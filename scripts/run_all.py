@@ -12,6 +12,7 @@
 """
 
 import sys
+import time
 import subprocess
 from pathlib import Path
 from datetime import datetime
@@ -19,6 +20,10 @@ from datetime import datetime
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
+
+# TPEx API 偶發抽風，自動重試 3 次
+MAX_ATTEMPTS = 3
+RETRY_BACKOFF = 8   # 秒
 
 ROOT = Path(__file__).resolve().parent
 SCRIPTS = [
@@ -42,17 +47,32 @@ def main():
         print(f"\n{'━' * 50}")
         print(f"▶ 執行 {s}")
         print(f"{'━' * 50}")
-        try:
-            code = subprocess.call(
-                [sys.executable, str(script)],
-                env={**__import__("os").environ, "PYTHONIOENCODING": "utf-8"}
-            )
-            if code != 0:
-                failed.append(s)
-                print(f"❌ {s} 失敗 (exit {code})")
-        except Exception as e:
+
+        success = False
+        for attempt in range(1, MAX_ATTEMPTS + 1):
+            try:
+                code = subprocess.call(
+                    [sys.executable, str(script)],
+                    env={**__import__("os").environ, "PYTHONIOENCODING": "utf-8"}
+                )
+                if code == 0:
+                    success = True
+                    break
+                if attempt < MAX_ATTEMPTS:
+                    wait = RETRY_BACKOFF * attempt
+                    print(f"⚠ {s} 第 {attempt} 次失敗 (exit {code})，等 {wait} 秒後重試...")
+                    time.sleep(wait)
+                else:
+                    print(f"❌ {s} 三次嘗試都失敗，放棄")
+            except Exception as e:
+                if attempt < MAX_ATTEMPTS:
+                    print(f"⚠ {s} 第 {attempt} 次例外: {e}，等 {RETRY_BACKOFF * attempt} 秒後重試...")
+                    time.sleep(RETRY_BACKOFF * attempt)
+                else:
+                    print(f"❌ {s} 三次嘗試都例外: {e}")
+
+        if not success:
             failed.append(s)
-            print(f"❌ {s} 例外: {e}")
 
     print(f"\n{'=' * 60}")
     if failed:
