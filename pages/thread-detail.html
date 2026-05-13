@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">討論串 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="contact.html">客服 0800-035-178</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li><a href="stocks.html?status=興櫃">興櫃股票</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li class="active"><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="announcements.html">公司公告</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container main-grid">
+  <section class="col-main">
+
+    <div class="panel">
+      <div style="padding: 20px 24px;">
+        <div class="breadcrumb" style="margin-bottom: 10px; padding-left: 0;">
+          <a href="discussion.html">討論區</a> ▸ <span id="bcCat"></span>
+        </div>
+        <h1 id="threadTitle" style="font-size: 22px; color: #222; line-height: 1.5; margin-bottom: 14px;">--</h1>
+        <div style="display:flex;align-items:center;gap:14px;color:#888;font-size:13px;border-bottom:1px solid #eef0f3;padding-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div id="authorAvatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#163A2E,#1B4332);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">U</div>
+            <div>
+              <div id="threadAuthor" style="color:#163A2E;font-weight:600;font-size:13px;">--</div>
+              <div id="threadTime" style="font-size:11px;">--</div>
+            </div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:8px;">
+            <button id="favThread" style="background:none;border:1px solid #d0d5dc;padding:4px 10px;border-radius:2px;font-size:12px;color:#555;">☆ 追蹤</button>
+            <button style="background:none;border:1px solid #d0d5dc;padding:4px 10px;border-radius:2px;font-size:12px;color:#555;">⚠ 檢舉</button>
+            <button style="background:none;border:1px solid #d0d5dc;padding:4px 10px;border-radius:2px;font-size:12px;color:#555;">↗ 分享</button>
+          </div>
+        </div>
+
+        <article id="threadBody" style="font-size: 14px; line-height: 1.95; color: #333; padding: 20px 0;"></article>
+
+        <div id="threadStocks" style="margin-top: 12px; padding-top: 16px; border-top: 1px dashed #eef0f3;"></div>
+
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid #eef0f3;display:flex;gap:8px;align-items:center;">
+          <button class="like-btn" data-type="up" style="background:none;border:1px solid #d0d5dc;padding:6px 14px;border-radius:14px;font-size:12px;color:#EF4444;">👍 看多 <span id="upCount">42</span></button>
+          <button class="like-btn" data-type="down" style="background:none;border:1px solid #d0d5dc;padding:6px 14px;border-radius:14px;font-size:12px;color:#1a8e3e;">👎 看空 <span id="downCount">8</span></button>
+          <span style="color:#888;font-size:12px;margin-left:8px;">已 <span id="viewCount">1,256</span> 次瀏覽</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>全部回覆（<span id="replyCount">5</span>）</h2>
+        <div class="panel-tabs">
+          <button class="tab active" data-sort="time">時間排序</button>
+          <button class="tab" data-sort="like">熱門排序</button>
+        </div>
+      </div>
+      <div id="replyList" style="padding: 0;"></div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-panel-head">
+        <div class="ai-panel-title">AI 討論串重點整理</div>
+        <button class="ai-trigger" data-action="threadSummary" data-target="#aiThreadResult">產生重點 →</button>
+      </div>
+      <p class="ai-placeholder">AI 自動彙整本討論串各方觀點、看多看空比例、爭議焦點。</p>
+      <div id="aiThreadResult" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>我要回覆</h2></div>
+      <div style="padding:16px 20px;">
+        <textarea id="newReply" placeholder="寫下你的回覆..." rows="4" style="width:100%;padding:12px;border:1px solid #d0d5dc;border-radius:3px;font-family:inherit;font-size:14px;"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+          <div style="font-size:12px;color:#888;">
+            <label><input type="checkbox" checked> 匿名發表</label>
+            <label style="margin-left:16px;"><input type="checkbox"> 同步分享到 LINE</label>
+          </div>
+          <button class="btn-primary" id="postReply" style="width:auto;padding:8px 24px;">送出回覆</button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <aside class="col-side">
+
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>相關討論</h3></div>
+      <ul id="relatedThreads" style="font-size: 13px;"></ul>
+    </div>
+
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>看板規則</h3></div>
+      <div style="padding: 14px; font-size: 12px; color: #555; line-height: 1.8;">
+        <p>1. 禁止人身攻擊、廣告與不實謠言</p>
+        <p>2. 個股討論請註明代號與名稱</p>
+        <p>3. 投資建議僅供參考</p>
+      </div>
+    </div>
+
+    <div class="panel side-panel ad-box">
+      <div class="ad-tag">廣告</div>
+      <div class="ad-body">
+        <div class="ad-title">VIP 看完整對話</div>
+        <p>VIP 會員可閱讀全部精華討論</p>
+        <button class="btn-primary">升級 VIP</button>
+      </div>
+    </div>
+
+  </aside>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const { data, findStock, fmtPrice, fmtChange, changeClass, arrow, pageHref } = window.LeadFu;
+
+  // 樣本主題池（簡化版，實際應從後端拿）
+  const threadPool = {
+    1: {
+      cat: "個股", title: "[請益] 環球晶 6488 現在進場會不會太晚？",
+      author: "stock_god", time: "5 分鐘前", date: "2026-05-12 09:25",
+      stocks: ["6488"],
+      body: [
+        "想請教各位前輩，環球晶 (6488) 從去年底 350 元一路漲到現在 462，漲幅已經超過 30%。",
+        "看了一下基本面：",
+        "・本益比 11.98，看起來不算太貴",
+        "・ROE 25.4%，獲利能力強",
+        "・AI 伺服器需求帶動，矽晶圓出貨持續成長",
+        "但現在進場是不是位階太高了？想聽聽大家的看法，謝謝！"
+      ],
+      replies: [
+        { author: "投資老手_88", time: "3 分鐘前", body: "我從 380 開始買到現在，個人覺得長期來看 500 應該有機會。但短線確實漲多，可以等回到 450 再進。", likes: 28 },
+        { author: "ai_fan", time: "10 分鐘前", body: "AI 伺服器這波應該還沒結束，看研調預估到 2027 年都會持續成長。", likes: 15 },
+        { author: "risk_alert", time: "20 分鐘前", body: "提醒一下，外資已經連續買超 5 天，要小心法人翻臉。", likes: 9 },
+        { author: "long_term", time: "1 小時前", body: "未上市股票流動性是個問題，買進前要先想清楚出場時機。", likes: 18 },
+        { author: "新手請教", time: "2 小時前", body: "請問環球晶有確定上市日期了嗎？", likes: 2 }
+      ]
+    },
+    2: {
+      cat: "興櫃", title: "穎崴 6515 法說會重點整理",
+      author: "ai_fan", time: "15 分鐘前", date: "2026-05-12 09:15",
+      stocks: ["6515"],
+      body: [
+        "昨天參加穎崴法說會，整理一下重點：",
+        "1. Q1 營收年增 65%，創歷史新高",
+        "2. AI 晶片測試 Probe Card 訂單滿到 2027 上半年",
+        "3. 新廠擴建中，預計 2026 Q3 投產",
+        "4. 毛利率持續提升至 58%",
+        "5. 法人預估全年 EPS 可望突破 25 元",
+        "整體展望非常正面，但股價已經反映不少利多了。"
+      ],
+      replies: [
+        { author: "tech_invest", time: "5 分鐘前", body: "感謝整理！穎崴技術領先同業，長線看好。", likes: 22 },
+        { author: "stock_god", time: "8 分鐘前", body: "EPS 25 元的話本益比就降到 50 倍，還算合理範圍。", likes: 14 }
+      ]
+    },
+    3: {
+      cat: "新股", title: "[抽籤] 浩鼎 4174 下週開放，承銷價 305 元",
+      author: "ipo_hunter", time: "30 分鐘前", date: "2026-05-12 09:00",
+      stocks: ["4174"],
+      body: [
+        "浩鼎 (4174) 確定下週開放申購：",
+        "・申購期間：5/18 - 5/20",
+        "・承銷價：305 元",
+        "・抽籤日：5/22",
+        "・預估中籤率：0.85%",
+        "目前未上市市場成交價約 320 元，預期中籤有 5% 左右價差。",
+        "手續費 20 元，未中籤退款手續費 50 元。"
+      ],
+      replies: [
+        { author: "lucky_guy", time: "10 分鐘前", body: "已經設定好自動圈存，希望這次能中！", likes: 8 },
+        { author: "risk_alert", time: "15 分鐘前", body: "生技股要小心，價差不一定 hold 得住。", likes: 12 }
+      ]
+    }
+  };
+
+  const id = parseInt(new URLSearchParams(location.search).get("id") || "1");
+  const t = threadPool[id] || threadPool[1];
+
+  // 渲染主題
+  document.title = `${t.title} - 領富 AI`;
+  document.getElementById("threadTitle").textContent = t.title;
+  document.getElementById("threadAuthor").textContent = t.author;
+  document.getElementById("threadTime").textContent = t.date;
+  document.getElementById("authorAvatar").textContent = t.author[0].toUpperCase();
+  document.getElementById("bcCat").innerHTML = `<span class="thread-cat">${t.cat}</span>`;
+  document.getElementById("threadBody").innerHTML = t.body.map(p => `<p style="margin-bottom:10px;">${p}</p>`).join("");
+
+  // 相關個股
+  if (t.stocks && t.stocks.length) {
+    const html = t.stocks.map(c => {
+      const s = findStock(c);
+      if (!s) return "";
+      const cls = changeClass(s.change);
+      return `<a href="${pageHref('stock-detail.html?code=' + s.code)}" style="display:inline-block;background:#f8fafd;border:1px solid #e0e3e8;padding:8px 14px;border-radius:4px;margin:4px 6px 4px 0;text-decoration:none;color:inherit;font-size:13px;">
+        <strong style="color:#163A2E;">${s.code} ${s.name}</strong>
+        <span style="margin-left:6px;color:#444;">${fmtPrice(s.price)}</span>
+        <span class="${cls}" style="margin-left:4px;">${arrow(s.change)} ${fmtChange(s.change)}</span>
+      </a>`;
+    }).join("");
+    document.getElementById("threadStocks").innerHTML = `<small style="color:#888;">相關個股：</small> ${html}`;
+  }
+
+  // 回覆列表
+  function renderReplies(sort = "time") {
+    const list = t.replies.slice();
+    if (sort === "like") list.sort((a, b) => b.likes - a.likes);
+    document.getElementById("replyCount").textContent = list.length;
+    document.getElementById("replyList").innerHTML = list.map((r, i) => `
+      <div style="padding: 16px 24px; border-bottom: 1px solid #eef0f3; display:flex; gap:14px;">
+        <div style="flex-shrink:0;">
+          <div style="width:36px;height:36px;border-radius:50%;background:#${(parseInt(r.author.charCodeAt(0))%9)+1}a${(parseInt(r.author.charCodeAt(0))%9)+1}8e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">${r.author[0].toUpperCase()}</div>
+        </div>
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:12px;">
+            <strong style="color:#163A2E;">${r.author}</strong>
+            <span style="color:#888;">${r.time}</span>
+            <span style="background:#f0f3f8;color:#666;padding:1px 8px;border-radius:8px;">#${i+1}</span>
+          </div>
+          <p style="font-size:14px;line-height:1.8;color:#333;">${r.body}</p>
+          <div style="margin-top:8px;display:flex;gap:12px;font-size:12px;color:#888;">
+            <span>👍 ${r.likes}</span>
+            <a href="#" style="color:#888;">回覆</a>
+            <a href="#" style="color:#888;">引用</a>
+          </div>
+        </div>
+      </div>
+    `).join("");
+  }
+  renderReplies();
+
+  // 排序切換
+  document.querySelectorAll(".panel-tabs .tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".panel-tabs .tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderReplies(btn.dataset.sort);
+    });
+  });
+
+  // 看多看空
+  document.querySelectorAll(".like-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const type = btn.dataset.type;
+      const el = document.getElementById(type + "Count");
+      el.textContent = parseInt(el.textContent) + 1;
+      btn.style.background = type === "up" ? "#fde7eb" : "#e6f5ec";
+    });
+  });
+
+  // 追蹤
+  document.getElementById("favThread").addEventListener("click", e => {
+    e.target.textContent = e.target.textContent.includes("☆") ? "★ 已追蹤" : "☆ 追蹤";
+    e.target.style.color = e.target.textContent.includes("★") ? "#1B4332" : "#555";
+  });
+
+  // 發新回覆
+  document.getElementById("postReply").addEventListener("click", () => {
+    const v = document.getElementById("newReply").value.trim();
+    if (!v) return alert("請輸入回覆內容");
+    t.replies.push({ author: "您 (訪客)", time: "剛剛", body: v, likes: 0 });
+    document.getElementById("newReply").value = "";
+    renderReplies();
+    // 滾到新回覆
+    setTimeout(() => {
+      const replies = document.querySelectorAll("#replyList > div");
+      replies[replies.length-1].scrollIntoView({ behavior: "smooth", block: "center" });
+      replies[replies.length-1].style.background = "#fff8e1";
+    }, 100);
+  });
+
+  // 相關討論
+  document.getElementById("relatedThreads").innerHTML = Object.entries(threadPool)
+    .filter(([k]) => parseInt(k) !== id)
+    .map(([k, v]) => `
+      <li style="padding:10px 14px;border-bottom:1px solid #eef0f3;">
+        <a href="thread-detail.html?id=${k}" style="color:#222;text-decoration:none;">
+          <div style="font-size:13px;line-height:1.4;margin-bottom:4px;">${v.title}</div>
+          <div style="font-size:11px;color:#888;">${v.author} ・ ${v.replies.length} 回覆</div>
+        </a>
+      </li>
+    `).join("");
+});
+</script>
+</body>
+</html>

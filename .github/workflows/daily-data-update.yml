@@ -1,0 +1,51 @@
+name: 領富 AI · 每日資料更新
+
+# 每天台灣時間 15:00（UTC 07:00）跑一次
+# TPEx 收盤後資料才會就緒，14:30 後 OK
+on:
+  schedule:
+    - cron: "0 7 * * 1-5"   # 週一到週五
+  workflow_dispatch:         # 允許手動觸發
+
+permissions:
+  contents: write            # 讓 Action 可以 commit 回 main
+
+jobs:
+  fetch-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run all fetchers
+        run: python scripts/run_all.py
+        env:
+          PYTHONIOENCODING: utf-8
+
+      - name: Show data summary
+        run: |
+          echo "=== data/ files ==="
+          ls -la data/
+          echo ""
+          echo "=== stocks_live.json header ==="
+          python -c "import json; d=json.load(open('data/stocks_live.json')); print(f\"updatedAt: {d.get('updatedAt')}\"); print(f\"stockCount: {d.get('stockCount')}\")"
+
+      - name: Commit if changed
+        run: |
+          git config user.name "leadfu-ai-bot"
+          git config user.email "bot@leadfu.ai"
+          git add data/
+          # 只有真的有 diff 才 commit，避免空 commit
+          if ! git diff --staged --quiet; then
+            DATE=$(date -u +"%Y-%m-%d")
+            git commit -m "data: 每日更新 ($DATE)"
+            git push
+            echo "✅ 已 commit 並 push"
+          else
+            echo "ℹ️ 無變動，跳過 commit"
+          fi

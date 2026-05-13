@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>未上市股價列表 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right">
+      <a href="#">會員登入</a><a href="#">免費註冊</a><a href="#">客服 0800-035-178</a>
+    </div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li class="active"><a href="stocks.html">未上市股價</a></li>
+      <li><a href="stocks.html?status=興櫃">興櫃股票</a></li>
+      <li><a href="stocks.html?status=準上市">準上市</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="tutorial.html">下單教學</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1 id="pageTitle">未上市 / 興櫃股價總覽</h1>
+    <div class="breadcrumb">首頁 ▸ 未上市股價</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 20px 12px 40px;">
+
+  <div class="panel">
+    <div class="filter-bar">
+      <label>狀態：
+        <select id="filterStatus">
+          <option value="">全部</option>
+          <option value="興櫃">興櫃</option>
+          <option value="未上市">未上市</option>
+          <option value="準上市">準上市</option>
+        </select>
+      </label>
+      <label>類別：
+        <select id="filterCategory">
+          <option value="">全部</option>
+        </select>
+      </label>
+      <label>排序：
+        <select id="sortBy">
+          <option value="code">代號</option>
+          <option value="changePct">漲跌幅</option>
+          <option value="volume">成交量</option>
+          <option value="price">價格</option>
+        </select>
+      </label>
+      <label>關鍵字：
+        <input type="text" id="filterKeyword" placeholder="代號或名稱">
+      </label>
+      <span style="margin-left:auto;font-size:12px;color:#666;">共 <span id="resultCount">0</span> 檔</span>
+    </div>
+
+    <table class="stock-table">
+      <thead>
+        <tr>
+          <th>代號</th><th>名稱</th>
+          <th class="num">成交價</th>
+          <th class="num">漲跌</th>
+          <th class="num">漲跌幅</th>
+          <th class="num">成交量(張)</th>
+          <th>類別</th><th>狀態</th><th></th>
+        </tr>
+      </thead>
+      <tbody id="stockTbody"></tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const { data, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow } = window.LeadFu;
+
+  // Category options
+  const cats = [...new Set(data.stocks.map(s => s.category))];
+  const catSel = document.getElementById("filterCategory");
+  cats.forEach(c => {
+    const o = document.createElement("option");
+    o.value = c; o.textContent = c;
+    catSel.appendChild(o);
+  });
+
+  // URL params (e.g. ?status=興櫃)
+  const params = new URLSearchParams(location.search);
+  if (params.get("status")) {
+    document.getElementById("filterStatus").value = params.get("status");
+    document.getElementById("pageTitle").textContent = `${params.get("status")}股票報價`;
+  }
+
+  function render() {
+    const status = document.getElementById("filterStatus").value;
+    const cat = document.getElementById("filterCategory").value;
+    const kw = document.getElementById("filterKeyword").value.trim().toLowerCase();
+    const sortBy = document.getElementById("sortBy").value;
+
+    let list = data.stocks.slice();
+    if (status) list = list.filter(s => s.status === status);
+    if (cat) list = list.filter(s => s.category === cat);
+    if (kw) list = list.filter(s => s.code.toLowerCase().includes(kw) || s.name.includes(kw));
+
+    list.sort((a, b) => {
+      if (sortBy === "changePct") return pctChange(b.price, b.change) - pctChange(a.price, a.change);
+      if (sortBy === "volume") return b.volume - a.volume;
+      if (sortBy === "price") return b.price - a.price;
+      return a.code.localeCompare(b.code);
+    });
+
+    document.getElementById("resultCount").textContent = list.length;
+
+    const tbody = document.getElementById("stockTbody");
+    if (list.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="9" class="loading">沒有符合條件的個股</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = list.map(s => {
+      const pct = pctChange(s.price, s.change);
+      const cls = changeClass(s.change);
+      return `<tr data-code="${s.code}">
+        <td class="code">${s.code}</td>
+        <td class="name">${s.name}</td>
+        <td class="num ${cls}">${fmtPrice(s.price)}</td>
+        <td class="num ${cls}">${arrow(s.change)} ${fmtChange(s.change)}</td>
+        <td class="num ${cls}">${fmtPct(pct)}</td>
+        <td class="num">${s.volume.toLocaleString("zh-TW")}</td>
+        <td>${s.category}</td>
+        <td><span class="status-pill status-${s.status}">${s.status}</span></td>
+        <td><button class="add-btn" data-code="${s.code}">＋自選</button></td>
+      </tr>`;
+    }).join("");
+  }
+
+  ["filterStatus","filterCategory","sortBy","filterKeyword"].forEach(id => {
+    document.getElementById(id).addEventListener("input", render);
+  });
+
+  render();
+});
+</script>
+</body>
+</html>

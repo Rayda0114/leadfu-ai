@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">新聞詳情 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="contact.html">客服 0800-035-178</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li><a href="stocks.html?status=興櫃">興櫃股票</a></li>
+      <li class="active"><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="announcements.html">公司公告</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container main-grid">
+  <section class="col-main">
+
+    <div class="panel">
+      <div style="padding: 24px 28px;">
+        <div class="breadcrumb" style="margin-bottom: 10px;padding-left:0;"><a href="news.html">財經新聞</a> ▸ <span id="bcTag"></span></div>
+        <h1 id="newsTitle" style="font-size: 26px; color: #222; line-height: 1.4; margin-bottom: 12px;">--</h1>
+        <div style="display:flex;align-items:center;gap:14px;color:#888;font-size:13px;border-bottom:1px solid #eef0f3;padding-bottom:14px;margin-bottom:20px;">
+          <span id="newsDate">--</span>
+          <span>|</span>
+          <span id="newsAuthor">--</span>
+          <span style="margin-left:auto;display:flex;gap:8px;">
+            <button style="background:none;border:1px solid #d0d5dc;padding:4px 10px;border-radius:2px;font-size:12px;color:#555;">分享</button>
+            <button style="background:none;border:1px solid #d0d5dc;padding:4px 10px;border-radius:2px;font-size:12px;color:#555;">收藏</button>
+            <button style="background:none;border:1px solid #d0d5dc;padding:4px 10px;border-radius:2px;font-size:12px;color:#555;">列印</button>
+          </span>
+        </div>
+        <article id="newsBody" style="font-size: 15px; line-height: 1.95; color: #333;"></article>
+
+        <div id="relatedStocks" style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #eef0f3;"></div>
+
+        <div style="margin-top: 24px; padding: 12px 16px; background: #fff8e1; border-left: 4px solid #f0a800; border-radius: 2px; font-size: 12px; color: #666;">
+          ※ 本網站所有資訊僅供參考，不構成任何投資建議。投資前請審慎評估風險。
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-panel-head">
+        <div class="ai-panel-title">AI 新聞重點摘要</div>
+        <button class="ai-trigger" data-action="newsSummary" data-target="#aiNewsResult">產生摘要 →</button>
+      </div>
+      <p class="ai-placeholder">AI 自動萃取本篇新聞的關鍵重點、影響個股、風險提示。</p>
+      <div id="aiNewsResult" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>讀者留言（<span id="cmtCount">3</span>）</h2></div>
+      <div style="padding:16px 20px;">
+        <div id="commentList">
+          <div style="padding:12px 0;border-bottom:1px solid #eef0f3;">
+            <div style="display:flex;gap:10px;align-items:center;font-size:13px;margin-bottom:4px;">
+              <strong style="color:#163A2E;">投資老手_88</strong>
+              <span style="color:#888;font-size:12px;">2 小時前</span>
+            </div>
+            <p style="color:#444;font-size:14px;line-height:1.7;">這檔我從 300 開始買，現在已經獲利 50%，建議大家逢回承接。</p>
+          </div>
+          <div style="padding:12px 0;border-bottom:1px solid #eef0f3;">
+            <div style="display:flex;gap:10px;align-items:center;font-size:13px;margin-bottom:4px;">
+              <strong style="color:#163A2E;">新手請教</strong>
+              <span style="color:#888;font-size:12px;">5 小時前</span>
+            </div>
+            <p style="color:#444;font-size:14px;line-height:1.7;">請問現在進場會不會太晚？本益比是不是偏高了？</p>
+          </div>
+          <div style="padding:12px 0;">
+            <div style="display:flex;gap:10px;align-items:center;font-size:13px;margin-bottom:4px;">
+              <strong style="color:#163A2E;">stock_god</strong>
+              <span style="color:#888;font-size:12px;">昨日</span>
+            </div>
+            <p style="color:#444;font-size:14px;line-height:1.7;">外資加碼是真的，可以看籌碼面數據佐證。</p>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid #eef0f3;">
+          <textarea id="newCmt" placeholder="寫下您的看法..." rows="3" style="width:100%;padding:10px;border:1px solid #d0d5dc;border-radius:3px;font-family:inherit;font-size:14px;"></textarea>
+          <div style="text-align:right;margin-top:8px;">
+            <button class="btn-primary" id="postCmt" style="width:auto;padding:8px 22px;">送出留言</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <aside class="col-side">
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>熱門新聞</h3></div>
+      <ul class="news-list" id="hotNews"></ul>
+    </div>
+
+    <div class="panel side-panel ad-box">
+      <div class="ad-tag">廣告</div>
+      <div class="ad-body">
+        <div class="ad-title">即時新聞 LINE 推播</div>
+        <p>重大新聞即時推播到你的手機</p>
+        <button class="btn-primary line-cta">📱 加 LINE 訂閱</button>
+      </div>
+    </div>
+
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>熱門題材</h3></div>
+      <ul class="topic-list" id="topicList"></ul>
+    </div>
+  </aside>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const { data, findStock, fmtPrice, fmtChange, changeClass, arrow, pageHref, pctChange, fmtPct } = window.LeadFu;
+
+  const id = parseInt(new URLSearchParams(location.search).get("id") || "1");
+  const news = data.news.find(n => n.id === id) || data.news[0];
+
+  // Title
+  document.title = `${news.title} - 領富 AI`;
+  document.getElementById("newsTitle").textContent = news.title;
+  document.getElementById("newsDate").textContent = (news.date || "") + (news.time ? " " + news.time : "");
+  document.getElementById("newsAuthor").textContent = news.source || news.author || "領富 AI 編輯部";
+  document.getElementById("bcTag").innerHTML = `<span class="news-tag ${news.tag}">${news.tag}</span>`;
+
+  // Body：兩種格式
+  //   舊內嵌：news.body 為段落陣列
+  //   新即時：news.summary（短摘）+ news.link（外部連結）
+  const bodyEl = document.getElementById("newsBody");
+  if (Array.isArray(news.body) && news.body.length) {
+    bodyEl.innerHTML = news.body.map(p => `<p style="margin-bottom:14px;">${p}</p>`).join("");
+  } else if (news.summary || news.link) {
+    const summary = news.summary || news.title;
+    const linkBtn = news.link ? `
+      <div style="margin-top: 24px; padding: 16px; background: #f7f4ec; border-left: 4px solid #C5A572; border-radius: 4px;">
+        <p style="margin: 0 0 10px 0; font-size: 13px; color: #666;">本則新聞由 ${news.source || "外部媒體"} 提供。閱讀全文請至原始來源：</p>
+        <a href="${news.link}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: linear-gradient(135deg, #D4B884, #8B6F47); color: #fff; padding: 10px 22px; border-radius: 24px; text-decoration: none; font-weight: 600; font-size: 14px;">📄 閱讀原文 →</a>
+      </div>` : "";
+    bodyEl.innerHTML = `<p style="margin-bottom:14px;">${summary}</p>${linkBtn}`;
+  } else {
+    bodyEl.innerHTML = `<p>（無內文）</p>`;
+  }
+
+  // 相關個股
+  if (news.related && news.related.length) {
+    const html = news.related.map(c => {
+      const s = findStock(c);
+      if (!s) return "";
+      const cls = changeClass(s.change);
+      return `<a href="${pageHref('stock-detail.html?code=' + s.code)}" style="display:inline-block;background:#f8fafd;border:1px solid #e0e3e8;padding:10px 14px;border-radius:4px;margin:4px 6px 4px 0;text-decoration:none;color:inherit;">
+        <strong style="color:#163A2E;">${s.code} ${s.name}</strong>
+        <span style="margin-left:8px;color:#444;">${fmtPrice(s.price)}</span>
+        <span class="${cls}" style="margin-left:6px;">${arrow(s.change)} ${fmtChange(s.change)}</span>
+      </a>`;
+    }).join("");
+    document.getElementById("relatedStocks").innerHTML = `
+      <h3 style="font-size:15px;color:#163A2E;margin-bottom:10px;">📊 相關個股</h3>
+      ${html}
+    `;
+  }
+
+  // 熱門新聞（其他 5 則）
+  document.getElementById("hotNews").innerHTML = data.news
+    .filter(n => n.id !== news.id).slice(0, 5).map(n => `
+    <li>
+      <span class="news-time">${n.time}</span>
+      <span class="news-tag ${n.tag}">${n.tag}</span>
+      <a class="news-title" href="news-detail.html?id=${n.id}">${n.title}</a>
+    </li>
+  `).join("");
+
+  // 熱門題材
+  document.getElementById("topicList").innerHTML = data.hotTopics.map(t => `<li># ${t}</li>`).join("");
+
+  // 留言
+  document.getElementById("postCmt").addEventListener("click", () => {
+    const v = document.getElementById("newCmt").value.trim();
+    if (!v) return;
+    const div = document.createElement("div");
+    div.style.cssText = "padding:12px 0;border-bottom:1px solid #eef0f3;background:#fff8e1;";
+    div.innerHTML = `
+      <div style="display:flex;gap:10px;align-items:center;font-size:13px;margin-bottom:4px;">
+        <strong style="color:#163A2E;">您 (訪客)</strong>
+        <span style="color:#888;font-size:12px;">剛剛</span>
+      </div>
+      <p style="color:#444;font-size:14px;line-height:1.7;">${v}</p>
+    `;
+    document.getElementById("commentList").prepend(div);
+    document.getElementById("newCmt").value = "";
+    document.getElementById("cmtCount").textContent = parseInt(document.getElementById("cmtCount").textContent) + 1;
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公司公告 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="contact.html">客服 0800-035-178</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li><a href="stocks.html?status=興櫃">興櫃股票</a></li>
+      <li><a href="stocks.html?status=準上市">準上市</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li class="active"><a href="announcements.html">公司公告</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>公司公告 / 重大訊息</h1>
+    <div class="breadcrumb">首頁 ▸ 公司公告</div>
+  </div>
+</div>
+
+<main class="container main-grid">
+  <section class="col-main">
+    <div class="panel">
+      <div class="filter-bar">
+        <label>類型：
+          <select id="filterType">
+            <option value="">全部</option>
+            <option value="股利">股利</option>
+            <option value="營收">營收</option>
+            <option value="財報">財報</option>
+            <option value="法說會">法說會</option>
+            <option value="股東會">股東會</option>
+            <option value="增資">增資</option>
+            <option value="庫藏股">庫藏股</option>
+            <option value="重大訊息">重大訊息</option>
+            <option value="合約">合約</option>
+            <option value="公司治理">公司治理</option>
+          </select>
+        </label>
+        <label>個股：
+          <input type="text" id="filterCode" placeholder="代號或名稱">
+        </label>
+        <span style="margin-left:auto;font-size:12px;color:#666;">共 <span id="annCount">0</span> 筆</span>
+      </div>
+
+      <table class="stock-table" id="annTable">
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>代號</th>
+            <th>名稱</th>
+            <th>類型</th>
+            <th>主旨</th>
+          </tr>
+        </thead>
+        <tbody id="annTbody"></tbody>
+      </table>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-panel-head">
+        <div class="ai-panel-title">AI 公告摘要與預警</div>
+        <button class="ai-trigger" data-action="newsSummary" data-target="#aiAnnResult">產生本週公告重點 →</button>
+      </div>
+      <p class="ai-placeholder">AI 自動篩選對股價有潛在影響的重大訊息，並提示應注意事項。</p>
+      <div id="aiAnnResult" style="margin-top:12px;"></div>
+    </div>
+  </section>
+
+  <aside class="col-side">
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>常見公告類型</h3></div>
+      <div style="padding: 14px; font-size: 12px; color: #555; line-height: 1.9;">
+        <p><strong>股利：</strong>每年董事會通過、股東會決議的現金或股票股利</p>
+        <p><strong>營收：</strong>每月 10 日前公告上月合併營收</p>
+        <p><strong>財報：</strong>每季公告財務報告（Q1/Q2/Q3/年報）</p>
+        <p><strong>重大訊息：</strong>影響股價之重大事件</p>
+        <p><strong>法說會：</strong>對外法人說明會</p>
+      </div>
+    </div>
+
+    <div class="panel side-panel ad-box">
+      <div class="ad-tag">廣告</div>
+      <div class="ad-body">
+        <div class="ad-title">即時公告 LINE 推播</div>
+        <p>個股公告第一時間推播到你的手機</p>
+        <button class="btn-primary line-cta">📱 加 LINE 訂閱</button>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const { data, pageHref } = window.LeadFu;
+
+  function render() {
+    const type = document.getElementById("filterType").value;
+    const kw = document.getElementById("filterCode").value.trim().toLowerCase();
+    let list = data.announcements.slice();
+    if (type) list = list.filter(a => a.type === type);
+    if (kw) list = list.filter(a => a.code.toLowerCase().includes(kw) || a.name.includes(kw));
+
+    document.getElementById("annCount").textContent = list.length;
+    const tbody = document.getElementById("annTbody");
+    if (list.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" class="loading">沒有符合條件的公告</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = list.map(a => `
+      <tr>
+        <td>${a.date}</td>
+        <td class="code"><a href="${pageHref('stock-detail.html?code=' + a.code)}">${a.code}</a></td>
+        <td><a href="${pageHref('stock-detail.html?code=' + a.code)}" style="color:inherit;">${a.name}</a></td>
+        <td><span class="status-pill" style="background:#e6efff;color:#163A2E;">${a.type}</span></td>
+        <td><a href="#" style="color:#222;">${a.title}</a></td>
+      </tr>
+    `).join("");
+  }
+
+  ["filterType","filterCode"].forEach(id => {
+    document.getElementById(id).addEventListener("input", render);
+  });
+
+  render();
+});
+</script>
+</body>
+</html>

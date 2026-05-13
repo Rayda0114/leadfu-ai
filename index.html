@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>領富 AI - 未上市股票股價・興櫃行情・財經資訊</title>
+<meta name="description" content="領富 AI提供未上市股票即時股價、興櫃行情、準上市股票、財經新聞與投資人討論區。">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left">
+      <span id="todayDate"></span>
+      <span class="divider">|</span>
+      <span>未上市股票財經資訊網</span>
+    </div>
+    <div class="top-right">
+      <a href="pages/login.html">會員登入</a>
+      <a href="pages/register.html">免費註冊</a>
+      <a href="pages/contact.html">客服 0800-035-178</a>
+    </div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱 (例：6488 環球晶)">
+      <button id="searchBtn">查詢</button>
+    </div>
+    <div class="quick-links">
+      <a href="pages/app.html" class="qlink">手機 APP</a>
+      <a href="pages/software.html" class="qlink">下載報價軟體</a>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li class="active"><a href="index.html">首頁</a></li>
+      <li><a href="pages/stocks.html">未上市股價</a></li>
+      <li><a href="pages/screener.html">進階選股</a></li>
+      <li><a href="pages/industries.html">產業分類</a></li>
+      <li><a href="pages/news.html">財經新聞</a></li>
+      <li><a href="pages/discussion.html">討論區</a></li>
+      <li><a href="pages/ipo.html">新股抽籤</a></li>
+      <li><a href="pages/announcements.html">公告</a></li>
+      <li><a href="pages/watchlist.html">自選股</a></li>
+      <li><a href="pages/vip.html" style="color:#C5A572;">VIP</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <span class="hero-badge">✨ AI Powered Pre-IPO Platform</span>
+      <h1 class="hero-title">領先市場<span class="accent">兩步</span><br>AI 揭密未上市金礦</h1>
+      <p class="hero-sub">機器學習掃描興櫃、未上市、準上市三大市場<br>比大眾早兩步看見 IPO 前的飆股訊號</p>
+      <div class="hero-stats">
+        <div><strong>30+</strong>追蹤個股</div>
+        <div><strong>AI</strong>智能分析</div>
+        <div><strong>0 元</strong>免費註冊</div>
+      </div>
+      <div class="hero-cta">
+        <a href="pages/screener.html" class="hero-btn primary">🔍 立即選股</a>
+        <a href="pages/register.html" class="hero-btn ghost">免費註冊 →</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hc-row"><span class="hc-name">6488 環球晶</span><span class="hc-price">462.50</span></div>
+        <div class="hc-row"><span class="hc-pct">▲ +1.87%</span><span style="font-size:11px;opacity:0.7;">興櫃</span></div>
+        <div class="hc-ai">AI 評等：強力買進 ・ 預估上市價 580</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-row"><span class="hc-name">6515 穎崴</span><span class="hc-price">1,245</span></div>
+        <div class="hc-row"><span class="hc-pct">▲ +2.89%</span><span style="font-size:11px;opacity:0.7;">興櫃</span></div>
+        <div class="hc-ai">AI 評等：技術面突破，留意法人動向</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-row"><span class="hc-name">6770 力積電</span><span class="hc-price">28.50</span></div>
+        <div class="hc-row"><span class="hc-pct">▲ +1.79%</span><span style="font-size:11px;opacity:0.7;">未上市</span></div>
+        <div class="hc-ai">AI 預測：IPO 申請進度 65%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-label">即時行情</div>
+  <div class="ticker-track" id="tickerTrack">載入中...</div>
+</div>
+
+<main class="container main-grid">
+
+  <section class="col-main">
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>熱門未上市股票</h2>
+        <div class="panel-tabs">
+          <button class="tab active" data-filter="all">全部</button>
+          <button class="tab" data-filter="興櫃">興櫃</button>
+          <button class="tab" data-filter="未上市">未上市</button>
+          <button class="tab" data-filter="準上市">準上市</button>
+        </div>
+      </div>
+      <table class="stock-table">
+        <thead>
+          <tr>
+            <th>代號</th>
+            <th>名稱</th>
+            <th class="num">成交價</th>
+            <th class="num">漲跌</th>
+            <th class="num">漲跌幅</th>
+            <th class="num">成交量(張)</th>
+            <th>類別</th>
+            <th>狀態</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="stockTbody">
+          <tr><td colspan="9" class="loading">資料載入中...</td></tr>
+        </tbody>
+      </table>
+      <div class="panel-foot">
+        資料更新時間：<span id="updatedAt">--</span>
+        ・<a href="pages/stocks.html">查看完整股價列表 ▸</a>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>財經焦點</h2>
+        <a href="pages/news.html" class="more">更多 ▸</a>
+      </div>
+      <ul class="news-list" id="newsList">
+        <li class="loading">載入中...</li>
+      </ul>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-panel-head">
+        <div class="ai-panel-title">AI 今日盤勢摘要</div>
+        <button class="ai-trigger" data-action="newsSummary" data-target="#aiHomeResult">產生今日摘要 →</button>
+      </div>
+      <p class="ai-placeholder">AI 自動彙整今日未上市市場焦點、漲跌排行、外資動向。每日盤後 14:30 自動更新。</p>
+      <div id="aiHomeResult" style="margin-top:12px;"></div>
+    </div>
+
+  </section>
+
+  <aside class="col-side">
+
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>熱門題材</h3></div>
+      <ul class="topic-list" id="topicList"></ul>
+    </div>
+
+    <div class="panel side-panel ad-box">
+      <div class="ad-tag">廣告</div>
+      <div class="ad-body">
+        <div class="ad-title">未上市股票免費試閱</div>
+        <p>專業團隊每日盤後解析，加 LINE 領取體驗版報告。</p>
+        <button class="btn-primary line-cta">📱 加 LINE 領取</button>
+      </div>
+    </div>
+
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>近期 IPO / 抽籤</h3></div>
+      <ul class="ipo-list">
+        <li>
+          <div class="ipo-name">浩鼎 (4174)</div>
+          <div class="ipo-info">承銷價 305 元・5/18 開放抽籤</div>
+        </li>
+        <li>
+          <div class="ipo-name">彩晶 (6116)</div>
+          <div class="ipo-info">承銷價 8.5 元・5/20 開放抽籤</div>
+        </li>
+        <li>
+          <div class="ipo-name">力積電 (6770)</div>
+          <div class="ipo-info">準上市・預計 6 月送件</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>免費 LINE 推播</h3></div>
+      <div class="line-box">
+        <div class="line-icon">LINE</div>
+        <div>
+          <p>每日盤前 / 盤後重點推播</p>
+          <button class="btn-line">加入官方帳號</button>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-logo">領富 AI</div>
+      <p>未上市股票財經資訊網<br>客服專線：0800-035-178<br>postmaster@berich.example.com</p>
+    </div>
+    <div>
+      <h4>網站服務</h4>
+      <ul>
+        <li><a href="pages/stocks.html">未上市股價</a></li>
+        <li><a href="pages/screener.html">進階選股工具</a></li>
+        <li><a href="pages/industries.html">產業分類</a></li>
+        <li><a href="pages/stocks.html?status=興櫃">興櫃行情</a></li>
+        <li><a href="pages/ipo.html">新股抽籤 / 中籤股</a></li>
+        <li><a href="pages/announcements.html">公司公告</a></li>
+        <li><a href="pages/discussion.html">投資人討論區</a></li>
+        <li><a href="pages/tax.html">證交稅專題</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>會員專區</h4>
+      <ul>
+        <li><a href="pages/register.html">免費註冊</a></li>
+        <li><a href="pages/login.html">會員登入</a></li>
+        <li><a href="pages/member.html">會員中心</a></li>
+        <li><a href="pages/vip.html">VIP 訂閱</a></li>
+        <li><a href="pages/watchlist.html">我的自選股</a></li>
+        <li><a href="pages/app.html">手機 APP</a></li>
+        <li><a href="pages/software.html">報價軟體</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>關於我們</h4>
+      <ul>
+        <li><a href="pages/about.html">公司簡介</a></li>
+        <li><a href="pages/tutorial.html">下單教學</a></li>
+        <li><a href="#">服務條款</a></li>
+        <li><a href="#">隱私政策</a></li>
+        <li><a href="pages/contact.html">聯絡客服</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="copyright">
+    <div class="container">
+      © 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，投資前請審慎評估。
+    </div>
+  </div>
+</footer>
+
+<!-- AI 今日盤勢警報（進站彈窗）-->
+<div class="ai-alert-overlay" id="aiAlertOverlay" hidden>
+  <div class="ai-alert-modal" role="dialog" aria-labelledby="aiAlertTitle" aria-modal="true">
+    <button class="ai-alert-close" aria-label="關閉" id="aiAlertClose">✕</button>
+    <div class="ai-alert-header">
+      <div class="ai-alert-eyebrow">✨ 領富 AI · 今日盤勢警報</div>
+      <h2 id="aiAlertTitle">AI 為你篩出今日三大重點</h2>
+      <div class="ai-alert-date" id="aiAlertDate">--</div>
+    </div>
+    <div class="ai-alert-body" id="aiAlertItems">
+      <!-- 由 JS 動態填入：今日漲幅前 2 名 + 1 則最新公告/政策 -->
+    </div>
+    <div class="ai-alert-footer">
+      <a href="pages/register.html" class="ai-alert-btn primary">📊 看完整報告</a>
+      <button class="ai-alert-btn line" data-action="line">💬 加 LINE 受推播</button>
+    </div>
+    <p class="ai-alert-disclaimer">※ 本資訊由 AI 自動產生，僅供參考，不構成投資建議。投資前請審慎評估風險。</p>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

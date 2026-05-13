@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">個股詳情 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="contact.html">客服 0800-035-178</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li><a href="stocks.html?status=興櫃">興櫃股票</a></li>
+      <li><a href="stocks.html?status=準上市">準上市</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="announcements.html">公司公告</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="stock-hero">
+  <div class="container">
+    <div class="breadcrumb" style="margin-bottom:6px;">首頁 ▸ 個股 ▸ <span id="bcCode"></span></div>
+    <div class="stock-hero-inner">
+      <div>
+        <div class="stock-title-row">
+          <div class="stock-name-big" id="stockName">--</div>
+          <div class="stock-code-big" id="stockCode">----</div>
+          <span class="status-pill" id="stockStatus"></span>
+          <span class="stock-meta" id="stockMeta"></span>
+        </div>
+        <div class="stock-price-block">
+          <div class="stock-price-big" id="stockPrice">--</div>
+          <div class="stock-change-big" id="stockChange">--</div>
+        </div>
+        <div class="stock-quick-stats">
+          <div class="qs-item"><div class="qs-label">成交量</div><div class="qs-value" id="qsVol">--</div></div>
+          <div class="qs-item"><div class="qs-label">本益比</div><div class="qs-value" id="qsPe">--</div></div>
+          <div class="qs-item"><div class="qs-label">EPS</div><div class="qs-value" id="qsEps">--</div></div>
+          <div class="qs-item"><div class="qs-label">ROE</div><div class="qs-value" id="qsRoe">--</div></div>
+        </div>
+        <div class="stock-action-row">
+          <button class="btn-primary" id="favBtn">＋ 加入自選</button>
+          <button>聯絡營業員下單</button>
+          <button>下載個股報告</button>
+          <button>分享</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:#888;margin-bottom:6px;">近 16 日 K 線（示意）</div>
+        <div class="kchart-wrap">
+          <canvas id="kchart" class="kchart-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container" style="background:#fff;border:1px solid #e0e3e8;margin-top:20px;border-radius:4px;">
+
+  <div class="detail-tabs">
+    <button class="active" data-section="sec-info">基本資料</button>
+    <button data-section="sec-fin">財務指標</button>
+    <button data-section="sec-news">個股新聞</button>
+    <button data-section="sec-ann">公司公告</button>
+    <button data-section="sec-talk">個股討論</button>
+    <button data-section="sec-ai">AI 智能分析</button>
+  </div>
+
+  <!-- 基本資料 -->
+  <div class="detail-section active" id="sec-info">
+    <div class="info-grid" id="infoGrid"></div>
+  </div>
+
+  <!-- 財務指標 -->
+  <div class="detail-section" id="sec-fin">
+    <table class="fin-table" id="finTable"></table>
+    <p style="font-size:11px;color:#999;margin-top:12px;">※ 資料僅供參考，實際財報以公開資訊觀測站為準。</p>
+  </div>
+
+  <!-- 個股新聞 -->
+  <div class="detail-section" id="sec-news">
+    <ul class="news-list" id="stockNewsList"></ul>
+  </div>
+
+  <!-- 公司公告 -->
+  <div class="detail-section" id="sec-ann">
+    <ul class="news-list" id="stockAnnList"></ul>
+  </div>
+
+  <!-- 個股討論 -->
+  <div class="detail-section" id="sec-talk">
+    <ul class="thread-list" id="stockThreadList"></ul>
+    <div style="padding:16px;text-align:center;background:#fafbfc;border-top:1px solid #eee;">
+      <button class="btn-primary" style="width:auto;padding:8px 28px;">＋ 我要發文</button>
+    </div>
+  </div>
+
+  <!-- AI 智能分析 -->
+  <div class="detail-section" id="sec-ai">
+    <div class="ai-panel">
+      <div class="ai-panel-head">
+        <div class="ai-panel-title">AI 個股智能分析</div>
+        <button class="ai-trigger" data-action="stockAnalyze" data-code="" data-target="#aiResult">點此產生分析 →</button>
+      </div>
+      <p class="ai-placeholder">點擊右上方按鈕，AI 將自動產出技術面、基本面與風險評估報告。</p>
+      <div id="aiResult" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer" style="margin-top:40px;">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const { data, findStock, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, addToWatchlist, removeFromWatchlist, isInWatchlist } = window.LeadFu;
+
+  // 取代號
+  const code = new URLSearchParams(location.search).get("code") || "6488";
+  const s = findStock(code);
+  if (!s) {
+    document.querySelector(".stock-hero").innerHTML = `<div class="container" style="padding:40px;text-align:center;color:#999;">找不到代號 ${code} 的個股</div>`;
+    return;
+  }
+  const d = data.details[code] || null;
+  const pct = pctChange(s.price, s.change);
+  const cls = changeClass(s.change);
+
+  // Title & breadcrumb
+  document.getElementById("pageTitle").textContent = `${s.code} ${s.name} - 領富 AI`;
+  document.getElementById("bcCode").textContent = `${s.code} ${s.name}`;
+
+  // Hero
+  document.getElementById("stockName").textContent = s.name;
+  document.getElementById("stockCode").textContent = s.code;
+  const sp = document.getElementById("stockStatus");
+  sp.className = "status-pill status-" + s.status; sp.textContent = s.status;
+  document.getElementById("stockMeta").textContent = `${s.category}`;
+
+  const priceEl = document.getElementById("stockPrice");
+  priceEl.textContent = fmtPrice(s.price);
+  priceEl.className = "stock-price-big " + cls;
+
+  const chgEl = document.getElementById("stockChange");
+  chgEl.innerHTML = `${arrow(s.change)} ${fmtChange(s.change)} (${fmtPct(pct)})`;
+  chgEl.className = "stock-change-big " + cls;
+
+  // Quick stats：優先用真實月營收資料；退 mock 財報；都沒有顯示「-」
+  const qsRev = (data.revenue || {})[code];
+  function setQs(id, label, value, valueClass) {
+    const valEl = document.getElementById(id);
+    valEl.textContent = value;
+    if (valueClass) valEl.className = "qs-value " + valueClass;
+    const labelEl = valEl.previousElementSibling;
+    if (labelEl && labelEl.classList.contains("qs-label")) labelEl.textContent = label;
+  }
+  setQs("qsVol", "成交量", s.volume.toLocaleString("zh-TW") + " 張");
+  if (qsRev) {
+    const momCls = qsRev.mom > 0 ? "up" : (qsRev.mom < 0 ? "down" : "flat");
+    const yoyCls = qsRev.yoy > 0 ? "up" : (qsRev.yoy < 0 ? "down" : "flat");
+    setQs("qsPe",  "月營收", qsRev.monthRevenueFmt);
+    setQs("qsEps", "月增 MoM", (qsRev.mom > 0 ? "+" : "") + qsRev.mom.toFixed(1) + "%", momCls);
+    setQs("qsRoe", "年增 YoY", (qsRev.yoy > 0 ? "+" : "") + qsRev.yoy.toFixed(1) + "%", yoyCls);
+  } else if (d) {
+    setQs("qsPe",  "本益比", d.financials.pe.toFixed(2));
+    setQs("qsEps", "EPS",   d.financials.eps.toFixed(2));
+    setQs("qsRoe", "ROE",   d.financials.roe.toFixed(2) + "%");
+  } else {
+    setQs("qsPe",  "本益比", "-");
+    setQs("qsEps", "EPS",   "-");
+    setQs("qsRoe", "ROE",   "-");
+  }
+
+  // Fav button
+  const favBtn = document.getElementById("favBtn");
+  function syncFavBtn() {
+    if (isInWatchlist(code)) {
+      favBtn.textContent = "✓ 已加入自選";
+      favBtn.style.background = "#163A2E";
+    } else {
+      favBtn.textContent = "＋ 加入自選";
+      favBtn.style.background = "#1B4332";
+    }
+  }
+  favBtn.addEventListener("click", () => {
+    if (isInWatchlist(code)) removeFromWatchlist(code);
+    else addToWatchlist(code);
+    syncFavBtn();
+  });
+  syncFavBtn();
+
+  // K 線：優先用 TPEx 累積真實資料 → 退 mock 詳情 kline → 退隨機漂移
+  let kdata, kSource;
+  const liveKlines = (data.klines || {})[code];
+  if (liveKlines && liveKlines.length >= 3) {
+    kdata = liveKlines.map(k => k.close);
+    kSource = `TPEx 累積 ${liveKlines.length} 天`;
+  } else if (d && d.kline) {
+    kdata = d.kline;
+    kSource = "示意資料";
+  } else {
+    kdata = Array(16).fill(s.price).map((p,i)=>p + (Math.random()-0.5)*p*0.05);
+    kSource = "隨機示意";
+  }
+  drawKChart(document.getElementById("kchart"), kdata, s.change >= 0);
+  const kLabel = document.querySelector(".kchart-wrap")?.previousElementSibling;
+  if (kLabel && kLabel.tagName === "DIV" && kLabel.textContent.includes("K 線")) {
+    kLabel.innerHTML = `近 ${kdata.length} 日 K 線 <span style="color:#C5A572;font-size:11px;">(${kSource})</span>`;
+  }
+
+  function drawKChart(canvas, arr, isUp) {
+    const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, w, h);
+
+    const pad = 10;
+    const min = Math.min(...arr), max = Math.max(...arr);
+    const range = (max - min) || 1;
+    const xStep = (w - pad*2) / (arr.length - 1);
+
+    // grid
+    ctx.strokeStyle = "#eef0f3"; ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+      const y = pad + (h - pad*2) * (i/4);
+      ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w-pad, y); ctx.stroke();
+    }
+
+    // area
+    const color = isUp ? "#1B4332" : "#1a8e3e";
+    ctx.beginPath();
+    arr.forEach((v, i) => {
+      const x = pad + xStep * i;
+      const y = pad + (h - pad*2) * (1 - (v - min)/range);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.lineTo(w - pad, h - pad);
+    ctx.lineTo(pad, h - pad);
+    ctx.closePath();
+    ctx.fillStyle = color + "22";
+    ctx.fill();
+
+    // line
+    ctx.beginPath();
+    arr.forEach((v, i) => {
+      const x = pad + xStep * i;
+      const y = pad + (h - pad*2) * (1 - (v - min)/range);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
+
+    // dots
+    arr.forEach((v, i) => {
+      const x = pad + xStep * i;
+      const y = pad + (h - pad*2) * (1 - (v - min)/range);
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI*2); ctx.fill();
+    });
+  }
+
+  // Tabs
+  document.querySelectorAll(".detail-tabs button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".detail-tabs button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      document.querySelectorAll(".detail-section").forEach(s => s.classList.remove("active"));
+      document.getElementById(btn.dataset.section).classList.add("active");
+    });
+  });
+
+  // 基本資料：優先用真實 TPEx 資料，缺的退 mock
+  const live = (data.companies || {})[code] || {};
+  const info = d || {};
+  const websiteCell = live.website
+    ? `<a href="${live.website}" target="_blank" rel="noopener" style="color:#1B4332;">${live.website} ↗</a>`
+    : (info.website || "-");
+  const emailCell = live.email
+    ? `<a href="mailto:${live.email}" style="color:#1B4332;">${live.email}</a>`
+    : "-";
+  const infoRows = [
+    ["公司全名",   live.name || info.fullName || s.name],
+    ["產業類別",   info.industry || s.category],
+    ["成立日期",   live.founded || info.founded || "-"],
+    ["實收資本額", live.capital || info.capital || "-"],
+    ["董事長",     live.chairman || info.chairman || "-"],
+    ["總經理",     live.president || info.president || "-"],
+    ["發言人",     live.spokesman ? `${live.spokesman} (${live.spokesmanTitle || "發言人"})` : (info.spokesman || "-")],
+    ["公司地址",   live.address || info.address || "-"],
+    ["公司電話",   live.phone || info.phone || "-"],
+    ["傳真",       live.fax || "-"],
+    ["公司網站",   websiteCell],
+    ["公司 Email", emailCell],
+    ["股票代理",   live.stockAgent ? `${live.stockAgent}${live.stockAgentPhone ? " ・ " + live.stockAgentPhone : ""}` : "-"],
+    ["會計師事務所", live.accountingFirm || "-"],
+    ["簽證會計師",  [live.cpa1, live.cpa2].filter(Boolean).join("、") || "-"],
+    ["統一編號",   live.taxId || "-"]
+  ];
+  document.getElementById("infoGrid").innerHTML = infoRows.map(([l,v]) =>
+    `<div class="info-row"><div class="info-label">${l}</div><div class="info-value">${v}</div></div>`
+  ).join("");
+
+  // 財務指標：優先真實月營收 → 退 mock 財報
+  const rev = (data.revenue || {})[code];
+  const finTable = document.getElementById("finTable");
+  if (rev) {
+    const momCls  = rev.mom > 0 ? "up" : (rev.mom < 0 ? "down" : "flat");
+    const yoyCls  = rev.yoy > 0 ? "up" : (rev.yoy < 0 ? "down" : "flat");
+    const cumCls  = rev.cumYoy > 0 ? "up" : (rev.cumYoy < 0 ? "down" : "flat");
+    const momArr  = rev.mom > 0 ? "▲" : (rev.mom < 0 ? "▼" : "－");
+    const yoyArr  = rev.yoy > 0 ? "▲" : (rev.yoy < 0 ? "▼" : "－");
+    const cumArr  = rev.cumYoy > 0 ? "▲" : (rev.cumYoy < 0 ? "▼" : "－");
+    finTable.innerHTML = `
+      <thead>
+        <tr><th colspan="4" style="background:linear-gradient(135deg,#1B4332,#2D6A4F);color:#fff;padding:10px 12px;">
+          📊 ${rev.period} 月營收（TPEx 即時） <span style="background:rgba(197,165,114,0.3);color:#C5A572;padding:2px 8px;border-radius:10px;font-size:11px;margin-left:8px;">真實資料</span>
+        </tr></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>當月營收</td>
+          <td class="num"><strong style="font-size:16px;">${rev.monthRevenueFmt}</strong></td>
+          <td>產業別</td>
+          <td>${rev.industry || "-"}</td>
+        </tr>
+        <tr>
+          <td>月增率 MoM</td>
+          <td class="num ${momCls}">${momArr} ${rev.mom > 0 ? "+" : ""}${rev.mom.toFixed(2)}%</td>
+          <td>年增率 YoY</td>
+          <td class="num ${yoyCls}">${yoyArr} ${rev.yoy > 0 ? "+" : ""}${rev.yoy.toFixed(2)}%</td>
+        </tr>
+        <tr>
+          <td>累計營收</td>
+          <td class="num"><strong>${rev.cumRevenueFmt}</strong></td>
+          <td>累計年增</td>
+          <td class="num ${cumCls}">${cumArr} ${rev.cumYoy > 0 ? "+" : ""}${rev.cumYoy.toFixed(2)}%</td>
+        </tr>
+      </tbody>`;
+    // 若還有 mock 財報，補上 EPS/PE/ROE
+    if (d && d.financials) {
+      const f = d.financials;
+      finTable.innerHTML += `
+        <thead><tr><th colspan="4" style="background:#f8f5ee;color:#1B4332;padding:8px 12px;">補充財報指標 <span style="font-size:10px;color:#999;">（範例資料）</span></th></tr></thead>
+        <tbody>
+          <tr><td>EPS</td><td class="num">${f.eps.toFixed(2)}</td><td>本益比 P/E</td><td class="num">${f.pe.toFixed(2)}</td></tr>
+          <tr><td>BPS</td><td class="num">${f.bps.toFixed(2)}</td><td>股價淨值比 P/B</td><td class="num">${f.pb.toFixed(2)}</td></tr>
+          <tr><td>ROE</td><td class="num">${f.roe.toFixed(2)}%</td><td>毛利率</td><td class="num">-</td></tr>
+        </tbody>`;
+    }
+  } else if (d) {
+    const f = d.financials;
+    finTable.innerHTML = `
+      <thead><tr><th>項目</th><th class="num">數值</th><th>項目</th><th class="num">數值</th></tr></thead>
+      <tbody>
+        <tr><td>營業收入(億)</td><td class="num">${f.revenue.toFixed(2)}</td><td>稅後淨利(億)</td><td class="num">${f.netProfit.toFixed(2)}</td></tr>
+        <tr><td>每股盈餘 EPS</td><td class="num">${f.eps.toFixed(2)}</td><td>每股淨值 BPS</td><td class="num">${f.bps.toFixed(2)}</td></tr>
+        <tr><td>本益比 (P/E)</td><td class="num">${f.pe.toFixed(2)}</td><td>股價淨值比 (P/B)</td><td class="num">${f.pb.toFixed(2)}</td></tr>
+        <tr><td>股東權益報酬率 ROE</td><td class="num">${f.roe.toFixed(2)}%</td><td>毛利率</td><td class="num">-</td></tr>
+      </tbody>`;
+  } else {
+    finTable.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:30px;color:#999;">本檔個股財務資料尚未建立</td></tr>`;
+  }
+
+  // 個股新聞：先看內建 related 欄位，沒有就用標題比對（Google News 來源）
+  const relatedNews = data.news.filter(n => {
+    if (n.related && n.related.includes(code)) return true;
+    const title = n.title || "";
+    return title.includes(s.name) || title.includes(code);
+  });
+  document.getElementById("stockNewsList").innerHTML = relatedNews.length
+    ? relatedNews.map(n => `<li>
+        <span class="news-time">${n.time}</span>
+        <span class="news-tag ${n.tag}">${n.tag}</span>
+        <a class="news-title" href="news-detail.html?id=${n.id}">${n.title}</a>
+      </li>`).join("")
+    : `<li style="display:block;text-align:center;padding:30px;color:#999;">尚無此個股相關新聞</li>`;
+
+  // 公司公告
+  const anns = (d && d.announcements) || data.announcements.filter(a => a.code === code);
+  document.getElementById("stockAnnList").innerHTML = anns.length
+    ? anns.map(a => `<li>
+        <span class="news-time">${a.date.slice(5)}</span>
+        <span class="news-tag 公告">公告</span>
+        <a class="news-title" href="#">${a.title}</a>
+      </li>`).join("")
+    : `<li style="display:block;text-align:center;padding:30px;color:#999;">尚無此個股公告</li>`;
+
+  // 個股討論（佔位 - 連到 thread-detail）
+  const sampleThreads = [
+    { tid: 1, cat: "個股", title: `[請益] ${s.name} ${s.code} 現在進場會不會太晚？`, author: "stock_god", replies: 128, time: "5 分鐘前" },
+    { tid: 2, cat: "個股", title: `[心得] ${s.name} 持有半年的心得分享`, author: "long_term", replies: 42, time: "2 小時前" },
+    { tid: 3, cat: "個股", title: `[討論] ${s.name} 法說會重點整理`, author: "ai_fan", replies: 87, time: "昨日" }
+  ];
+  document.getElementById("stockThreadList").innerHTML = sampleThreads.map(t => `
+    <li>
+      <span class="thread-cat">${t.cat}</span>
+      <a href="thread-detail.html?id=${t.tid}" class="thread-title">${t.title}</a>
+      <span class="thread-author">${t.author}</span>
+      <span class="thread-replies">${t.replies} 回</span>
+      <span class="thread-time">${t.time}</span>
+    </li>
+  `).join("");
+
+  // AI button: 寫入 code
+  document.querySelector(".ai-trigger").dataset.code = code;
+});
+</script>
+</body>
+</html>

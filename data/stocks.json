@@ -1,0 +1,38 @@
+{
+  "updatedAt": "2026-05-12 09:30",
+  "stocks": [
+    { "code": "6488", "name": "環球晶", "price": 462.5, "change": 8.5, "volume": 1245, "category": "半導體", "status": "興櫃" },
+    { "code": "3552", "name": "同致", "price": 178.0, "change": -2.0, "volume": 320, "category": "電子零組件", "status": "未上市" },
+    { "code": "6515", "name": "穎崴", "price": 1245.0, "change": 35.0, "volume": 88, "category": "半導體", "status": "興櫃" },
+    { "code": "8038", "name": "長園科", "price": 92.3, "change": 1.2, "volume": 540, "category": "電池材料", "status": "未上市" },
+    { "code": "6531", "name": "愛普", "price": 1820.0, "change": -45.0, "volume": 45, "category": "IC設計", "status": "興櫃" },
+    { "code": "6770", "name": "力積電", "price": 28.5, "change": 0.5, "volume": 2850, "category": "晶圓代工", "status": "未上市" },
+    { "code": "6841", "name": "長聖", "price": 215.0, "change": 5.0, "volume": 180, "category": "生技醫療", "status": "興櫃" },
+    { "code": "4174", "name": "浩鼎", "price": 320.0, "change": -8.0, "volume": 95, "category": "生技醫療", "status": "準上市" },
+    { "code": "6962", "name": "拓凱", "price": 156.0, "change": 2.5, "volume": 420, "category": "運動器材", "status": "未上市" },
+    { "code": "8155", "name": "博智", "price": 386.0, "change": 11.0, "volume": 230, "category": "PCB", "status": "興櫃" },
+    { "code": "5483", "name": "中美晶", "price": 132.5, "change": -1.5, "volume": 680, "category": "半導體", "status": "未上市" },
+    { "code": "2069", "name": "運錩", "price": 56.4, "change": 0.8, "volume": 1100, "category": "鋼鐵", "status": "未上市" },
+    { "code": "6116", "name": "彩晶", "price": 8.95, "change": -0.05, "volume": 12500, "category": "面板", "status": "準上市" },
+    { "code": "3265", "name": "台星科", "price": 88.0, "change": 1.5, "volume": 380, "category": "半導體封測", "status": "興櫃" },
+    { "code": "4438", "name": "廣越", "price": 245.0, "change": 4.5, "volume": 145, "category": "紡織成衣", "status": "未上市" }
+  ],
+  "news": [
+    { "time": "09:25", "title": "外資加碼半導體未上市股，環球晶連三紅", "tag": "熱門" },
+    { "time": "09:10", "title": "AI 概念股延燒至興櫃市場，IC 設計股表現亮眼", "tag": "焦點" },
+    { "time": "08:55", "title": "金管會公布最新興櫃股票交易規範，5/15 上路", "tag": "公告" },
+    { "time": "08:30", "title": "生技股財報季登場，浩鼎、長聖獲法人青睞", "tag": "個股" },
+    { "time": "昨日", "title": "未上市股市週評：成交量回升 15%，買盤轉趨積極", "tag": "週評" },
+    { "time": "昨日", "title": "新股申購：兩檔興櫃股下週開放抽籤", "tag": "抽籤" }
+  ],
+  "hotTopics": [
+    "AI 伺服器供應鏈",
+    "半導體先進製程",
+    "電動車電池材料",
+    "生技新藥",
+    "低軌衛星",
+    "重電族群",
+    "PCB 載板",
+    "面板雙虎"
+  ]
+}

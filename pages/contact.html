@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>聯絡我們 / 客服 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="contact.html">客服 0800-035-178</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="tutorial.html">下單教學</a></li>
+      <li><a href="about.html">關於我們</a></li>
+      <li class="active"><a href="contact.html">聯絡客服</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>聯絡我們 / 客服中心</h1>
+    <div class="breadcrumb">首頁 ▸ 聯絡客服</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 20px 12px 40px;">
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+    <div class="panel">
+      <div class="panel-head"><h2>客服聯絡方式</h2></div>
+      <div style="padding:24px;">
+        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;">
+          <div style="background:#1B4332;color:#fff;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;">☎</div>
+          <div>
+            <h3 style="color:#163A2E;margin-bottom:4px;">免付費客服專線</h3>
+            <div style="font-size:24px;font-weight:700;color:#1B4332;">0800-035-178</div>
+            <p style="font-size:12px;color:#888;margin-top:2px;">週一至週五 09:00 - 18:00</p>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;">
+          <div style="background:#163A2E;color:#fff;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;">✉</div>
+          <div>
+            <h3 style="color:#163A2E;margin-bottom:4px;">客服信箱</h3>
+            <div style="font-size:16px;">postmaster@berich.example.com</div>
+            <p style="font-size:12px;color:#888;margin-top:2px;">24 小時內回覆</p>
+          </div>
+        </div>
+
+        <div class="line-cta" style="display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;cursor:pointer;padding:8px;border-radius:8px;transition:background 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">
+          <div style="background:#06c755;color:#fff;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;">LINE</div>
+          <div>
+            <h3 style="color:#163A2E;margin-bottom:4px;">LINE 官方帳號 <span style="font-size:11px;color:#06c755;font-weight:500;">點擊加好友 →</span></h3>
+            <div style="font-size:18px;font-weight:700;color:#1B4332;">@041exgtv</div>
+            <p style="font-size:12px;color:#888;margin-top:2px;">即時客服回覆 ・ 每日盤勢推播</p>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:flex-start;gap:16px;">
+          <div style="background:#666;color:#fff;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">📍</div>
+          <div>
+            <h3 style="color:#163A2E;margin-bottom:4px;">公司地址</h3>
+            <div style="font-size:14px;line-height:1.6;">台北市中山區南京東路二段 100 號 10 樓<br><span style="color:#888;font-size:12px;">捷運松江南京站步行 5 分鐘</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>線上留言</h2></div>
+      <div style="padding:20px;">
+        <form id="contactForm">
+          <div class="form-group">
+            <label>姓名 *</label>
+            <input type="text" id="name" required>
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="email" required>
+          </div>
+          <div class="form-group">
+            <label>電話</label>
+            <input type="tel" id="phone">
+          </div>
+          <div class="form-group">
+            <label>問題類型 *</label>
+            <select id="type" required>
+              <option value="">請選擇</option>
+              <option>會員帳號問題</option>
+              <option>VIP 訂閱付款</option>
+              <option>網站使用問題</option>
+              <option>個股資料錯誤回報</option>
+              <option>合作 / 廣告諮詢</option>
+              <option>其他</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>留言內容 *</label>
+            <textarea id="msg" rows="5" required style="width:100%;padding:10px;border:1px solid #d0d5dc;border-radius:3px;font-family:inherit;font-size:14px;"></textarea>
+          </div>
+          <button type="submit" class="form-btn">送出留言</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel" style="margin-top:20px;">
+    <div class="panel-head"><h2>常見問題</h2></div>
+    <div style="padding:20px;font-size:14px;line-height:1.9;">
+      <details style="margin-bottom:12px;border-bottom:1px solid #eef0f3;padding-bottom:12px;">
+        <summary style="cursor:pointer;font-weight:600;color:#163A2E;">Q：如何重設密碼？</summary>
+        <p style="margin-top:8px;color:#555;">於登入頁面點選「忘記密碼」，輸入註冊 Email 後，系統會寄送重設連結。</p>
+      </details>
+      <details style="margin-bottom:12px;border-bottom:1px solid #eef0f3;padding-bottom:12px;">
+        <summary style="cursor:pointer;font-weight:600;color:#163A2E;">Q：VIP 訂閱可以退費嗎？</summary>
+        <p style="margin-top:8px;color:#555;">訂閱後 7 天內可申請全額退費，請來信客服信箱說明訂單編號。</p>
+      </details>
+      <details style="margin-bottom:12px;border-bottom:1px solid #eef0f3;padding-bottom:12px;">
+        <summary style="cursor:pointer;font-weight:600;color:#163A2E;">Q：報價資料更新頻率？</summary>
+        <p style="margin-top:8px;color:#555;">免費會員每 15 分鐘更新一次，VIP 會員享即時報價推播。</p>
+      </details>
+      <details>
+        <summary style="cursor:pointer;font-weight:600;color:#163A2E;">Q：領富 AI有提供下單服務嗎？</summary>
+        <p style="margin-top:8px;color:#555;">本網僅提供報價與資訊服務，下單需透過合作券商或代辦業者。請參考「下單教學」頁面。</p>
+      </details>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.getElementById("contactForm").addEventListener("submit", e => {
+  e.preventDefault();
+  alert("留言已送出，客服將於 24 小時內回覆您（範例環境，未串接真實後端）");
+  e.target.reset();
+});
+</script>
+</body>
+</html>

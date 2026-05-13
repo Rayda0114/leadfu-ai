@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>會員登入 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="contact.html">客服 0800-035-178</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="announcements.html">公司公告</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+      <li><a href="vip.html">VIP 訂閱</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container" style="min-height: 60vh;">
+
+  <div class="form-card">
+    <h2>會員登入</h2>
+    <p class="form-sub">登入即可使用自選股、即時推播、VIP 報告</p>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="account">會員帳號 / Email</label>
+        <input type="text" id="account" placeholder="請輸入帳號或 Email" required>
+      </div>
+      <div class="form-group">
+        <label for="pwd">密碼</label>
+        <input type="password" id="pwd" placeholder="請輸入密碼" required>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin: 6px 0 12px;">
+        <label><input type="checkbox" id="remember"> 記住我</label>
+        <a href="#">忘記密碼？</a>
+      </div>
+      <button type="submit" class="form-btn">登入</button>
+    </form>
+
+    <div style="margin: 20px 0; text-align: center; color: #aaa; font-size: 12px; position: relative;">
+      <span style="background: #fff; padding: 0 12px; position: relative; z-index: 1;">或使用社群帳號</span>
+      <div style="position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid #eef0f3; z-index: 0;"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+      <button style="padding:10px;border:1px solid #d0d5dc;background:#fff;border-radius:3px;font-size:13px;">Google 登入</button>
+      <button style="padding:10px;border:none;background:#06c755;color:#fff;border-radius:3px;font-size:13px;font-weight:600;">LINE 登入</button>
+    </div>
+
+    <div class="form-foot">
+      還沒有會員？ <a href="register.html" style="font-weight:600;">立即免費註冊</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.getElementById("loginForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const acc = document.getElementById("account").value.trim();
+  if (!acc) return;
+  // 佔位：將會員資料寫入 localStorage 模擬登入
+  localStorage.setItem("berich_user", JSON.stringify({ account: acc, loginAt: new Date().toISOString() }));
+  alert("登入成功！（範例環境，未串接真實後端）");
+  location.href = "member.html";
+});
+</script>
+</body>
+</html>

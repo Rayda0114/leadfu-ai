@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIP 訂閱方案 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="contact.html">客服 0800-035-178</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="announcements.html">公司公告</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+      <li class="active"><a href="vip.html">VIP 訂閱</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>VIP 訂閱方案</h1>
+    <div class="breadcrumb">首頁 ▸ VIP 訂閱</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 20px 12px 40px;">
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>選擇您的方案</h2>
+      <span style="font-size:12px;color:#1B4332;font-weight:600;">🎉 限時 7 折優惠中</span>
+    </div>
+
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="plan-name">免費會員</div>
+        <div class="plan-price">$0 <small>/ 月</small></div>
+        <ul class="plan-feat">
+          <li>自選股清單 (最多 10 檔)</li>
+          <li>每日盤後新聞</li>
+          <li>個股基本資料查詢</li>
+          <li>討論區發文</li>
+          <li>K 線圖查詢</li>
+        </ul>
+        <button class="form-btn" style="background:#888;">目前方案</button>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">最受歡迎</div>
+        <div class="plan-name">VIP 進階</div>
+        <div class="plan-price">$399 <small>/ 月</small></div>
+        <ul class="plan-feat">
+          <li>自選股清單 (最多 100 檔)</li>
+          <li>即時行情推播</li>
+          <li>個股深度分析報告</li>
+          <li>每日盤前 / 盤後 LINE 推播</li>
+          <li>AI 智能個股分析</li>
+          <li>三大法人籌碼追蹤</li>
+          <li>VIP 專屬討論區</li>
+        </ul>
+        <button class="form-btn">立即訂閱</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">VIP 旗艦</div>
+        <div class="plan-price">$999 <small>/ 月</small></div>
+        <ul class="plan-feat">
+          <li>VIP 進階全部功能</li>
+          <li>自選股無上限</li>
+          <li>專業分析師一對一諮詢</li>
+          <li>AI 投資組合建議</li>
+          <li>內幕消息優先推播</li>
+          <li>不公開個股報告</li>
+          <li>線下投資講座優先報名</li>
+        </ul>
+        <button class="form-btn">立即訂閱</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:20px;">
+    <div class="panel-head"><h2>付款方式</h2></div>
+    <div style="padding: 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+      <div style="text-align:center;padding:16px;border:1px solid #e0e3e8;border-radius:4px;">💳<br><small>信用卡</small></div>
+      <div style="text-align:center;padding:16px;border:1px solid #e0e3e8;border-radius:4px;">🏦<br><small>ATM 轉帳</small></div>
+      <div style="text-align:center;padding:16px;border:1px solid #e0e3e8;border-radius:4px;">📱<br><small>LINE Pay</small></div>
+      <div style="text-align:center;padding:16px;border:1px solid #e0e3e8;border-radius:4px;">🅿️<br><small>街口支付</small></div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:20px;">
+    <div class="panel-head"><h2>常見問題</h2></div>
+    <div style="padding: 20px; font-size: 14px; line-height: 1.9;">
+      <p><strong>Q：可以隨時取消訂閱嗎？</strong><br>A：可以，於到期前 24 小時取消即不會自動續訂。</p>
+      <hr style="margin:12px 0;border:none;border-top:1px dashed #eef0f3;">
+      <p><strong>Q：有試用方案嗎？</strong><br>A：新會員註冊享 30 天 VIP 免費體驗（無需綁信用卡）。</p>
+      <hr style="margin:12px 0;border:none;border-top:1px dashed #eef0f3;">
+      <p><strong>Q：年付有折扣嗎？</strong><br>A：年付方案可享 8 折優惠，VIP 進階年付僅 $3,829。</p>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>會員中心 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right">
+      <span id="userBar">未登入</span>
+      <a href="contact.html">客服 0800-035-178</a>
+    </div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="announcements.html">公司公告</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+      <li><a href="vip.html">VIP 訂閱</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>會員中心</h1>
+    <div class="breadcrumb">首頁 ▸ 會員中心</div>
+  </div>
+</div>
+
+<main class="container main-grid">
+  <section class="col-main">
+
+    <div class="panel">
+      <div class="panel-head"><h2>個人資料</h2></div>
+      <div class="info-grid" id="profileGrid"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>我的自選股</h2>
+        <a href="watchlist.html" class="more">完整列表 ▸</a>
+      </div>
+      <div id="favPreview" style="padding:0;"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>會員權益</h2></div>
+      <div style="padding:16px 20px;font-size:14px;line-height:1.9;">
+        <p>✅ 免費自選股清單（最多 50 檔）</p>
+        <p>✅ 每日盤後 LINE 推播（基礎版）</p>
+        <p>✅ 個股討論區發文權限</p>
+        <p>🔒 即時行情推播（升級 VIP 解鎖）</p>
+        <p>🔒 個股深度分析報告（升級 VIP 解鎖）</p>
+        <p>🔒 AI 智能投資組合建議（升級 VIP 解鎖）</p>
+        <div style="margin-top:14px;">
+          <a href="vip.html" style="display:inline-block;background:#1B4332;color:#fff;padding:8px 22px;border-radius:3px;font-weight:600;">升級 VIP 解鎖全部功能 →</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <aside class="col-side">
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>會員專區</h3></div>
+      <ul style="padding: 8px 0;">
+        <li style="padding:10px 16px;border-bottom:1px solid #eef0f3;"><a href="watchlist.html">我的自選股</a></li>
+        <li style="padding:10px 16px;border-bottom:1px solid #eef0f3;"><a href="#">我的發文</a></li>
+        <li style="padding:10px 16px;border-bottom:1px solid #eef0f3;"><a href="#">通知中心</a></li>
+        <li style="padding:10px 16px;border-bottom:1px solid #eef0f3;"><a href="vip.html">VIP 訂閱</a></li>
+        <li style="padding:10px 16px;border-bottom:1px solid #eef0f3;"><a href="#">付款記錄</a></li>
+        <li style="padding:10px 16px;"><a href="#" id="logoutBtn" style="color:#1B4332;">登出</a></li>
+      </ul>
+    </div>
+
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>會員狀態</h3></div>
+      <div style="padding:14px;text-align:center;">
+        <div style="font-size:28px;font-weight:700;color:#1B4332;margin-bottom:4px;">免費會員</div>
+        <p style="font-size:12px;color:#888;margin-bottom:12px;">升級享受完整服務</p>
+        <a href="vip.html" style="display:block;background:linear-gradient(135deg,#1B4332,#0D2818);color:#fff;padding:8px;border-radius:3px;font-weight:600;font-size:13px;">立即升級</a>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const { data, findStock, getWatchlist, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, pageHref } = window.LeadFu;
+
+  // 取得會員資料
+  let user = null;
+  try { user = JSON.parse(localStorage.getItem("berich_user") || "null"); } catch {}
+  if (!user) {
+    document.querySelector("main").innerHTML = `
+      <div class="form-card" style="text-align:center;">
+        <h2>請先登入</h2>
+        <p class="form-sub">您尚未登入會員，請先登入或註冊</p>
+        <a href="login.html" class="form-btn" style="display:block;text-decoration:none;text-align:center;margin-bottom:8px;">前往登入</a>
+        <a href="register.html" style="display:block;color:#163A2E;font-weight:600;">免費註冊 →</a>
+      </div>`;
+    return;
+  }
+
+  document.getElementById("userBar").innerHTML = `${user.name || user.account || "會員"} ・ <a href="#" id="logoutLink">登出</a>`;
+  document.getElementById("logoutLink").addEventListener("click", e => {
+    e.preventDefault();
+    localStorage.removeItem("berich_user");
+    location.href = "../index.html";
+  });
+  document.getElementById("logoutBtn").addEventListener("click", e => {
+    e.preventDefault();
+    localStorage.removeItem("berich_user");
+    location.href = "../index.html";
+  });
+
+  // 個人資料
+  const rows = [
+    ["姓名", user.name || user.account || "-"],
+    ["Email", user.email || "-"],
+    ["手機", user.phone || "-"],
+    ["投資經驗", user.exp || "-"],
+    ["註冊日期", user.registeredAt ? user.registeredAt.slice(0,10) : (user.loginAt ? user.loginAt.slice(0,10) : "-")],
+    ["會員等級", "免費會員"]
+  ];
+  document.getElementById("profileGrid").innerHTML = rows.map(([l,v]) =>
+    `<div class="info-row"><div class="info-label">${l}</div><div class="info-value">${v}</div></div>`
+  ).join("");
+
+  // 自選股預覽（前 5 檔）
+  const favCodes = getWatchlist().slice(0, 5);
+  if (favCodes.length === 0) {
+    document.getElementById("favPreview").innerHTML = `
+      <div style="padding:30px;text-align:center;color:#999;">
+        尚無自選股 ・ <a href="stocks.html">前往加入 →</a>
+      </div>`;
+  } else {
+    const list = favCodes.map(findStock).filter(Boolean);
+    document.getElementById("favPreview").innerHTML = `
+      <table class="stock-table">
+        <thead><tr><th>代號</th><th>名稱</th><th class="num">成交價</th><th class="num">漲跌</th><th class="num">漲跌幅</th><th>狀態</th></tr></thead>
+        <tbody>
+          ${list.map(s => {
+            const cls = changeClass(s.change);
+            return `<tr>
+              <td class="code"><a href="${pageHref('stock-detail.html?code=' + s.code)}">${s.code}</a></td>
+              <td>${s.name}</td>
+              <td class="num ${cls}">${fmtPrice(s.price)}</td>
+              <td class="num ${cls}">${arrow(s.change)} ${fmtChange(s.change)}</td>
+              <td class="num ${cls}">${fmtPct(pctChange(s.price, s.change))}</td>
+              <td><span class="status-pill status-${s.status}">${s.status}</span></td>
+            </tr>`;
+          }).join("")}
+        </tbody>
+      </table>`;
+  }
+});
+</script>
+</body>
+</html>

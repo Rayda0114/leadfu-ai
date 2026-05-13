@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">搜尋結果 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="contact.html">客服 0800-035-178</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱 / 新聞 / 討論">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li><a href="screener.html">進階選股</a></li>
+      <li><a href="industries.html">產業分類</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>搜尋結果：「<span id="qText">--</span>」</h1>
+    <div class="breadcrumb">首頁 ▸ 搜尋</div>
+  </div>
+</div>
+
+<main class="container main-grid">
+  <section class="col-main">
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>搜尋分類</h2>
+        <div class="panel-tabs">
+          <button class="tab active" data-cat="all">全部 (<span id="cAll">0</span>)</button>
+          <button class="tab" data-cat="stock">個股 (<span id="cStock">0</span>)</button>
+          <button class="tab" data-cat="news">新聞 (<span id="cNews">0</span>)</button>
+          <button class="tab" data-cat="thread">討論 (<span id="cThread">0</span>)</button>
+          <button class="tab" data-cat="ann">公告 (<span id="cAnn">0</span>)</button>
+        </div>
+      </div>
+      <div id="searchResults" style="padding: 0;"></div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-panel-head">
+        <div class="ai-panel-title">AI 智能搜尋助手</div>
+        <button class="ai-trigger" data-action="stockAnalyze" data-target="#aiSrResult">用 AI 解釋搜尋詞 →</button>
+      </div>
+      <p class="ai-placeholder">AI 根據您的搜尋意圖，自動推薦相關個股、新聞、產業背景。</p>
+      <div id="aiSrResult" style="margin-top:12px;"></div>
+    </div>
+
+  </section>
+
+  <aside class="col-side">
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>熱門搜尋</h3></div>
+      <div style="padding:14px;">
+        <a href="search.html?q=AI" style="display:inline-block;margin:3px;padding:4px 10px;background:#f0f3f8;border-radius:14px;font-size:12px;color:#555;text-decoration:none;">AI</a>
+        <a href="search.html?q=環球晶" style="display:inline-block;margin:3px;padding:4px 10px;background:#f0f3f8;border-radius:14px;font-size:12px;color:#555;text-decoration:none;">環球晶</a>
+        <a href="search.html?q=半導體" style="display:inline-block;margin:3px;padding:4px 10px;background:#f0f3f8;border-radius:14px;font-size:12px;color:#555;text-decoration:none;">半導體</a>
+        <a href="search.html?q=生技" style="display:inline-block;margin:3px;padding:4px 10px;background:#f0f3f8;border-radius:14px;font-size:12px;color:#555;text-decoration:none;">生技</a>
+        <a href="search.html?q=興櫃" style="display:inline-block;margin:3px;padding:4px 10px;background:#f0f3f8;border-radius:14px;font-size:12px;color:#555;text-decoration:none;">興櫃</a>
+        <a href="search.html?q=IPO" style="display:inline-block;margin:3px;padding:4px 10px;background:#f0f3f8;border-radius:14px;font-size:12px;color:#555;text-decoration:none;">IPO</a>
+        <a href="search.html?q=力積電" style="display:inline-block;margin:3px;padding:4px 10px;background:#f0f3f8;border-radius:14px;font-size:12px;color:#555;text-decoration:none;">力積電</a>
+        <a href="search.html?q=股利" style="display:inline-block;margin:3px;padding:4px 10px;background:#f0f3f8;border-radius:14px;font-size:12px;color:#555;text-decoration:none;">股利</a>
+      </div>
+    </div>
+
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>搜尋技巧</h3></div>
+      <div style="padding: 14px; font-size: 12px; color: #555; line-height: 1.9;">
+        <p>輸入股票代號可直接跳轉個股</p>
+        <p>輸入公司名稱可模糊搜尋</p>
+        <p>支援搜尋新聞、討論、公告</p>
+        <p>關鍵字可搜尋產業類別</p>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const { data, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, pageHref } = window.LeadFu;
+
+  const q = new URLSearchParams(location.search).get("q") || "";
+  document.getElementById("qText").textContent = q;
+  document.getElementById("stockSearch").value = q;
+  document.title = `搜尋「${q}」 - 領富 AI`;
+
+  if (!q) {
+    document.getElementById("searchResults").innerHTML = `<div style="padding:40px;text-align:center;color:#999;">請輸入搜尋關鍵字</div>`;
+    return;
+  }
+
+  const ql = q.toLowerCase();
+  const matches = {
+    stock: data.stocks.filter(s =>
+      s.code.toLowerCase().includes(ql) ||
+      s.name.includes(q) ||
+      s.category.includes(q)
+    ),
+    news: data.news.filter(n =>
+      n.title.includes(q) ||
+      (Array.isArray(n.body) && n.body.some(p => p.includes(q))) ||
+      (n.related && n.related.some(c => {
+        const s = data.stocks.find(x => x.code === c);
+        return s && s.name.includes(q);
+      }))
+    ),
+    thread: [
+      { id: 1, cat: "個股", title: "[請益] 環球晶 6488 現在進場會不會太晚？", author: "stock_god", replies: 128 },
+      { id: 2, cat: "興櫃", title: "穎崴 6515 法說會重點整理", author: "ai_fan", replies: 87 },
+      { id: 3, cat: "新股", title: "[抽籤] 浩鼎 4174 下週開放，承銷價 305 元", author: "ipo_hunter", replies: 56 }
+    ].filter(t => t.title.includes(q)),
+    ann: data.announcements.filter(a =>
+      a.title.includes(q) || a.name.includes(q) || a.code.includes(q) || a.type.includes(q)
+    )
+  };
+
+  document.getElementById("cAll").textContent = matches.stock.length + matches.news.length + matches.thread.length + matches.ann.length;
+  document.getElementById("cStock").textContent = matches.stock.length;
+  document.getElementById("cNews").textContent = matches.news.length;
+  document.getElementById("cThread").textContent = matches.thread.length;
+  document.getElementById("cAnn").textContent = matches.ann.length;
+
+  function highlight(text, kw) {
+    if (!kw) return text;
+    return text.replaceAll(kw, `<mark style="background:#fff3a0;padding:0 2px;">${kw}</mark>`);
+  }
+
+  function renderSection(title, count, body) {
+    if (count === 0) return "";
+    return `
+      <div style="padding: 14px 20px; border-bottom: 1px solid #eef0f3;">
+        <h3 style="color:#163A2E;font-size:14px;margin-bottom:10px;">${title} <span style="color:#1B4332;">(${count})</span></h3>
+        ${body}
+      </div>`;
+  }
+
+  function renderStocks() {
+    if (matches.stock.length === 0) return "";
+    return matches.stock.map(s => {
+      const cls = changeClass(s.change);
+      return `<a href="${pageHref('stock-detail.html?code=' + s.code)}" style="display:flex;align-items:center;gap:14px;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
+        <div style="flex-shrink:0;">
+          <strong style="color:#163A2E;font-size:15px;">${highlight(s.code, q)}</strong>
+          <span style="margin-left:6px;font-size:14px;">${highlight(s.name, q)}</span>
+        </div>
+        <div style="flex:1;font-size:12px;color:#888;">${highlight(s.category, q)} ・ <span class="status-pill status-${s.status}">${s.status}</span></div>
+        <div class="${cls}" style="font-weight:600;">${fmtPrice(s.price)} ${arrow(s.change)} ${fmtPct(pctChange(s.price, s.change))}</div>
+      </a>`;
+    }).join("");
+  }
+
+  function renderNews() {
+    if (matches.news.length === 0) return "";
+    return matches.news.map(n => `
+      <a href="${pageHref('news-detail.html?id=' + n.id)}" style="display:block;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:4px;">
+          <span class="news-tag ${n.tag}" style="font-size:11px;">${n.tag}</span>
+          <span style="font-size:12px;color:#888;">${n.date}</span>
+        </div>
+        <div style="font-size:14px;color:#222;margin-bottom:4px;">${highlight(n.title, q)}</div>
+        ${Array.isArray(n.body) ? `<div style="font-size:12px;color:#777;line-height:1.6;">${highlight((n.body[0] || "").slice(0, 100), q)}...</div>` : ""}
+      </a>`).join("");
+  }
+
+  function renderThreads() {
+    if (matches.thread.length === 0) return "";
+    return matches.thread.map(t => `
+      <a href="${pageHref('thread-detail.html?id=' + t.id)}" style="display:flex;gap:14px;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
+        <span class="thread-cat">${t.cat}</span>
+        <div style="flex:1;">
+          <div style="font-size:14px;color:#222;">${highlight(t.title, q)}</div>
+          <div style="font-size:12px;color:#888;margin-top:2px;">${t.author} ・ ${t.replies} 回覆</div>
+        </div>
+      </a>`).join("");
+  }
+
+  function renderAnns() {
+    if (matches.ann.length === 0) return "";
+    return matches.ann.map(a => `
+      <a href="${pageHref('stock-detail.html?code=' + a.code)}" style="display:flex;gap:12px;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
+        <span style="font-size:12px;color:#888;">${a.date}</span>
+        <span style="color:#163A2E;font-weight:600;">${a.code} ${a.name}</span>
+        <span class="status-pill" style="background:#e6efff;color:#163A2E;font-size:11px;">${a.type}</span>
+        <span style="font-size:13px;color:#222;flex:1;">${highlight(a.title, q)}</span>
+      </a>`).join("");
+  }
+
+  function renderAll(cat) {
+    let html = "";
+    if (cat === "all" || cat === "stock") html += renderSection("📊 個股", matches.stock.length, renderStocks());
+    if (cat === "all" || cat === "news")  html += renderSection("📰 新聞", matches.news.length, renderNews());
+    if (cat === "all" || cat === "thread") html += renderSection("💬 討論", matches.thread.length, renderThreads());
+    if (cat === "all" || cat === "ann")   html += renderSection("📢 公告", matches.ann.length, renderAnns());
+
+    if (!html) {
+      html = `<div style="padding:50px 20px;text-align:center;color:#999;">
+        <div style="font-size:48px;margin-bottom:12px;">🔍</div>
+        <p style="font-size:15px;">找不到與「${q}」相關的結果</p>
+        <p style="font-size:12px;margin-top:8px;">試試其他關鍵字，或回 <a href="../index.html">首頁</a> 看看</p>
+      </div>`;
+    }
+    document.getElementById("searchResults").innerHTML = html;
+  }
+
+  document.querySelectorAll(".panel-tabs .tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".panel-tabs .tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderAll(btn.dataset.cat);
+    });
+  });
+
+  renderAll("all");
+});
+</script>
+</body>
+</html>

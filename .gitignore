@@ -1,0 +1,25 @@
+# 原始 TPEx 備份檔（資料大、不需部署）
+data/_raw_*.json
+
+# 探測/開發過程的暫存檔
+scripts/_*.json
+scripts/_*.html
+scripts/_*.xml
+scripts/_swagger.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Deploy
+berich-deploy.zip
+*.tmp

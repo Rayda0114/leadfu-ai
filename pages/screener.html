@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>進階選股 - 領富 AI</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .screener-grid { display: grid; grid-template-columns: 280px 1fr; gap: 16px; }
+  @media (max-width: 768px) { .screener-grid { grid-template-columns: 1fr; } }
+  .filter-card {
+    background: #fff;
+    border: 1px solid #e0e3e8;
+    border-radius: 4px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .filter-card h4 {
+    font-size: 13px;
+    color: #163A2E;
+    margin-bottom: 10px;
+    border-left: 3px solid #1B4332;
+    padding-left: 8px;
+  }
+  .range-row { display: flex; gap: 6px; align-items: center; }
+  .range-row input { width: 100%; padding: 6px 8px; border: 1px solid #d0d5dc; border-radius: 2px; font-size: 13px; }
+  .check-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .check-list label {
+    font-size: 12px;
+    color: #444;
+    cursor: pointer;
+    padding: 4px 8px;
+    border: 1px solid #e0e3e8;
+    border-radius: 2px;
+    background: #fff;
+  }
+  .check-list label.checked {
+    background: #163A2E;
+    color: #fff;
+    border-color: #163A2E;
+  }
+  .check-list input { display: none; }
+  .preset-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 3px;
+    background: #fff8e1;
+    border: 1px solid #f0d77a;
+    color: #b07b00;
+    border-radius: 12px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .preset-pill:hover { background: #f0d77a; color: #fff; }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="contact.html">客服 0800-035-178</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li class="active"><a href="screener.html">進階選股</a></li>
+      <li><a href="industries.html">產業分類</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>進階選股工具</h1>
+    <div class="breadcrumb">首頁 ▸ 進階選股</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 16px 12px 40px;">
+
+  <div class="filter-card" style="margin-bottom: 16px;">
+    <h4>🎯 熱門快選</h4>
+    <div>
+      <span class="preset-pill" data-preset="up">📈 今日上漲</span>
+      <span class="preset-pill" data-preset="down">📉 今日下跌</span>
+      <span class="preset-pill" data-preset="volume">🔥 成交量爆量</span>
+      <span class="preset-pill" data-preset="ai">🤖 AI 概念股</span>
+      <span class="preset-pill" data-preset="bio">💊 生技醫療</span>
+      <span class="preset-pill" data-preset="ipo">🆕 準上市</span>
+      <span class="preset-pill" data-preset="high">📊 高價股 ($500+)</span>
+      <span class="preset-pill" data-preset="low">💰 低價股 ($100-)</span>
+    </div>
+  </div>
+
+  <div class="screener-grid">
+    <aside>
+
+      <div class="filter-card">
+        <h4>價格區間</h4>
+        <div class="range-row">
+          <input type="number" id="priceMin" placeholder="最低"> ~
+          <input type="number" id="priceMax" placeholder="最高">
+        </div>
+      </div>
+
+      <div class="filter-card">
+        <h4>漲跌幅 (%)</h4>
+        <div class="range-row">
+          <input type="number" id="pctMin" placeholder="最低" step="0.1"> ~
+          <input type="number" id="pctMax" placeholder="最高" step="0.1">
+        </div>
+      </div>
+
+      <div class="filter-card">
+        <h4>成交量 (張)</h4>
+        <div class="range-row">
+          <input type="number" id="volMin" placeholder="最低"> ~
+          <input type="number" id="volMax" placeholder="最高">
+        </div>
+      </div>
+
+      <div class="filter-card">
+        <h4>市場狀態</h4>
+        <div class="check-list" id="statusList">
+          <label><input type="checkbox" value="興櫃"> 興櫃</label>
+          <label><input type="checkbox" value="未上市"> 未上市</label>
+          <label><input type="checkbox" value="準上市"> 準上市</label>
+        </div>
+      </div>
+
+      <div class="filter-card">
+        <h4>產業類別</h4>
+        <div class="check-list" id="catList"></div>
+      </div>
+
+      <div style="display:flex;gap:6px;">
+        <button id="applyBtn" class="btn-primary" style="flex:1;">套用篩選</button>
+        <button id="resetBtn" style="background:#fff;border:1px solid #d0d5dc;padding:8px 14px;border-radius:3px;color:#555;">重設</button>
+      </div>
+    </aside>
+
+    <section>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>篩選結果</h2>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <label style="font-size:12px;color:#666;">排序：
+              <select id="sortBy" style="padding:4px 8px;border:1px solid #d0d5dc;border-radius:2px;font-size:12px;">
+                <option value="code">代號</option>
+                <option value="pctDesc">漲幅大→小</option>
+                <option value="pctAsc">跌幅大→小</option>
+                <option value="volDesc">量大→小</option>
+                <option value="priceDesc">價高→低</option>
+              </select>
+            </label>
+            <span style="font-size:12px;color:#666;">共 <span id="resultCount" style="color:#1B4332;font-weight:700;">0</span> 檔</span>
+          </div>
+        </div>
+        <table class="stock-table">
+          <thead>
+            <tr>
+              <th>代號</th><th>名稱</th>
+              <th class="num">成交價</th>
+              <th class="num">漲跌</th>
+              <th class="num">漲跌幅</th>
+              <th class="num">成交量</th>
+              <th>類別</th><th>狀態</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="resultTbody"></tbody>
+        </table>
+      </div>
+
+      <div class="ai-panel">
+        <div class="ai-panel-head">
+          <div class="ai-panel-title">AI 選股建議</div>
+          <button class="ai-trigger" data-action="stockAnalyze" data-target="#aiScrResult">分析篩選結果 →</button>
+        </div>
+        <p class="ai-placeholder">AI 根據您的篩選條件，自動推薦最值得關注的 3 檔個股並說明理由。</p>
+        <div id="aiScrResult" style="margin-top:12px;"></div>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const { data, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, pageHref, isInWatchlist } = window.LeadFu;
+
+  // 動態填入類別 (從現有資料取 unique)
+  const cats = [...new Set(data.stocks.map(s => s.category))].sort();
+  document.getElementById("catList").innerHTML = cats.map(c =>
+    `<label><input type="checkbox" value="${c}"> ${c}</label>`
+  ).join("");
+
+  // checkbox 視覺化
+  document.addEventListener("change", e => {
+    if (e.target.matches('.check-list input[type="checkbox"]')) {
+      e.target.parentElement.classList.toggle("checked", e.target.checked);
+    }
+  });
+
+  function readFilters() {
+    const f = {};
+    const v = id => document.getElementById(id).value;
+    if (v("priceMin")) f.priceMin = +v("priceMin");
+    if (v("priceMax")) f.priceMax = +v("priceMax");
+    if (v("pctMin")) f.pctMin = +v("pctMin");
+    if (v("pctMax")) f.pctMax = +v("pctMax");
+    if (v("volMin")) f.volMin = +v("volMin");
+    if (v("volMax")) f.volMax = +v("volMax");
+    f.status = [...document.querySelectorAll("#statusList input:checked")].map(x => x.value);
+    f.cats   = [...document.querySelectorAll("#catList input:checked")].map(x => x.value);
+    f.sort = document.getElementById("sortBy").value;
+    return f;
+  }
+
+  function apply() {
+    const f = readFilters();
+    let list = data.stocks.slice();
+
+    if (f.priceMin != null) list = list.filter(s => s.price >= f.priceMin);
+    if (f.priceMax != null) list = list.filter(s => s.price <= f.priceMax);
+    if (f.volMin != null)   list = list.filter(s => s.volume >= f.volMin);
+    if (f.volMax != null)   list = list.filter(s => s.volume <= f.volMax);
+    if (f.status.length)    list = list.filter(s => f.status.includes(s.status));
+    if (f.cats.length)      list = list.filter(s => f.cats.includes(s.category));
+    if (f.pctMin != null || f.pctMax != null) {
+      list = list.filter(s => {
+        const p = pctChange(s.price, s.change);
+        if (f.pctMin != null && p < f.pctMin) return false;
+        if (f.pctMax != null && p > f.pctMax) return false;
+        return true;
+      });
+    }
+
+    // 排序
+    list.sort((a, b) => {
+      if (f.sort === "pctDesc") return pctChange(b.price, b.change) - pctChange(a.price, a.change);
+      if (f.sort === "pctAsc")  return pctChange(a.price, a.change) - pctChange(b.price, b.change);
+      if (f.sort === "volDesc") return b.volume - a.volume;
+      if (f.sort === "priceDesc") return b.price - a.price;
+      return a.code.localeCompare(b.code);
+    });
+
+    document.getElementById("resultCount").textContent = list.length;
+    const tbody = document.getElementById("resultTbody");
+    if (list.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="9" class="loading">沒有符合條件的個股</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = list.map(s => {
+      const pct = pctChange(s.price, s.change);
+      const cls = changeClass(s.change);
+      const fav = isInWatchlist(s.code);
+      return `<tr data-code="${s.code}">
+        <td class="code"><a href="${pageHref('stock-detail.html?code=' + s.code)}">${s.code}</a></td>
+        <td><a href="${pageHref('stock-detail.html?code=' + s.code)}" style="color:inherit;">${s.name}</a></td>
+        <td class="num ${cls}">${fmtPrice(s.price)}</td>
+        <td class="num ${cls}">${arrow(s.change)} ${fmtChange(s.change)}</td>
+        <td class="num ${cls}">${fmtPct(pct)}</td>
+        <td class="num">${s.volume.toLocaleString("zh-TW")}</td>
+        <td>${s.category}</td>
+        <td><span class="status-pill status-${s.status}">${s.status}</span></td>
+        <td><button class="add-btn ${fav?'in-fav':''}" data-code="${s.code}">${fav?'✓ 已加入':'＋自選'}</button></td>
+      </tr>`;
+    }).join("");
+  }
+
+  function reset() {
+    document.querySelectorAll(".filter-card input, .filter-card select").forEach(el => {
+      if (el.type === "checkbox") el.checked = false;
+      else el.value = "";
+    });
+    document.querySelectorAll(".check-list label").forEach(l => l.classList.remove("checked"));
+    apply();
+  }
+
+  // 熱門快選 preset
+  document.querySelectorAll(".preset-pill").forEach(p => {
+    p.addEventListener("click", () => {
+      reset();
+      const preset = p.dataset.preset;
+      const setVal = (id, v) => { document.getElementById(id).value = v; };
+      const checkVal = (group, val) => {
+        const el = document.querySelector(`#${group} input[value="${val}"]`);
+        if (el) { el.checked = true; el.parentElement.classList.add("checked"); }
+      };
+      if (preset === "up") setVal("pctMin", "0.01");
+      if (preset === "down") setVal("pctMax", "-0.01");
+      if (preset === "volume") setVal("volMin", "500");
+      if (preset === "ai") { checkVal("catList","半導體"); checkVal("catList","IC設計"); checkVal("catList","伺服器"); }
+      if (preset === "bio") checkVal("catList","生技醫療");
+      if (preset === "ipo") checkVal("statusList","準上市");
+      if (preset === "high") setVal("priceMin", "500");
+      if (preset === "low") setVal("priceMax", "100");
+      apply();
+    });
+  });
+
+  document.getElementById("applyBtn").addEventListener("click", apply);
+  document.getElementById("resetBtn").addEventListener("click", reset);
+  document.getElementById("sortBy").addEventListener("change", apply);
+
+  apply();
+});
+</script>
+</body>
+</html>
