@@ -568,6 +568,88 @@ function setupBottomTabBar() {
 }
 
 /* ============================================================
+ * PWA 註冊 + 安裝提示橫幅
+ * ============================================================ */
+function setupPWA() {
+  // 註冊 Service Worker（離線快取 + 加到主畫面前置）
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js", { scope: "/" })
+      .then(() => console.log("[領富 AI] ✅ Service Worker 已註冊"))
+      .catch(e => console.log("[領富 AI] SW 註冊失敗:", e.message));
+  }
+
+  // 安裝提示流程
+  let deferredPrompt = null;
+  const DISMISS_KEY = "leadfu_pwa_dismissed_until";
+
+  // 已在 PWA standalone 模式 → 已安裝，不顯示
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+  if (isStandalone) return;
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    // 7 天內關過就不再煩
+    const dismissedUntil = parseInt(localStorage.getItem(DISMISS_KEY) || "0", 10);
+    if (Date.now() < dismissedUntil) return;
+
+    // 延 4 秒再跳，讓使用者先看到內容
+    setTimeout(showInstallBanner, 4000);
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    hideInstallBanner();
+    showToast("✓ 已加到主畫面，下次直接從手機桌面開", "success");
+  });
+
+  function showInstallBanner() {
+    if (document.getElementById("pwaInstallBanner")) return;
+    const banner = document.createElement("div");
+    banner.id = "pwaInstallBanner";
+    banner.className = "pwa-install-banner";
+    banner.innerHTML = `
+      <div class="pwa-icon">📱</div>
+      <div class="pwa-text">
+        <strong>加到主畫面</strong>
+        <small>當 app 用，下次一鍵打開</small>
+      </div>
+      <button id="pwaInstallBtn">安裝</button>
+      <button class="pwa-dismiss" id="pwaDismissBtn" aria-label="關閉">✕</button>
+    `;
+    document.body.appendChild(banner);
+    requestAnimationFrame(() => banner.classList.add("show"));
+
+    banner.querySelector("#pwaInstallBtn").addEventListener("click", async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const result = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      hideInstallBanner();
+      if (result.outcome === "dismissed") {
+        // 用戶在系統 prompt 取消 → 暫停 3 天
+        localStorage.setItem(DISMISS_KEY, (Date.now() + 3 * 86400000).toString());
+      }
+    });
+    banner.querySelector("#pwaDismissBtn").addEventListener("click", () => {
+      // 主動關 → 暫停 7 天
+      localStorage.setItem(DISMISS_KEY, (Date.now() + 7 * 86400000).toString());
+      hideInstallBanner();
+    });
+  }
+
+  function hideInstallBanner() {
+    const el = document.getElementById("pwaInstallBanner");
+    if (!el) return;
+    el.classList.remove("show");
+    setTimeout(() => el.remove(), 400);
+  }
+}
+
+/* ============================================================
  * 滾動時隱藏 Header + 回到頂部按鈕
  * ============================================================ */
 function setupHideableHeader() {
@@ -969,6 +1051,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupMobileNav();
   setupBottomTabBar();
   setupHideableHeader();
+  setupPWA();
   renderDate();
 
   // 先抓即時資料再渲染表格

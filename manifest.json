@@ -1,0 +1,61 @@
+{
+  "name": "領富 AI · LeadFu AI",
+  "short_name": "領富 AI",
+  "description": "AI 預測未上市股票・領先市場兩步",
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "start_url": "/index.html?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0A1F18",
+  "theme_color": "#1B4332",
+  "categories": ["finance", "business", "news"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "AI 今日盤勢",
+      "short_name": "今日盤勢",
+      "description": "AI 自動篩出今日重點",
+      "url": "/index.html?source=pwa-shortcut-ai",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "進階選股",
+      "short_name": "選股",
+      "url": "/pages/screener.html?source=pwa-shortcut-screener",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "我的自選",
+      "short_name": "自選",
+      "url": "/pages/watchlist.html?source=pwa-shortcut-watchlist",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
