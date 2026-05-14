@@ -731,6 +731,32 @@ img { max-width: 100%; }
   .ai-alert-disclaimer { padding: 0 14px 14px; }
 }
 
+/* ========== 全站切割聲明（合規）========== */
+.site-disclaimer {
+  background: #f4f1e8;
+  border-top: 2px solid #C5A572;
+  border-bottom: 1px solid #e5dcc5;
+  padding: 12px 0;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #6b5f43;
+}
+.site-disclaimer .container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.site-disclaimer .disc-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+  color: #b08d3f;
+}
+.site-disclaimer strong { color: #1B4332; }
+.site-disclaimer a { color: #1B4332; text-decoration: underline; }
+@media (max-width: 768px) {
+  .site-disclaimer { padding: 10px 0; font-size: 11px; }
+}
+
 /* ========== PWA 安裝橫幅 ========== */
 .pwa-install-banner {
   position: fixed;

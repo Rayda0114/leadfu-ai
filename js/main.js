@@ -659,6 +659,32 @@ function loadGA() {
 }
 
 /* ============================================================
+ * 全站切割聲明（合規）— 注入到 footer 上方，每頁都有
+ * 明示「純資訊平台、不介入交易」，符合未上市股票資訊網的法律定位
+ * ============================================================ */
+function setupDisclaimer() {
+  if (document.querySelector(".site-disclaimer")) return;
+  const footer = document.querySelector(".site-footer");
+  if (!footer) return;
+
+  const fraudHref = pageHref("fraud-alert.html");
+  const bar = document.createElement("div");
+  bar.className = "site-disclaimer";
+  bar.innerHTML = `
+    <div class="container">
+      <span class="disc-icon">⚠</span>
+      <span>
+        <strong>領富 AI 為未上市／興櫃股票公開資訊整理平台。</strong>
+        本站<strong>不介入任何股票買賣、不撮合交易、不代為下單或過戶、不收受投資款項</strong>，
+        亦非證券投資顧問事業。所有內容（含 AI 功能）僅為公開資料之整理與摘要，不構成投資建議。
+        未上市股票買賣應透過合法券商辦理，謹防詐騙 — 請參閱
+        <a href="${fraudHref}">投資人防詐須知</a>。
+      </span>
+    </div>`;
+  footer.parentNode.insertBefore(bar, footer);
+}
+
+/* ============================================================
  * PWA 註冊 + 安裝提示橫幅
  * ============================================================ */
 function setupPWA() {
@@ -1140,6 +1166,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupMobileNav();
   setupBottomTabBar();
   setupHideableHeader();
+  setupDisclaimer();
   setupPWA();
   renderDate();
 
