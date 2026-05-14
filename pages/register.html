@@ -75,11 +75,25 @@
         </select>
       </div>
       <div style="font-size:12px;color:#666;margin-bottom:14px;">
-        <label><input type="checkbox" required> 我同意 <a href="#">服務條款</a> 與 <a href="#">隱私政策</a></label><br>
+        <label><input type="checkbox" required> 我同意 <a href="terms.html" target="_blank">服務條款</a> 與 <a href="privacy.html" target="_blank">隱私權政策</a></label><br>
         <label style="margin-top:6px;display:inline-block;"><input type="checkbox"> 訂閱領富 AI電子報</label>
       </div>
       <button type="submit" class="form-btn">立即註冊</button>
     </form>
+
+    <div style="margin: 18px 0; text-align: center; color: #aaa; font-size: 12px; position: relative;">
+      <span style="background: #fff; padding: 0 12px; position: relative; z-index: 1;">或一鍵註冊</span>
+      <div style="position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid #eef0f3; z-index: 0;"></div>
+    </div>
+
+    <div style="display: grid; gap: 8px;">
+      <button type="button" id="googleRegBtn" style="padding:11px;border:1px solid #d0d5dc;background:#fff;border-radius:6px;font-size:14px;font-weight:600;color:#444;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
+        <span style="font-size:16px;">G</span> 用 Google 註冊
+      </button>
+      <button type="button" id="facebookRegBtn" style="padding:11px;border:none;background:#1877F2;color:#fff;border-radius:6px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
+        <span style="font-size:16px;">f</span> 用 Facebook 註冊
+      </button>
+    </div>
 
     <div class="form-foot">
       已有帳號？ <a href="login.html" style="font-weight:600;">登入</a>
@@ -132,6 +146,22 @@ document.getElementById("regForm").addEventListener("submit", async e => {
     alert(window.LeadFuAuth.zhError(err));
     btn.disabled = false;
     btn.textContent = "立即註冊";
+  }
+});
+
+// 社群一鍵註冊
+document.getElementById("googleRegBtn").addEventListener("click", async () => {
+  try {
+    await window.LeadFuAuth.signInWithGoogle();
+  } catch (err) {
+    alert(window.LeadFuAuth.zhError(err));
+  }
+});
+document.getElementById("facebookRegBtn").addEventListener("click", async () => {
+  try {
+    await window.LeadFuAuth.signInWithFacebook();
+  } catch (err) {
+    alert(window.LeadFuAuth.zhError(err));
   }
 });
 </script>

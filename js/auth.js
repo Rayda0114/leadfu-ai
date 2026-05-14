@@ -41,6 +41,21 @@ window.LeadFuAuth = {
     return data;
   },
 
+  /* 社群一鍵登入（Google / Facebook）
+     會跳轉到第三方授權頁，授權後自動導回 member.html */
+  async signInWithProvider(provider) {
+    const { data, error } = await _sb.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: window.location.origin + "/pages/member.html"
+      }
+    });
+    if (error) throw error;
+    return data;
+  },
+  async signInWithGoogle()   { return this.signInWithProvider("google"); },
+  async signInWithFacebook() { return this.signInWithProvider("facebook"); },
+
   /* 登出 */
   async signOut() {
     await _sb.auth.signOut();

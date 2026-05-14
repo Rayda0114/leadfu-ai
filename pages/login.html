@@ -66,9 +66,13 @@
       <div style="position: absolute; top: 50%; left: 0; right: 0; border-top: 1px solid #eef0f3; z-index: 0;"></div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-      <button style="padding:10px;border:1px solid #d0d5dc;background:#fff;border-radius:3px;font-size:13px;">Google 登入</button>
-      <button style="padding:10px;border:none;background:#06c755;color:#fff;border-radius:3px;font-size:13px;font-weight:600;">LINE 登入</button>
+    <div style="display: grid; gap: 8px;">
+      <button type="button" id="googleLoginBtn" style="padding:11px;border:1px solid #d0d5dc;background:#fff;border-radius:6px;font-size:14px;font-weight:600;color:#444;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
+        <span style="font-size:16px;">G</span> 用 Google 登入
+      </button>
+      <button type="button" id="facebookLoginBtn" style="padding:11px;border:none;background:#1877F2;color:#fff;border-radius:6px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;">
+        <span style="font-size:16px;">f</span> 用 Facebook 登入
+      </button>
     </div>
 
     <div class="form-foot">
@@ -106,14 +110,20 @@ document.getElementById("loginForm").addEventListener("submit", async e => {
   }
 });
 
-// 社群登入按鈕：目前僅佔位（Supabase 可後續接 Google OAuth）
-document.querySelectorAll(".form-card button").forEach(b => {
-  if (b.textContent.includes("Google") || b.textContent.includes("LINE")) {
-    b.addEventListener("click", () => {
-      window.LeadFu && window.LeadFu.showToast
-        ? window.LeadFu.showToast("社群登入即將推出，請先用 Email 註冊", "info")
-        : alert("社群登入即將推出，請先用 Email 註冊");
-    });
+// 社群一鍵登入
+document.getElementById("googleLoginBtn").addEventListener("click", async () => {
+  try {
+    await window.LeadFuAuth.signInWithGoogle();
+    // 成功會自動跳轉到 Google 授權頁
+  } catch (err) {
+    alert(window.LeadFuAuth.zhError(err));
+  }
+});
+document.getElementById("facebookLoginBtn").addEventListener("click", async () => {
+  try {
+    await window.LeadFuAuth.signInWithFacebook();
+  } catch (err) {
+    alert(window.LeadFuAuth.zhError(err));
   }
 });
 </script>

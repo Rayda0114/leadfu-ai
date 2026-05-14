@@ -505,38 +505,39 @@ function bindAiPlaceholders() {
 }
 
 function mockAiResponse(action, code) {
-  // ⚠ 這是佔位 mock，之後串 Claude API 替換這個函式
+  // ⚠ 佔位 mock。重要：AI 內容一律「中性整理公開資料」，不得出現買進/賣出/評等等推介字眼
+  //    （台灣《證券投資信託及顧問法》：未取得投顧執照不得做個股推介建議）
+  //    之後串 Claude API 時，prompt 也須遵守此原則
   const s = code ? findStock(code) : null;
   if (action === "stockAnalyze" && s) {
-    const trend = s.change > 0 ? "偏多" : (s.change < 0 ? "偏空" : "盤整");
+    const pct = pctChange(s.price, s.change);
+    const dir = s.change > 0 ? "上漲" : (s.change < 0 ? "下跌" : "持平");
     return `
       <div class="ai-result">
-        <div class="ai-result-head">🤖 AI 個股分析（範例）</div>
-        <p><strong>${s.code} ${s.name}</strong>（${s.category}・${s.status}）目前報價 ${fmtPrice(s.price)}，今日走勢 <strong>${trend}</strong>。</p>
-        <p><strong>技術面：</strong>近期成交量 ${s.volume.toLocaleString()} 張，相較同產業平均偏${s.volume > 500 ? "高" : "低"}，顯示市場關注度${s.volume > 500 ? "提升" : "尚屬一般"}。</p>
-        <p><strong>基本面：</strong>所屬 ${s.category} 類股近期受惠於 AI 與半導體需求，建議留意後續法人動向。</p>
-        <p><strong>風險提醒：</strong>${s.status === "未上市" ? "未上市股票流動性較低" : "興櫃股票漲跌幅較大"}，請審慎評估。</p>
-        <p class="ai-disclaimer">※ 本分析由 AI 生成，僅供參考，不構成投資建議。</p>
+        <div class="ai-result-head">📋 AI 個股資料摘要（範例）</div>
+        <p><strong>${s.code} ${s.name}</strong>（${s.category}・${s.status}）目前報價 ${fmtPrice(s.price)}，今日${dir} ${fmtPct(pct)}。</p>
+        <p><strong>成交概況：</strong>今日成交量 ${s.volume.toLocaleString()} 張，於興櫃個股中屬${s.volume > 500 ? "成交較活躍" : "成交一般"}。</p>
+        <p><strong>產業別：</strong>歸類於 ${s.category}。本摘要僅彙整公開數據，未對個股做任何評價或判斷。</p>
+        <p><strong>風險提醒：</strong>${s.status === "未上市" ? "未上市股票無集中市場、流動性低、價格不透明" : "興櫃股票漲跌幅較大"}，買賣應透過合法券商辦理。</p>
+        <p class="ai-disclaimer">※ 本內容為 AI 整理之公開資料摘要，不構成投資建議或推介，亦非證券投資顧問服務。投資決策與風險請自行評估。</p>
       </div>`;
   }
   if (action === "newsSummary") {
     return `
       <div class="ai-result">
-        <div class="ai-result-head">🤖 AI 新聞摘要（範例）</div>
-        <p>今日未上市市場焦點集中於 <strong>AI 半導體供應鏈</strong>，環球晶 (6488)、穎崴 (6515) 等個股獲外資加碼。</p>
-        <p>生技股財報季開跑，浩鼎 (4174)、長聖 (6841) 表現受到法人關注。</p>
-        <p>金管會將於 5/15 上路興櫃新規，投資人應留意漲跌幅變動影響。</p>
-        <p class="ai-disclaimer">※ 由 AI 自動彙整今日新聞重點。</p>
+        <div class="ai-result-head">📋 AI 新聞摘要（範例）</div>
+        <p>今日財經新聞主題包含半導體供應鏈、生技股財報季，以及金管會興櫃交易新規等。</p>
+        <p>本摘要僅彙整公開新聞之標題與重點，完整內容請點各則新聞連結至原始來源閱讀。</p>
+        <p class="ai-disclaimer">※ 由 AI 自動彙整公開新聞重點，不代表本站立場，亦不構成投資建議。</p>
       </div>`;
   }
   if (action === "threadSummary") {
     return `
       <div class="ai-result">
-        <div class="ai-result-head">🤖 AI 討論區重點（範例）</div>
-        <p>今日熱門討論集中於 <strong>環球晶 (6488)</strong> 進場時機，多數網友看法分歧。</p>
-        <p>新股抽籤話題：浩鼎、彩晶 IPO 預期受到關注，討論度高。</p>
-        <p>政策面：5/15 興櫃漲跌幅放寬議題引發熱烈討論。</p>
-        <p class="ai-disclaimer">※ 由 AI 彙整今日討論區熱門話題。</p>
+        <div class="ai-result-head">📋 AI 討論區重點（範例）</div>
+        <p>今日討論區較多人討論的主題包含個股觀察、新股申購、以及興櫃交易制度變動等。</p>
+        <p>以下為使用者公開發言之整理，內容為網友個人意見，不代表本站立場。</p>
+        <p class="ai-disclaimer">※ 由 AI 彙整討論區公開發言，僅供參考，不構成投資建議。</p>
       </div>`;
   }
   return `<div class="ai-result"><p>AI 服務尚未開啟（佔位）。</p></div>`;
@@ -876,13 +877,9 @@ function setupAiAlert() {
 
     const items = topGainers.map((s, i) => {
       const tagClass = i === 0 ? "tag-strong" : "tag-tech";
-      const tagText = i === 0 ? "AI 強力推薦" : "資金湧入";
-      const reasons = [
-        `今日漲 ${fmtPct(s.pct)}，成交量 ${s.volume.toLocaleString()} 張，AI 偵測動能轉強`,
-        `突破近期高點，量能放大，AI 推估短線續攻機率高`,
-        `${s.category}類股表現強勢，建議留意法人籌碼`
-      ];
-      const reason = reasons[i % reasons.length];
+      // 中性標籤：只描述「今日漲幅排名」這個客觀事實，不做推介
+      const tagText = `今日漲幅第 ${i + 1} 名`;
+      const reason = `今日${s.change > 0 ? "上漲" : "下跌"} ${fmtPct(s.pct)}，成交量 ${s.volume.toLocaleString()} 張，屬 ${s.category} 類股。以上為公開數據整理，非投資建議。`;
       return `<a class="ai-alert-item" href="${pageHref('stock-detail.html?code=' + s.code)}">
         <div class="ai-alert-rank">0${i+1}</div>
         <div class="ai-alert-content">

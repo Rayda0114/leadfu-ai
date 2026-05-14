@@ -42,6 +42,8 @@ STATIC_PAGES = [
     ("/pages/contact.html",            "monthly", 0.5),
     ("/pages/register.html",           "yearly",  0.4),
     ("/pages/login.html",              "yearly",  0.3),
+    ("/pages/terms.html",              "yearly",  0.3),
+    ("/pages/privacy.html",            "yearly",  0.3),
 ]
 
 
