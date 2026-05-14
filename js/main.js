@@ -6,8 +6,8 @@
 const LINE_ID  = "@041exgtv";
 const LINE_URL = "https://line.me/R/ti/p/@041exgtv";
 
-/* Google Analytics 4 Measurement ID（拿到後替換 G-XXXXXXXXXX） */
-const GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+/* Google Analytics 4 Measurement ID */
+const GA_MEASUREMENT_ID = "G-RX7R1ZFQPW";
 
 /* 網站主網域（之後綁自有網域時改這裡） */
 const SITE_ORIGIN = "https://friendly-mousse-33de3d.netlify.app";
