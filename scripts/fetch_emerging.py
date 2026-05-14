@@ -54,7 +54,7 @@ def fetch_tpex_json():
     req = Request(
         TPEX_URL,
         headers={
-            "User-Agent": "LeadFu-AI/1.0 (+https://friendly-mousse-33de3d.netlify.app)",
+            "User-Agent": "LeadFu-AI/1.0 (+https://leadfu-ai.pages.dev)",
             "Accept": "application/json"
         }
     )

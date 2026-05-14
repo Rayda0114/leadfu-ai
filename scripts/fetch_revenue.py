@@ -22,7 +22,7 @@ DATA_DIR = ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
 URL = "https://www.tpex.org.tw/openapi/v1/t187ap05_R"
-UA = "LeadFu-AI/1.0 (+https://friendly-mousse-33de3d.netlify.app)"
+UA = "LeadFu-AI/1.0 (+https://leadfu-ai.pages.dev)"
 
 
 def fetch():

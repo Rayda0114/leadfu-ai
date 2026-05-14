@@ -38,7 +38,7 @@ QUERIES = [
     ("台股 公告",      "公告"),
 ]
 
-UA = "Mozilla/5.0 (compatible; LeadFu-AI/1.0; +https://friendly-mousse-33de3d.netlify.app)"
+UA = "Mozilla/5.0 (compatible; LeadFu-AI/1.0; +https://leadfu-ai.pages.dev)"
 
 
 def strip_html(s):

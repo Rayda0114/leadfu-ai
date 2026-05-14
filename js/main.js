@@ -10,7 +10,7 @@ const LINE_URL = "https://line.me/R/ti/p/@041exgtv";
 const GA_MEASUREMENT_ID = "G-RX7R1ZFQPW";
 
 /* 網站主網域（之後綁自有網域時改這裡） */
-const SITE_ORIGIN = "https://friendly-mousse-33de3d.netlify.app";
+const SITE_ORIGIN = "https://leadfu-ai.pages.dev";
 
 const STOCK_DATA = {
   updatedAt: "2026-05-12 09:30",
