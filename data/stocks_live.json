@@ -1,1275 +1,1140 @@
 {
-  "updatedAt": "2026-05-13 14:44",
+  "updatedAt": "2026-05-14 09:38",
   "source": "TPEx 櫃買中心 OpenAPI",
-  "sourceDate": "2026-05-13",
-  "stockCount": 346,
+  "sourceDate": "2026-05-14",
+  "stockCount": 347,
   "stocks": [
     {
       "code": "6775",
       "name": "穎台科技",
-      "price": 70.4,
-      "change": 11.43,
-      "volume": 9425,
+      "price": 60.1,
+      "change": -7.86,
+      "volume": 6711,
       "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "3184",
-      "name": "微邦",
-      "price": 30.45,
-      "change": 2.61,
-      "volume": 3915,
-      "category": "電子",
-      "status": "興櫃"
-    },
-    {
-      "code": "6920",
-      "name": "恆勁科技",
-      "price": 110.0,
-      "change": 4.37,
-      "volume": 3136,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6586",
-      "name": "醣基",
-      "price": 67.4,
-      "change": 8.1,
-      "volume": 2505,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "7731",
-      "name": "火星生技*",
-      "price": 5.94,
-      "change": -0.06,
-      "volume": 2324,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6682",
-      "name": "華旭先進",
-      "price": 53.9,
-      "change": -3.3,
-      "volume": 2179,
-      "category": "金融保險",
       "status": "興櫃"
     },
     {
       "code": "3585",
       "name": "聯致",
-      "price": 104.5,
-      "change": -5.98,
-      "volume": 2135,
+      "price": 93.0,
+      "change": -11.78,
+      "volume": 5297,
       "category": "通訊網路",
       "status": "興櫃"
     },
     {
-      "code": "7781",
-      "name": "昕力資*",
-      "price": 30.25,
-      "change": -0.31,
-      "volume": 2027,
+      "code": "6920",
+      "name": "恆勁科技",
+      "price": 102.5,
+      "change": -8.87,
+      "volume": 3729,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "6434",
       "name": "達輝光電",
-      "price": 21.8,
-      "change": -1.04,
-      "volume": 1822,
+      "price": 20.65,
+      "change": -1.41,
+      "volume": 3682,
       "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "4738",
-      "name": "大同精化",
-      "price": 10.1,
-      "change": 1.56,
-      "volume": 1670,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7853",
-      "name": "政美應用",
-      "price": 382.0,
-      "change": 16.09,
-      "volume": 1307,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6634",
-      "name": "欣耀",
-      "price": 79.9,
-      "change": 19.59,
-      "volume": 1166,
-      "category": "金融保險",
       "status": "興櫃"
     },
     {
       "code": "5271",
       "name": "紘通",
-      "price": 20.75,
-      "change": 1.19,
-      "volume": 1126,
+      "price": 24.95,
+      "change": 5.18,
+      "volume": 3657,
       "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6682",
+      "name": "華旭先進",
+      "price": 50.1,
+      "change": -3.84,
+      "volume": 2524,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "7781",
+      "name": "昕力資*",
+      "price": 30.2,
+      "change": 0.1,
+      "volume": 2191,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "3184",
+      "name": "微邦",
+      "price": 29.65,
+      "change": -0.49,
+      "volume": 2186,
+      "category": "電子",
+      "status": "興櫃"
+    },
+    {
+      "code": "6586",
+      "name": "醣基",
+      "price": 69.8,
+      "change": 3.45,
+      "volume": 2186,
+      "category": "金融",
       "status": "興櫃"
     },
     {
       "code": "5297",
       "name": "廣化",
-      "price": 145.5,
-      "change": -2.9,
-      "volume": 1098,
+      "price": 132.0,
+      "change": -16.55,
+      "volume": 2185,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6945",
-      "name": "圓祥生技",
-      "price": 182.0,
-      "change": 11.32,
-      "volume": 1091,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7887",
-      "name": "宇川精材",
-      "price": 266.0,
-      "change": 3.0,
-      "volume": 1047,
-      "category": "其他",
+      "code": "6819",
+      "name": "眾智",
+      "price": 70.4,
+      "change": 13.03,
+      "volume": 2091,
+      "category": "證券",
       "status": "興櫃"
     },
     {
       "code": "6407",
       "name": "相互",
-      "price": 34.6,
-      "change": -2.14,
-      "volume": 1024,
+      "price": 32.95,
+      "change": -1.95,
+      "volume": 1861,
       "category": "金融",
       "status": "興櫃"
     },
     {
-      "code": "7861",
-      "name": "貝爾威勒",
-      "price": 1130.0,
-      "change": 173.35,
-      "volume": 935,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7866",
-      "name": "丹立",
-      "price": 267.5,
-      "change": -19.53,
-      "volume": 928,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7742",
-      "name": "天弘化",
-      "price": 181.5,
-      "change": -4.79,
-      "volume": 878,
+      "code": "7731",
+      "name": "火星生技*",
+      "price": 5.9,
+      "change": -0.03,
+      "volume": 1709,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "6750",
       "name": "泰創工程",
-      "price": 69.2,
-      "change": 2.91,
-      "volume": 861,
+      "price": 72.0,
+      "change": 3.95,
+      "volume": 1424,
       "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "6940",
-      "name": "格斯科技*",
-      "price": 21.1,
-      "change": -0.28,
-      "volume": 849,
+      "code": "7853",
+      "name": "政美應用",
+      "price": 359.5,
+      "change": -20.15,
+      "volume": 1282,
       "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6891",
-      "name": "樂迦再生",
-      "price": 57.9,
-      "change": -0.7,
-      "volume": 828,
-      "category": "證券",
       "status": "興櫃"
     },
     {
       "code": "6787",
       "name": "晶瑞光",
-      "price": 38.85,
-      "change": -0.52,
-      "volume": 801,
+      "price": 36.85,
+      "change": -2.52,
+      "volume": 1202,
       "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6467",
-      "name": "泰合",
-      "price": 144.5,
-      "change": 11.29,
-      "volume": 779,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "6819",
-      "name": "眾智",
-      "price": 60.9,
-      "change": -2.3,
-      "volume": 760,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6610",
-      "name": "安成生技",
-      "price": 30.0,
-      "change": 0.89,
-      "volume": 753,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "7918",
-      "name": "創鉅材料",
-      "price": 1030.0,
-      "change": 103.02,
-      "volume": 750,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7590",
-      "name": "怡和國際",
-      "price": 24.75,
-      "change": -1.36,
-      "volume": 739,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7784",
-      "name": "安邦生技*",
-      "price": 9.89,
-      "change": -0.1,
-      "volume": 727,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "4925",
-      "name": "智微",
-      "price": 195.0,
-      "change": -2.92,
-      "volume": 688,
-      "category": "電腦周邊",
-      "status": "興櫃"
-    },
-    {
-      "code": "6618",
-      "name": "永虹先進",
-      "price": 19.9,
-      "change": -0.23,
-      "volume": 659,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "7530",
-      "name": "鋒魁科技",
-      "price": 43.85,
-      "change": -1.37,
-      "volume": 641,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6696",
-      "name": "仁新",
-      "price": 405.5,
-      "change": -14.96,
-      "volume": 606,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "4573",
-      "name": "高明鐵",
-      "price": 471.5,
-      "change": -28.01,
-      "volume": 600,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6959",
-      "name": "兆捷科技",
-      "price": 105.0,
-      "change": -8.77,
-      "volume": 584,
-      "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "5246",
       "name": "勵威",
-      "price": 204.0,
-      "change": -11.29,
-      "volume": 579,
+      "price": 185.5,
+      "change": -19.15,
+      "volume": 1164,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6976",
-      "name": "育世博-KY",
-      "price": 12.95,
-      "change": -0.07,
-      "volume": 566,
+      "code": "4738",
+      "name": "大同精化",
+      "price": 9.25,
+      "change": -0.69,
+      "volume": 1098,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7871",
-      "name": "安立璽榮-KY",
-      "price": 69.8,
-      "change": 0.04,
-      "volume": 559,
+      "code": "4573",
+      "name": "高明鐵",
+      "price": 443.0,
+      "change": -21.14,
+      "volume": 1006,
       "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "3595",
-      "name": "山太士",
-      "price": 2815.0,
-      "change": -90.01,
-      "volume": 542,
-      "category": "通訊網路",
-      "status": "興櫃"
-    },
-    {
-      "code": "7719",
-      "name": "碳基",
-      "price": 41.35,
-      "change": -0.42,
-      "volume": 535,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6707",
-      "name": "富基電通",
-      "price": 35.9,
-      "change": 0.01,
-      "volume": 534,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6673",
-      "name": "和詮",
-      "price": 21.55,
-      "change": -0.54,
-      "volume": 521,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "2256",
-      "name": "歐特明",
-      "price": 82.2,
-      "change": -3.39,
-      "volume": 474,
-      "category": "汽車",
       "status": "興櫃"
     },
     {
       "code": "5254",
       "name": "欣訊科技",
-      "price": 45.25,
-      "change": -3.41,
-      "volume": 463,
+      "price": 57.8,
+      "change": 15.03,
+      "volume": 952,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6618",
+      "name": "永虹先進",
+      "price": 19.1,
+      "change": -0.73,
+      "volume": 945,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "6891",
+      "name": "樂迦再生",
+      "price": 54.9,
+      "change": -3.06,
+      "volume": 940,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6634",
+      "name": "欣耀",
+      "price": 76.1,
+      "change": 0.37,
+      "volume": 915,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "6786",
+      "name": "芯測",
+      "price": 98.0,
+      "change": -4.28,
+      "volume": 886,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7419",
+      "name": "達勝",
+      "price": 137.5,
+      "change": -10.96,
+      "volume": 884,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7742",
+      "name": "天弘化",
+      "price": 171.5,
+      "change": -9.95,
+      "volume": 845,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "8119",
       "name": "公信",
-      "price": 10.65,
-      "change": 0.14,
-      "volume": 461,
+      "price": 11.35,
+      "change": 0.82,
+      "volume": 782,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7879",
-      "name": "益材科技",
-      "price": 111.0,
-      "change": -4.18,
-      "volume": 454,
+      "code": "4925",
+      "name": "智微",
+      "price": 190.0,
+      "change": -0.84,
+      "volume": 761,
+      "category": "電腦周邊",
+      "status": "興櫃"
+    },
+    {
+      "code": "7784",
+      "name": "安邦生技*",
+      "price": 10.45,
+      "change": 0.93,
+      "volume": 751,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "7899",
       "name": "景美",
-      "price": 570.0,
-      "change": -35.19,
-      "volume": 427,
+      "price": 521.0,
+      "change": -57.28,
+      "volume": 692,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7419",
-      "name": "達勝",
-      "price": 149.5,
-      "change": -2.07,
-      "volume": 408,
+      "code": "7918",
+      "name": "創鉅材料",
+      "price": 1180.0,
+      "change": 163.56,
+      "volume": 670,
       "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6940",
+      "name": "格斯科技*",
+      "price": 21.2,
+      "change": 0.01,
+      "volume": 663,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7843",
+      "name": "英柏得",
+      "price": 141.5,
+      "change": 13.21,
+      "volume": 648,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "2256",
+      "name": "歐特明",
+      "price": 75.4,
+      "change": -6.13,
+      "volume": 640,
+      "category": "汽車",
+      "status": "興櫃"
+    },
+    {
+      "code": "6959",
+      "name": "兆捷科技",
+      "price": 115.5,
+      "change": 9.43,
+      "volume": 639,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6467",
+      "name": "泰合",
+      "price": 150.0,
+      "change": 9.17,
+      "volume": 638,
+      "category": "金融",
       "status": "興櫃"
     },
     {
       "code": "8058",
       "name": "耐特",
-      "price": 107.0,
-      "change": -3.09,
-      "volume": 387,
+      "price": 99.0,
+      "change": -8.58,
+      "volume": 621,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6786",
-      "name": "芯測",
-      "price": 100.5,
-      "change": -2.1,
-      "volume": 386,
-      "category": "證券",
+      "code": "6673",
+      "name": "和詮",
+      "price": 21.2,
+      "change": -0.31,
+      "volume": 620,
+      "category": "金融保險",
       "status": "興櫃"
     },
     {
-      "code": "6947",
-      "name": "台鎔科技",
-      "price": 79.0,
-      "change": 0.94,
-      "volume": 366,
+      "code": "7861",
+      "name": "貝爾威勒",
+      "price": 1195.0,
+      "change": 123.71,
+      "volume": 616,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7851",
-      "name": "慧康生技*-KY",
-      "price": 45.0,
-      "change": 5.39,
-      "volume": 366,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7909",
-      "name": "鈺祥",
-      "price": 860.0,
-      "change": -41.93,
-      "volume": 352,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6849",
-      "name": "奇鼎科技",
-      "price": 235.0,
-      "change": -5.23,
-      "volume": 349,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7812",
-      "name": "稜研科技*",
-      "price": 79.9,
-      "change": -0.68,
-      "volume": 339,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6917",
-      "name": "竟天",
-      "price": 35.9,
-      "change": -1.11,
-      "volume": 336,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7729",
-      "name": "仲恩生醫",
-      "price": 71.7,
-      "change": -0.12,
-      "volume": 319,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7763",
-      "name": "崇舜",
-      "price": 270.5,
-      "change": 8.59,
-      "volume": 317,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6932",
-      "name": "水星生醫*",
-      "price": 7.59,
-      "change": 0.02,
-      "volume": 315,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "5262",
-      "name": "立達",
-      "price": 53.0,
-      "change": -0.51,
-      "volume": 295,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6572",
-      "name": "博錸",
-      "price": 9.19,
-      "change": -0.22,
-      "volume": 290,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "9957",
-      "name": "燁聯",
-      "price": 6.43,
-      "change": -0.07,
-      "volume": 289,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6755",
-      "name": "連鋐科技",
-      "price": 21.5,
-      "change": -3.21,
-      "volume": 287,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "4186",
-      "name": "尖端醫",
-      "price": 10.75,
-      "change": -0.45,
-      "volume": 281,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6842",
-      "name": "瑞宇",
-      "price": 116.0,
-      "change": -3.48,
-      "volume": 279,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "4582",
-      "name": "聚恆",
-      "price": 33.35,
-      "change": -1.77,
-      "volume": 276,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7892",
-      "name": "元鈦科",
-      "price": 978.0,
-      "change": -40.54,
-      "volume": 267,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7796",
-      "name": "擷發科",
-      "price": 105.0,
-      "change": -6.32,
-      "volume": 263,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6826",
-      "name": "和淞",
-      "price": 557.0,
-      "change": -6.42,
-      "volume": 259,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7827",
-      "name": "漢康-KY",
-      "price": 137.0,
-      "change": -2.61,
-      "volume": 256,
+      "code": "7530",
+      "name": "鋒魁科技",
+      "price": 43.5,
+      "change": -0.73,
+      "volume": 589,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "6882",
       "name": "甲尚",
-      "price": 19.2,
-      "change": 0.79,
-      "volume": 254,
+      "price": 21.15,
+      "change": 2.3,
+      "volume": 577,
       "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "7882",
-      "name": "倍利創投",
-      "price": 22.95,
-      "change": 0.16,
-      "volume": 249,
+      "code": "7871",
+      "name": "安立璽榮-KY",
+      "price": 69.5,
+      "change": -0.34,
+      "volume": 577,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6563",
-      "name": "映智",
-      "price": 31.5,
-      "change": -1.24,
-      "volume": 248,
-      "category": "金融",
+      "code": "7887",
+      "name": "宇川精材",
+      "price": 264.0,
+      "change": -5.42,
+      "volume": 556,
+      "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7707",
-      "name": "益芯科",
-      "price": 162.5,
-      "change": -9.68,
-      "volume": 247,
+      "code": "7879",
+      "name": "益材科技",
+      "price": 124.5,
+      "change": 14.95,
+      "volume": 551,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7912",
+      "name": "新聿科",
+      "price": 542.0,
+      "change": 101.84,
+      "volume": 547,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6990",
+      "name": "華鉬",
+      "price": 93.3,
+      "change": 13.74,
+      "volume": 540,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "9957",
+      "name": "燁聯",
+      "price": 6.32,
+      "change": -0.1,
+      "volume": 522,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6927",
+      "name": "聯合聚晶",
+      "price": 67.5,
+      "change": 17.24,
+      "volume": 519,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6976",
+      "name": "育世博-KY",
+      "price": 12.85,
+      "change": 0.02,
+      "volume": 468,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6945",
+      "name": "圓祥生技",
+      "price": 177.5,
+      "change": -5.69,
+      "volume": 457,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6842",
+      "name": "瑞宇",
+      "price": 111.0,
+      "change": -4.32,
+      "volume": 453,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7919",
+      "name": "禾蒼",
+      "price": 120.5,
+      "change": 0.0,
+      "volume": 451,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7866",
+      "name": "丹立",
+      "price": 278.0,
+      "change": 5.82,
+      "volume": 446,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6707",
+      "name": "富基電通",
+      "price": 36.85,
+      "change": 1.89,
+      "volume": 435,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "3595",
+      "name": "山太士",
+      "price": 2760.0,
+      "change": -100.17,
+      "volume": 427,
+      "category": "通訊網路",
+      "status": "興櫃"
+    },
+    {
+      "code": "6849",
+      "name": "奇鼎科技",
+      "price": 226.0,
+      "change": -5.52,
+      "volume": 418,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6610",
+      "name": "安成生技",
+      "price": 29.0,
+      "change": -0.87,
+      "volume": 406,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "7827",
+      "name": "漢康-KY",
+      "price": 135.0,
+      "change": -1.75,
+      "volume": 363,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "4186",
+      "name": "尖端醫",
+      "price": 10.55,
+      "change": -0.12,
+      "volume": 358,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "4150",
       "name": "優你康",
-      "price": 6.11,
-      "change": 0.0,
-      "volume": 241,
+      "price": 6.07,
+      "change": -0.04,
+      "volume": 355,
       "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "4537",
-      "name": "旭東",
-      "price": 177.0,
-      "change": -4.45,
-      "volume": 238,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6883",
-      "name": "微電能源",
-      "price": 24.1,
-      "change": -4.06,
-      "volume": 238,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6639",
-      "name": "源大環能",
-      "price": 7.47,
-      "change": -0.12,
-      "volume": 236,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "7858",
-      "name": "芝普",
-      "price": 228.5,
-      "change": -10.32,
-      "volume": 233,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7754",
-      "name": "安基生技",
-      "price": 60.0,
-      "change": -0.14,
-      "volume": 230,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "3117",
-      "name": "年程",
-      "price": 24.4,
-      "change": -1.1,
-      "volume": 229,
-      "category": "電子",
-      "status": "興櫃"
-    },
-    {
-      "code": "6748",
-      "name": "亞果生醫",
-      "price": 70.4,
-      "change": -1.34,
-      "volume": 229,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7825",
-      "name": "和亞智慧",
-      "price": 99.5,
-      "change": 2.36,
-      "volume": 224,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6912",
-      "name": "益鈞環科*",
-      "price": 16.9,
-      "change": 0.07,
-      "volume": 223,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "5248",
-      "name": "景傳",
-      "price": 49.0,
-      "change": -2.86,
-      "volume": 219,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7566",
-      "name": "亞果遊艇",
-      "price": 12.95,
-      "change": -0.19,
-      "volume": 216,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6812",
-      "name": "梭特",
-      "price": 70.5,
-      "change": 0.21,
-      "volume": 212,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6676",
-      "name": "祥翊",
-      "price": 14.5,
-      "change": -0.34,
-      "volume": 211,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "5859",
-      "name": "遠壽",
-      "price": 14.45,
-      "change": -0.14,
-      "volume": 210,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7878",
-      "name": "藥祇",
-      "price": 290.0,
-      "change": 0.79,
-      "volume": 210,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7868",
-      "name": "聖育",
-      "price": 88.2,
-      "change": -3.16,
-      "volume": 193,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6555",
-      "name": "榮炭",
-      "price": 22.45,
-      "change": 0.34,
-      "volume": 190,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "7832",
-      "name": "智新生技*",
-      "price": 12.6,
-      "change": -0.24,
-      "volume": 190,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "3678",
-      "name": "聯享",
-      "price": 61.2,
-      "change": 0.79,
-      "volume": 186,
-      "category": "電子零組件",
-      "status": "興櫃"
-    },
-    {
-      "code": "6659",
-      "name": "天明製藥",
-      "price": 20.95,
-      "change": -1.14,
-      "volume": 185,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "6876",
-      "name": "朗齊生醫*",
-      "price": 20.1,
-      "change": -0.56,
-      "volume": 185,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6738",
-      "name": "鼎恒",
-      "price": 68.8,
-      "change": 0.99,
-      "volume": 184,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "4115",
-      "name": "善德生技",
-      "price": 9.39,
-      "change": 0.12,
-      "volume": 179,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7854",
-      "name": "佐茂",
-      "price": 100.0,
-      "change": -8.15,
-      "volume": 179,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7803",
-      "name": "雲象科技",
-      "price": 29.45,
-      "change": -0.34,
-      "volume": 178,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7902",
-      "name": "宇越生醫*",
-      "price": 41.15,
-      "change": 0.66,
-      "volume": 176,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7911",
-      "name": "阿波羅電力",
-      "price": 135.0,
-      "change": -1.41,
-      "volume": 174,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6980",
-      "name": "鐳洋科技",
-      "price": 169.0,
-      "change": -4.05,
-      "volume": 173,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "2237",
-      "name": "華德動能",
-      "price": 35.5,
-      "change": 0.0,
-      "volume": 169,
-      "category": "汽車",
       "status": "興櫃"
     },
     {
       "code": "6793",
       "name": "天力離岸",
-      "price": 6.25,
-      "change": 0.28,
-      "volume": 168,
+      "price": 5.9,
+      "change": -0.16,
+      "volume": 354,
       "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "1271",
-      "name": "晨暉生技",
-      "price": 66.0,
-      "change": -1.85,
-      "volume": 167,
-      "category": "食品",
-      "status": "興櫃"
-    },
-    {
-      "code": "1594",
-      "name": "日高",
-      "price": 10.6,
-      "change": 0.43,
-      "volume": 167,
-      "category": "電機機械",
-      "status": "興櫃"
-    },
-    {
-      "code": "4980",
-      "name": "佐臻",
-      "price": 38.95,
-      "change": 0.35,
-      "volume": 163,
-      "category": "電腦周邊",
-      "status": "興櫃"
-    },
-    {
-      "code": "6549",
-      "name": "景凱",
-      "price": 7.95,
-      "change": -0.09,
-      "volume": 163,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "7843",
-      "name": "英柏得",
-      "price": 130.5,
-      "change": -4.02,
-      "volume": 160,
+      "code": "6932",
+      "name": "水星生醫*",
+      "price": 7.19,
+      "change": -0.3,
+      "volume": 353,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7815",
-      "name": "新特",
-      "price": 487.5,
-      "change": -4.97,
-      "volume": 156,
+      "code": "5262",
+      "name": "立達",
+      "price": 53.9,
+      "change": 2.11,
+      "volume": 342,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "5267",
-      "name": "龍翩",
-      "price": 63.6,
-      "change": -2.01,
-      "volume": 148,
+      "code": "7669",
+      "name": "碩正科技",
+      "price": 830.0,
+      "change": 46.6,
+      "volume": 334,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "4172",
-      "name": "因華",
-      "price": 13.95,
-      "change": 0.27,
-      "volume": 146,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6820",
-      "name": "連訊",
-      "price": 291.5,
-      "change": 5.9,
-      "volume": 146,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7912",
-      "name": "新聿科",
-      "price": 438.0,
-      "change": -17.78,
-      "volume": 146,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7856",
-      "name": "漢測",
-      "price": 3385.0,
-      "change": 21.81,
-      "volume": 145,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6832",
-      "name": "金鼎科",
-      "price": 97.0,
-      "change": -3.11,
-      "volume": 144,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7427",
-      "name": "華上生醫",
-      "price": 41.0,
+      "code": "7719",
+      "name": "碳基",
+      "price": 40.75,
       "change": -0.43,
-      "volume": 141,
+      "volume": 330,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7516",
-      "name": "清淨海",
-      "price": 8.9,
-      "change": -0.07,
-      "volume": 139,
+      "code": "7729",
+      "name": "仲恩生醫",
+      "price": 74.1,
+      "change": 3.27,
+      "volume": 330,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7818",
-      "name": "溢泰實業",
-      "price": 98.6,
-      "change": 7.93,
-      "volume": 137,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7819",
-      "name": "精誠金融",
-      "price": 60.0,
-      "change": -5.31,
-      "volume": 135,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7702",
-      "name": "前端風電",
-      "price": 22.5,
-      "change": 1.59,
-      "volume": 130,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "4575",
-      "name": "銓寶",
-      "price": 25.9,
-      "change": -0.78,
-      "volume": 128,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7876",
-      "name": "鼎晉生技",
-      "price": 35.95,
-      "change": -0.35,
-      "volume": 128,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6915",
-      "name": "美強光",
-      "price": 69.1,
-      "change": -3.31,
-      "volume": 127,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6818",
-      "name": "連騰",
-      "price": 62.0,
-      "change": -0.93,
-      "volume": 125,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6709",
-      "name": "昱厚生技",
-      "price": 24.9,
-      "change": -0.4,
-      "volume": 123,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6810",
-      "name": "新穎生醫",
-      "price": 28.15,
-      "change": 0.0,
-      "volume": 118,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6704",
-      "name": "國璽幹細胞",
-      "price": 21.45,
+      "code": "7590",
+      "name": "怡和國際",
+      "price": 24.35,
       "change": 0.08,
-      "volume": 117,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7764",
-      "name": "聖州",
-      "price": 13.85,
-      "change": 0.46,
-      "volume": 117,
+      "volume": 329,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6815",
-      "name": "晶鑽生醫",
-      "price": 27.0,
-      "change": -1.56,
-      "volume": 115,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "4197",
-      "name": "暐世",
-      "price": 10.35,
-      "change": 0.43,
-      "volume": 114,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6621",
-      "name": "華宇藥",
-      "price": 12.1,
-      "change": -0.13,
-      "volume": 113,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "7813",
-      "name": "宇辰系統",
-      "price": 143.5,
-      "change": -5.44,
-      "volume": 112,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "1780",
-      "name": "立弘",
-      "price": 31.4,
-      "change": -0.24,
-      "volume": 110,
-      "category": "化學",
-      "status": "興櫃"
-    },
-    {
-      "code": "6808",
-      "name": "三鼎生技",
-      "price": 30.7,
-      "change": 0.03,
-      "volume": 110,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7558",
-      "name": "群利科技",
-      "price": 24.55,
-      "change": -1.47,
-      "volume": 110,
+      "code": "6917",
+      "name": "竟天",
+      "price": 35.8,
+      "change": -0.43,
+      "volume": 323,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "6559",
       "name": "研晶",
-      "price": 27.0,
-      "change": -1.22,
-      "volume": 109,
+      "price": 25.4,
+      "change": -1.83,
+      "volume": 319,
       "category": "金融",
       "status": "興櫃"
     },
     {
-      "code": "6990",
-      "name": "華鉬",
-      "price": 80.0,
-      "change": -5.25,
-      "volume": 109,
+      "code": "6696",
+      "name": "仁新",
+      "price": 402.0,
+      "change": -3.67,
+      "volume": 310,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "6572",
+      "name": "博錸",
+      "price": 8.52,
+      "change": -0.55,
+      "volume": 293,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "7763",
+      "name": "崇舜",
+      "price": 258.0,
+      "change": -10.91,
+      "volume": 289,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "4565",
-      "name": "宏偉",
-      "price": 120.5,
-      "change": 5.65,
-      "volume": 105,
+      "code": "7819",
+      "name": "精誠金融",
+      "price": 62.0,
+      "change": -0.93,
+      "volume": 289,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "5248",
+      "name": "景傳",
+      "price": 45.75,
+      "change": -3.01,
+      "volume": 287,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7427",
+      "name": "華上生醫",
+      "price": 41.9,
+      "change": 1.03,
+      "volume": 283,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6892",
+      "name": "台寶生醫",
+      "price": 24.8,
+      "change": 0.08,
+      "volume": 282,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "4582",
+      "name": "聚恆",
+      "price": 32.95,
+      "change": -0.44,
+      "volume": 277,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7909",
+      "name": "鈺祥",
+      "price": 839.0,
+      "change": -28.37,
+      "volume": 276,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6483",
+      "name": "原創生醫",
+      "price": 13.1,
+      "change": -0.83,
+      "volume": 274,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "7886",
+      "name": "科建",
+      "price": 210.5,
+      "change": 9.57,
+      "volume": 273,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7911",
+      "name": "阿波羅電力",
+      "price": 139.5,
+      "change": 4.64,
+      "volume": 264,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "4172",
+      "name": "因華",
+      "price": 14.05,
+      "change": 0.43,
+      "volume": 255,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7752",
+      "name": "世紀樺欣",
+      "price": 32.25,
+      "change": -2.69,
+      "volume": 255,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7825",
+      "name": "和亞智慧",
+      "price": 99.9,
+      "change": 1.89,
+      "volume": 253,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6818",
+      "name": "連騰",
+      "price": 59.6,
+      "change": -2.25,
+      "volume": 252,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7832",
+      "name": "智新生技*",
+      "price": 12.5,
+      "change": -0.03,
+      "volume": 245,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6876",
+      "name": "朗齊生醫*",
+      "price": 20.1,
+      "change": 0.34,
+      "volume": 239,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "4537",
+      "name": "旭東",
+      "price": 177.5,
+      "change": 1.79,
+      "volume": 234,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6946",
+      "name": "三地能源",
+      "price": 12.15,
+      "change": -0.3,
+      "volume": 232,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "3117",
+      "name": "年程",
+      "price": 22.6,
+      "change": -1.7,
+      "volume": 230,
+      "category": "電子",
+      "status": "興櫃"
+    },
+    {
+      "code": "4980",
+      "name": "佐臻",
+      "price": 39.0,
+      "change": 1.03,
+      "volume": 228,
+      "category": "電腦周邊",
+      "status": "興櫃"
+    },
+    {
+      "code": "7707",
+      "name": "益芯科",
+      "price": 161.0,
+      "change": -2.89,
+      "volume": 223,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7812",
+      "name": "稜研科技*",
+      "price": 80.2,
+      "change": 0.35,
+      "volume": 221,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6555",
+      "name": "榮炭",
+      "price": 21.7,
+      "change": -0.4,
+      "volume": 216,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "6729",
+      "name": "機光科技",
+      "price": 57.0,
+      "change": 4.69,
+      "volume": 213,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6980",
+      "name": "鐳洋科技",
+      "price": 159.5,
+      "change": -8.4,
+      "volume": 213,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6883",
+      "name": "微電能源",
+      "price": 20.9,
+      "change": -2.21,
+      "volume": 203,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7815",
+      "name": "新特",
+      "price": 474.5,
+      "change": -8.44,
+      "volume": 202,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6705",
+      "name": "振躍精密",
+      "price": 102.0,
+      "change": 6.93,
+      "volume": 198,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7762",
+      "name": "吉晟生",
+      "price": 53.2,
+      "change": 5.31,
+      "volume": 193,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6563",
+      "name": "映智",
+      "price": 31.95,
+      "change": 1.15,
+      "volume": 191,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "6826",
+      "name": "和淞",
+      "price": 554.0,
+      "change": -2.76,
+      "volume": 190,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6815",
+      "name": "晶鑽生醫",
+      "price": 28.45,
+      "change": 1.47,
+      "volume": 184,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7761",
+      "name": "三大未來",
+      "price": 39.3,
+      "change": 0.22,
+      "volume": 184,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7851",
+      "name": "慧康生技*-KY",
+      "price": 43.5,
+      "change": -0.01,
+      "volume": 182,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6676",
+      "name": "祥翊",
+      "price": 14.5,
+      "change": 0.04,
+      "volume": 179,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "1271",
+      "name": "晨暉生技",
+      "price": 62.5,
+      "change": -2.85,
+      "volume": 174,
+      "category": "食品",
+      "status": "興櫃"
+    },
+    {
+      "code": "6748",
+      "name": "亞果生醫",
+      "price": 70.2,
+      "change": -0.51,
+      "volume": 172,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7566",
+      "name": "亞果遊艇",
+      "price": 13.05,
+      "change": 0.2,
+      "volume": 171,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7856",
+      "name": "漢測",
+      "price": 3345.0,
+      "change": 57.6,
+      "volume": 171,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7754",
+      "name": "安基生技",
+      "price": 60.3,
+      "change": -0.12,
+      "volume": 169,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7858",
+      "name": "芝普",
+      "price": 233.5,
+      "change": 3.78,
+      "volume": 168,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6549",
+      "name": "景凱",
+      "price": 8.03,
+      "change": 0.15,
+      "volume": 159,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "7868",
+      "name": "聖育",
+      "price": 89.1,
+      "change": -0.02,
+      "volume": 156,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7882",
+      "name": "倍利創投",
+      "price": 23.05,
+      "change": 0.31,
+      "volume": 156,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7902",
+      "name": "宇越生醫*",
+      "price": 40.8,
+      "change": 0.27,
+      "volume": 156,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6977",
+      "name": "聯純",
+      "price": 322.5,
+      "change": -13.64,
+      "volume": 155,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "2237",
+      "name": "華德動能",
+      "price": 35.7,
+      "change": 0.73,
+      "volume": 153,
+      "category": "汽車",
+      "status": "興櫃"
+    },
+    {
+      "code": "4575",
+      "name": "銓寶",
+      "price": 25.9,
+      "change": -0.1,
+      "volume": 153,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6915",
+      "name": "美強光",
+      "price": 66.0,
+      "change": -3.61,
+      "volume": 153,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "5267",
+      "name": "龍翩",
+      "price": 59.5,
+      "change": -2.83,
+      "volume": 150,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6473",
+      "name": "美賣*",
+      "price": 8.66,
+      "change": -0.83,
+      "volume": 150,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "6983",
+      "name": "華洋精機",
+      "price": 390.0,
+      "change": -5.28,
+      "volume": 150,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6810",
+      "name": "新穎生醫",
+      "price": 27.85,
+      "change": 0.04,
+      "volume": 148,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6604",
+      "name": "儒億",
+      "price": 30.7,
+      "change": 0.23,
+      "volume": 142,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "7880",
+      "name": "聖凰",
+      "price": 207.5,
+      "change": -1.41,
+      "volume": 138,
       "category": "其他",
       "status": "興櫃"
     },
@@ -1277,106 +1142,214 @@
       "code": "7883",
       "name": "饗賓",
       "price": 292.0,
-      "change": 10.93,
-      "volume": 105,
+      "change": 10.51,
+      "volume": 129,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7886",
-      "name": "科建",
-      "price": 202.0,
-      "change": 6.04,
-      "volume": 105,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7872",
-      "name": "登豐",
-      "price": 67.4,
-      "change": 3.94,
-      "volume": 104,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6473",
-      "name": "美賣*",
-      "price": 9.4,
-      "change": -0.36,
-      "volume": 102,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "6604",
-      "name": "儒億",
-      "price": 30.4,
-      "change": 0.15,
-      "volume": 101,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "6825",
-      "name": "和暢科技",
-      "price": 43.3,
-      "change": 1.53,
-      "volume": 101,
+      "code": "6808",
+      "name": "三鼎生技",
+      "price": 31.2,
+      "change": 0.6,
+      "volume": 128,
       "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "7578",
-      "name": "利百景",
-      "price": 32.85,
-      "change": -0.12,
-      "volume": 101,
+      "code": "7803",
+      "name": "雲象科技",
+      "price": 29.45,
+      "change": -0.03,
+      "volume": 128,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "2252",
-      "name": "為昇科",
-      "price": 19.9,
-      "change": 0.89,
-      "volume": 97,
-      "category": "汽車",
+      "code": "7878",
+      "name": "藥祇",
+      "price": 287.5,
+      "change": -0.85,
+      "volume": 127,
+      "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6839",
-      "name": "開陽能源",
-      "price": 12.15,
-      "change": 0.09,
-      "volume": 97,
+      "code": "5859",
+      "name": "遠壽",
+      "price": 14.6,
+      "change": 0.26,
+      "volume": 125,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7558",
+      "name": "群利科技",
+      "price": 22.0,
+      "change": -2.85,
+      "volume": 124,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6709",
+      "name": "昱厚生技",
+      "price": 25.05,
+      "change": 0.03,
+      "volume": 121,
       "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "4724",
+      "name": "宣捷幹細胞",
+      "price": 12.6,
+      "change": -0.24,
+      "volume": 117,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6912",
+      "name": "益鈞環科*",
+      "price": 16.45,
+      "change": 0.31,
+      "volume": 117,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7796",
+      "name": "擷發科",
+      "price": 108.5,
+      "change": 1.67,
+      "volume": 114,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7876",
+      "name": "鼎晉生技",
+      "price": 36.15,
+      "change": 0.08,
+      "volume": 112,
+      "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "6987",
       "name": "寶晶能源*",
-      "price": 20.05,
-      "change": 0.04,
-      "volume": 97,
+      "price": 19.95,
+      "change": -0.04,
+      "volume": 111,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6983",
-      "name": "華洋精機",
-      "price": 403.5,
-      "change": 14.48,
-      "volume": 96,
+      "code": "5863",
+      "name": "瑞興銀",
+      "price": 11.1,
+      "change": 0.12,
+      "volume": 108,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7893",
-      "name": "睿信",
-      "price": 215.5,
-      "change": 7.63,
+      "code": "7833",
+      "name": "綠岩能源",
+      "price": 30.0,
+      "change": 0.82,
+      "volume": 108,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "3678",
+      "name": "聯享",
+      "price": 59.0,
+      "change": 0.19,
+      "volume": 106,
+      "category": "電子零組件",
+      "status": "興櫃"
+    },
+    {
+      "code": "7818",
+      "name": "溢泰實業",
+      "price": 98.3,
+      "change": 4.45,
+      "volume": 104,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6755",
+      "name": "連鋐科技",
+      "price": 20.55,
+      "change": -0.65,
+      "volume": 103,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "1780",
+      "name": "立弘",
+      "price": 31.4,
+      "change": 0.07,
+      "volume": 102,
+      "category": "化學",
+      "status": "興櫃"
+    },
+    {
+      "code": "6820",
+      "name": "連訊",
+      "price": 276.0,
+      "change": -14.6,
+      "volume": 102,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6536",
+      "name": "碩豐",
+      "price": 30.3,
+      "change": 9.08,
+      "volume": 101,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "6659",
+      "name": "天明製藥",
+      "price": 20.75,
+      "change": 0.31,
+      "volume": 100,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "6947",
+      "name": "台鎔科技",
+      "price": 78.6,
+      "change": -0.1,
+      "volume": 100,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "1594",
+      "name": "日高",
+      "price": 11.1,
+      "change": 1.03,
+      "volume": 98,
+      "category": "電機機械",
+      "status": "興櫃"
+    },
+    {
+      "code": "7892",
+      "name": "元鈦科",
+      "price": 972.0,
+      "change": -10.61,
       "volume": 96,
       "category": "其他",
       "status": "興櫃"
@@ -1384,423 +1357,756 @@
     {
       "code": "7829",
       "name": "思捷優達-KY",
-      "price": 40.45,
-      "change": -0.55,
+      "price": 39.6,
+      "change": 0.34,
       "volume": 95,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6565",
-      "name": "物聯",
-      "price": 22.95,
-      "change": -0.21,
+      "code": "6639",
+      "name": "源大環能",
+      "price": 7.21,
+      "change": -0.44,
       "volume": 93,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "6543",
+      "name": "普惠醫工",
+      "price": 22.35,
+      "change": 0.29,
+      "volume": 91,
       "category": "金融",
       "status": "興櫃"
     },
     {
-      "code": "6946",
-      "name": "三地能源",
-      "price": 12.3,
-      "change": -0.37,
-      "volume": 92,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6723",
-      "name": "傑智環境",
-      "price": 39.4,
-      "change": 0.01,
+      "code": "7737",
+      "name": "凱鈿",
+      "price": 44.5,
+      "change": 1.08,
       "volume": 90,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6784",
-      "name": "天凱科技",
-      "price": 26.1,
-      "change": -0.1,
-      "volume": 90,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "4587",
-      "name": "寶元數控",
-      "price": 60.0,
-      "change": 1.31,
-      "volume": 86,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6705",
-      "name": "振躍精密",
-      "price": 93.8,
-      "change": -5.97,
-      "volume": 86,
+      "code": "6812",
+      "name": "梭特",
+      "price": 70.3,
+      "change": 0.95,
+      "volume": 89,
       "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "6729",
-      "name": "機光科技",
-      "price": 52.7,
-      "change": -0.95,
+      "code": "6648",
+      "name": "斯其大",
+      "price": 17.0,
+      "change": -0.54,
       "volume": 86,
-      "category": "證券",
+      "category": "金融保險",
       "status": "興櫃"
     },
     {
-      "code": "4194",
-      "name": "禾生技",
-      "price": 7.59,
-      "change": 0.01,
+      "code": "7689",
+      "name": "大鵬科CLMX",
+      "price": 255.0,
+      "change": 3.64,
       "volume": 85,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7669",
-      "name": "碩正科技",
-      "price": 797.0,
-      "change": 16.88,
-      "volume": 85,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "8098",
-      "name": "慶康科技",
-      "price": 389.0,
-      "change": -19.41,
-      "volume": 84,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6827",
-      "name": "巨生醫",
-      "price": 12.0,
-      "change": -0.07,
-      "volume": 81,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6977",
-      "name": "聯純",
-      "price": 335.5,
-      "change": -2.29,
-      "volume": 81,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "2255",
-      "name": "凱銳光電",
-      "price": 18.5,
-      "change": -0.42,
-      "volume": 79,
-      "category": "汽車",
-      "status": "興櫃"
-    },
-    {
-      "code": "7798",
-      "name": "將捷",
-      "price": 14.55,
-      "change": 0.0,
-      "volume": 74,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6898",
-      "name": "程曦資訊",
-      "price": 104.5,
-      "change": -1.21,
-      "volume": 73,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7814",
-      "name": "海昌生技",
-      "price": 43.05,
-      "change": -0.24,
-      "volume": 72,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6927",
-      "name": "聯合聚晶",
-      "price": 51.0,
-      "change": 0.8,
-      "volume": 71,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "6814",
       "name": "路迦生醫",
-      "price": 25.0,
-      "change": 0.66,
-      "volume": 70,
+      "price": 26.2,
+      "change": 1.12,
+      "volume": 84,
       "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "7752",
-      "name": "世紀樺欣",
-      "price": 34.9,
-      "change": -0.92,
-      "volume": 70,
+      "code": "7872",
+      "name": "登豐",
+      "price": 64.4,
+      "change": -2.37,
+      "volume": 84,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7893",
+      "name": "睿信",
+      "price": 212.5,
+      "change": -0.51,
+      "volume": 84,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6564",
+      "name": "安特羅",
+      "price": 18.3,
+      "change": 0.04,
+      "volume": 81,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "4115",
+      "name": "善德生技",
+      "price": 9.3,
+      "change": -0.13,
+      "volume": 80,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "4194",
+      "name": "禾生技",
+      "price": 7.59,
+      "change": 0.05,
+      "volume": 79,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "4197",
+      "name": "暐世",
+      "price": 10.05,
+      "change": -0.1,
+      "volume": 79,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6723",
+      "name": "傑智環境",
+      "price": 37.4,
+      "change": -0.88,
+      "volume": 79,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7578",
+      "name": "利百景",
+      "price": 32.7,
+      "change": -0.07,
+      "volume": 76,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "1260",
       "name": "富味鄉",
-      "price": 24.9,
-      "change": 0.22,
-      "volume": 69,
+      "price": 24.15,
+      "change": -0.49,
+      "volume": 74,
       "category": "食品",
       "status": "興櫃"
     },
     {
-      "code": "7850",
-      "name": "寶泰生醫",
-      "price": 19.1,
-      "change": 0.07,
-      "volume": 69,
+      "code": "7854",
+      "name": "佐茂",
+      "price": 101.5,
+      "change": 0.38,
+      "volume": 74,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7516",
+      "name": "清淨海",
+      "price": 8.8,
+      "change": -0.14,
+      "volume": 71,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "3603",
+      "name": "建祥國際",
+      "price": 9.63,
+      "change": 1.03,
+      "volume": 70,
+      "category": "電子零組件",
+      "status": "興櫃"
+    },
+    {
+      "code": "6825",
+      "name": "和暢科技",
+      "price": 44.1,
+      "change": -0.4,
+      "volume": 70,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6832",
+      "name": "金鼎科",
+      "price": 99.4,
+      "change": 3.61,
+      "volume": 68,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7790",
+      "name": "思必瑞特",
+      "price": 64.2,
+      "change": 11.73,
+      "volume": 68,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7808",
+      "name": "訊聯智藥",
+      "price": 40.45,
+      "change": 0.48,
+      "volume": 67,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "6734",
       "name": "安盛生",
-      "price": 6.74,
-      "change": -0.02,
-      "volume": 67,
+      "price": 6.32,
+      "change": -0.26,
+      "volume": 65,
       "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "7761",
-      "name": "三大未來",
-      "price": 39.55,
-      "change": 0.36,
-      "volume": 66,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7595",
-      "name": "世基生醫",
-      "price": 9.6,
-      "change": -0.09,
+      "code": "7896",
+      "name": "喬越",
+      "price": 277.5,
+      "change": -14.14,
       "volume": 65,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7689",
-      "name": "大鵬科CLMX",
-      "price": 254.5,
-      "change": -11.88,
-      "volume": 65,
-      "category": "其他",
+      "code": "2252",
+      "name": "為昇科",
+      "price": 19.2,
+      "change": -0.14,
+      "volume": 64,
+      "category": "汽車",
       "status": "興櫃"
     },
     {
-      "code": "3633",
-      "name": "云光",
-      "price": 130.0,
-      "change": 0.18,
+      "code": "6565",
+      "name": "物聯",
+      "price": 22.9,
+      "change": 0.45,
       "volume": 63,
-      "category": "電子零組件",
+      "category": "金融",
       "status": "興櫃"
     },
     {
-      "code": "4724",
-      "name": "宣捷幹細胞",
-      "price": 12.85,
-      "change": -0.17,
-      "volume": 63,
+      "code": "2255",
+      "name": "凱銳光電",
+      "price": 18.85,
+      "change": 0.76,
+      "volume": 62,
+      "category": "汽車",
+      "status": "興櫃"
+    },
+    {
+      "code": "7551",
+      "name": "知識科技",
+      "price": 14.15,
+      "change": 0.49,
+      "volume": 62,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "6797",
       "name": "圓點奈米",
-      "price": 15.0,
-      "change": -0.32,
-      "volume": 63,
+      "price": 14.6,
+      "change": -0.69,
+      "volume": 60,
       "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "6564",
-      "name": "安特羅",
-      "price": 18.7,
-      "change": 0.38,
-      "volume": 61,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "7776",
-      "name": "奧孟亞",
-      "price": 26.5,
-      "change": 0.0,
-      "volume": 61,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "8345",
-      "name": "超秦",
-      "price": 55.2,
-      "change": 0.29,
-      "volume": 61,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7888",
-      "name": "麗寶新藥",
-      "price": 39.5,
-      "change": 0.6,
+      "code": "7816",
+      "name": "來穎",
+      "price": 66.6,
+      "change": -0.45,
       "volume": 60,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7880",
-      "name": "聖凰",
-      "price": 209.0,
-      "change": 0.89,
-      "volume": 58,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "4765",
-      "name": "磐采",
-      "price": 20.1,
-      "change": 0.31,
-      "volume": 55,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6938",
-      "name": "藍新資訊",
-      "price": 100.0,
-      "change": -0.02,
-      "volume": 54,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7783",
-      "name": "佳運",
-      "price": 105.5,
-      "change": 3.09,
-      "volume": 54,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7907",
-      "name": "錸恩帕斯",
-      "price": 297.0,
-      "change": 6.77,
-      "volume": 54,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6979",
-      "name": "勝釩",
-      "price": 228.0,
-      "change": -15.04,
-      "volume": 51,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6864",
-      "name": "元樟生技",
-      "price": 55.5,
-      "change": -0.91,
-      "volume": 50,
+      "code": "6704",
+      "name": "國璽幹細胞",
+      "price": 21.5,
+      "change": 0.29,
+      "volume": 57,
       "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6911",
+      "name": "群運",
+      "price": 31.85,
+      "change": 0.02,
+      "volume": 56,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6986",
+      "name": "和迅",
+      "price": 60.7,
+      "change": 0.39,
+      "volume": 56,
+      "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "7877",
       "name": "海利普",
-      "price": 40.0,
-      "change": -0.43,
-      "volume": 50,
+      "price": 40.15,
+      "change": 0.03,
+      "volume": 56,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "8359",
-      "name": "錢櫃",
-      "price": 65.0,
-      "change": 0.46,
-      "volume": 50,
+      "code": "7814",
+      "name": "海昌生技",
+      "price": 42.85,
+      "change": -0.55,
+      "volume": 55,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "2741",
-      "name": "老四川",
-      "price": 22.1,
-      "change": 0.89,
-      "volume": 49,
-      "category": "航運",
+      "code": "8098",
+      "name": "慶康科技",
+      "price": 381.5,
+      "change": -10.25,
+      "volume": 53,
+      "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6483",
-      "name": "原創生醫",
-      "price": 14.0,
-      "change": -0.03,
-      "volume": 47,
+      "code": "6493",
+      "name": "雷虎生",
+      "price": 29.95,
+      "change": 0.04,
+      "volume": 52,
       "category": "金融",
       "status": "興櫃"
     },
     {
-      "code": "7833",
-      "name": "綠岩能源",
-      "price": 29.9,
-      "change": 1.13,
+      "code": "6580",
+      "name": "台睿",
+      "price": 16.1,
+      "change": 0.28,
+      "volume": 52,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "6827",
+      "name": "巨生醫",
+      "price": 11.95,
+      "change": 0.05,
+      "volume": 52,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6839",
+      "name": "開陽能源",
+      "price": 11.85,
+      "change": -0.12,
+      "volume": 51,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7865",
+      "name": "金聯成",
+      "price": 43.0,
+      "change": -2.0,
+      "volume": 50,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6621",
+      "name": "華宇藥",
+      "price": 12.0,
+      "change": -0.09,
+      "volume": 48,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "6817",
+      "name": "溫士頓",
+      "price": 68.3,
+      "change": 0.53,
+      "volume": 48,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "3633",
+      "name": "云光",
+      "price": 128.5,
+      "change": 0.12,
+      "volume": 47,
+      "category": "電子零組件",
+      "status": "興櫃"
+    },
+    {
+      "code": "6784",
+      "name": "天凱科技",
+      "price": 26.1,
+      "change": 0.57,
+      "volume": 47,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7813",
+      "name": "宇辰系統",
+      "price": 142.5,
+      "change": -0.7,
       "volume": 47,
       "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "1343",
+      "name": "旭東環保",
+      "price": 21.1,
+      "change": 0.29,
+      "volume": 46,
+      "category": "塑膠",
       "status": "興櫃"
     },
     {
       "code": "7773",
       "name": "富禾生醫",
-      "price": 28.35,
-      "change": 0.53,
-      "volume": 46,
+      "price": 28.1,
+      "change": -0.03,
+      "volume": 44,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7850",
+      "name": "寶泰生醫",
+      "price": 19.05,
+      "change": 0.08,
+      "volume": 43,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "7915",
       "name": "廌家",
-      "price": 775.0,
-      "change": 10.93,
-      "volume": 46,
+      "price": 769.0,
+      "change": 11.99,
+      "volume": 43,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "4559",
+      "name": "久裕興",
+      "price": 9.0,
+      "change": -0.35,
+      "volume": 42,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "4587",
+      "name": "寶元數控",
+      "price": 57.5,
+      "change": 0.12,
+      "volume": 42,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7758",
+      "name": "睿騰能源",
+      "price": 48.45,
+      "change": 1.69,
+      "volume": 42,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7702",
+      "name": "前端風電",
+      "price": 21.75,
+      "change": -0.62,
+      "volume": 41,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6677",
+      "name": "瑩碩生技",
+      "price": 18.1,
+      "change": -0.16,
+      "volume": 40,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "7443",
+      "name": "凡事康",
+      "price": 9.89,
+      "change": -0.18,
+      "volume": 40,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6738",
+      "name": "鼎恒",
+      "price": 69.0,
+      "change": 0.85,
+      "volume": 39,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "4589",
+      "name": "碩陽電機",
+      "price": 38.5,
+      "change": -0.52,
+      "volume": 38,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6622",
+      "name": "百聿數碼",
+      "price": 7.15,
+      "change": -0.09,
+      "volume": 38,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "7783",
+      "name": "佳運",
+      "price": 102.5,
+      "change": -3.16,
+      "volume": 38,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6027",
+      "name": "德信",
+      "price": 13.0,
+      "change": 0.07,
+      "volume": 37,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "7507",
+      "name": "環拓科技",
+      "price": 24.0,
+      "change": 0.14,
+      "volume": 37,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7801",
+      "name": "華芸科技",
+      "price": 145.0,
+      "change": 0.23,
+      "volume": 35,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "2741",
+      "name": "老四川",
+      "price": 21.3,
+      "change": -0.35,
+      "volume": 34,
+      "category": "航運",
+      "status": "興櫃"
+    },
+    {
+      "code": "7848",
+      "name": "騏億鑫",
+      "price": 475.0,
+      "change": -12.25,
+      "volume": 33,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6868",
+      "name": "采威國際",
+      "price": 28.0,
+      "change": -1.12,
+      "volume": 32,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "4546",
+      "name": "長亨",
+      "price": 116.0,
+      "change": 0.63,
+      "volume": 31,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6898",
+      "name": "程曦資訊",
+      "price": 103.5,
+      "change": -0.14,
+      "volume": 31,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7907",
+      "name": "錸恩帕斯",
+      "price": 297.0,
+      "change": -0.68,
+      "volume": 31,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "8359",
+      "name": "錢櫃",
+      "price": 64.6,
+      "change": 0.15,
+      "volume": 31,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "2758",
+      "name": "路易莎咖啡",
+      "price": 67.5,
+      "change": -1.37,
+      "volume": 30,
+      "category": "航運",
+      "status": "興櫃"
+    },
+    {
+      "code": "7836",
+      "name": "智生活",
+      "price": 51.9,
+      "change": 0.22,
+      "volume": 28,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "4765",
+      "name": "磐采",
+      "price": 20.55,
+      "change": 0.71,
+      "volume": 27,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7862",
+      "name": "聚泰",
+      "price": 38.05,
+      "change": -0.55,
+      "volume": 27,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6926",
+      "name": "聖安生醫",
+      "price": 64.9,
+      "change": 0.6,
+      "volume": 26,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7875",
+      "name": "安圖斯",
+      "price": 131.5,
+      "change": 1.13,
+      "volume": 26,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6595",
+      "name": "光禹國際",
+      "price": 32.15,
+      "change": 0.11,
+      "volume": 25,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "6638",
+      "name": "沅聖",
+      "price": 42.0,
+      "change": -0.61,
+      "volume": 25,
+      "category": "金融保險",
+      "status": "興櫃"
+    },
+    {
+      "code": "4565",
+      "name": "宏偉",
+      "price": 119.5,
+      "change": -1.58,
+      "volume": 24,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6833",
+      "name": "太康精密",
+      "price": 26.8,
+      "change": 0.58,
+      "volume": 24,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6938",
+      "name": "藍新資訊",
+      "price": 100.5,
+      "change": 2.36,
+      "volume": 24,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7870",
+      "name": "聯剛科技",
+      "price": 157.5,
+      "change": -3.63,
+      "volume": 24,
       "category": "其他",
       "status": "興櫃"
     },
@@ -1808,260 +2114,62 @@
       "code": "4553",
       "name": "盛復",
       "price": 18.9,
-      "change": -0.77,
-      "volume": 45,
+      "change": 0.03,
+      "volume": 23,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "6892",
-      "name": "台寶生醫",
-      "price": 25.0,
-      "change": 0.04,
-      "volume": 45,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7507",
-      "name": "環拓科技",
-      "price": 24.4,
-      "change": 1.11,
-      "volume": 45,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7801",
-      "name": "華芸科技",
-      "price": 145.5,
-      "change": 1.2,
-      "volume": 44,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7891",
-      "name": "博研醫藥",
-      "price": 21.4,
-      "change": -0.58,
-      "volume": 44,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6536",
-      "name": "碩豐",
-      "price": 22.3,
-      "change": 0.04,
-      "volume": 43,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "7762",
-      "name": "吉晟生",
-      "price": 48.25,
-      "change": 0.7,
-      "volume": 43,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7816",
-      "name": "來穎",
-      "price": 66.7,
-      "change": -0.14,
-      "volume": 43,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6833",
-      "name": "太康精密",
-      "price": 26.1,
-      "change": -0.44,
-      "volume": 42,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "3603",
-      "name": "建祥國際",
-      "price": 9.1,
-      "change": 0.78,
-      "volume": 41,
-      "category": "電子零組件",
-      "status": "興櫃"
-    },
-    {
-      "code": "6879",
-      "name": "大江基因",
-      "price": 36.35,
-      "change": 0.04,
-      "volume": 41,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6986",
-      "name": "和迅",
-      "price": 60.7,
-      "change": 0.15,
-      "volume": 41,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "2071",
-      "name": "震南鐵",
-      "price": 20.5,
-      "change": 0.16,
-      "volume": 40,
-      "category": "鋼鐵",
-      "status": "興櫃"
-    },
-    {
-      "code": "6911",
-      "name": "群運",
-      "price": 32.45,
-      "change": 0.48,
-      "volume": 39,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7808",
-      "name": "訊聯智藥",
-      "price": 40.5,
-      "change": -0.34,
-      "volume": 39,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "4431",
-      "name": "敏成健康",
-      "price": 17.3,
-      "change": 0.26,
-      "volume": 37,
-      "category": "生技醫療",
-      "status": "興櫃"
-    },
-    {
-      "code": "6543",
-      "name": "普惠醫工",
-      "price": 22.0,
-      "change": -0.3,
-      "volume": 37,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "6848",
-      "name": "拉法醫",
-      "price": 19.6,
-      "change": 0.15,
-      "volume": 37,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "2644",
-      "name": "中信造船",
-      "price": 81.3,
-      "change": -0.2,
-      "volume": 36,
-      "category": "建材營造",
-      "status": "興櫃"
-    },
-    {
-      "code": "7836",
-      "name": "智生活",
-      "price": 51.9,
-      "change": 0.32,
-      "volume": 36,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6493",
-      "name": "雷虎生",
-      "price": 30.1,
-      "change": 0.15,
-      "volume": 35,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "6973",
-      "name": "永立榮",
+      "code": "6737",
+      "name": "秀育",
       "price": 34.15,
-      "change": -0.27,
-      "volume": 34,
+      "change": 0.95,
+      "volume": 23,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6979",
+      "name": "勝釩",
+      "price": 244.0,
+      "change": 12.7,
+      "volume": 23,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "2758",
-      "name": "路易莎咖啡",
-      "price": 69.3,
-      "change": 0.11,
-      "volume": 33,
-      "category": "航運",
-      "status": "興櫃"
-    },
-    {
-      "code": "3659",
-      "name": "百辰",
-      "price": 24.0,
-      "change": -0.42,
-      "volume": 32,
-      "category": "電子零組件",
-      "status": "興櫃"
-    },
-    {
-      "code": "7896",
-      "name": "喬越",
-      "price": 291.5,
-      "change": -13.56,
-      "volume": 32,
+      "code": "7561",
+      "name": "光晟生技",
+      "price": 19.05,
+      "change": -0.08,
+      "volume": 22,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "2249",
-      "name": "湧盛",
-      "price": 118.0,
-      "change": 0.12,
-      "volume": 31,
-      "category": "汽車",
-      "status": "興櫃"
-    },
-    {
-      "code": "4170",
-      "name": "鑫品生醫",
-      "price": 13.4,
-      "change": 0.23,
-      "volume": 30,
+      "code": "7562",
+      "name": "博來科技",
+      "price": 52.0,
+      "change": -1.3,
+      "volume": 22,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7756",
-      "name": "多那之",
-      "price": 42.5,
-      "change": 0.75,
-      "volume": 30,
+      "code": "7595",
+      "name": "世基生醫",
+      "price": 9.75,
+      "change": -0.16,
+      "volume": 22,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7890",
-      "name": "明曜科技",
-      "price": 119.5,
-      "change": 1.15,
-      "volume": 30,
+      "code": "7846",
+      "name": "德揚",
+      "price": 88.0,
+      "change": 0.08,
+      "volume": 22,
       "category": "其他",
       "status": "興櫃"
     },
@@ -2069,332 +2177,368 @@
       "code": "7895",
       "name": "元進莊",
       "price": 70.0,
-      "change": -0.5,
-      "volume": 30,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "8298",
-      "name": "威睿",
-      "price": 49.0,
-      "change": -1.49,
-      "volume": 30,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "1343",
-      "name": "旭東環保",
-      "price": 20.95,
-      "change": 0.12,
-      "volume": 29,
-      "category": "塑膠",
-      "status": "興櫃"
-    },
-    {
-      "code": "6677",
-      "name": "瑩碩生技",
-      "price": 18.4,
-      "change": 0.08,
-      "volume": 27,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "6816",
-      "name": "捷智商訊",
-      "price": 38.8,
-      "change": -0.49,
-      "volume": 27,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7551",
-      "name": "知識科技",
-      "price": 14.05,
-      "change": 0.58,
-      "volume": 27,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7790",
-      "name": "思必瑞特",
-      "price": 54.3,
-      "change": 6.28,
-      "volume": 27,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "1269",
-      "name": "乾杯",
-      "price": 68.8,
-      "change": -1.9,
-      "volume": 26,
-      "category": "食品",
-      "status": "興櫃"
-    },
-    {
-      "code": "6995",
-      "name": "野獸國",
-      "price": 47.5,
-      "change": 0.0,
-      "volume": 26,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7881",
-      "name": "科明",
-      "price": 102.0,
-      "change": 1.52,
-      "volume": 26,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "4546",
-      "name": "長亨",
-      "price": 117.0,
-      "change": 3.82,
-      "volume": 25,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "5863",
-      "name": "瑞興銀",
-      "price": 11.15,
-      "change": 0.28,
-      "volume": 25,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6027",
-      "name": "德信",
-      "price": 12.9,
-      "change": -0.37,
-      "volume": 24,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "7875",
-      "name": "安圖斯",
-      "price": 134.5,
-      "change": 0.07,
-      "volume": 24,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6926",
-      "name": "聖安生醫",
-      "price": 64.0,
-      "change": 0.11,
+      "change": -0.14,
       "volume": 22,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7745",
-      "name": "紅陽",
-      "price": 17.95,
-      "change": -0.49,
-      "volume": 21,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7857",
-      "name": "合水先進",
-      "price": 52.7,
-      "change": 1.32,
-      "volume": 21,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "2938",
-      "name": "床的世界",
-      "price": 23.2,
-      "change": 0.2,
-      "volume": 20,
-      "category": "百貨貿易",
-      "status": "興櫃"
-    },
-    {
-      "code": "4559",
-      "name": "久裕興",
-      "price": 9.44,
-      "change": 0.26,
-      "volume": 20,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7607",
-      "name": "通用幹細胞*",
-      "price": 14.3,
-      "change": -0.2,
-      "volume": 20,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7759",
-      "name": "視航生醫",
-      "price": 37.0,
-      "change": 0.23,
-      "volume": 20,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6878",
-      "name": "歐付寶",
-      "price": 9.88,
-      "change": -0.12,
-      "volume": 19,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6984",
-      "name": "ACpay",
-      "price": 18.0,
-      "change": -1.54,
-      "volume": 19,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7724",
-      "name": "諾亞克",
-      "price": 24.0,
-      "change": -0.03,
-      "volume": 19,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7863",
-      "name": "中科物流",
-      "price": 49.85,
-      "change": 2.61,
-      "volume": 19,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6580",
-      "name": "台睿",
-      "price": 16.25,
-      "change": 0.28,
-      "volume": 18,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "6665",
-      "name": "康聯生醫",
-      "price": 23.0,
-      "change": -0.36,
-      "volume": 18,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "7848",
-      "name": "騏億鑫",
-      "price": 485.5,
-      "change": 3.75,
-      "volume": 18,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "2940",
-      "name": "歐都納",
-      "price": 23.6,
-      "change": 0.08,
-      "volume": 17,
-      "category": "百貨貿易",
-      "status": "興櫃"
-    },
-    {
-      "code": "6599",
-      "name": "普達系統",
-      "price": 47.0,
-      "change": -1.49,
-      "volume": 17,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "4589",
-      "name": "碩陽電機",
-      "price": 39.9,
-      "change": 0.45,
-      "volume": 16,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6847",
-      "name": "普瑞博",
-      "price": 64.8,
-      "change": -0.43,
-      "volume": 16,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "4732",
-      "name": "彥臣",
-      "price": 19.05,
-      "change": 0.0,
-      "volume": 15,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7846",
-      "name": "德揚",
-      "price": 88.4,
-      "change": -1.84,
-      "volume": 15,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "3097",
       "name": "拍檔",
-      "price": 26.35,
-      "change": 0.05,
-      "volume": 14,
+      "price": 26.65,
+      "change": 0.54,
+      "volume": 21,
       "category": "電子",
       "status": "興櫃"
     },
     {
-      "code": "6648",
-      "name": "斯其大",
-      "price": 17.6,
-      "change": 0.15,
+      "code": "6518",
+      "name": "康科特",
+      "price": 32.35,
+      "change": 0.45,
+      "volume": 21,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "7847",
+      "name": "豊漁",
+      "price": 22.8,
+      "change": 0.04,
+      "volume": 21,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6850",
+      "name": "光鼎生技",
+      "price": 34.65,
+      "change": -0.25,
+      "volume": 20,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6864",
+      "name": "元樟生技",
+      "price": 55.8,
+      "change": 0.69,
+      "volume": 20,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7759",
+      "name": "視航生醫",
+      "price": 37.5,
+      "change": 0.41,
+      "volume": 20,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7857",
+      "name": "合水先進",
+      "price": 52.6,
+      "change": 1.85,
+      "volume": 20,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "8298",
+      "name": "威睿",
+      "price": 48.0,
+      "change": 0.02,
+      "volume": 20,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "4170",
+      "name": "鑫品生醫",
+      "price": 13.0,
+      "change": -0.43,
+      "volume": 19,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6428",
+      "name": "淘米",
+      "price": 13.9,
+      "change": 0.57,
+      "volume": 19,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "7575",
+      "name": "安美得",
+      "price": 20.2,
+      "change": -0.32,
+      "volume": 19,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7745",
+      "name": "紅陽",
+      "price": 18.0,
+      "change": -0.07,
+      "volume": 19,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7776",
+      "name": "奧孟亞",
+      "price": 27.05,
+      "change": 0.29,
+      "volume": 19,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "2249",
+      "name": "湧盛",
+      "price": 117.0,
+      "change": 0.01,
+      "volume": 18,
+      "category": "汽車",
+      "status": "興櫃"
+    },
+    {
+      "code": "7771",
+      "name": "綠基",
+      "price": 60.5,
+      "change": 0.7,
+      "volume": 18,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7885",
+      "name": "宏羚",
+      "price": 24.6,
+      "change": 0.45,
+      "volume": 18,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "5240",
+      "name": "建騰",
+      "price": 27.1,
+      "change": -0.33,
+      "volume": 17,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7824",
+      "name": "智寶",
+      "price": 45.0,
+      "change": 0.33,
+      "volume": 17,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6878",
+      "name": "歐付寶",
+      "price": 9.8,
+      "change": -0.17,
+      "volume": 16,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6973",
+      "name": "永立榮",
+      "price": 33.9,
+      "change": 0.01,
+      "volume": 16,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "2644",
+      "name": "中信造船",
+      "price": 82.2,
+      "change": 1.31,
+      "volume": 15,
+      "category": "建材營造",
+      "status": "興櫃"
+    },
+    {
+      "code": "3659",
+      "name": "百辰",
+      "price": 26.0,
+      "change": 1.61,
+      "volume": 14,
+      "category": "電子零組件",
+      "status": "興櫃"
+    },
+    {
+      "code": "6665",
+      "name": "康聯生醫",
+      "price": 22.8,
+      "change": 0.7,
       "volume": 14,
       "category": "金融保險",
       "status": "興櫃"
     },
     {
+      "code": "8345",
+      "name": "超秦",
+      "price": 54.9,
+      "change": 0.14,
+      "volume": 14,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6599",
+      "name": "普達系統",
+      "price": 46.0,
+      "change": -0.07,
+      "volume": 13,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "6879",
+      "name": "大江基因",
+      "price": 36.35,
+      "change": -0.01,
+      "volume": 13,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "1480",
+      "name": "東盟開發",
+      "price": 9.15,
+      "change": 0.0,
+      "volume": 12,
+      "category": "紡織",
+      "status": "興櫃"
+    },
+    {
+      "code": "2940",
+      "name": "歐都納",
+      "price": 23.5,
+      "change": -0.05,
+      "volume": 12,
+      "category": "百貨貿易",
+      "status": "興櫃"
+    },
+    {
+      "code": "4431",
+      "name": "敏成健康",
+      "price": 16.8,
+      "change": -0.13,
+      "volume": 12,
+      "category": "生技醫療",
+      "status": "興櫃"
+    },
+    {
       "code": "7748",
       "name": "鑫囍創業",
-      "price": 20.1,
-      "change": -0.89,
-      "volume": 14,
+      "price": 20.0,
+      "change": -0.15,
+      "volume": 12,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7867",
+      "name": "特力屋",
+      "price": 56.3,
+      "change": 0.64,
+      "volume": 12,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6035",
+      "name": "悠遊卡",
+      "price": 53.2,
+      "change": 1.46,
+      "volume": 11,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "7724",
+      "name": "諾亞克",
+      "price": 24.0,
+      "change": -0.05,
+      "volume": 11,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6886",
+      "name": "遠東生技",
+      "price": 47.5,
+      "change": 0.7,
+      "volume": 10,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6995",
+      "name": "野獸國",
+      "price": 47.5,
+      "change": -0.26,
+      "volume": 10,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "2071",
+      "name": "震南鐵",
+      "price": 20.25,
+      "change": -0.05,
+      "volume": 9,
+      "category": "鋼鐵",
+      "status": "興櫃"
+    },
+    {
+      "code": "3473",
+      "name": "智通聯網",
+      "price": 95.3,
+      "change": 0.0,
+      "volume": 9,
+      "category": "光電",
+      "status": "興櫃"
+    },
+    {
+      "code": "7726",
+      "name": "暄達",
+      "price": 33.85,
+      "change": 1.39,
+      "volume": 9,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7888",
+      "name": "麗寶新藥",
+      "price": 38.65,
+      "change": -0.63,
+      "volume": 9,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "8329",
+      "name": "台視",
+      "price": 10.15,
+      "change": -0.33,
+      "volume": 9,
       "category": "其他",
       "status": "興櫃"
     },
@@ -2402,351 +2546,18 @@
       "code": "6798",
       "name": "展逸",
       "price": 50.0,
-      "change": -0.4,
-      "volume": 13,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6858",
-      "name": "愛比科技",
-      "price": 24.1,
-      "change": -0.57,
-      "volume": 13,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6638",
-      "name": "沅聖",
-      "price": 41.8,
-      "change": -1.28,
-      "volume": 12,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "6758",
-      "name": "冠亞",
-      "price": 34.5,
-      "change": -1.65,
-      "volume": 12,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7737",
-      "name": "凱鈿",
-      "price": 43.3,
-      "change": -0.99,
-      "volume": 12,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7758",
-      "name": "睿騰能源",
-      "price": 46.0,
-      "change": -3.86,
-      "volume": 12,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "2733",
-      "name": "維格餅家",
-      "price": 11.8,
-      "change": -0.15,
-      "volume": 11,
-      "category": "航運",
-      "status": "興櫃"
-    },
-    {
-      "code": "7771",
-      "name": "綠基",
-      "price": 61.6,
-      "change": 2.12,
-      "volume": 11,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7867",
-      "name": "特力屋",
-      "price": 56.0,
-      "change": 0.53,
-      "volume": 11,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "8458",
-      "name": "影一",
-      "price": 15.1,
-      "change": -0.19,
-      "volume": 11,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "5240",
-      "name": "建騰",
-      "price": 27.5,
-      "change": -0.45,
-      "volume": 10,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7561",
-      "name": "光晟生技",
-      "price": 19.2,
-      "change": -0.01,
-      "volume": 10,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7806",
-      "name": "精華生醫",
-      "price": 69.9,
-      "change": 0.38,
-      "volume": 10,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6744",
-      "name": "豐技生技",
-      "price": 15.75,
-      "change": -0.39,
-      "volume": 9,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6886",
-      "name": "遠東生技",
-      "price": 47.95,
-      "change": 0.92,
-      "volume": 9,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6963",
-      "name": "品元",
-      "price": 27.1,
-      "change": -0.1,
-      "volume": 9,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7443",
-      "name": "凡事康",
-      "price": 10.5,
-      "change": 0.22,
-      "volume": 9,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6868",
-      "name": "采威國際",
-      "price": 29.4,
-      "change": 0.39,
+      "change": 0.0,
       "volume": 8,
       "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "6972",
-      "name": "博瑞達應材",
-      "price": 24.45,
-      "change": -0.1,
+      "code": "6848",
+      "name": "拉法醫",
+      "price": 19.6,
+      "change": 0.43,
       "volume": 8,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7826",
-      "name": "極風雲創",
-      "price": 45.85,
-      "change": 0.01,
-      "volume": 8,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6737",
-      "name": "秀育",
-      "price": 34.1,
-      "change": 0.05,
-      "volume": 7,
       "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7901",
-      "name": "大大寬頻",
-      "price": 75.9,
-      "change": 1.46,
-      "volume": 7,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "8329",
-      "name": "台視",
-      "price": 10.55,
-      "change": 0.03,
-      "volume": 7,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "2245",
-      "name": "詠勝昌*",
-      "price": 27.3,
-      "change": -0.4,
-      "volume": 6,
-      "category": "汽車",
-      "status": "興櫃"
-    },
-    {
-      "code": "3473",
-      "name": "智通聯網",
-      "price": 97.8,
-      "change": 2.18,
-      "volume": 6,
-      "category": "光電",
-      "status": "興櫃"
-    },
-    {
-      "code": "6428",
-      "name": "淘米",
-      "price": 13.35,
-      "change": -0.55,
-      "volume": 6,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "6850",
-      "name": "光鼎生技",
-      "price": 34.65,
-      "change": -0.09,
-      "volume": 6,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6939",
-      "name": "啟弘生技",
-      "price": 23.75,
-      "change": 0.16,
-      "volume": 6,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7710",
-      "name": "東擎科技",
-      "price": 270.0,
-      "change": 6.47,
-      "volume": 6,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7840",
-      "name": "祥圃",
-      "price": 36.1,
-      "change": -0.6,
-      "volume": 6,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7889",
-      "name": "騰勢",
-      "price": 87.9,
-      "change": -0.62,
-      "volume": 6,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7841",
-      "name": "經貿聯網",
-      "price": 29.8,
-      "change": -0.24,
-      "volume": 5,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "6622",
-      "name": "百聿數碼",
-      "price": 7.44,
-      "change": 0.04,
-      "volume": 4,
-      "category": "金融保險",
-      "status": "興櫃"
-    },
-    {
-      "code": "6817",
-      "name": "溫士頓",
-      "price": 68.2,
-      "change": 0.9,
-      "volume": 4,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6867",
-      "name": "坦德科技",
-      "price": 23.45,
-      "change": 0.51,
-      "volume": 4,
-      "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "7575",
-      "name": "安美得",
-      "price": 19.9,
-      "change": -0.39,
-      "volume": 4,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7726",
-      "name": "暄達",
-      "price": 32.5,
-      "change": -0.45,
-      "volume": 4,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "2761",
-      "name": "橘焱胡同",
-      "price": 15.7,
-      "change": 0.23,
-      "volume": 3,
-      "category": "航運",
-      "status": "興櫃"
-    },
-    {
-      "code": "2942",
-      "name": "京站",
-      "price": 38.3,
-      "change": 0.95,
-      "volume": 3,
-      "category": "百貨貿易",
       "status": "興櫃"
     },
     {
@@ -2754,125 +2565,305 @@
       "name": "瀚醫生技",
       "price": 30.0,
       "change": 0.0,
-      "volume": 3,
+      "volume": 8,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7706",
-      "name": "宏碁創達",
-      "price": 39.5,
-      "change": -1.14,
-      "volume": 3,
+      "code": "7839",
+      "name": "達人網",
+      "price": 60.0,
+      "change": -2.6,
+      "volume": 8,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7725",
-      "name": "列特博",
-      "price": 21.85,
-      "change": -0.95,
-      "volume": 3,
+      "code": "7869",
+      "name": "宏于電機",
+      "price": 391.5,
+      "change": 0.19,
+      "volume": 8,
       "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7789",
-      "name": "開展",
-      "price": 35.25,
-      "change": 0.0,
-      "volume": 3,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7834",
-      "name": "來毅數位",
-      "price": 20.5,
-      "change": 1.16,
-      "volume": 3,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7870",
-      "name": "聯剛科技",
-      "price": 158.0,
-      "change": -6.77,
-      "volume": 3,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "1480",
-      "name": "東盟開發",
-      "price": 9.45,
-      "change": 0.3,
-      "volume": 2,
-      "category": "紡織",
-      "status": "興櫃"
-    },
-    {
-      "code": "6539",
-      "name": "麗彤",
-      "price": 47.9,
-      "change": 0.91,
-      "volume": 2,
-      "category": "金融",
       "status": "興櫃"
     },
     {
       "code": "6650",
       "name": "帝圖",
-      "price": 31.75,
-      "change": -0.05,
-      "volume": 2,
+      "price": 31.45,
+      "change": 0.06,
+      "volume": 7,
       "category": "金融保險",
       "status": "興櫃"
     },
     {
-      "code": "7837",
-      "name": "啟新生",
-      "price": 105.0,
+      "code": "6847",
+      "name": "普瑞博",
+      "price": 61.8,
+      "change": -2.53,
+      "volume": 7,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7779",
+      "name": "鍇睿國際",
+      "price": 15.0,
+      "change": -0.12,
+      "volume": 7,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "2733",
+      "name": "維格餅家",
+      "price": 11.9,
+      "change": 0.16,
+      "volume": 6,
+      "category": "航運",
+      "status": "興櫃"
+    },
+    {
+      "code": "4732",
+      "name": "彥臣",
+      "price": 18.8,
+      "change": -0.18,
+      "volume": 6,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7756",
+      "name": "多那之",
+      "price": 44.05,
+      "change": 2.18,
+      "volume": 6,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7890",
+      "name": "明曜科技",
+      "price": 120.0,
+      "change": 1.54,
+      "volume": 6,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "1293",
+      "name": "利統",
+      "price": 28.1,
+      "change": 0.1,
+      "volume": 5,
+      "category": "食品",
+      "status": "興櫃"
+    },
+    {
+      "code": "2245",
+      "name": "詠勝昌*",
+      "price": 27.3,
+      "change": 0.1,
+      "volume": 5,
+      "category": "汽車",
+      "status": "興櫃"
+    },
+    {
+      "code": "6758",
+      "name": "冠亞",
+      "price": 34.5,
+      "change": 0.0,
+      "volume": 5,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6857",
+      "name": "宏碁智醫",
+      "price": 95.0,
       "change": -0.5,
-      "volume": 2,
+      "volume": 5,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "7891",
+      "name": "博研醫藥",
+      "price": 21.3,
+      "change": -0.1,
+      "volume": 5,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7901",
+      "name": "大大寬頻",
+      "price": 76.0,
+      "change": 1.86,
+      "volume": 5,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6539",
+      "name": "麗彤",
+      "price": 45.55,
+      "change": -0.37,
+      "volume": 4,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "6867",
+      "name": "坦德科技",
+      "price": 23.4,
+      "change": 0.71,
+      "volume": 3,
+      "category": "證券",
+      "status": "興櫃"
+    },
+    {
+      "code": "6972",
+      "name": "博瑞達應材",
+      "price": 24.5,
+      "change": 1.03,
+      "volume": 3,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6984",
+      "name": "ACpay",
+      "price": 18.65,
+      "change": 0.17,
+      "volume": 3,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7764",
+      "name": "聖州",
+      "price": 13.8,
+      "change": 0.22,
+      "volume": 3,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7785",
+      "name": "北祥科服",
+      "price": 36.2,
+      "change": -1.0,
+      "volume": 3,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7798",
+      "name": "將捷",
+      "price": 14.75,
+      "change": 0.21,
+      "volume": 3,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7826",
+      "name": "極風雲創",
+      "price": 45.85,
+      "change": 0.21,
+      "volume": 3,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7841",
+      "name": "經貿聯網",
+      "price": 29.5,
+      "change": 0.07,
+      "volume": 3,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "7855",
       "name": "和運租車",
-      "price": 102.5,
-      "change": 3.1,
-      "volume": 2,
+      "price": 104.5,
+      "change": 2.0,
+      "volume": 3,
       "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "7860",
       "name": "得生製藥",
-      "price": 57.5,
+      "price": 58.7,
+      "change": 2.57,
+      "volume": 3,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7889",
+      "name": "騰勢",
+      "price": 88.0,
+      "change": 0.05,
+      "volume": 3,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "6583",
+      "name": "友松",
+      "price": 12.85,
+      "change": 0.5,
+      "volume": 2,
+      "category": "金融",
+      "status": "興櫃"
+    },
+    {
+      "code": "6935",
+      "name": "王子製藥",
+      "price": 30.35,
+      "change": 0.05,
+      "volume": 2,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7881",
+      "name": "科明",
+      "price": 102.0,
       "change": -0.9,
       "volume": 2,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7865",
-      "name": "金聯成",
-      "price": 45.0,
-      "change": 1.68,
+      "code": "7897",
+      "name": "禾迅綠電",
+      "price": 40.5,
+      "change": -2.0,
       "volume": 2,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "8999",
-      "name": "台灣積層",
-      "price": 38.1,
-      "change": 0.0,
-      "volume": 2,
-      "category": "其他",
+      "code": "2761",
+      "name": "橘焱胡同",
+      "price": 15.65,
+      "change": 0.15,
+      "volume": 1,
+      "category": "航運",
+      "status": "興櫃"
+    },
+    {
+      "code": "2938",
+      "name": "床的世界",
+      "price": 23.4,
+      "change": 0.15,
+      "volume": 1,
+      "category": "百貨貿易",
       "status": "興櫃"
     },
     {
@@ -2885,46 +2876,19 @@
       "status": "興櫃"
     },
     {
-      "code": "6518",
-      "name": "康科特",
-      "price": 32.1,
-      "change": 0.34,
-      "volume": 1,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "6583",
-      "name": "友松",
-      "price": 12.35,
-      "change": -0.05,
-      "volume": 1,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "6857",
-      "name": "宏碁智醫",
-      "price": 95.5,
-      "change": -0.23,
+      "code": "6744",
+      "name": "豐技生技",
+      "price": 15.05,
+      "change": -0.61,
       "volume": 1,
       "category": "證券",
-      "status": "興櫃"
-    },
-    {
-      "code": "6935",
-      "name": "王子製藥",
-      "price": 30.3,
-      "change": 0.23,
-      "volume": 1,
-      "category": "其他",
       "status": "興櫃"
     },
     {
       "code": "7583",
       "name": "國際海洋",
       "price": 66.0,
-      "change": 1.38,
+      "change": 0.25,
       "volume": 1,
       "category": "其他",
       "status": "興櫃"
@@ -2933,25 +2897,25 @@
       "code": "7797",
       "name": "Q Burger",
       "price": 59.0,
-      "change": 2.19,
+      "change": 0.02,
       "volume": 1,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7885",
-      "name": "宏羚",
-      "price": 24.15,
-      "change": 0.05,
+      "code": "7840",
+      "name": "祥圃",
+      "price": 37.85,
+      "change": 1.42,
       "volume": 1,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "1293",
-      "name": "利統",
-      "price": 28.0,
-      "change": 1.05,
+      "code": "1269",
+      "name": "乾杯",
+      "price": 68.7,
+      "change": 1.2,
       "volume": 0,
       "category": "食品",
       "status": "興櫃"
@@ -2959,10 +2923,19 @@
     {
       "code": "2760",
       "name": "巨宇翔",
-      "price": 21.59,
-      "change": 0.0,
+      "price": 21.95,
+      "change": 0.36,
       "volume": 0,
       "category": "航運",
+      "status": "興櫃"
+    },
+    {
+      "code": "2942",
+      "name": "京站",
+      "price": 37.8,
+      "change": -0.5,
+      "volume": 0,
+      "category": "百貨貿易",
       "status": "興櫃"
     },
     {
@@ -2975,24 +2948,6 @@
       "status": "興櫃"
     },
     {
-      "code": "6035",
-      "name": "悠遊卡",
-      "price": 50.6,
-      "change": -1.49,
-      "volume": 0,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
-      "code": "6595",
-      "name": "光禹國際",
-      "price": 32.35,
-      "change": 0.5,
-      "volume": 0,
-      "category": "金融",
-      "status": "興櫃"
-    },
-    {
       "code": "6780",
       "name": "學習王",
       "price": 42.29,
@@ -3002,46 +2957,100 @@
       "status": "興櫃"
     },
     {
-      "code": "7455",
-      "name": "樺緯物聯",
-      "price": 64.8,
-      "change": 0.01,
+      "code": "6816",
+      "name": "捷智商訊",
+      "price": 38.28,
+      "change": 0.0,
       "volume": 0,
-      "category": "其他",
+      "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "7562",
-      "name": "博來科技",
-      "price": 53.3,
-      "change": -1.09,
+      "code": "6858",
+      "name": "愛比科技",
+      "price": 24.9,
+      "change": 0.82,
       "volume": 0,
-      "category": "其他",
+      "category": "證券",
       "status": "興櫃"
     },
     {
-      "code": "7779",
-      "name": "鍇睿國際",
-      "price": 15.12,
+      "code": "6939",
+      "name": "啟弘生技",
+      "price": 23.04,
       "change": 0.0,
       "volume": 0,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7785",
-      "name": "北祥科服",
-      "price": 37.2,
-      "change": 0.12,
+      "code": "6963",
+      "name": "品元",
+      "price": 25.96,
+      "change": 0.0,
       "volume": 0,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7824",
-      "name": "智寶",
-      "price": 43.9,
-      "change": -0.16,
+      "code": "7455",
+      "name": "樺緯物聯",
+      "price": 64.8,
+      "change": 0.0,
+      "volume": 0,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7607",
+      "name": "通用幹細胞*",
+      "price": 14.65,
+      "change": 0.36,
+      "volume": 0,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7706",
+      "name": "宏碁創達",
+      "price": 40.0,
+      "change": 0.83,
+      "volume": 0,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7710",
+      "name": "東擎科技",
+      "price": 269.0,
+      "change": 1.29,
+      "volume": 0,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7725",
+      "name": "列特博",
+      "price": 21.85,
+      "change": 0.0,
+      "volume": 0,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7789",
+      "name": "開展",
+      "price": 35.2,
+      "change": 1.12,
+      "volume": 0,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "7806",
+      "name": "精華生醫",
+      "price": 70.0,
+      "change": 0.89,
       "volume": 0,
       "category": "其他",
       "status": "興櫃"
@@ -3056,19 +3065,19 @@
       "status": "興櫃"
     },
     {
-      "code": "7839",
-      "name": "達人網",
-      "price": 62.6,
-      "change": 0.0,
+      "code": "7834",
+      "name": "來毅數位",
+      "price": 20.5,
+      "change": 0.5,
       "volume": 0,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7847",
-      "name": "豊漁",
-      "price": 22.75,
-      "change": 0.37,
+      "code": "7837",
+      "name": "啟新生",
+      "price": 105.0,
+      "change": 0.0,
       "volume": 0,
       "category": "其他",
       "status": "興櫃"
@@ -3077,34 +3086,16 @@
       "code": "7849",
       "name": "旭誼",
       "price": 143.0,
-      "change": 6.47,
+      "change": 0.0,
       "volume": 0,
       "category": "其他",
       "status": "興櫃"
     },
     {
-      "code": "7862",
-      "name": "聚泰",
-      "price": 38.6,
-      "change": 0.52,
-      "volume": 0,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7869",
-      "name": "宏于電機",
-      "price": 390.5,
-      "change": -1.28,
-      "volume": 0,
-      "category": "其他",
-      "status": "興櫃"
-    },
-    {
-      "code": "7897",
-      "name": "禾迅綠電",
-      "price": 42.5,
-      "change": 1.01,
+      "code": "7863",
+      "name": "中科物流",
+      "price": 49.65,
+      "change": 0.0,
       "volume": 0,
       "category": "其他",
       "status": "興櫃"
@@ -3112,7 +3103,25 @@
     {
       "code": "7904",
       "name": "任開數位",
-      "price": 24.3,
+      "price": 25.3,
+      "change": 1.0,
+      "volume": 0,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "8458",
+      "name": "影一",
+      "price": 15.1,
+      "change": 0.01,
+      "volume": 0,
+      "category": "其他",
+      "status": "興櫃"
+    },
+    {
+      "code": "8999",
+      "name": "台灣積層",
+      "price": 38.1,
       "change": 0.0,
       "volume": 0,
       "category": "其他",

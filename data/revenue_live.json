@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-05-13 14:44",
+  "updatedAt": "2026-05-14 09:38",
   "source": "TPEx OpenAPI t187ap05_R",
-  "count": 346,
+  "count": 347,
   "revenue": {
     "1260": {
       "code": "1260",
@@ -5378,6 +5378,22 @@
       "cumRevenueFmt": "21.07 億",
       "cumLastYear": 0,
       "cumYoy": 0.0
+    },
+    "7919": {
+      "code": "7919",
+      "name": "禾蒼",
+      "industry": "光電業",
+      "period": "2026/04",
+      "monthRevenue": 12241,
+      "monthRevenueFmt": "12.2 千萬",
+      "lastMonth": 0,
+      "lastYear": 34101,
+      "mom": 0.0,
+      "yoy": -64.1,
+      "cumRevenue": 101128,
+      "cumRevenueFmt": "1.01 億",
+      "cumLastYear": 117369,
+      "cumYoy": -13.84
     },
     "8058": {
       "code": "8058",
