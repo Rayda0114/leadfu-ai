@@ -115,14 +115,15 @@
 </footer>
 
 <script src="../js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/auth.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
   const { data, findStock, getWatchlist, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, pageHref } = window.LeadFu;
 
-  // 取得會員資料
-  let user = null;
-  try { user = JSON.parse(localStorage.getItem("berich_user") || "null"); } catch {}
+  // 取得真實會員資料（Supabase）
+  const user = await window.LeadFuAuth.getProfile();
   if (!user) {
     document.querySelector("main").innerHTML = `
       <div class="form-card" style="text-align:center;">
@@ -134,26 +135,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  document.getElementById("userBar").innerHTML = `${user.name || user.account || "會員"} ・ <a href="#" id="logoutLink">登出</a>`;
-  document.getElementById("logoutLink").addEventListener("click", e => {
+  async function doLogout(e) {
     e.preventDefault();
-    localStorage.removeItem("berich_user");
+    await window.LeadFuAuth.signOut();
     location.href = "../index.html";
-  });
-  document.getElementById("logoutBtn").addEventListener("click", e => {
-    e.preventDefault();
-    localStorage.removeItem("berich_user");
-    location.href = "../index.html";
-  });
+  }
+  document.getElementById("userBar").innerHTML = `${user.name || "會員"} ・ <a href="#" id="logoutLink">登出</a>`;
+  document.getElementById("logoutLink").addEventListener("click", doLogout);
+  document.getElementById("logoutBtn").addEventListener("click", doLogout);
 
   // 個人資料
   const rows = [
-    ["姓名", user.name || user.account || "-"],
+    ["姓名", user.name || "-"],
     ["Email", user.email || "-"],
     ["手機", user.phone || "-"],
-    ["投資經驗", user.exp || "-"],
-    ["註冊日期", user.registeredAt ? user.registeredAt.slice(0,10) : (user.loginAt ? user.loginAt.slice(0,10) : "-")],
-    ["會員等級", "免費會員"]
+    ["投資經驗", user.experience || "-"],
+    ["註冊日期", user.created_at ? user.created_at.slice(0,10) : "-"],
+    ["會員等級", user.member_level || "免費會員"]
   ];
   document.getElementById("profileGrid").innerHTML = rows.map(([l,v]) =>
     `<div class="info-row"><div class="info-label">${l}</div><div class="info-value">${v}</div></div>`

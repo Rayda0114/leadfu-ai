@@ -92,23 +92,47 @@
 </footer>
 
 <script src="../js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/auth.js"></script>
 <script>
-document.getElementById("regForm").addEventListener("submit", e => {
+document.getElementById("regForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const pwd = document.getElementById("pwd").value;
+  const btn = e.target.querySelector(".form-btn");
+  const pwd  = document.getElementById("pwd").value;
   const pwd2 = document.getElementById("pwd2").value;
+  const email = document.getElementById("email").value.trim();
+  const name  = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const exp   = document.getElementById("exp").value;
+
+  // 前端基本驗證
   if (pwd.length < 8) return alert("密碼至少 8 碼");
-  if (pwd !== pwd2) return alert("兩次密碼不一致");
-  const user = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    exp: document.getElementById("exp").value,
-    registeredAt: new Date().toISOString()
-  };
-  localStorage.setItem("berich_user", JSON.stringify(user));
-  alert("註冊成功！已自動登入（範例環境，未串接真實後端）");
-  location.href = "member.html";
+  if (pwd !== pwd2)   return alert("兩次密碼不一致");
+  if (!email)         return alert("請輸入 Email");
+
+  // 防止重複點擊
+  btn.disabled = true;
+  btn.textContent = "註冊中...";
+
+  try {
+    const result = await window.LeadFuAuth.signUp({
+      email, password: pwd, name, phone, experience: exp
+    });
+
+    if (result.needsConfirmation) {
+      // Confirm email 開啟時：要收信
+      alert("註冊成功！\n\n我們寄了一封確認信到 " + email + "\n請到信箱點擊連結完成驗證，再回來登入。");
+      location.href = "login.html";
+    } else {
+      // Confirm email 關閉時：已自動登入
+      alert("註冊成功，已自動登入！");
+      location.href = "member.html";
+    }
+  } catch (err) {
+    alert(window.LeadFuAuth.zhError(err));
+    btn.disabled = false;
+    btn.textContent = "立即註冊";
+  }
 });
 </script>
 </body>

@@ -47,8 +47,8 @@
 
     <form id="loginForm">
       <div class="form-group">
-        <label for="account">會員帳號 / Email</label>
-        <input type="text" id="account" placeholder="請輸入帳號或 Email" required>
+        <label for="account">Email</label>
+        <input type="email" id="account" placeholder="請輸入註冊時的 Email" required>
       </div>
       <div class="form-group">
         <label for="pwd">密碼</label>
@@ -83,15 +83,38 @@
 </footer>
 
 <script src="../js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/auth.js"></script>
 <script>
-document.getElementById("loginForm").addEventListener("submit", e => {
+document.getElementById("loginForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const acc = document.getElementById("account").value.trim();
-  if (!acc) return;
-  // 佔位：將會員資料寫入 localStorage 模擬登入
-  localStorage.setItem("berich_user", JSON.stringify({ account: acc, loginAt: new Date().toISOString() }));
-  alert("登入成功！（範例環境，未串接真實後端）");
-  location.href = "member.html";
+  const btn = e.target.querySelector(".form-btn");
+  const email = document.getElementById("account").value.trim();
+  const pwd   = document.getElementById("pwd").value;
+  if (!email || !pwd) return alert("請輸入 Email 與密碼");
+
+  btn.disabled = true;
+  btn.textContent = "登入中...";
+
+  try {
+    await window.LeadFuAuth.signIn({ email, password: pwd });
+    location.href = "member.html";
+  } catch (err) {
+    alert(window.LeadFuAuth.zhError(err));
+    btn.disabled = false;
+    btn.textContent = "登入";
+  }
+});
+
+// 社群登入按鈕：目前僅佔位（Supabase 可後續接 Google OAuth）
+document.querySelectorAll(".form-card button").forEach(b => {
+  if (b.textContent.includes("Google") || b.textContent.includes("LINE")) {
+    b.addEventListener("click", () => {
+      window.LeadFu && window.LeadFu.showToast
+        ? window.LeadFu.showToast("社群登入即將推出，請先用 Email 註冊", "info")
+        : alert("社群登入即將推出，請先用 Email 註冊");
+    });
+  }
 });
 </script>
 </body>
