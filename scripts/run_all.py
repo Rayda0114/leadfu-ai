@@ -33,6 +33,7 @@ SCRIPTS = [
     "fetch_news.py",
     "fetch_announcements.py",
     "fetch_klines.py",
+    "generate_sitemap.py",   # 依最新資料更新 sitemap，讓 Google 索引到所有個股
 ]
 
 

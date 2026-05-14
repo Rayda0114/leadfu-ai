@@ -6,6 +6,12 @@
 const LINE_ID  = "@041exgtv";
 const LINE_URL = "https://line.me/R/ti/p/@041exgtv";
 
+/* Google Analytics 4 Measurement ID（拿到後替換 G-XXXXXXXXXX） */
+const GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+
+/* 網站主網域（之後綁自有網域時改這裡） */
+const SITE_ORIGIN = "https://friendly-mousse-33de3d.netlify.app";
+
 const STOCK_DATA = {
   updatedAt: "2026-05-12 09:30",
   stocks: [
@@ -568,6 +574,90 @@ function setupBottomTabBar() {
 }
 
 /* ============================================================
+ * SEO：動態 canonical + Open Graph + JSON-LD
+ * 每個頁面自動寫入正確的 canonical URL 與 og 標籤
+ * ============================================================ */
+function setupSEO() {
+  const url = SITE_ORIGIN + location.pathname + location.search;
+  const head = document.head;
+
+  function ensureMeta(selector, create) {
+    let el = head.querySelector(selector);
+    if (!el) {
+      el = create();
+      head.appendChild(el);
+    }
+    return el;
+  }
+
+  // canonical
+  ensureMeta('link[rel="canonical"]', () => {
+    const l = document.createElement("link");
+    l.rel = "canonical";
+    return l;
+  }).href = url;
+
+  // og:url
+  ensureMeta('meta[property="og:url"]', () => {
+    const m = document.createElement("meta");
+    m.setAttribute("property", "og:url");
+    return m;
+  }).setAttribute("content", url);
+
+  // og:title (用 document.title，每頁不同)
+  ensureMeta('meta[property="og:title"]', () => {
+    const m = document.createElement("meta");
+    m.setAttribute("property", "og:title");
+    return m;
+  }).setAttribute("content", document.title);
+
+  // og:site_name
+  ensureMeta('meta[property="og:site_name"]', () => {
+    const m = document.createElement("meta");
+    m.setAttribute("property", "og:site_name");
+    return m;
+  }).setAttribute("content", "領富 AI");
+
+  // og:image fallback
+  if (!head.querySelector('meta[property="og:image"]')) {
+    const m = document.createElement("meta");
+    m.setAttribute("property", "og:image");
+    m.setAttribute("content", SITE_ORIGIN + "/icons/icon-512.png");
+    head.appendChild(m);
+  }
+
+  // og:type
+  ensureMeta('meta[property="og:type"]', () => {
+    const m = document.createElement("meta");
+    m.setAttribute("property", "og:type");
+    return m;
+  }).setAttribute("content", "website");
+}
+
+/* ============================================================
+ * Google Analytics 4
+ * 拿到 Measurement ID 後在 GA_MEASUREMENT_ID 替換即生效
+ * ============================================================ */
+function loadGA() {
+  if (!GA_MEASUREMENT_ID || GA_MEASUREMENT_ID === "G-XXXXXXXXXX") return;
+
+  // 載入 gtag.js
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  document.head.appendChild(s);
+
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag("js", new Date());
+  window.gtag("config", GA_MEASUREMENT_ID, {
+    page_path: location.pathname + location.search
+  });
+
+  console.log("[領富 AI] ✅ GA4 已載入");
+}
+
+/* ============================================================
  * PWA 註冊 + 安裝提示橫幅
  * ============================================================ */
 function setupPWA() {
@@ -1048,6 +1138,8 @@ async function loadLiveData() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  setupSEO();
+  loadGA();
   setupMobileNav();
   setupBottomTabBar();
   setupHideableHeader();

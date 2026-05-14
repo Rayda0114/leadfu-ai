@@ -300,6 +300,50 @@
   </div>
 </div>
 
+<!-- JSON-LD 結構化資料（給 Google / Bing 認識品牌 + 啟用搜尋框）-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://friendly-mousse-33de3d.netlify.app/#organization",
+      "name": "領富 AI",
+      "alternateName": "LeadFu AI",
+      "url": "https://friendly-mousse-33de3d.netlify.app/",
+      "logo": "https://friendly-mousse-33de3d.netlify.app/icons/icon-512.png",
+      "description": "AI 預測未上市股票・領先市場兩步",
+      "sameAs": [
+        "https://line.me/R/ti/p/@041exgtv",
+        "https://github.com/Rayda0114/leadfu-ai"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://friendly-mousse-33de3d.netlify.app/#website",
+      "url": "https://friendly-mousse-33de3d.netlify.app/",
+      "name": "領富 AI · LeadFu AI",
+      "inLanguage": "zh-TW",
+      "publisher": { "@id": "https://friendly-mousse-33de3d.netlify.app/#organization" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://friendly-mousse-33de3d.netlify.app/pages/search.html?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "name": "領富 AI",
+      "url": "https://friendly-mousse-33de3d.netlify.app/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web, iOS, Android",
+      "description": "未上市股票即時報價、興櫃 IPO 行事曆、AI 個股分析",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+    }
+  ]
+}
+</script>
+
 <script src="js/main.js"></script>
 </body>
 </html>

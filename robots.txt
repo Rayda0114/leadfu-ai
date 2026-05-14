@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# 不需要被索引的目錄
+Disallow: /scripts/
+Disallow: /data/_raw_
+
+# sitemap
+Sitemap: https://friendly-mousse-33de3d.netlify.app/sitemap.xml
