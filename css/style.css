@@ -2196,6 +2196,10 @@ img { max-width: 100%; }
 }
 .feedback-fab:active { transform: translateY(0); }
 .feedback-fab svg { display: block; }
+.feedback-fab-emoji {
+  font-size: 18px;
+  line-height: 1;
+}
 
 @media (max-width: 768px) {
   .feedback-fab {

@@ -950,11 +950,7 @@ function setupFeedbackWidget() {
   btn.type = "button";
   btn.setAttribute("aria-label", "意見回饋");
   btn.title = "意見回饋";
-  btn.innerHTML = `
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
-    </svg>
-    <span class="feedback-fab-label">回饋</span>`;
+  btn.innerHTML = `<span class="feedback-fab-emoji" aria-hidden="true">💬</span><span class="feedback-fab-label">回饋</span>`;
   document.body.appendChild(btn);
   btn.addEventListener("click", showFeedbackModal);
 }
@@ -1529,9 +1525,10 @@ function setupPWA() {
       inner = `
         <div class="pwa-icon">📱</div>
         <div class="pwa-text">
-          <strong>把領富 AI 加到桌面</strong>
-          <small>點下方 <span style="font-weight:700;color:#1B4332;">分享 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;"><path d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zm4 5v11c0 1.1-.9 2-2 2H6c-1.11 0-2-.9-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3c1.1 0 2 .89 2 2z"/></svg></span> → <span style="font-weight:700;color:#1B4332;">加入主畫面</span></small>
+          <strong>把領富 AI 加到 iPhone 桌面</strong>
+          <small>① 點下方 <svg width="14" height="14" viewBox="0 0 24 24" fill="#C5A572" style="vertical-align:-2px;"><path d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zm4 5v11c0 1.1-.9 2-2 2H6c-1.11 0-2-.9-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3c1.1 0 2 .89 2 2z"/></svg> 分享圖示　② 選「加到主畫面」</small>
         </div>
+        <button class="pwa-action" id="pwaIosOkBtn">知道了</button>
         <button class="pwa-dismiss" id="pwaDismissBtn" aria-label="關閉">✕</button>`;
     } else {
       inner = `
@@ -1557,6 +1554,14 @@ function setupPWA() {
         if (result.outcome === "dismissed") {
           localStorage.setItem(DISMISS_KEY, (Date.now() + 3 * 86400000).toString());
         }
+      });
+    }
+    // iOS 「知道了」按鈕 → 壓 3 天不再跳
+    const iosOkBtn = banner.querySelector("#pwaIosOkBtn");
+    if (iosOkBtn) {
+      iosOkBtn.addEventListener("click", () => {
+        localStorage.setItem(DISMISS_KEY, (Date.now() + 3 * 86400000).toString());
+        hideInstallBanner();
       });
     }
     banner.querySelector("#pwaDismissBtn").addEventListener("click", () => {
