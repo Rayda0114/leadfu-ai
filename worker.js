@@ -11,7 +11,9 @@
  *   NVIDIA_MODEL    (Plain Text，預設 meta/llama-3.3-70b-instruct)
  */
 
-const DEFAULT_MODEL = "meta/llama-3.3-70b-instruct";
+// Phase 1：先用 Nemotron Super 49B 單模型測試（品質/速度/成本最平衡）
+// Phase 2 後可在 Cloudflare 環境變數 NVIDIA_MODEL 覆寫切換其他模型
+const DEFAULT_MODEL = "nvidia/llama-3.3-nemotron-super-49b-v1.5";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 const SYSTEM_PROMPT = `你是「領富 AI」的資料整理助理（LeadFu AI），服務台灣 45-75 歲投資人，目標是用清楚、保守、易懂的繁體中文，整理公開市場資料。
