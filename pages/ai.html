@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">AI 問答 - 領富 AI</title>
-<meta name="description" content="用自然語言問領富 AI：今天漲最多的上市股、半導體類熱門、穎台基本面，AI 一次幫你找好">
+<title>AI 對話 - 領富 AI</title>
+<meta name="description" content="跟領富 AI 用自然語言或語音對話：股票查詢、產業熱門、公司基本面、防詐須知，AI 幫你一次找好。">
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -39,317 +39,336 @@
       <li><a href="news.html">財經新聞</a></li>
       <li><a href="discussion.html">討論區</a></li>
       <li><a href="ipo.html">新股抽籤</a></li>
-      <li><a href="watchlist.html">自選股</a></li>
+      <li class="active"><a href="ai.html">AI 對話</a></li>
     </ul>
   </div>
 </nav>
 
-<div class="page-head">
-  <div class="container">
-    <h1>✨ AI 問答：「<span id="qText">--</span>」</h1>
-    <div class="breadcrumb">首頁 ▸ AI 問答</div>
-  </div>
-</div>
-
-<main class="container" style="padding:20px 12px 40px;">
-
-  <div class="panel" style="margin-bottom:16px;">
-    <div class="ai-ask-box">
-      <form id="aiAskForm" autocomplete="off">
-        <input type="text" id="aiAskInput" placeholder="再問一個問題（例：上櫃半導體熱門股）" />
-        <button type="submit">問 AI →</button>
-      </form>
-      <div class="ai-examples">
-        <a class="ai-chip" href="ai.html?q=今天漲最多的上市股">📈 上市漲幅榜</a>
-        <a class="ai-chip" href="ai.html?q=半導體上市熱門股">🔬 半導體熱門</a>
-        <a class="ai-chip" href="ai.html?q=興櫃成交活躍">⚡ 興櫃熱門</a>
-        <a class="ai-chip" href="ai.html?q=生技上櫃股">💊 生技上櫃</a>
-        <a class="ai-chip" href="ai.html?q=怎麼避免投資詐騙">⚠ 防詐須知</a>
-        <a class="ai-chip" href="ai.html?q=新手怎麼下單">📖 新手教學</a>
-      </div>
+<main class="chat-page">
+  <div class="chat-toolbar">
+    <div class="chat-toolbar-inner">
+      <h1 class="chat-title">
+        <span class="chat-sparkle">✨</span>
+        <span>領富 AI 對話</span>
+        <span class="chat-subtitle">跨上市/上櫃/興櫃 2,310 檔，AI 幫你找資料</span>
+      </h1>
+      <button id="newChatBtn" class="chat-new-btn" type="button">＋ 新對話</button>
     </div>
   </div>
 
-  <div class="panel">
-    <div id="aiAnswer"></div>
+  <div id="chatScroll" class="chat-scroll">
+    <div id="chatList" class="chat-list">
+      <!-- 訊息會用 JS 動態插入 -->
+    </div>
   </div>
 
-  <p style="text-align:center;color:#999;font-size:12px;margin-top:18px;">
-    ※ 本內容為 AI 整理之公開資料，不構成投資建議或推介，亦非證券投資顧問服務。投資決策與風險請自行評估。
-  </p>
+  <div class="chat-input-bar">
+    <div class="chat-input-inner">
+      <form id="chatForm" autocomplete="off">
+        <button type="button" id="chatMicBtn" class="chat-mic-btn" aria-label="語音輸入" title="語音輸入">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5.91-3a.91.91 0 0 0-.91.91A4.99 4.99 0 0 1 12 17a4.99 4.99 0 0 1-5-5.09.91.91 0 1 0-1.82 0A6.81 6.81 0 0 0 11 18.91V21a1 1 0 1 0 2 0v-2.09a6.81 6.81 0 0 0 5.82-6.91.91.91 0 0 0-.91-.91z"/></svg>
+        </button>
+        <textarea id="chatInput" placeholder="輸入或語音問問題..." rows="1" maxlength="800"></textarea>
+        <button type="submit" id="chatSendBtn" class="chat-send-btn">送出</button>
+      </form>
+      <p class="chat-disclaimer">※ AI 整理公開資料，不構成投資建議。買賣決定請自行評估或諮詢合法投顧。</p>
+    </div>
+  </div>
 </main>
-
-<footer class="site-footer">
-  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
-</footer>
 
 <script src="../js/main.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
   const L = window.LeadFu;
-  const q = new URLSearchParams(location.search).get("q") || "";
-  const qText = document.getElementById("qText");
-  qText.textContent = q || "（請輸入問題）";
-  document.title = `AI 問答：${q || "助理"} - 領富 AI`;
 
-  // 「再問一個」表單
-  document.getElementById("aiAskForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const v = document.getElementById("aiAskInput").value.trim();
-    if (v) location.href = "ai.html?q=" + encodeURIComponent(v);
-  });
+  const STORAGE_KEY = "leadfu_chat_history_v1";
+  const chatList = document.getElementById("chatList");
+  const chatScroll = document.getElementById("chatScroll");
+  const chatInput = document.getElementById("chatInput");
+  const chatForm = document.getElementById("chatForm");
+  const sendBtn = document.getElementById("chatSendBtn");
+  const newBtn = document.getElementById("newChatBtn");
+  const micBtn = document.getElementById("chatMicBtn");
 
-  if (!q) {
-    document.getElementById("aiAnswer").innerHTML = `
-      <div style="padding:40px 20px;text-align:center;color:#888;">
-        <div style="font-size:48px;margin-bottom:10px;">💬</div>
-        <p style="font-size:15px;">請從上方輸入問題，或點下面的範例試試</p>
-      </div>`;
-    return;
+  let history = [];
+
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) history = JSON.parse(raw) || [];
+  } catch {}
+
+  // URL 帶 ?q=... 從首頁過來 → 先清空舊歷史開新對話
+  const initialQ = new URLSearchParams(location.search).get("q");
+  if (initialQ) {
+    history = [];
+    chatList.innerHTML = "";
+    localStorage.removeItem(STORAGE_KEY);
+    window.history.replaceState({}, "", "ai.html");
+    sendMessage(initialQ);
+  } else if (history.length === 0) {
+    showWelcome();
+  } else {
+    history.forEach(renderBubble);
+    scrollToBottom();
   }
 
-  // 解析意圖 → 渲染
-  const intent = L.parseAiQuery(q);
-  renderAnswer(intent, q);
+  function showWelcome() {
+    const welcome = `您好！我是領富 AI 助理 ✨
 
-  // ★ 第 2 層：呼叫 Nvidia API 補充說明（個股 / list / search 三種都呼叫）
-  // 第 1 層 nav 類就不打 AI（直接跳頁）
-  if (intent && intent.kind !== "nav") {
-    callAiBackend(q, intent);
+我可以幫您：
+・查股票：講代號（2330）或公司名（台積電）都行
+・找熱門：「今天漲最多的上市股」「半導體上市熱門」
+・問基本面：「穎台科技最近怎樣」「環球晶基本資料」
+・學概念：「什麼是月營收年增率」「本益比怎麼看」
+・避免被騙：「怎麼避免投資詐騙」
+
+也可以直接點下面的按鈕，或按麥克風用講的：`;
+    renderBubble({ role: "assistant", content: welcome });
+    renderSuggestionChips([
+      { icon: "📈", text: "今天漲最多的上市股" },
+      { icon: "🔬", text: "半導體上市熱門股" },
+      { icon: "💊", text: "生技上櫃熱門" },
+      { icon: "⚡", text: "興櫃成交活躍" },
+      { icon: "🏢", text: "穎台科技基本面" },
+      { icon: "⚠", text: "怎麼避免投資詐騙" }
+    ]);
+    scrollToBottom();
   }
 
-  function renderAnswer(intent, raw) {
-    const host = document.getElementById("aiAnswer");
-    if (!intent) {
-      host.innerHTML = noResult(raw);
-      return;
-    }
-
-    if (intent.kind === "nav") {
-      host.innerHTML = `
-        <div style="padding:28px 24px;text-align:center;">
-          <div style="font-size:48px;margin-bottom:10px;">📌</div>
-          <h2 style="margin-bottom:10px;color:#1B4332;">幫您找到了：${intent.label}</h2>
-          <p style="color:#666;margin-bottom:18px;">頁面已準備好，點下方按鈕進入</p>
-          <a href="${intent.url}" class="btn-primary" style="display:inline-block;width:auto;padding:12px 32px;text-decoration:none;">前往 ${intent.label} →</a>
-        </div>`;
-      // 2 秒後自動跳轉（給使用者看一下標題）
-      setTimeout(() => { location.href = intent.url; }, 2200);
-      return;
-    }
-
-    if (intent.kind === "stock") {
-      const stock = L.findStock(intent.code);
-      if (!stock) { host.innerHTML = noResult(raw); return; }
-      const cls = L.changeClass(stock.change);
-      const pct = L.pctChange(stock.price, stock.change);
-      const marketLabel = stock.market === "listed" ? "上市"
-                        : stock.market === "otc"    ? "上櫃"
-                        : stock.market === "emerging" ? "興櫃" : stock.status;
-      host.innerHTML = `
-        <div style="padding:20px;">
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-            <span style="font-size:13px;color:#888;">🎯 為您找到的個股</span>
-            <span class="status-pill status-${marketLabel}">${marketLabel}</span>
-          </div>
-          <h2 style="font-size:24px;color:#1B4332;margin-bottom:8px;">${stock.code} ${stock.name}</h2>
-          <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:18px;">
-            <span class="${cls}" style="font-size:32px;font-weight:700;">${L.fmtPrice(stock.price)}</span>
-            <span class="${cls}" style="font-size:18px;">${L.arrow(stock.change)} ${L.fmtChange(stock.change)} (${L.fmtPct(pct)})</span>
-            <span style="color:#888;font-size:13px;">成交量 ${stock.volume.toLocaleString()} 張</span>
-          </div>
-          <a href="stock-detail.html?code=${stock.code}" class="btn-primary" style="display:inline-block;width:auto;padding:10px 26px;text-decoration:none;">看完整個股資料 →</a>
-        </div>`;
-      return;
-    }
-
-    if (intent.kind === "list") {
-      renderList(intent, raw);
-      return;
-    }
-
-    if (intent.kind === "search") {
-      host.innerHTML = `
-        <div style="padding:24px;">
-          <p style="color:#666;margin-bottom:14px;">AI 沒完全理解您的問題，但我用一般搜尋幫您找：</p>
-          <a href="search.html?q=${encodeURIComponent(intent.q)}" class="btn-primary" style="display:inline-block;width:auto;padding:10px 26px;text-decoration:none;">前往搜尋結果 →</a>
-        </div>`;
-      return;
-    }
-
-    host.innerHTML = noResult(raw);
+  function renderBubble(msg) {
+    const div = document.createElement("div");
+    div.className = "chat-bubble chat-bubble-" + msg.role;
+    const avatar = msg.role === "assistant"
+      ? `<div class="chat-avatar chat-avatar-ai">AI</div>`
+      : `<div class="chat-avatar chat-avatar-user">我</div>`;
+    div.innerHTML = `${avatar}<div class="chat-content">${formatText(msg.content)}</div>`;
+    chatList.appendChild(div);
   }
 
-  function renderList(intent, raw) {
-    const all = L.data.stocks || [];
-    let pool = all.slice();
-    if (intent.market)   pool = pool.filter(s => s.market === intent.market);
-    if (intent.industry) pool = pool.filter(s => s.category && s.category.includes(intent.industry));
-    pool = pool.filter(s => s.price > 0);
-
-    // 排序
-    if (intent.sortBy === "gainers") {
-      pool.sort((a, b) => L.pctChange(b.price, b.change) - L.pctChange(a.price, a.change));
-    } else if (intent.sortBy === "losers") {
-      pool.sort((a, b) => L.pctChange(a.price, a.change) - L.pctChange(b.price, b.change));
-    } else if (intent.sortBy === "price_desc") {
-      pool.sort((a, b) => b.price - a.price);
-    } else if (intent.sortBy === "price_asc") {
-      pool.sort((a, b) => a.price - b.price);
-    } else {
-      pool.sort((a, b) => (b.volume || 0) - (a.volume || 0));   // 預設 volume
-    }
-    const top = pool.slice(0, intent.limit || 15);
-
-    if (top.length === 0) {
-      document.getElementById("aiAnswer").innerHTML = noResult(raw);
-      return;
-    }
-
-    const marketName  = intent.market === "listed" ? "上市"
-                      : intent.market === "otc"    ? "上櫃"
-                      : intent.market === "emerging" ? "興櫃" : "全市場";
-    const sortName    = intent.sortBy === "gainers" ? "依今日漲幅排序"
-                      : intent.sortBy === "losers"  ? "依今日跌幅排序"
-                      : intent.sortBy === "price_desc" ? "依股價由高至低"
-                      : intent.sortBy === "price_asc"  ? "依股價由低至高"
-                      :                                  "依成交量排序";
-    const industryLabel = intent.industry ? `「${intent.industry}」類股` : "";
-
-    const rows = top.map((s, i) => {
-      const cls = L.changeClass(s.change);
-      const pct = L.pctChange(s.price, s.change);
-      const mLabel = s.market === "listed" ? "上市"
-                   : s.market === "otc"    ? "上櫃"
-                   : s.market === "emerging" ? "興櫃" : s.status;
-      return `<a class="ai-list-row" href="stock-detail.html?code=${s.code}">
-        <span class="ai-list-rank">${(i+1).toString().padStart(2,'0')}</span>
-        <span class="ai-list-code"><strong>${s.code}</strong> ${s.name}</span>
-        <span class="status-pill status-${mLabel}" style="font-size:10px;">${mLabel}</span>
-        <span class="ai-list-cat">${s.category}</span>
-        <span class="ai-list-price ${cls}">${L.fmtPrice(s.price)}</span>
-        <span class="ai-list-pct ${cls}">${L.arrow(s.change)} ${L.fmtPct(pct)}</span>
-        <span class="ai-list-vol">量 ${s.volume.toLocaleString()}</span>
-      </a>`;
-    }).join("");
-
-    document.getElementById("aiAnswer").innerHTML = `
-      <div style="padding:18px 20px 8px;border-bottom:1px solid #eef0f3;">
-        <div style="font-size:13px;color:#888;margin-bottom:4px;">📋 AI 整理 ・ ${marketName}${industryLabel} ${sortName} ・ 列出前 ${top.length} 名</div>
-        <h2 style="color:#1B4332;font-size:18px;">查詢：「${raw}」</h2>
-      </div>
-      <div class="ai-list-wrap">${rows}</div>
-      <p style="padding:14px 20px;color:#888;font-size:12px;background:#fafbfc;border-top:1px solid #eef0f3;">
-        以上為公開數據整理，未對個股做任何評價或推介。點任一檔可查看完整資料。
-      </p>`;
+  function renderSuggestionChips(list) {
+    const wrap = document.createElement("div");
+    wrap.className = "chat-suggestions";
+    wrap.innerHTML = list.map(it =>
+      `<button type="button" class="chat-chip" data-q="${escAttr(it.text)}">${it.icon} ${it.text}</button>`
+    ).join("");
+    wrap.querySelectorAll(".chat-chip").forEach(b => {
+      b.addEventListener("click", () => sendMessage(b.dataset.q));
+    });
+    chatList.appendChild(wrap);
   }
 
-  /* ============================================================
-   * 第 2 層：呼叫 Cloudflare Worker /api/ask → Nvidia API
-   * 依意圖決定要送哪些 context（個股資料 / 公司資料 / 排行資料）
-   * ============================================================ */
-  async function callAiBackend(question, intent) {
-    // 為 AI 答案區塊預留位置（接在第 1 層結果下面）
-    const aiBlock = document.createElement("div");
-    aiBlock.className = "ai-llm-block";
-    aiBlock.innerHTML = `
-      <div class="ai-llm-head">
-        <span class="ai-llm-icon">🤖</span>
-        <span class="ai-llm-title">AI 補充說明</span>
-        <span class="ai-llm-status" id="aiLlmStatus">思考中...</span>
-      </div>
-      <div class="ai-llm-body" id="aiLlmBody">
-        <span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span>
-      </div>`;
-    document.querySelector(".panel").appendChild(aiBlock);
+  function renderTypingIndicator() {
+    const div = document.createElement("div");
+    div.className = "chat-bubble chat-bubble-assistant chat-typing";
+    div.id = "chat-typing";
+    div.innerHTML = `<div class="chat-avatar chat-avatar-ai">AI</div><div class="chat-content"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span></div>`;
+    chatList.appendChild(div);
+    scrollToBottom();
+  }
 
-    // 組裝 context（依意圖類型挑相關資料）
-    const context = buildContext(intent);
+  function removeTypingIndicator() {
+    const t = document.getElementById("chat-typing");
+    if (t) t.remove();
+  }
+
+  function formatText(text) {
+    if (!text) return "";
+    const esc = String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+  }
+  function escAttr(s) { return String(s).replace(/"/g, "&quot;"); }
+
+  function scrollToBottom() {
+    requestAnimationFrame(() => { chatScroll.scrollTop = chatScroll.scrollHeight; });
+  }
+
+  function saveHistory() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-20)));
+    } catch {}
+  }
+
+  async function sendMessage(text) {
+    text = (text || "").trim();
+    if (!text) return;
+
+    chatList.querySelectorAll(".chat-suggestions").forEach(el => el.remove());
+
+    const userMsg = { role: "user", content: text, ts: Date.now() };
+    history.push(userMsg);
+    renderBubble(userMsg);
+    saveHistory();
+    scrollToBottom();
+
+    sendBtn.disabled = true;
+    sendBtn.textContent = "...";
+    renderTypingIndicator();
+
+    const context = buildContext(text);
 
     try {
       const resp = await fetch("/api/ask", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, context })
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({
+          messages: history.map(m => ({ role: m.role, content: m.content })),
+          context
+        })
       });
       const data = await resp.json();
-      const statusEl = document.getElementById("aiLlmStatus");
-      const bodyEl = document.getElementById("aiLlmBody");
+      removeTypingIndicator();
+
       if (!resp.ok || data.error) {
-        statusEl.textContent = "暫時無法回答";
-        bodyEl.innerHTML = `<p style="color:#888;font-size:13px;">AI 補充說明暫時無法載入（${data.error || "服務忙碌"}）。上方的資料整理仍可正常使用。</p>`;
-        return;
+        const errMsg = { role: "assistant", content: "抱歉，AI 暫時無法回答（" + (data.error || "服務忙碌") + "）。請稍後再試一次。", ts: Date.now() };
+        history.push(errMsg);
+        renderBubble(errMsg);
+      } else {
+        const aiMsg = { role: "assistant", content: data.answer || "(空回應)", ts: Date.now() };
+        history.push(aiMsg);
+        renderBubble(aiMsg);
       }
-      // 成功時隱藏狀態徽章（不暴露底層模型名）
-      statusEl.style.display = "none";
-      bodyEl.innerHTML = formatAiText(data.answer || "");
+      saveHistory();
     } catch (err) {
-      const statusEl = document.getElementById("aiLlmStatus");
-      const bodyEl = document.getElementById("aiLlmBody");
-      if (statusEl) statusEl.textContent = "連線失敗";
-      if (bodyEl) bodyEl.innerHTML = `<p style="color:#888;font-size:13px;">連線 AI 服務失敗。上方的資料整理仍可使用。</p>`;
+      removeTypingIndicator();
+      const errMsg = { role: "assistant", content: "連線 AI 服務失敗，請檢查網路或稍後再試。", ts: Date.now() };
+      history.push(errMsg);
+      renderBubble(errMsg);
+      saveHistory();
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.textContent = "送出";
+      scrollToBottom();
+      chatInput.focus();
     }
   }
 
-  function buildContext(intent) {
+  function buildContext(question) {
+    if (!question) return {};
     const ctx = {};
     const all = L.data.stocks || [];
 
-    if (intent.kind === "stock") {
-      const stock = L.findStock(intent.code);
-      if (stock) {
-        ctx.relevantStocks = [stock];
-        // 嘗試加公司基本資料
-        const co = (L.data.companies && L.data.companies[intent.code]) || null;
-        if (co) ctx.companyInfo = co;
-        const rev = (L.data.revenue && L.data.revenue[intent.code]) || null;
-        if (rev) ctx.revenueInfo = rev;
-      }
-    } else if (intent.kind === "list") {
-      // 取符合條件的前 20 名給 AI 看
-      let pool = all.slice();
-      if (intent.market)   pool = pool.filter(s => s.market === intent.market);
-      if (intent.industry) pool = pool.filter(s => s.category && s.category.includes(intent.industry));
-      pool = pool.filter(s => s.price > 0);
-      if (intent.sortBy === "gainers")    pool.sort((a, b) => L.pctChange(b.price, b.change) - L.pctChange(a.price, a.change));
-      else if (intent.sortBy === "losers") pool.sort((a, b) => L.pctChange(a.price, a.change) - L.pctChange(b.price, b.change));
-      else                                  pool.sort((a, b) => (b.volume || 0) - (a.volume || 0));
-      ctx.relevantStocks = pool.slice(0, 20).map(s => ({
-        code: s.code, name: s.name, market: s.market, category: s.category,
-        price: s.price, change: s.change, volume: s.volume
-      }));
-    } else {
-      // search / fuzzy：取前 30 名熱門股當參考
-      const top = all.filter(s => s.price > 0).sort((a, b) => (b.volume || 0) - (a.volume || 0)).slice(0, 30);
-      ctx.relevantStocks = top.map(s => ({
-        code: s.code, name: s.name, market: s.market, category: s.category
-      }));
+    const codeMatch = question.match(/\b\d{4}\b/);
+    let targetStock = null;
+    if (codeMatch) targetStock = all.find(s => s.code === codeMatch[0]);
+    if (!targetStock) {
+      const sortedByLen = [...all].filter(s => s.name && s.name.length >= 2)
+                                  .sort((a, b) => b.name.length - a.name.length);
+      targetStock = sortedByLen.find(s => question.includes(s.name));
     }
+
+    if (targetStock) {
+      ctx.relevantStocks = [targetStock];
+      const co = (L.data.companies && L.data.companies[targetStock.code]) || null;
+      if (co) ctx.companyInfo = co;
+      const rev = (L.data.revenue && L.data.revenue[targetStock.code]) || null;
+      if (rev) ctx.revenueInfo = rev;
+      return ctx;
+    }
+
+    let market = null;
+    if (/上市/.test(question)) market = "listed";
+    else if (/上櫃/.test(question)) market = "otc";
+    else if (/興櫃/.test(question)) market = "emerging";
+
+    const industries = ["半導體","電子零組件","電腦及周邊","通信網路","電子通路",
+                        "光電","生技醫療","金融保險","綠能環保","數位雲端",
+                        "電子","電機機械","鋼鐵","紡織","食品","汽車","建材營造"];
+    const matchedIndustry = industries.find(i => question.includes(i));
+
+    let pool = all.slice();
+    if (market) pool = pool.filter(s => s.market === market);
+    if (matchedIndustry) pool = pool.filter(s => s.category && s.category.includes(matchedIndustry));
+    pool = pool.filter(s => s.price > 0);
+
+    if (/漲|上漲/.test(question)) {
+      pool.sort((a, b) => L.pctChange(b.price, b.change) - L.pctChange(a.price, a.change));
+    } else if (/跌|下跌/.test(question)) {
+      pool.sort((a, b) => L.pctChange(a.price, a.change) - L.pctChange(b.price, b.change));
+    } else {
+      pool.sort((a, b) => (b.volume || 0) - (a.volume || 0));
+    }
+    ctx.relevantStocks = pool.slice(0, 15).map(s => ({
+      code: s.code, name: s.name, market: s.market, category: s.category,
+      price: s.price, change: s.change, volume: s.volume
+    }));
     return ctx;
   }
 
-  function formatAiText(text) {
-    if (!text) return "";
-    // 簡單把 \n\n 變段落，\n 變 <br>
-    const esc = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    return esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
-  }
+  chatForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const text = chatInput.value.trim();
+    if (text) {
+      chatInput.value = "";
+      autoResize();
+      sendMessage(text);
+    }
+  });
 
-  function noResult(raw) {
-    return `
-      <div style="padding:40px 20px;text-align:center;color:#888;">
-        <div style="font-size:48px;margin-bottom:10px;">🤔</div>
-        <p style="font-size:15px;margin-bottom:10px;">AI 暫時看不懂「${raw}」這個問題</p>
-        <p style="font-size:13px;margin-bottom:18px;">試試這些問法：</p>
-        <p style="color:#1B4332;line-height:2;">
-          「今天漲最多的上市股」<br>
-          「半導體類熱門股」<br>
-          「2330」「台積電」（直接輸入代號或公司名）<br>
-          「怎麼避免被騙」
-        </p>
-        <a href="search.html?q=${encodeURIComponent(raw)}" style="display:inline-block;margin-top:14px;color:#888;font-size:13px;">或用一般搜尋找「${raw}」 →</a>
-      </div>`;
+  function autoResize() {
+    chatInput.style.height = "auto";
+    chatInput.style.height = Math.min(chatInput.scrollHeight, 160) + "px";
+  }
+  chatInput.addEventListener("input", autoResize);
+  chatInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      chatForm.dispatchEvent(new Event("submit"));
+    }
+  });
+
+  newBtn.addEventListener("click", () => {
+    if (history.length > 0 && !confirm("確定要開新對話嗎？目前的對話歷史會清空。")) return;
+    history = [];
+    chatList.innerHTML = "";
+    localStorage.removeItem(STORAGE_KEY);
+    showWelcome();
+  });
+
+  // 語音輸入
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    micBtn.style.display = "none";
+  } else {
+    let recog = null;
+    micBtn.addEventListener("click", () => {
+      if (recog) {
+        try { recog.abort(); } catch {}
+        recog = null;
+        micBtn.classList.remove("chat-mic-active");
+        return;
+      }
+      recog = new SR();
+      recog.lang = "zh-TW";
+      recog.continuous = false;
+      recog.interimResults = true;
+      recog.maxAlternatives = 1;
+      micBtn.classList.add("chat-mic-active");
+
+      let finalText = "";
+      recog.onresult = (e) => {
+        let t = "";
+        for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+        t = L.normalizeSearchQuery ? L.normalizeSearchQuery(t) : t;
+        chatInput.value = t;
+        autoResize();
+        if (e.results[e.results.length - 1].isFinal) finalText = t;
+      };
+      recog.onerror = () => {
+        micBtn.classList.remove("chat-mic-active");
+        recog = null;
+      };
+      recog.onend = () => {
+        micBtn.classList.remove("chat-mic-active");
+        recog = null;
+        if (finalText) {
+          chatInput.value = finalText;
+          autoResize();
+          setTimeout(() => chatForm.dispatchEvent(new Event("submit")), 200);
+        }
+      };
+      try { recog.start(); } catch { micBtn.classList.remove("chat-mic-active"); recog = null; }
+    });
   }
 });
 </script>

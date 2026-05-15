@@ -108,36 +108,66 @@ async function handleAsk(request, env) {
     });
   }
 
-  const question = (body.question || "").toString().slice(0, 800);
+  // 支援兩種模式：
+  //   1. 單輪：{ question, context } - 舊版相容
+  //   2. 多輪聊天：{ messages: [{role, content}, ...], context }
+  const question = (body.question || "").toString().slice(0, 1500);
   const context = body.context || {};
-  if (!question.trim()) {
+  const incomingMessages = Array.isArray(body.messages) ? body.messages : null;
+
+  if (!question.trim() && (!incomingMessages || incomingMessages.length === 0)) {
     return new Response(JSON.stringify({ error: "No question provided" }), {
       status: 400,
       headers: { "Content-Type": "application/json", ...corsHeaders() }
     });
   }
 
-  // 組裝 user message：問題在最上面，context 用 markdown 樣式包起來，
-  // 不要在最後加任何「請依鐵則」之類的句子，否則模型會困惑找鐵則
-  let userMsg = question;
+  // 構建最後一條 user message（含 context 注入）
+  // 多輪模式：把 context 接到最後一條 user message 上
+  let lastUserContent = question;
+  if (incomingMessages && incomingMessages.length) {
+    const lastUser = [...incomingMessages].reverse().find(m => m.role === "user");
+    if (lastUser) lastUserContent = lastUser.content;
+  }
+
   const hasContext =
     (context.relevantStocks && context.relevantStocks.length) ||
     context.companyInfo || context.revenueInfo || context.industryStats;
 
+  let augmentedLast = lastUserContent;
   if (hasContext) {
-    userMsg += `\n\n---\n以下是領富 AI 網站提供給你的相關公開資料，請優先依此回答：`;
+    augmentedLast += `\n\n---\n以下是領富 AI 網站提供給你的相關公開資料，請優先依此回答：`;
     if (context.relevantStocks && context.relevantStocks.length) {
-      userMsg += `\n\n### 相關個股\n\`\`\`json\n${JSON.stringify(context.relevantStocks).slice(0, 8000)}\n\`\`\``;
+      augmentedLast += `\n\n### 相關個股\n\`\`\`json\n${JSON.stringify(context.relevantStocks).slice(0, 8000)}\n\`\`\``;
     }
     if (context.companyInfo) {
-      userMsg += `\n\n### 公司基本資料\n\`\`\`json\n${JSON.stringify(context.companyInfo).slice(0, 3000)}\n\`\`\``;
+      augmentedLast += `\n\n### 公司基本資料\n\`\`\`json\n${JSON.stringify(context.companyInfo).slice(0, 3000)}\n\`\`\``;
     }
     if (context.revenueInfo) {
-      userMsg += `\n\n### 月營收\n\`\`\`json\n${JSON.stringify(context.revenueInfo).slice(0, 2000)}\n\`\`\``;
+      augmentedLast += `\n\n### 月營收\n\`\`\`json\n${JSON.stringify(context.revenueInfo).slice(0, 2000)}\n\`\`\``;
     }
     if (context.industryStats) {
-      userMsg += `\n\n### 產業統計\n\`\`\`json\n${JSON.stringify(context.industryStats).slice(0, 2000)}\n\`\`\``;
+      augmentedLast += `\n\n### 產業統計\n\`\`\`json\n${JSON.stringify(context.industryStats).slice(0, 2000)}\n\`\`\``;
     }
+  }
+
+  // 組裝最終 messages 陣列
+  const finalMessages = [{ role: "system", content: SYSTEM_PROMPT }];
+  if (incomingMessages && incomingMessages.length) {
+    // 多輪模式：保留歷史（除最後一條），最後一條用 augmented 版本
+    // 限制歷史到最近 10 條訊息控制 token 用量
+    const trimmedHistory = incomingMessages.slice(-10);
+    // 取出除最後一條外的所有訊息
+    for (let i = 0; i < trimmedHistory.length - 1; i++) {
+      const m = trimmedHistory[i];
+      if (m && (m.role === "user" || m.role === "assistant") && m.content) {
+        finalMessages.push({ role: m.role, content: String(m.content).slice(0, 4000) });
+      }
+    }
+    finalMessages.push({ role: "user", content: augmentedLast });
+  } else {
+    // 單輪模式（舊版相容）
+    finalMessages.push({ role: "user", content: augmentedLast });
   }
 
   const model = env.NVIDIA_MODEL || DEFAULT_MODEL;
@@ -152,13 +182,10 @@ async function handleAsk(request, env) {
       },
       body: JSON.stringify({
         model,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: userMsg }
-        ],
-        temperature: 0.3,
+        messages: finalMessages,
+        temperature: 0.4,
         top_p: 0.9,
-        max_tokens: 700,
+        max_tokens: 800,
         stream: false
       })
     });
