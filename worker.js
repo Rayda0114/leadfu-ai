@@ -116,21 +116,28 @@ async function handleAsk(request, env) {
     });
   }
 
-  // 組裝 user prompt
-  let userMsg = `使用者問題：${question}\n`;
-  if (context.relevantStocks && context.relevantStocks.length) {
-    userMsg += `\n相關個股資料：\n${JSON.stringify(context.relevantStocks).slice(0, 8000)}\n`;
+  // 組裝 user message：問題在最上面，context 用 markdown 樣式包起來，
+  // 不要在最後加任何「請依鐵則」之類的句子，否則模型會困惑找鐵則
+  let userMsg = question;
+  const hasContext =
+    (context.relevantStocks && context.relevantStocks.length) ||
+    context.companyInfo || context.revenueInfo || context.industryStats;
+
+  if (hasContext) {
+    userMsg += `\n\n---\n以下是領富 AI 網站提供給你的相關公開資料，請優先依此回答：`;
+    if (context.relevantStocks && context.relevantStocks.length) {
+      userMsg += `\n\n### 相關個股\n\`\`\`json\n${JSON.stringify(context.relevantStocks).slice(0, 8000)}\n\`\`\``;
+    }
+    if (context.companyInfo) {
+      userMsg += `\n\n### 公司基本資料\n\`\`\`json\n${JSON.stringify(context.companyInfo).slice(0, 3000)}\n\`\`\``;
+    }
+    if (context.revenueInfo) {
+      userMsg += `\n\n### 月營收\n\`\`\`json\n${JSON.stringify(context.revenueInfo).slice(0, 2000)}\n\`\`\``;
+    }
+    if (context.industryStats) {
+      userMsg += `\n\n### 產業統計\n\`\`\`json\n${JSON.stringify(context.industryStats).slice(0, 2000)}\n\`\`\``;
+    }
   }
-  if (context.companyInfo) {
-    userMsg += `\n公司基本資料：\n${JSON.stringify(context.companyInfo).slice(0, 3000)}\n`;
-  }
-  if (context.revenueInfo) {
-    userMsg += `\n月營收資料：\n${JSON.stringify(context.revenueInfo).slice(0, 2000)}\n`;
-  }
-  if (context.industryStats) {
-    userMsg += `\n產業統計：\n${JSON.stringify(context.industryStats).slice(0, 2000)}\n`;
-  }
-  userMsg += `\n請依鐵則回答。`;
 
   const model = env.NVIDIA_MODEL || DEFAULT_MODEL;
 
