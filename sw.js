@@ -5,7 +5,7 @@
  *   3. 外部資源（Google News 連結等）→ pass through
  */
 
-const VERSION = "v1.1.0";
+const VERSION = "v1.2.0";
 const STATIC_CACHE  = "leadfu-static-"  + VERSION;
 const DATA_CACHE    = "leadfu-data-"    + VERSION;
 
@@ -56,7 +56,18 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // 其餘靜態資產：stale-while-revalidate
+  // 導覽請求（HTML 頁面）也用 network-first
+  // 避免使用者卡在舊快取（例如 footer 連結更新後點不到）
+  if (req.mode === "navigate" ||
+      (req.destination === "document") ||
+      url.pathname.endsWith(".html") ||
+      url.pathname === "/" ||
+      !url.pathname.includes(".")) {
+    event.respondWith(networkFirst(req));
+    return;
+  }
+
+  // 其餘純靜態資產（CSS/JS/圖片）：stale-while-revalidate
   event.respondWith(staleWhileRevalidate(req));
 });
 
