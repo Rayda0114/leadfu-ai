@@ -35,6 +35,26 @@ URL_OTC      = "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O"         #
 URL_EMERGING = "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_R"         # 興櫃
 UA = "LeadFu-AI/1.0 (+https://leadfuai.com)"
 
+# 台股產業代碼對照表（TWSE/TPEx 通用 SecuritiesIndustryCode）
+INDUSTRY_CODE_NAME = {
+    "01": "水泥",       "02": "食品",       "03": "塑膠",       "04": "紡織",
+    "05": "電機機械",   "06": "電器電纜",   "07": "化學",       "08": "玻璃陶瓷",
+    "09": "造紙",       "10": "鋼鐵",       "11": "橡膠",       "12": "汽車",
+    "13": "電子",       "14": "建材營造",   "15": "航運",       "16": "觀光餐旅",
+    "17": "金融保險",   "18": "貿易百貨",   "19": "綜合",       "20": "其他",
+    "21": "化學",       "22": "生技醫療",   "23": "油電燃氣",   "24": "半導體",
+    "25": "電腦及周邊", "26": "光電",       "27": "通信網路",   "28": "電子零組件",
+    "29": "電子通路",   "30": "資訊服務",   "31": "其他電子",   "32": "文化創意",
+    "33": "農業科技",   "34": "電子商務",   "35": "綠能環保",   "36": "數位雲端",
+    "37": "運動休閒",   "38": "居家生活",   "80": "管理股票",   "91": "存託憑證",
+    "99": "ETF"
+}
+
+def industry_name(code):
+    """產業代碼 → 中文名"""
+    code = (code or "").strip().zfill(2)
+    return INDUSTRY_CODE_NAME.get(code, "")
+
 # TWSE 政府 API SSL 退而求其次 context（公開資料無敏感性）
 _INSECURE_CTX = ssl.create_default_context()
 _INSECURE_CTX.check_hostname = False
@@ -131,7 +151,7 @@ def map_tpex_record(r, market):
 
 
 def map_twse_record(r):
-    """TWSE 格式（上市），欄位名跟 TPEx 不同"""
+    """TWSE 上市格式（注意：實際欄位名跟想像不同，已對照 API 實際 response）"""
     code = clean(r.get("公司代號") or r.get("Code"))
     if not code:
         return None
@@ -139,7 +159,7 @@ def map_twse_record(r):
         "code":           code,
         "name":           clean(r.get("公司名稱") or r.get("Name")),
         "abbrev":         clean(r.get("公司簡稱")),
-        "industry":       clean(r.get("產業類別") or r.get("Industry")),
+        "industry":       clean(r.get("產業別") or r.get("產業類別")),    # 真實欄位是「產業別」
         "address":        clean(r.get("住址")),
         "taxId":          clean(r.get("營利事業統一編號")),
         "chairman":       clean(r.get("董事長")),
@@ -150,18 +170,18 @@ def map_twse_record(r):
         "phone":          clean(r.get("總機電話")),
         "fax":            clean(r.get("傳真機號碼")),
         "email":          clean(r.get("電子郵件信箱")),
-        "website":        clean(r.get("公司網址")),
+        "website":        clean(r.get("網址") or r.get("公司網址")),       # 真實欄位是「網址」
         "founded":        parse_date(r.get("成立日期")),
         "listed":         parse_date(r.get("上市日期")),
         "parValue":       clean(r.get("普通股每股面額")),
-        "capital":        fmt_capital(r.get("實收資本額(元)") or r.get("實收資本額")),
-        "issuedShares":   clean(r.get("已發行普通股數或TDR原發行股數")),
+        "capital":        fmt_capital(r.get("實收資本額") or r.get("實收資本額(元)")),
+        "issuedShares":   clean(r.get("已發行普通股數或TDR原股發行股數") or r.get("已發行普通股數或TDR原發行股數")),
         "stockAgent":     clean(r.get("股票過戶機構")),
         "stockAgentPhone": clean(r.get("過戶電話")),
         "accountingFirm": clean(r.get("簽證會計師事務所")),
         "cpa1":           clean(r.get("簽證會計師1")),
         "cpa2":           clean(r.get("簽證會計師2")),
-        "reportType":     clean(r.get("編製財務報告類型")),
+        "reportType":     clean(r.get("編制財務報表類型") or r.get("編製財務報告類型")),
         "symbol":         clean(r.get("英文簡稱")),
         "market":         "listed"
     }
@@ -181,6 +201,8 @@ def fetch_market(name, url, mapper, allow_insecure=False):
         result = mapper(r)
         if result:
             code, info = result
+            # 把產業代碼轉成中文名（給前端 / merge_stocks 用）
+            info["industryName"] = industry_name(info.get("industry"))
             out[code] = info
     print(f"  有效公司: {len(out)}")
     return out
@@ -192,8 +214,8 @@ def main():
     print("=" * 60)
 
     listed   = fetch_market("上市 (TWSE)", URL_LISTED, map_twse_record, allow_insecure=True)
-    otc      = fetch_market("上櫃 (TPEx)", URL_OTC,    lambda r: map_tpex_record(r, "otc"))
-    emerging = fetch_market("興櫃 (TPEx)", URL_EMERGING, lambda r: map_tpex_record(r, "emerging"))
+    otc      = fetch_market("上櫃 (TPEx)", URL_OTC,    lambda r: map_tpex_record(r, "otc"),      allow_insecure=True)
+    emerging = fetch_market("興櫃 (TPEx)", URL_EMERGING, lambda r: map_tpex_record(r, "emerging"), allow_insecure=True)
 
     # 合併（同 code 衝突時優先級：上市 > 上櫃 > 興櫃）
     companies = {}

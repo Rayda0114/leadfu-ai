@@ -12,6 +12,7 @@
 """
 
 import json
+import ssl
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +24,11 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8")
 
 TPEX_URL = "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes"
+
+# 公開政府 API SSL 退而求其次 context（憑證偶發抽風）
+_INSECURE_CTX = ssl.create_default_context()
+_INSECURE_CTX.check_hostname = False
+_INSECURE_CTX.verify_mode = ssl.CERT_NONE
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
@@ -48,8 +54,15 @@ def fetch_tpex_json():
         "User-Agent": "LeadFu-AI/1.0 (+https://leadfuai.com)",
         "Accept": "application/json"
     })
-    with urlopen(req, timeout=45) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    try:
+        with urlopen(req, timeout=45) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except (URLError, ssl.SSLError) as e:
+        if "CERTIFICATE" in str(e) or isinstance(e.__cause__, ssl.SSLError):
+            print("⚠ SSL 驗證失敗，改用 unverified context（公開資料 OK）")
+            with urlopen(req, timeout=45, context=_INSECURE_CTX) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        raise
 
 
 def safe_float(x, default=0.0):

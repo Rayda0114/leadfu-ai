@@ -52,6 +52,36 @@ def main():
     listed_twse, src_twse = load_intermediate("_listed_twse.json")
     listed_tpex, src_tpex = load_intermediate("_listed_tpex.json")
 
+    # 讀公司基本資料拿真實產業名（覆蓋 fetcher 用代號前綴粗略推測的 category）
+    companies = {}
+    companies_path = DATA_DIR / "companies_live.json"
+    if companies_path.exists():
+        try:
+            cdata = json.loads(companies_path.read_text(encoding="utf-8"))
+            companies = cdata.get("companies", {}) or {}
+            print(f"\n載入 companies_live.json: {len(companies)} 家公司可用產業資料")
+        except Exception as e:
+            print(f"\n⚠ 讀取 companies_live.json 失敗: {e}（產業欄位將沿用 fetcher 粗估）")
+    else:
+        print(f"\n⚠ 找不到 companies_live.json（產業欄位將沿用 fetcher 粗估）")
+
+    enriched_count = 0
+    def enrich(stocks):
+        nonlocal enriched_count
+        for s in stocks:
+            co = companies.get(s.get("code"))
+            if co:
+                real = co.get("industryName") or ""
+                if real:
+                    s["category"] = real
+                    enriched_count += 1
+        return stocks
+
+    listed_twse = enrich(listed_twse)
+    listed_tpex = enrich(listed_tpex)
+    emerging    = enrich(emerging)
+    print(f"以真實產業覆蓋: {enriched_count} 檔")
+
     print(f"\n上市 (TWSE):  {len(listed_twse):>5} 檔")
     print(f"上櫃 (TPEx):  {len(listed_tpex):>5} 檔")
     print(f"興櫃 (ESB):   {len(emerging):>5} 檔")

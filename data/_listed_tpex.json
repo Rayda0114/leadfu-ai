@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15 09:51",
+  "updatedAt": "2026-05-15 19:23",
   "source": "TPEx 櫃買中心 OpenAPI",
   "market": "otc",
   "count": 878,
@@ -29,7 +29,7 @@
       "name": "世界",
       "price": 176.5,
       "change": 1.5,
-      "volume": 47683,
+      "volume": 49783,
       "category": "其他",
       "status": "上櫃",
       "market": "otc"
@@ -89,7 +89,7 @@
       "name": "光洋科",
       "price": 153.0,
       "change": 4.0,
-      "volume": 26114,
+      "volume": 26613,
       "category": "化學",
       "status": "上櫃",
       "market": "otc"
@@ -899,7 +899,7 @@
       "name": "環球晶",
       "price": 710.0,
       "change": -78.0,
-      "volume": 3811,
+      "volume": 3847,
       "category": "其他",
       "status": "上櫃",
       "market": "otc"
@@ -2445,6 +2445,16 @@
       "market": "otc"
     },
     {
+      "code": "6121",
+      "name": "新普",
+      "price": 368.0,
+      "change": -4.5,
+      "volume": 957,
+      "category": "證券",
+      "status": "上櫃",
+      "market": "otc"
+    },
+    {
       "code": "2070",
       "name": "精湛",
       "price": 65.2,
@@ -2511,16 +2521,6 @@
       "change": -0.2,
       "volume": 909,
       "category": "其他",
-      "status": "上櫃",
-      "market": "otc"
-    },
-    {
-      "code": "6121",
-      "name": "新普",
-      "price": 368.0,
-      "change": -4.5,
-      "volume": 909,
-      "category": "證券",
       "status": "上櫃",
       "market": "otc"
     },

@@ -27,13 +27,15 @@ RETRY_BACKOFF = 8   # 秒
 
 ROOT = Path(__file__).resolve().parent
 SCRIPTS = [
-    # 三市場各自抓取 → 中間檔 _emerging.json / _listed_twse.json / _listed_tpex.json
+    # 1. 公司基本資料先抓（含產業代碼→中文名對照），給 merge_stocks 用
+    "fetch_companies.py",
+    # 2. 三市場各自抓報價 → 中間檔
     "fetch_listed_twse.py",   # 上市 ~1,000 檔
     "fetch_listed_tpex.py",   # 上櫃 ~800 檔
     "fetch_emerging.py",      # 興櫃 ~350 檔
-    "merge_stocks.py",        # 合併三檔成最終 stocks_live.json
-    # 其他補充資料
-    "fetch_companies.py",
+    # 3. 合併並用 companies 真實產業覆蓋 category
+    "merge_stocks.py",
+    # 4. 其他補充資料
     "fetch_revenue.py",
     "fetch_news.py",
     "fetch_announcements.py",
