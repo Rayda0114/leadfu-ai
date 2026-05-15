@@ -940,6 +940,112 @@ function setupBottomTabBar() {
 }
 
 /* ============================================================
+ * 偵測「內建瀏覽器」(LINE / FB / IG / WeChat 等 WebView)
+ * 這些環境用 Google OAuth 會被擋 (disallowed_useragent 403)
+ * 偵測到就跳警告 + 教學切外部瀏覽器
+ * ============================================================ */
+function detectInAppBrowser() {
+  const ua = navigator.userAgent || "";
+  if (/Line\//i.test(ua))             return { name: "LINE",      tip: "點右上角『⋯』→『在預設瀏覽器開啟』" };
+  if (/FBAN|FBAV|FB_IAB/i.test(ua))   return { name: "Facebook",  tip: "點右下角『⋯』→『在外部瀏覽器中開啟』" };
+  if (/Instagram/i.test(ua))          return { name: "Instagram", tip: "點右上角『⋯』→『在外部瀏覽器中開啟』" };
+  if (/MicroMessenger/i.test(ua))     return { name: "微信 WeChat", tip: "點右上角『⋯』→『在瀏覽器開啟』" };
+  if (/BytedanceWebview/i.test(ua))   return { name: "TikTok 抖音", tip: "點右上角『⋯』→『在瀏覽器開啟』" };
+  if (/Twitter/i.test(ua))            return { name: "Twitter/X", tip: "點右上角分享圖示 → 在瀏覽器開啟" };
+  if (/(KAKAOTALK|NAVER)/i.test(ua))  return { name: "Kakao/Naver", tip: "點選單在外部瀏覽器開啟" };
+  // Generic WebView 偵測（iOS Safari WebView 與 Android WebView 沒有完整瀏覽器 UI）
+  // 注意：純 Safari/Chrome 也可能匹配，避免誤判，只在「明確 WebView」時才警告
+  return null;
+}
+
+function setupInAppBrowserWarning() {
+  const inApp = detectInAppBrowser();
+  if (!inApp) return;
+  // 只在會員相關頁面顯示（OAuth 才會用到）
+  if (!/login\.html|register\.html|member\.html/.test(location.pathname)) return;
+
+  // 注入頂部警告 banner
+  const banner = document.createElement("div");
+  banner.className = "inapp-warning-banner";
+  banner.innerHTML = `
+    <div class="inapp-warning-inner">
+      <span class="inapp-warning-icon">⚠</span>
+      <div class="inapp-warning-text">
+        <strong>您正在 ${inApp.name} 內建瀏覽器中</strong>
+        <span>Google／Facebook 登入會被擋。請${inApp.tip}，再回來這頁。</span>
+      </div>
+      <button class="inapp-warning-copy" type="button">複製網址</button>
+    </div>`;
+  document.body.insertBefore(banner, document.body.firstChild);
+
+  // 複製網址鈕
+  banner.querySelector(".inapp-warning-copy").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      banner.querySelector(".inapp-warning-copy").textContent = "✓ 已複製";
+    } catch {
+      // 退而求其次：顯示完整網址讓使用者長按複製
+      banner.querySelector(".inapp-warning-text span").innerHTML +=
+        `<br><span style="user-select:all;font-size:11px;color:#1B4332;background:#fff;padding:2px 6px;border-radius:3px;display:inline-block;margin-top:4px;">${location.href}</span>`;
+      banner.querySelector(".inapp-warning-copy").textContent = "↑ 長按選取";
+    }
+  });
+
+  // 攔截 Google / Facebook OAuth 按鈕 click → 改跳警告 modal（不要直接送出去被擋）
+  const oauthBtns = document.querySelectorAll(
+    "#googleLoginBtn, #googleRegBtn, #facebookLoginBtn, #facebookRegBtn"
+  );
+  oauthBtns.forEach(btn => {
+    // 用 capture 階段先攔截，stopImmediatePropagation 擋掉原本的 click
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      _showInAppModal(inApp);
+    }, true);
+  });
+}
+
+function _showInAppModal(inApp) {
+  const el = document.createElement("div");
+  el.className = "inapp-modal-overlay";
+  el.innerHTML = `
+    <div class="inapp-modal-box">
+      <div class="inapp-modal-icon">🚫</div>
+      <h2>${inApp.name} 內無法使用<br>Google／Facebook 一鍵登入</h2>
+      <p>這是 Google 的安全規定，不是網站問題。請依下方步驟改用外部瀏覽器，即可順利登入。</p>
+      <div class="inapp-modal-steps">
+        <div class="inapp-modal-step">
+          <span class="inapp-modal-num">1</span>
+          <span>${inApp.tip}</span>
+        </div>
+        <div class="inapp-modal-step">
+          <span class="inapp-modal-num">2</span>
+          <span>在開啟的 Chrome / Safari 中，再次點 Google 登入即可</span>
+        </div>
+      </div>
+      <p style="font-size:13px;color:#666;margin-top:12px;">或者，您也可以在這個畫面直接用 <strong>Email 帳號密碼</strong> 註冊／登入。</p>
+      <button class="inapp-modal-copy" type="button">📋 複製網址到剪貼簿</button>
+      <button class="inapp-modal-close" type="button">我知道了</button>
+    </div>`;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => el.classList.add("show"));
+
+  el.querySelector(".inapp-modal-copy").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      el.querySelector(".inapp-modal-copy").textContent = "✓ 已複製，請貼到 Chrome / Safari";
+    } catch {
+      el.querySelector(".inapp-modal-copy").innerHTML =
+        `請長按選取下方網址：<br><span style="user-select:all;font-size:12px;background:#f0f3f8;padding:4px 8px;border-radius:4px;display:inline-block;margin-top:6px;">${location.href}</span>`;
+    }
+  });
+  el.querySelector(".inapp-modal-close").addEventListener("click", () => {
+    el.classList.remove("show");
+    setTimeout(() => el.remove(), 200);
+  });
+}
+
+/* ============================================================
  * 個股詳情頁動態 JSON-LD（GEO 用，讓 AI 助手能精準抽取個股資料）
  * ============================================================ */
 function injectStockJsonLd() {
@@ -1628,6 +1734,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupBottomTabBar();
   setupHideableHeader();
   setupDisclaimer();
+  setupInAppBrowserWarning();   // 偵測 LINE/FB/IG/WeChat 內建瀏覽器，跳警告擋掉 OAuth
   setupPWA();
   renderDate();
 

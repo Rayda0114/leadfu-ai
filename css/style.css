@@ -2157,6 +2157,152 @@ img { max-width: 100%; }
 .ai-list-pct { font-weight: 600; text-align: right; }
 .ai-list-vol { color: #888; font-size: 12px; text-align: right; }
 
+/* ============================================================
+ * 內建瀏覽器警告（LINE/FB/IG/WeChat 等 WebView 無法跑 OAuth）
+ * ============================================================ */
+.inapp-warning-banner {
+  background: linear-gradient(90deg, #fff4d6 0%, #ffe7b3 100%);
+  border-bottom: 2px solid #C5A572;
+  padding: 12px 14px;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.inapp-warning-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.inapp-warning-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.inapp-warning-text {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #663c00;
+}
+.inapp-warning-text strong {
+  display: block;
+  color: #b07b00;
+  margin-bottom: 2px;
+  font-size: 14px;
+}
+.inapp-warning-copy {
+  background: #1B4332;
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.inapp-warning-copy:hover { background: #0D2818; }
+
+.inapp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 31, 24, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.2s;
+  padding: 16px;
+}
+.inapp-modal-overlay.show { opacity: 1; }
+.inapp-modal-box {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 24px 22px;
+  width: min(94%, 420px);
+  text-align: center;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.4);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.inapp-modal-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+.inapp-modal-box h2 {
+  font-size: 18px;
+  color: #1B4332;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.inapp-modal-box > p {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.inapp-modal-steps {
+  background: #f3f9f5;
+  border-radius: 8px;
+  padding: 14px 16px;
+  text-align: left;
+  margin-bottom: 6px;
+}
+.inapp-modal-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.inapp-modal-step:last-child { margin-bottom: 0; }
+.inapp-modal-num {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #1B4332;
+  color: #C5A572;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+.inapp-modal-copy {
+  display: block;
+  width: 100%;
+  background: #C5A572;
+  color: #1B4332;
+  border: 0;
+  border-radius: 8px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 14px;
+  margin-bottom: 8px;
+}
+.inapp-modal-copy:hover { background: #d4b787; }
+.inapp-modal-close {
+  display: block;
+  width: 100%;
+  background: #f0f0f0;
+  color: #555;
+  border: 0;
+  border-radius: 8px;
+  padding: 11px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
 /* 第 2 層 AI 補充說明（呼叫 Nvidia API） */
 .ai-llm-block {
   background: linear-gradient(180deg, #fafdfb 0%, #f3f9f5 100%);
