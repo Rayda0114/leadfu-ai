@@ -1455,16 +1455,12 @@ function setupDisclaimer() {
  * PWA 註冊 + 安裝提示橫幅
  * ============================================================ */
 function setupPWA() {
-  // 註冊 Service Worker（離線快取 + 加到主畫面前置）
+  // 註冊 Service Worker
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/sw.js", { scope: "/" })
       .then(() => console.log("[領富 AI] ✅ Service Worker 已註冊"))
       .catch(e => console.log("[領富 AI] SW 註冊失敗:", e.message));
   }
-
-  // 安裝提示流程
-  let deferredPrompt = null;
-  const DISMISS_KEY = "leadfu_pwa_dismissed_until";
 
   // 已在 PWA standalone 模式 → 已安裝，不顯示
   const isStandalone =
@@ -1472,16 +1468,23 @@ function setupPWA() {
     window.navigator.standalone === true;
   if (isStandalone) return;
 
+  const DISMISS_KEY = "leadfu_pwa_dismissed_until";
+  const dismissedUntil = parseInt(localStorage.getItem(DISMISS_KEY) || "0", 10);
+  if (Date.now() < dismissedUntil) return;
+
+  // 偵測平台 → 不同提示策略
+  const ua = navigator.userAgent || "";
+  const isIOS = /iPhone|iPad|iPod/.test(ua) && !/Windows/.test(ua);
+  const isIOSSafari = isIOS && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua);
+  const isAndroid = /Android/.test(ua);
+
+  let deferredPrompt = null;
+
+  // === Android Chrome：用原生 beforeinstallprompt ===
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt = e;
-
-    // 7 天內關過就不再煩
-    const dismissedUntil = parseInt(localStorage.getItem(DISMISS_KEY) || "0", 10);
-    if (Date.now() < dismissedUntil) return;
-
-    // 延 4 秒再跳，讓使用者先看到內容
-    setTimeout(showInstallBanner, 4000);
+    setTimeout(() => showInstallBanner("native"), 3500);
   });
 
   window.addEventListener("appinstalled", () => {
@@ -1490,37 +1493,75 @@ function setupPWA() {
     showToast("✓ 已加到主畫面，下次直接從手機桌面開", "success");
   });
 
-  function showInstallBanner() {
+  // === iOS Safari：永遠不會 fire beforeinstallprompt，直接跳手動教學 ===
+  if (isIOSSafari) {
+    setTimeout(() => showInstallBanner("ios"), 4000);
+  }
+
+  // === Fallback：手機但非 iOS/Android（很少），給通用提示 ===
+  // 或 Android Chrome 沒 fire beforeinstallprompt 時（例如已多次拒絕）
+  if (!isIOSSafari && /Mobi|Android/i.test(ua)) {
+    // 等 8 秒看有沒 fire，沒就跳通用版
+    setTimeout(() => {
+      if (!deferredPrompt && !document.getElementById("pwaInstallBanner")) {
+        showInstallBanner("generic");
+      }
+    }, 8000);
+  }
+
+  function showInstallBanner(kind) {
     if (document.getElementById("pwaInstallBanner")) return;
     const banner = document.createElement("div");
     banner.id = "pwaInstallBanner";
-    banner.className = "pwa-install-banner";
-    banner.innerHTML = `
-      <div class="pwa-icon">📱</div>
-      <div class="pwa-text">
-        <strong>加到主畫面</strong>
-        <small>當 app 用，下次一鍵打開</small>
-      </div>
-      <button id="pwaInstallBtn">安裝</button>
-      <button class="pwa-dismiss" id="pwaDismissBtn" aria-label="關閉">✕</button>
-    `;
+    banner.className = "pwa-install-banner pwa-install-" + kind;
+
+    let inner = "";
+    if (kind === "native") {
+      inner = `
+        <div class="pwa-icon">📱</div>
+        <div class="pwa-text">
+          <strong>加到主畫面</strong>
+          <small>當 app 用，下次一鍵打開</small>
+        </div>
+        <button id="pwaInstallBtn" class="pwa-action">安裝</button>
+        <button class="pwa-dismiss" id="pwaDismissBtn" aria-label="關閉">✕</button>`;
+    } else if (kind === "ios") {
+      inner = `
+        <div class="pwa-icon">📱</div>
+        <div class="pwa-text">
+          <strong>把領富 AI 加到桌面</strong>
+          <small>點下方 <span style="font-weight:700;color:#1B4332;">分享 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;"><path d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zm4 5v11c0 1.1-.9 2-2 2H6c-1.11 0-2-.9-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3c1.1 0 2 .89 2 2z"/></svg></span> → <span style="font-weight:700;color:#1B4332;">加入主畫面</span></small>
+        </div>
+        <button class="pwa-dismiss" id="pwaDismissBtn" aria-label="關閉">✕</button>`;
+    } else {
+      inner = `
+        <div class="pwa-icon">📱</div>
+        <div class="pwa-text">
+          <strong>把領富 AI 加到桌面</strong>
+          <small>點瀏覽器選單 <strong>⋮</strong> → 「<strong>加到主畫面</strong>」</small>
+        </div>
+        <button class="pwa-dismiss" id="pwaDismissBtn" aria-label="關閉">✕</button>`;
+    }
+    banner.innerHTML = inner;
     document.body.appendChild(banner);
     requestAnimationFrame(() => banner.classList.add("show"));
 
-    banner.querySelector("#pwaInstallBtn").addEventListener("click", async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      const result = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      hideInstallBanner();
-      if (result.outcome === "dismissed") {
-        // 用戶在系統 prompt 取消 → 暫停 3 天
-        localStorage.setItem(DISMISS_KEY, (Date.now() + 3 * 86400000).toString());
-      }
-    });
+    const installBtn = banner.querySelector("#pwaInstallBtn");
+    if (installBtn) {
+      installBtn.addEventListener("click", async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        hideInstallBanner();
+        if (result.outcome === "dismissed") {
+          localStorage.setItem(DISMISS_KEY, (Date.now() + 3 * 86400000).toString());
+        }
+      });
+    }
     banner.querySelector("#pwaDismissBtn").addEventListener("click", () => {
-      // 主動關 → 暫停 7 天
-      localStorage.setItem(DISMISS_KEY, (Date.now() + 7 * 86400000).toString());
+      // 主動關 → 暫停 3 天（之前 7 天太久，3 天剛好）
+      localStorage.setItem(DISMISS_KEY, (Date.now() + 3 * 86400000).toString());
       hideInstallBanner();
     });
   }
@@ -1647,9 +1688,11 @@ function setupAiAlert() {
   const overlay = document.getElementById("aiAlertOverlay");
   if (!overlay) return;
 
-  const today = new Date().toISOString().slice(0, 10);
-  const dismissKey = "leadfu_ai_alert_" + today;
-  if (localStorage.getItem(dismissKey)) return;
+  // 壓 6 小時（不是整天），讓使用者一天能多看到 2-3 次
+  const SUPPRESS_HOURS = 6;
+  const dismissKey = "leadfu_ai_alert_dismissed_until";
+  const dismissedUntil = parseInt(localStorage.getItem(dismissKey) || "0", 10);
+  if (Date.now() < dismissedUntil) return;
 
   // 更新日期文字
   const d = new Date();
@@ -1726,7 +1769,14 @@ function setupAiAlert() {
     document.body.style.overflow = "";
     setTimeout(() => {
       overlay.hidden = true;
-      localStorage.setItem(dismissKey, "1");
+      // 壓 6 小時不再跳
+      localStorage.setItem(dismissKey, String(Date.now() + SUPPRESS_HOURS * 3600 * 1000));
+      // 清理舊版 key（按日期的，現在改用 *_dismissed_until）
+      Object.keys(localStorage).forEach(k => {
+        if (k.startsWith("leadfu_ai_alert_") && k !== "leadfu_ai_alert_dismissed_until") {
+          localStorage.removeItem(k);
+        }
+      });
     }, 300);
   }
 
