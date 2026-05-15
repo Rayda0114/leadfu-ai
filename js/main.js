@@ -483,6 +483,170 @@ function bindSearch() {
 }
 
 /* ============================================================
+ * 🎤 語音搜尋（Web Speech API，免費、瀏覽器內建、繁中支援）
+ * - 每個 .search-box 自動注入麥克風按鈕（不用改 HTML）
+ * - 手機優先：按鈕加大、全螢幕聆聽視覺
+ * - HTTPS only（leadfuai.com 已是 HTTPS，沒問題）
+ * ============================================================ */
+let _activeRecognition = null;
+
+function setupVoiceSearch() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;   // 老瀏覽器不支援就靜默跳過，不影響其他功能
+
+  document.querySelectorAll(".search-box").forEach(box => {
+    if (box.querySelector(".voice-mic")) return;  // 已注入過跳過
+    const input = box.querySelector("input");
+    const submitBtn = box.querySelector("button");
+    if (!input) return;
+
+    const mic = document.createElement("button");
+    mic.type = "button";
+    mic.className = "voice-mic";
+    mic.setAttribute("aria-label", "語音搜尋");
+    mic.title = "語音搜尋（點麥克風開始）";
+    mic.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5.91-3a.91.91 0 0 0-.91.91A4.99 4.99 0 0 1 12 17a4.99 4.99 0 0 1-5-5.09.91.91 0 1 0-1.82 0A6.81 6.81 0 0 0 11 18.91V21a1 1 0 1 0 2 0v-2.09a6.81 6.81 0 0 0 5.82-6.91.91.91 0 0 0-.91-.91z"/></svg>`;
+
+    // 放在「查詢」按鈕之前，視覺順序：[ 輸入框 ][🎤][ 查詢 ]
+    if (submitBtn) box.insertBefore(mic, submitBtn);
+    else box.appendChild(mic);
+
+    mic.addEventListener("click", () => startVoiceRecognition(input, submitBtn));
+  });
+
+  // 第一次來的使用者：發提示動畫一次（5 秒），告訴他「這裡新功能」
+  if (!localStorage.getItem("leadfu_voice_hint_seen")) {
+    setTimeout(() => {
+      const firstMic = document.querySelector(".voice-mic");
+      if (firstMic) {
+        firstMic.classList.add("voice-mic-pulse-hint");
+        setTimeout(() => firstMic.classList.remove("voice-mic-pulse-hint"), 5000);
+        localStorage.setItem("leadfu_voice_hint_seen", "1");
+      }
+    }, 2500);
+  }
+}
+
+function startVoiceRecognition(input, submitBtn) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+
+  // 已經在聽就中止（再點一次=取消）
+  if (_activeRecognition) {
+    try { _activeRecognition.abort(); } catch (e) {}
+    _activeRecognition = null;
+    return;
+  }
+
+  const recog = new SR();
+  recog.lang = "zh-TW";
+  recog.continuous = false;
+  recog.interimResults = true;
+  recog.maxAlternatives = 1;
+  _activeRecognition = recog;
+
+  const overlay = _createVoiceOverlay(() => {
+    if (_activeRecognition) {
+      try { _activeRecognition.abort(); } catch (e) {}
+      _activeRecognition = null;
+    }
+  });
+
+  let finalText = "";
+
+  recog.onresult = (e) => {
+    let text = "";
+    for (let i = 0; i < e.results.length; i++) text += e.results[i][0].transcript;
+    // 去掉句末標點（語音常會自動加「。」、「，」）
+    text = text.replace(/[。，、？！.,?!\s]+$/g, "").trim();
+    overlay.setHeard(text);
+    if (e.results[e.results.length - 1].isFinal) finalText = text;
+  };
+
+  recog.onerror = (e) => {
+    const msg = e.error === "no-speech" ? "沒有聽到聲音，請再試一次"
+              : e.error === "not-allowed" ? "請允許麥克風權限後重試"
+              : e.error === "audio-capture" ? "找不到麥克風"
+              : "語音辨識失敗，請改用打字";
+    overlay.setError(msg);
+    setTimeout(() => overlay.close(), 2000);
+    _activeRecognition = null;
+  };
+
+  recog.onend = () => {
+    _activeRecognition = null;
+    if (finalText) {
+      input.value = finalText;
+      overlay.setSuccess(finalText);
+      setTimeout(() => {
+        overlay.close();
+        if (submitBtn) submitBtn.click();
+      }, 900);
+    } else {
+      // onend 沒拿到 final（可能用戶取消）
+      overlay.close();
+    }
+  };
+
+  try {
+    recog.start();
+  } catch (err) {
+    overlay.setError("啟動失敗，請改用打字");
+    setTimeout(() => overlay.close(), 1500);
+    _activeRecognition = null;
+  }
+}
+
+function _createVoiceOverlay(onCancel) {
+  const el = document.createElement("div");
+  el.className = "voice-overlay";
+  el.innerHTML = `
+    <div class="voice-overlay-box">
+      <div class="voice-pulse"><div class="voice-pulse-dot">🎤</div></div>
+      <div class="voice-overlay-status">正在聆聽...</div>
+      <div class="voice-overlay-text">請說股票代號或公司名稱</div>
+      <button class="voice-overlay-cancel" type="button">取消</button>
+    </div>
+  `;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => el.classList.add("show"));
+
+  const statusEl = el.querySelector(".voice-overlay-status");
+  const textEl = el.querySelector(".voice-overlay-text");
+
+  el.querySelector(".voice-overlay-cancel").addEventListener("click", () => {
+    onCancel && onCancel();
+    closeOverlay();
+  });
+
+  function closeOverlay() {
+    el.classList.remove("show");
+    setTimeout(() => el.remove(), 220);
+  }
+
+  return {
+    setHeard: (t) => {
+      if (t) {
+        statusEl.textContent = "聽到了：";
+        textEl.textContent = `「${t}」`;
+        textEl.classList.add("voice-overlay-text--heard");
+      }
+    },
+    setSuccess: (t) => {
+      statusEl.textContent = "✅ 已搜尋：";
+      textEl.textContent = `「${t}」`;
+      textEl.classList.add("voice-overlay-text--heard");
+    },
+    setError: (msg) => {
+      statusEl.textContent = "⚠ " + msg;
+      textEl.textContent = "";
+      el.querySelector(".voice-pulse").style.display = "none";
+    },
+    close: closeOverlay
+  };
+}
+
+/* ============================================================
  * AI 佔位區塊（之後接 Claude API）
  * ============================================================ */
 function bindAiPlaceholders() {
@@ -1176,6 +1340,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindAddFavBtns();
   bindMobileRowTap();
   bindSearch();
+  setupVoiceSearch();   // 🎤 語音搜尋（每頁 search-box 自動注入麥克風按鈕）
   bindAiPlaceholders();
   setupAiAlert();
   // 開啟即時股價模擬（每 6 秒微幅跳動，避免長時間高 CPU 佔用）

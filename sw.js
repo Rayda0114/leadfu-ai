@@ -5,7 +5,7 @@
  *   3. 外部資源（Google News 連結等）→ pass through
  */
 
-const VERSION = "v1.3.0";
+const VERSION = "v1.4.0";
 const STATIC_CACHE  = "leadfu-static-"  + VERSION;
 const DATA_CACHE    = "leadfu-data-"    + VERSION;
 
