@@ -175,6 +175,20 @@ img { max-width: 100%; }
   padding-left: 16px;
   font-size: 13px;
 }
+.ticker-track .ticker-inner {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker-scroll 80s linear infinite;
+  will-change: transform;
+}
+.ticker-track:hover .ticker-inner { animation-play-state: paused; }
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track .ticker-inner { animation: none; }
+}
 .ticker-track .tk-item { display: inline-block; margin-right: 32px; }
 .ticker-track .tk-code { font-weight: 600; margin-right: 6px; }
 .ticker-track .tk-price { margin-right: 4px; }

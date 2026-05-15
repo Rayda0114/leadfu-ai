@@ -331,9 +331,16 @@ function renderDate() {
 function renderTicker() {
   const track = document.getElementById("tickerTrack");
   if (!track) return;
-  const items = STOCK_DATA.stocks.map(s => {
+  // 效能優化：原本渲染全部 887 檔 × 2 份 = 1774 個 DOM 節點，
+  // 加上 JS RAF 每幀讀 scrollWidth (強制 reflow)，會把 CPU 拉到 100%。
+  // 改為只顯示成交量前 30 名 + CSS animation（GPU 合成、不觸發 reflow）
+  const topStocks = STOCK_DATA.stocks
+    .filter(s => s.price > 0)
+    .sort((a, b) => (b.volume || 0) - (a.volume || 0))
+    .slice(0, 30);
+  const items = topStocks.map(s => {
     const cls = changeClass(s.change);
-    return `<span class="tk-item">
+    return `<span class="tk-item" data-code="${s.code}">
       <a href="${pageHref('stock-detail.html?code=' + s.code)}" style="color:inherit;text-decoration:none;">
         <span class="tk-code">${s.code} ${s.name}</span>
         <span class="tk-price">${fmtPrice(s.price)}</span>
@@ -341,20 +348,8 @@ function renderTicker() {
       </a>
     </span>`;
   }).join("");
-  track.innerHTML = items + items;
-  startTickerMarquee(track);
-}
-function startTickerMarquee(track) {
-  let pos = 0;
-  const speed = 0.6;
-  function tick() {
-    pos -= speed;
-    const halfWidth = track.scrollWidth / 2;
-    if (-pos >= halfWidth) pos = 0;
-    track.style.transform = `translateX(${pos}px)`;
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
+  // 雙份內容塞進 .ticker-inner，由 CSS @keyframes ticker-scroll 做 translateX(-50%) 無縫循環
+  track.innerHTML = `<div class="ticker-inner">${items}${items}</div>`;
 }
 
 /* ============================================================
@@ -1019,16 +1014,15 @@ function startLivePriceSimulation(intervalMs = 3000) {
         setTimeout(() => { tr.style.background = ""; }, 600);
       });
 
-      // 更新跑馬燈裡的價格
-      document.querySelectorAll(`#tickerTrack .tk-item`).forEach(item => {
-        const codeEl = item.querySelector(".tk-code");
-        if (codeEl && codeEl.textContent.startsWith(s.code)) {
-          item.querySelector(".tk-price").textContent = fmtPrice(s.price);
-          const chgSpan = item.querySelectorAll("span")[2] || item.querySelector(".up,.down,.flat");
-          if (chgSpan) {
-            chgSpan.textContent = `${arrow(s.change)} ${fmtChange(s.change)}`;
-            chgSpan.className = changeClass(s.change);
-          }
+      // 效能優化：用 data-code 屬性直接定位（不再掃描全部 tk-item）
+      // 跑馬燈節點是雙份（前 30 名 × 2），用 querySelectorAll 一次取到
+      document.querySelectorAll(`#tickerTrack .tk-item[data-code="${s.code}"]`).forEach(item => {
+        const priceEl = item.querySelector(".tk-price");
+        if (priceEl) priceEl.textContent = fmtPrice(s.price);
+        const chgSpan = item.querySelectorAll("a > span")[2];
+        if (chgSpan) {
+          chgSpan.textContent = `${arrow(s.change)} ${fmtChange(s.change)}`;
+          chgSpan.className = changeClass(s.change);
         }
       });
     });
@@ -1184,6 +1178,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindSearch();
   bindAiPlaceholders();
   setupAiAlert();
-  // 開啟即時股價模擬（每 3 秒微幅跳動）
-  startLivePriceSimulation(3000);
+  // 開啟即時股價模擬（每 6 秒微幅跳動，避免長時間高 CPU 佔用）
+  startLivePriceSimulation(6000);
 });
