@@ -55,7 +55,7 @@
       <span class="logo-sub">LeadFu · 領先市場兩步</span>
     </a>
     <div class="search-box">
-      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱 (例：6488 環球晶)">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱 (例：2330 台積電、6488 環球晶)">
       <button id="searchBtn">查詢</button>
     </div>
     <div class="quick-links">
@@ -98,22 +98,11 @@
         <a href="pages/register.html" class="hero-btn ghost">免費註冊 →</a>
       </div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-card">
-        <div class="hc-row"><span class="hc-name">6488 環球晶</span><span class="hc-price">462.50</span></div>
-        <div class="hc-row"><span class="hc-pct">▲ +1.87%</span><span style="font-size:11px;opacity:0.7;">興櫃</span></div>
-        <div class="hc-ai">AI 摘要：成交量居半導體類股前段</div>
-      </div>
-      <div class="hero-card">
-        <div class="hc-row"><span class="hc-name">6515 穎崴</span><span class="hc-price">1,245</span></div>
-        <div class="hc-row"><span class="hc-pct">▲ +2.89%</span><span style="font-size:11px;opacity:0.7;">興櫃</span></div>
-        <div class="hc-ai">AI 摘要：今日成交量較前一日放大</div>
-      </div>
-      <div class="hero-card">
-        <div class="hc-row"><span class="hc-name">6770 力積電</span><span class="hc-price">28.50</span></div>
-        <div class="hc-row"><span class="hc-pct">▲ +1.79%</span><span style="font-size:11px;opacity:0.7;">未上市</span></div>
-        <div class="hc-ai">AI 摘要：晶圓代工類股・公開資料整理</div>
-      </div>
+    <div class="hero-visual" id="heroCards">
+      <!-- 由 main.js 動態填入即時資料前 3 名（上市熱門股優先） -->
+      <div class="hero-card hero-card-skel"><div class="hc-row"><span class="hc-name">載入中...</span></div></div>
+      <div class="hero-card hero-card-skel"><div class="hc-row"><span class="hc-name">載入中...</span></div></div>
+      <div class="hero-card hero-card-skel"><div class="hc-row"><span class="hc-name">載入中...</span></div></div>
     </div>
   </div>
 </section>

@@ -294,6 +294,8 @@ img { max-width: 100%; }
 .status-興櫃 { background: #fde7eb; color: #EF4444; }
 .status-未上市 { background: #e6efff; color: #163A2E; }
 .status-準上市 { background: #fff4d6; color: #b07b00; }
+.status-上市   { background: #e5f3ec; color: #1B4332; }   /* 墨綠：穩重已上市 */
+.status-上櫃   { background: #eef0f3; color: #555; }      /* 灰：成熟次市場 */
 .add-btn {
   background: none;
   border: 1px solid #d0d5dc;

@@ -121,7 +121,8 @@ def transform(raw_list):
             "change": change,
             "volume": volume_lots,
             "category": guess_industry(code),
-            "status": "興櫃"
+            "status": "興櫃",
+            "market": "emerging"
         })
 
     return stocks, skipped
@@ -178,8 +179,8 @@ def main():
         json.dump(raw, f, ensure_ascii=False, indent=2)
     print(f"📦 原始備份: {raw_backup.relative_to(ROOT)}")
 
-    # 主要產出
-    out = DATA_DIR / "stocks_live.json"
+    # 中間產出（之後由 merge_stocks.py 合併成 stocks_live.json）
+    out = DATA_DIR / "_emerging.json"
     with open(out, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
     print(f"✅ 已輸出: {out.relative_to(ROOT)}")

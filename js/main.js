@@ -459,6 +459,36 @@ function renderTopics() {
 }
 
 /* ============================================================
+ * 首頁 Hero 三張卡片（動態載入熱門股，不再硬編碼）
+ * ============================================================ */
+function renderHeroCards() {
+  const host = document.getElementById("heroCards");
+  if (!host) return;
+  // 取上市熱門股 top 3（成交量），缺資料時自動退而求其次
+  const all = STOCK_DATA.stocks || [];
+  const listed = all.filter(s => s.market === "listed" && s.price > 0)
+                    .sort((a, b) => (b.volume || 0) - (a.volume || 0));
+  const pool = listed.length >= 3 ? listed : all.filter(s => s.price > 0)
+                                                .sort((a, b) => (b.volume || 0) - (a.volume || 0));
+  const top3 = pool.slice(0, 3);
+  if (top3.length === 0) return;
+
+  const cards = top3.map(s => {
+    const pct = pctChange(s.price, s.change);
+    const cls = changeClass(s.change);
+    const marketLabel = s.status || (s.market === "listed" ? "上市"
+                                   : s.market === "otc"    ? "上櫃"
+                                   : s.market === "emerging" ? "興櫃" : "");
+    return `<a class="hero-card" href="${pageHref('stock-detail.html?code=' + s.code)}" style="text-decoration:none;color:inherit;">
+      <div class="hc-row"><span class="hc-name">${s.code} ${s.name}</span><span class="hc-price">${fmtPrice(s.price)}</span></div>
+      <div class="hc-row"><span class="hc-pct ${cls}">${arrow(s.change)} ${fmtPct(pct)}</span><span style="font-size:11px;opacity:0.7;">${marketLabel}</span></div>
+      <div class="hc-ai">AI 摘要：成交量 ${s.volume.toLocaleString()} 張・${s.category}</div>
+    </a>`;
+  }).join("");
+  host.innerHTML = cards;
+}
+
+/* ============================================================
  * 搜尋 → 跳轉個股詳情
  * ============================================================ */
 // 中文數字 → 阿拉伯數字（給語音搜尋用：「六四八八」→ 6488）
@@ -1377,6 +1407,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   _resolveReady();   // 通知所有 inline script 資料就緒，可以開始 render
 
   renderTicker();
+  renderHeroCards();   // 首頁三張卡片（其他頁沒有 #heroCards 會自動跳過）
   renderStockTable();
   renderNews();
   renderTopics();
