@@ -46,8 +46,8 @@
 
 <div class="page-head">
   <div class="container">
-    <h1 id="pageTitle">未上市 / 興櫃股價總覽</h1>
-    <div class="breadcrumb">首頁 ▸ 未上市股價</div>
+    <h1 id="pageTitle">全市場股價總覽（上市・上櫃・興櫃）</h1>
+    <div class="breadcrumb">首頁 ▸ 股價總覽</div>
   </div>
 </div>
 
@@ -55,12 +55,12 @@
 
   <div class="panel">
     <div class="filter-bar">
-      <label>狀態：
+      <label>市場：
         <select id="filterStatus">
-          <option value="">全部</option>
+          <option value="">全部（含上市/上櫃/興櫃）</option>
+          <option value="上市">上市</option>
+          <option value="上櫃">上櫃</option>
           <option value="興櫃">興櫃</option>
-          <option value="未上市">未上市</option>
-          <option value="準上市">準上市</option>
         </select>
       </label>
       <label>類別：
@@ -143,7 +143,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       return a.code.localeCompare(b.code);
     });
 
-    document.getElementById("resultCount").textContent = list.length;
+    const totalCount = list.length;
+    const DISPLAY_LIMIT = 150;   // 防止 2300 列爆掉
+    const truncated = totalCount > DISPLAY_LIMIT;
+    if (truncated) list = list.slice(0, DISPLAY_LIMIT);
+    document.getElementById("resultCount").textContent = truncated
+      ? `${totalCount}（僅顯示前 ${DISPLAY_LIMIT}，請用市場/類別/關鍵字篩選縮小）`
+      : totalCount;
 
     const tbody = document.getElementById("stockTbody");
     if (list.length === 0) {

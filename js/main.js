@@ -356,13 +356,19 @@ function renderTicker() {
  * 首頁股票表格
  * ============================================================ */
 let currentFilter = "all";
+const HOME_TABLE_TOP_N = 30;   // 首頁熱門股表格：每分類顯示前 N 名（按成交量）
 
 function renderStockTable() {
   const tbody = document.getElementById("stockTbody");
   if (!tbody) return;
-  const list = currentFilter === "all"
+  let pool = currentFilter === "all"
     ? STOCK_DATA.stocks
     : STOCK_DATA.stocks.filter(s => s.status === currentFilter);
+  // 按成交量取前 N 名（避免 dump 2300 筆）
+  const list = pool.filter(s => s.price > 0)
+                   .slice()
+                   .sort((a, b) => (b.volume || 0) - (a.volume || 0))
+                   .slice(0, HOME_TABLE_TOP_N);
 
   if (list.length === 0) {
     tbody.innerHTML = `<tr><td colspan="9" class="loading">沒有符合條件的個股</td></tr>`;
