@@ -520,6 +520,103 @@ function normalizeSearchQuery(text) {
   return text;
 }
 
+/* ============================================================
+ * 自然語言意圖解析（第 1 層 AI 問答：無 LLM、純規則匹配）
+ * 之後第 2 層接 Claude API 可在這函式 fallback 時呼叫
+ * 回傳：{ kind, ...payload }  kind ∈ nav|stock|list|search|null
+ * ============================================================ */
+function parseAiQuery(text) {
+  if (!text) return null;
+  const q = String(text).trim();
+  if (!q) return null;
+
+  // ---- 1. 導覽意圖（跳頁）----
+  if (/詐|騙|被坑|被害|警示/.test(q))
+    return { kind: "nav", url: pageHref("fraud-alert.html"), label: "投資人防詐須知" };
+  if (/註冊|加入會員|新會員/.test(q))
+    return { kind: "nav", url: pageHref("register.html"), label: "會員註冊" };
+  if (/登入|login/i.test(q))
+    return { kind: "nav", url: pageHref("login.html"), label: "會員登入" };
+  if (/(自選|追蹤|關注).*(股|清單)|我的(自選|追蹤|關注)/.test(q))
+    return { kind: "nav", url: pageHref("watchlist.html"), label: "我的自選股" };
+  if (/稅|報稅|證所稅/.test(q))
+    return { kind: "nav", url: pageHref("tax.html"), label: "稅務說明" };
+  if (/教學|怎麼下單|怎麼買|新手|入門|看不懂|教我/.test(q))
+    return { kind: "nav", url: pageHref("tutorial.html"), label: "新手教學" };
+  if (/IPO|新股|抽籤/i.test(q))
+    return { kind: "nav", url: pageHref("ipo.html"), label: "新股抽籤" };
+  if (/公告|重大訊息/.test(q))
+    return { kind: "nav", url: pageHref("announcements.html"), label: "公告中心" };
+  if (/新聞|快訊/.test(q) && !/公司新聞/.test(q))
+    return { kind: "nav", url: pageHref("news.html"), label: "財經新聞" };
+
+  // ---- 2. 個股直接命中（4 碼代號 或 完整公司名包含）----
+  const codeMatch = q.match(/\b\d{4}\b/);
+  if (codeMatch) {
+    const code = codeMatch[0];
+    const stock = (STOCK_DATA.stocks || []).find(s => s.code === code);
+    if (stock) return { kind: "stock", code: stock.code, name: stock.name };
+  }
+  // 公司名子串匹配（從長到短，避免短名先match）
+  const allStocks = (STOCK_DATA.stocks || []).filter(s => s.name && s.name.length >= 2);
+  const sortedByLen = [...allStocks].sort((a, b) => b.name.length - a.name.length);
+  const nameHit = sortedByLen.find(s => q.includes(s.name));
+  if (nameHit) return { kind: "stock", code: nameHit.code, name: nameHit.name };
+
+  // ---- 3. 列表查詢（市場 / 產業 / 排序 三維度組合）----
+  // 解析市場
+  let market = null;
+  if (/上市/.test(q))      market = "listed";
+  else if (/上櫃/.test(q)) market = "otc";
+  else if (/興櫃/.test(q)) market = "emerging";
+
+  // 解析產業（取最先出現的關鍵字）
+  const industries = ["半導體","電子零組件","電腦周邊","通訊網路","電子通路","資訊服務",
+                      "電子","生技","金融","金融控股","證券","保險","電機機械","鋼鐵",
+                      "光電","航運","食品","紡織","塑膠","化學","橡膠","建材營造","建材",
+                      "汽車","觀光","百貨","水泥","造紙","玻璃","電器電纜","PCB","醫療",
+                      "AI"];
+  const matchedIndustry = industries.find(i => q.includes(i));
+
+  // 解析排序
+  let sortBy = null;
+  if (/漲(最多|幅|前|榜)|漲幅|多頭|表現好/.test(q))           sortBy = "gainers";
+  else if (/跌(最多|幅|前|榜)|跌幅|空頭|表現差/.test(q))      sortBy = "losers";
+  else if (/成交(量|活躍|熱門)|熱門|熱股|量(最多|大)|爆量/.test(q)) sortBy = "volume";
+  else if (/股價(最高|前)|最貴|高價股/.test(q))               sortBy = "price_desc";
+  else if (/(便宜|低價|銅板)股/.test(q))                       sortBy = "price_asc";
+
+  if (sortBy || matchedIndustry || market) {
+    return {
+      kind: "list",
+      market,
+      industry: matchedIndustry || null,
+      sortBy: sortBy || "volume",
+      limit: 15
+    };
+  }
+
+  // ---- 4. fallback：一般 fuzzy 搜尋 ----
+  return { kind: "search", q };
+}
+
+/* 把意圖物件變成可分享的 URL（給 ai.html 結果頁用） */
+function aiQueryUrl(query) {
+  return pageHref("ai.html?q=" + encodeURIComponent(query));
+}
+
+/* 判斷查詢「看起來」是不是自然語言（vs 純股票代號 / 公司名）*/
+function isNaturalLanguageQuery(text) {
+  if (!text) return false;
+  const q = String(text).trim();
+  // 純 4 碼數字 = 代號，不是 NL
+  if (/^\d{4}$/.test(q)) return false;
+  // 太短 = 不像 NL
+  if (q.length < 3) return false;
+  // 包含問句字眼 / 動作字眼 / 多市場詞彙
+  return /找|哪|怎麼|誰|多少|幾|前 |最多|最少|最大|最小|漲|跌|熱門|活躍|教|新手|詐|騙|我的|上市|上櫃|興櫃|類股|股票/.test(q);
+}
+
 function bindSearch() {
   const input = document.getElementById("stockSearch");
   const btn = document.getElementById("searchBtn");
@@ -531,6 +628,12 @@ function bindSearch() {
     // 智慧正規化（手打也吃，例如打成「6488 」尾巴空白也清掉）
     const nq = normalizeSearchQuery(q);
     if (nq && nq !== q) input.value = nq, q = nq;
+
+    // ★ 自然語言查詢 → 走 AI 問答頁
+    if (isNaturalLanguageQuery(q)) {
+      location.href = aiQueryUrl(q);
+      return;
+    }
 
     // 1. 完全符合代號 → 跳個股
     const exact = STOCK_DATA.stocks.find(s => s.code === q);
@@ -1310,6 +1413,8 @@ window.LeadFu = {
   findStock, pageHref, homeHref,
   getWatchlist, addToWatchlist, removeFromWatchlist, isInWatchlist,
   mockAiResponse, startLivePriceSimulation, showToast,
+  // 第 1 層 AI 問答工具（ai.html 用）
+  parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
   lineUrl: LINE_URL, lineId: LINE_ID,
   ready: _readyPromise
 };

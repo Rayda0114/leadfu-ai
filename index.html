@@ -116,6 +116,23 @@
 
   <section class="col-main">
 
+    <!-- ✨ AI 問答 Hero Panel — 用自然語言問問題，AI 一次找好資料 -->
+    <div class="ai-hero-panel">
+      <h2><span class="ai-sparkle">✨</span> 跟領富 AI 對話</h2>
+      <p class="ai-sub">用自然語言或語音問問題，AI 跨上市/上櫃/興櫃 2,310 檔幫你一次找好</p>
+      <form id="aiHeroForm" autocomplete="off">
+        <input type="text" id="aiHeroInput" placeholder="例如：今天漲最多的上市股、半導體類熱門、穎台基本面" />
+        <button type="submit">問 AI →</button>
+      </form>
+      <div class="ai-examples">
+        <a class="ai-chip" href="pages/ai.html?q=今天漲最多的上市股">📈 上市漲幅榜</a>
+        <a class="ai-chip" href="pages/ai.html?q=半導體上市熱門股">🔬 半導體熱門</a>
+        <a class="ai-chip" href="pages/ai.html?q=興櫃成交活躍">⚡ 興櫃熱門</a>
+        <a class="ai-chip" href="pages/ai.html?q=生技上櫃股">💊 生技上櫃</a>
+        <a class="ai-chip" href="pages/ai.html?q=怎麼避免投資詐騙">⚠ 防詐須知</a>
+      </div>
+    </div>
+
     <div class="panel">
       <div class="panel-head">
         <h2>熱門未上市股票</h2>
@@ -335,5 +352,18 @@
 </script>
 
 <script src="js/main.js"></script>
+<script>
+// 首頁 AI 問答 hero form
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("aiHeroForm");
+  const input = document.getElementById("aiHeroInput");
+  if (!form || !input) return;
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = input.value.trim();
+    if (v) location.href = "pages/ai.html?q=" + encodeURIComponent(v);
+  });
+});
+</script>
 </body>
 </html>

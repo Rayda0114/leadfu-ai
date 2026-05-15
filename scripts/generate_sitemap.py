@@ -25,6 +25,7 @@ BASE_URL = "https://leadfuai.com"
 
 STATIC_PAGES = [
     ("/",                              "daily",   1.0),
+    ("/pages/ai.html",                 "daily",   0.95),
     ("/pages/stocks.html",             "daily",   0.9),
     ("/pages/screener.html",           "daily",   0.9),
     ("/pages/news.html",               "daily",   0.9),

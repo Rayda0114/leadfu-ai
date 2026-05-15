@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">AI 問答 - 領富 AI</title>
+<meta name="description" content="用自然語言問領富 AI：今天漲最多的上市股、半導體類熱門、穎台基本面，AI 一次幫你找好">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>未上市股票財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="contact.html">客服 0800-035-178</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱 / 自然語言問題">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">未上市股價</a></li>
+      <li><a href="screener.html">進階選股</a></li>
+      <li><a href="industries.html">產業分類</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="discussion.html">討論區</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>✨ AI 問答：「<span id="qText">--</span>」</h1>
+    <div class="breadcrumb">首頁 ▸ AI 問答</div>
+  </div>
+</div>
+
+<main class="container" style="padding:20px 12px 40px;">
+
+  <div class="panel" style="margin-bottom:16px;">
+    <div class="ai-ask-box">
+      <form id="aiAskForm" autocomplete="off">
+        <input type="text" id="aiAskInput" placeholder="再問一個問題（例：上櫃半導體熱門股）" />
+        <button type="submit">問 AI →</button>
+      </form>
+      <div class="ai-examples">
+        <a class="ai-chip" href="ai.html?q=今天漲最多的上市股">📈 上市漲幅榜</a>
+        <a class="ai-chip" href="ai.html?q=半導體上市熱門股">🔬 半導體熱門</a>
+        <a class="ai-chip" href="ai.html?q=興櫃成交活躍">⚡ 興櫃熱門</a>
+        <a class="ai-chip" href="ai.html?q=生技上櫃股">💊 生技上櫃</a>
+        <a class="ai-chip" href="ai.html?q=怎麼避免投資詐騙">⚠ 防詐須知</a>
+        <a class="ai-chip" href="ai.html?q=新手怎麼下單">📖 新手教學</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div id="aiAnswer"></div>
+  </div>
+
+  <p style="text-align:center;color:#999;font-size:12px;margin-top:18px;">
+    ※ 本內容為 AI 整理之公開資料，不構成投資建議或推介，亦非證券投資顧問服務。投資決策與風險請自行評估。
+  </p>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const q = new URLSearchParams(location.search).get("q") || "";
+  const qText = document.getElementById("qText");
+  qText.textContent = q || "（請輸入問題）";
+  document.title = `AI 問答：${q || "助理"} - 領富 AI`;
+
+  // 「再問一個」表單
+  document.getElementById("aiAskForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = document.getElementById("aiAskInput").value.trim();
+    if (v) location.href = "ai.html?q=" + encodeURIComponent(v);
+  });
+
+  if (!q) {
+    document.getElementById("aiAnswer").innerHTML = `
+      <div style="padding:40px 20px;text-align:center;color:#888;">
+        <div style="font-size:48px;margin-bottom:10px;">💬</div>
+        <p style="font-size:15px;">請從上方輸入問題，或點下面的範例試試</p>
+      </div>`;
+    return;
+  }
+
+  // 解析意圖 → 渲染
+  const intent = L.parseAiQuery(q);
+  renderAnswer(intent, q);
+
+  function renderAnswer(intent, raw) {
+    const host = document.getElementById("aiAnswer");
+    if (!intent) {
+      host.innerHTML = noResult(raw);
+      return;
+    }
+
+    if (intent.kind === "nav") {
+      host.innerHTML = `
+        <div style="padding:28px 24px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:10px;">📌</div>
+          <h2 style="margin-bottom:10px;color:#1B4332;">幫您找到了：${intent.label}</h2>
+          <p style="color:#666;margin-bottom:18px;">頁面已準備好，點下方按鈕進入</p>
+          <a href="${intent.url}" class="btn-primary" style="display:inline-block;width:auto;padding:12px 32px;text-decoration:none;">前往 ${intent.label} →</a>
+        </div>`;
+      // 2 秒後自動跳轉（給使用者看一下標題）
+      setTimeout(() => { location.href = intent.url; }, 2200);
+      return;
+    }
+
+    if (intent.kind === "stock") {
+      const stock = L.findStock(intent.code);
+      if (!stock) { host.innerHTML = noResult(raw); return; }
+      const cls = L.changeClass(stock.change);
+      const pct = L.pctChange(stock.price, stock.change);
+      const marketLabel = stock.market === "listed" ? "上市"
+                        : stock.market === "otc"    ? "上櫃"
+                        : stock.market === "emerging" ? "興櫃" : stock.status;
+      host.innerHTML = `
+        <div style="padding:20px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+            <span style="font-size:13px;color:#888;">🎯 為您找到的個股</span>
+            <span class="status-pill status-${marketLabel}">${marketLabel}</span>
+          </div>
+          <h2 style="font-size:24px;color:#1B4332;margin-bottom:8px;">${stock.code} ${stock.name}</h2>
+          <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:18px;">
+            <span class="${cls}" style="font-size:32px;font-weight:700;">${L.fmtPrice(stock.price)}</span>
+            <span class="${cls}" style="font-size:18px;">${L.arrow(stock.change)} ${L.fmtChange(stock.change)} (${L.fmtPct(pct)})</span>
+            <span style="color:#888;font-size:13px;">成交量 ${stock.volume.toLocaleString()} 張</span>
+          </div>
+          <a href="stock-detail.html?code=${stock.code}" class="btn-primary" style="display:inline-block;width:auto;padding:10px 26px;text-decoration:none;">看完整個股資料 →</a>
+        </div>`;
+      return;
+    }
+
+    if (intent.kind === "list") {
+      renderList(intent, raw);
+      return;
+    }
+
+    if (intent.kind === "search") {
+      host.innerHTML = `
+        <div style="padding:24px;">
+          <p style="color:#666;margin-bottom:14px;">AI 沒完全理解您的問題，但我用一般搜尋幫您找：</p>
+          <a href="search.html?q=${encodeURIComponent(intent.q)}" class="btn-primary" style="display:inline-block;width:auto;padding:10px 26px;text-decoration:none;">前往搜尋結果 →</a>
+        </div>`;
+      return;
+    }
+
+    host.innerHTML = noResult(raw);
+  }
+
+  function renderList(intent, raw) {
+    const all = L.data.stocks || [];
+    let pool = all.slice();
+    if (intent.market)   pool = pool.filter(s => s.market === intent.market);
+    if (intent.industry) pool = pool.filter(s => s.category && s.category.includes(intent.industry));
+    pool = pool.filter(s => s.price > 0);
+
+    // 排序
+    if (intent.sortBy === "gainers") {
+      pool.sort((a, b) => L.pctChange(b.price, b.change) - L.pctChange(a.price, a.change));
+    } else if (intent.sortBy === "losers") {
+      pool.sort((a, b) => L.pctChange(a.price, a.change) - L.pctChange(b.price, b.change));
+    } else if (intent.sortBy === "price_desc") {
+      pool.sort((a, b) => b.price - a.price);
+    } else if (intent.sortBy === "price_asc") {
+      pool.sort((a, b) => a.price - b.price);
+    } else {
+      pool.sort((a, b) => (b.volume || 0) - (a.volume || 0));   // 預設 volume
+    }
+    const top = pool.slice(0, intent.limit || 15);
+
+    if (top.length === 0) {
+      document.getElementById("aiAnswer").innerHTML = noResult(raw);
+      return;
+    }
+
+    const marketName  = intent.market === "listed" ? "上市"
+                      : intent.market === "otc"    ? "上櫃"
+                      : intent.market === "emerging" ? "興櫃" : "全市場";
+    const sortName    = intent.sortBy === "gainers" ? "依今日漲幅排序"
+                      : intent.sortBy === "losers"  ? "依今日跌幅排序"
+                      : intent.sortBy === "price_desc" ? "依股價由高至低"
+                      : intent.sortBy === "price_asc"  ? "依股價由低至高"
+                      :                                  "依成交量排序";
+    const industryLabel = intent.industry ? `「${intent.industry}」類股` : "";
+
+    const rows = top.map((s, i) => {
+      const cls = L.changeClass(s.change);
+      const pct = L.pctChange(s.price, s.change);
+      const mLabel = s.market === "listed" ? "上市"
+                   : s.market === "otc"    ? "上櫃"
+                   : s.market === "emerging" ? "興櫃" : s.status;
+      return `<a class="ai-list-row" href="stock-detail.html?code=${s.code}">
+        <span class="ai-list-rank">${(i+1).toString().padStart(2,'0')}</span>
+        <span class="ai-list-code"><strong>${s.code}</strong> ${s.name}</span>
+        <span class="status-pill status-${mLabel}" style="font-size:10px;">${mLabel}</span>
+        <span class="ai-list-cat">${s.category}</span>
+        <span class="ai-list-price ${cls}">${L.fmtPrice(s.price)}</span>
+        <span class="ai-list-pct ${cls}">${L.arrow(s.change)} ${L.fmtPct(pct)}</span>
+        <span class="ai-list-vol">量 ${s.volume.toLocaleString()}</span>
+      </a>`;
+    }).join("");
+
+    document.getElementById("aiAnswer").innerHTML = `
+      <div style="padding:18px 20px 8px;border-bottom:1px solid #eef0f3;">
+        <div style="font-size:13px;color:#888;margin-bottom:4px;">📋 AI 整理 ・ ${marketName}${industryLabel} ${sortName} ・ 列出前 ${top.length} 名</div>
+        <h2 style="color:#1B4332;font-size:18px;">查詢：「${raw}」</h2>
+      </div>
+      <div class="ai-list-wrap">${rows}</div>
+      <p style="padding:14px 20px;color:#888;font-size:12px;background:#fafbfc;border-top:1px solid #eef0f3;">
+        以上為公開數據整理，未對個股做任何評價或推介。點任一檔可查看完整資料。
+      </p>`;
+  }
+
+  function noResult(raw) {
+    return `
+      <div style="padding:40px 20px;text-align:center;color:#888;">
+        <div style="font-size:48px;margin-bottom:10px;">🤔</div>
+        <p style="font-size:15px;margin-bottom:10px;">AI 暫時看不懂「${raw}」這個問題</p>
+        <p style="font-size:13px;margin-bottom:18px;">試試這些問法：</p>
+        <p style="color:#1B4332;line-height:2;">
+          「今天漲最多的上市股」<br>
+          「半導體類熱門股」<br>
+          「2330」「台積電」（直接輸入代號或公司名）<br>
+          「怎麼避免被騙」
+        </p>
+        <a href="search.html?q=${encodeURIComponent(raw)}" style="display:inline-block;margin-top:14px;color:#888;font-size:13px;">或用一般搜尋找「${raw}」 →</a>
+      </div>`;
+  }
+});
+</script>
+</body>
+</html>

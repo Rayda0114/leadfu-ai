@@ -1987,3 +1987,194 @@ img { max-width: 100%; }
   .voice-pulse::before, .voice-pulse::after { animation: none; }
   .voice-mic-pulse-hint { animation: none; }
 }
+
+/* ============================================================
+ * ✨ AI 問答 — 第 1 層（純規則匹配，無 LLM）
+ * 首頁 hero 入口 + ai.html 結果頁 共用樣式
+ * ============================================================ */
+
+/* 首頁 AI Hero 入口區塊 */
+.ai-hero-panel {
+  background: linear-gradient(135deg, #0A1F18 0%, #1B4332 60%, #2D6A4F 100%);
+  border-radius: 14px;
+  padding: 28px 24px;
+  margin: 18px 0 22px;
+  color: #fff;
+  box-shadow: 0 8px 28px rgba(27, 67, 50, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+.ai-hero-panel::before {
+  content: "";
+  position: absolute;
+  top: -40px; right: -30px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(197, 165, 114, 0.25), transparent 70%);
+  pointer-events: none;
+}
+.ai-hero-panel h2 {
+  font-size: 22px;
+  margin-bottom: 6px;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+.ai-hero-panel h2 .ai-sparkle {
+  color: #C5A572;
+  font-size: 26px;
+  display: inline-block;
+  animation: ai-sparkle-pulse 2.5s ease-in-out infinite;
+}
+@keyframes ai-sparkle-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.18); opacity: 0.85; }
+}
+.ai-hero-panel p.ai-sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.ai-hero-panel form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+.ai-hero-panel form input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  font-family: inherit;
+}
+.ai-hero-panel form button {
+  background: #C5A572;
+  color: #1B4332;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.15s, transform 0.1s;
+}
+.ai-hero-panel form button:hover { background: #d4b787; }
+.ai-hero-panel form button:active { transform: scale(0.96); }
+.ai-examples,
+.ai-hero-panel .ai-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+.ai-chip {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(197, 165, 114, 0.4);
+  color: #fff;
+  padding: 7px 14px;
+  border-radius: 18px;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.ai-chip:hover {
+  background: rgba(197, 165, 114, 0.25);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ai.html 頁面內的「再問」表單（白底） */
+.ai-ask-box {
+  padding: 16px 20px;
+}
+.ai-ask-box form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ai-ask-box form input {
+  flex: 1;
+  padding: 11px 14px;
+  border: 2px solid #1B4332;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+}
+.ai-ask-box form button {
+  background: #1B4332;
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.ai-ask-box form button:hover { background: #0D2818; }
+.ai-ask-box .ai-examples .ai-chip {
+  background: #f0f3f8;
+  border: 1px solid #e0e6ed;
+  color: #555;
+}
+.ai-ask-box .ai-examples .ai-chip:hover {
+  background: #1B4332;
+  color: #fff;
+  border-color: #1B4332;
+}
+
+/* AI 結果列表（ai.html 排行結果用） */
+.ai-list-wrap { padding: 4px 0; }
+.ai-list-row {
+  display: grid;
+  grid-template-columns: 36px 1.6fr 50px 1fr 90px 90px 110px;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f3f8;
+  text-decoration: none;
+  color: inherit;
+  font-size: 14px;
+  transition: background 0.12s;
+}
+.ai-list-row:hover { background: #fafbfc; text-decoration: none; }
+.ai-list-rank { color: #C5A572; font-weight: 700; font-size: 13px; }
+.ai-list-code strong { color: #1B4332; margin-right: 4px; }
+.ai-list-cat { color: #888; font-size: 12px; }
+.ai-list-price { font-weight: 700; text-align: right; }
+.ai-list-pct { font-weight: 600; text-align: right; }
+.ai-list-vol { color: #888; font-size: 12px; text-align: right; }
+
+@media (max-width: 768px) {
+  .ai-hero-panel { padding: 22px 18px; }
+  .ai-hero-panel h2 { font-size: 19px; }
+  .ai-hero-panel form { flex-direction: column; }
+  .ai-hero-panel form button { padding: 12px; }
+  .ai-list-row {
+    grid-template-columns: 24px 1fr auto auto;
+    grid-template-areas:
+      "rank code  market  price"
+      ".    cat   vol     pct";
+    font-size: 13px;
+    padding: 12px 14px;
+  }
+  .ai-list-rank   { grid-area: rank; }
+  .ai-list-code   { grid-area: code; }
+  .ai-list-row .status-pill { grid-area: market; }
+  .ai-list-price  { grid-area: price; }
+  .ai-list-cat    { grid-area: cat; }
+  .ai-list-pct    { grid-area: pct; }
+  .ai-list-vol    { grid-area: vol; }
+}
