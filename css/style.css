@@ -2480,11 +2480,11 @@ img { max-width: 100%; }
 .chat-content {
   background: #fff;
   border: 1px solid #e8edf0;
-  padding: 12px 16px;
+  padding: 13px 18px;
   border-radius: 14px;
-  font-size: 15px;
-  line-height: 1.7;
-  color: #222;
+  font-size: 16.5px;       /* 放大給 45-75 歲讀者 */
+  line-height: 1.8;        /* 行距加大易讀 */
+  color: #1f1f1f;
   word-break: break-word;
 }
 .chat-bubble-user .chat-content {
@@ -2493,10 +2493,63 @@ img { max-width: 100%; }
   border-color: transparent;
 }
 .chat-content p {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
 }
 .chat-content p:last-child {
   margin-bottom: 0;
+}
+.chat-content strong { color: inherit; font-weight: 700; }
+
+/* 個股代號連結（AI 訊息內可點跳個股頁） */
+.chat-stock-link {
+  color: #C5A572;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(197, 165, 114, 0.6);
+  padding-bottom: 1px;
+  transition: background 0.15s, color 0.15s;
+}
+.chat-stock-link:hover {
+  background: rgba(197, 165, 114, 0.18);
+  color: #b07b00;
+  text-decoration: none;
+  border-radius: 3px;
+}
+/* user 泡泡裡如果出現個股代號也對應深色版（罕見） */
+.chat-bubble-user .chat-stock-link {
+  color: #C5A572;
+  border-bottom-color: rgba(197, 165, 114, 0.8);
+}
+.chat-bubble-user .chat-stock-link:hover {
+  background: rgba(197, 165, 114, 0.25);
+  color: #f0d8a8;
+}
+
+/* Streaming 中的「打字 mini」三點，inline 顯示 */
+.chat-typing-mini {
+  display: inline-block;
+  padding: 2px 0;
+}
+.chat-typing-mini .chat-dot {
+  width: 6px;
+  height: 6px;
+  margin: 0 1px;
+}
+.chat-streaming .chat-content::after {
+  /* streaming 中的游標效果 */
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 17px;
+  background: #C5A572;
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: chat-cursor-blink 0.9s ease-in-out infinite;
+  border-radius: 1px;
+}
+@keyframes chat-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
 }
 
 /* 思考中三點 */
@@ -2634,7 +2687,7 @@ img { max-width: 100%; }
   .chat-subtitle { display: none; }
   .chat-bubble { max-width: 92%; }
   .chat-avatar { width: 30px; height: 30px; font-size: 11px; }
-  .chat-content { font-size: 14px; padding: 10px 14px; }
+  .chat-content { font-size: 15.5px; line-height: 1.75; padding: 11px 15px; }
   .chat-suggestions { margin-left: 38px; }
   .chat-chip { font-size: 12px; padding: 7px 12px; }
   .chat-input-bar { padding: 10px 12px 6px; }

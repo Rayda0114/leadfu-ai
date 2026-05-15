@@ -172,18 +172,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (t) t.remove();
   }
 
+  // 預編譯個股代號 → 名稱對照（給 formatText 加連結用）
+  const _stockByCode = {};
+  (L.data.stocks || []).forEach(s => { _stockByCode[s.code] = s; });
+
   function formatText(text) {
     if (!text) return "";
-    // 先 escape HTML 防 XSS
+    // 1. escape HTML 防 XSS
     let esc = String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    // 再處理輕量 markdown（AI 常用粗體、斜體）
-    // **bold** → <strong>
+    // 2. 個股代號可點：把 4 位數字代號（前後是空白/標點/邊界）轉成連結
+    //    例如「2330 台積電」→「<a>2330 台積電</a>」
+    esc = esc.replace(/(^|[\s（(「『\[、，,])(\d{4})(\s+)([一-龥A-Za-z\-\*KY]{1,12})/g,
+      (m, pre, code, sp, name) => {
+        const s = _stockByCode[code];
+        if (!s) return m;
+        return `${pre}<a href="stock-detail.html?code=${code}" class="chat-stock-link">${code}${sp}${name}</a>`;
+      });
+    // 也處理單獨出現的代號（沒接公司名的情況）
+    esc = esc.replace(/(^|[\s（(「『\[、，,])(\d{4})(?=[）)」』\]、，,\s。.!?]|$)/g,
+      (m, pre, code) => {
+        const s = _stockByCode[code];
+        if (!s) return m;
+        return `${pre}<a href="stock-detail.html?code=${code}" class="chat-stock-link">${code}</a>`;
+      });
+    // 3. 輕量 markdown
     esc = esc.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
-    // *italic* → <em>（避免吃到 **）
     esc = esc.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g, "$1<em>$2</em>");
-    // `code` → <code>
     esc = esc.replace(/`([^`\n]+?)`/g, "<code style=\"background:#f0f3f8;padding:1px 5px;border-radius:3px;font-size:0.92em;\">$1</code>");
-    // 段落 + 換行
+    // 4. 段落 + 換行
     return esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
   }
   function escAttr(s) { return String(s).replace(/"/g, "&quot;"); }
@@ -216,43 +232,91 @@ document.addEventListener("DOMContentLoaded", async () => {
     sendBtn.disabled = true;
     sendBtn.textContent = "...";
     chatInput.disabled = true;
-    renderTypingIndicator();
 
     const context = buildContext(text);
+
+    // 預先建立 AI 訊息泡泡（空的，之後 streaming 補內容進去）
+    const aiMsg = { role: "assistant", content: "", ts: Date.now() };
+    const aiBubble = createStreamingBubble();
+    let fullText = "";
+    let gotFirstChunk = false;
 
     try {
       const resp = await fetch("/api/ask", {
         method: "POST",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Accept": "text/event-stream"
+        },
         body: JSON.stringify({
           messages: history.map(m => ({ role: m.role, content: m.content })),
-          context
+          context,
+          stream: true
         })
       });
-      const data = await resp.json();
-      removeTypingIndicator();
 
-      if (!resp.ok || data.error) {
-        // 友善錯誤訊息（worker 已經轉成中文了，這邊直接用）
-        const errText = data.error || "AI 暫時無法回答";
-        const isRateLimit = resp.status === 429 || data.status === 429 || /忙|429|rate/i.test(errText);
+      if (!resp.ok) {
+        // 錯誤情形 → 改用一般 JSON 模式讀錯誤訊息
+        let errInfo;
+        try { errInfo = await resp.json(); } catch { errInfo = { error: "AI 暫時無法回答" }; }
+        const errText = errInfo.error || "AI 暫時無法回答";
+        const isRateLimit = resp.status === 429 || errInfo.status === 429;
         const tail = isRateLimit
-          ? "\n\n💡 提示：免費 AI 額度有速率限制。請等 5-10 秒後，按「送出」再試一次相同問題。"
+          ? "\n\n💡 提示：免費 AI 額度有速率限制。請等 5-10 秒後再試一次。"
           : "\n\n請稍後再試一次。";
-        const errMsg = { role: "assistant", content: errText + tail, ts: Date.now() };
-        history.push(errMsg);
-        renderBubble(errMsg);
-      } else {
-        const aiMsg = { role: "assistant", content: data.answer || "(空回應)", ts: Date.now() };
+        aiMsg.content = errText + tail;
+        aiBubble.update(aiMsg.content);
+        aiBubble.finalize();
         history.push(aiMsg);
-        renderBubble(aiMsg);
+        saveHistory();
+        return;
       }
+
+      // ===== Streaming：解析 SSE chunks =====
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        // 拆成 SSE event（以 \n\n 為界）
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";  // 最後不完整的留著
+
+        for (const raw of lines) {
+          const line = raw.trim();
+          if (!line.startsWith("data:")) continue;
+          const data = line.slice(5).trim();
+          if (data === "[DONE]") continue;
+          try {
+            const json = JSON.parse(data);
+            const delta = json.choices?.[0]?.delta?.content;
+            if (delta) {
+              if (!gotFirstChunk) {
+                aiBubble.removeTyping();
+                gotFirstChunk = true;
+              }
+              fullText += delta;
+              aiBubble.update(fullText);
+              scrollToBottomIfNearBottom();
+            }
+          } catch {}
+        }
+      }
+
+      aiMsg.content = fullText || "(AI 沒有回應)";
+      aiBubble.update(aiMsg.content);
+      aiBubble.finalize();
+      history.push(aiMsg);
       saveHistory();
     } catch (err) {
-      removeTypingIndicator();
-      const errMsg = { role: "assistant", content: "連線 AI 服務失敗，請檢查網路後再試。", ts: Date.now() };
-      history.push(errMsg);
-      renderBubble(errMsg);
+      aiMsg.content = "連線 AI 服務失敗，請檢查網路後再試。\n\n" + (err.message || "");
+      aiBubble.update(aiMsg.content);
+      aiBubble.finalize();
+      history.push(aiMsg);
       saveHistory();
     } finally {
       _pending = false;
@@ -262,6 +326,39 @@ document.addEventListener("DOMContentLoaded", async () => {
       scrollToBottom();
       chatInput.focus();
     }
+  }
+
+  // 建立一個「streaming 中」的 AI 泡泡，回傳控制函式
+  function createStreamingBubble() {
+    const div = document.createElement("div");
+    div.className = "chat-bubble chat-bubble-assistant chat-streaming";
+    div.innerHTML = `
+      <div class="chat-avatar chat-avatar-ai">AI</div>
+      <div class="chat-content">
+        <span class="chat-typing-mini"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span></span>
+      </div>`;
+    chatList.appendChild(div);
+    scrollToBottom();
+    const contentEl = div.querySelector(".chat-content");
+    return {
+      removeTyping() {
+        const t = div.querySelector(".chat-typing-mini");
+        if (t) t.remove();
+      },
+      update(text) {
+        contentEl.innerHTML = formatText(text);
+      },
+      finalize() {
+        div.classList.remove("chat-streaming");
+      }
+    };
+  }
+
+  function scrollToBottomIfNearBottom() {
+    // 只在使用者沒往上滑時才自動捲到底（streaming 過程中允許看上方）
+    const threshold = 120;
+    const fromBottom = chatScroll.scrollHeight - chatScroll.scrollTop - chatScroll.clientHeight;
+    if (fromBottom < threshold) scrollToBottom();
   }
 
   function buildContext(question) {

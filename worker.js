@@ -129,10 +129,11 @@ async function handleAsk(request, env) {
 
   // 支援兩種模式：
   //   1. 單輪：{ question, context } - 舊版相容
-  //   2. 多輪聊天：{ messages: [{role, content}, ...], context }
+  //   2. 多輪聊天：{ messages: [{role, content}, ...], context, stream?: true }
   const question = (body.question || "").toString().slice(0, 1500);
   const context = body.context || {};
   const incomingMessages = Array.isArray(body.messages) ? body.messages : null;
+  const wantStream = body.stream === true;
 
   if (!question.trim() && (!incomingMessages || incomingMessages.length === 0)) {
     return new Response(JSON.stringify({ error: "No question provided" }), {
@@ -197,14 +198,15 @@ async function handleAsk(request, env) {
     temperature: 0.4,
     top_p: 0.9,
     max_tokens: 800,
-    stream: false
+    stream: wantStream
   });
 
   const callNvidia = async () => fetch(NVIDIA_ENDPOINT, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${env.NVIDIA_API_KEY}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Accept": wantStream ? "text/event-stream" : "application/json"
     },
     body: requestBody
   });
@@ -226,6 +228,20 @@ async function handleAsk(request, env) {
     return new Response(JSON.stringify({ error: "AI 服務連線失敗，請稍後再試", detail: err.message }), {
       status: 502,
       headers: { "Content-Type": "application/json", ...corsHeaders() }
+    });
+  }
+
+  // === Streaming 模式：直接把 Nvidia SSE 串流轉發給前端 ===
+  if (wantStream && aiResp.ok) {
+    return new Response(aiResp.body, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/event-stream; charset=utf-8",
+        "Cache-Control": "no-cache, no-transform",
+        "Connection": "keep-alive",
+        "X-Accel-Buffering": "no",
+        ...corsHeaders()
+      }
     });
   }
 
