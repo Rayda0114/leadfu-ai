@@ -940,6 +940,101 @@ function setupBottomTabBar() {
 }
 
 /* ============================================================
+ * 個股詳情頁動態 JSON-LD（GEO 用，讓 AI 助手能精準抽取個股資料）
+ * ============================================================ */
+function injectStockJsonLd() {
+  // 只在 stock-detail.html 跑
+  if (!location.pathname.includes("stock-detail")) return;
+  const code = new URLSearchParams(location.search).get("code");
+  if (!code) return;
+  const s = findStock(code);
+  if (!s) return;
+
+  const marketLabel = s.market === "listed"   ? "上市"
+                    : s.market === "otc"      ? "上櫃"
+                    : s.market === "emerging" ? "興櫃" : (s.status || "");
+  const co = (STOCK_DATA.companies && STOCK_DATA.companies[code]) || null;
+  const rev = (STOCK_DATA.revenue && STOCK_DATA.revenue[code]) || null;
+  const url = SITE_ORIGIN + "/pages/stock-detail.html?code=" + code;
+  const pct = pctChange(s.price, s.change);
+
+  const additionalProperty = [
+    { "@type": "PropertyValue", "name": "市場", "value": marketLabel },
+    { "@type": "PropertyValue", "name": "股票代號", "value": s.code },
+    { "@type": "PropertyValue", "name": "公司名稱", "value": s.name },
+    { "@type": "PropertyValue", "name": "產業類別", "value": s.category },
+    { "@type": "PropertyValue", "name": "目前股價",  "value": s.price, "unitCode": "TWD" },
+    { "@type": "PropertyValue", "name": "今日漲跌",  "value": s.change.toFixed(2) },
+    { "@type": "PropertyValue", "name": "今日漲跌幅", "value": pct.toFixed(2) + "%" },
+    { "@type": "PropertyValue", "name": "今日成交量", "value": s.volume + " 張" }
+  ];
+  if (co) {
+    if (co.chairman) additionalProperty.push({ "@type": "PropertyValue", "name": "董事長",   "value": co.chairman });
+    if (co.president)additionalProperty.push({ "@type": "PropertyValue", "name": "總經理",   "value": co.president });
+    if (co.founded)  additionalProperty.push({ "@type": "PropertyValue", "name": "成立日期", "value": co.founded });
+    if (co.listed)   additionalProperty.push({ "@type": "PropertyValue", "name": "上市日期", "value": co.listed });
+    if (co.capital)  additionalProperty.push({ "@type": "PropertyValue", "name": "實收資本額", "value": co.capital });
+    if (co.address)  additionalProperty.push({ "@type": "PropertyValue", "name": "公司地址", "value": co.address });
+    if (co.website)  additionalProperty.push({ "@type": "PropertyValue", "name": "公司網站", "value": co.website });
+  }
+  if (rev) {
+    if (rev.period)         additionalProperty.push({ "@type": "PropertyValue", "name": "最新月營收期間", "value": rev.period });
+    if (rev.monthRevenueFmt)additionalProperty.push({ "@type": "PropertyValue", "name": "當月營收",       "value": rev.monthRevenueFmt });
+    if (typeof rev.yoy === "number")additionalProperty.push({ "@type": "PropertyValue", "name": "年增率",   "value": rev.yoy + "%" });
+    if (typeof rev.mom === "number")additionalProperty.push({ "@type": "PropertyValue", "name": "月增率",   "value": rev.mom + "%" });
+  }
+
+  const jsonld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "FinancialProduct",
+        "@id": url + "#stock",
+        "name": s.code + " " + s.name,
+        "alternateName": [s.code, s.name],
+        "category": marketLabel + " ・ " + s.category,
+        "url": url,
+        "description": `${s.code} ${s.name}，${marketLabel}市場 ${s.category} 類股。截至 ${STOCK_DATA.updatedAt || "今日"}，股價 ${s.price} TWD，今日漲跌 ${s.change.toFixed(2)} (${pct.toFixed(2)}%)，成交量 ${s.volume} 張。`,
+        "provider": { "@id": "https://leadfuai.com/#organization" },
+        "additionalProperty": additionalProperty,
+        "audience": { "@type": "Audience", "name": "Taiwan retail investors" },
+        "inLanguage": "zh-TW"
+      },
+      co ? {
+        "@type": "Organization",
+        "@id": url + "#company",
+        "name": co.name || s.name,
+        "alternateName": co.abbrev || s.name,
+        "tickerSymbol": s.code,
+        "address": co.address,
+        "telephone": co.phone,
+        "url": co.website || undefined,
+        "foundingDate": co.founded || undefined,
+        "leiCode": co.taxId || undefined,
+        "areaServed": "TW"
+      } : null,
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+          { "@type": "ListItem", "position": 2, "name": "股價總覽", "item": "https://leadfuai.com/pages/stocks.html" },
+          { "@type": "ListItem", "position": 3, "name": s.code + " " + s.name, "item": url }
+        ]
+      }
+    ].filter(x => x)
+  };
+
+  const tag = document.createElement("script");
+  tag.type = "application/ld+json";
+  tag.id = "stock-jsonld";
+  tag.textContent = JSON.stringify(jsonld);
+  // 移除舊的避免重複
+  const old = document.getElementById("stock-jsonld");
+  if (old) old.remove();
+  document.head.appendChild(tag);
+}
+
+/* ============================================================
  * SEO：動態 canonical + Open Graph + JSON-LD
  * 每個頁面自動寫入正確的 canonical URL 與 og 標籤
  * ============================================================ */
@@ -1540,6 +1635,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadLiveData();
   _resolveReady();   // 通知所有 inline script 資料就緒，可以開始 render
 
+  injectStockJsonLd();  // GEO：個股詳情頁注入 JSON-LD（FinancialProduct + Organization + BreadcrumbList）
   renderTicker();
   renderHeroCards();   // 首頁三張卡片（其他頁沒有 #heroCards 會自動跳過）
   renderStockTable();

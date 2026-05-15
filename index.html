@@ -38,7 +38,7 @@
     <div class="top-left">
       <span id="todayDate"></span>
       <span class="divider">|</span>
-      <span>未上市股票財經資訊網</span>
+      <span>台股全市場財經資訊網</span>
     </div>
     <div class="top-right">
       <a href="pages/login.html">會員登入</a>
@@ -241,7 +241,7 @@
   <div class="container footer-grid">
     <div>
       <div class="footer-logo">領富 AI</div>
-      <p>未上市股票財經資訊網<br>客服專線：0800-035-178<br>postmaster@berich.example.com</p>
+      <p>台股全市場財經資訊網<br>客服專線：0800-035-178<br>postmaster@berich.example.com</p>
     </div>
     <div>
       <h4>網站服務</h4>
@@ -316,36 +316,130 @@
       "@type": "Organization",
       "@id": "https://leadfuai.com/#organization",
       "name": "領富 AI",
-      "alternateName": "LeadFu AI",
+      "alternateName": ["LeadFu AI", "LeadFu", "領富"],
       "url": "https://leadfuai.com/",
-      "logo": "https://leadfuai.com/icons/icon-512.png",
-      "description": "AI 預測未上市股票・領先市場兩步",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://leadfuai.com/icons/icon-512.png",
+        "width": 512,
+        "height": 512
+      },
+      "image": "https://leadfuai.com/icons/icon-512.png",
+      "description": "台灣全市場（上市・上櫃・興櫃）股票財經資訊網。提供 2,310 檔即時報價、公司基本資料、月營收、產業分類與 AI 自然語言查詢。資料來源為 TWSE 證交所與 TPEx 櫃買中心公開 OpenAPI。",
+      "slogan": "領先市場兩步・AI 揭密台股",
+      "foundingDate": "2026",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Taiwan",
+        "alternateName": "TW"
+      },
+      "knowsAbout": [
+        "台灣股市",
+        "上市股票",
+        "上櫃股票",
+        "興櫃股票",
+        "未上市股票",
+        "TWSE 證交所",
+        "TPEx 櫃買中心",
+        "公司基本資料",
+        "月營收",
+        "IPO 新股抽籤",
+        "證券投資人保護",
+        "投資詐騙防範",
+        "半導體",
+        "生技醫療",
+        "電子零組件"
+      ],
+      "knowsLanguage": ["zh-TW", "zh-Hant"],
       "sameAs": [
         "https://line.me/R/ti/p/@041exgtv",
         "https://github.com/Rayda0114/leadfu-ai"
-      ]
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+886-800-035-178",
+        "contactType": "customer service",
+        "areaServed": "TW",
+        "availableLanguage": ["zh-TW"]
+      },
+      "disambiguatingDescription": "本站僅提供公開資料整理，非證券投資顧問服務（不持有投顧執照），不撮合交易、不代收投資款項，所有資料不構成投資建議。"
     },
     {
       "@type": "WebSite",
       "@id": "https://leadfuai.com/#website",
       "url": "https://leadfuai.com/",
       "name": "領富 AI · LeadFu AI",
+      "alternateName": "LeadFu AI",
+      "description": "台灣全市場（上市・上櫃・興櫃）股票財經資訊網",
       "inLanguage": "zh-TW",
       "publisher": { "@id": "https://leadfuai.com/#organization" },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://leadfuai.com/pages/search.html?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
+      "potentialAction": [
+        {
+          "@type": "SearchAction",
+          "target": "https://leadfuai.com/pages/search.html?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
+        {
+          "@type": "Action",
+          "name": "AI 自然語言查詢",
+          "target": "https://leadfuai.com/pages/ai.html?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      ]
     },
     {
       "@type": "WebApplication",
+      "@id": "https://leadfuai.com/#webapp",
       "name": "領富 AI",
       "url": "https://leadfuai.com/",
       "applicationCategory": "FinanceApplication",
+      "applicationSubCategory": "Stock Market Information",
       "operatingSystem": "Web, iOS, Android",
-      "description": "未上市股票即時報價、興櫃 IPO 行事曆、AI 個股分析",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+      "description": "台股全市場（上市/上櫃/興櫃）即時報價、AI 自然語言查詢、公司基本資料、月營收、產業分類、IPO 行事曆",
+      "featureList": [
+        "2,310 檔即時股價",
+        "AI 自然語言查詢",
+        "語音搜尋",
+        "公司基本資料 2,322 家",
+        "月營收年增率",
+        "產業分類",
+        "個股 K 線",
+        "新聞與重大訊息",
+        "投資人防詐警示",
+        "自選股追蹤"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" },
+      "browserRequirements": "Requires JavaScript and HTML5"
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://leadfuai.com/#dataset",
+      "name": "台灣全市場股票即時資料集",
+      "description": "上市 1,084 檔 + 上櫃 878 檔 + 興櫃 348 檔，每日盤後更新",
+      "url": "https://leadfuai.com/data/stocks_live.json",
+      "creator": { "@id": "https://leadfuai.com/#organization" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "isAccessibleForFree": true,
+      "keywords": "台灣股票, 上市, 上櫃, 興櫃, 股價, TWSE, TPEx",
+      "spatialCoverage": "Taiwan",
+      "temporalCoverage": "2026/..",
+      "distribution": [
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "application/json",
+          "contentUrl": "https://leadfuai.com/data/stocks_live.json"
+        },
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "application/json",
+          "contentUrl": "https://leadfuai.com/data/companies_live.json"
+        },
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "application/json",
+          "contentUrl": "https://leadfuai.com/data/revenue_live.json"
+        }
+      ]
     }
   ]
 }

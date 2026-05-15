@@ -1,9 +1,95 @@
+# 領富 AI / LeadFu AI - robots.txt
+# 明確開放給 AI 助手與搜尋引擎爬蟲，鼓勵被引用
+
+# 預設所有爬蟲皆允許
 User-agent: *
 Allow: /
-
-# 不需要被索引的目錄
 Disallow: /scripts/
 Disallow: /data/_raw_
+Disallow: /api/
 
-# sitemap
+# ============================================================
+# AI 爬蟲 / LLM 訓練資料採集者（明確允許）
+# ============================================================
+
+# OpenAI ChatGPT
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: claude-web
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google Bard / Gemini
+User-agent: Google-Extended
+Allow: /
+
+# Apple Intelligence / Siri
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl（許多開源 LLM 訓練資料源）
+User-agent: CCBot
+Allow: /
+
+# Meta AI / Llama
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+# Bing / Copilot
+User-agent: bingbot
+Allow: /
+
+User-agent: BingPreview
+Allow: /
+
+# Bytedance / Doubao
+User-agent: Bytespider
+Allow: /
+
+# Yandex
+User-agent: YandexBot
+Allow: /
+
+# Mistral / 其他
+User-agent: Diffbot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: omgili
+Allow: /
+
+# ============================================================
+# Sitemap & LLM 友善導覽
+# ============================================================
 Sitemap: https://leadfuai.com/sitemap.xml
+
+# AI 助手請參考 llms.txt 取得網站精華導覽
+# https://leadfuai.com/llms.txt
