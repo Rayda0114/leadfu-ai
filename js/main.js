@@ -461,21 +461,64 @@ function renderTopics() {
 /* ============================================================
  * 搜尋 → 跳轉個股詳情
  * ============================================================ */
+// 中文數字 → 阿拉伯數字（給語音搜尋用：「六四八八」→ 6488）
+const _CN_DIGIT_MAP = {
+  "零":"0","〇":"0","○":"0","０":"0",
+  "一":"1","壹":"1","ㄧ":"1",
+  "二":"2","貳":"2","兩":"2",
+  "三":"3","參":"3","叁":"3",
+  "四":"4","肆":"4",
+  "五":"5","伍":"5",
+  "六":"6","陸":"6","陆":"6",
+  "七":"7","柒":"7",
+  "八":"8","捌":"8",
+  "九":"9","玖":"9"
+};
+
+function normalizeSearchQuery(text) {
+  if (!text) return "";
+  // 1. 去全部空白
+  text = text.replace(/\s+/g, "");
+  // 2. 去句末標點（語音常會加 「。」「，」「？」）
+  text = text.replace(/[。，、？！．.,?!]+$/g, "");
+  // 3. 去常見語音尾巴（「環球晶股票」→ 環球晶）
+  text = text.replace(/(的)?(股票|股價|股價多少|怎麼樣|股|公司|代號|代碼)$/g, "");
+  // 4. 整串都是中文數字（3-5 字）→ 轉阿拉伯（給股票代號用）
+  if (/^[零〇○０一壹ㄧ二貳兩三參叁四肆五伍六陸陆七柒八捌九玖]{3,5}$/.test(text)) {
+    text = text.split("").map(c => _CN_DIGIT_MAP[c] || c).join("");
+  }
+  return text;
+}
+
 function bindSearch() {
   const input = document.getElementById("stockSearch");
   const btn = document.getElementById("searchBtn");
   if (!input || !btn) return;
 
   function doSearch() {
-    const q = input.value.trim();
+    let q = input.value.trim();
     if (!q) return;
-    // 完全符合代號 → 直接跳個股
+    // 智慧正規化（手打也吃，例如打成「6488 」尾巴空白也清掉）
+    const nq = normalizeSearchQuery(q);
+    if (nq && nq !== q) input.value = nq, q = nq;
+
+    // 1. 完全符合代號 → 跳個股
     const exact = STOCK_DATA.stocks.find(s => s.code === q);
-    if (exact) {
-      location.href = pageHref('stock-detail.html?code=' + exact.code);
-      return;
-    }
-    // 否則進搜尋結果頁
+    if (exact) { location.href = pageHref('stock-detail.html?code=' + exact.code); return; }
+
+    // 2. 完全符合公司名稱 → 跳個股
+    const exactName = STOCK_DATA.stocks.find(s => s.name === q);
+    if (exactName) { location.href = pageHref('stock-detail.html?code=' + exactName.code); return; }
+
+    // 3. 公司名稱開頭含查詢字串（例如「環球晶」→ 環球晶圓）→ 唯一結果直接跳
+    const startsWith = STOCK_DATA.stocks.filter(s => s.name.startsWith(q));
+    if (startsWith.length === 1) { location.href = pageHref('stock-detail.html?code=' + startsWith[0].code); return; }
+
+    // 4. 部分包含（任何位置）→ 唯一結果直接跳
+    const includes = STOCK_DATA.stocks.filter(s => s.name.includes(q) || s.code.includes(q));
+    if (includes.length === 1) { location.href = pageHref('stock-detail.html?code=' + includes[0].code); return; }
+
+    // 5. 多結果或全無 → 進搜尋頁
     location.href = pageHref('search.html?q=' + encodeURIComponent(q));
   }
   btn.addEventListener("click", doSearch);
@@ -557,8 +600,9 @@ function startVoiceRecognition(input, submitBtn) {
   recog.onresult = (e) => {
     let text = "";
     for (let i = 0; i < e.results.length; i++) text += e.results[i][0].transcript;
-    // 去掉句末標點（語音常會自動加「。」、「，」）
-    text = text.replace(/[。，、？！.,?!\s]+$/g, "").trim();
+    // 智慧正規化：去空白/標點、移除常見尾巴（「股票」「股價」）、中文數字轉阿拉伯
+    // 例：聽到「六四八八」→ 6488，聽到「環球晶股票」→ 環球晶
+    text = normalizeSearchQuery(text);
     overlay.setHeard(text);
     if (e.results[e.results.length - 1].isFinal) finalText = text;
   };
