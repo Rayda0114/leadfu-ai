@@ -2,7 +2,7 @@
 
 ## 🏗️ 目前部署狀態
 
-- **網址**：https://leadfu-ai.pages.dev
+- **網址**：https://leadfu-ai.leadwealthai-ai.workers.dev
 - **部署方式**：Netlify Drop（手動拖 zip）
 - **資料更新**：手動跑 `python scripts/run_all.py` 後重新打包
 

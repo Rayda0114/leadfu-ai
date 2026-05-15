@@ -21,7 +21,7 @@ DATA_DIR = ROOT / "data"
 SITEMAP = ROOT / "sitemap.xml"
 
 # 改網域時只需動這裡
-BASE_URL = "https://leadfu-ai.pages.dev"
+BASE_URL = "https://leadfu-ai.leadwealthai-ai.workers.dev"
 
 STATIC_PAGES = [
     ("/",                              "daily",   1.0),

@@ -25,7 +25,7 @@ DATA_DIR = ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
 URL = "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_R"   # _R 結尾 = 興櫃，_O 結尾是上櫃（不要用錯）
-UA = "LeadFu-AI/1.0 (+https://leadfu-ai.pages.dev)"
+UA = "LeadFu-AI/1.0 (+https://leadfu-ai.leadwealthai-ai.workers.dev)"
 
 
 def fetch():

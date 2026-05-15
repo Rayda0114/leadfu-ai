@@ -2,12 +2,12 @@
 
 > AI 預測未上市股票・領先市場兩步
 
-[![Deploy on Netlify](https://img.shields.io/badge/Netlify-Live-00C7B7?logo=netlify)](https://leadfu-ai.pages.dev)
+[![Deploy on Netlify](https://img.shields.io/badge/Netlify-Live-00C7B7?logo=netlify)](https://leadfu-ai.leadwealthai-ai.workers.dev)
 [![Data Source](https://img.shields.io/badge/Data-TPEx%20OpenAPI-1B4332)](https://www.tpex.org.tw/openapi/)
 
 ## 線上版
 
-**https://leadfu-ai.pages.dev**
+**https://leadfu-ai.leadwealthai-ai.workers.dev**
 
 ## 內容
 
