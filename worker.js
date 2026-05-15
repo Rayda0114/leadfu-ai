@@ -11,16 +11,15 @@
  *   NVIDIA_MODEL    (Plain Text，預設 meta/llama-3.3-70b-instruct)
  */
 
-// Phase 1：先用 Nemotron Super 49B 單模型測試（品質/速度/成本最平衡）
-// Phase 2 後可在 Cloudflare 環境變數 NVIDIA_MODEL 覆寫切換其他模型
-const DEFAULT_MODEL = "nvidia/llama-3.3-nemotron-super-49b-v1.5";
+// Nemotron Super 49B 對中文 prompt 不穩（連續測試多次都回「編碼錯誤」拒答）
+// 改用 Qwen 2.5 72B Instruct（Alibaba 中文母系訓練、對繁中表現最好）
+// 可在 Cloudflare 環境變數 NVIDIA_MODEL 覆寫切換
+const DEFAULT_MODEL = "qwen/qwen2.5-72b-instruct";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
-// Nemotron 系列：detailed thinking off 切到直答模式（重要！否則它會 silent thinking 然後拒答）
-// 系統 prompt 重寫成「正面說明角色」而非「列禁令」，避免模型過度防衛
-const SYSTEM_PROMPT = `detailed thinking off
-
-你是「領富 AI」（LeadFu AI），台灣財經資訊網站 leadfuai.com 的 AI 助理。
+// 系統 prompt：正面說明角色、清楚列舉可做/不可做
+// Qwen 系列不需要 detailed thinking 切換（不是 Nemotron）
+const SYSTEM_PROMPT = `你是「領富 AI」（LeadFu AI），台灣財經資訊網站 leadfuai.com 的 AI 助理。
 
 【你的工作】
 - 用清楚易懂的繁體中文，幫使用者解答關於股票、市場、財報、公司的問題
