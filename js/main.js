@@ -7,7 +7,7 @@ const LINE_ID  = "@041exgtv";
 const LINE_URL = "https://line.me/R/ti/p/@041exgtv";
 
 /* Google Analytics 4 Measurement ID */
-const GA_MEASUREMENT_ID = "G-RX7R1ZFQPW";
+const GA_MEASUREMENT_ID = "G-FM7DSZ7V2R";
 
 /* 網站主網域（之後綁自有網域時改這裡） */
 const SITE_ORIGIN = "https://leadfuai.com";
