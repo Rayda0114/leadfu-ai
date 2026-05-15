@@ -1836,22 +1836,30 @@ img { max-width: 100%; }
  * 🎤 語音搜尋（每頁 search-box 注入麥克風 + 聆聽 overlay）
  * ============================================================ */
 .search-box .voice-mic {
+  /* 覆寫 .search-box button 的預設 padding/background/color */
+  background: transparent !important;
+  color: #1B4332 !important;
+  padding: 0 !important;
   border: 0;
-  background: transparent;
-  color: #1B4332;
-  width: 38px;
+  width: 40px;
   height: 38px;
+  min-width: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 50%;
-  margin: 0 4px;
+  border-radius: 0;
+  margin: 0;
   transition: background 0.15s, transform 0.1s;
   flex-shrink: 0;
+  border-left: 1px solid #e5ebe8;
 }
-.search-box .voice-mic:hover { background: rgba(27, 67, 50, 0.1); }
-.search-box .voice-mic:active { transform: scale(0.92); background: rgba(27, 67, 50, 0.18); }
+.search-box .voice-mic svg {
+  fill: #1B4332;
+  display: block;
+}
+.search-box .voice-mic:hover { background: rgba(27, 67, 50, 0.08) !important; }
+.search-box .voice-mic:active { transform: scale(0.92); background: rgba(27, 67, 50, 0.18) !important; }
 
 /* 第一次來的使用者：金色脈動提示「這裡新功能」 */
 .voice-mic-pulse-hint { animation: voice-hint-glow 1.4s ease-in-out infinite; }
@@ -1955,8 +1963,9 @@ img { max-width: 100%; }
 /* 手機優先：按鈕跟聆聽圈圈再放大，讓 45-75 歲老花眼看得清楚 */
 @media (max-width: 768px) {
   .search-box .voice-mic {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 42px;
+    min-width: 46px;
   }
   .search-box .voice-mic svg {
     width: 24px;
