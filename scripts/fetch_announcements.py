@@ -9,6 +9,7 @@
 """
 
 import json
+import ssl
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -23,15 +24,30 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
-BASE = "https://www.tpex.org.tw/openapi/v1"
+BASE_TPEX = "https://www.tpex.org.tw/openapi/v1"
+BASE_TWSE = "https://openapi.twse.com.tw/v1"
 UA = "LeadFu-AI/1.0 (+https://leadfuai.com)"
+
+_INSECURE_CTX = ssl.create_default_context()
+_INSECURE_CTX.check_hostname = False
+_INSECURE_CTX.verify_mode = ssl.CERT_NONE
+
+
+def fetch_url(url, allow_insecure=False):
+    req = Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
+    try:
+        with urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except (URLError, ssl.SSLError) as e:
+        if allow_insecure and ("CERTIFICATE" in str(e) or isinstance(e.__cause__, ssl.SSLError)):
+            with urlopen(req, timeout=30, context=_INSECURE_CTX) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        raise
 
 
 def fetch(endpoint):
-    url = f"{BASE}/{endpoint}"
-    req = Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
-    with urlopen(req, timeout=30) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    """舊版相容：TPEx 端點"""
+    return fetch_url(f"{BASE_TPEX}/{endpoint}")
 
 
 def roc_to_iso(roc_date):
@@ -46,8 +62,8 @@ def roc_to_iso(roc_date):
         return ""
 
 
-def normalize_major(raw):
-    """上櫃重大訊息"""
+def normalize_major_tpex(raw):
+    """上櫃重大訊息（TPEx 格式）"""
     out = []
     for r in raw:
         date = roc_to_iso(r.get("Date", ""))
@@ -56,15 +72,30 @@ def normalize_major(raw):
         name  = (r.get("CompanyName") or "").strip()
         if not (title and code):
             continue
-        # 主旨太長截斷
         if len(title) > 80:
             title = title[:78] + "..."
         out.append({
-            "date": date,
-            "code": code,
-            "name": name,
-            "title": title,
-            "type": "重大訊息"
+            "date": date, "code": code, "name": name,
+            "title": title, "type": "重大訊息", "market": "otc"
+        })
+    return out
+
+
+def normalize_major_twse(raw):
+    """上市重大訊息（TWSE 格式）"""
+    out = []
+    for r in raw:
+        date = roc_to_iso(r.get("發言日期") or r.get("出表日期", ""))
+        title = (r.get("主旨 ") or r.get("主旨") or "").strip()  # TWSE 欄位名後面有空格
+        code  = (r.get("公司代號") or "").strip()
+        name  = (r.get("公司名稱") or "").strip()
+        if not (title and code):
+            continue
+        if len(title) > 80:
+            title = title[:78] + "..."
+        out.append({
+            "date": date, "code": code, "name": name,
+            "title": title, "type": "重大訊息", "market": "listed"
         })
     return out
 
@@ -120,25 +151,27 @@ def normalize_disposal(raw):
 def main():
     print(f"[{datetime.now():%H:%M:%S}] 抓取公告資料")
     sources = [
-        ("mopsfin_t187ap04_O",            normalize_major,    "上櫃重大訊息"),
-        ("tpex_esb_warning_information",  normalize_warning,  "興櫃注意股"),
-        ("tpex_esb_disposal_information", normalize_disposal, "興櫃處置股")
+        # (URL, normalizer, label, allow_insecure)
+        (f"{BASE_TWSE}/opendata/t187ap04_L",         normalize_major_twse, "上市重大訊息", True),
+        (f"{BASE_TPEX}/mopsfin_t187ap04_O",          normalize_major_tpex, "上櫃重大訊息", False),
+        (f"{BASE_TPEX}/tpex_esb_warning_information",  normalize_warning,    "興櫃注意股",    False),
+        (f"{BASE_TPEX}/tpex_esb_disposal_information", normalize_disposal,   "興櫃處置股",    False),
     ]
 
     all_ann = []
-    for endpoint, normalizer, label in sources:
+    for url, normalizer, label, allow_insecure in sources:
         try:
-            raw = fetch(endpoint)
+            raw = fetch_url(url, allow_insecure=allow_insecure)
             items = normalizer(raw)
             print(f"  {label}: 原始 {len(raw)} → 有效 {len(items)}")
             all_ann.extend(items)
-        except (URLError, HTTPError, ValueError) as e:
+        except (URLError, HTTPError, ValueError, ssl.SSLError) as e:
             print(f"  {label}: ❌ {e}")
 
     # 排序：日期倒序
     all_ann.sort(key=lambda a: a.get("date", ""), reverse=True)
-    # 上限 60 筆（最新的優先）
-    all_ann = all_ann[:60]
+    # 上限 120 筆（三市場資料量大，給多一點）
+    all_ann = all_ann[:120]
 
     print(f"\n合計 {len(all_ann)} 筆公告")
     for a in all_ann[:5]:

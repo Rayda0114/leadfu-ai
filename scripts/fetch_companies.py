@@ -1,15 +1,21 @@
 """
-領富 AI · 興櫃公司基本資料抓取
-資料來源：TPEx OpenAPI mopsfin_t187ap03_O (約 887 筆)
+領富 AI · 全市場公司基本資料抓取
+資料來源：三個免費公開 OpenAPI（依市場分別抓）
+
+端點：
+  上市 TWSE: https://openapi.twse.com.tw/v1/opendata/t187ap03_L
+  上櫃 TPEx: https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O
+  興櫃 TPEx: https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_R
 
 包含：董事長、總經理、發言人、地址、電話、Email、網站、
       實收資本額、成立日期、上市日期、簽證會計師、股票代理人...
 
 產出：data/companies_live.json
-       格式：{ "<code>": { name, chairman, ... }, ... }  方便 main.js O(1) 查
+  格式：{ "<code>": { name, chairman, market, ... }, ... }
 """
 
 import json
+import ssl
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -24,45 +30,55 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
-URL = "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_R"   # _R 結尾 = 興櫃，_O 結尾是上櫃（不要用錯）
+URL_LISTED   = "https://openapi.twse.com.tw/v1/opendata/t187ap03_L"           # 上市
+URL_OTC      = "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O"         # 上櫃
+URL_EMERGING = "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_R"         # 興櫃
 UA = "LeadFu-AI/1.0 (+https://leadfuai.com)"
 
+# TWSE 政府 API SSL 退而求其次 context（公開資料無敏感性）
+_INSECURE_CTX = ssl.create_default_context()
+_INSECURE_CTX.check_hostname = False
+_INSECURE_CTX.verify_mode = ssl.CERT_NONE
 
-def fetch():
-    req = Request(URL, headers={"User-Agent": UA, "Accept": "application/json"})
-    with urlopen(req, timeout=30) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+
+def fetch_json(url, allow_insecure=False):
+    """抓取 JSON，遇 SSL 憑證問題自動 fallback（公開政府 API）"""
+    req = Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
+    try:
+        with urlopen(req, timeout=45) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except (URLError, ssl.SSLError) as e:
+        if allow_insecure and ("CERTIFICATE" in str(e) or isinstance(e.__cause__, ssl.SSLError)):
+            print(f"  ⚠ SSL 驗證失敗，改用 unverified context（{url}）")
+            with urlopen(req, timeout=45, context=_INSECURE_CTX) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        raise
 
 
 def parse_date(s):
-    """支援兩種格式：
-       - 西元 YYYYMMDD (8 位數，例如 '19670218')
-       - 民國 YYYMMDD  (7 位數，例如 '0701021')
-    """
+    """支援西元 YYYYMMDD 與民國 YYYMMDD"""
     if not s:
         return ""
     s = str(s).strip()
     try:
-        if len(s) == 8:               # 西元
+        if len(s) == 8:
             return f"{s[:4]}-{s[4:6]}-{s[6:8]}"
-        if len(s) == 7:               # 民國
+        if len(s) == 7:
             year = int(s[:3]) + 1911
             return f"{year}-{s[3:5]}-{s[5:7]}"
     except (ValueError, IndexError):
         pass
-    return ""
+    return s if s else ""
 
 
 def clean(v):
-    """空值統一回空字串"""
     if v is None:
         return ""
     s = str(v).strip()
-    return "" if s in ("", "-", "─") else s
+    return "" if s in ("", "-", "─", "─") else s
 
 
 def fmt_capital(s):
-    """實收資本額：1000000 → '1,000 千' 或 '10 億'"""
     s = clean(s)
     if not s:
         return ""
@@ -77,79 +93,143 @@ def fmt_capital(s):
         return s
 
 
-def transform(raw):
-    """轉成 { code: company_info } 字典，方便前端 O(1) 查"""
+def map_tpex_record(r, market):
+    """TPEx 格式（上櫃/興櫃共用）"""
+    code = clean(r.get("SecuritiesCompanyCode"))
+    if not code:
+        return None
+    return code, {
+        "code":           code,
+        "name":           clean(r.get("CompanyName")),
+        "abbrev":         clean(r.get("CompanyAbbreviation")),
+        "industry":       clean(r.get("SecuritiesIndustryCode")),
+        "address":        clean(r.get("Address")),
+        "taxId":          clean(r.get("UnifiedBusinessNo.")),
+        "chairman":       clean(r.get("Chairman")),
+        "president":      clean(r.get("GeneralManager")),
+        "spokesman":      clean(r.get("Spokesman")),
+        "spokesmanTitle": clean(r.get("TitleOfSpokesman")),
+        "deputy":         clean(r.get("DeputySpokesperson")),
+        "phone":          clean(r.get("Telephone")),
+        "fax":            clean(r.get("Fax")),
+        "email":          clean(r.get("EmailAddress")),
+        "website":        clean(r.get("WebAddress")),
+        "founded":        parse_date(r.get("DateOfIncorporation")),
+        "listed":         parse_date(r.get("DateOfListing")),
+        "parValue":       clean(r.get("ParValueOfCommonStock")),
+        "capital":        fmt_capital(r.get("Paidin.Capital.NTDollars")),
+        "issuedShares":   clean(r.get("IssueShares")),
+        "stockAgent":     clean(r.get("StockTransferAgent")),
+        "stockAgentPhone": clean(r.get("StockTransferAgentTelephone")),
+        "accountingFirm": clean(r.get("AccountingFirm")),
+        "cpa1":           clean(r.get("CPA.CharteredPublicAccountant.First")),
+        "cpa2":           clean(r.get("CPA.CharteredPublicAccountant.Second")),
+        "reportType":     clean(r.get("PreparationOfFinancialReportType")),
+        "symbol":         clean(r.get("Symbol")),
+        "market":         market
+    }
+
+
+def map_twse_record(r):
+    """TWSE 格式（上市），欄位名跟 TPEx 不同"""
+    code = clean(r.get("公司代號") or r.get("Code"))
+    if not code:
+        return None
+    return code, {
+        "code":           code,
+        "name":           clean(r.get("公司名稱") or r.get("Name")),
+        "abbrev":         clean(r.get("公司簡稱")),
+        "industry":       clean(r.get("產業類別") or r.get("Industry")),
+        "address":        clean(r.get("住址")),
+        "taxId":          clean(r.get("營利事業統一編號")),
+        "chairman":       clean(r.get("董事長")),
+        "president":      clean(r.get("總經理")),
+        "spokesman":      clean(r.get("發言人")),
+        "spokesmanTitle": clean(r.get("發言人職稱")),
+        "deputy":         clean(r.get("代理發言人")),
+        "phone":          clean(r.get("總機電話")),
+        "fax":            clean(r.get("傳真機號碼")),
+        "email":          clean(r.get("電子郵件信箱")),
+        "website":        clean(r.get("公司網址")),
+        "founded":        parse_date(r.get("成立日期")),
+        "listed":         parse_date(r.get("上市日期")),
+        "parValue":       clean(r.get("普通股每股面額")),
+        "capital":        fmt_capital(r.get("實收資本額(元)") or r.get("實收資本額")),
+        "issuedShares":   clean(r.get("已發行普通股數或TDR原發行股數")),
+        "stockAgent":     clean(r.get("股票過戶機構")),
+        "stockAgentPhone": clean(r.get("過戶電話")),
+        "accountingFirm": clean(r.get("簽證會計師事務所")),
+        "cpa1":           clean(r.get("簽證會計師1")),
+        "cpa2":           clean(r.get("簽證會計師2")),
+        "reportType":     clean(r.get("編製財務報告類型")),
+        "symbol":         clean(r.get("英文簡稱")),
+        "market":         "listed"
+    }
+
+
+def fetch_market(name, url, mapper, allow_insecure=False):
+    print(f"\n▶ 抓 {name}: {url}")
+    try:
+        raw = fetch_json(url, allow_insecure=allow_insecure)
+    except Exception as e:
+        print(f"  ❌ 失敗: {e}")
+        return {}
+
+    print(f"  原始筆數: {len(raw)}")
     out = {}
     for r in raw:
-        code = clean(r.get("SecuritiesCompanyCode"))
-        if not code:
-            continue
-        out[code] = {
-            "code":         code,
-            "name":         clean(r.get("CompanyName")),
-            "abbrev":       clean(r.get("CompanyAbbreviation")),
-            "industry":     clean(r.get("SecuritiesIndustryCode")),
-            "address":      clean(r.get("Address")),
-            "taxId":        clean(r.get("UnifiedBusinessNo.")),
-            "chairman":     clean(r.get("Chairman")),
-            "president":    clean(r.get("GeneralManager")),
-            "spokesman":    clean(r.get("Spokesman")),
-            "spokesmanTitle": clean(r.get("TitleOfSpokesman")),
-            "deputy":       clean(r.get("DeputySpokesperson")),
-            "phone":        clean(r.get("Telephone")),
-            "fax":          clean(r.get("Fax")),
-            "email":        clean(r.get("EmailAddress")),
-            "website":      clean(r.get("WebAddress")),
-            "founded":      parse_date(r.get("DateOfIncorporation")),
-            "listed":       parse_date(r.get("DateOfListing")),
-            "parValue":     clean(r.get("ParValueOfCommonStock")),
-            "capital":      fmt_capital(r.get("Paidin.Capital.NTDollars")),
-            "issuedShares": clean(r.get("IssueShares")),
-            "stockAgent":   clean(r.get("StockTransferAgent")),
-            "stockAgentPhone": clean(r.get("StockTransferAgentTelephone")),
-            "accountingFirm": clean(r.get("AccountingFirm")),
-            "cpa1":         clean(r.get("CPA.CharteredPublicAccountant.First")),
-            "cpa2":         clean(r.get("CPA.CharteredPublicAccountant.Second")),
-            "reportType":   clean(r.get("PreparationOfFinancialReportType")),
-            "symbol":       clean(r.get("Symbol"))
-        }
+        result = mapper(r)
+        if result:
+            code, info = result
+            out[code] = info
+    print(f"  有效公司: {len(out)}")
     return out
 
 
 def main():
-    print(f"[{datetime.now():%H:%M:%S}] 抓興櫃公司基本資料")
-    try:
-        raw = fetch()
-    except (URLError, HTTPError) as e:
-        print(f"❌ {e}")
-        sys.exit(1)
+    print("=" * 60)
+    print(f"全市場公司基本資料抓取 ・ {datetime.now():%Y-%m-%d %H:%M:%S}")
+    print("=" * 60)
 
-    print(f"原始筆數: {len(raw)}")
-    companies = transform(raw)
-    print(f"有效公司: {len(companies)}")
+    listed   = fetch_market("上市 (TWSE)", URL_LISTED, map_twse_record, allow_insecure=True)
+    otc      = fetch_market("上櫃 (TPEx)", URL_OTC,    lambda r: map_tpex_record(r, "otc"))
+    emerging = fetch_market("興櫃 (TPEx)", URL_EMERGING, lambda r: map_tpex_record(r, "emerging"))
+
+    # 合併（同 code 衝突時優先級：上市 > 上櫃 > 興櫃）
+    companies = {}
+    companies.update(emerging)
+    companies.update(otc)
+    companies.update(listed)
+
+    print(f"\n合併後總公司數: {len(companies)}")
 
     payload = {
         "updatedAt": datetime.now().strftime("%Y-%m-%d %H:%M"),
-        "source": "TPEx OpenAPI mopsfin_t187ap03_O",
+        "source": "TWSE + TPEx OpenAPI (t187ap03_L/_O/_R)",
         "count": len(companies),
+        "marketBreakdown": {
+            "listed":   len(listed),
+            "otc":      len(otc),
+            "emerging": len(emerging)
+        },
         "companies": companies
     }
 
     out = DATA_DIR / "companies_live.json"
     with open(out, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
-    print(f"✅ 已輸出: {out.relative_to(ROOT)}")
+    print(f"✅ 已輸出: {out.relative_to(ROOT)} ({len(companies)} 家公司)")
 
-    # 顯示 3 個範例
+    # 範例（每市場各印 1 家熱門股驗證）
     print("\n--- 範例 ---")
-    for i, (code, c) in enumerate(companies.items()):
-        if i >= 3:
-            break
-        print(f"  {code} {c['name']}")
-        print(f"    董事長: {c['chairman']}  總經理: {c['president']}")
-        print(f"    資本: {c['capital']}  成立: {c['founded']}")
-        print(f"    地址: {c['address'][:30]}...")
-        print(f"    網站: {c['website']}")
+    for code in ("2330", "6488", "6775"):
+        if code in companies:
+            c = companies[code]
+            print(f"  [{c['market']:<8}] {code} {c['name']}")
+            print(f"    董事長: {c['chairman']}  總經理: {c['president']}")
+            print(f"    資本額: {c['capital']}  成立: {c['founded']}  上市: {c['listed']}")
+            print(f"    地址: {c['address'][:36]}")
+            print(f"    網站: {c['website']}")
 
 
 if __name__ == "__main__":
