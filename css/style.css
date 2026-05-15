@@ -2157,6 +2157,59 @@ img { max-width: 100%; }
 .ai-list-pct { font-weight: 600; text-align: right; }
 .ai-list-vol { color: #888; font-size: 12px; text-align: right; }
 
+/* 第 2 層 AI 補充說明（呼叫 Nvidia API） */
+.ai-llm-block {
+  background: linear-gradient(180deg, #fafdfb 0%, #f3f9f5 100%);
+  border-top: 2px solid #C5A572;
+  margin-top: 16px;
+  padding: 16px 20px 18px;
+}
+.ai-llm-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.ai-llm-icon { font-size: 18px; }
+.ai-llm-title {
+  font-weight: 700;
+  color: #1B4332;
+  font-size: 14px;
+}
+.ai-llm-status {
+  margin-left: auto;
+  font-size: 11px;
+  color: #999;
+  background: rgba(197, 165, 114, 0.2);
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.ai-llm-body {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.75;
+}
+.ai-llm-body p { margin-bottom: 10px; }
+.ai-llm-body p:last-child { margin-bottom: 0; }
+
+/* 載入中三點 */
+.ai-llm-body .ai-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin: 0 2px;
+  border-radius: 50%;
+  background: #C5A572;
+  animation: ai-dot-bounce 1s ease-in-out infinite;
+}
+.ai-llm-body .ai-dot:nth-child(2) { animation-delay: 0.15s; }
+.ai-llm-body .ai-dot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes ai-dot-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%           { transform: scale(1);   opacity: 1; }
+}
+
 @media (max-width: 768px) {
   .ai-hero-panel { padding: 22px 18px; }
   .ai-hero-panel h2 { font-size: 19px; }
