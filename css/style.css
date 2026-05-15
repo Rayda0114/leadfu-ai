@@ -1824,13 +1824,13 @@ img { max-width: 100%; }
     background: #fff;
   }
 
-  /* 浮動回到頂部按鈕 */
+  /* 浮動回到頂部按鈕（位置在回饋按鈕上方，避免重疊）*/
   .back-to-top {
     position: fixed;
-    bottom: 76px;
+    bottom: 124px;     /* 回饋按鈕 70 + 44(回饋高度) + 10 間距 ≈ 124 */
     right: 14px;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, #163A2E, #1B4332);
     color: #fff;
