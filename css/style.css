@@ -2080,7 +2080,7 @@ img { max-width: 100%; }
 .ai-chat-embed-input {
   background: #fff;
   border-top: 1px solid #e8edf0;
-  padding: 10px 12px 6px;
+  padding: 12px 14px 10px;
 }
 #aiEmbedForm {
   display: flex;
@@ -2090,23 +2090,23 @@ img { max-width: 100%; }
 #aiEmbedInput {
   flex: 1;
   border: 2px solid #d0d5dc;
-  border-radius: 8px;
-  padding: 9px 12px;
-  font-size: 14.5px;
+  border-radius: 10px;
+  padding: 13px 14px;
+  font-size: 15.5px;
   font-family: inherit;
-  line-height: 1.5;
+  line-height: 1.55;
   resize: none;
   outline: none;
-  max-height: 140px;
-  min-height: 38px;
+  max-height: 160px;
+  min-height: 50px;     /* 之前 38px 太擠，放大 */
   transition: border-color 0.15s;
 }
 #aiEmbedInput:focus { border-color: #1B4332; }
 .ai-chat-embed-mic {
   background: #f0f3f8;
   border: 0;
-  width: 38px;
-  height: 38px;
+  width: 50px;          /* 之前 38px */
+  height: 50px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -2117,6 +2117,7 @@ img { max-width: 100%; }
   font-family: inherit;
   transition: background 0.15s, transform 0.1s;
 }
+.ai-chat-embed-mic svg { width: 26px; height: 26px; }
 .ai-chat-embed-mic:hover { background: #e0e6ed; }
 .ai-chat-embed-mic.chat-mic-active {
   background: #EF4444;
@@ -2127,10 +2128,10 @@ img { max-width: 100%; }
   background: #1B4332;
   color: #fff;
   border: 0;
-  border-radius: 8px;
-  padding: 0 18px;
-  height: 38px;
-  font-size: 14px;
+  border-radius: 10px;
+  padding: 0 22px;
+  height: 50px;          /* 之前 38px */
+  font-size: 15.5px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
@@ -2142,7 +2143,7 @@ img { max-width: 100%; }
   text-align: center;
   font-size: 11px;
   color: #999;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 @media (max-width: 768px) {
@@ -2156,7 +2157,15 @@ img { max-width: 100%; }
   .ai-chat-embed-sub { font-size: 11.5px; }
   .ai-chat-embed-newbtn { font-size: 11px; padding: 4px 8px; top: 12px; right: 12px; }
   .ai-chat-embed .chat-content { font-size: 14.5px; }
-  #aiEmbedInput { font-size: 16px; }  /* iOS 防自動縮放 */
+  .ai-chat-embed-input { padding: 12px 12px 10px; }
+  #aiEmbedInput {
+    font-size: 16px;            /* iOS 防自動縮放 */
+    min-height: 52px;
+    padding: 14px 14px;
+  }
+  .ai-chat-embed-mic { width: 52px; height: 52px; }
+  .ai-chat-embed-mic svg { width: 26px; height: 26px; }
+  .ai-chat-embed-send { height: 52px; padding: 0 20px; font-size: 15px; }
 }
 
 /* 舊的 ai-hero-panel 保留樣式給 ai.html 也許還用到 */
