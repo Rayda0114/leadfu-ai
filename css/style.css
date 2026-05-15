@@ -2003,7 +2003,163 @@ img { max-width: 100%; }
  * 首頁 hero 入口 + ai.html 結果頁 共用樣式
  * ============================================================ */
 
-/* 首頁 AI Hero 入口區塊 */
+/* 首頁內嵌對話視窗（chat-embed）*/
+.ai-chat-embed {
+  background: #fff;
+  border-radius: 14px;
+  margin: 18px 0 22px;
+  box-shadow: 0 6px 22px rgba(27, 67, 50, 0.12);
+  border: 1px solid #e8edf0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 540px;
+  max-height: 70vh;
+}
+.ai-chat-embed-head {
+  background: linear-gradient(135deg, #0A1F18, #1B4332 60%, #2D6A4F);
+  color: #fff;
+  padding: 14px 18px;
+  position: relative;
+  border-bottom: 2px solid #C5A572;
+}
+.ai-chat-embed-head h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ai-chat-embed-head h2 .ai-sparkle {
+  color: #C5A572;
+  font-size: 19px;
+  animation: ai-sparkle-pulse 2.5s ease-in-out infinite;
+}
+.ai-chat-embed-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.72);
+}
+.ai-chat-embed-newbtn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255,255,255,0.12);
+  color: #C5A572;
+  border: 1px solid rgba(197,165,114,0.45);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ai-chat-embed-newbtn:hover { background: rgba(197,165,114,0.2); }
+
+.ai-chat-embed-scroll {
+  flex: 1;
+  overflow-y: auto;
+  background: #fafbfc;
+  scroll-behavior: smooth;
+}
+.ai-chat-embed-list {
+  padding: 16px 14px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* 內嵌版本沿用 .chat-bubble / .chat-content 等 ai.html 的 class
+   只覆寫字級稍小一點符合首頁脈絡 */
+.ai-chat-embed .chat-content {
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 11px 14px;
+}
+.ai-chat-embed .chat-avatar { width: 30px; height: 30px; font-size: 11px; }
+
+.ai-chat-embed-input {
+  background: #fff;
+  border-top: 1px solid #e8edf0;
+  padding: 10px 12px 6px;
+}
+#aiEmbedForm {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+#aiEmbedInput {
+  flex: 1;
+  border: 2px solid #d0d5dc;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 14.5px;
+  font-family: inherit;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  max-height: 140px;
+  min-height: 38px;
+  transition: border-color 0.15s;
+}
+#aiEmbedInput:focus { border-color: #1B4332; }
+.ai-chat-embed-mic {
+  background: #f0f3f8;
+  border: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #1B4332;
+  flex-shrink: 0;
+  font-family: inherit;
+  transition: background 0.15s, transform 0.1s;
+}
+.ai-chat-embed-mic:hover { background: #e0e6ed; }
+.ai-chat-embed-mic.chat-mic-active {
+  background: #EF4444;
+  color: #fff;
+  animation: chat-mic-pulse 1s ease-in-out infinite;
+}
+.ai-chat-embed-send {
+  background: #1B4332;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 18px;
+  height: 38px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.ai-chat-embed-send:hover { background: #0D2818; }
+.ai-chat-embed-send:disabled { background: #888; cursor: not-allowed; }
+.ai-chat-embed-disclaimer {
+  text-align: center;
+  font-size: 11px;
+  color: #999;
+  margin-top: 6px;
+}
+
+@media (max-width: 768px) {
+  .ai-chat-embed {
+    height: 460px;
+    max-height: 70vh;
+    border-radius: 10px;
+  }
+  .ai-chat-embed-head { padding: 12px 14px; }
+  .ai-chat-embed-head h2 { font-size: 15px; }
+  .ai-chat-embed-sub { font-size: 11.5px; }
+  .ai-chat-embed-newbtn { font-size: 11px; padding: 4px 8px; top: 12px; right: 12px; }
+  .ai-chat-embed .chat-content { font-size: 14.5px; }
+  #aiEmbedInput { font-size: 16px; }  /* iOS 防自動縮放 */
+}
+
+/* 舊的 ai-hero-panel 保留樣式給 ai.html 也許還用到 */
 .ai-hero-panel {
   background: linear-gradient(135deg, #0A1F18 0%, #1B4332 60%, #2D6A4F 100%);
   border-radius: 14px;

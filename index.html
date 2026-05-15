@@ -116,20 +116,25 @@
 
   <section class="col-main">
 
-    <!-- ✨ AI 問答 Hero Panel — 用自然語言問問題，AI 一次找好資料 -->
-    <div class="ai-hero-panel">
-      <h2><span class="ai-sparkle">✨</span> 跟領富 AI 對話</h2>
-      <p class="ai-sub">用自然語言或語音問問題，AI 跨上市/上櫃/興櫃 2,310 檔幫你一次找好</p>
-      <form id="aiHeroForm" autocomplete="off">
-        <input type="text" id="aiHeroInput" placeholder="例如：今天漲最多的上市股、半導體類熱門、穎台基本面" />
-        <button type="submit">問 AI →</button>
-      </form>
-      <div class="ai-examples">
-        <a class="ai-chip" href="pages/ai.html?q=今天漲最多的上市股">📈 上市漲幅榜</a>
-        <a class="ai-chip" href="pages/ai.html?q=半導體上市熱門股">🔬 半導體熱門</a>
-        <a class="ai-chip" href="pages/ai.html?q=興櫃成交活躍">⚡ 興櫃熱門</a>
-        <a class="ai-chip" href="pages/ai.html?q=生技上櫃股">💊 生技上櫃</a>
-        <a class="ai-chip" href="pages/ai.html?q=怎麼避免投資詐騙">⚠ 防詐須知</a>
+    <!-- ✨ 領富 AI 內嵌對話視窗 -->
+    <div class="ai-chat-embed" id="aiChatEmbed">
+      <div class="ai-chat-embed-head">
+        <h2><span class="ai-sparkle">✨</span> 跟領富 AI 對話</h2>
+        <div class="ai-chat-embed-sub">跨上市/上櫃/興櫃 2,310 檔，AI 即時幫你找資料</div>
+        <button type="button" class="ai-chat-embed-newbtn" id="aiEmbedNewBtn" title="新對話">＋ 新對話</button>
+      </div>
+      <div class="ai-chat-embed-scroll" id="aiEmbedScroll">
+        <div class="ai-chat-embed-list" id="aiEmbedList"></div>
+      </div>
+      <div class="ai-chat-embed-input">
+        <form id="aiEmbedForm" autocomplete="off">
+          <button type="button" id="aiEmbedMicBtn" class="ai-chat-embed-mic" aria-label="語音輸入" title="語音輸入">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5.91-3a.91.91 0 0 0-.91.91A4.99 4.99 0 0 1 12 17a4.99 4.99 0 0 1-5-5.09.91.91 0 1 0-1.82 0A6.81 6.81 0 0 0 11 18.91V21a1 1 0 1 0 2 0v-2.09a6.81 6.81 0 0 0 5.82-6.91.91.91 0 0 0-.91-.91z"/></svg>
+          </button>
+          <textarea id="aiEmbedInput" placeholder="輸入或按麥克風講話..." rows="1" maxlength="800"></textarea>
+          <button type="submit" id="aiEmbedSendBtn" class="ai-chat-embed-send">送出</button>
+        </form>
+        <p class="ai-chat-embed-disclaimer">※ AI 整理公開資料，不構成投資建議</p>
       </div>
     </div>
 
@@ -447,16 +452,321 @@
 
 <script src="js/main.js"></script>
 <script>
-// 首頁 AI 問答 hero form
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("aiHeroForm");
-  const input = document.getElementById("aiHeroInput");
-  if (!form || !input) return;
+// 首頁 AI 內嵌對話視窗（直接在首頁聊，跟 ai.html 共用 localStorage 歷史）
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const root = document.getElementById("aiChatEmbed");
+  if (!root) return;
+
+  const STORAGE_KEY = "leadfu_chat_history_v1";
+  const list = document.getElementById("aiEmbedList");
+  const scroll = document.getElementById("aiEmbedScroll");
+  const input = document.getElementById("aiEmbedInput");
+  const form = document.getElementById("aiEmbedForm");
+  const sendBtn = document.getElementById("aiEmbedSendBtn");
+  const newBtn = document.getElementById("aiEmbedNewBtn");
+  const micBtn = document.getElementById("aiEmbedMicBtn");
+
+  let history = [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) history = JSON.parse(raw) || [];
+  } catch {}
+
+  const _stockByCode = {};
+  (L.data.stocks || []).forEach(s => { _stockByCode[s.code] = s; });
+
+  function escAttr(s) { return String(s).replace(/"/g, "&quot;"); }
+  function formatText(text) {
+    if (!text) return "";
+    let esc = String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    esc = esc.replace(/(^|[\s（(「『\[、，,])(\d{4})(\s+)([一-龥A-Za-z\-\*KY]{1,12})/g,
+      (m, pre, code, sp, name) => {
+        if (!_stockByCode[code]) return m;
+        return `${pre}<a href="pages/stock-detail.html?code=${code}" class="chat-stock-link">${code}${sp}${name}</a>`;
+      });
+    esc = esc.replace(/(^|[\s（(「『\[、，,])(\d{4})(?=[）)」』\]、，,\s。.!?]|$)/g,
+      (m, pre, code) => {
+        if (!_stockByCode[code]) return m;
+        return `${pre}<a href="pages/stock-detail.html?code=${code}" class="chat-stock-link">${code}</a>`;
+      });
+    esc = esc.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
+    esc = esc.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g, "$1<em>$2</em>");
+    esc = esc.replace(/`([^`\n]+?)`/g, "<code style=\"background:#f0f3f8;padding:1px 5px;border-radius:3px;font-size:0.92em;\">$1</code>");
+    return esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+  }
+
+  function renderBubble(msg) {
+    const div = document.createElement("div");
+    div.className = "chat-bubble chat-bubble-" + msg.role;
+    const avatar = msg.role === "assistant"
+      ? `<div class="chat-avatar chat-avatar-ai">AI</div>`
+      : `<div class="chat-avatar chat-avatar-user">我</div>`;
+    div.innerHTML = `${avatar}<div class="chat-content">${formatText(msg.content)}</div>`;
+    list.appendChild(div);
+  }
+
+  function renderSuggestionChips(items) {
+    const wrap = document.createElement("div");
+    wrap.className = "chat-suggestions";
+    wrap.innerHTML = items.map(it =>
+      `<button type="button" class="chat-chip" data-q="${escAttr(it.text)}">${it.icon} ${it.text}</button>`
+    ).join("");
+    wrap.querySelectorAll(".chat-chip").forEach(b => {
+      b.addEventListener("click", () => sendMessage(b.dataset.q));
+    });
+    list.appendChild(wrap);
+  }
+
+  function showWelcome() {
+    renderBubble({ role: "assistant", content: "您好！我是領富 AI 助理 ✨\n\n問我股票代號、公司名、產業熱門、財經概念都可以。也可以按麥克風用講的：" });
+    renderSuggestionChips([
+      { icon: "📈", text: "今天漲最多的上市股" },
+      { icon: "🔬", text: "半導體上市熱門股" },
+      { icon: "💊", text: "生技上櫃熱門" },
+      { icon: "⚡", text: "興櫃成交活躍" },
+      { icon: "⚠", text: "怎麼避免投資詐騙" }
+    ]);
+    scrollToBottom();
+  }
+
+  function scrollToBottom() {
+    requestAnimationFrame(() => { scroll.scrollTop = scroll.scrollHeight; });
+  }
+  function scrollToBottomIfNearBottom() {
+    const fromBottom = scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight;
+    if (fromBottom < 120) scrollToBottom();
+  }
+
+  function saveHistory() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-20))); } catch {}
+  }
+
+  function createStreamingBubble() {
+    const div = document.createElement("div");
+    div.className = "chat-bubble chat-bubble-assistant chat-streaming";
+    div.innerHTML = `<div class="chat-avatar chat-avatar-ai">AI</div><div class="chat-content"><span class="chat-typing-mini"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span></span></div>`;
+    list.appendChild(div);
+    scrollToBottom();
+    const contentEl = div.querySelector(".chat-content");
+    return {
+      removeTyping() { const t = div.querySelector(".chat-typing-mini"); if (t) t.remove(); },
+      update(text) { contentEl.innerHTML = formatText(text); },
+      finalize() { div.classList.remove("chat-streaming"); }
+    };
+  }
+
+  function buildContext(question) {
+    if (!question) return {};
+    const ctx = {};
+    const all = L.data.stocks || [];
+    const codeMatch = question.match(/\b\d{4}\b/);
+    let targetStock = null;
+    if (codeMatch) targetStock = all.find(s => s.code === codeMatch[0]);
+    if (!targetStock) {
+      const sortedByLen = [...all].filter(s => s.name && s.name.length >= 2)
+                                  .sort((a, b) => b.name.length - a.name.length);
+      targetStock = sortedByLen.find(s => question.includes(s.name));
+    }
+    if (targetStock) {
+      ctx.relevantStocks = [targetStock];
+      const co = (L.data.companies && L.data.companies[targetStock.code]) || null;
+      if (co) ctx.companyInfo = co;
+      const rev = (L.data.revenue && L.data.revenue[targetStock.code]) || null;
+      if (rev) ctx.revenueInfo = rev;
+      return ctx;
+    }
+    let market = null;
+    if (/上市/.test(question)) market = "listed";
+    else if (/上櫃/.test(question)) market = "otc";
+    else if (/興櫃/.test(question)) market = "emerging";
+    const industries = ["半導體","電子零組件","電腦及周邊","通信網路","電子通路",
+                        "光電","生技醫療","金融保險","綠能環保","數位雲端",
+                        "電子","電機機械","鋼鐵","紡織","食品","汽車","建材營造"];
+    const matchedIndustry = industries.find(i => question.includes(i));
+    let pool = all.slice();
+    if (market) pool = pool.filter(s => s.market === market);
+    if (matchedIndustry) pool = pool.filter(s => s.category && s.category.includes(matchedIndustry));
+    pool = pool.filter(s => s.price > 0);
+    if (/漲|上漲/.test(question)) pool.sort((a, b) => L.pctChange(b.price, b.change) - L.pctChange(a.price, a.change));
+    else if (/跌|下跌/.test(question)) pool.sort((a, b) => L.pctChange(a.price, a.change) - L.pctChange(b.price, b.change));
+    else pool.sort((a, b) => (b.volume || 0) - (a.volume || 0));
+    ctx.relevantStocks = pool.slice(0, 15).map(s => ({
+      code: s.code, name: s.name, market: s.market, category: s.category,
+      price: s.price, change: s.change, volume: s.volume
+    }));
+    return ctx;
+  }
+
+  let _pending = false;
+  async function sendMessage(text) {
+    text = (text || "").trim();
+    if (!text) return;
+    if (_pending) return;
+    _pending = true;
+    list.querySelectorAll(".chat-suggestions").forEach(el => el.remove());
+
+    const userMsg = { role: "user", content: text, ts: Date.now() };
+    history.push(userMsg);
+    renderBubble(userMsg);
+    saveHistory();
+    scrollToBottom();
+
+    sendBtn.disabled = true;
+    sendBtn.textContent = "...";
+    input.disabled = true;
+
+    const context = buildContext(text);
+    const aiMsg = { role: "assistant", content: "", ts: Date.now() };
+    const aiBubble = createStreamingBubble();
+    let fullText = "";
+    let gotFirstChunk = false;
+
+    try {
+      const resp = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8", "Accept": "text/event-stream" },
+        body: JSON.stringify({
+          messages: history.map(m => ({ role: m.role, content: m.content })),
+          context,
+          stream: true
+        })
+      });
+      if (!resp.ok) {
+        let errInfo;
+        try { errInfo = await resp.json(); } catch { errInfo = { error: "AI 暫時無法回答" }; }
+        const errText = errInfo.error || "AI 暫時無法回答";
+        const isRateLimit = resp.status === 429;
+        const tail = isRateLimit ? "\n\n💡 提示：等 5-10 秒後再試。" : "\n\n請稍後再試一次。";
+        aiMsg.content = errText + tail;
+        aiBubble.update(aiMsg.content);
+        aiBubble.finalize();
+        history.push(aiMsg);
+        saveHistory();
+        return;
+      }
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let buffer = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+        for (const raw of lines) {
+          const line = raw.trim();
+          if (!line.startsWith("data:")) continue;
+          const data = line.slice(5).trim();
+          if (data === "[DONE]") continue;
+          try {
+            const json = JSON.parse(data);
+            const delta = json.choices?.[0]?.delta?.content;
+            if (delta) {
+              if (!gotFirstChunk) { aiBubble.removeTyping(); gotFirstChunk = true; }
+              fullText += delta;
+              aiBubble.update(fullText);
+              scrollToBottomIfNearBottom();
+            }
+          } catch {}
+        }
+      }
+      aiMsg.content = fullText || "(AI 沒有回應)";
+      aiBubble.update(aiMsg.content);
+      aiBubble.finalize();
+      history.push(aiMsg);
+      saveHistory();
+    } catch (err) {
+      aiMsg.content = "連線 AI 服務失敗，請檢查網路後再試。";
+      aiBubble.update(aiMsg.content);
+      aiBubble.finalize();
+      history.push(aiMsg);
+      saveHistory();
+    } finally {
+      _pending = false;
+      sendBtn.disabled = false;
+      sendBtn.textContent = "送出";
+      input.disabled = false;
+      scrollToBottom();
+      input.focus();
+    }
+  }
+
+  // 表單送出
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const v = input.value.trim();
-    if (v) location.href = "pages/ai.html?q=" + encodeURIComponent(v);
+    const text = input.value.trim();
+    if (text) {
+      input.value = "";
+      autoResize();
+      sendMessage(text);
+    }
   });
+  function autoResize() {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 140) + "px";
+  }
+  input.addEventListener("input", autoResize);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      form.dispatchEvent(new Event("submit"));
+    }
+  });
+
+  // 新對話
+  newBtn.addEventListener("click", () => {
+    if (history.length > 0 && !confirm("確定要開新對話嗎？目前的對話歷史會清空。")) return;
+    history = [];
+    list.innerHTML = "";
+    localStorage.removeItem(STORAGE_KEY);
+    showWelcome();
+  });
+
+  // 語音輸入
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    micBtn.style.display = "none";
+  } else {
+    let recog = null;
+    micBtn.addEventListener("click", () => {
+      if (recog) { try { recog.abort(); } catch {} recog = null; micBtn.classList.remove("chat-mic-active"); return; }
+      recog = new SR();
+      recog.lang = "zh-TW";
+      recog.continuous = false;
+      recog.interimResults = true;
+      micBtn.classList.add("chat-mic-active");
+      let finalText = "";
+      recog.onresult = (e) => {
+        let t = "";
+        for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+        t = L.normalizeSearchQuery ? L.normalizeSearchQuery(t) : t;
+        input.value = t;
+        autoResize();
+        if (e.results[e.results.length - 1].isFinal) finalText = t;
+      };
+      recog.onerror = () => { micBtn.classList.remove("chat-mic-active"); recog = null; };
+      recog.onend = () => {
+        micBtn.classList.remove("chat-mic-active");
+        recog = null;
+        if (finalText) {
+          input.value = finalText;
+          autoResize();
+          setTimeout(() => form.dispatchEvent(new Event("submit")), 200);
+        }
+      };
+      try { recog.start(); } catch { micBtn.classList.remove("chat-mic-active"); recog = null; }
+    });
+  }
+
+  // 初始化：有歷史就 render，沒就 welcome
+  if (history.length === 0) {
+    showWelcome();
+  } else {
+    history.forEach(renderBubble);
+    scrollToBottom();
+  }
 });
 </script>
 </body>
