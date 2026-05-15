@@ -38,7 +38,7 @@ QUERIES = [
     ("台股 公告",      "公告"),
 ]
 
-UA = "Mozilla/5.0 (compatible; LeadFu-AI/1.0; +https://leadfu-ai.leadwealthai-ai.workers.dev)"
+UA = "Mozilla/5.0 (compatible; LeadFu-AI/1.0; +https://leadfuai.com)"
 
 
 def strip_html(s):

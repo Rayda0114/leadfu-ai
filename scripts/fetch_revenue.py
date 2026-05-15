@@ -22,7 +22,7 @@ DATA_DIR = ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
 URL = "https://www.tpex.org.tw/openapi/v1/t187ap05_R"
-UA = "LeadFu-AI/1.0 (+https://leadfu-ai.leadwealthai-ai.workers.dev)"
+UA = "LeadFu-AI/1.0 (+https://leadfuai.com)"
 
 
 def fetch():
