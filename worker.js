@@ -33,9 +33,11 @@ const SYSTEM_PROMPT = `你是「領富 AI」（LeadFu AI），台灣財經資訊
 【免責規則】
 你只整理公開資料，不做個股買賣建議。所以：
 ✔ 可以說：「該股目前股價 X 元」「月營收年增 Y%」「資本額 Z 億」「成立於 19XX 年」
-✔ 可以說：「以下是符合條件的公司列表」「月營收年增率是跟去年同月相比的成長」
-✘ 不要說：「建議買進」「建議賣出」「值得買」「會漲」「目標價是」「我看好」「我推薦」
-✘ 如有人問「該不該買」「會不會漲」，回答：「我只整理公開資料給您參考，買賣決定請您自行評估或諮詢合法投顧」
+✔ 可以說：「以下是今日成交量前 N 名」「月營收年增率是跟去年同月相比的成長」
+✘ 不要說：「建議買進」「建議賣出」「值得買」「會漲」「目標價是」「我看好」「我推薦」「好推薦」「值得關注」
+✘ 如有人問「推薦股票」「該不該買」「會不會漲」「有什麼好的」「值不值得」「建議買哪檔」，
+   你必須直接回答：「我是資料整理助理，不提供個股推薦或買賣建議。買賣決定請您自行評估或諮詢合法的證券投資顧問。如果您想知道客觀數據（例如今天成交量最大、漲幅最高的股票），我可以幫您整理。」
+   不要列出任何個股清單，也不要說「以下是公開資料」之類的開場白，直接給上述回答即可。
 
 回答最後請加一行：
 ※ 以上為公開資料整理，不構成投資建議，亦非投顧服務。
@@ -172,25 +174,39 @@ async function handleAsk(request, env) {
 
   const model = env.NVIDIA_MODEL || DEFAULT_MODEL;
 
+  const requestBody = JSON.stringify({
+    model,
+    messages: finalMessages,
+    temperature: 0.4,
+    top_p: 0.9,
+    max_tokens: 800,
+    stream: false
+  });
+
+  const callNvidia = async () => fetch(NVIDIA_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.NVIDIA_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: requestBody
+  });
+
   let aiResp;
   try {
-    aiResp = await fetch(NVIDIA_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${env.NVIDIA_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model,
-        messages: finalMessages,
-        temperature: 0.4,
-        top_p: 0.9,
-        max_tokens: 800,
-        stream: false
-      })
-    });
+    aiResp = await callNvidia();
+    // 429 = rate limit，等 1.5 秒重試一次（免費 tier 容易遇到）
+    if (aiResp.status === 429) {
+      await new Promise(r => setTimeout(r, 1500));
+      aiResp = await callNvidia();
+    }
+    // 5xx 也重試一次（暫時服務問題）
+    if (aiResp.status >= 500 && aiResp.status < 600) {
+      await new Promise(r => setTimeout(r, 1200));
+      aiResp = await callNvidia();
+    }
   } catch (err) {
-    return new Response(JSON.stringify({ error: "Network error calling AI service", detail: err.message }), {
+    return new Response(JSON.stringify({ error: "AI 服務連線失敗，請稍後再試", detail: err.message }), {
       status: 502,
       headers: { "Content-Type": "application/json", ...corsHeaders() }
     });
@@ -198,7 +214,19 @@ async function handleAsk(request, env) {
 
   if (!aiResp.ok) {
     const errText = await aiResp.text().catch(() => "");
-    return new Response(JSON.stringify({ error: `AI service error (HTTP ${aiResp.status})`, detail: errText.slice(0, 300) }), {
+    // 把常見錯誤碼轉成中文（前端會直接顯示）
+    const friendlyMap = {
+      429: "AI 服務目前太忙，請稍等 5 秒再試（免費額度速率限制）",
+      401: "AI 服務驗證失敗，請聯絡客服",
+      402: "AI 服務免費額度已用完，請聯絡客服",
+      403: "AI 服務存取被拒",
+      500: "AI 服務暫時故障，請稍後再試",
+      502: "AI 服務閘道錯誤，請稍後再試",
+      503: "AI 服務暫不可用，請稍後再試",
+      504: "AI 服務回應逾時，請稍後再試"
+    };
+    const errMsg = friendlyMap[aiResp.status] || `AI 服務異常 (代碼 ${aiResp.status})`;
+    return new Response(JSON.stringify({ error: errMsg, status: aiResp.status, detail: errText.slice(0, 300) }), {
       status: 502,
       headers: { "Content-Type": "application/json", ...corsHeaders() }
     });

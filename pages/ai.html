@@ -189,9 +189,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch {}
   }
 
+  let _pending = false;   // 防止重複送
   async function sendMessage(text) {
     text = (text || "").trim();
     if (!text) return;
+    if (_pending) return;  // 上一個還在跑就不送
+    _pending = true;
 
     chatList.querySelectorAll(".chat-suggestions").forEach(el => el.remove());
 
@@ -203,6 +206,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     sendBtn.disabled = true;
     sendBtn.textContent = "...";
+    chatInput.disabled = true;
     renderTypingIndicator();
 
     const context = buildContext(text);
@@ -220,7 +224,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       removeTypingIndicator();
 
       if (!resp.ok || data.error) {
-        const errMsg = { role: "assistant", content: "抱歉，AI 暫時無法回答（" + (data.error || "服務忙碌") + "）。請稍後再試一次。", ts: Date.now() };
+        // 友善錯誤訊息（worker 已經轉成中文了，這邊直接用）
+        const errText = data.error || "AI 暫時無法回答";
+        const isRateLimit = resp.status === 429 || data.status === 429 || /忙|429|rate/i.test(errText);
+        const tail = isRateLimit
+          ? "\n\n💡 提示：免費 AI 額度有速率限制。請等 5-10 秒後，按「送出」再試一次相同問題。"
+          : "\n\n請稍後再試一次。";
+        const errMsg = { role: "assistant", content: errText + tail, ts: Date.now() };
         history.push(errMsg);
         renderBubble(errMsg);
       } else {
@@ -231,13 +241,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       saveHistory();
     } catch (err) {
       removeTypingIndicator();
-      const errMsg = { role: "assistant", content: "連線 AI 服務失敗，請檢查網路或稍後再試。", ts: Date.now() };
+      const errMsg = { role: "assistant", content: "連線 AI 服務失敗，請檢查網路後再試。", ts: Date.now() };
       history.push(errMsg);
       renderBubble(errMsg);
       saveHistory();
     } finally {
+      _pending = false;
       sendBtn.disabled = false;
       sendBtn.textContent = "送出";
+      chatInput.disabled = false;
       scrollToBottom();
       chatInput.focus();
     }
