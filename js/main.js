@@ -940,6 +940,207 @@ function setupBottomTabBar() {
 }
 
 /* ============================================================
+ * 💬 會員回饋小工具（漂浮按鈕 + Modal）
+ * 任何頁面都能 1 秒丟意見，存進 Supabase feedback 表
+ * ============================================================ */
+function setupFeedbackWidget() {
+  // 漂浮按鈕（右下角，手機在 bottom-tab-bar 上方）
+  const btn = document.createElement("button");
+  btn.className = "feedback-fab";
+  btn.type = "button";
+  btn.setAttribute("aria-label", "意見回饋");
+  btn.title = "意見回饋";
+  btn.innerHTML = `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+    </svg>
+    <span class="feedback-fab-label">回饋</span>`;
+  document.body.appendChild(btn);
+  btn.addEventListener("click", showFeedbackModal);
+}
+
+let _feedbackSubmitting = false;
+
+async function showFeedbackModal() {
+  if (document.getElementById("feedback-modal-overlay")) return;
+
+  // 取目前登入使用者（若已登入帶入 email）
+  let userEmail = "", userId = null;
+  if (window.LeadFuAuth && window.LeadFuAuth.getUser) {
+    try {
+      const u = await window.LeadFuAuth.getUser();
+      if (u) { userEmail = u.email || ""; userId = u.id; }
+    } catch {}
+  }
+
+  const overlay = document.createElement("div");
+  overlay.id = "feedback-modal-overlay";
+  overlay.className = "feedback-modal-overlay";
+  overlay.innerHTML = `
+    <div class="feedback-modal" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
+      <div class="feedback-modal-head">
+        <h2 id="fbTitle">💬 您的意見回饋</h2>
+        <button type="button" class="feedback-modal-close" aria-label="關閉">✕</button>
+      </div>
+      <form id="feedbackForm" class="feedback-modal-body">
+        <div class="feedback-row">
+          <label>我想反映：</label>
+          <div class="feedback-cat-grid">
+            <label class="feedback-cat"><input type="radio" name="cat" value="建議" checked> 💡 建議</label>
+            <label class="feedback-cat"><input type="radio" name="cat" value="問題回報"> 🐛 問題回報</label>
+            <label class="feedback-cat"><input type="radio" name="cat" value="讚美"> 🎉 讚美</label>
+            <label class="feedback-cat"><input type="radio" name="cat" value="其他"> 💭 其他</label>
+          </div>
+        </div>
+
+        <div class="feedback-row">
+          <label>整體評分（選填）：</label>
+          <div class="feedback-stars" id="fbStars">
+            <span data-r="1">☆</span><span data-r="2">☆</span><span data-r="3">☆</span><span data-r="4">☆</span><span data-r="5">☆</span>
+          </div>
+        </div>
+
+        <div class="feedback-row">
+          <label for="fbMessage">您的意見 *</label>
+          <textarea id="fbMessage" name="message" rows="4" maxlength="500" required
+            placeholder="告訴我們您的想法、遇到的問題、或希望我們改進的地方..."></textarea>
+          <div class="feedback-counter"><span id="fbCount">0</span> / 500</div>
+        </div>
+
+        ${userEmail ? "" : `
+        <div class="feedback-row">
+          <label for="fbEmail">Email（選填，方便我們回覆）</label>
+          <input type="email" id="fbEmail" name="email" placeholder="your@email.com" maxlength="120">
+        </div>`}
+
+        <div class="feedback-actions">
+          <button type="button" class="feedback-cancel">取消</button>
+          <button type="submit" class="feedback-submit">送出</button>
+        </div>
+        <p class="feedback-disclaimer">您的回饋會直接傳送給領富 AI 團隊，我們會儘快處理 🙏</p>
+      </form>
+
+      <div class="feedback-success" id="fbSuccess" hidden>
+        <div class="feedback-success-icon">✅</div>
+        <h3>謝謝您的回饋！</h3>
+        <p>我們已經收到您的意見，會儘快參考改進。</p>
+        <button type="button" class="feedback-submit feedback-close-after">完成</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add("show"));
+
+  // 關閉
+  const closeModal = () => {
+    overlay.classList.remove("show");
+    setTimeout(() => overlay.remove(), 200);
+  };
+  overlay.querySelector(".feedback-modal-close").addEventListener("click", closeModal);
+  overlay.querySelector(".feedback-cancel").addEventListener("click", closeModal);
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  // 字數計數
+  const msgEl = overlay.querySelector("#fbMessage");
+  const countEl = overlay.querySelector("#fbCount");
+  msgEl.addEventListener("input", () => { countEl.textContent = msgEl.value.length; });
+
+  // 星等評分
+  let rating = 0;
+  overlay.querySelectorAll("#fbStars span").forEach(star => {
+    star.addEventListener("mouseenter", () => {
+      const r = parseInt(star.dataset.r);
+      overlay.querySelectorAll("#fbStars span").forEach(s => {
+        s.textContent = parseInt(s.dataset.r) <= r ? "★" : "☆";
+        s.classList.toggle("hover", parseInt(s.dataset.r) <= r);
+      });
+    });
+    star.addEventListener("click", () => {
+      rating = parseInt(star.dataset.r);
+      overlay.querySelectorAll("#fbStars span").forEach(s => {
+        s.textContent = parseInt(s.dataset.r) <= rating ? "★" : "☆";
+        s.classList.toggle("selected", parseInt(s.dataset.r) <= rating);
+      });
+    });
+  });
+  overlay.querySelector("#fbStars").addEventListener("mouseleave", () => {
+    overlay.querySelectorAll("#fbStars span").forEach(s => {
+      s.classList.remove("hover");
+      s.textContent = parseInt(s.dataset.r) <= rating ? "★" : "☆";
+    });
+  });
+
+  // 送出
+  overlay.querySelector("#feedbackForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (_feedbackSubmitting) return;
+    _feedbackSubmitting = true;
+    const submitBtn = overlay.querySelector(".feedback-submit");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "送出中...";
+
+    const formData = new FormData(e.target);
+    const payload = {
+      category: formData.get("cat") || "其他",
+      rating: rating || null,
+      message: (formData.get("message") || "").toString().trim().slice(0, 500),
+      email: userEmail || (formData.get("email") || "").toString().trim().slice(0, 120) || null,
+      user_id: userId,
+      page_url: location.href,
+      user_agent: navigator.userAgent.slice(0, 240)
+    };
+
+    let success = false, errMsg = "";
+    try {
+      // 兩種送法：優先用 Supabase JS（如果頁面有載），否則直接打 REST API
+      if (window.LeadFuAuth && window.LeadFuAuth.client) {
+        const { error } = await window.LeadFuAuth.client.from("feedback").insert(payload);
+        if (error) throw error;
+      } else {
+        // 直接 REST API（不依賴 supabase-js，所有頁面都能用）
+        const resp = await fetch("https://lhwxpnyzplylajxunlua.supabase.co/rest/v1/feedback", {
+          method: "POST",
+          headers: {
+            "apikey": "sb_publishable_hBrtHt8ham91nuXSU_tdmA__BqcfIX1",
+            "Authorization": "Bearer sb_publishable_hBrtHt8ham91nuXSU_tdmA__BqcfIX1",
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+          },
+          body: JSON.stringify(payload)
+        });
+        if (!resp.ok) {
+          const t = await resp.text().catch(() => "");
+          throw new Error(`HTTP ${resp.status} ${t.slice(0, 120)}`);
+        }
+      }
+      success = true;
+    } catch (err) {
+      errMsg = (err && err.message) || String(err);
+      console.warn("[領富 AI] feedback insert failed:", errMsg);
+    }
+
+    _feedbackSubmitting = false;
+    if (success) {
+      overlay.querySelector("#feedbackForm").hidden = true;
+      overlay.querySelector("#fbSuccess").hidden = false;
+      overlay.querySelector(".feedback-close-after").addEventListener("click", closeModal);
+      // 5 秒後自動關
+      setTimeout(closeModal, 5000);
+    } else {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "送出";
+      // fallback：開 LINE 客服讓使用者直接傳訊
+      if (confirm("送出失敗（" + errMsg + "）\n要直接從 LINE 客服反映嗎？")) {
+        window.open(LINE_URL, "_blank", "noopener");
+        closeModal();
+      }
+    }
+  });
+}
+
+/* ============================================================
  * 偵測「內建瀏覽器」(LINE / FB / IG / WeChat 等 WebView)
  * 這些環境用 Google OAuth 會被擋 (disallowed_useragent 403)
  * 偵測到就跳警告 + 教學切外部瀏覽器
@@ -1735,6 +1936,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupHideableHeader();
   setupDisclaimer();
   setupInAppBrowserWarning();   // 偵測 LINE/FB/IG/WeChat 內建瀏覽器，跳警告擋掉 OAuth
+  setupFeedbackWidget();        // 漂浮回饋按鈕，每頁右下角
   setupPWA();
   renderDate();
 
