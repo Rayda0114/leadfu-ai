@@ -281,7 +281,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         bodyEl.innerHTML = `<p style="color:#888;font-size:13px;">AI 補充說明暫時無法載入（${data.error || "服務忙碌"}）。上方的資料整理仍可正常使用。</p>`;
         return;
       }
-      statusEl.textContent = data.model ? data.model.split("/").pop() : "AI";
+      // 成功時隱藏狀態徽章（不暴露底層模型名）
+      statusEl.style.display = "none";
       bodyEl.innerHTML = formatAiText(data.answer || "");
     } catch (err) {
       const statusEl = document.getElementById("aiLlmStatus");
