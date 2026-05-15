@@ -745,13 +745,36 @@ function mockAiResponse(action, code) {
   if (action === "stockAnalyze" && s) {
     const pct = pctChange(s.price, s.change);
     const dir = s.change > 0 ? "上漲" : (s.change < 0 ? "下跌" : "持平");
+
+    // 依市場給對應的「同市場分布」描述與風險提醒（不再寫死「興櫃」）
+    const marketLabel = s.market === "listed"   ? "上市"
+                      : s.market === "otc"      ? "上櫃"
+                      : s.market === "emerging" ? "興櫃"
+                      : (s.status || "");
+    const peerLabel = marketLabel ? `${marketLabel}個股` : "同類個股";
+    // 各市場成交量量級不同：上市基準較高，上櫃次之，興櫃最低
+    const volThreshold = s.market === "listed" ? 5000
+                       : s.market === "otc"    ? 1000
+                       : 500;
+    const volBucket = s.volume > volThreshold ? "成交較活躍" : "成交一般";
+
+    const riskByMarket = {
+      "listed":   "上市股票於集中市場交易，每日漲跌幅限制 ±10%。短線波動可能較大",
+      "otc":      "上櫃股票於櫃買中心交易，每日漲跌幅限制 ±10%。部分中小型股流動性較低",
+      "emerging": "興櫃股票每日漲跌幅 ±10%，流動性與資訊揭露弱於上市櫃，買賣價差較大",
+      "":         "未上市股票無集中市場、流動性低、價格不透明、買賣風險高"
+    };
+    const riskText = (s.market === "未上市" || s.status === "未上市")
+      ? riskByMarket[""]
+      : (riskByMarket[s.market] || riskByMarket["emerging"]);
+
     return `
       <div class="ai-result">
         <div class="ai-result-head">📋 AI 個股資料摘要（範例）</div>
-        <p><strong>${s.code} ${s.name}</strong>（${s.category}・${s.status}）目前報價 ${fmtPrice(s.price)}，今日${dir} ${fmtPct(pct)}。</p>
-        <p><strong>成交概況：</strong>今日成交量 ${s.volume.toLocaleString()} 張，於興櫃個股中屬${s.volume > 500 ? "成交較活躍" : "成交一般"}。</p>
+        <p><strong>${s.code} ${s.name}</strong>（${s.category}・${marketLabel || s.status}）目前報價 ${fmtPrice(s.price)}，今日${dir} ${fmtPct(pct)}。</p>
+        <p><strong>成交概況：</strong>今日成交量 ${s.volume.toLocaleString()} 張，於${peerLabel}中屬${volBucket}。</p>
         <p><strong>產業別：</strong>歸類於 ${s.category}。本摘要僅彙整公開數據，未對個股做任何評價或判斷。</p>
-        <p><strong>風險提醒：</strong>${s.status === "未上市" ? "未上市股票無集中市場、流動性低、價格不透明" : "興櫃股票漲跌幅較大"}，買賣應透過合法券商辦理。</p>
+        <p><strong>風險提醒：</strong>${riskText}，買賣應透過合法券商辦理。</p>
         <p class="ai-disclaimer">※ 本內容為 AI 整理之公開資料摘要，不構成投資建議或推介，亦非證券投資顧問服務。投資決策與風險請自行評估。</p>
       </div>`;
   }
