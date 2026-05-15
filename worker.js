@@ -11,10 +11,12 @@
  *   NVIDIA_MODEL    (Plain Text，預設 meta/llama-3.3-70b-instruct)
  */
 
-// Nemotron Super 49B 對中文 prompt 不穩（連續測試多次都回「編碼錯誤」拒答）
-// 改用 Qwen 2.5 72B Instruct（Alibaba 中文母系訓練、對繁中表現最好）
-// 可在 Cloudflare 環境變數 NVIDIA_MODEL 覆寫切換
-const DEFAULT_MODEL = "qwen/qwen2.5-72b-instruct";
+// 模型測試紀錄：
+//   ✘ nvidia/llama-3.3-nemotron-super-49b-v1.5 → 中文 prompt 拒答（「編碼錯誤」）
+//   ✘ qwen/qwen2.5-72b-instruct                → Nvidia NIM 沒這模型（404）
+//   ✓ meta/llama-3.3-70b-instruct              → 穩定、中文可
+// 之後可在 Cloudflare 環境變數 NVIDIA_MODEL 覆寫
+const DEFAULT_MODEL = "meta/llama-3.3-70b-instruct";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // 系統 prompt：正面說明角色、清楚列舉可做/不可做
