@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-05-14 09:38",
+  "updatedAt": "2026-05-15 09:51",
   "source": "TPEx OpenAPI t187ap05_R",
-  "count": 347,
+  "count": 348,
   "revenue": {
     "1260": {
       "code": "1260",
@@ -5346,6 +5346,22 @@
       "cumRevenueFmt": "4.73 億",
       "cumLastYear": 318854,
       "cumYoy": 48.46
+    },
+    "7913": {
+      "code": "7913",
+      "name": "通寶半導體",
+      "industry": "半導體業",
+      "period": "2026/04",
+      "monthRevenue": 39224,
+      "monthRevenueFmt": "39.2 千萬",
+      "lastMonth": 0,
+      "lastYear": 3319,
+      "mom": 0.0,
+      "yoy": 1081.8,
+      "cumRevenue": 124500,
+      "cumRevenueFmt": "1.25 億",
+      "cumLastYear": 70538,
+      "cumYoy": 76.5
     },
     "7915": {
       "code": "7915",
