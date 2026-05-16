@@ -2526,13 +2526,35 @@ img { max-width: 100%; }
 }
 
 @media (max-width: 600px) {
-  .daily-brief { padding: 16px; }
+  .daily-brief { padding: 14px 12px; }
   .daily-brief-title { font-size: 16px; }
-  .daily-brief-grid { gap: 8px; }
-  .daily-stat { padding: 10px 4px; }
-  .daily-stat-num { font-size: 18px; }
-  .daily-stat-label { font-size: 11px; }
-  .daily-brief-industries { grid-template-columns: 1fr; gap: 10px; }
+  /* 保持 4 卡並排（桌機質感），卡片本身壓緊 */
+  .daily-brief-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .daily-stat { padding: 9px 3px; border-radius: 8px; }
+  .daily-stat-num { font-size: 17px; }
+  .daily-stat-label { font-size: 10.5px; }
+  /* 產業也保持 2 卡並排 */
+  .daily-brief-industries {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .daily-industry-block { padding: 9px 10px; }
+  .daily-industry-label { font-size: 11px; margin-bottom: 5px; }
+  .daily-industry-list { gap: 4px; }
+  .daily-ind-pill { font-size: 11px; padding: 2px 7px; }
+  .daily-ind-pill em { font-size: 10px; }
+  .daily-brief-ai { padding: 11px 13px; }
+  .daily-brief-ai-body { font-size: 13.5px; line-height: 1.65; }
+}
+
+/* 超窄螢幕 (<380px) 才退回 2x2 stats + 1 col industries */
+@media (max-width: 380px) {
+  .daily-brief-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .daily-stat-num { font-size: 19px; }
+  .daily-brief-industries { grid-template-columns: 1fr; }
 }
 
 /* 紅主題下的 daily-brief AI block */
