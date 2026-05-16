@@ -14,14 +14,18 @@
 // 模型測試紀錄：
 //   ✘ nvidia/llama-3.3-nemotron-super-49b-v1.5 → 中文 prompt 拒答（「編碼錯誤」）
 //   ✘ qwen/qwen2.5-72b-instruct                → Nvidia NIM 沒這模型（404）
-//   ✓ meta/llama-3.3-70b-instruct              → 穩定、中文可
-// 之後可在 Cloudflare 環境變數 NVIDIA_MODEL 覆寫
-const DEFAULT_MODEL = "meta/llama-3.3-70b-instruct";
+//   ✓ meta/llama-3.3-70b-instruct              → 穩定、中文可（前一版主力，2-5s）
+//   ✓ nvidia/nvidia-nemotron-nano-9b-v2        → 速度快 6-8 倍（<1s 首字），128K context（目前主力）
+// 之後可在 Cloudflare 環境變數 NVIDIA_MODEL 覆寫切回 70B
+const DEFAULT_MODEL = "nvidia/nvidia-nemotron-nano-9b-v2";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // 系統 prompt：正面說明角色、清楚列舉可做/不可做
-// Qwen 系列不需要 detailed thinking 切換（不是 Nemotron）
-const SYSTEM_PROMPT = `你是「領富 AI」（LeadFu AI），台灣財經資訊網站 leadfuai.com 的 AI 助理。
+// 開頭 "detailed thinking off" 是給 Nemotron 系列模型用，告訴它不要做無聲推理直接回答；
+// 對其他模型（Llama 等）這行會被當成普通指令忽略，不影響運作。
+const SYSTEM_PROMPT = `detailed thinking off
+
+你是「領富 AI」（LeadFu AI），台灣財經資訊網站 leadfuai.com 的 AI 助理。
 
 【你的工作】
 - 用清楚易懂的繁體中文，幫使用者解答關於股票、市場、財報、公司的問題
