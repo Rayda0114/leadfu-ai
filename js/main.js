@@ -2167,6 +2167,54 @@ async function loadLiveData() {
   } catch (e) {
     console.log(`[領富 AI] ℹ️ 融資融券未載入 (${e.message})`);
   }
+
+  // 10. 上櫃融資融券（TPEx margin balance）
+  try {
+    const live = await fetchJson("margin_tpex_live.json");
+    if (live.data) {
+      STOCK_DATA.marginTpex = live.data;
+      STOCK_DATA.marginTpexSourceDate = live.sourceDate;
+      // 合併到 margin 主表（前端可用 market 欄區分）
+      STOCK_DATA.margin = Object.assign({}, STOCK_DATA.margin || {}, live.data);
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆上櫃融資融券 (${live.sourceDate})`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 上櫃融資融券未載入 (${e.message})`);
+  }
+
+  // 11. 借券（融券 + 借券賣出 - TWSE TWT93U）
+  try {
+    const live = await fetchJson("sbl_live.json");
+    if (live.data) {
+      STOCK_DATA.sbl = live.data;
+      STOCK_DATA.sblSourceDate = live.sourceDate;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆借券資料 (${live.sourceDate})`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 借券資料未載入 (${e.message})`);
+  }
+
+  // 12. 技術指標（KD / MACD / 布林 / RSI / MA - 由 calc_indicators.py 計算）
+  try {
+    const live = await fetchJson("indicators_live.json");
+    if (live.data) {
+      STOCK_DATA.indicators = live.data;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆技術指標`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 技術指標未載入 (${e.message})`);
+  }
+
+  // 13. 大股東名單（MOPS t187ap02）
+  try {
+    const live = await fetchJson("insider_live.json");
+    if (live.data) {
+      STOCK_DATA.insider = live.data;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆大股東名單`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 大股東名單未載入 (${e.message})`);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {

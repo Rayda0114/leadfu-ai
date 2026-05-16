@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💰 高殖利率股排行 - 領富 AI</title>
-<meta name="description" content="台股上市公司高殖利率股票排行：依殖利率/本益比/股價淨值比排序。資料來源 TWSE 證交所，每日更新。退休族與長期投資人的好朋友。">
+<title>📕 借券排行（法人空單） - 領富 AI</title>
+<meta name="description" content="台股借券賣出排行：法人融券放空動向。借券增加代表法人加碼放空，借券減少可能是回補軋空訊號。資料來源 TWSE 信用額度總量管制餘額表。">
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -36,18 +36,17 @@
       <li><a href="stocks.html">股價總覽</a></li>
       <li><a href="institutional.html">三大法人</a></li>
       <li><a href="margin.html">融資融券</a></li>
-      <li><a href="sbl.html">📕 借券</a></li>
-      <li class="active"><a href="dividends.html">💰 殖利率</a></li>
+      <li class="active"><a href="sbl.html">📕 借券</a></li>
+      <li><a href="dividends.html">💰 殖利率</a></li>
       <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
-      <li><a href="ai.html">AI 對話</a></li>
     </ul>
   </div>
 </nav>
 
 <div class="page-head">
   <div class="container">
-    <h1>💰 高殖利率股排行</h1>
-    <div class="breadcrumb">首頁 ▸ 殖利率排行</div>
+    <h1>📕 借券排行（法人空單動向）</h1>
+    <div class="breadcrumb">首頁 ▸ 法人借券</div>
   </div>
 </div>
 
@@ -55,32 +54,33 @@
 
   <div class="panel" style="margin-bottom:14px;">
     <div style="padding:14px 22px;font-size:13px;color:#555;line-height:1.7;">
-      退休族與長期投資人最關心的「<strong>殖利率 = 現金股利 ÷ 股價</strong>」。
-      高殖利率代表用同樣的錢能領更多股息。<br>
-      <strong style="color:#888;">⚠ 高殖利率不等於好股票</strong>，可能是股價跌深造成。需搭配本益比、營運穩定度一起看。
+      <strong>借券賣出</strong>多由外資/法人操作（散戶融券只能放空 90 天），是<strong>法人看空</strong>最直接的訊號。<br>
+      <span style="color:#dc2626;">借券增加</span> = 法人加碼放空；
+      <span style="color:#16a34a;">借券減少</span> = 法人回補空單（可能軋空）。<br>
+      <strong style="color:#888;">⚠ 解讀提醒：</strong>借券餘額過大個股，一旦股價上漲，法人回補會推升股價（軋空行情）。
     </div>
   </div>
 
   <div class="panel">
     <div class="panel-head">
-      <h2 id="divTitle">殖利率排行</h2>
+      <h2 id="sblTitle">借券排行</h2>
       <div class="panel-tabs">
-        <button class="tab active" data-sort="yield_desc">殖利率高→低</button>
-        <button class="tab" data-sort="pe_asc">本益比低→高</button>
-        <button class="tab" data-sort="pb_asc">股價淨值比低→高</button>
+        <button class="tab active" data-sort="sbl_inc">借券增加（法人加空）</button>
+        <button class="tab" data-sort="sbl_dec">借券減少（可能軋空）</button>
+        <button class="tab" data-sort="sbl_balance">借券餘額（空單部位）</button>
       </div>
     </div>
     <div style="padding:8px 18px;background:#fafbfc;font-size:12px;color:#666;border-bottom:1px solid #eef0f3;">
-      <span>📅 <strong id="divDate">--</strong></span>
-      <span style="margin-left:16px;">📊 共 <strong id="divCount">--</strong> 檔（僅上市公司）</span>
-      <span style="margin-left:auto;float:right;">顯示前 50 名</span>
+      <span>📅 <strong id="sblDate">--</strong></span>
+      <span style="margin-left:16px;">📊 共 <strong id="sblCount">--</strong> 檔</span>
+      <span style="margin-left:auto;float:right;">顯示前 50 名 · 單位：股</span>
     </div>
-    <div class="data-row-list" id="divList"></div>
+    <div class="data-row-list" id="sblList"></div>
   </div>
 
   <p style="text-align:center;color:#888;font-size:12px;margin-top:18px;line-height:1.7;">
-    ※ 資料來源：TWSE 證交所「個股日本益比、殖利率及股價淨值比」每日更新。<br>
-    ※ 僅含上市公司（上櫃/興櫃尚未提供官方殖利率資料）。<br>
+    ※ 資料來源：TWSE 證交所「信用額度總量管制餘額表（TWT93U）」每日盤後更新。<br>
+    ※ 借券餘額大多由外資/壽險等法人操作，反映機構投資人對個股的方向觀點。<br>
     ※ 排名僅為公開資料整理，不構成個股推薦或買賣建議。
   </p>
 
@@ -95,49 +95,65 @@
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
   const L = window.LeadFu;
-  const val = L.data.valuation || {};
+  const sbl = L.data.sbl || {};
   const all = L.data.stocks || [];
 
-  if (!Object.keys(val).length) {
-    document.getElementById("divList").innerHTML = `<div style="padding:40px;text-align:center;color:#888;">估值資料載入中...</div>`;
+  if (!Object.keys(sbl).length) {
+    document.getElementById("sblList").innerHTML = `<div style="padding:40px;text-align:center;color:#888;">借券資料載入中...</div>`;
     return;
   }
 
-  const arr = Object.values(val);
-  document.getElementById("divDate").textContent = (L.data.valuation && Object.keys(L.data.valuation).length) ? document.getElementById("todayDate")?.textContent || "" : "";
-  document.getElementById("divCount").textContent = arr.length;
+  const arr = Object.values(sbl);
+  document.getElementById("sblDate").textContent = L.data.sblSourceDate ?
+    L.data.sblSourceDate.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3") : "";
+  document.getElementById("sblCount").textContent = arr.length;
 
   function findStock(code) { return all.find(s => s.code === code); }
+  function fmtBig(n) {
+    if (n === null || n === undefined) return "—";
+    const abs = Math.abs(n);
+    if (abs >= 100_000_000) return (n / 100_000_000).toFixed(2) + "億";
+    if (abs >= 10_000) return (n / 10_000).toFixed(1) + "萬";
+    return n.toLocaleString();
+  }
+  function fmtChange(n) {
+    if (n === null || n === undefined) return "—";
+    return (n > 0 ? "+" : "") + fmtBig(n);
+  }
 
-  let currentSort = "yield_desc";
+  let currentSort = "sbl_inc";
   function render() {
     let list = arr.slice();
-    if (currentSort === "yield_desc") {
-      list = list.filter(x => x.yield_pct !== null && x.yield_pct !== undefined).sort((a, b) => b.yield_pct - a.yield_pct);
-      document.getElementById("divTitle").textContent = "💰 殖利率高→低排行";
-    } else if (currentSort === "pe_asc") {
-      list = list.filter(x => x.pe_ratio && x.pe_ratio > 0).sort((a, b) => a.pe_ratio - b.pe_ratio);
-      document.getElementById("divTitle").textContent = "📊 低本益比排行";
+    let titleText = "";
+
+    if (currentSort === "sbl_inc") {
+      list = list.filter(x => x.sbl_change > 0).sort((a, b) => b.sbl_change - a.sbl_change);
+      titleText = "🔻 借券增加排行（法人加碼放空）";
+    } else if (currentSort === "sbl_dec") {
+      list = list.filter(x => x.sbl_change < 0 && x.sbl_balance > 0).sort((a, b) => a.sbl_change - b.sbl_change);
+      titleText = "🚀 借券減少排行（法人回補・可能軋空）";
     } else {
-      list = list.filter(x => x.pb_ratio && x.pb_ratio > 0).sort((a, b) => a.pb_ratio - b.pb_ratio);
-      document.getElementById("divTitle").textContent = "📉 低股價淨值比排行";
+      list = list.filter(x => x.sbl_balance > 0).sort((a, b) => b.sbl_balance - a.sbl_balance);
+      titleText = "📕 借券餘額排行（法人空單部位）";
     }
+    document.getElementById("sblTitle").textContent = titleText;
+
     list = list.slice(0, 50);
-    document.getElementById("divList").innerHTML = list.map((d, i) => {
+    document.getElementById("sblList").innerHTML = list.map((d, i) => {
       const s = findStock(d.code);
-      const pct = s ? L.pctChange(s.price, s.change) : 0;
       const cls = s ? L.changeClass(s.change) : "flat";
       const cat = s ? s.category : "";
-      const yieldText = d.yield_pct !== null && d.yield_pct !== undefined ? `${d.yield_pct.toFixed(2)}%` : "—";
-      const peText = d.pe_ratio ? d.pe_ratio.toFixed(2) : "—";
-      const pbText = d.pb_ratio ? d.pb_ratio.toFixed(2) : "—";
+      const sc = d.sbl_change || 0;
+      const scCls = sc > 0 ? "down" : (sc < 0 ? "up" : "flat");
+      const shortChange = d.short_change || 0;
+      const sCls = shortChange > 0 ? "down" : (shortChange < 0 ? "up" : "flat");
       return `<a class="data-row" href="stock-detail.html?code=${d.code}">
         <span class="data-rank">${(i+1).toString().padStart(2,'0')}</span>
         <span class="data-code"><strong>${d.code}</strong> ${d.name}</span>
         <span class="data-cat">${cat}</span>
-        <span class="data-num data-yield ${currentSort==='yield_desc'?'data-num-hl':''}">${yieldText}</span>
-        <span class="data-num data-pe ${currentSort==='pe_asc'?'data-num-hl':''}">P/E ${peText}</span>
-        <span class="data-num data-pb ${currentSort==='pb_asc'?'data-num-hl':''}">P/B ${pbText}</span>
+        <span class="data-num data-margin ${scCls} data-num-hl">借 ${fmtChange(sc)}</span>
+        <span class="data-num data-balance">餘 ${fmtBig(d.sbl_balance)}</span>
+        <span class="data-num data-short ${sCls}">券 ${fmtChange(shortChange)}</span>
         <span class="data-num data-price ${cls}">${s ? L.fmtPrice(s.price) : '-'}</span>
       </a>`;
     }).join("");

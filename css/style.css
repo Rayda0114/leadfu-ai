@@ -4098,6 +4098,121 @@ body.theme-red .inapp-warning-banner {
   }
 }
 
+/* ─────────────────────────────────────────────────────────────
+   stock-detail.html「技術／籌碼」分頁
+   ───────────────────────────────────────────────────────────── */
+.tech-h3 {
+  font-size: 14px;
+  color: #1B4332;
+  margin: 20px 0 10px;
+  padding-left: 8px;
+  border-left: 3px solid #C5A572;
+}
+.tech-h3:first-child { margin-top: 0; }
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.tech-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.tech-card {
+  background: #fafbfc;
+  border: 1px solid #eef0f3;
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+.tech-label {
+  font-size: 11px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+.tech-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  font-variant-numeric: tabular-nums;
+}
+.tech-value.up { color: #dc2626; }
+.tech-value.down { color: #16a34a; }
+.tech-value.flat { color: #6b7280; }
+.tech-sep { color: #cbd5e1; margin: 0 2px; }
+.tech-sub {
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: 6px;
+}
+.tech-sub.up { color: #dc2626; }
+.tech-sub.down { color: #16a34a; }
+.tech-signal {
+  background: linear-gradient(135deg, #fef3c7 0%, #fef9e7 100%);
+  border-color: #fde68a;
+  grid-column: span 2;
+}
+.tech-empty {
+  padding: 30px;
+  text-align: center;
+  color: #888;
+  background: #fafbfc;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.insider-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+.insider-list li {
+  padding: 8px 12px;
+  background: #fafbfc;
+  border: 1px solid #eef0f3;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #333;
+}
+.insider-list li::before {
+  content: "·";
+  color: #C5A572;
+  margin-right: 6px;
+  font-weight: 700;
+}
+@media (max-width: 768px) {
+  .tech-grid { grid-template-columns: 1fr 1fr; }
+  .tech-signal { grid-column: span 2; }
+  .insider-list { grid-template-columns: 1fr; }
+}
+
+/* 紅金主題覆寫（技術面板） */
+body.theme-red .tech-h3 { color: #7F1D1D; border-left-color: #D4AF37; }
+body.theme-red .tech-value.up { color: #DC2626; }
+body.theme-red .tech-value.down { color: #15803D; }
+body.theme-red .tech-signal { background: linear-gradient(135deg, #fef3c7, #fef9e7); }
+
+/* 市場切換 pill（上市 / 上櫃 / 全部） */
+.market-pill {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #555;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.market-pill:hover { border-color: #1B4332; color: #1B4332; }
+.market-pill.active {
+  background: #1B4332;
+  border-color: #1B4332;
+  color: #fff;
+}
+body.theme-red .market-pill.active {
+  background: #7F1D1D;
+  border-color: #7F1D1D;
+}
+
 /* 紅金主題覆寫 */
 body.theme-red .data-rank { color: #B91C1C; }
 body.theme-red .data-row:nth-child(-n+3) .data-rank { color: #7F1D1D; }

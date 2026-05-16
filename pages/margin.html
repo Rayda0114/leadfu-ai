@@ -36,6 +36,7 @@
       <li><a href="stocks.html">股價總覽</a></li>
       <li><a href="institutional.html">三大法人</a></li>
       <li class="active"><a href="margin.html">融資融券</a></li>
+      <li><a href="sbl.html">📕 借券</a></li>
       <li><a href="dividends.html">💰 殖利率</a></li>
       <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
       <li><a href="ai.html">AI 對話</a></li>
@@ -71,10 +72,15 @@
         <button class="tab" data-sort="short_dec">融券減少（軋空訊號）</button>
       </div>
     </div>
-    <div style="padding:8px 18px;background:#fafbfc;font-size:12px;color:#666;border-bottom:1px solid #eef0f3;">
+    <div style="padding:8px 18px;background:#fafbfc;font-size:12px;color:#666;border-bottom:1px solid #eef0f3;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
       <span>📅 <strong id="marDate">--</strong></span>
-      <span style="margin-left:16px;">📊 共 <strong id="marCount">--</strong> 檔（僅上市公司）</span>
-      <span style="margin-left:auto;float:right;">顯示前 50 名</span>
+      <span>📊 共 <strong id="marCount">--</strong> 檔</span>
+      <div style="display:inline-flex;gap:6px;margin-left:8px;">
+        <button class="market-pill active" data-market="all">全部</button>
+        <button class="market-pill" data-market="TWSE">上市</button>
+        <button class="market-pill" data-market="TPEx">上櫃</button>
+      </div>
+      <span style="margin-left:auto;">顯示前 50 名</span>
     </div>
     <div class="data-row-list" id="marList"></div>
   </div>
@@ -123,8 +129,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   let currentSort = "margin_inc";
+  let currentMarket = "all";
   function render() {
     let list = arr.slice();
+    // 市場過濾（上櫃資料有 market="TPEx" 標籤；上市無此欄位視為 TWSE）
+    if (currentMarket !== "all") {
+      list = list.filter(x => (x.market || "TWSE") === currentMarket);
+    }
     let titleText = "", hlField = "";
 
     if (currentSort === "margin_inc") {
@@ -172,6 +183,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.querySelectorAll(".panel-tabs .tab").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
       currentSort = btn.dataset.sort;
+      render();
+    });
+  });
+  document.querySelectorAll(".market-pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".market-pill").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentMarket = btn.dataset.market;
       render();
     });
   });

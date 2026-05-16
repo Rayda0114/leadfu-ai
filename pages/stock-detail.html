@@ -87,6 +87,7 @@
   <div class="detail-tabs">
     <button class="active" data-section="sec-info">基本資料</button>
     <button data-section="sec-fin">財務指標</button>
+    <button data-section="sec-tech">技術／籌碼</button>
     <button data-section="sec-news">個股新聞</button>
     <button data-section="sec-ann">公司公告</button>
     <button data-section="sec-talk">個股討論</button>
@@ -102,6 +103,11 @@
   <div class="detail-section" id="sec-fin">
     <table class="fin-table" id="finTable"></table>
     <p style="font-size:11px;color:#999;margin-top:12px;">※ 資料僅供參考，實際財報以公開資訊觀測站為準。</p>
+  </div>
+
+  <!-- 技術指標 + 籌碼 + 大股東 -->
+  <div class="detail-section" id="sec-tech">
+    <div id="techPanel" style="padding:18px;"></div>
   </div>
 
   <!-- 個股新聞 -->
@@ -437,9 +443,143 @@ document.addEventListener("DOMContentLoaded", async () => {
     </li>
   `).join("");
 
+  // ★ 技術／籌碼面板（KD / MACD / 布林 / RSI / MA + 借券 + 大股東）
+  renderTechPanel(code, s);
+
   // ★ AI 個股摘要自動載入（sessionStorage 快取，同 session 不重複呼叫）
   setupStockAiSummary(code, s);
 });
+
+function renderTechPanel(code, stock) {
+  const L = window.LeadFu;
+  const ind = (L.data.indicators && L.data.indicators[code]) || null;
+  const sbl = (L.data.sbl && L.data.sbl[code]) || null;
+  const mar = (L.data.margin && L.data.margin[code]) || null;
+  const insider = (L.data.insider && L.data.insider[code]) || null;
+  const val = (L.data.valuation && L.data.valuation[code]) || null;
+  const target = document.getElementById("techPanel");
+  if (!target) return;
+
+  // ── 技術指標 ──
+  let techHtml = "";
+  if (ind) {
+    const kdCls = (ind.k != null && ind.d != null) ? (ind.k > ind.d ? "up" : "down") : "flat";
+    const macdCls = (ind.macd_dif != null && ind.macd_signal != null)
+      ? (ind.macd_dif > ind.macd_signal ? "up" : "down") : "flat";
+    const rsiCls = ind.rsi == null ? "flat" : (ind.rsi > 70 ? "up" : ind.rsi < 30 ? "down" : "flat");
+    techHtml = `
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-label">KD 9 日</div>
+          <div class="tech-value ${kdCls}">
+            K ${ind.k != null ? ind.k.toFixed(1) : "—"} <span class="tech-sep">／</span>
+            D ${ind.d != null ? ind.d.toFixed(1) : "—"}
+          </div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-label">MACD（DIF / 訊號）</div>
+          <div class="tech-value ${macdCls}">
+            ${ind.macd_dif != null ? ind.macd_dif.toFixed(2) : "—"} <span class="tech-sep">／</span>
+            ${ind.macd_signal != null ? ind.macd_signal.toFixed(2) : "—"}
+          </div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-label">RSI 14</div>
+          <div class="tech-value ${rsiCls}">${ind.rsi != null ? ind.rsi.toFixed(1) : "—"}</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-label">5 / 10 / 20 日均</div>
+          <div class="tech-value" style="font-size:13px;">
+            ${ind.ma5 != null ? ind.ma5 : "—"} ／ ${ind.ma10 != null ? ind.ma10 : "—"} ／ ${ind.ma20 != null ? ind.ma20 : "—"}
+          </div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-label">布林通道（上 / 中 / 下）</div>
+          <div class="tech-value" style="font-size:13px;">
+            ${ind.bb_upper != null ? ind.bb_upper : "—"} ／ ${ind.bb_middle != null ? ind.bb_middle : "—"} ／ ${ind.bb_lower != null ? ind.bb_lower : "—"}
+          </div>
+        </div>
+        <div class="tech-card tech-signal">
+          <div class="tech-label">綜合訊號</div>
+          <div class="tech-value" style="font-size:13px;color:#1B4332;font-weight:700;">${ind.signal || "—"}</div>
+        </div>
+      </div>
+    `;
+  } else {
+    techHtml = `<div class="tech-empty">📊 此檔技術指標尚未計算（K 線歷史不足 9 天，每日累積中）</div>`;
+  }
+
+  // ── 估值區塊（如果有） ──
+  let valHtml = "";
+  if (val) {
+    valHtml = `
+      <h3 class="tech-h3">📐 估值指標</h3>
+      <div class="tech-grid tech-grid-3">
+        <div class="tech-card"><div class="tech-label">本益比 P/E</div><div class="tech-value">${val.pe_ratio != null ? val.pe_ratio.toFixed(2) : "—"}</div></div>
+        <div class="tech-card"><div class="tech-label">殖利率</div><div class="tech-value" style="color:#B45309;">${val.yield_pct != null ? val.yield_pct.toFixed(2) + "%" : "—"}</div></div>
+        <div class="tech-card"><div class="tech-label">股價淨值比 P/B</div><div class="tech-value">${val.pb_ratio != null ? val.pb_ratio.toFixed(2) : "—"}</div></div>
+      </div>
+    `;
+  }
+
+  // ── 籌碼（融資融券 + 借券） ──
+  function fmtBig(n) {
+    if (n == null) return "—";
+    const abs = Math.abs(n);
+    if (abs >= 100_000_000) return (n / 100_000_000).toFixed(2) + "億";
+    if (abs >= 10_000) return (n / 10_000).toFixed(1) + "萬";
+    return n.toLocaleString();
+  }
+  function fmtCh(n) { return n == null ? "—" : (n > 0 ? "+" : "") + fmtBig(n); }
+
+  let chipsHtml = "";
+  if (mar || sbl) {
+    chipsHtml = `
+      <h3 class="tech-h3">📊 籌碼面</h3>
+      <div class="tech-grid">
+        ${mar ? `
+        <div class="tech-card">
+          <div class="tech-label">融資餘額（張）</div>
+          <div class="tech-value">${fmtBig(mar.margin_balance)} <span class="tech-sub ${mar.margin_change > 0 ? 'up' : (mar.margin_change < 0 ? 'down' : 'flat')}">${fmtCh(mar.margin_change)}</span></div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-label">融券餘額（張）</div>
+          <div class="tech-value">${fmtBig(mar.short_balance)} <span class="tech-sub ${mar.short_change > 0 ? 'down' : (mar.short_change < 0 ? 'up' : 'flat')}">${fmtCh(mar.short_change)}</span></div>
+        </div>` : ""}
+        ${sbl ? `
+        <div class="tech-card">
+          <div class="tech-label">借券賣出餘額（股）</div>
+          <div class="tech-value">${fmtBig(sbl.sbl_balance)} <span class="tech-sub ${sbl.sbl_change > 0 ? 'down' : (sbl.sbl_change < 0 ? 'up' : 'flat')}">${fmtCh(sbl.sbl_change)}</span></div>
+        </div>` : ""}
+      </div>
+      <p style="font-size:11px;color:#888;margin-top:8px;">
+        🟢 紅色 = 散戶/法人看空訊號加碼 ・ 🔵 綠色 = 看空訊號減碼（回補/軋空）
+      </p>
+    `;
+  }
+
+  // ── 大股東名單 ──
+  let insHtml = "";
+  if (insider && insider.shareholders && insider.shareholders.length) {
+    insHtml = `
+      <h3 class="tech-h3">👥 主要股東名單（持股 ≥ 10%）</h3>
+      <ul class="insider-list">
+        ${insider.shareholders.map(sh => `<li>${sh}</li>`).join("")}
+      </ul>
+      <p style="font-size:11px;color:#888;margin-top:8px;">
+        ※ 資料來源 MOPS 公開資訊觀測站，顯示法人 / 自然人持股 ≥ 10% 之主要股東。
+      </p>
+    `;
+  }
+
+  target.innerHTML = `
+    <h3 class="tech-h3">📈 技術指標</h3>
+    ${techHtml}
+    ${valHtml}
+    ${chipsHtml}
+    ${insHtml || (insider ? "" : `<p style="color:#888;font-size:12px;margin-top:16px;">※ 此檔尚未取得主要股東名單。</p>`)}
+  `;
+}
 
 async function setupStockAiSummary(code, stock) {
   const L = window.LeadFu;
