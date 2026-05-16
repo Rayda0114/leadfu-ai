@@ -122,15 +122,19 @@
     </div>
   </div>
 
-  <!-- AI 智能分析 -->
+  <!-- AI 個股摘要（自動載入，sessionStorage 快取） -->
   <div class="detail-section" id="sec-ai">
     <div class="ai-panel">
       <div class="ai-panel-head">
-        <div class="ai-panel-title">AI 個股資料摘要</div>
-        <button class="ai-trigger" data-action="stockAnalyze" data-code="" data-target="#aiResult">點此產生分析 →</button>
+        <div class="ai-panel-title">✨ AI 個股摘要</div>
+        <button type="button" class="stock-ai-refresh" id="stockAiRefresh" title="重新整理 AI 摘要">🔄</button>
       </div>
-      <p class="ai-placeholder">點擊右上方按鈕，AI 將彙整本檔個股的公開數據與新聞重點。</p>
-      <div id="aiResult" style="margin-top:12px;"></div>
+      <div id="aiResult" class="stock-ai-result">
+        <div class="stock-ai-loading">
+          <span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span>
+          AI 整理中...
+        </div>
+      </div>
     </div>
   </div>
 
@@ -433,9 +437,126 @@ document.addEventListener("DOMContentLoaded", async () => {
     </li>
   `).join("");
 
-  // AI button: 寫入 code
-  document.querySelector(".ai-trigger").dataset.code = code;
+  // ★ AI 個股摘要自動載入（sessionStorage 快取，同 session 不重複呼叫）
+  setupStockAiSummary(code, s);
 });
+
+async function setupStockAiSummary(code, stock) {
+  const L = window.LeadFu;
+  const resultEl = document.getElementById("aiResult");
+  const refreshBtn = document.getElementById("stockAiRefresh");
+  const cacheKey = "leadfu_stock_ai_" + code;
+
+  // 檢查 sessionStorage 快取
+  const cached = sessionStorage.getItem(cacheKey);
+  if (cached) {
+    renderAiResult(resultEl, cached);
+    return;
+  }
+
+  await loadAiSummary(code, stock, resultEl, cacheKey);
+
+  refreshBtn.addEventListener("click", async () => {
+    sessionStorage.removeItem(cacheKey);
+    resultEl.innerHTML = `<div class="stock-ai-loading"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span> AI 整理中...</div>`;
+    await loadAiSummary(code, stock, resultEl, cacheKey);
+  });
+}
+
+async function loadAiSummary(code, stock, resultEl, cacheKey) {
+  const L = window.LeadFu;
+  const co = (L.data.companies && L.data.companies[code]) || null;
+  const rev = (L.data.revenue && L.data.revenue[code]) || null;
+  const pct = L.pctChange(stock.price, stock.change);
+  const marketLabel = stock.market === "listed" ? "上市"
+                    : stock.market === "otc"    ? "上櫃"
+                    : stock.market === "emerging" ? "興櫃" : (stock.status || "");
+
+  // 組裝 context
+  const context = {
+    relevantStocks: [{
+      code: stock.code,
+      name: stock.name,
+      market: stock.market,
+      category: stock.category,
+      price_TWD: stock.price,
+      todayChange_TWD: stock.change,
+      todayChangePercent: Number(pct.toFixed(2)),
+      volume_lots: stock.volume
+    }]
+  };
+  if (co) context.companyInfo = co;
+  if (rev) context.revenueInfo = rev;
+
+  const prompt = `請用 3-4 段簡短文字介紹 ${stock.code} ${stock.name} 這檔股票，給 45-75 歲一般投資人看的，淺白語言。內容包含：1) 公司是做什麼的（從產業類別與名稱推測）2) 今日股價與漲跌（用元跟%雙標示）3) 公司基本情況（董事長、成立年數、實收資本額，如有資料）4) 月營收近況（如有資料，含月增/年增率）。最後加一句中性風險提醒。不要做買賣建議。`;
+
+  try {
+    const resp = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8", "Accept": "text/event-stream" },
+      body: JSON.stringify({
+        messages: [{ role: "user", content: prompt }],
+        context,
+        stream: true
+      })
+    });
+    if (!resp.ok) {
+      resultEl.innerHTML = `<div style="padding:16px;color:#888;">AI 摘要暫時無法載入，請稍後重新整理。</div>`;
+      return;
+    }
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let buffer = "";
+    let fullText = "";
+    let gotFirst = false;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+      for (const raw of lines) {
+        const line = raw.trim();
+        if (!line.startsWith("data:")) continue;
+        const data = line.slice(5).trim();
+        if (data === "[DONE]") continue;
+        try {
+          const json = JSON.parse(data);
+          const delta = json.choices?.[0]?.delta?.content;
+          if (delta) {
+            if (!gotFirst) { gotFirst = true; }
+            fullText += delta;
+            renderAiResult(resultEl, fullText);
+          }
+        } catch {}
+      }
+    }
+    if (fullText) sessionStorage.setItem(cacheKey, fullText);
+  } catch (err) {
+    resultEl.innerHTML = `<div style="padding:16px;color:#888;">連線 AI 服務失敗，請刷新頁面再試。</div>`;
+  }
+}
+
+function renderAiResult(el, text) {
+  let esc = String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  esc = esc.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
+  esc = esc.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g, "$1<em>$2</em>");
+  const html = esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+  el.innerHTML = `<div class="stock-ai-body">${html}</div>
+    <div class="stock-ai-foot">
+      ${window.LeadFuTTS && window.LeadFuTTS.isSupported()
+        ? `<button type="button" class="chat-tts-btn stock-ai-tts" title="朗讀">🔊</button>` : ""}
+      <span class="stock-ai-disclaimer">※ AI 整理公開資料，不構成投資建議</span>
+    </div>`;
+  const tts = el.querySelector(".stock-ai-tts");
+  if (tts && window.LeadFuTTS) {
+    tts.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.LeadFuTTS.toggleButton(tts, text);
+    });
+  }
+}
 </script>
 </body>
 </html>

@@ -2003,6 +2003,214 @@ img { max-width: 100%; }
  * 首頁 hero 入口 + ai.html 結果頁 共用樣式
  * ============================================================ */
 
+/* 個股詳情頁的 AI 摘要 */
+.stock-ai-refresh {
+  background: rgba(27, 67, 50, 0.08);
+  border: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s, transform 0.3s;
+}
+.stock-ai-refresh:hover { background: rgba(27, 67, 50, 0.18); transform: rotate(180deg); }
+.stock-ai-result {
+  margin-top: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(180deg, #fafdfb 0%, #f3f9f5 100%);
+  border-radius: 10px;
+  border: 1px solid #d8e5dc;
+  min-height: 60px;
+}
+.stock-ai-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #888;
+  font-size: 14px;
+}
+.stock-ai-body {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #222;
+}
+.stock-ai-body p { margin: 0 0 10px; }
+.stock-ai-body p:last-child { margin-bottom: 0; }
+.stock-ai-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(0,0,0,0.08);
+}
+.stock-ai-tts {
+  position: static;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+}
+.stock-ai-disclaimer {
+  font-size: 11px;
+  color: #999;
+  margin-left: auto;
+}
+
+/* 📊 首頁每日盤後摘要卡片 */
+.daily-brief {
+  background: linear-gradient(135deg, #fff 0%, #f3f9f5 100%);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin: 18px 0;
+  border: 1px solid #d8e5dc;
+  box-shadow: 0 4px 18px rgba(27, 67, 50, 0.08);
+}
+.daily-brief-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+.daily-brief-title {
+  font-size: 18px;
+  color: #1B4332;
+  font-weight: 700;
+  margin: 0 0 2px;
+}
+.daily-brief-date {
+  font-size: 12px;
+  color: #666;
+}
+.daily-brief-refresh {
+  background: rgba(27, 67, 50, 0.08);
+  border: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.15s, transform 0.3s;
+}
+.daily-brief-refresh:hover { background: rgba(27, 67, 50, 0.18); transform: rotate(180deg); }
+
+.daily-brief-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.daily-stat {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+  border: 1px solid #eef0f3;
+}
+.daily-stat-num {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.daily-stat-label {
+  font-size: 12px;
+  color: #666;
+}
+.daily-stat-up .daily-stat-num   { color: #EF4444; }    /* 台股紅漲 */
+.daily-stat-down .daily-stat-num { color: #16A34A; }    /* 台股綠跌 */
+.daily-stat-flat .daily-stat-num { color: #888; }
+.daily-stat-warn .daily-stat-num { color: #C5A572; }
+
+.daily-brief-industries {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.daily-industry-block {
+  background: #fff;
+  border-radius: 10px;
+  padding: 11px 13px;
+  border: 1px solid #eef0f3;
+}
+.daily-industry-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.daily-industry-list {
+  font-size: 13px;
+  line-height: 1.6;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.daily-ind-pill {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.daily-ind-pill em { font-style: normal; font-size: 11px; margin-left: 3px; }
+.daily-ind-pill-up   { background: #fde7eb; color: #B91C1C; }
+.daily-ind-pill-down { background: #e5f3ec; color: #16A34A; }
+
+.daily-brief-ai {
+  background: linear-gradient(135deg, #0A1F18, #1B4332);
+  border-radius: 10px;
+  padding: 13px 16px;
+  color: #fff;
+}
+.daily-brief-ai-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #C5A572;
+  margin-bottom: 6px;
+}
+.daily-brief-ai-head .daily-brief-sparkle {
+  animation: ai-sparkle-pulse 2.5s ease-in-out infinite;
+}
+.daily-brief-ai-head .chat-tts-btn {
+  position: static;
+  margin-left: auto;
+  width: 26px;
+  height: 26px;
+  background: rgba(197, 165, 114, 0.2);
+  border-color: rgba(197, 165, 114, 0.5);
+  color: #C5A572;
+  font-size: 12px;
+}
+.daily-brief-ai-head .chat-tts-btn.playing {
+  background: #C5A572;
+  color: #1B4332;
+}
+.daily-brief-ai-body {
+  font-size: 14.5px;
+  line-height: 1.7;
+  min-height: 24px;
+}
+
+@media (max-width: 600px) {
+  .daily-brief { padding: 16px; }
+  .daily-brief-title { font-size: 16px; }
+  .daily-brief-grid { gap: 8px; }
+  .daily-stat { padding: 10px 4px; }
+  .daily-stat-num { font-size: 18px; }
+  .daily-stat-label { font-size: 11px; }
+  .daily-brief-industries { grid-template-columns: 1fr; gap: 10px; }
+}
+
+/* 紅主題下的 daily-brief AI block */
+body.theme-red .daily-brief-ai {
+  background: linear-gradient(135deg, #7F1D1D, #B91C1C);
+}
+
 /* 首頁內嵌對話視窗（chat-embed）*/
 .ai-chat-embed {
   background: #fff;

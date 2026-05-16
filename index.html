@@ -116,6 +116,43 @@
 
   <section class="col-main">
 
+    <!-- 📊 今日 AI 盤後摘要（每日生成，6 小時內快取） -->
+    <div class="daily-brief" id="dailyBrief">
+      <div class="daily-brief-head">
+        <div>
+          <h2 class="daily-brief-title">📊 今日 AI 盤後摘要</h2>
+          <div class="daily-brief-date" id="dailyBriefDate">--</div>
+        </div>
+        <button type="button" class="daily-brief-refresh" id="dailyBriefRefresh" title="重新整理 AI 摘要">🔄</button>
+      </div>
+      <div class="daily-brief-grid">
+        <div class="daily-stat daily-stat-up"><div class="daily-stat-num" id="dbUp">--</div><div class="daily-stat-label">上漲家數</div></div>
+        <div class="daily-stat daily-stat-down"><div class="daily-stat-num" id="dbDown">--</div><div class="daily-stat-label">下跌家數</div></div>
+        <div class="daily-stat daily-stat-flat"><div class="daily-stat-num" id="dbFlat">--</div><div class="daily-stat-label">平盤</div></div>
+        <div class="daily-stat daily-stat-warn"><div class="daily-stat-num" id="dbWarn">--</div><div class="daily-stat-label">⚠ 注意股</div></div>
+      </div>
+      <div class="daily-brief-industries">
+        <div class="daily-industry-block">
+          <div class="daily-industry-label">🔥 領漲產業</div>
+          <div id="dbTopUpInd" class="daily-industry-list">--</div>
+        </div>
+        <div class="daily-industry-block">
+          <div class="daily-industry-label">❄ 領跌產業</div>
+          <div id="dbTopDownInd" class="daily-industry-list">--</div>
+        </div>
+      </div>
+      <div class="daily-brief-ai">
+        <div class="daily-brief-ai-head">
+          <span class="daily-brief-sparkle">✨</span>
+          <span>AI 一句話整理</span>
+          <button type="button" class="chat-tts-btn" id="dbTtsBtn" title="朗讀">🔊</button>
+        </div>
+        <div class="daily-brief-ai-body" id="dbAiBody">
+          <span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span>
+        </div>
+      </div>
+    </div>
+
     <!-- ✨ 領富 AI 內嵌對話視窗 -->
     <div class="ai-chat-embed" id="aiChatEmbed">
       <div class="ai-chat-embed-head">
@@ -452,6 +489,167 @@
 
 <script src="js/main.js"></script>
 <script>
+// 📊 今日 AI 盤後摘要（每日生成，6 小時內快取）
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  await setupDailyBrief();
+});
+async function setupDailyBrief() {
+  const L = window.LeadFu;
+  const all = L.data.stocks || [];
+  if (!all.length) return;
+
+  // 1. 計算統計
+  const upStocks = all.filter(s => s.change > 0);
+  const downStocks = all.filter(s => s.change < 0);
+  const flatStocks = all.filter(s => s.change === 0);
+
+  // 注意股/處置股數量
+  const ann = L.data.announcements || [];
+  const warnStocks = new Set();
+  ann.forEach(a => {
+    if (a.type === "注意股" || a.type === "處置股") warnStocks.add(a.code);
+  });
+
+  // 領漲領跌產業（依平均漲跌幅）
+  const cats = {};
+  all.forEach(s => {
+    if (!s.category || s.price <= 0) return;
+    const pct = L.pctChange(s.price, s.change);
+    if (!cats[s.category]) cats[s.category] = { sum: 0, n: 0 };
+    cats[s.category].sum += pct;
+    cats[s.category].n++;
+  });
+  const indStats = Object.entries(cats)
+    .filter(([, v]) => v.n >= 5)   // 至少 5 檔才算（避免 1 檔扭曲）
+    .map(([name, v]) => ({ name, avg: v.sum / v.n, count: v.n }))
+    .sort((a, b) => b.avg - a.avg);
+  const topUp = indStats.slice(0, 3);
+  const topDown = indStats.slice(-3).reverse();
+
+  // 填數字
+  const d = new Date();
+  const w = ["日","一","二","三","四","五","六"];
+  document.getElementById("dailyBriefDate").textContent =
+    `${d.getFullYear()}/${(d.getMonth()+1).toString().padStart(2,"0")}/${d.getDate().toString().padStart(2,"0")} (週${w[d.getDay()]})・全市場 ${all.length} 檔`;
+  document.getElementById("dbUp").textContent = upStocks.length.toLocaleString();
+  document.getElementById("dbDown").textContent = downStocks.length.toLocaleString();
+  document.getElementById("dbFlat").textContent = flatStocks.length.toLocaleString();
+  document.getElementById("dbWarn").textContent = warnStocks.size;
+
+  document.getElementById("dbTopUpInd").innerHTML = topUp.length === 0
+    ? "<span style='color:#999;'>暫無資料</span>"
+    : topUp.map(i => `<span class="daily-ind-pill daily-ind-pill-up">${i.name} <em>+${i.avg.toFixed(2)}%</em></span>`).join(" ");
+  document.getElementById("dbTopDownInd").innerHTML = topDown.length === 0
+    ? "<span style='color:#999;'>暫無資料</span>"
+    : topDown.map(i => `<span class="daily-ind-pill daily-ind-pill-down">${i.name} <em>${i.avg.toFixed(2)}%</em></span>`).join(" ");
+
+  // 2. AI 摘要（快取 6 小時，避免每次刷新都呼叫 API）
+  const cacheKey = "leadfu_daily_brief_" + d.toISOString().slice(0, 10);
+  const cacheRaw = localStorage.getItem(cacheKey);
+  let cached = null;
+  if (cacheRaw) {
+    try {
+      const c = JSON.parse(cacheRaw);
+      if (Date.now() - c.ts < 6 * 3600 * 1000) cached = c.text;
+    } catch {}
+  }
+
+  const aiBody = document.getElementById("dbAiBody");
+  const ttsBtn = document.getElementById("dbTtsBtn");
+
+  if (cached) {
+    aiBody.textContent = cached;
+    bindTtsBtn(ttsBtn, cached);
+  } else {
+    // 呼叫 AI，streaming
+    await fetchDailyBriefAi({
+      upCount: upStocks.length,
+      downCount: downStocks.length,
+      flatCount: flatStocks.length,
+      warnCount: warnStocks.size,
+      topUpIndustries: topUp.map(i => ({ name: i.name, avg: i.avg.toFixed(2), count: i.count })),
+      topDownIndustries: topDown.map(i => ({ name: i.name, avg: i.avg.toFixed(2), count: i.count }))
+    }, aiBody, ttsBtn, cacheKey);
+  }
+
+  // 重新整理鈕
+  document.getElementById("dailyBriefRefresh").addEventListener("click", async () => {
+    localStorage.removeItem(cacheKey);
+    aiBody.innerHTML = `<span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span>`;
+    await fetchDailyBriefAi({
+      upCount: upStocks.length, downCount: downStocks.length, flatCount: flatStocks.length,
+      warnCount: warnStocks.size,
+      topUpIndustries: topUp.map(i => ({ name: i.name, avg: i.avg.toFixed(2), count: i.count })),
+      topDownIndustries: topDown.map(i => ({ name: i.name, avg: i.avg.toFixed(2), count: i.count }))
+    }, aiBody, ttsBtn, cacheKey);
+  });
+}
+
+async function fetchDailyBriefAi(stats, bodyEl, ttsBtn, cacheKey) {
+  const prompt = `請用 2-3 句話幫我整理今天台股全市場的盤後重點，給 45-75 歲一般投資人看的，淺白語言。資料如下：\n\n上漲 ${stats.upCount} 家、下跌 ${stats.downCount} 家、平盤 ${stats.flatCount} 家、注意股 ${stats.warnCount} 檔。\n領漲產業：${stats.topUpIndustries.map(i => i.name+" "+i.avg+"%").join("、")}。\n領跌產業：${stats.topDownIndustries.map(i => i.name+" "+i.avg+"%").join("、")}。\n\n只寫盤面客觀觀察，不要推薦個股，不要預測明日走勢。`;
+
+  try {
+    const resp = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8", "Accept": "text/event-stream" },
+      body: JSON.stringify({
+        messages: [{ role: "user", content: prompt }],
+        stream: true
+      })
+    });
+    if (!resp.ok) {
+      bodyEl.textContent = "（AI 暫時忙碌，請稍後重新整理）";
+      return;
+    }
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let buffer = "";
+    let fullText = "";
+    let gotFirst = false;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+      for (const raw of lines) {
+        const line = raw.trim();
+        if (!line.startsWith("data:")) continue;
+        const data = line.slice(5).trim();
+        if (data === "[DONE]") continue;
+        try {
+          const json = JSON.parse(data);
+          const delta = json.choices?.[0]?.delta?.content;
+          if (delta) {
+            if (!gotFirst) { bodyEl.textContent = ""; gotFirst = true; }
+            fullText += delta;
+            bodyEl.textContent = fullText;
+          }
+        } catch {}
+      }
+    }
+    if (fullText) {
+      localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), text: fullText }));
+      bindTtsBtn(ttsBtn, fullText);
+    }
+  } catch (err) {
+    bodyEl.textContent = "（連線 AI 服務失敗）";
+  }
+}
+
+function bindTtsBtn(btn, text) {
+  if (!btn || !window.LeadFuTTS || !window.LeadFuTTS.isSupported()) {
+    if (btn) btn.style.display = "none";
+    return;
+  }
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.LeadFuTTS.toggleButton(btn, text);
+  });
+}
+
 // 首頁 AI 內嵌對話視窗（直接在首頁聊，跟 ai.html 共用 localStorage 歷史）
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
