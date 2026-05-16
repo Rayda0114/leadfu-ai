@@ -12,13 +12,13 @@
  */
 
 // 模型測試紀錄（速度從快到慢，品質從低到高）：
-//   ✘ nvidia/nvidia-nemotron-nano-9b-v2        → 中文 silent thinking 拒答（無聲推理吃 token）
+//   ✘ nvidia/nvidia-nemotron-nano-9b-v2        → 中文 silent thinking 拒答
 //   ✘ nvidia/llama-3.3-nemotron-super-49b-v1.5 → 同上
-//   ✘ meta/llama-3.1-8b-instruct               → 太弱：編造股票資料、誤把教育問題當查股
-//   ✘ qwen/qwen2.5-72b-instruct                → Nvidia NIM 沒這模型 (404)
-//   ✓ meta/llama-3.3-70b-instruct              → 最佳平衡：中文穩、不亂編、配合 streaming <1s 首字
-// 70B 配 SSE streaming 已經夠快，使用者主觀體感等同 8B。中文金融場景品質是關鍵。
-const DEFAULT_MODEL = "meta/llama-3.3-70b-instruct";
+//   ✘ meta/llama-3.1-8b-instruct               → 太弱：編造資料、誤解問題
+//   ✘ qwen/qwen2.5-72b-instruct                → Nvidia NIM 404
+//   🧪 google/gemma-3-4b-it                    → 測試中（Google 2025/3 釋出，多語訓練，4B 但有 128K context）
+//   ✓ meta/llama-3.3-70b-instruct              → 穩定備援
+const DEFAULT_MODEL = "google/gemma-3-4b-it";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // 系統 prompt：正面說明角色、清楚列舉可做/不可做
