@@ -503,7 +503,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     const avatar = msg.role === "assistant"
       ? `<div class="chat-avatar chat-avatar-ai">AI</div>`
       : `<div class="chat-avatar chat-avatar-user">我</div>`;
-    div.innerHTML = `${avatar}<div class="chat-content">${formatText(msg.content)}</div>`;
+    const ttsBtn = (msg.role === "assistant" && window.LeadFuTTS && window.LeadFuTTS.isSupported())
+      ? `<button class="chat-tts-btn" type="button" aria-label="朗讀" title="朗讀">🔊</button>`
+      : "";
+    div.innerHTML = `${avatar}<div class="chat-content">${ttsBtn}${formatText(msg.content)}</div>`;
+    if (ttsBtn) {
+      const btn = div.querySelector(".chat-tts-btn");
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        window.LeadFuTTS.toggleButton(btn, msg.content);
+      });
+    }
     list.appendChild(div);
   }
 
@@ -550,10 +561,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     list.appendChild(div);
     scrollToBottom();
     const contentEl = div.querySelector(".chat-content");
+    let lastText = "";
     return {
       removeTyping() { const t = div.querySelector(".chat-typing-mini"); if (t) t.remove(); },
-      update(text) { contentEl.innerHTML = formatText(text); },
-      finalize() { div.classList.remove("chat-streaming"); }
+      update(text) { lastText = text; contentEl.innerHTML = formatText(text); },
+      finalize() {
+        div.classList.remove("chat-streaming");
+        if (window.LeadFuTTS && window.LeadFuTTS.isSupported() && lastText) {
+          const btn = document.createElement("button");
+          btn.className = "chat-tts-btn";
+          btn.type = "button";
+          btn.title = "朗讀";
+          btn.textContent = "🔊";
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.LeadFuTTS.toggleButton(btn, lastText);
+          });
+          contentEl.insertBefore(btn, contentEl.firstChild);
+        }
+      }
     };
   }
 

@@ -940,6 +940,110 @@ function setupBottomTabBar() {
 }
 
 /* ============================================================
+ * 🔊 TTS 文字朗讀（Web Speech API，免費、繁中支援）
+ * 給 45-75 老花眼用戶：點 AI 訊息上的 🔊 就能聽
+ * ============================================================ */
+const LeadFuTTS = {
+  _voices: [],
+  _currentBtn: null,    // 目前播放中的按鈕（用於 UI 狀態）
+
+  init() {
+    if (!window.speechSynthesis) return;
+    const load = () => { this._voices = window.speechSynthesis.getVoices(); };
+    load();
+    // Chrome 上 voices 是非同步載入
+    window.speechSynthesis.onvoiceschanged = load;
+  },
+
+  isSupported() { return !!window.speechSynthesis; },
+
+  /** 清理文字：去掉 markdown 標記與免責句，讓朗讀順 */
+  _cleanText(text) {
+    if (!text) return "";
+    return String(text)
+      .replace(/\*\*([^*]+)\*\*/g, "$1")    // **bold**
+      .replace(/\*([^*]+)\*/g, "$1")         // *italic*
+      .replace(/`([^`]+)`/g, "$1")           // `code`
+      .replace(/^[#\->\s]+/gm, "")           // 開頭 # > -
+      .replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/gm, "")
+      .replace(/[─━]+/g, "")                 // 分隔線
+      .replace(/^\s*[\*\-\+]\s+/gm, "")      // 條列 bullet
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  },
+
+  /** 選最佳繁中語音 */
+  _pickVoice() {
+    const v = this._voices;
+    return v.find(x => x.lang === "zh-TW")
+        || v.find(x => x.lang === "zh-Hant" || x.lang === "zh-Hant-TW")
+        || v.find(x => x.lang === "zh-HK")
+        || v.find(x => x.lang === "zh-CN")
+        || v.find(x => x.lang && x.lang.startsWith("zh"))
+        || null;
+  },
+
+  /** 朗讀，回傳 utterance；若已在朗讀則先停止 */
+  speak(text, opts) {
+    if (!this.isSupported()) return null;
+    const clean = this._cleanText(text);
+    if (!clean) return null;
+    this.cancel();   // 停止之前的
+
+    const u = new SpeechSynthesisUtterance(clean);
+    u.lang = "zh-TW";
+    u.rate = (opts && opts.rate) || 1.0;
+    u.pitch = 1.0;
+    u.volume = 1.0;
+    const voice = this._pickVoice();
+    if (voice) u.voice = voice;
+
+    if (opts && opts.onStart) u.onstart = opts.onStart;
+    if (opts && opts.onEnd) {
+      const end = opts.onEnd;
+      u.onend = end;
+      u.onerror = end;
+    }
+    window.speechSynthesis.speak(u);
+    return u;
+  },
+
+  cancel() {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+  },
+
+  /** Toggle 朗讀按鈕（點一次播、再點停）*/
+  toggleButton(btn, text) {
+    if (!this.isSupported()) return;
+    const playing = btn.classList.contains("playing");
+
+    // 先把所有播放中的按鈕還原
+    document.querySelectorAll(".chat-tts-btn.playing").forEach(b => {
+      b.classList.remove("playing");
+      b.textContent = "🔊";
+    });
+    this.cancel();
+
+    if (playing) return;  // 點同一個 → 停止
+
+    btn.classList.add("playing");
+    btn.textContent = "⏸";
+    this.speak(text, {
+      onEnd: () => {
+        btn.classList.remove("playing");
+        btn.textContent = "🔊";
+      }
+    });
+  }
+};
+LeadFuTTS.init();
+window.LeadFuTTS = LeadFuTTS;
+
+/* 頁面離開時自動停止朗讀 */
+window.addEventListener("beforeunload", () => LeadFuTTS.cancel());
+window.addEventListener("pagehide", () => LeadFuTTS.cancel());
+
+/* ============================================================
  * 💬 會員回饋小工具（漂浮按鈕 + Modal）
  * 任何頁面都能 1 秒丟意見，存進 Supabase feedback 表
  * ============================================================ */

@@ -2679,6 +2679,49 @@ img { max-width: 100%; }
 }
 .chat-content strong { color: inherit; font-weight: 700; }
 
+/* 🔊 朗讀按鈕（AI 訊息泡泡右上角）*/
+.chat-bubble-assistant .chat-content {
+  position: relative;
+  padding-right: 44px;   /* 保留按鈕位置 */
+}
+.chat-tts-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(197, 165, 114, 0.15);
+  border: 1px solid rgba(197, 165, 114, 0.45);
+  color: #1B4332;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  font-family: inherit;
+  line-height: 1;
+  padding: 0;
+}
+.chat-tts-btn:hover { background: rgba(197, 165, 114, 0.32); }
+.chat-tts-btn:active { transform: scale(0.92); }
+.chat-tts-btn.playing {
+  background: #1B4332;
+  color: #C5A572;
+  border-color: #1B4332;
+  animation: chat-tts-pulse 1.2s ease-in-out infinite;
+}
+@keyframes chat-tts-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(27, 67, 50, 0.4); }
+  50%      { box-shadow: 0 0 0 7px rgba(27, 67, 50, 0); }
+}
+
+@media (max-width: 768px) {
+  .chat-tts-btn { width: 32px; height: 32px; font-size: 15px; }
+  .chat-bubble-assistant .chat-content { padding-right: 46px; }
+}
+
 /* 個股代號連結（AI 訊息內可點跳個股頁） */
 .chat-stock-link {
   color: #C5A572;
