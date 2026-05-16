@@ -11,14 +11,14 @@
  *   NVIDIA_MODEL    (Plain Text，預設 meta/llama-3.3-70b-instruct)
  */
 
-// 模型測試紀錄：
-//   ✘ nvidia/llama-3.3-nemotron-super-49b-v1.5 → 中文 prompt 拒答（reasoning 一直 silent thinking）
-//   ✘ nvidia/nvidia-nemotron-nano-9b-v2        → 同樣中文 prompt 拒答（消耗 476 token 但回「格式錯誤」）
-//   ✘ qwen/qwen2.5-72b-instruct                → Nvidia NIM 沒這模型（404）
-//   ✓ meta/llama-3.3-70b-instruct              → 穩定、中文好（2-5s）
-//   ✓ meta/llama-3.1-8b-instruct               → 快 6-7 倍（<1s 首字），中文 OK（目前主力，平衡速度+品質）
-// Nemotron 系列在繁中財經 prompt 上反覆出問題，先用 Llama 8B
-const DEFAULT_MODEL = "meta/llama-3.1-8b-instruct";
+// 模型測試紀錄（速度從快到慢，品質從低到高）：
+//   ✘ nvidia/nvidia-nemotron-nano-9b-v2        → 中文 silent thinking 拒答（無聲推理吃 token）
+//   ✘ nvidia/llama-3.3-nemotron-super-49b-v1.5 → 同上
+//   ✘ meta/llama-3.1-8b-instruct               → 太弱：編造股票資料、誤把教育問題當查股
+//   ✘ qwen/qwen2.5-72b-instruct                → Nvidia NIM 沒這模型 (404)
+//   ✓ meta/llama-3.3-70b-instruct              → 最佳平衡：中文穩、不亂編、配合 streaming <1s 首字
+// 70B 配 SSE streaming 已經夠快，使用者主觀體感等同 8B。中文金融場景品質是關鍵。
+const DEFAULT_MODEL = "meta/llama-3.3-70b-instruct";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // 系統 prompt：正面說明角色、清楚列舉可做/不可做
