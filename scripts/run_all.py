@@ -40,6 +40,7 @@ SCRIPTS = [
     "fetch_news.py",
     "fetch_announcements.py",
     "fetch_institutional.py",   # 三大法人買賣超（上市，TWSE T86）
+    "fetch_valuation.py",       # 本益比/殖利率/股價淨值比（上市，TWSE BWIBBU_d）
     "fetch_klines.py",
     "generate_sitemap.py",
 ]

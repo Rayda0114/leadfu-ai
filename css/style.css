@@ -2003,6 +2003,103 @@ img { max-width: 100%; }
  * 首頁 hero 入口 + ai.html 結果頁 共用樣式
  * ============================================================ */
 
+/* 📋 持股健診頁 */
+.ph-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.ph-summary-card {
+  background: linear-gradient(135deg, #fff, #f3f9f5);
+  border: 1px solid #d8e5dc;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+.ph-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1B4332;
+  line-height: 1.2;
+}
+.ph-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.ph-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* 長條圖 */
+.ph-bar-chart { padding: 14px 20px; }
+.ph-bar-row {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.ph-bar-label { color: #444; font-weight: 600; }
+.ph-bar-track {
+  background: #f0f3f8;
+  border-radius: 8px;
+  height: 18px;
+  overflow: hidden;
+}
+.ph-bar-fill {
+  height: 100%;
+  background: #1B4332;
+  border-radius: 8px;
+  transition: width 0.4s ease;
+}
+.ph-bar-val { font-size: 12px; color: #666; min-width: 80px; text-align: right; }
+
+/* 持股明細 */
+.ph-stock-list { padding: 4px 0; }
+.ph-stock-row {
+  display: grid;
+  grid-template-columns: 50px 100px 50px 100px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 11px 18px;
+  border-bottom: 1px solid #f3f5f8;
+  text-decoration: none;
+  color: inherit;
+  font-size: 13px;
+  transition: background 0.12s;
+}
+.ph-stock-row:hover { background: #fafbfc; text-decoration: none; }
+.ph-stock-code { font-weight: 700; color: #1B4332; }
+.ph-stock-name { font-weight: 600; }
+.ph-stock-cat { font-size: 11px; color: #888; }
+.ph-stock-price { font-weight: 700; text-align: right; }
+.ph-stock-val { font-size: 11px; color: #666; text-align: right; }
+
+@media (max-width: 768px) {
+  .ph-summary { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .ph-summary-card { padding: 12px; }
+  .ph-num { font-size: 21px; }
+  .ph-grid { grid-template-columns: 1fr; }
+  .ph-bar-row { grid-template-columns: 70px 1fr 70px; font-size: 12px; }
+  .ph-bar-val { font-size: 11px; min-width: 60px; }
+  .ph-stock-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "main price" "cat val";
+    padding: 11px 14px;
+    gap: 4px 10px;
+  }
+  .ph-stock-code, .ph-stock-name, .ph-stock-row .status-pill { grid-area: main; }
+  .ph-stock-cat { grid-area: cat; }
+  .ph-stock-price { grid-area: price; }
+  .ph-stock-val { grid-area: val; text-align: left; }
+}
+
 /* 📈 三大法人排行頁 */
 .inst-panel .panel-tabs { gap: 4px; }
 .inst-grid {

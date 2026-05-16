@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📋 持股健診 - 領富 AI</title>
+<meta name="description" content="領富 AI 持股健診：依您的自選股自動分析市場分散度、產業集中度、平均殖利率與本益比，由 AI 給出風險評估與建議。">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">股價總覽</a></li>
+      <li><a href="institutional.html">三大法人</a></li>
+      <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
+      <li class="active"><a href="portfolio-health.html">📋 持股健診</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+      <li><a href="ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>📋 持股健診</h1>
+    <div class="breadcrumb">首頁 ▸ 持股健診</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 18px 12px 40px;">
+
+  <div id="phEmpty" class="panel" style="display:none;padding:50px 24px;text-align:center;">
+    <div style="font-size:56px;margin-bottom:12px;">📋</div>
+    <h2 style="color:#1B4332;margin-bottom:8px;">您還沒加任何自選股</h2>
+    <p style="color:#666;font-size:14px;line-height:1.8;margin-bottom:20px;">
+      持股健診會分析您自選股的市場分散度、產業集中度、平均殖利率與本益比。<br>
+      先到個股頁面按「＋自選」加入幾檔，再回來這頁。
+    </p>
+    <a href="stocks.html" class="btn-primary" style="display:inline-block;width:auto;padding:11px 28px;text-decoration:none;">去逛逛股價總覽 →</a>
+  </div>
+
+  <div id="phContent" style="display:none;">
+    <!-- 摘要卡片 -->
+    <div class="ph-summary">
+      <div class="ph-summary-card">
+        <div class="ph-num" id="phCount">--</div>
+        <div class="ph-label">追蹤檔數</div>
+      </div>
+      <div class="ph-summary-card">
+        <div class="ph-num" id="phAvgPe">--</div>
+        <div class="ph-label">平均本益比</div>
+      </div>
+      <div class="ph-summary-card">
+        <div class="ph-num" id="phAvgYield">--</div>
+        <div class="ph-label">平均殖利率</div>
+      </div>
+      <div class="ph-summary-card" id="phRiskCard">
+        <div class="ph-num" id="phRisk">--</div>
+        <div class="ph-label">集中度風險</div>
+      </div>
+    </div>
+
+    <!-- 兩欄：市場分散 + 產業集中 -->
+    <div class="ph-grid">
+      <div class="panel">
+        <div class="panel-head"><h2>🌐 市場分散度</h2></div>
+        <div id="phMarketChart" class="ph-bar-chart"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>🏭 產業集中度</h2></div>
+        <div id="phIndustryChart" class="ph-bar-chart"></div>
+      </div>
+    </div>
+
+    <!-- 持股清單 -->
+    <div class="panel" style="margin-top:14px;">
+      <div class="panel-head">
+        <h2>📑 持股明細</h2>
+        <span class="radar-count" id="phStockCount" style="background:#1B4332;">--</span>
+      </div>
+      <div id="phStockList" class="ph-stock-list"></div>
+    </div>
+
+    <!-- AI 健診報告 -->
+    <div class="panel" style="margin-top:14px;">
+      <div class="panel-head">
+        <h2>✨ AI 健診報告</h2>
+        <button type="button" class="stock-ai-refresh" id="phAiRefresh" title="重新整理">🔄</button>
+      </div>
+      <div id="phAiResult" class="stock-ai-result">
+        <div class="stock-ai-loading">
+          <span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span>
+          AI 健診中...
+        </div>
+      </div>
+    </div>
+
+    <p style="text-align:center;color:#888;font-size:12px;margin-top:18px;line-height:1.8;">
+      ※ 持股健診為公開資料整理，不構成個股推薦或買賣建議。<br>
+      ※ 健診結果僅供參考，實際投資決定請依您自身風險承受度與投資目標評估。
+    </p>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const all = L.data.stocks || [];
+  const companies = L.data.companies || {};
+  const valuation = L.data.valuation || {};
+  const revenue = L.data.revenue || {};
+
+  const codes = L.getWatchlist ? L.getWatchlist() : [];
+  if (!codes.length) {
+    document.getElementById("phEmpty").style.display = "block";
+    return;
+  }
+
+  // 抓自選股完整資料
+  const stocks = codes.map(c => all.find(s => s.code === c)).filter(Boolean);
+  if (!stocks.length) {
+    document.getElementById("phEmpty").style.display = "block";
+    return;
+  }
+  document.getElementById("phContent").style.display = "block";
+
+  // === 1. 摘要計算 ===
+  const peList = stocks.map(s => valuation[s.code]?.pe_ratio).filter(v => v && v > 0);
+  const yieldList = stocks.map(s => valuation[s.code]?.yield_pct).filter(v => v !== null && v !== undefined);
+  const avgPe = peList.length ? (peList.reduce((a,b)=>a+b,0)/peList.length).toFixed(1) : "—";
+  const avgYield = yieldList.length ? (yieldList.reduce((a,b)=>a+b,0)/yieldList.length).toFixed(2) + "%" : "—";
+
+  document.getElementById("phCount").textContent = stocks.length;
+  document.getElementById("phAvgPe").textContent = avgPe;
+  document.getElementById("phAvgYield").textContent = avgYield;
+
+  // === 2. 市場分散 ===
+  const marketCounts = { listed: 0, otc: 0, emerging: 0 };
+  stocks.forEach(s => { if (marketCounts[s.market] !== undefined) marketCounts[s.market]++; });
+  const marketTotal = stocks.length;
+  const marketLabels = { listed: "🟢 上市", otc: "🟡 上櫃", emerging: "🟠 興櫃" };
+  const marketColors = { listed: "#16A34A", otc: "#C5A572", emerging: "#EF4444" };
+  document.getElementById("phMarketChart").innerHTML = Object.entries(marketCounts)
+    .filter(([, n]) => n > 0)
+    .map(([k, n]) => {
+      const pct = (n / marketTotal * 100).toFixed(0);
+      return `<div class="ph-bar-row">
+        <div class="ph-bar-label">${marketLabels[k]}</div>
+        <div class="ph-bar-track"><div class="ph-bar-fill" style="width:${pct}%;background:${marketColors[k]};"></div></div>
+        <div class="ph-bar-val">${n} 檔 (${pct}%)</div>
+      </div>`;
+    }).join("");
+
+  // === 3. 產業集中度 ===
+  const indCounts = {};
+  stocks.forEach(s => {
+    const cat = s.category || "未分類";
+    indCounts[cat] = (indCounts[cat] || 0) + 1;
+  });
+  const indSorted = Object.entries(indCounts).sort((a,b) => b[1] - a[1]);
+  const top3Total = indSorted.slice(0, 3).reduce((sum, [, n]) => sum + n, 0);
+  const concentration = (top3Total / stocks.length * 100).toFixed(0);
+
+  document.getElementById("phIndustryChart").innerHTML = indSorted.slice(0, 6).map(([cat, n]) => {
+    const pct = (n / stocks.length * 100).toFixed(0);
+    return `<div class="ph-bar-row">
+      <div class="ph-bar-label">${cat}</div>
+      <div class="ph-bar-track"><div class="ph-bar-fill" style="width:${pct}%;background:#1B4332;"></div></div>
+      <div class="ph-bar-val">${n} 檔 (${pct}%)</div>
+    </div>`;
+  }).join("");
+
+  // 集中度風險
+  let riskLabel, riskColor;
+  if (concentration >= 80) { riskLabel = "高"; riskColor = "#EF4444"; }
+  else if (concentration >= 60) { riskLabel = "中"; riskColor = "#C5A572"; }
+  else { riskLabel = "低"; riskColor = "#16A34A"; }
+  document.getElementById("phRisk").innerHTML = `<span style="color:${riskColor}">${riskLabel}</span><div style="font-size:12px;color:#666;margin-top:2px;">前 3 大產業占 ${concentration}%</div>`;
+
+  // === 4. 持股明細列表 ===
+  document.getElementById("phStockCount").textContent = stocks.length + " 檔";
+  document.getElementById("phStockList").innerHTML = stocks.map(s => {
+    const pct = L.pctChange(s.price, s.change);
+    const cls = L.changeClass(s.change);
+    const m = s.market === "listed" ? "上市" : s.market === "otc" ? "上櫃" : s.market === "emerging" ? "興櫃" : "";
+    const val = valuation[s.code] || {};
+    const peStr = val.pe_ratio ? `P/E ${val.pe_ratio}` : "P/E —";
+    const yStr = val.yield_pct !== null && val.yield_pct !== undefined ? `殖利率 ${val.yield_pct.toFixed(2)}%` : "殖利率 —";
+    return `<a class="ph-stock-row" href="stock-detail.html?code=${s.code}">
+      <span class="ph-stock-code">${s.code}</span>
+      <span class="ph-stock-name">${s.name}</span>
+      <span class="status-pill status-${m}" style="font-size:10px;">${m}</span>
+      <span class="ph-stock-cat">${s.category || ""}</span>
+      <span class="ph-stock-price ${cls}">${L.fmtPrice(s.price)} ${L.arrow(s.change)} ${L.fmtPct(pct)}</span>
+      <span class="ph-stock-val">${peStr} ・ ${yStr}</span>
+    </a>`;
+  }).join("");
+
+  // === 5. AI 健診報告（streaming）===
+  const aiResult = document.getElementById("phAiResult");
+  const refreshBtn = document.getElementById("phAiRefresh");
+
+  async function loadAiHealthCheck() {
+    aiResult.innerHTML = `<div class="stock-ai-loading"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span> AI 健診中...</div>`;
+
+    // 組裝 context
+    const watchlistStocks = stocks.map(s => {
+      const val = valuation[s.code] || {};
+      const rev = revenue[s.code] || {};
+      const pct = L.pctChange(s.price, s.change);
+      return {
+        code: s.code, name: s.name, market: s.market, category: s.category,
+        price_TWD: s.price,
+        todayChangePercent: Number(pct.toFixed(2)),
+        pe_ratio: val.pe_ratio,
+        yield_pct: val.yield_pct,
+        pb_ratio: val.pb_ratio,
+        revenue_yoy: rev.yoy
+      };
+    });
+
+    const context = {
+      watchlistStocks,
+      portfolioStats: {
+        totalStocks: stocks.length,
+        marketBreakdown: marketCounts,
+        topIndustries: indSorted.slice(0, 5).map(([k, v]) => ({ name: k, count: v, pct: Math.round(v/stocks.length*100) })),
+        concentrationTop3Pct: Number(concentration),
+        avgPe: peList.length ? Number((peList.reduce((a,b)=>a+b,0)/peList.length).toFixed(2)) : null,
+        avgYield: yieldList.length ? Number((yieldList.reduce((a,b)=>a+b,0)/yieldList.length).toFixed(2)) : null
+      }
+    };
+
+    const prompt = `這是一份持股健診報告。我有 ${stocks.length} 檔自選股。請用「資料整理＋觀察」的中立角度，幫我寫一份 4-5 段的健診分析：
+
+1. 整體分散度（市場分散、產業集中度，前 3 大產業占比 ${concentration}%）
+2. 估值水準（平均本益比 ${avgPe}、平均殖利率 ${avgYield}）— 跟一般大盤比較高還是低
+3. 風險觀察（若有單一產業占比過高、或市場集中於興櫃等）
+4. 給我一個重新分散投資的方向建議（不要推薦具體個股，只說「可以考慮加入其他產業」這種方向）
+5. 提醒這只是資料整理，買賣決定請自評
+
+請用淺白繁中，給 45-75 歲長輩看得懂。不要推薦個股，不要說「值得買進」「應該賣出」。`;
+
+    try {
+      const resp = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8", "Accept": "text/event-stream" },
+        body: JSON.stringify({
+          messages: [{ role: "user", content: prompt }],
+          context,
+          stream: true
+        })
+      });
+      if (!resp.ok) {
+        aiResult.innerHTML = `<div style="padding:16px;color:#888;">AI 健診暫時無法載入，請稍後重試。</div>`;
+        return;
+      }
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let buffer = "";
+      let fullText = "";
+      let gotFirst = false;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+        for (const raw of lines) {
+          const line = raw.trim();
+          if (!line.startsWith("data:")) continue;
+          const data = line.slice(5).trim();
+          if (data === "[DONE]") continue;
+          try {
+            const json = JSON.parse(data);
+            const delta = json.choices?.[0]?.delta?.content;
+            if (delta) {
+              if (!gotFirst) gotFirst = true;
+              fullText += delta;
+              renderAi(aiResult, fullText);
+            }
+          } catch {}
+        }
+      }
+    } catch (err) {
+      aiResult.innerHTML = `<div style="padding:16px;color:#888;">連線 AI 服務失敗，請刷新頁面再試。</div>`;
+    }
+  }
+
+  function renderAi(el, text) {
+    let esc = String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    esc = esc.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
+    const html = esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+    el.innerHTML = `<div class="stock-ai-body">${html}</div>
+      <div class="stock-ai-foot">
+        ${window.LeadFuTTS && window.LeadFuTTS.isSupported()
+          ? `<button type="button" class="chat-tts-btn stock-ai-tts" title="朗讀">🔊</button>` : ""}
+        <span class="stock-ai-disclaimer">※ AI 整理公開資料，不構成投資建議</span>
+      </div>`;
+    const tts = el.querySelector(".stock-ai-tts");
+    if (tts && window.LeadFuTTS) {
+      tts.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.LeadFuTTS.toggleButton(tts, text);
+      });
+    }
+  }
+
+  loadAiHealthCheck();
+  refreshBtn.addEventListener("click", loadAiHealthCheck);
+});
+</script>
+</body>
+</html>

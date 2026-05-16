@@ -2144,6 +2144,17 @@ async function loadLiveData() {
   } catch (e) {
     console.log(`[領富 AI] ℹ️ 三大法人未載入 (${e.message})`);
   }
+
+  // 8. 估值指標（本益比/殖利率/股價淨值比 - TWSE BWIBBU_d）
+  try {
+    const live = await fetchJson("valuation_live.json");
+    if (live.data) {
+      STOCK_DATA.valuation = live.data;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆估值指標 (${live.sourceDate})`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 估值指標未載入 (${e.message})`);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
