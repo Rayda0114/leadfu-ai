@@ -2374,10 +2374,13 @@ img { max-width: 100%; }
   padding-top: 10px;
   border-top: 1px dashed rgba(0,0,0,0.08);
 }
-.stock-ai-tts {
-  position: static;
-  width: 30px;
-  height: 30px;
+.stock-ai-tts.chat-tts-btn {
+  /* 提高 specificity 強制取消 absolute（.chat-tts-btn 預設 absolute 用於泡泡內角落） */
+  position: static !important;
+  top: auto;
+  right: auto;
+  width: 32px;
+  height: 32px;
   font-size: 14px;
 }
 .stock-ai-disclaimer {
