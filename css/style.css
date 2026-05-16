@@ -3177,18 +3177,30 @@ body.theme-red {
   /* 連結 */
   --leadfu-primary: #B91C1C;
 }
+/* 全域連結改暗紅（但不影響深色背景上的連結） */
 body.theme-red a { color: #991B1B; }
 body.theme-red a:hover { color: #B91C1C; }
 
 /* Top bar / Logo bar 背景 */
 body.theme-red .top-bar { background: linear-gradient(90deg, #7F1D1D, #991B1B); }
+body.theme-red .top-bar a { color: #fff; }   /* 深紅底上的連結改白色 */
+body.theme-red .top-bar a:hover { color: #C5A572; }
 body.theme-red .logo-bar { background: linear-gradient(180deg, #fff 0%, #fef2f2 100%); }
 body.theme-red .logo-bi { color: #991B1B; }
 
-/* Main nav */
+/* Main nav — 紅底必須用金色字才看得到 */
 body.theme-red .main-nav { background: linear-gradient(90deg, #7F1D1D, #B91C1C, #991B1B); }
-body.theme-red .main-nav li.active a,
-body.theme-red .main-nav li a:hover { background: rgba(255,255,255,0.18); }
+body.theme-red .main-nav li a {
+  color: #C5A572;          /* 金色字配紅底，中華吉利配色 */
+}
+body.theme-red .main-nav li a:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+body.theme-red .main-nav li.active a {
+  background: rgba(0, 0, 0, 0.22);
+  color: #C5A572;
+}
 
 /* Page-head / breadcrumb */
 body.theme-red .page-head { background: linear-gradient(180deg, #fef2f2, #fff); border-bottom: 2px solid #B91C1C; }
