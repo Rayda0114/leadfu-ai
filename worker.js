@@ -16,9 +16,10 @@
 //   ✘ nvidia/llama-3.3-nemotron-super-49b-v1.5 → 同上
 //   ✘ meta/llama-3.1-8b-instruct               → 太弱：編造資料、誤解問題
 //   ✘ qwen/qwen2.5-72b-instruct                → Nvidia NIM 404
-//   🧪 google/gemma-3-4b-it                    → 測試中（Google 2025/3 釋出，多語訓練，4B 但有 128K context）
+//   ✘ google/gemma-3-4b-it                     → Nvidia NIM 尚未上架 (404)
+//   🧪 中國模型測試中（qwen / deepseek-r1-distill）
 //   ✓ meta/llama-3.3-70b-instruct              → 穩定備援
-const DEFAULT_MODEL = "google/gemma-3-4b-it";
+const DEFAULT_MODEL = "meta/llama-3.3-70b-instruct";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // 系統 prompt：正面說明角色、清楚列舉可做/不可做
@@ -195,7 +196,10 @@ async function handleAsk(request, env) {
     finalMessages.push({ role: "user", content: augmentedLast });
   }
 
-  const model = env.NVIDIA_MODEL || DEFAULT_MODEL;
+  // 允許 body.model 覆寫（給開發測試用，前端不會送這個參數）
+  const model = (typeof body.model === "string" && body.model.length < 200)
+    ? body.model
+    : (env.NVIDIA_MODEL || DEFAULT_MODEL);
 
   const requestBody = JSON.stringify({
     model,
