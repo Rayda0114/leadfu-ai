@@ -389,6 +389,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (fromBottom < threshold) scrollToBottom();
   }
 
+  /** 把股票物件轉成「欄位名自帶單位」的版本，避免 AI 把金額誤讀為 % */
+  function normalizeStockForAI(s) {
+    const pct = L.pctChange(s.price, s.change);
+    return {
+      code: s.code,
+      name: s.name,
+      market: s.market,
+      category: s.category,
+      price_TWD: s.price,
+      todayChange_TWD: s.change,                      // 今日漲跌「金額」(新台幣元)
+      todayChangePercent: Number(pct.toFixed(2)),     // 今日漲跌「百分比」
+      volume_lots: s.volume                            // 成交量（張）
+    };
+  }
+
   function buildContext(question) {
     if (!question) return {};
     const ctx = {};
@@ -404,7 +419,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (targetStock) {
-      ctx.relevantStocks = [targetStock];
+      ctx.relevantStocks = [normalizeStockForAI(targetStock)];
       const co = (L.data.companies && L.data.companies[targetStock.code]) || null;
       if (co) ctx.companyInfo = co;
       const rev = (L.data.revenue && L.data.revenue[targetStock.code]) || null;
@@ -434,10 +449,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       pool.sort((a, b) => (b.volume || 0) - (a.volume || 0));
     }
-    ctx.relevantStocks = pool.slice(0, 15).map(s => ({
-      code: s.code, name: s.name, market: s.market, category: s.category,
-      price: s.price, change: s.change, volume: s.volume
-    }));
+    ctx.relevantStocks = pool.slice(0, 15).map(normalizeStockForAI);
     return ctx;
   }
 

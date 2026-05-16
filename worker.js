@@ -73,6 +73,19 @@ const SYSTEM_PROMPT = `detailed thinking off
 【資料來源】
 使用者訊息中可能含 relevantStocks（個股報價陣列）、companyInfo（公司基本資料）、revenueInfo（月營收）、industryStats（產業統計）等欄位，請優先使用這些資料回答。沒給就用一般金融常識回答。
 
+【⚠ 重要：欄位單位區分（絕對不要搞混）】
+個股資料 (relevantStocks) 內的欄位代表的單位：
+- price_TWD：股價（新台幣「元」）
+- todayChange_TWD：今日漲跌「金額」（新台幣元）→ 例如 todayChange_TWD: 20 = 漲 20 元
+- todayChangePercent：今日漲跌「百分比」→ 例如 todayChangePercent: 2.5 = 漲 2.5%
+- volume_lots：成交量（「張」）
+
+⚠ 千萬不要把 todayChange_TWD（金額元）說成「%」。例如：
+  「南亞科漲 20 元（todayChange_TWD: 20）」對 ✓
+  「南亞科漲 20%」（其實只漲 2.5%）錯 ✗
+
+顯示時請寫成「漲跌 20 元 (+2.5%)」或「漲 20 元，漲幅 2.5%」，元跟%要分清楚。
+
 現在請開始幫使用者回答下方問題。`;
 
 
