@@ -86,7 +86,7 @@
           <li>異常事件警示（會計師變動、處置股）</li>
           <li>VIP 專屬討論區</li>
         </ul>
-        <button class="form-btn">立即訂閱</button>
+        <button class="form-btn subscribe-btn" data-plan="VIP 進階" data-price="399">立即訂閱</button>
       </div>
 
       <div class="plan-card">
@@ -101,7 +101,7 @@
           <li>線下投資講座優先報名</li>
           <li>專屬客服 LINE</li>
         </ul>
-        <button class="form-btn">立即訂閱</button>
+        <button class="form-btn subscribe-btn" data-plan="VIP 旗艦" data-price="999">立即訂閱</button>
       </div>
     </div>
   </div>
@@ -140,6 +140,132 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/auth.js"></script>
 <script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const LINE_URL = "https://line.me/R/ti/p/@041exgtv";
+  document.querySelectorAll(".subscribe-btn").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const plan = btn.dataset.plan;
+      const price = btn.dataset.price;
+
+      // 取使用者 email（已登入才有）
+      let userEmail = "";
+      let userId = "";
+      try {
+        if (window.LeadFuAuth && window.LeadFuAuth.getUser) {
+          const u = await window.LeadFuAuth.getUser();
+          if (u) { userEmail = u.email || ""; userId = u.id || ""; }
+        }
+      } catch {}
+
+      const now = new Date();
+      const timeStr = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,"0")}/${String(now.getDate()).padStart(2,"0")} ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+      const message = `【領富 AI VIP 訂閱申請】
+方案：${plan}
+月費：NT$ ${price}
+${userEmail ? `會員 Email：${userEmail}` : "（尚未登入，請告訴客服您的聯絡 Email）"}
+${userId ? `會員 ID：${userId.slice(0,8)}...` : ""}
+申請時間：${timeStr}
+
+請告知付款方式（街口/LINE Pay/銀行轉帳），謝謝！`;
+
+      // 嘗試複製到剪貼簿
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(message);
+        copied = true;
+      } catch {}
+
+      showSubscribeModal(plan, price, message, copied, LINE_URL);
+
+      // 同步寫一筆紀錄到 Supabase feedback 表（讓你後台看誰想訂閱）
+      try {
+        if (window.LeadFuAuth && window.LeadFuAuth.client) {
+          await window.LeadFuAuth.client.from("feedback").insert({
+            category: "VIP 訂閱申請",
+            message: `${plan} (NT$${price}/月) - 透過 LINE 客服流程`,
+            email: userEmail,
+            user_id: userId || null,
+            page_url: location.href,
+            user_agent: navigator.userAgent.slice(0, 240)
+          });
+        }
+      } catch (err) { /* 不影響主流程 */ }
+    });
+  });
+
+  function showSubscribeModal(plan, price, message, copied, lineUrl) {
+    const old = document.getElementById("subscribeModal");
+    if (old) old.remove();
+
+    const overlay = document.createElement("div");
+    overlay.id = "subscribeModal";
+    overlay.className = "subscribe-modal-overlay";
+    overlay.innerHTML = `
+      <div class="subscribe-modal">
+        <div class="subscribe-modal-head">
+          <h2>📝 訂閱 ${plan}</h2>
+          <button type="button" class="subscribe-modal-close">✕</button>
+        </div>
+        <div class="subscribe-modal-body">
+          <div class="subscribe-plan-info">
+            <div class="subscribe-plan-name">${plan}</div>
+            <div class="subscribe-plan-price">NT$ ${price} <small>/ 月</small></div>
+          </div>
+
+          <div class="subscribe-steps">
+            <h3>三步驟完成訂閱：</h3>
+            <ol>
+              <li>${copied ? "✅ 訂閱訊息已複製到剪貼簿" : "請手動複製下方訂閱訊息"}</li>
+              <li>點下方藍色按鈕 <strong>加領富 AI 客服 LINE</strong></li>
+              <li>到 LINE 對話框 <strong>貼上訊息</strong>送出，客服會回覆付款方式</li>
+            </ol>
+          </div>
+
+          <div class="subscribe-msg-box">
+            <div class="subscribe-msg-label">訂閱訊息（如果沒自動複製，請手動長按選取）：</div>
+            <pre class="subscribe-msg-text">${message.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</pre>
+            <button type="button" class="subscribe-copy-btn">📋 複製訊息</button>
+          </div>
+
+          <a href="${lineUrl}" target="_blank" rel="noopener" class="subscribe-line-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+            開啟 LINE 客服加好友 →
+          </a>
+
+          <p class="subscribe-disclaimer">
+            ※ 領富 AI 為純資料服務，所有訂閱方案不含個股推薦或買賣建議。<br>
+            ※ 確認付款後客服會在 24 小時內為您開通 VIP 權限。
+          </p>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add("show"));
+
+    overlay.querySelector(".subscribe-modal-close").addEventListener("click", closeModal);
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) closeModal(); });
+
+    overlay.querySelector(".subscribe-copy-btn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(message);
+        overlay.querySelector(".subscribe-copy-btn").textContent = "✅ 已複製";
+      } catch {
+        overlay.querySelector(".subscribe-msg-text").style.userSelect = "all";
+        overlay.querySelector(".subscribe-copy-btn").textContent = "請長按上方文字選取";
+      }
+    });
+
+    function closeModal() {
+      overlay.classList.remove("show");
+      setTimeout(() => overlay.remove(), 200);
+    }
+  }
+});
+</script>
 </body>
 </html>

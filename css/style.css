@@ -2003,6 +2003,169 @@ img { max-width: 100%; }
  * 首頁 hero 入口 + ai.html 結果頁 共用樣式
  * ============================================================ */
 
+/* 💎 VIP 訂閱 Modal（點立即訂閱跳出，引導到 LINE 客服） */
+.subscribe-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 31, 24, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.2s;
+  padding: 16px;
+  overflow-y: auto;
+}
+.subscribe-modal-overlay.show { opacity: 1; }
+.subscribe-modal {
+  background: #fff;
+  border-radius: 14px;
+  width: min(94%, 540px);
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.4);
+}
+.subscribe-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 22px;
+  background: linear-gradient(135deg, #0A1F18, #1B4332);
+  color: #fff;
+  border-radius: 14px 14px 0 0;
+}
+.subscribe-modal-head h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+.subscribe-modal-close {
+  background: transparent;
+  border: 0;
+  color: rgba(255,255,255,0.7);
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.subscribe-modal-close:hover { color: #fff; }
+.subscribe-modal-body { padding: 22px; }
+
+.subscribe-plan-info {
+  background: linear-gradient(135deg, #fef8ed, #fdf0d5);
+  border: 1px solid #C5A572;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.subscribe-plan-name {
+  font-size: 14px;
+  color: #7c5a2a;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.subscribe-plan-price {
+  font-size: 30px;
+  color: #1B4332;
+  font-weight: 800;
+}
+.subscribe-plan-price small {
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+}
+
+.subscribe-steps h3 {
+  font-size: 15px;
+  color: #1B4332;
+  margin-bottom: 10px;
+}
+.subscribe-steps ol {
+  padding-left: 22px;
+  margin-bottom: 16px;
+}
+.subscribe-steps li {
+  font-size: 14px;
+  line-height: 1.9;
+  color: #333;
+  list-style: decimal;
+}
+
+.subscribe-msg-box {
+  background: #f3f5f8;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 18px;
+}
+.subscribe-msg-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 6px;
+}
+.subscribe-msg-text {
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #222;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0 0 10px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #e0e6ed;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.subscribe-copy-btn {
+  background: #1B4332;
+  color: #fff;
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+}
+.subscribe-copy-btn:hover { background: #0D2818; }
+
+.subscribe-line-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #06C755;
+  color: #fff !important;
+  padding: 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s, transform 0.1s;
+  margin-bottom: 14px;
+}
+.subscribe-line-btn:hover {
+  background: #05B048;
+  color: #fff !important;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.subscribe-disclaimer {
+  text-align: center;
+  font-size: 11px;
+  color: #999;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .subscribe-modal-body { padding: 18px; }
+  .subscribe-plan-price { font-size: 26px; }
+}
+
 /* ⚠ 防錯雷達頁 */
 .radar-summary {
   display: grid;
