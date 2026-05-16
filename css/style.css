@@ -2003,6 +2003,61 @@ img { max-width: 100%; }
  * 首頁 hero 入口 + ai.html 結果頁 共用樣式
  * ============================================================ */
 
+/* 📈 三大法人排行頁 */
+.inst-panel .panel-tabs { gap: 4px; }
+.inst-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.inst-side { border-right: 1px solid #eef0f3; }
+.inst-side:last-child { border-right: none; }
+.inst-side-head {
+  padding: 12px 18px;
+  font-weight: 700;
+  font-size: 14px;
+  border-bottom: 2px solid;
+}
+.inst-side-head-buy { background: #fde7eb; color: #EF4444; border-bottom-color: #EF4444; }
+.inst-side-head-sell { background: #e5f3ec; color: #16A34A; border-bottom-color: #16A34A; }
+.inst-list { padding: 0; }
+.inst-row {
+  display: grid;
+  grid-template-columns: 50px 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 16px;
+  border-bottom: 1px solid #f3f5f8;
+  text-decoration: none;
+  color: inherit;
+  font-size: 13px;
+  transition: background 0.12s;
+}
+.inst-row:hover { background: #fafbfc; text-decoration: none; }
+.inst-row-code { font-weight: 700; color: #1B4332; }
+.inst-row-name { font-weight: 500; }
+.inst-row-cat {
+  font-size: 11px;
+  color: #888;
+  background: #f3f5f8;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.inst-row-net { font-weight: 700; text-align: right; font-size: 13px; }
+.inst-empty {
+  padding: 30px;
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .inst-grid { grid-template-columns: 1fr; }
+  .inst-side { border-right: none; border-bottom: 1px solid #eef0f3; }
+  .inst-row { grid-template-columns: 46px 1fr auto; padding: 9px 14px; font-size: 12px; }
+  .inst-row-cat { display: none; }
+}
+
 /* 💎 VIP 訂閱 Modal（點立即訂閱跳出，引導到 LINE 客服） */
 .subscribe-modal-overlay {
   position: fixed;

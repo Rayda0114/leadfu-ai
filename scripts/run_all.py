@@ -39,6 +39,7 @@ SCRIPTS = [
     "fetch_revenue.py",
     "fetch_news.py",
     "fetch_announcements.py",
+    "fetch_institutional.py",   # 三大法人買賣超（上市，TWSE T86）
     "fetch_klines.py",
     "generate_sitemap.py",
 ]

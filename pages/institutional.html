@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三大法人買賣超排行 - 領富 AI</title>
+<meta name="description" content="台股上市公司三大法人（外資、投信、自營商）今日買賣超排行。資料來源 TWSE 證交所，每日盤後更新。">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">股價總覽</a></li>
+      <li><a href="screener.html">進階選股</a></li>
+      <li class="active"><a href="institutional.html">三大法人</a></li>
+      <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>📈 三大法人買賣超排行</h1>
+    <div class="breadcrumb">首頁 ▸ 三大法人</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 18px 12px 40px;">
+
+  <div class="panel" style="margin-bottom:14px;">
+    <div style="padding: 14px 22px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; font-size: 13px; color: #555;">
+      <span>📅 <strong id="instSourceDate">--</strong></span>
+      <span>📊 <strong id="instCount">--</strong> 檔上市股</span>
+      <span style="margin-left:auto;color:#888;font-size:12px;">資料來源：TWSE 證交所 T86 三大法人買賣超日報</span>
+    </div>
+  </div>
+
+  <!-- Tabs：法人切換 -->
+  <div class="panel inst-panel">
+    <div class="panel-head">
+      <h2 id="instTitle">三大法人合計</h2>
+      <div class="panel-tabs">
+        <button class="tab active" data-inv="total">三大法人合計</button>
+        <button class="tab" data-inv="foreign">外資</button>
+        <button class="tab" data-inv="trust">投信</button>
+        <button class="tab" data-inv="dealer">自營商</button>
+      </div>
+    </div>
+    <div class="inst-grid">
+      <div class="inst-side">
+        <div class="inst-side-head inst-side-head-buy">🔴 買超前 30 名</div>
+        <div id="instBuyList" class="inst-list"></div>
+      </div>
+      <div class="inst-side">
+        <div class="inst-side-head inst-side-head-sell">🟢 賣超前 30 名</div>
+        <div id="instSellList" class="inst-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align:center;color:#888;font-size:12px;margin-top:18px;line-height:1.7;">
+    ※ 三大法人 = 外資（含外資自營商）+ 投信 + 自營商。買賣超單位為「張」（1 張 = 1,000 股）。<br>
+    ※ 資料每日盤後更新，目前僅含上市公司。法人籌碼僅供參考，買賣決定請自行評估。
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const inst = L.data.institutional || {};
+  const all = L.data.stocks || [];
+
+  if (!Object.keys(inst).length) {
+    document.querySelector("main").innerHTML = `
+      <div class="panel" style="padding:40px;text-align:center;color:#888;">
+        <div style="font-size:48px;margin-bottom:10px;">📊</div>
+        <p>三大法人資料載入中或暫無資料</p>
+        <p style="font-size:13px;margin-top:8px;">通常盤後 18:00 後才會有當日資料</p>
+      </div>`;
+    return;
+  }
+
+  // 顯示資料日期
+  const srcDate = L.data.institutionalSourceDate || "";
+  const dateLabel = srcDate.length === 8
+    ? `${srcDate.slice(0,4)}/${srcDate.slice(4,6)}/${srcDate.slice(6,8)}`
+    : srcDate;
+  document.getElementById("instSourceDate").textContent = dateLabel;
+  document.getElementById("instCount").textContent = Object.keys(inst).length;
+
+  const fieldKey = {
+    total:   "total_net_lots",
+    foreign: "foreign_net_lots",
+    trust:   "trust_net_lots",
+    dealer:  "dealer_net_lots"
+  };
+  const titleMap = {
+    total:   "三大法人合計",
+    foreign: "外資",
+    trust:   "投信",
+    dealer:  "自營商"
+  };
+
+  function findStock(code) { return all.find(s => s.code === code); }
+
+  function pillMarket(s) {
+    const m = s.market === "listed" ? "上市"
+            : s.market === "otc"    ? "上櫃"
+            : s.market === "emerging" ? "興櫃" : (s.status || "");
+    return `<span class="status-pill status-${m}" style="font-size:10px;">${m}</span>`;
+  }
+
+  function renderRow(item, kind) {
+    const s = findStock(item.code) || { code: item.code, name: item.name, market: "listed", price: 0, change: 0, category: "" };
+    const netLots = item[fieldKey[kind]];
+    const cls = netLots > 0 ? "up" : (netLots < 0 ? "down" : "flat");
+    return `<a class="inst-row" href="stock-detail.html?code=${item.code}">
+      <span class="inst-row-code">${item.code}</span>
+      <span class="inst-row-name">${item.name.trim()}</span>
+      ${s.category ? `<span class="inst-row-cat">${s.category}</span>` : ""}
+      <span class="inst-row-net ${cls}">${netLots > 0 ? "+" : ""}${netLots.toLocaleString()} 張</span>
+    </a>`;
+  }
+
+  let currentInv = "total";
+
+  function render() {
+    const key = fieldKey[currentInv];
+    const arr = Object.values(inst);
+    const sorted = arr.slice().sort((a, b) => b[key] - a[key]);
+
+    const buys = sorted.filter(x => x[key] > 0).slice(0, 30);
+    const sells = sorted.filter(x => x[key] < 0).slice(-30).reverse();
+
+    document.getElementById("instTitle").textContent = titleMap[currentInv] + " 買賣超排行";
+    document.getElementById("instBuyList").innerHTML = buys.length === 0
+      ? `<div class="inst-empty">無買超個股</div>`
+      : buys.map(it => renderRow(it, currentInv)).join("");
+    document.getElementById("instSellList").innerHTML = sells.length === 0
+      ? `<div class="inst-empty">無賣超個股</div>`
+      : sells.map(it => renderRow(it, currentInv)).join("");
+  }
+
+  document.querySelectorAll(".panel-tabs .tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".panel-tabs .tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentInv = btn.dataset.inv;
+      render();
+    });
+  });
+
+  render();
+});
+</script>
+</body>
+</html>

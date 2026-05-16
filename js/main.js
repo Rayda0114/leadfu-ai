@@ -2125,6 +2125,18 @@ async function loadLiveData() {
   } catch (e) {
     console.log(`[領富 AI] ℹ️ 月營收未載入 (${e.message})`);
   }
+
+  // 7. 三大法人買賣超（上市 TWSE T86）
+  try {
+    const live = await fetchJson("institutional_live.json");
+    if (live.data) {
+      STOCK_DATA.institutional = live.data;
+      STOCK_DATA.institutionalSourceDate = live.sourceDate;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆三大法人買賣超 (${live.sourceDate})`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 三大法人未載入 (${e.message})`);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
