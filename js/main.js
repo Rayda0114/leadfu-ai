@@ -940,6 +940,46 @@ function setupBottomTabBar() {
 }
 
 /* ============================================================
+ * 🎨 主題切換（墨綠老錢 ↔ 喜氣紅金）
+ * 台股族群迷信紅色 = 漲、賺錢，給他們選擇權
+ * ============================================================ */
+function setupThemeToggle() {
+  const STORAGE_KEY = "leadfu_theme";
+  // 先套用儲存的主題（避免閃爍）
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved === "red") document.body.classList.add("theme-red");
+
+  // 在每個 .top-right 注入切換按鈕
+  document.querySelectorAll(".top-right").forEach(host => {
+    if (host.querySelector(".theme-toggle-btn")) return;
+    const btn = document.createElement("button");
+    btn.className = "theme-toggle-btn";
+    btn.type = "button";
+    btn.title = "切換主題顏色（墨綠 ↔ 喜氣紅）";
+    btn.innerHTML = getThemeBtnLabel();
+    btn.addEventListener("click", toggleTheme);
+    // 放在最前面（會員登入按鈕左邊）
+    host.insertBefore(btn, host.firstChild);
+  });
+
+  function getThemeBtnLabel() {
+    return document.body.classList.contains("theme-red")
+      ? `<span class="theme-dot theme-dot-green"></span>切換墨綠`
+      : `<span class="theme-dot theme-dot-red"></span>切換喜氣紅`;
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle("theme-red");
+    const isRed = document.body.classList.contains("theme-red");
+    localStorage.setItem(STORAGE_KEY, isRed ? "red" : "green");
+    document.querySelectorAll(".theme-toggle-btn").forEach(b => b.innerHTML = getThemeBtnLabel());
+    if (window.showToast) {
+      window.showToast(isRed ? "🔴 已切換到喜氣紅金主題" : "💚 已切回墨綠老錢主題", "success");
+    }
+  }
+}
+
+/* ============================================================
  * 🔊 TTS 文字朗讀（Web Speech API，免費、繁中支援）
  * 給 45-75 老花眼用戶：點 AI 訊息上的 🔊 就能聽
  * ============================================================ */
@@ -2095,6 +2135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupHideableHeader();
   setupDisclaimer();
   setupInAppBrowserWarning();   // 偵測 LINE/FB/IG/WeChat 內建瀏覽器，跳警告擋掉 OAuth
+  setupThemeToggle();           // 🎨 主題切換（墨綠 ↔ 喜氣紅）
   setupFeedbackWidget();        // 漂浮回饋按鈕，每頁右下角
   setupPWA();
   renderDate();

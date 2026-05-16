@@ -3138,3 +3138,191 @@ img { max-width: 100%; }
   .ai-list-pct    { grid-area: pct; }
   .ai-list-vol    { grid-area: vol; }
 }
+
+/* ============================================================
+ * 🎨 主題切換按鈕 + 喜氣紅金主題覆寫
+ * 重要：股價漲跌色保持台股慣例（紅=漲，綠=跌）— 不改
+ * ============================================================ */
+.theme-toggle-btn {
+  background: transparent;
+  border: 1px solid rgba(197, 165, 114, 0.5);
+  color: inherit;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s;
+  margin-right: 4px;
+}
+.theme-toggle-btn:hover { background: rgba(197, 165, 114, 0.18); }
+.theme-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.theme-dot-green { background: #1B4332; }
+.theme-dot-red   { background: #B91C1C; }
+
+/* ===== 喜氣紅金主題覆寫 ===== */
+/* 思路：用 body.theme-red 高 specificity 覆寫綠色為紅色
+   股價 .up/.down/.flat 不動，保持紅漲綠跌 */
+
+body.theme-red {
+  /* 連結 */
+  --leadfu-primary: #B91C1C;
+}
+body.theme-red a { color: #991B1B; }
+body.theme-red a:hover { color: #B91C1C; }
+
+/* Top bar / Logo bar 背景 */
+body.theme-red .top-bar { background: linear-gradient(90deg, #7F1D1D, #991B1B); }
+body.theme-red .logo-bar { background: linear-gradient(180deg, #fff 0%, #fef2f2 100%); }
+body.theme-red .logo-bi { color: #991B1B; }
+
+/* Main nav */
+body.theme-red .main-nav { background: linear-gradient(90deg, #7F1D1D, #B91C1C, #991B1B); }
+body.theme-red .main-nav li.active a,
+body.theme-red .main-nav li a:hover { background: rgba(255,255,255,0.18); }
+
+/* Page-head / breadcrumb */
+body.theme-red .page-head { background: linear-gradient(180deg, #fef2f2, #fff); border-bottom: 2px solid #B91C1C; }
+body.theme-red .page-head h1 { color: #7F1D1D; }
+body.theme-red .breadcrumb { color: #991B1B; }
+
+/* 主要按鈕 */
+body.theme-red .btn-primary,
+body.theme-red .search-box button {
+  background: linear-gradient(135deg, #991B1B, #B91C1C);
+  color: #fff;
+}
+body.theme-red .btn-primary:hover,
+body.theme-red .search-box button:hover {
+  background: linear-gradient(135deg, #7F1D1D, #991B1B);
+}
+body.theme-red .search-box { border-color: #B91C1C; }
+
+/* Voice mic & search elements */
+body.theme-red .search-box .voice-mic { color: #B91C1C !important; }
+body.theme-red .search-box .voice-mic svg { fill: #B91C1C; }
+
+/* Footer */
+body.theme-red .site-footer { background: linear-gradient(180deg, #1c0a0a, #2a0f0f); }
+
+/* Status pill 上市 改紅金（不衝突，因為 status pill 是描述市場，不是漲跌）*/
+body.theme-red .status-上市 { background: #fef2f2; color: #7F1D1D; }
+body.theme-red .status-上櫃 { background: #fef7e0; color: #92400e; }
+/* status-興櫃 維持原樣（淡粉紅色），跟主題其實也搭 */
+
+/* Hero（首頁主視覺）*/
+body.theme-red .hero {
+  background: linear-gradient(135deg, #7F1D1D 0%, #991B1B 40%, #B91C1C 100%);
+}
+body.theme-red .hero-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+  border-color: rgba(197, 165, 114, 0.4);
+}
+
+/* AI Hero panel / AI chat embed head */
+body.theme-red .ai-hero-panel {
+  background: linear-gradient(135deg, #7F1D1D 0%, #991B1B 60%, #B91C1C 100%);
+}
+body.theme-red .ai-chat-embed {
+  border-color: #fecaca;
+  box-shadow: 0 6px 22px rgba(185, 28, 28, 0.18);
+}
+body.theme-red .ai-chat-embed-head {
+  background: linear-gradient(135deg, #7F1D1D, #991B1B 60%, #B91C1C);
+  border-bottom-color: #C5A572;
+}
+
+/* Chat 對話泡泡 - user 改紅金 */
+body.theme-red .chat-bubble-user .chat-content {
+  background: linear-gradient(135deg, #991B1B, #B91C1C);
+}
+body.theme-red .chat-avatar-ai {
+  background: linear-gradient(135deg, #7F1D1D, #B91C1C);
+  color: #C5A572;
+}
+body.theme-red .chat-avatar-user {
+  background: #C5A572;
+  color: #7F1D1D;
+}
+
+/* AI 對話頁 toolbar */
+body.theme-red .chat-toolbar {
+  background: linear-gradient(135deg, #7F1D1D, #B91C1C);
+}
+
+/* 個股連結 / 朗讀按鈕 - 紅主題下保持金色，配紅底更喜氣 */
+body.theme-red .chat-stock-link {
+  color: #991B1B;
+  border-bottom-color: rgba(153, 27, 27, 0.5);
+}
+body.theme-red .chat-stock-link:hover {
+  background: rgba(185, 28, 28, 0.12);
+  color: #7F1D1D;
+}
+body.theme-red .chat-tts-btn { color: #991B1B; }
+body.theme-red .chat-tts-btn.playing {
+  background: #B91C1C;
+  color: #C5A572;
+  border-color: #B91C1C;
+}
+
+/* 回饋按鈕 */
+body.theme-red .feedback-fab {
+  background: linear-gradient(135deg, #7F1D1D, #B91C1C);
+  color: #C5A572;
+  box-shadow: 0 6px 20px rgba(185, 28, 28, 0.4);
+}
+body.theme-red .feedback-modal-head {
+  background: linear-gradient(135deg, #7F1D1D, #B91C1C);
+}
+
+/* PWA 安裝橫條 */
+body.theme-red .pwa-install-banner {
+  background: linear-gradient(135deg, #7F1D1D, #B91C1C);
+  border-bottom-color: #C5A572;
+}
+
+/* 語音搜尋 overlay */
+body.theme-red .voice-overlay { background: rgba(127, 29, 29, 0.85); }
+body.theme-red .voice-pulse-dot {
+  background: linear-gradient(135deg, #7F1D1D, #B91C1C);
+}
+body.theme-red .voice-pulse::before,
+body.theme-red .voice-pulse::after { background: #B91C1C; }
+
+/* AI 摘要區塊 */
+body.theme-red .ai-result-head { color: #7F1D1D; }
+body.theme-red .ai-panel { border-left-color: #B91C1C; }
+
+/* Panels */
+body.theme-red .panel-head { background: linear-gradient(180deg, #fff, #fef2f2); }
+body.theme-red .panel-head h2,
+body.theme-red .panel-head h3 { color: #7F1D1D; }
+body.theme-red .panel-tabs .tab.active {
+  background: #B91C1C;
+  color: #fff;
+}
+
+/* Tip box / disclaimer bars */
+body.theme-red .site-disclaimer,
+body.theme-red .ai-disclaimer { color: #991B1B; }
+
+/* 內建瀏覽器警告 banner 改紅 */
+body.theme-red .inapp-warning-banner {
+  background: linear-gradient(90deg, #fee2e2 0%, #fecaca 100%);
+  border-bottom-color: #B91C1C;
+}
+
+@media (max-width: 480px) {
+  .theme-toggle-btn { font-size: 10px; padding: 2px 7px; }
+  .theme-dot { width: 8px; height: 8px; }
+}
