@@ -3997,3 +3997,112 @@ body.theme-red .inapp-warning-banner {
   .theme-toggle-btn { font-size: 10px; padding: 2px 7px; }
   .theme-dot { width: 8px; height: 8px; }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   共用：殖利率 / 融資融券排行列表（data-row）
+   pages/dividends.html, pages/margin.html
+   ───────────────────────────────────────────────────────────── */
+.data-row-list {
+  display: flex;
+  flex-direction: column;
+}
+.data-row {
+  display: grid;
+  grid-template-columns: 40px minmax(150px, 1.6fr) 80px repeat(4, minmax(70px, 1fr));
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-bottom: 1px solid #eef0f3;
+  text-decoration: none;
+  color: #333;
+  transition: background 0.15s;
+  font-size: 13px;
+}
+.data-row:hover { background: #f7fafc; }
+.data-row:last-child { border-bottom: none; }
+.data-rank {
+  font-weight: 700;
+  color: #C5A572;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.data-row:nth-child(-n+3) .data-rank { color: #B45309; font-size: 15px; }
+.data-code {
+  font-size: 13px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.data-code strong {
+  color: #1B4332;
+  margin-right: 6px;
+  font-family: ui-monospace, "Consolas", monospace;
+}
+.data-cat {
+  font-size: 11px;
+  color: #888;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.data-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  color: #555;
+}
+.data-num-hl {
+  color: #1B4332;
+  font-weight: 700;
+  font-size: 14px;
+}
+.data-num.up    { color: #dc2626; }
+.data-num.down  { color: #16a34a; }
+.data-num.flat  { color: #6b7280; }
+.data-yield { color: #B45309; font-weight: 600; }
+.data-num-hl.data-yield { color: #92400e; }
+.data-price { font-weight: 600; }
+
+@media (max-width: 768px) {
+  .data-row {
+    grid-template-columns: 32px 1fr 60px;
+    grid-template-rows: auto auto;
+    row-gap: 4px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  .data-rank { grid-row: 1 / 3; }
+  .data-code { grid-column: 2; grid-row: 1; font-size: 13px; }
+  .data-cat  { grid-column: 3; grid-row: 1; font-size: 10px; }
+  .data-num  {
+    grid-row: 2;
+    text-align: left;
+    font-size: 12px;
+    padding-right: 8px;
+  }
+  .data-num:nth-of-type(1) { grid-column: 2 / span 1; }
+  .data-num:nth-of-type(2),
+  .data-num:nth-of-type(3),
+  .data-num:nth-of-type(4) {
+    grid-column: auto;
+  }
+  /* 把所有 .data-num 排在第二列 */
+  .data-row > .data-num {
+    grid-row: 2;
+  }
+}
+
+/* 紅金主題覆寫 */
+body.theme-red .data-rank { color: #B91C1C; }
+body.theme-red .data-row:nth-child(-n+3) .data-rank { color: #7F1D1D; }
+body.theme-red .data-code strong { color: #7F1D1D; }
+body.theme-red .data-num-hl { color: #7F1D1D; }
+body.theme-red .data-num.up    { color: #DC2626; }
+body.theme-red .data-num.down  { color: #15803D; }
+body.theme-red .data-row:hover { background: #fef2f2; }

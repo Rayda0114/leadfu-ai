@@ -2155,6 +2155,18 @@ async function loadLiveData() {
   } catch (e) {
     console.log(`[領富 AI] ℹ️ 估值指標未載入 (${e.message})`);
   }
+
+  // 9. 融資融券（散戶籌碼面 - TWSE MI_MARGN）
+  try {
+    const live = await fetchJson("margin_live.json");
+    if (live.data) {
+      STOCK_DATA.margin = live.data;
+      STOCK_DATA.marginSourceDate = live.sourceDate;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆融資融券 (${live.sourceDate})`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 融資融券未載入 (${e.message})`);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {

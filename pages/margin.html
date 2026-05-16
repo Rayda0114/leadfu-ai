@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 融資融券排行（散戶籌碼） - 領富 AI</title>
+<meta name="description" content="台股融資融券每日變化排行：融資增加（散戶看多）、融資減少（散戶停損）、融券增加（散戶看空）、融券減少（軋空訊號）。資料來源 TWSE 證交所。">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">股價總覽</a></li>
+      <li><a href="institutional.html">三大法人</a></li>
+      <li class="active"><a href="margin.html">融資融券</a></li>
+      <li><a href="dividends.html">💰 殖利率</a></li>
+      <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
+      <li><a href="ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>📊 融資融券排行</h1>
+    <div class="breadcrumb">首頁 ▸ 散戶籌碼面</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 18px 12px 40px;">
+
+  <div class="panel" style="margin-bottom:14px;">
+    <div style="padding:14px 22px;font-size:13px;color:#555;line-height:1.7;">
+      <strong>融資</strong> = 跟券商借錢買股票（散戶積極看多）；<strong>融券</strong> = 跟券商借股票賣出（看空、放空）。<br>
+      <span style="color:#16a34a;">融資增加</span> 代表散戶加碼；<span style="color:#dc2626;">融券增加</span> 代表散戶看空；
+      <span style="color:#b45309;">融券大減</span> 通常是「軋空」訊號（被迫回補）。<br>
+      <strong style="color:#888;">⚠ 提醒：</strong>融資維持率過低可能被斷頭、引發連鎖賣壓，是短線風險指標。
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2 id="marTitle">融資融券排行</h2>
+      <div class="panel-tabs">
+        <button class="tab active" data-sort="margin_inc">融資增加（散戶看多）</button>
+        <button class="tab" data-sort="margin_dec">融資減少（散戶停損）</button>
+        <button class="tab" data-sort="short_inc">融券增加（散戶看空）</button>
+        <button class="tab" data-sort="short_dec">融券減少（軋空訊號）</button>
+      </div>
+    </div>
+    <div style="padding:8px 18px;background:#fafbfc;font-size:12px;color:#666;border-bottom:1px solid #eef0f3;">
+      <span>📅 <strong id="marDate">--</strong></span>
+      <span style="margin-left:16px;">📊 共 <strong id="marCount">--</strong> 檔（僅上市公司）</span>
+      <span style="margin-left:auto;float:right;">顯示前 50 名</span>
+    </div>
+    <div class="data-row-list" id="marList"></div>
+  </div>
+
+  <p style="text-align:center;color:#888;font-size:12px;margin-top:18px;line-height:1.7;">
+    ※ 資料來源：TWSE 證交所「每日信用交易彙總（MI_MARGN）」每日盤後更新。<br>
+    ※ 僅含上市公司（上櫃融資融券資料另抓）。單位：張。<br>
+    ※ 排名僅為公開資料整理，不構成個股推薦或買賣建議。
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const margin = L.data.margin || {};
+  const all = L.data.stocks || [];
+
+  if (!Object.keys(margin).length) {
+    document.getElementById("marList").innerHTML = `<div style="padding:40px;text-align:center;color:#888;">融資融券資料載入中...</div>`;
+    return;
+  }
+
+  const arr = Object.values(margin);
+  document.getElementById("marDate").textContent = L.data.marginSourceDate ?
+    L.data.marginSourceDate.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3") : "";
+  document.getElementById("marCount").textContent = arr.length;
+
+  function findStock(code) { return all.find(s => s.code === code); }
+  function fmtNum(n) {
+    if (n === null || n === undefined) return "—";
+    const abs = Math.abs(n);
+    if (abs >= 10000) return (n / 10000).toFixed(1) + "萬";
+    return n.toLocaleString();
+  }
+  function fmtChange(n) {
+    if (n === null || n === undefined) return "—";
+    const sign = n > 0 ? "+" : "";
+    return sign + fmtNum(n);
+  }
+
+  let currentSort = "margin_inc";
+  function render() {
+    let list = arr.slice();
+    let titleText = "", hlField = "";
+
+    if (currentSort === "margin_inc") {
+      list = list.filter(x => x.margin_change > 0).sort((a, b) => b.margin_change - a.margin_change);
+      titleText = "📈 融資增加排行（散戶加碼）";
+      hlField = "margin_change";
+    } else if (currentSort === "margin_dec") {
+      list = list.filter(x => x.margin_change < 0).sort((a, b) => a.margin_change - b.margin_change);
+      titleText = "📉 融資減少排行（散戶停損）";
+      hlField = "margin_change";
+    } else if (currentSort === "short_inc") {
+      list = list.filter(x => x.short_change > 0).sort((a, b) => b.short_change - a.short_change);
+      titleText = "🔻 融券增加排行（散戶看空）";
+      hlField = "short_change";
+    } else {
+      list = list.filter(x => x.short_change < 0 && x.short_balance > 0).sort((a, b) => a.short_change - b.short_change);
+      titleText = "🚀 融券減少排行（可能軋空）";
+      hlField = "short_change";
+    }
+    document.getElementById("marTitle").textContent = titleText;
+
+    list = list.slice(0, 50);
+    document.getElementById("marList").innerHTML = list.map((d, i) => {
+      const s = findStock(d.code);
+      const cls = s ? L.changeClass(s.change) : "flat";
+      const cat = s ? s.category : "";
+      const mc = d.margin_change || 0;
+      const sc = d.short_change || 0;
+      const mcCls = mc > 0 ? "up" : (mc < 0 ? "down" : "flat");
+      const scCls = sc > 0 ? "down" : (sc < 0 ? "up" : "flat");
+      return `<a class="data-row" href="stock-detail.html?code=${d.code}">
+        <span class="data-rank">${(i+1).toString().padStart(2,'0')}</span>
+        <span class="data-code"><strong>${d.code}</strong> ${d.name}</span>
+        <span class="data-cat">${cat}</span>
+        <span class="data-num data-margin ${mcCls} ${hlField==='margin_change'?'data-num-hl':''}">資 ${fmtChange(mc)}</span>
+        <span class="data-num data-balance">餘 ${fmtNum(d.margin_balance)}</span>
+        <span class="data-num data-short ${scCls} ${hlField==='short_change'?'data-num-hl':''}">券 ${fmtChange(sc)}</span>
+        <span class="data-num data-price ${cls}">${s ? L.fmtPrice(s.price) : '-'}</span>
+      </a>`;
+    }).join("");
+  }
+
+  document.querySelectorAll(".panel-tabs .tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".panel-tabs .tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentSort = btn.dataset.sort;
+      render();
+    });
+  });
+  render();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💰 高殖利率股排行 - 領富 AI</title>
+<meta name="description" content="台股上市公司高殖利率股票排行：依殖利率/本益比/股價淨值比排序。資料來源 TWSE 證交所，每日更新。退休族與長期投資人的好朋友。">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">股價總覽</a></li>
+      <li><a href="institutional.html">三大法人</a></li>
+      <li><a href="margin.html">融資融券</a></li>
+      <li class="active"><a href="dividends.html">💰 殖利率</a></li>
+      <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
+      <li><a href="ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>💰 高殖利率股排行</h1>
+    <div class="breadcrumb">首頁 ▸ 殖利率排行</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 18px 12px 40px;">
+
+  <div class="panel" style="margin-bottom:14px;">
+    <div style="padding:14px 22px;font-size:13px;color:#555;line-height:1.7;">
+      退休族與長期投資人最關心的「<strong>殖利率 = 現金股利 ÷ 股價</strong>」。
+      高殖利率代表用同樣的錢能領更多股息。<br>
+      <strong style="color:#888;">⚠ 高殖利率不等於好股票</strong>，可能是股價跌深造成。需搭配本益比、營運穩定度一起看。
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2 id="divTitle">殖利率排行</h2>
+      <div class="panel-tabs">
+        <button class="tab active" data-sort="yield_desc">殖利率高→低</button>
+        <button class="tab" data-sort="pe_asc">本益比低→高</button>
+        <button class="tab" data-sort="pb_asc">股價淨值比低→高</button>
+      </div>
+    </div>
+    <div style="padding:8px 18px;background:#fafbfc;font-size:12px;color:#666;border-bottom:1px solid #eef0f3;">
+      <span>📅 <strong id="divDate">--</strong></span>
+      <span style="margin-left:16px;">📊 共 <strong id="divCount">--</strong> 檔（僅上市公司）</span>
+      <span style="margin-left:auto;float:right;">顯示前 50 名</span>
+    </div>
+    <div class="data-row-list" id="divList"></div>
+  </div>
+
+  <p style="text-align:center;color:#888;font-size:12px;margin-top:18px;line-height:1.7;">
+    ※ 資料來源：TWSE 證交所「個股日本益比、殖利率及股價淨值比」每日更新。<br>
+    ※ 僅含上市公司（上櫃/興櫃尚未提供官方殖利率資料）。<br>
+    ※ 排名僅為公開資料整理，不構成個股推薦或買賣建議。
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const val = L.data.valuation || {};
+  const all = L.data.stocks || [];
+
+  if (!Object.keys(val).length) {
+    document.getElementById("divList").innerHTML = `<div style="padding:40px;text-align:center;color:#888;">估值資料載入中...</div>`;
+    return;
+  }
+
+  const arr = Object.values(val);
+  document.getElementById("divDate").textContent = (L.data.valuation && Object.keys(L.data.valuation).length) ? document.getElementById("todayDate")?.textContent || "" : "";
+  document.getElementById("divCount").textContent = arr.length;
+
+  function findStock(code) { return all.find(s => s.code === code); }
+
+  let currentSort = "yield_desc";
+  function render() {
+    let list = arr.slice();
+    if (currentSort === "yield_desc") {
+      list = list.filter(x => x.yield_pct !== null && x.yield_pct !== undefined).sort((a, b) => b.yield_pct - a.yield_pct);
+      document.getElementById("divTitle").textContent = "💰 殖利率高→低排行";
+    } else if (currentSort === "pe_asc") {
+      list = list.filter(x => x.pe_ratio && x.pe_ratio > 0).sort((a, b) => a.pe_ratio - b.pe_ratio);
+      document.getElementById("divTitle").textContent = "📊 低本益比排行";
+    } else {
+      list = list.filter(x => x.pb_ratio && x.pb_ratio > 0).sort((a, b) => a.pb_ratio - b.pb_ratio);
+      document.getElementById("divTitle").textContent = "📉 低股價淨值比排行";
+    }
+    list = list.slice(0, 50);
+    document.getElementById("divList").innerHTML = list.map((d, i) => {
+      const s = findStock(d.code);
+      const pct = s ? L.pctChange(s.price, s.change) : 0;
+      const cls = s ? L.changeClass(s.change) : "flat";
+      const cat = s ? s.category : "";
+      const yieldText = d.yield_pct !== null && d.yield_pct !== undefined ? `${d.yield_pct.toFixed(2)}%` : "—";
+      const peText = d.pe_ratio ? d.pe_ratio.toFixed(2) : "—";
+      const pbText = d.pb_ratio ? d.pb_ratio.toFixed(2) : "—";
+      return `<a class="data-row" href="stock-detail.html?code=${d.code}">
+        <span class="data-rank">${(i+1).toString().padStart(2,'0')}</span>
+        <span class="data-code"><strong>${d.code}</strong> ${d.name}</span>
+        <span class="data-cat">${cat}</span>
+        <span class="data-num data-yield ${currentSort==='yield_desc'?'data-num-hl':''}">${yieldText}</span>
+        <span class="data-num data-pe ${currentSort==='pe_asc'?'data-num-hl':''}">P/E ${peText}</span>
+        <span class="data-num data-pb ${currentSort==='pb_asc'?'data-num-hl':''}">P/B ${pbText}</span>
+        <span class="data-num data-price ${cls}">${s ? L.fmtPrice(s.price) : '-'}</span>
+      </a>`;
+    }).join("");
+  }
+
+  document.querySelectorAll(".panel-tabs .tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".panel-tabs .tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentSort = btn.dataset.sort;
+      render();
+    });
+  });
+  render();
+});
+</script>
+</body>
+</html>

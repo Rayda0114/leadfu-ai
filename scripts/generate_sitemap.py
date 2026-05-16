@@ -49,6 +49,8 @@ STATIC_PAGES = [
     ("/pages/risk-radar.html",         "daily",   0.85),
     ("/pages/institutional.html",      "daily",   0.85),
     ("/pages/portfolio-health.html",   "weekly",  0.7),
+    ("/pages/dividends.html",          "daily",   0.85),
+    ("/pages/margin.html",             "daily",   0.85),
 ]
 
 
