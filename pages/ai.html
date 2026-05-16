@@ -404,8 +404,67 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
   }
 
+  /** 偵測「我的自選股」類問題 */
+  function isWatchlistQuestion(q) {
+    if (!q) return false;
+    return /(我的?|本人)?(自選|追蹤|關注|觀察|盯|心儀).*?(股|清單|名單|這幾檔)/.test(q)
+        || /我自選|自選股/.test(q);
+  }
+
+  /** 組裝自選股完整上下文（5 層資料）給 AI */
+  function buildWatchlistContext() {
+    const codes = (L.getWatchlist ? L.getWatchlist() : []);
+    const ctx = { watchlistIsEmpty: codes.length === 0 };
+    if (!codes.length) return ctx;
+
+    const all = L.data.stocks || [];
+    const companies = L.data.companies || {};
+    const revenue = L.data.revenue || {};
+    const news = L.data.news || [];
+    const announcements = L.data.announcements || [];
+
+    // 1. 自選股報價
+    const watchStocks = codes
+      .map(c => all.find(s => s.code === c))
+      .filter(Boolean);
+    ctx.watchlistStocks = watchStocks.map(normalizeStockForAI);
+
+    // 2. 公司基本資料（董事長、地址、資本額…）
+    const co = {};
+    codes.forEach(c => { if (companies[c]) co[c] = companies[c]; });
+    if (Object.keys(co).length) ctx.watchlistCompanies = co;
+
+    // 3. 月營收
+    const rev = {};
+    codes.forEach(c => { if (revenue[c]) rev[c] = revenue[c]; });
+    if (Object.keys(rev).length) ctx.watchlistRevenue = rev;
+
+    // 4. 相關新聞（依 related 欄位過濾，取最近 8 則）
+    const relNews = news.filter(n =>
+      n.related && Array.isArray(n.related) && n.related.some(c => codes.includes(c))
+    ).slice(0, 8).map(n => ({
+      title: n.title, date: n.date, tag: n.tag, related: n.related,
+      summary: Array.isArray(n.body) ? (n.body[0] || "").slice(0, 150) : ""
+    }));
+    if (relNews.length) ctx.watchlistNews = relNews;
+
+    // 5. 重大公告 / 注意股（取近 10 則）
+    const relAnn = announcements.filter(a =>
+      codes.includes(a.code)
+    ).slice(0, 10);
+    if (relAnn.length) ctx.watchlistAnnouncements = relAnn;
+
+    return ctx;
+  }
+
   function buildContext(question) {
     if (!question) return {};
+
+    // ★ 自選股相關問題 → 一次帶入 5 層資料
+    if (isWatchlistQuestion(question)) {
+      return buildWatchlistContext();
+    }
+
     const ctx = {};
     const all = L.data.stocks || [];
 

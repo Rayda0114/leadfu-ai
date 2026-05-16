@@ -71,7 +71,23 @@ const SYSTEM_PROMPT = `detailed thinking off
 ※ 以上為公開資料整理，不構成投資建議，亦非投顧服務。
 
 【資料來源】
-使用者訊息中可能含 relevantStocks（個股報價陣列）、companyInfo（公司基本資料）、revenueInfo（月營收）、industryStats（產業統計）等欄位，請優先使用這些資料回答。沒給就用一般金融常識回答。
+使用者訊息中可能含這些 context 欄位，請優先使用：
+- relevantStocks（個股報價）/ companyInfo / revenueInfo / industryStats
+- watchlistStocks（使用者自選股即時報價）
+- watchlistCompanies（自選股公司基本資料）
+- watchlistRevenue（自選股月營收）
+- watchlistNews（自選股近期相關新聞）
+- watchlistAnnouncements（自選股重大公告 / 注意股）
+- watchlistIsEmpty: true（使用者還沒加任何自選股）
+
+【被問自選股時】
+- 如 watchlistIsEmpty=true：友善告訴使用者「您還沒加任何自選股，先到個股頁面按『＋自選』加入幾檔，下次就能直接問我了」
+- 如有自選股資料：根據使用者問題，**整合多源資料**回答。例如：
+  - 「我的自選股今天怎樣」→ 列出每檔的代號名稱、價格、漲跌（元+%）、所屬市場
+  - 「我自選股有什麼新聞」→ 用 watchlistNews 整理近期新聞要點（含日期）
+  - 「我自選股月營收」→ 用 watchlistRevenue 整理每檔的最新月營收 + 年增率
+  - 「我自選股有沒有公告」→ 用 watchlistAnnouncements 提醒注意股或處置股
+  - 「自選股全部一次幫我看」→ 跨資料源綜合整理（股價 + 新聞 + 重大訊息）
 
 【⚠ 重要：欄位單位區分（絕對不要搞混）】
 個股資料 (relevantStocks) 內的欄位代表的單位：
@@ -179,7 +195,14 @@ async function handleAsk(request, env) {
     context.companyInfo || context.revenueInfo || context.industryStats;
 
   let augmentedLast = lastUserContent;
-  if (hasContext) {
+  const hasWatchlistContext = context.watchlistStocks
+    || context.watchlistNews
+    || context.watchlistAnnouncements
+    || context.watchlistCompanies
+    || context.watchlistRevenue
+    || (context.watchlistIsEmpty === true);
+
+  if (hasContext || hasWatchlistContext) {
     augmentedLast += `\n\n---\n以下是領富 AI 網站提供給你的相關公開資料，請優先依此回答：`;
     if (context.relevantStocks && context.relevantStocks.length) {
       augmentedLast += `\n\n### 相關個股\n\`\`\`json\n${JSON.stringify(context.relevantStocks).slice(0, 8000)}\n\`\`\``;
@@ -192,6 +215,26 @@ async function handleAsk(request, env) {
     }
     if (context.industryStats) {
       augmentedLast += `\n\n### 產業統計\n\`\`\`json\n${JSON.stringify(context.industryStats).slice(0, 2000)}\n\`\`\``;
+    }
+
+    // === 自選股 5 層資料 ===
+    if (context.watchlistIsEmpty) {
+      augmentedLast += `\n\n### 使用者自選股\n（目前是空的，請建議使用者先去個股頁面按「＋自選」加入幾檔）`;
+    }
+    if (context.watchlistStocks && context.watchlistStocks.length) {
+      augmentedLast += `\n\n### 使用者的自選股 即時報價\n\`\`\`json\n${JSON.stringify(context.watchlistStocks).slice(0, 8000)}\n\`\`\``;
+    }
+    if (context.watchlistCompanies) {
+      augmentedLast += `\n\n### 使用者自選股 公司基本資料\n\`\`\`json\n${JSON.stringify(context.watchlistCompanies).slice(0, 6000)}\n\`\`\``;
+    }
+    if (context.watchlistRevenue) {
+      augmentedLast += `\n\n### 使用者自選股 月營收\n\`\`\`json\n${JSON.stringify(context.watchlistRevenue).slice(0, 5000)}\n\`\`\``;
+    }
+    if (context.watchlistNews && context.watchlistNews.length) {
+      augmentedLast += `\n\n### 使用者自選股 相關新聞（近期）\n\`\`\`json\n${JSON.stringify(context.watchlistNews).slice(0, 5000)}\n\`\`\``;
+    }
+    if (context.watchlistAnnouncements && context.watchlistAnnouncements.length) {
+      augmentedLast += `\n\n### 使用者自選股 重大公告 / 注意股\n\`\`\`json\n${JSON.stringify(context.watchlistAnnouncements).slice(0, 5000)}\n\`\`\``;
     }
   }
 

@@ -599,8 +599,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
   }
 
+  function isWatchlistQuestion(q) {
+    if (!q) return false;
+    return /(我的?|本人)?(自選|追蹤|關注|觀察|盯|心儀).*?(股|清單|名單|這幾檔)/.test(q)
+        || /我自選|自選股/.test(q);
+  }
+
+  function buildWatchlistContext() {
+    const codes = (L.getWatchlist ? L.getWatchlist() : []);
+    const ctx = { watchlistIsEmpty: codes.length === 0 };
+    if (!codes.length) return ctx;
+    const all = L.data.stocks || [];
+    const companies = L.data.companies || {};
+    const revenue = L.data.revenue || {};
+    const news = L.data.news || [];
+    const announcements = L.data.announcements || [];
+    const watchStocks = codes.map(c => all.find(s => s.code === c)).filter(Boolean);
+    ctx.watchlistStocks = watchStocks.map(normalizeStockForAI);
+    const co = {};
+    codes.forEach(c => { if (companies[c]) co[c] = companies[c]; });
+    if (Object.keys(co).length) ctx.watchlistCompanies = co;
+    const rev = {};
+    codes.forEach(c => { if (revenue[c]) rev[c] = revenue[c]; });
+    if (Object.keys(rev).length) ctx.watchlistRevenue = rev;
+    const relNews = news.filter(n =>
+      n.related && Array.isArray(n.related) && n.related.some(c => codes.includes(c))
+    ).slice(0, 8).map(n => ({
+      title: n.title, date: n.date, tag: n.tag, related: n.related,
+      summary: Array.isArray(n.body) ? (n.body[0] || "").slice(0, 150) : ""
+    }));
+    if (relNews.length) ctx.watchlistNews = relNews;
+    const relAnn = announcements.filter(a => codes.includes(a.code)).slice(0, 10);
+    if (relAnn.length) ctx.watchlistAnnouncements = relAnn;
+    return ctx;
+  }
+
   function buildContext(question) {
     if (!question) return {};
+    if (isWatchlistQuestion(question)) return buildWatchlistContext();
     const ctx = {};
     const all = L.data.stocks || [];
     const codeMatch = question.match(/\b\d{4}\b/);
