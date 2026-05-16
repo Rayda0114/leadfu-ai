@@ -11,15 +11,20 @@
  *   NVIDIA_MODEL    (Plain Text，預設 meta/llama-3.3-70b-instruct)
  */
 
-// 模型測試紀錄（速度從快到慢，品質從低到高）：
-//   ✘ nvidia/nvidia-nemotron-nano-9b-v2        → 中文 silent thinking 拒答
-//   ✘ nvidia/llama-3.3-nemotron-super-49b-v1.5 → 同上
-//   ✘ meta/llama-3.1-8b-instruct               → 太弱：編造資料、誤解問題
-//   ✘ qwen/qwen2.5-72b-instruct                → Nvidia NIM 404
-//   ✘ google/gemma-3-4b-it                     → Nvidia NIM 尚未上架 (404)
-//   🧪 中國模型測試中（qwen / deepseek-r1-distill）
-//   ✓ meta/llama-3.3-70b-instruct              → 穩定備援
-const DEFAULT_MODEL = "meta/llama-3.3-70b-instruct";
+// 完整模型測試紀錄（2026-05-16 第二輪掃完 Nvidia NIM 完整名單）：
+//   ⭐ qwen/qwen3-next-80b-a3b-instruct        → 9.4s, 中文最自然（台式繁中舉例），MoE 80B/3B【目前主力】
+//   ⚡ nvidia/nemotron-3-nano-30b-a3b          → 3.5s, 167 t/s 速度王，中文 OK（備援極速版）
+//   ⚡ openai/gpt-oss-20b                      → 4.7s, 168 t/s, 結構好
+//   ✓ minimaxai/minimax-m2.7                   → 12.9s, 中文好
+//   ✓ meta/llama-3.3-70b-instruct              → 13s, 穩定備援
+//   ✘ mistralai/mixtral-8x7b-instruct          → 答案有錯（混淆月增/年增）
+//   ✘ stockmark/stockmark-2-100b-instruct      → 答錯（金融專用名不符實）
+//   ✘ deepseek-ai/deepseek-v4-flash            → 42s 太慢
+//   ✘ Nemotron 9B v2 / Super 49B               → 中文 silent thinking 拒答
+//   ✘ meta/llama-3.1-8b-instruct               → 編造資料
+//   不可用 404/410：qwen/qwen2.5-72b, qwen3-5-122b, moonshotai/kimi-k2, z-ai/glm4.7&5.1,
+//                  bytedance/seed-oss, google/gemma-*, microsoft/phi-*, ibm/granite, 01-ai/yi-large
+const DEFAULT_MODEL = "qwen/qwen3-next-80b-a3b-instruct";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // 系統 prompt：正面說明角色、清楚列舉可做/不可做
