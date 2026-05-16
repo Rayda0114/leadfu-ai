@@ -433,15 +433,22 @@ function bindAddFavBtns() {
 
 /* 手機版：整列卡片可點擊跳轉個股 */
 function bindMobileRowTap() {
+  // 整個 .stock-table 的 tr[data-code] 都可點，桌機/手機都通
   document.addEventListener("click", (e) => {
-    if (window.innerWidth > 768) return;
     const tr = e.target.closest(".stock-table tr[data-code]");
     if (!tr) return;
-    // 不要攔截真實連結與按鈕
+    // 不要攔截真實連結與按鈕（避免「+自選」按鈕被誤觸發跳轉）
     if (e.target.closest("a, button")) return;
     const code = tr.dataset.code;
     if (code) location.href = pageHref("stock-detail.html?code=" + code);
   });
+  // 滑鼠 hover 顯示手型 cursor（視覺提示「這列可點」）
+  if (!document.getElementById("_rowTapStyle")) {
+    const s = document.createElement("style");
+    s.id = "_rowTapStyle";
+    s.textContent = `.stock-table tr[data-code]{cursor:pointer;}.stock-table tr[data-code]:hover{background:#fafbfc;}`;
+    document.head.appendChild(s);
+  }
 }
 
 /* ============================================================
