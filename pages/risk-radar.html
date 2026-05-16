@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚠ 領富 AI 防錯雷達 - 投資人警示工具</title>
+<meta name="description" content="領富 AI 防錯雷達：跨上市/上櫃/興櫃，列出注意股、處置股、漲跌停接近股、月營收暴跌股、極低流動性股，幫投資人避開地雷。">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">股價總覽</a></li>
+      <li><a href="screener.html">進階選股</a></li>
+      <li><a href="industries.html">產業分類</a></li>
+      <li class="active"><a href="risk-radar.html">⚠ 防錯雷達</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="ai.html">AI 對話</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>⚠ 領富 AI 防錯雷達</h1>
+    <div class="breadcrumb">首頁 ▸ 防錯雷達</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 18px 12px 40px;">
+
+  <!-- 簡介說明 -->
+  <div class="panel" style="margin-bottom:18px;">
+    <div style="padding: 18px 22px;">
+      <p style="font-size:14px;color:#444;line-height:1.8;margin:0;">
+        防錯雷達整合 <strong>TPEx 注意股 / 處置股公告</strong>、<strong>今日股價異常波動</strong>、<strong>月營收劇烈下滑</strong>、<strong>流動性極低</strong> 等多項警示，
+        幫您在投資前快速檢查目標個股有無紅旗。
+        <strong style="color:#B91C1C;">看到自選股出現在這裡，建議重新檢視持有理由。</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- 警示總數摘要 -->
+  <div class="radar-summary" id="radarSummary"></div>
+
+  <!-- ⚠ 注意股 -->
+  <div class="panel radar-section">
+    <div class="panel-head">
+      <h2>⚠ 注意股</h2>
+      <span class="radar-count" id="cntNotice">--</span>
+    </div>
+    <p class="radar-desc">交易所列為「注意股」的個股 — 可能因短期內漲跌幅、週轉率、本益比異常。建議買賣前先了解原因。</p>
+    <div id="listNotice" class="radar-list"></div>
+  </div>
+
+  <!-- 🚫 處置股 -->
+  <div class="panel radar-section">
+    <div class="panel-head">
+      <h2>🚫 處置股</h2>
+      <span class="radar-count" id="cntDisposal">--</span>
+    </div>
+    <p class="radar-desc">交易所採取處置措施的個股 — 通常需全額交割或分盤集合競價，流動性與買賣方式受限。</p>
+    <div id="listDisposal" class="radar-list"></div>
+  </div>
+
+  <!-- 🎯 今日漲跌停接近 -->
+  <div class="panel radar-section">
+    <div class="panel-head">
+      <h2>🎯 今日異常波動</h2>
+      <span class="radar-count" id="cntVolatile">--</span>
+    </div>
+    <p class="radar-desc">今日漲幅或跌幅超過 ±7%（接近漲跌停 ±10%）的個股 — 短線價格波動劇烈，請留意持倉風險。</p>
+    <div id="listVolatile" class="radar-list"></div>
+  </div>
+
+  <!-- 📉 月營收年減 50% 以上 -->
+  <div class="panel radar-section">
+    <div class="panel-head">
+      <h2>📉 月營收暴跌（年減 ≥ 50%）</h2>
+      <span class="radar-count" id="cntRevDrop">--</span>
+    </div>
+    <p class="radar-desc">最新月營收較去年同期下滑 50% 以上 — 公司營運可能正面臨重大挑戰，請審慎評估。</p>
+    <div id="listRevDrop" class="radar-list"></div>
+  </div>
+
+  <!-- 💀 極低流動性 -->
+  <div class="panel radar-section">
+    <div class="panel-head">
+      <h2>💀 流動性極低（今日成交 ≤ 5 張）</h2>
+      <span class="radar-count" id="cntZeroVol">--</span>
+    </div>
+    <p class="radar-desc">今日成交量低於 5 張的個股 — 想賣可能賣不掉、想買也可能拉不到。投資前請評估流動性風險。</p>
+    <div id="listZeroVol" class="radar-list"></div>
+  </div>
+
+  <p style="text-align:center;color:#888;font-size:12px;margin-top:24px;line-height:1.8;">
+    ※ 防錯雷達為公開資料整理，不構成個股推薦或不推薦。資料來源：TWSE 證交所、TPEx 櫃買中心、每日盤後更新。<br>
+    ※ 看到自選股出現於此並非要求賣出，但建議您主動了解原因、評估是否符合您的投資策略。
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const all = L.data.stocks || [];
+  const ann = L.data.announcements || [];
+  const rev = L.data.revenue || {};
+  const companies = L.data.companies || {};
+
+  // 取個股完整資料（給 list 渲染用）
+  function findStock(code) { return all.find(s => s.code === code); }
+
+  function pillMarket(s) {
+    const m = s.market === "listed" ? "上市"
+            : s.market === "otc"    ? "上櫃"
+            : s.market === "emerging" ? "興櫃" : (s.status || "");
+    return `<span class="status-pill status-${m}" style="font-size:10px;">${m}</span>`;
+  }
+
+  function renderStockRow(s, extra) {
+    if (!s) return "";
+    const pct = L.pctChange(s.price, s.change);
+    const cls = L.changeClass(s.change);
+    return `<a class="radar-row" href="stock-detail.html?code=${s.code}">
+      <div class="radar-row-main">
+        <strong class="radar-code">${s.code}</strong>
+        <span class="radar-name">${s.name}</span>
+        ${pillMarket(s)}
+        <span class="radar-cat">${s.category || ""}</span>
+      </div>
+      <div class="radar-row-num">
+        <span class="${cls}" style="font-weight:700;">${L.fmtPrice(s.price)}</span>
+        <span class="${cls}" style="font-size:12px;">${L.arrow(s.change)} ${L.fmtPct(pct)}</span>
+      </div>
+      <div class="radar-row-extra">${extra || ""}</div>
+    </a>`;
+  }
+
+  // 1. 注意股
+  const notice = ann.filter(a => a.type === "注意股");
+  document.getElementById("cntNotice").textContent = notice.length + " 檔";
+  document.getElementById("listNotice").innerHTML = notice.length === 0
+    ? `<div class="radar-empty">✓ 今日無「注意股」公告</div>`
+    : notice.map(a => {
+        const s = findStock(a.code);
+        const extra = `<span class="radar-warn">${(a.title || "").slice(0, 40)}</span>`;
+        return s ? renderStockRow(s, extra) : `<div class="radar-row">${a.code} ${a.name} ${a.title}</div>`;
+      }).join("");
+
+  // 2. 處置股
+  const disposal = ann.filter(a => a.type === "處置股");
+  document.getElementById("cntDisposal").textContent = disposal.length + " 檔";
+  document.getElementById("listDisposal").innerHTML = disposal.length === 0
+    ? `<div class="radar-empty">✓ 今日無「處置股」公告</div>`
+    : disposal.map(a => {
+        const s = findStock(a.code);
+        const extra = `<span class="radar-warn">${(a.title || "").slice(0, 40)}</span>`;
+        return s ? renderStockRow(s, extra) : `<div class="radar-row">${a.code} ${a.name} ${a.title}</div>`;
+      }).join("");
+
+  // 3. 異常波動（漲跌 > 7%）
+  const volatile = all
+    .filter(s => s.price > 0 && Math.abs(L.pctChange(s.price, s.change)) >= 7)
+    .sort((a, b) => Math.abs(L.pctChange(b.price, b.change)) - Math.abs(L.pctChange(a.price, a.change)))
+    .slice(0, 30);
+  document.getElementById("cntVolatile").textContent = volatile.length + " 檔" + (volatile.length === 30 ? "+" : "");
+  document.getElementById("listVolatile").innerHTML = volatile.length === 0
+    ? `<div class="radar-empty">✓ 今日無 ±7% 以上異常波動</div>`
+    : volatile.map(s => {
+        const pct = L.pctChange(s.price, s.change);
+        const extra = `<span class="radar-warn">波動 ${pct > 0 ? "+" : ""}${pct.toFixed(2)}%</span>`;
+        return renderStockRow(s, extra);
+      }).join("");
+
+  // 4. 月營收年減 50%+
+  const revDrop = Object.values(rev)
+    .filter(r => r && typeof r.yoy === "number" && r.yoy <= -50)
+    .sort((a, b) => a.yoy - b.yoy)
+    .slice(0, 30);
+  document.getElementById("cntRevDrop").textContent = revDrop.length + " 檔" + (revDrop.length === 30 ? "+" : "");
+  document.getElementById("listRevDrop").innerHTML = revDrop.length === 0
+    ? `<div class="radar-empty">✓ 無月營收年減 50% 以上的個股</div>`
+    : revDrop.map(r => {
+        const s = findStock(r.code);
+        const extra = `<span class="radar-warn">${r.period} 月營收 ${r.monthRevenueFmt}・年減 ${r.yoy.toFixed(1)}%</span>`;
+        return s ? renderStockRow(s, extra) : `<div class="radar-row">${r.code} ${r.name} 年減 ${r.yoy.toFixed(1)}%</div>`;
+      }).join("");
+
+  // 5. 極低流動性（成交量 ≤ 5 張）
+  const lowVol = all
+    .filter(s => s.price > 0 && s.volume >= 0 && s.volume <= 5)
+    .sort((a, b) => a.volume - b.volume)
+    .slice(0, 50);
+  document.getElementById("cntZeroVol").textContent = lowVol.length + " 檔" + (lowVol.length === 50 ? "+" : "");
+  document.getElementById("listZeroVol").innerHTML = lowVol.length === 0
+    ? `<div class="radar-empty">✓ 沒有極低流動性的個股</div>`
+    : lowVol.map(s => {
+        const extra = `<span class="radar-warn">成交量 ${s.volume} 張</span>`;
+        return renderStockRow(s, extra);
+      }).join("");
+
+  // 總數摘要
+  const total = notice.length + disposal.length + volatile.length + revDrop.length + lowVol.length;
+  document.getElementById("radarSummary").innerHTML = `
+    <div class="radar-summary-card">
+      <div class="radar-summary-num">${total}</div>
+      <div class="radar-summary-label">今日總警示</div>
+    </div>
+    <div class="radar-summary-card radar-summary-card-w">
+      <div class="radar-summary-num">${notice.length + disposal.length}</div>
+      <div class="radar-summary-label">交易所警示</div>
+    </div>
+    <div class="radar-summary-card radar-summary-card-v">
+      <div class="radar-summary-num">${volatile.length}</div>
+      <div class="radar-summary-label">異常波動</div>
+    </div>
+    <div class="radar-summary-card radar-summary-card-r">
+      <div class="radar-summary-num">${revDrop.length}</div>
+      <div class="radar-summary-label">營收暴跌</div>
+    </div>
+    <div class="radar-summary-card radar-summary-card-l">
+      <div class="radar-summary-num">${lowVol.length}</div>
+      <div class="radar-summary-label">流動性差</div>
+    </div>
+  `;
+});
+</script>
+</body>
+</html>
