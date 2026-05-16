@@ -12,12 +12,13 @@
  */
 
 // 模型測試紀錄：
-//   ✘ nvidia/llama-3.3-nemotron-super-49b-v1.5 → 中文 prompt 拒答（「編碼錯誤」）
+//   ✘ nvidia/llama-3.3-nemotron-super-49b-v1.5 → 中文 prompt 拒答（reasoning 一直 silent thinking）
+//   ✘ nvidia/nvidia-nemotron-nano-9b-v2        → 同樣中文 prompt 拒答（消耗 476 token 但回「格式錯誤」）
 //   ✘ qwen/qwen2.5-72b-instruct                → Nvidia NIM 沒這模型（404）
-//   ✓ meta/llama-3.3-70b-instruct              → 穩定、中文可（前一版主力，2-5s）
-//   ✓ nvidia/nvidia-nemotron-nano-9b-v2        → 速度快 6-8 倍（<1s 首字），128K context（目前主力）
-// 之後可在 Cloudflare 環境變數 NVIDIA_MODEL 覆寫切回 70B
-const DEFAULT_MODEL = "nvidia/nvidia-nemotron-nano-9b-v2";
+//   ✓ meta/llama-3.3-70b-instruct              → 穩定、中文好（2-5s）
+//   ✓ meta/llama-3.1-8b-instruct               → 快 6-7 倍（<1s 首字），中文 OK（目前主力，平衡速度+品質）
+// Nemotron 系列在繁中財經 prompt 上反覆出問題，先用 Llama 8B
+const DEFAULT_MODEL = "meta/llama-3.1-8b-instruct";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // 系統 prompt：正面說明角色、清楚列舉可做/不可做
