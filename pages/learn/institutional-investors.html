@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三大法人是誰？外資、投信、自營商差別 + 跟單實戰 - 領富 AI 學習中心</title>
+<meta name="description" content="台股「三大法人」= 外資 + 投信 + 自營商。本文 7 分鐘講清楚每一種法人的角色、買賣超數據怎麼看、外資跟投信買超誰更值得跟、看法人籌碼投資的 3 個誤區。">
+<meta name="keywords" content="三大法人,外資,投信,自營商,法人買賣超,籌碼面,跟單,台股">
+<link rel="canonical" href="https://leadfuai.com/pages/learn/institutional-investors.html">
+
+<meta property="og:title" content="三大法人是誰？外資、投信、自營商差別 + 跟單實戰">
+<meta property="og:description" content="外資長線、投信短中線、自營商最短線。看懂三大法人怎麼操作台股。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://leadfuai.com/pages/learn/institutional-investors.html">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://leadfuai.com/pages/learn/institutional-investors.html#article",
+      "headline": "三大法人是誰？外資、投信、自營商差別 + 跟單實戰",
+      "description": "台股三大法人 = 外資 + 投信 + 自營商。本文講清楚每一種法人的角色與買賣超解讀。",
+      "datePublished": "2026-05-17",
+      "dateModified": "2026-05-17",
+      "author": { "@id": "https://leadfuai.com/#organization" },
+      "publisher": { "@id": "https://leadfuai.com/#organization" },
+      "inLanguage": "zh-TW",
+      "isAccessibleForFree": true,
+      "wordCount": 1200,
+      "articleSection": "籌碼面教學",
+      "keywords": ["三大法人", "外資", "投信", "自營商", "籌碼面"]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "三大法人是誰？分別是什麼？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "台股三大法人指：(1) 外資（國際機構投資人，如美林、摩根大通）；(2) 投信（國內投信投顧公司，發行台股基金）；(3) 自營商（券商用自有資金交易的部門）。三者佔台股每日成交量約 50-70%。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "外資、投信、自營商有什麼差別？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "資金規模：外資 >> 投信 > 自營商。操作週期：外資長線（月-年）、投信短中線（週-月）、自營商最短線（日-週）。資訊優勢：外資有全球研究團隊、投信靠國內研究、自營商靠技術面。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "法人買超就一定會漲嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "不一定。法人也會看錯、也會被軋。觀察重點是「連續性」(連續 5 天買超才有意義)、「規模占比」(占成交量 20% 以上才算強勢)、「三大法人合計」(三家都買超才是真共識)。單日數據意義有限。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "外資買超「最值得跟」嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "外資資訊優勢最強、操作週期最長，「跟外資長線」勝率較高。但外資也會「假買真賣」（用買超掩護出貨），需配合借券、選擇權部位看。投信買超的台灣中小型股，因規模較小較有跟單空間。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "領富 AI 怎麼查三大法人買賣超？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "領富 AI 提供「三大法人」頁面，整合 TWSE 證交所 T86 資料，1,073 檔上市公司每日盤後更新。可切換「外資買超 / 賣超」「投信買超 / 賣超」「自營商」「合計」六種排序。"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+        { "@type": "ListItem", "position": 2, "name": "學習中心", "item": "https://leadfuai.com/pages/learn.html" },
+        { "@type": "ListItem", "position": 3, "name": "三大法人是誰" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="../login.html">會員登入</a><a href="../register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../../index.html">首頁</a></li>
+      <li><a href="../stocks.html">股價總覽</a></li>
+      <li><a href="../weekly.html">產業週報</a></li>
+      <li><a href="../risk-radar.html">防錯雷達</a></li>
+      <li class="active"><a href="../learn.html">📚 學習中心</a></li>
+      <li><a href="../ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container learn-article-main">
+  <article class="learn-article">
+
+    <div class="article-breadcrumb">
+      <a href="../../index.html">首頁</a> ▸
+      <a href="../learn.html">學習中心</a> ▸
+      <span>三大法人</span>
+    </div>
+
+    <header class="article-header">
+      <div class="article-category">📊 籌碼面教學</div>
+      <h1>三大法人是誰？外資、投信、自營商差別 + 跟單實戰</h1>
+      <div class="article-meta">
+        <span>📅 2026-05-17</span>
+        <span>⏱ 7 分鐘閱讀</span>
+        <span>🤖 AI 整理 · 領富 AI 編輯部</span>
+      </div>
+    </header>
+
+    <div class="article-toc">
+      <strong>本文重點</strong>
+      <ol>
+        <li><a href="#what">三大法人是誰</a></li>
+        <li><a href="#foreign">外資：規模最大、消息最靈</a></li>
+        <li><a href="#trust">投信：國內專業基金</a></li>
+        <li><a href="#dealer">自營商：券商自營部</a></li>
+        <li><a href="#follow">怎麼看「買賣超」+ 跟單實戰</a></li>
+        <li><a href="#trap">看法人籌碼的 3 個誤區</a></li>
+        <li><a href="#tool">用領富 AI 查三大法人</a></li>
+        <li><a href="#faq">常見問題 FAQ</a></li>
+      </ol>
+    </div>
+
+    <section id="what" class="article-section">
+      <h2>1. 三大法人是誰</h2>
+      <p>台股每天約有 50-70% 的成交量是由「<strong>三大法人</strong>」貢獻的。所謂三大法人就是：</p>
+      <ol>
+        <li><strong>外資</strong>（國際機構投資人）</li>
+        <li><strong>投信</strong>（國內投信投顧公司）</li>
+        <li><strong>自營商</strong>（券商用自有資金交易的部門）</li>
+      </ol>
+      <p>剩下的成交量主要是「<strong>散戶</strong>」（個人投資人）跟「<strong>大戶</strong>」（高資產自然人）。</p>
+      <p>因為法人資金量大、有專業研究、操作有紀律，市場視他們的買賣超為「<strong>聰明錢的方向</strong>」。</p>
+    </section>
+
+    <section id="foreign" class="article-section">
+      <h2>2. 外資：規模最大、消息最靈</h2>
+      <p><strong>誰是外資</strong>：美林、摩根大通、高盛、瑞銀、UBS 等國際投資銀行；以及富達、貝萊德、Vanguard 這些國際基金公司。</p>
+      <p><strong>資金規模</strong>：台股外資每日成交額約 800-1,500 億元（佔市場 30-50%）。</p>
+      <p><strong>操作風格</strong>：</p>
+      <ul>
+        <li>長線為主，部位通常 3 個月以上</li>
+        <li>偏好權值股（台積電、聯發科等）、ETF 0050</li>
+        <li>看 MSCI 指數調整、基本面、總經</li>
+        <li>動作前通常已研究過幾週甚至幾個月</li>
+      </ul>
+      <p><strong>解讀</strong>：外資連續買超大型股 = 國際資金看好台灣；連續賣超 = 撤退訊號（注意風險）。</p>
+    </section>
+
+    <section id="trust" class="article-section">
+      <h2>3. 投信：國內專業基金</h2>
+      <p><strong>誰是投信</strong>：元大、富邦、國泰、群益等 30 多家投信投顧公司，發行台股基金、ETF。</p>
+      <p><strong>資金規模</strong>：每日成交額約 80-150 億元（市場 5-10%）。</p>
+      <p><strong>操作風格</strong>：</p>
+      <ul>
+        <li>短中線（週到月）為主</li>
+        <li>偏好中小型成長股</li>
+        <li>有「<strong>季底作帳</strong>」效應：3、6、9、12 月底會推升持股</li>
+        <li>「<strong>投信認養股</strong>」：少數投信集中持有，容易拉抬</li>
+      </ul>
+      <p><strong>解讀</strong>：投信買超中小型股 = 短期動能強；季底投信加碼 = 作帳行情。</p>
+    </section>
+
+    <section id="dealer" class="article-section">
+      <h2>4. 自營商：券商自營部</h2>
+      <p><strong>誰是自營商</strong>：元大、凱基、富邦、永豐等券商「自營部」，用券商自有資金交易（不是客戶的）。</p>
+      <p><strong>資金規模</strong>：每日成交額約 30-60 億元（市場 2-5%）。</p>
+      <p><strong>操作風格</strong>：</p>
+      <ul>
+        <li>最短線，當沖、隔日沖比例高</li>
+        <li>偏技術面、籌碼面、新聞題材</li>
+        <li>常做「<strong>避險</strong>」交易（搭配權證、選擇權）</li>
+      </ul>
+      <p><strong>解讀</strong>：自營商買超通常是「<strong>短期看好</strong>」，但週期太短不一定能跟。注意要區分「<strong>自行買賣</strong>」跟「<strong>避險</strong>」兩類，前者才有方向意義。</p>
+    </section>
+
+    <section id="follow" class="article-section">
+      <h2>5. 怎麼看「買賣超」+ 跟單實戰</h2>
+      <p>每日盤後台股會公告每檔股票的「買賣超」數字：</p>
+      <ul>
+        <li><strong>買超</strong>：法人當日買進量 > 賣出量</li>
+        <li><strong>賣超</strong>：法人當日賣出量 > 買進量</li>
+        <li>單位：張（1 張 = 1,000 股）</li>
+      </ul>
+      <p><strong>實戰原則</strong>：</p>
+      <ol>
+        <li><strong>看連續性</strong>：連續 5 個交易日以上同方向買 / 賣超才有意義</li>
+        <li><strong>看占比</strong>：法人買賣超占當日成交量 20% 以上才算強勢</li>
+        <li><strong>看合計</strong>：三大法人同方向買超 = 真共識；分歧時意義有限</li>
+        <li><strong>看歷史</strong>：對應公司過去買賣超紀錄，今天的數字是「異常」還是「常態」</li>
+      </ol>
+      <p><strong>跟單策略</strong>：</p>
+      <ul>
+        <li>外資+投信「同步」買超中型股 = 動能股訊號（最強）</li>
+        <li>外資長期穩定買超大型股 = 存股族可參考</li>
+        <li>季底投信加碼某檔小型股 = 作帳行情可短跟</li>
+      </ul>
+    </section>
+
+    <section id="trap" class="article-section">
+      <h2>6. 看法人籌碼的 3 個誤區</h2>
+
+      <h3>誤區 1：單日數據過度解讀</h3>
+      <p>「今天外資買超 5 萬張，明天會漲！」這種想法很危險。單日可能是：</p>
+      <ul>
+        <li>避險倉位調整（伴隨期貨/選擇權）</li>
+        <li>ETF 重新平衡（被動買進）</li>
+        <li>MSCI 季度調整</li>
+      </ul>
+      <p><strong>解方</strong>：至少看 5-10 日連續方向。</p>
+
+      <h3>誤區 2：把外資當神</h3>
+      <p>外資也會看錯：2022 年外資全年賣超台股 1.2 兆，但加權指數年底反而漲。把外資當神跟，會錯過很多反彈行情。</p>
+      <p><strong>解方</strong>：外資是參考、不是聖經。</p>
+
+      <h3>誤區 3：忽略「期貨多空頭寸」</h3>
+      <p>外資現貨買超 + 期貨大量空單 = 可能是「<strong>避險</strong>」；現貨買超 + 期貨多單 = 真實看多。只看現貨會被誤導。</p>
+      <p><strong>解方</strong>：搭配期貨未平倉口數一起看（進階）。</p>
+    </section>
+
+    <section id="tool" class="article-section article-tool-section">
+      <h2>7. 用領富 AI 查三大法人</h2>
+      <div class="tool-cards">
+        <a class="tool-card" href="../institutional.html">
+          <div class="tc-icon">🏦</div>
+          <div class="tc-title">三大法人排行</div>
+          <div class="tc-desc">每日盤後更新，1,073 檔上市股，可按外資/投信/自營分類</div>
+        </a>
+        <a class="tool-card" href="../sbl.html">
+          <div class="tc-icon">📕</div>
+          <div class="tc-title">借券排行</div>
+          <div class="tc-desc">外資借券賣出 = 真實放空訊號</div>
+        </a>
+        <a class="tool-card" href="../margin.html">
+          <div class="tc-icon">📊</div>
+          <div class="tc-title">融資融券</div>
+          <div class="tc-desc">看散戶籌碼（融資 = 散戶多，融券 = 散戶空）</div>
+        </a>
+      </div>
+    </section>
+
+    <section id="faq" class="article-section article-faq">
+      <h2>8. 常見問題 FAQ</h2>
+      <details>
+        <summary><strong>Q1：法人買賣超數據哪裡來？</strong></summary>
+        <p>來自證交所 TWSE 每日盤後公告的「T86 三大法人買賣超」資料。免費公開、所有財經網站都看得到。</p>
+      </details>
+      <details>
+        <summary><strong>Q2：外資為什麼能影響台股這麼大？</strong></summary>
+        <p>外資佔台股市值約 40-45%，且資金量超大，幾筆交易就能造成顯著價格波動。台積電外資持股比例約 78%，幾乎決定大盤方向。</p>
+      </details>
+      <details>
+        <summary><strong>Q3：投信「認養股」是什麼意思？</strong></summary>
+        <p>少數投信集中持有某檔股票（持股比例 5-10%+），形成「認養」效應。優點：投信會推升股價；缺點：投信賣出時容易踩踏，股價暴跌。</p>
+      </details>
+      <details>
+        <summary><strong>Q4：自營商「避險」跟「自行買賣」差在哪？</strong></summary>
+        <p>自行買賣 = 看好/看空方向；避險 = 因應發行權證/選擇權部位的對沖。台股公告會分開兩種，看「自營商-自行買賣」才有方向意義。</p>
+      </details>
+      <details>
+        <summary><strong>Q5：散戶可以跟外資嗎？</strong></summary>
+        <p>可以，但要：(1) 用日線、週線而非分鐘級，外資是中長線思維；(2) 確認外資連續同方向 5 天以上；(3) 搭配基本面確認，避免外資「假買真賣」。</p>
+      </details>
+    </section>
+
+    <footer class="article-footer">
+      <div class="article-disclaimer">
+        <strong>📌 免責聲明</strong><br>
+        本文僅為公開資料整理與基本概念說明，不構成個股推薦或買賣建議。
+        法人買賣超數據僅為投資參考之一，實際決策需結合基本面、技術面與風險評估。
+        投資決定請您自行評估，或諮詢合法之證券投資顧問。
+      </div>
+
+      <div class="article-related">
+        <strong>📖 延伸閱讀</strong>
+        <ul>
+          <li><a href="securities-lending.html">借券賣出是什麼？怎麼看法人空單？</a></li>
+          <li><a href="yoy.html">什麼是月營收年增率（YoY）？</a></li>
+          <li><a href="pe-ratio.html">本益比 P/E 怎麼看？</a></li>
+        </ul>
+      </div>
+    </footer>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

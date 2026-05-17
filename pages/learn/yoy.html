@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>什麼是月營收年增率（YoY）？怎麼解讀公司營收成長 - 領富 AI 學習中心</title>
+<meta name="description" content="月營收年增率（YoY）是公司本月營收與去年同月相比的成長百分比。本文用 5 分鐘講清楚 YoY 是什麼、怎麼算、為什麼比月增率重要、看年增率投資的 3 個常見陷阱，並附實際案例。">
+<meta name="keywords" content="月營收,年增率,YoY,月增率,MoM,營收成長,台股,基本面分析,財報,月營收公告">
+<link rel="canonical" href="https://leadfuai.com/pages/learn/yoy.html">
+
+<meta property="og:title" content="什麼是月營收年增率（YoY）？看懂公司營運趨勢的關鍵指標">
+<meta property="og:description" content="月營收年增率 = 本月營收 ÷ 去年同月 - 1。5 分鐘搞懂為什麼基金經理人都看 YoY 不看 MoM。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://leadfuai.com/pages/learn/yoy.html">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+
+<!-- Schema.org Article + FAQPage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://leadfuai.com/pages/learn/yoy.html#article",
+      "headline": "什麼是月營收年增率（YoY）？怎麼解讀公司營收成長",
+      "description": "月營收年增率（YoY）是公司本月營收與去年同月相比的成長百分比。本文講清楚怎麼算、為什麼比月增率重要、看年增率的 3 個陷阱。",
+      "image": "https://leadfuai.com/icons/icon-512.png",
+      "datePublished": "2026-05-17",
+      "dateModified": "2026-05-17",
+      "author": { "@id": "https://leadfuai.com/#organization" },
+      "publisher": { "@id": "https://leadfuai.com/#organization" },
+      "inLanguage": "zh-TW",
+      "isAccessibleForFree": true,
+      "wordCount": 1100,
+      "articleSection": "基本面教學",
+      "keywords": ["月營收", "年增率", "YoY", "基本面分析"]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "月營收年增率（YoY）是什麼？怎麼計算？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "月營收年增率 = (本月營收 - 去年同月營收) ÷ 去年同月營收 × 100%。例如：本月營收 120 萬元、去年 5 月營收 100 萬元，則年增率 =（120-100）÷ 100 × 100% = +20%。台灣公司依法每月 10 日前公告上月營收。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "年增率（YoY）和月增率（MoM）有什麼差別？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "年增率比的是「同期不同年」，可以排除季節性影響（例如 7-8 月電子業出貨旺季）。月增率比的是「相鄰兩個月」，會受到淡旺季嚴重影響。專業投資人通常以年增率為主要判斷指標。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "年增率多少算好？多少算危險訊號？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "一般而言：YoY > +30% 屬於強勢成長；+10~30% 健康成長；-10~+10% 持平；< -20% 進入警戒，可能反映需求疲弱或客戶流失。但需搭配產業特性與長期趨勢看，單月波動不代表營運衰退。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "看月營收年增率投資有什麼陷阱？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "三個常見陷阱：(1) 基期過低造成「+1000%」的假象；(2) 一次性大訂單推升、後續難以延續；(3) 營收高成長但毛利率衰退，淨利仍可能下滑。建議搭配毛利率、營業利益率、累計年增率一起看。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "怎麼快速查所有台股的月營收年增率？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "領富 AI 整合台股 2,298 家公司的月營收資料，每月自動更新。可在「個股詳情頁」查單檔，或在「進階選股」用 YoY 篩選成長股。資料來源為公開資訊觀測站（MOPS）。"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+        { "@type": "ListItem", "position": 2, "name": "學習中心", "item": "https://leadfuai.com/pages/learn.html" },
+        { "@type": "ListItem", "position": 3, "name": "什麼是月營收年增率（YoY）" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="../login.html">會員登入</a><a href="../register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../../index.html">首頁</a></li>
+      <li><a href="../stocks.html">股價總覽</a></li>
+      <li><a href="../weekly.html">產業週報</a></li>
+      <li><a href="../risk-radar.html">防錯雷達</a></li>
+      <li class="active"><a href="../learn.html">📚 學習中心</a></li>
+      <li><a href="../ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container learn-article-main">
+  <article class="learn-article">
+
+    <div class="article-breadcrumb">
+      <a href="../../index.html">首頁</a> ▸
+      <a href="../learn.html">學習中心</a> ▸
+      <span>什麼是月營收年增率</span>
+    </div>
+
+    <header class="article-header">
+      <div class="article-category">📈 基本面教學</div>
+      <h1>什麼是月營收年增率（YoY）？怎麼解讀公司營收成長</h1>
+      <div class="article-meta">
+        <span>📅 2026-05-17</span>
+        <span>⏱ 5 分鐘閱讀</span>
+        <span>🤖 AI 整理 · 領富 AI 編輯部</span>
+      </div>
+    </header>
+
+    <div class="article-toc">
+      <strong>本文重點</strong>
+      <ol>
+        <li><a href="#what">月營收年增率到底是什麼</a></li>
+        <li><a href="#calc">YoY 怎麼計算（含實際算式）</a></li>
+        <li><a href="#why">為什麼 YoY 比 MoM 重要</a></li>
+        <li><a href="#good">年增率多少算好？多少要警戒</a></li>
+        <li><a href="#trap">看 YoY 投資的 3 大陷阱</a></li>
+        <li><a href="#tool">用領富 AI 查所有台股 YoY</a></li>
+        <li><a href="#faq">常見問題 FAQ</a></li>
+      </ol>
+    </div>
+
+    <section id="what" class="article-section">
+      <h2>1. 月營收年增率到底是什麼</h2>
+      <p>月營收年增率（英文 <strong>Year-over-Year，簡稱 YoY</strong>）是<strong>公司本月營收與去年同月相比的成長百分比</strong>。</p>
+      <p>台灣的上市櫃公司依法每月 <strong>10 日前</strong>都要公告上個月的營收數字。投資人最常追的就是這個數字旁邊的「年增率」，因為它能用<strong>一個百分比</strong>就讓你看出：</p>
+      <ul>
+        <li>這家公司今年的營運是「成長」、「持平」還是「衰退」</li>
+        <li>跟去年同期比，動能變強還是變弱</li>
+        <li>排除季節性影響後，真實的營運趨勢</li>
+      </ul>
+    </section>
+
+    <section id="calc" class="article-section">
+      <h2>2. YoY 怎麼計算（含實際算式）</h2>
+      <div class="formula-box">
+        <strong>月營收年增率 YoY ＝ (本月營收 − 去年同月營收) ÷ 去年同月營收 × 100%</strong>
+      </div>
+      <p><strong>實際例子</strong>：</p>
+      <ul>
+        <li>A 公司 2026 年 5 月營收：120 萬元</li>
+        <li>A 公司 2025 年 5 月營收：100 萬元</li>
+        <li>YoY ＝ (120 − 100) ÷ 100 × 100% = <strong>+20%</strong></li>
+      </ul>
+      <p>意思是「跟去年同月相比，營收成長了 20%」。如果反過來：</p>
+      <ul>
+        <li>B 公司 2026 年 5 月營收：80 萬元</li>
+        <li>B 公司 2025 年 5 月營收：100 萬元</li>
+        <li>YoY ＝ (80 − 100) ÷ 100 × 100% = <strong>−20%</strong></li>
+      </ul>
+      <p>「跟去年同月相比，營收衰退了 20%」。</p>
+    </section>
+
+    <section id="why" class="article-section">
+      <h2>3. 為什麼 YoY 比 MoM 重要</h2>
+      <p>很多新手會問：「為什麼不直接看『這個月比上個月好不好』就好？」</p>
+      <p>那叫做<strong>月增率（MoM, Month-over-Month）</strong>。它的問題是：<strong>很多產業有強烈的季節性</strong>。</p>
+      <div class="example-table">
+        <table class="fin-table">
+          <thead>
+            <tr><th>月份</th><th>電子業營收</th><th>MoM 月增率</th><th>YoY 年增率</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2025 年 12 月</td><td>150 億</td><td>+25% 旺季衝量</td><td>—</td></tr>
+            <tr><td>2026 年 1 月</td><td>100 億</td><td><span style="color:#dc2626;">−33% 看似崩</span></td><td>+5% 其實穩</td></tr>
+            <tr><td>2026 年 2 月</td><td>80 億</td><td><span style="color:#dc2626;">−20% 又崩</span></td><td>+10% 還在成長</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>如果只看 MoM，你會覺得「電子業 1-2 月慘到不行」；但事實上跟去年同期比，公司營運其實是<strong>穩定成長</strong>的。</p>
+      <p><strong>結論：YoY 排除了「季節性」干擾，看真實的營運趨勢。</strong></p>
+    </section>
+
+    <section id="good" class="article-section">
+      <h2>4. 年增率多少算好？多少要警戒</h2>
+      <div class="example-table">
+        <table class="fin-table">
+          <thead>
+            <tr><th>YoY 區間</th><th>解讀</th><th>常見情況</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="color:#16a34a;font-weight:700;">+ 50% 以上</td><td>爆發成長</td><td>新產品熱賣、新客戶導入</td></tr>
+            <tr><td style="color:#16a34a;">+ 20 ~ 50%</td><td>強勢成長</td><td>產業景氣循環向上</td></tr>
+            <tr><td>+ 10 ~ 20%</td><td>健康成長</td><td>穩健經營</td></tr>
+            <tr><td>− 10 ~ + 10%</td><td>持平</td><td>產業成熟、市場飽和</td></tr>
+            <tr><td style="color:#dc2626;">− 10 ~ − 20%</td><td>衰退警示</td><td>需求疲弱、競爭加劇</td></tr>
+            <tr><td style="color:#dc2626;font-weight:700;">− 20% 以下</td><td>嚴重警戒</td><td>可能客戶流失、產業衰退</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>注意</strong>：以上區間是「粗略」分類。實際看年增率時要搭配：</p>
+      <ul>
+        <li><strong>產業特性</strong>：科技股 YoY +20% 可能不夠，傳產 +20% 已經很強</li>
+        <li><strong>長期趨勢</strong>：連續 6 個月 YoY 都 +20% 才有意義</li>
+        <li><strong>累計年增率</strong>：避免單月波動誤判</li>
+      </ul>
+    </section>
+
+    <section id="trap" class="article-section">
+      <h2>5. 看 YoY 投資的 3 大陷阱</h2>
+
+      <h3>陷阱 1：基期過低造成「+1000%」假象</h3>
+      <p>如果去年同月公司剛碰到一次性的災難（例如疫情停工、客戶倒帳），營收基期低到只有 1 萬元；今年同月恢復正常 100 萬元，YoY 會算出 <strong>+9,900%</strong>。</p>
+      <p>看起來很驚人，但其實只是「回到正常水準」。<strong>建議：看連續 6 個月平均 YoY 較準確</strong>。</p>
+
+      <h3>陷阱 2：一次性大訂單推升、後續難延續</h3>
+      <p>某公司 5 月接到一筆超大訂單，營收暴衝 YoY +80%。但若這筆訂單一次性出貨完，6-7 月可能就回到平淡。</p>
+      <p>看年增率時要問：「這個成長是<strong>結構性</strong>還是<strong>一次性</strong>？」可以看公司法說會、客戶結構、訂單能見度判斷。</p>
+
+      <h3>陷阱 3：營收成長 ≠ 獲利成長</h3>
+      <p>有些公司為了搶單犧牲價格，營收 YoY +30% 漂亮，但毛利率從 30% 掉到 15%，<strong>淨利可能反而下滑</strong>。</p>
+      <p>搭配「<strong>毛利率</strong>」「<strong>營業利益率</strong>」「<strong>EPS 年增率</strong>」一起看才完整。</p>
+    </section>
+
+    <section id="tool" class="article-section article-tool-section">
+      <h2>6. 用領富 AI 查所有台股 YoY</h2>
+      <p>領富 AI 整合台股 <strong>2,298 家公司</strong>的月營收資料，每月自動更新：</p>
+      <div class="tool-cards">
+        <a class="tool-card" href="../stocks.html">
+          <div class="tc-icon">🔍</div>
+          <div class="tc-title">股價總覽</div>
+          <div class="tc-desc">所有個股月營收 + YoY 一覽，可按產業/市場篩選</div>
+        </a>
+        <a class="tool-card" href="../screener.html">
+          <div class="tc-icon">📊</div>
+          <div class="tc-title">進階選股</div>
+          <div class="tc-desc">用 YoY +30% / 月營收暴跌等條件篩選</div>
+        </a>
+        <a class="tool-card" href="../risk-radar.html">
+          <div class="tc-icon">⚠</div>
+          <div class="tc-title">防錯雷達</div>
+          <div class="tc-desc">月營收年增 ≤ −20% 自動警示</div>
+        </a>
+      </div>
+    </section>
+
+    <section id="faq" class="article-section article-faq">
+      <h2>7. 常見問題 FAQ</h2>
+      <details>
+        <summary><strong>Q1：月營收什麼時候會公告？</strong></summary>
+        <p>台灣上市櫃公司依法須於每月 <strong>10 日前</strong>公告上月營收。例如 5 月的營收，會在 6 月 10 日前公告。</p>
+      </details>
+      <details>
+        <summary><strong>Q2：YoY 跟「YTD（年初至今）」差在哪？</strong></summary>
+        <p>YoY 比的是「單月 vs 去年同月」；YTD（Year-to-Date）是「年初 1 月到本月累計 vs 去年同期累計」。YTD 是更穩定的長期趨勢，YoY 是短期動能。</p>
+      </details>
+      <details>
+        <summary><strong>Q3：營收年增率 +20%，股價就一定會漲嗎？</strong></summary>
+        <p>不一定。股價反映的是「市場已知」與「未來預期」。如果公司過去 6 個月 YoY 都 +30%，這次只 +20% 反而可能被視為「成長放緩」，股價可能下跌。<strong>市場預期</strong>才是關鍵。</p>
+      </details>
+      <details>
+        <summary><strong>Q4：為什麼有些公司不公告月營收？</strong></summary>
+        <p>金融控股公司、銀行、證券、保險業依規定免公告月營收（只公告季度自結損益）。一般製造業、服務業則必須每月公告。</p>
+      </details>
+      <details>
+        <summary><strong>Q5：累計年增率怎麼算？</strong></summary>
+        <p>累計年增率 = (本年累計營收 − 去年同期累計營收) ÷ 去年同期累計營收 × 100%。比單月 YoY 更穩定，能排除月份噪音。</p>
+      </details>
+    </section>
+
+    <footer class="article-footer">
+      <div class="article-disclaimer">
+        <strong>📌 免責聲明</strong><br>
+        本文僅為公開資料整理與基本概念說明，不構成個股推薦或買賣建議。
+        個別公司之月營收解讀仍需結合產業景氣、財務結構等多方面評估。
+        投資決定請您自行評估，或諮詢合法之證券投資顧問。
+      </div>
+
+      <div class="article-related">
+        <strong>📖 延伸閱讀</strong>
+        <ul>
+          <li><a href="pe-ratio.html">本益比 P/E 怎麼看？高/低代表什麼</a></li>
+          <li><a href="dividend-yield.html">殖利率怎麼算？高殖利率股一定好嗎？</a></li>
+          <li><a href="institutional-investors.html">三大法人是誰？外資、投信、自營商差別</a></li>
+        </ul>
+      </div>
+    </footer>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

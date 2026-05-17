@@ -53,6 +53,12 @@ STATIC_PAGES = [
     ("/pages/margin.html",             "daily",   0.85),
     ("/pages/sbl.html",                "daily",   0.8),
     ("/pages/weekly.html",             "weekly",  0.9),
+    ("/pages/learn.html",              "weekly",  0.9),
+    ("/pages/learn/yoy.html",                       "monthly", 0.8),
+    ("/pages/learn/pe-ratio.html",                  "monthly", 0.85),
+    ("/pages/learn/dividend-yield.html",            "monthly", 0.85),
+    ("/pages/learn/institutional-investors.html",   "monthly", 0.8),
+    ("/pages/learn/securities-lending.html",        "monthly", 0.75),
 ]
 
 

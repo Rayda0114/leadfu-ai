@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>借券賣出是什麼？怎麼看法人空單與軋空行情 - 領富 AI 學習中心</title>
+<meta name="description" content="借券賣出 = 外資/法人放空台股的工具。本文 6 分鐘講清楚借券是什麼、跟融券差在哪、借券暴增代表什麼、軋空行情怎麼判斷。看懂法人真實空單部位的關鍵指標。">
+<meta name="keywords" content="借券,借券賣出,法人空單,放空,軋空,融券,SBL,TWT93U">
+<link rel="canonical" href="https://leadfuai.com/pages/learn/securities-lending.html">
+
+<meta property="og:title" content="借券賣出是什麼？怎麼看法人空單與軋空行情">
+<meta property="og:description" content="借券 = 外資放空台股最直接訊號。看懂借券暴增、軋空行情背後的籌碼意義。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://leadfuai.com/pages/learn/securities-lending.html">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://leadfuai.com/pages/learn/securities-lending.html#article",
+      "headline": "借券賣出是什麼？怎麼看法人空單與軋空行情",
+      "description": "借券賣出 = 外資/法人放空台股的工具。本文講清楚借券暴增的籌碼意義。",
+      "datePublished": "2026-05-17",
+      "dateModified": "2026-05-17",
+      "author": { "@id": "https://leadfuai.com/#organization" },
+      "publisher": { "@id": "https://leadfuai.com/#organization" },
+      "inLanguage": "zh-TW",
+      "isAccessibleForFree": true,
+      "wordCount": 1000,
+      "articleSection": "籌碼面教學",
+      "keywords": ["借券", "借券賣出", "法人空單", "軋空"]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "借券賣出是什麼？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "借券賣出（Securities Borrowing and Lending, SBL）= 投資人向券商或大股東「借股票」後賣出，等股價下跌再買回還券，從中賺取價差。主要由外資、壽險等法人使用，是台股法人最直接的「放空」工具。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "借券和融券有什麼差別？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "借券：法人專用、無 90 天期限、可長期持有空單、借券成本低。融券：散戶可用、最長 90 天必須回補、利息高。借券是法人放空的「真實部位」，融券大多是散戶情緒。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "借券餘額暴增代表什麼？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "代表法人加碼放空、看空該檔個股。可能原因：(1) 基本面預期惡化；(2) 估值過高需修正；(3) 短期事件風險。但借券餘額過大時，一旦股價反彈，法人回補空單會推升股價，造成「軋空行情」。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "什麼是「軋空行情」？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "當某檔股票借券（或融券）餘額過大、股價突然反彈時，放空者被迫高價回補股票，連鎖推升股價。借券餘額越大、軋空幅度越強，常見一天漲停板甚至連續多日漲停。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "領富 AI 怎麼查借券資料？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "領富 AI 提供「借券排行」頁面，整合 TWSE TWT93U 資料，1,274 檔上市公司每日盤後更新。可切換「借券增加」「借券減少（軋空訊號）」「借券餘額」三種排序，看清楚法人空單動向。"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+        { "@type": "ListItem", "position": 2, "name": "學習中心", "item": "https://leadfuai.com/pages/learn.html" },
+        { "@type": "ListItem", "position": 3, "name": "借券賣出是什麼" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="../login.html">會員登入</a><a href="../register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../../index.html">首頁</a></li>
+      <li><a href="../stocks.html">股價總覽</a></li>
+      <li><a href="../weekly.html">產業週報</a></li>
+      <li><a href="../risk-radar.html">防錯雷達</a></li>
+      <li class="active"><a href="../learn.html">📚 學習中心</a></li>
+      <li><a href="../ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container learn-article-main">
+  <article class="learn-article">
+
+    <div class="article-breadcrumb">
+      <a href="../../index.html">首頁</a> ▸
+      <a href="../learn.html">學習中心</a> ▸
+      <span>借券賣出是什麼</span>
+    </div>
+
+    <header class="article-header">
+      <div class="article-category">📊 籌碼面教學</div>
+      <h1>借券賣出是什麼？怎麼看法人空單與軋空行情</h1>
+      <div class="article-meta">
+        <span>📅 2026-05-17</span>
+        <span>⏱ 6 分鐘閱讀</span>
+        <span>🤖 AI 整理 · 領富 AI 編輯部</span>
+      </div>
+    </header>
+
+    <div class="article-toc">
+      <strong>本文重點</strong>
+      <ol>
+        <li><a href="#what">借券賣出是什麼</a></li>
+        <li><a href="#mechanism">借券的運作流程</a></li>
+        <li><a href="#vs-margin-short">借券 vs 融券：差在哪</a></li>
+        <li><a href="#read">借券餘額怎麼解讀</a></li>
+        <li><a href="#short-squeeze">軋空行情：借券減少怎麼看</a></li>
+        <li><a href="#tool">用領富 AI 查借券資料</a></li>
+        <li><a href="#faq">常見問題 FAQ</a></li>
+      </ol>
+    </div>
+
+    <section id="what" class="article-section">
+      <h2>1. 借券賣出是什麼</h2>
+      <p>借券賣出（英文 <strong>Securities Borrowing and Lending</strong>，簡稱 SBL）是「<strong>放空台股的工具</strong>」。投資人向券商或大股東「借股票」後立刻賣出，等股價下跌再低價買回還券，賺中間的價差。</p>
+      <p>用簡單比喻：</p>
+      <ul>
+        <li>朋友的股票借我 → 我 100 元賣掉 → 等跌到 80 元買回還他 → 我賺 20 元</li>
+      </ul>
+      <p>主要由<strong>外資、壽險等機構法人</strong>使用，是台股法人空單最直接的指標。</p>
+    </section>
+
+    <section id="mechanism" class="article-section">
+      <h2>2. 借券的運作流程</h2>
+      <ol>
+        <li><strong>找借券來源</strong>：通常是大股東、ETF、長期投資人，他們的股票閒置，願意出借賺借券利息</li>
+        <li><strong>支付借券費</strong>：法人付給出借方年化 0.5-3% 的借券費</li>
+        <li><strong>賣出股票</strong>：法人在市場上賣出借到的股票</li>
+        <li><strong>等股價下跌</strong>：法人預期股價會跌（基本面惡化、估值過高、事件風險）</li>
+        <li><strong>低價買回</strong>：股價跌到目標位，買回同樣張數的股票</li>
+        <li><strong>歸還股票</strong>：把買回的股票還給出借方</li>
+        <li><strong>賺價差</strong>：(賣出價 − 買回價) × 張數 − 借券費</li>
+      </ol>
+      <p><strong>風險</strong>：如果股價反而上漲，法人會被迫高價買回（軋空），可能虧損慘重。</p>
+    </section>
+
+    <section id="vs-margin-short" class="article-section">
+      <h2>3. 借券 vs 融券：差在哪</h2>
+      <div class="example-table">
+        <table class="fin-table">
+          <thead>
+            <tr><th>項目</th><th>借券（SBL）</th><th>融券</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>使用者</td><td>外資、壽險等法人</td><td>散戶為主</td></tr>
+            <tr><td>期限</td><td>無強制期限</td><td>最長 90 天必須回補</td></tr>
+            <tr><td>成本</td><td>借券費 0.5-3%</td><td>融券利息 1-3% + 借券費</td></tr>
+            <tr><td>強制回補</td><td>無</td><td>股東會、除權息前須回補</td></tr>
+            <tr><td>規模</td><td>較大（單檔可達數十億股）</td><td>較小</td></tr>
+            <tr><td>解讀意義</td><td>法人真實空單部位</td><td>散戶看空情緒</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>關鍵差異</strong>：借券沒有 90 天回補限制、成本低，所以法人可以長期持有空單。融券則容易被「軋空」（強制回補）。</p>
+    </section>
+
+    <section id="read" class="article-section">
+      <h2>4. 借券餘額怎麼解讀</h2>
+
+      <h3>借券餘額暴增（連續 3-5 天）</h3>
+      <p>代表法人加碼放空，可能原因：</p>
+      <ul>
+        <li>基本面預期惡化（月營收衰退、客戶流失）</li>
+        <li>估值過高需修正（本益比過高）</li>
+        <li>短期事件風險（重大訴訟、政策衝擊）</li>
+        <li>產業景氣循環向下</li>
+      </ul>
+      <p>提醒：法人也會看錯，借券暴增不代表股價一定跌。要搭配基本面看。</p>
+
+      <h3>借券餘額暴減（連續減少）</h3>
+      <p>代表法人回補空單，可能是：</p>
+      <ul>
+        <li>「<strong>軋空行情</strong>」：股價漲了，被迫高價買回</li>
+        <li>事件風險解除，主動平倉</li>
+        <li>到法說會、除權息前主動回補</li>
+      </ul>
+      <p>借券減少常伴隨股價上漲，是<strong>反轉訊號</strong>。</p>
+
+      <h3>借券餘額占比</h3>
+      <p>看借券餘額占公司總股本的比例：</p>
+      <ul>
+        <li>< 1%：忽略不計</li>
+        <li>1-3%：常態</li>
+        <li>3-5%：法人有明顯空單部位</li>
+        <li>5% 以上：高度警戒（雙面刃：可能繼續跌、也可能軋空）</li>
+      </ul>
+    </section>
+
+    <section id="short-squeeze" class="article-section">
+      <h2>5. 軋空行情：借券減少怎麼看</h2>
+      <p>「<strong>軋空</strong>」（Short Squeeze）是台股最戲劇性的行情之一：</p>
+      <ol>
+        <li>某檔股票借券餘額很大（法人空單滿手）</li>
+        <li>突發利多（基本面轉好、政府利多、外資調升評等）</li>
+        <li>股價開始反彈，放空者開始虧損</li>
+        <li>放空者被迫買回股票止損</li>
+        <li>大量買盤推升股價，更多放空者被迫回補</li>
+        <li>股價連續漲停板</li>
+      </ol>
+      <p><strong>軋空行情特徵</strong>：</p>
+      <ul>
+        <li>借券餘額（或融券餘額）原本很大</li>
+        <li>突然連續 3-5 天減少</li>
+        <li>同時股價連續上漲</li>
+        <li>常見一天漲停甚至多日連續漲停</li>
+      </ul>
+      <p>台股經典軋空案例：2020 年的康友-KY、2023 年的智邦、力積電多次小型軋空。</p>
+    </section>
+
+    <section id="tool" class="article-section article-tool-section">
+      <h2>6. 用領富 AI 查借券資料</h2>
+      <div class="tool-cards">
+        <a class="tool-card" href="../sbl.html">
+          <div class="tc-icon">📕</div>
+          <div class="tc-title">借券排行</div>
+          <div class="tc-desc">1,274 檔上市股，借券增 / 減 / 餘額三排序</div>
+        </a>
+        <a class="tool-card" href="../margin.html">
+          <div class="tc-icon">📊</div>
+          <div class="tc-title">融資融券</div>
+          <div class="tc-desc">看融券（散戶空單）動向，搭配借券看完整空單部位</div>
+        </a>
+        <a class="tool-card" href="../institutional.html">
+          <div class="tc-icon">🏦</div>
+          <div class="tc-title">三大法人</div>
+          <div class="tc-desc">看現貨買賣超，跟借券一起看才是法人完整部位</div>
+        </a>
+      </div>
+    </section>
+
+    <section id="faq" class="article-section article-faq">
+      <h2>7. 常見問題 FAQ</h2>
+      <details>
+        <summary><strong>Q1：散戶可以借券嗎？</strong></summary>
+        <p>大多券商「借券交易」開放給法人客戶。散戶要放空主要透過融券（額度較小、有 90 天限制）。但部分券商有開放給高資產散戶申請借券。</p>
+      </details>
+      <details>
+        <summary><strong>Q2：借券資料什麼時候公告？</strong></summary>
+        <p>證交所每日盤後（約 17:00）公告當日各檔個股的借券交易明細（TWT93U）。隔日各財經網站可看到。</p>
+      </details>
+      <details>
+        <summary><strong>Q3：借券利率怎麼決定？</strong></summary>
+        <p>由供需決定。冷門股借券率可能 0.5%；熱門被空標的可達 5-10%。利率越高代表市場「想空但借不到」，常是軋空前兆。</p>
+      </details>
+      <details>
+        <summary><strong>Q4：除權息會影響借券嗎？</strong></summary>
+        <p>會。借券方須補償出借方應得的股利（現金或股票補償）。除權息前借券成本升高，部分法人會選擇先平倉。</p>
+      </details>
+      <details>
+        <summary><strong>Q5：怎麼判斷軋空行情已經結束？</strong></summary>
+        <p>看：(1) 借券餘額已大幅減少（從高峰降到正常水準）；(2) 股價連續多日漲停後出現大量爆量壓回；(3) K 線出現長黑或十字星。軋空後股價常回吐部分漲幅。</p>
+      </details>
+    </section>
+
+    <footer class="article-footer">
+      <div class="article-disclaimer">
+        <strong>📌 免責聲明</strong><br>
+        本文僅為公開資料整理與基本概念說明，不構成個股推薦或買賣建議。
+        借券資料僅為籌碼面參考之一，實際投資決策需綜合基本面、技術面、總體環境評估。
+        投資決定請您自行評估，或諮詢合法之證券投資顧問。
+      </div>
+
+      <div class="article-related">
+        <strong>📖 延伸閱讀</strong>
+        <ul>
+          <li><a href="institutional-investors.html">三大法人是誰？外資、投信、自營商差別</a></li>
+          <li><a href="pe-ratio.html">本益比 P/E 怎麼看？</a></li>
+          <li><a href="yoy.html">什麼是月營收年增率（YoY）？</a></li>
+        </ul>
+      </div>
+    </footer>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>
