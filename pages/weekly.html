@@ -109,11 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span>·</span>
           <span>🕐 ${generatedAt} 自動生成</span>
         </div>
-        <button type="button" class="weekly-tts-all" id="weeklyTtsAll" title="朗讀整篇週報">
-          <span class="wtts-icon">🔊</span>
-          <span class="wtts-text">朗讀整篇週報</span>
-          <span class="wtts-hint">（約 7 分鐘）</span>
-        </button>
+        <div class="weekly-tts-hint">💡 每段標題旁的 <span class="tts-mini-demo">🔊</span> 可朗讀單一段落</div>
       </header>
 
       <section class="weekly-section weekly-market">
@@ -144,8 +140,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 function setupTTSButtons(data) {
   const TTS = window.LeadFuTTS;
   if (!TTS || !TTS.isSupported()) {
-    // 瀏覽器不支援 → 隱藏所有朗讀按鈕
-    document.querySelectorAll(".weekly-tts-all, .weekly-tts-section").forEach(el => el.style.display = "none");
+    document.querySelectorAll(".weekly-tts-section, .weekly-tts-hint").forEach(el => el.style.display = "none");
     return;
   }
 
@@ -168,47 +163,6 @@ function setupTTSButtons(data) {
       if (text) TTS.toggleButton(btn, text);
     });
   });
-
-  // 整篇朗讀
-  const allBtn = document.getElementById("weeklyTtsAll");
-  if (allBtn) {
-    // 拼整篇全文
-    const parts = [];
-    parts.push(`領富 AI 產業週報。${data.weekStart} 到 ${data.weekEnd}，台股十大產業觀察。`);
-    parts.push(`整體市場觀察。${data.market?.summary || ""}`);
-    parts.push("以下分產業逐一觀察。");
-    (data.industries || []).forEach((ind, i) => {
-      parts.push(`第 ${i + 1} 個產業：${ind.name}。本產業共 ${ind.stockCount} 檔個股，平均週漲跌 ${(ind.avgWeekReturn || 0).toFixed(2)} %。${ind.narrative || ""}`);
-    });
-    parts.push("以上為本週領富 AI 產業週報，謝謝您的收聽。");
-    const fullText = parts.join("\n\n");
-
-    allBtn.addEventListener("click", () => {
-      const playing = allBtn.classList.contains("playing");
-      // 同步停止所有其他單段按鈕
-      document.querySelectorAll(".chat-tts-btn.playing").forEach(b => {
-        b.classList.remove("playing");
-        b.textContent = "🔊";
-      });
-      TTS.cancel();
-      if (playing) {
-        allBtn.classList.remove("playing");
-        allBtn.querySelector(".wtts-icon").textContent = "🔊";
-        allBtn.querySelector(".wtts-text").textContent = "朗讀整篇週報";
-        return;
-      }
-      allBtn.classList.add("playing");
-      allBtn.querySelector(".wtts-icon").textContent = "⏸";
-      allBtn.querySelector(".wtts-text").textContent = "正在朗讀（點擊停止）";
-      TTS.speak(fullText, {
-        onEnd: () => {
-          allBtn.classList.remove("playing");
-          allBtn.querySelector(".wtts-icon").textContent = "🔊";
-          allBtn.querySelector(".wtts-text").textContent = "朗讀整篇週報";
-        }
-      });
-    });
-  }
 }
 
 function renderIndustry(ind, idx) {

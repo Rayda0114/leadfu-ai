@@ -4162,42 +4162,41 @@ body.theme-red .daily-brief-weekly-cta {
   flex-wrap: wrap;
 }
 
-/* 整篇朗讀大按鈕 */
-.weekly-tts-all {
+/* 「每段標題旁可朗讀」提示文字 */
+.weekly-tts-hint {
+  margin-top: 16px;
+  font-size: 12px;
+  color: #6b7280;
+  background: #fafbfc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #C5A572;
+}
+.weekly-tts-hint .tts-mini-demo {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 16px;
-  background: linear-gradient(90deg, #1B4332 0%, #2d5f4a 100%);
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #C5A572;
   color: #C5A572;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.15s;
-  letter-spacing: 0.5px;
+  border-radius: 50%;
+  font-size: 10px;
+  margin: 0 2px;
+  vertical-align: middle;
 }
-.weekly-tts-all:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25);
+body.theme-red .weekly-tts-hint { border-left-color: #D4AF37; }
+body.theme-red .weekly-tts-hint .tts-mini-demo {
+  border-color: #D4AF37;
+  color: #D4AF37;
 }
-.weekly-tts-all.playing {
-  background: linear-gradient(90deg, #B45309 0%, #C5A572 100%);
-  color: #fff;
-  animation: tts-pulse 2s infinite;
-}
-@keyframes tts-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(197, 165, 114, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(197, 165, 114, 0); }
-}
-.weekly-tts-all .wtts-icon { font-size: 16px; }
-.weekly-tts-all .wtts-hint { font-size: 11px; opacity: 0.8; font-weight: 400; }
 
 /* 單段／單產業朗讀按鈕（嵌在 h2 / ind-name 標題裡） */
-.weekly-tts-section {
+/* 強制覆寫 .chat-tts-btn 的 position: absolute，否則會跑到頁面角落 */
+.weekly-tts-section.weekly-tts-section {   /* 雙重 class 提升 specificity */
+  position: static;
+  top: auto;
+  right: auto;
   margin-left: 10px;
   background: transparent;
   border: 1px solid #C5A572;
@@ -4213,25 +4212,18 @@ body.theme-red .daily-brief-weekly-cta {
   transition: all 0.15s;
   vertical-align: middle;
   padding: 0;
+  flex-shrink: 0;
 }
 .weekly-tts-section:hover {
   background: #C5A572;
   color: #fff;
 }
 .weekly-tts-section.playing {
-  background: #B45309;
-  color: #fff;
-  border-color: #B45309;
-  animation: tts-pulse 2s infinite;
+  background: #B45309 !important;
+  color: #fff !important;
+  border-color: #B45309 !important;
 }
 
-body.theme-red .weekly-tts-all {
-  background: linear-gradient(90deg, #7F1D1D 0%, #991B1B 100%);
-  color: #D4AF37;
-}
-body.theme-red .weekly-tts-all.playing {
-  background: linear-gradient(90deg, #D4AF37 0%, #7F1D1D 100%);
-}
 body.theme-red .weekly-tts-section {
   border-color: #D4AF37;
   color: #D4AF37;
