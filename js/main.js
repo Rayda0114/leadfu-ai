@@ -2302,14 +2302,14 @@ function _slParseQueue(str) {
 
 function _slRenderLevels(listEl, prices, qtys, side) {
   if (!listEl) return;
-  if (!prices.length) {
+  // 過濾掉無效價（0 或 NaN）+ 同步移除對應量
+  const valid = prices.map((p, i) => ({ p, q: qtys[i] || 0 })).filter(x => x.p > 0);
+  if (!valid.length) {
     listEl.innerHTML = `<li class="ba-empty">無報價</li>`;
     return;
   }
-  // 五檔深度條：依量大小做漸層
-  const maxQ = Math.max(1, ...qtys);
-  listEl.innerHTML = prices.map((p, i) => {
-    const q = qtys[i] || 0;
+  const maxQ = Math.max(1, ...valid.map(x => x.q));
+  listEl.innerHTML = valid.map(({ p, q }) => {
     const pct = Math.min(100, (q / maxQ) * 100);
     return `<li class="ba-row">
       <span class="ba-bar ${side}" style="width:${pct}%;"></span>
@@ -2330,38 +2330,40 @@ function _slFlash(el, oldV, newV) {
 function _slUpdate(q) {
   if (!q) return;
 
-  // 主價格
+  // 主價格 — z 是當日成交、pz 是上一筆成交、若都沒有就用 y（昨收）保持顯示
   let z = parseFloat(q.z);
   if (isNaN(z) || z <= 0) z = parseFloat(q.pz);
   const y = parseFloat(q.y);
-  if (isNaN(z) || isNaN(y) || z <= 0 || y <= 0) return;
+  const hasLivePrice = !isNaN(z) && !isNaN(y) && z > 0 && y > 0;
 
-  const change = z - y;
-  const pct = (change / y * 100);
-  const cls = change > 0 ? "up" : (change < 0 ? "down" : "flat");
-  const arrowChar = change > 0 ? "▲" : (change < 0 ? "▼" : "─");
+  if (hasLivePrice) {
+    const change = z - y;
+    const pct = (change / y * 100);
+    const cls = change > 0 ? "up" : (change < 0 ? "down" : "flat");
+    const arrowChar = change > 0 ? "▲" : (change < 0 ? "▼" : "─");
 
-  const priceEl = document.getElementById("stockPrice");
-  const chgEl   = document.getElementById("stockChange");
-  const volEl   = document.getElementById("qsVol");
+    const priceEl = document.getElementById("stockPrice");
+    const chgEl   = document.getElementById("stockChange");
+    const volEl   = document.getElementById("qsVol");
 
-  if (priceEl) {
-    _slFlash(priceEl, _SL.last, z);
-    priceEl.textContent = z.toFixed(2);
-    priceEl.classList.remove("up", "down", "flat");
-    priceEl.classList.add(cls);
-    _SL.last = z;
+    if (priceEl) {
+      _slFlash(priceEl, _SL.last, z);
+      priceEl.textContent = z.toFixed(2);
+      priceEl.classList.remove("up", "down", "flat");
+      priceEl.classList.add(cls);
+      _SL.last = z;
+    }
+    if (chgEl) {
+      chgEl.textContent = `${arrowChar} ${Math.abs(change).toFixed(2)} (${change > 0 ? '+' : ''}${pct.toFixed(2)}%)`;
+      chgEl.classList.remove("up", "down", "flat");
+      chgEl.classList.add(cls);
+    }
+    // 成交量（張）
+    const v = parseFloat(q.v);
+    if (volEl && !isNaN(v)) volEl.textContent = v.toLocaleString() + " 張";
   }
-  if (chgEl) {
-    chgEl.textContent = `${arrowChar} ${Math.abs(change).toFixed(2)} (${change > 0 ? '+' : ''}${pct.toFixed(2)}%)`;
-    chgEl.classList.remove("up", "down", "flat");
-    chgEl.classList.add(cls);
-  }
-  // 成交量（張）
-  const v = parseFloat(q.v);
-  if (volEl && !isNaN(v)) volEl.textContent = v.toLocaleString() + " 張";
 
-  // 五檔買賣
+  // 五檔買賣 — 即使沒成交，五檔還是有掛單，要顯示
   const panel = document.getElementById("bidAskPanel");
   if (panel) {
     panel.style.display = "block";
