@@ -4173,6 +4173,85 @@ body.theme-red .daily-brief-weekly-cta {
   gap: 6px;
   flex-wrap: wrap;
 }
+
+/* 整篇朗讀大按鈕 */
+.weekly-tts-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  background: linear-gradient(90deg, #1B4332 0%, #2d5f4a 100%);
+  color: #C5A572;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.5px;
+}
+.weekly-tts-all:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25);
+}
+.weekly-tts-all.playing {
+  background: linear-gradient(90deg, #B45309 0%, #C5A572 100%);
+  color: #fff;
+  animation: tts-pulse 2s infinite;
+}
+@keyframes tts-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(197, 165, 114, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(197, 165, 114, 0); }
+}
+.weekly-tts-all .wtts-icon { font-size: 16px; }
+.weekly-tts-all .wtts-hint { font-size: 11px; opacity: 0.8; font-weight: 400; }
+
+/* 單段／單產業朗讀按鈕（嵌在 h2 / ind-name 標題裡） */
+.weekly-tts-section {
+  margin-left: 10px;
+  background: transparent;
+  border: 1px solid #C5A572;
+  color: #C5A572;
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  vertical-align: middle;
+  padding: 0;
+}
+.weekly-tts-section:hover {
+  background: #C5A572;
+  color: #fff;
+}
+.weekly-tts-section.playing {
+  background: #B45309;
+  color: #fff;
+  border-color: #B45309;
+  animation: tts-pulse 2s infinite;
+}
+
+body.theme-red .weekly-tts-all {
+  background: linear-gradient(90deg, #7F1D1D 0%, #991B1B 100%);
+  color: #D4AF37;
+}
+body.theme-red .weekly-tts-all.playing {
+  background: linear-gradient(90deg, #D4AF37 0%, #7F1D1D 100%);
+}
+body.theme-red .weekly-tts-section {
+  border-color: #D4AF37;
+  color: #D4AF37;
+}
+body.theme-red .weekly-tts-section:hover {
+  background: #D4AF37;
+  color: #fff;
+}
 .weekly-section { margin: 32px 0; }
 .weekly-h2 {
   font-size: 18px;

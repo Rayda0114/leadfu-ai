@@ -109,16 +109,24 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span>·</span>
           <span>🕐 ${generatedAt} 自動生成</span>
         </div>
+        <button type="button" class="weekly-tts-all" id="weeklyTtsAll" title="朗讀整篇週報">
+          <span class="wtts-icon">🔊</span>
+          <span class="wtts-text">朗讀整篇週報</span>
+          <span class="wtts-hint">（約 7 分鐘）</span>
+        </button>
       </header>
 
       <section class="weekly-section weekly-market">
-        <h2 class="weekly-h2">📊 整體市場觀察</h2>
+        <h2 class="weekly-h2">
+          📊 整體市場觀察
+          <button type="button" class="chat-tts-btn weekly-tts-section" data-section-key="market" title="朗讀本段">🔊</button>
+        </h2>
         <p class="weekly-text">${escapeHtml(market.summary || "")}</p>
       </section>
 
       <section class="weekly-section">
         <h2 class="weekly-h2">🔍 10 大產業逐一觀察</h2>
-        <p class="weekly-sub">點任一個重點個股即可進詳情頁查看完整資料。</p>
+        <p class="weekly-sub">點 🔊 朗讀單一產業，或點上方「朗讀整篇」聽完整週報。每個重點個股可點進詳情頁。</p>
       </section>
 
       ${industries.map((ind, i) => renderIndustry(ind, i + 1)).join("")}
@@ -129,7 +137,79 @@ document.addEventListener("DOMContentLoaded", async () => {
       </section>
     </article>
   `;
+
+  setupTTSButtons(data);
 });
+
+function setupTTSButtons(data) {
+  const TTS = window.LeadFuTTS;
+  if (!TTS || !TTS.isSupported()) {
+    // 瀏覽器不支援 → 隱藏所有朗讀按鈕
+    document.querySelectorAll(".weekly-tts-all, .weekly-tts-section").forEach(el => el.style.display = "none");
+    return;
+  }
+
+  // 單段朗讀（市場 + 每個產業）
+  document.querySelectorAll(".weekly-tts-section").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const key = btn.dataset.sectionKey;
+      let text = "";
+      if (key === "market") {
+        text = "整體市場觀察。" + (data.market?.summary || "");
+      } else if (key && key.startsWith("ind-")) {
+        const idx = parseInt(key.slice(4), 10) - 1;
+        const ind = data.industries[idx];
+        if (ind) {
+          text = `${ind.name} 產業。${ind.narrative || ""}`;
+        }
+      }
+      if (text) TTS.toggleButton(btn, text);
+    });
+  });
+
+  // 整篇朗讀
+  const allBtn = document.getElementById("weeklyTtsAll");
+  if (allBtn) {
+    // 拼整篇全文
+    const parts = [];
+    parts.push(`領富 AI 產業週報。${data.weekStart} 到 ${data.weekEnd}，台股十大產業觀察。`);
+    parts.push(`整體市場觀察。${data.market?.summary || ""}`);
+    parts.push("以下分產業逐一觀察。");
+    (data.industries || []).forEach((ind, i) => {
+      parts.push(`第 ${i + 1} 個產業：${ind.name}。本產業共 ${ind.stockCount} 檔個股，平均週漲跌 ${(ind.avgWeekReturn || 0).toFixed(2)} %。${ind.narrative || ""}`);
+    });
+    parts.push("以上為本週領富 AI 產業週報，謝謝您的收聽。");
+    const fullText = parts.join("\n\n");
+
+    allBtn.addEventListener("click", () => {
+      const playing = allBtn.classList.contains("playing");
+      // 同步停止所有其他單段按鈕
+      document.querySelectorAll(".chat-tts-btn.playing").forEach(b => {
+        b.classList.remove("playing");
+        b.textContent = "🔊";
+      });
+      TTS.cancel();
+      if (playing) {
+        allBtn.classList.remove("playing");
+        allBtn.querySelector(".wtts-icon").textContent = "🔊";
+        allBtn.querySelector(".wtts-text").textContent = "朗讀整篇週報";
+        return;
+      }
+      allBtn.classList.add("playing");
+      allBtn.querySelector(".wtts-icon").textContent = "⏸";
+      allBtn.querySelector(".wtts-text").textContent = "正在朗讀（點擊停止）";
+      TTS.speak(fullText, {
+        onEnd: () => {
+          allBtn.classList.remove("playing");
+          allBtn.querySelector(".wtts-icon").textContent = "🔊";
+          allBtn.querySelector(".wtts-text").textContent = "朗讀整篇週報";
+        }
+      });
+    });
+  }
+}
 
 function renderIndustry(ind, idx) {
   const icon = INDUSTRY_ICONS[ind.name] || "📈";
@@ -142,11 +222,13 @@ function renderIndustry(ind, idx) {
     return n.toLocaleString() + " 張";
   };
   return `
-    <section class="weekly-section weekly-industry">
+    <section class="weekly-section weekly-industry" data-ind-name="${ind.name}">
       <div class="ind-head">
         <div class="ind-num">${String(idx).padStart(2, '0')}</div>
-        <div>
-          <h2 class="ind-name">${icon} ${ind.name}</h2>
+        <div class="ind-info">
+          <h2 class="ind-name">${icon} ${ind.name}
+            <button type="button" class="chat-tts-btn weekly-tts-section" data-section-key="ind-${idx}" title="朗讀本產業">🔊</button>
+          </h2>
           <div class="ind-stats">
             <span>${ind.stockCount} 檔</span>
             <span class="${wkClass}">平均週漲跌 ${wkArrow} ${Math.abs(ind.avgWeekReturn || 0).toFixed(2)}%</span>
