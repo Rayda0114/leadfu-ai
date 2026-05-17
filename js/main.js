@@ -1106,6 +1106,132 @@ function setupFeedbackWidget() {
   btn.addEventListener("click", showFeedbackModal);
 }
 
+/* ============================================================
+ * 👋 首次訪客 onboarding 浮層
+ * 只有「首頁」且「localStorage 沒看過旗標」才會跳
+ * 3 個步驟介紹核心差異化價值
+ * ============================================================ */
+function setupOnboarding() {
+  // 只在首頁跳
+  const isHome = location.pathname === "/" || location.pathname.endsWith("/index.html");
+  if (!isHome) return;
+
+  // 看過就不再跳
+  const STORAGE_KEY = "leadfu_onboarded_v1";
+  if (localStorage.getItem(STORAGE_KEY)) return;
+
+  // 延遲 1.2 秒讓首頁先渲染（避免一進來就被擋）
+  setTimeout(() => showOnboarding(), 1200);
+}
+
+function showOnboarding() {
+  if (document.querySelector(".onboard-overlay")) return;
+
+  const STORAGE_KEY = "leadfu_onboarded_v1";
+  const steps = [
+    {
+      eyebrow: "歡迎來到",
+      icon: "👋",
+      title: "領富 AI · LeadFu",
+      desc: "為 45-75 高資產投資人打造的台股 AI 助理。我們專注「防錯」而非追飆股，讓您穩健配置、避開地雷。",
+      features: [
+        "上市 + 上櫃 + 興櫃 全市場 2,310 檔",
+        "三大法人、融資融券、借券、月營收、估值一站整理",
+        "免費註冊、不需綁信用卡"
+      ],
+      next: "下一步 →"
+    },
+    {
+      eyebrow: "三個獨家功能",
+      icon: "⚠",
+      title: "防錯雷達 + AI 對話",
+      desc: "用您看得懂的方式整理資料，用您講得出的方式問問題。",
+      features: [
+        "⚠ 防錯雷達：注意股、處置股、月營收暴跌自動掃描",
+        "🤖 AI 對話：「台積電現在貴嗎？」自然語言問答",
+        "📋 持股健診：AI 生成風險組合分析報告"
+      ],
+      next: "下一步 →"
+    },
+    {
+      eyebrow: "每週一早上 8 點",
+      icon: "📰",
+      title: "AI 產業週報",
+      desc: "AI 自動整理上週台股 10 大產業重點，含朗讀功能、字級調整，邊喝咖啡邊聽。",
+      features: [
+        "10 大產業逐一觀察、外資動向",
+        "整篇朗讀（約 7 分鐘）或單段播放",
+        "字級三段切換（標準／大／特大）"
+      ],
+      next: "開始使用 →"
+    }
+  ];
+
+  let idx = 0;
+  const overlay = document.createElement("div");
+  overlay.className = "onboard-overlay";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+
+  function render() {
+    const s = steps[idx];
+    overlay.innerHTML = `
+      <div class="onboard-modal">
+        <div class="onboard-head">
+          <button type="button" class="onboard-skip" data-action="skip">略過 ✕</button>
+          <div class="onboard-eyebrow">${s.eyebrow}</div>
+          <div class="onboard-icon">${s.icon}</div>
+          <h2 class="onboard-title">${s.title}</h2>
+          <p class="onboard-desc">${s.desc}</p>
+        </div>
+        <div class="onboard-body">
+          <ul class="onboard-features">
+            ${s.features.map(f => `<li><span class="ob-check">✓</span><span>${f}</span></li>`).join("")}
+          </ul>
+        </div>
+        <div class="onboard-foot">
+          <div class="onboard-dots">
+            ${steps.map((_, i) => `<span class="${i === idx ? 'active' : ''}"></span>`).join("")}
+          </div>
+          <div style="display:flex;gap:8px;">
+            ${idx > 0 ? `<button type="button" class="onboard-btn onboard-btn-back" data-action="back">← 上一步</button>` : ""}
+            <button type="button" class="onboard-btn" data-action="${idx === steps.length - 1 ? 'done' : 'next'}">${s.next}</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function close() {
+    localStorage.setItem(STORAGE_KEY, new Date().toISOString());
+    overlay.style.animation = "ob-fade-in 0.2s reverse";
+    setTimeout(() => overlay.remove(), 180);
+  }
+
+  overlay.addEventListener("click", (e) => {
+    // 點背景關閉
+    if (e.target === overlay) { close(); return; }
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+    const act = btn.dataset.action;
+    if (act === "skip" || act === "done") { close(); return; }
+    if (act === "next" && idx < steps.length - 1) { idx++; render(); }
+    if (act === "back" && idx > 0) { idx--; render(); }
+  });
+
+  // ESC 關閉
+  const escHandler = (e) => {
+    if (e.key === "Escape") {
+      close();
+      document.removeEventListener("keydown", escHandler);
+    }
+  };
+  document.addEventListener("keydown", escHandler);
+
+  render();
+  document.body.appendChild(overlay);
+}
+
 let _feedbackSubmitting = false;
 
 async function showFeedbackModal() {
@@ -2641,6 +2767,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupThemeToggle();           // 🎨 主題切換（墨綠 ↔ 喜氣紅）
   setupFeedbackWidget();        // 漂浮回饋按鈕，每頁右下角
   setupPWA();
+  setupOnboarding();            // 👋 首次訪客 3 步驟引導浮層（只首頁、且首次造訪）
   renderDate();
 
   // 先抓即時資料再渲染表格
