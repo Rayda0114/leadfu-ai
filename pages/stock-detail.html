@@ -58,12 +58,37 @@
         <div class="stock-price-block">
           <div class="stock-price-big" id="stockPrice">--</div>
           <div class="stock-change-big" id="stockChange">--</div>
+          <div class="live-mini" id="liveMini">
+            <button class="live-toggle" id="liveToggle" type="button" title="點擊開關即時更新">
+              <span class="live-dot"></span>
+              <span class="live-toggle-text">即時</span>
+            </button>
+            <span class="live-meta" id="liveMeta">--</span>
+          </div>
         </div>
         <div class="stock-quick-stats">
           <div class="qs-item"><div class="qs-label">成交量</div><div class="qs-value" id="qsVol">--</div></div>
           <div class="qs-item"><div class="qs-label">本益比</div><div class="qs-value" id="qsPe">--</div></div>
           <div class="qs-item"><div class="qs-label">EPS</div><div class="qs-value" id="qsEps">--</div></div>
           <div class="qs-item"><div class="qs-label">ROE</div><div class="qs-value" id="qsRoe">--</div></div>
+        </div>
+        <div class="bid-ask-panel" id="bidAskPanel" style="display:none;">
+          <div class="bid-ask-cols">
+            <div class="ba-col ba-bid">
+              <div class="ba-head">買盤 5 檔</div>
+              <ul class="ba-list" id="bidList"></ul>
+            </div>
+            <div class="ba-col ba-ask">
+              <div class="ba-head">賣盤 5 檔</div>
+              <ul class="ba-list" id="askList"></ul>
+            </div>
+          </div>
+          <div class="ba-foot">
+            <span>今開 <strong id="baOpen">--</strong></span>
+            <span>最高 <strong id="baHigh">--</strong></span>
+            <span>最低 <strong id="baLow">--</strong></span>
+            <span>昨收 <strong id="baYest">--</strong></span>
+          </div>
         </div>
         <div class="stock-action-row">
           <button class="btn-primary" id="favBtn">＋ 加入自選</button>
@@ -445,6 +470,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ★ 技術／籌碼面板（KD / MACD / 布林 / RSI / MA + 借券 + 大股東）
   renderTechPanel(code, s);
+
+  // ★ 即時報價 polling（盤中 10 秒 / 盤外 60 秒，全頁價格、五檔閃爍更新）
+  if (window.LeadFu.startStockLive) window.LeadFu.startStockLive(code, s);
 
   // ★ AI 個股摘要自動載入（sessionStorage 快取，同 session 不重複呼叫）
   setupStockAiSummary(code, s);

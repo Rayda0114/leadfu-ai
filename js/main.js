@@ -2029,6 +2029,7 @@ window.LeadFu = {
   mockAiResponse, startLivePriceSimulation, showToast,
   // 第 1 層 AI 問答工具（ai.html 用）
   parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
+  startStockLive,  // 個股詳情頁即時報價 polling
   lineUrl: LINE_URL, lineId: LINE_ID,
   ready: _readyPromise
 };
@@ -2272,6 +2273,197 @@ function lqStart() {
     } else {
       tick();
       schedule();
+    }
+  });
+}
+
+/* ============================================================
+ * 單檔個股即時報價（stock-detail.html 用）
+ * 更新：價格、漲跌、成交量、五檔買賣、開高低、昨收
+ * 用戶可隨時按 #liveToggle 暫停／恢復
+ * ============================================================ */
+const _SL = {
+  timer: null,
+  paused: false,
+  last: null,    // 上一筆 z（給閃爍動畫）
+  code: null,
+  market: null
+};
+const SL_POLL_OPEN   = 10_000;
+const SL_POLL_CLOSED = 60_000;
+
+function _slParseQueue(str) {
+  // MIS 五檔格式：價1_價2_價3_價4_價5_  (張數則在另一欄)
+  // b="251.0_249.0_247.0_246.0_240.0_"
+  // bidQty / askQty 在 g / f 欄（也是底線分隔）
+  if (!str || str === "-") return [];
+  return str.split("_").filter(Boolean).map(parseFloat);
+}
+
+function _slRenderLevels(listEl, prices, qtys, side) {
+  if (!listEl) return;
+  if (!prices.length) {
+    listEl.innerHTML = `<li class="ba-empty">無報價</li>`;
+    return;
+  }
+  // 五檔深度條：依量大小做漸層
+  const maxQ = Math.max(1, ...qtys);
+  listEl.innerHTML = prices.map((p, i) => {
+    const q = qtys[i] || 0;
+    const pct = Math.min(100, (q / maxQ) * 100);
+    return `<li class="ba-row">
+      <span class="ba-bar ${side}" style="width:${pct}%;"></span>
+      <span class="ba-price">${p.toFixed(2)}</span>
+      <span class="ba-qty">${q.toLocaleString()}</span>
+    </li>`;
+  }).join("");
+}
+
+function _slFlash(el, oldV, newV) {
+  if (!el || oldV == null) return;
+  if (oldV === newV) return;
+  el.classList.remove("sl-flash-up", "sl-flash-down");
+  void el.offsetWidth;
+  el.classList.add(newV > oldV ? "sl-flash-up" : "sl-flash-down");
+}
+
+function _slUpdate(q) {
+  if (!q) return;
+
+  // 主價格
+  let z = parseFloat(q.z);
+  if (isNaN(z) || z <= 0) z = parseFloat(q.pz);
+  const y = parseFloat(q.y);
+  if (isNaN(z) || isNaN(y) || z <= 0 || y <= 0) return;
+
+  const change = z - y;
+  const pct = (change / y * 100);
+  const cls = change > 0 ? "up" : (change < 0 ? "down" : "flat");
+  const arrowChar = change > 0 ? "▲" : (change < 0 ? "▼" : "─");
+
+  const priceEl = document.getElementById("stockPrice");
+  const chgEl   = document.getElementById("stockChange");
+  const volEl   = document.getElementById("qsVol");
+
+  if (priceEl) {
+    _slFlash(priceEl, _SL.last, z);
+    priceEl.textContent = z.toFixed(2);
+    priceEl.classList.remove("up", "down", "flat");
+    priceEl.classList.add(cls);
+    _SL.last = z;
+  }
+  if (chgEl) {
+    chgEl.textContent = `${arrowChar} ${Math.abs(change).toFixed(2)} (${change > 0 ? '+' : ''}${pct.toFixed(2)}%)`;
+    chgEl.classList.remove("up", "down", "flat");
+    chgEl.classList.add(cls);
+  }
+  // 成交量（張）
+  const v = parseFloat(q.v);
+  if (volEl && !isNaN(v)) volEl.textContent = v.toLocaleString() + " 張";
+
+  // 五檔買賣
+  const panel = document.getElementById("bidAskPanel");
+  if (panel) {
+    panel.style.display = "block";
+    const bidPrices = _slParseQueue(q.b);
+    const askPrices = _slParseQueue(q.a);
+    const bidQtys   = _slParseQueue(q.g);
+    const askQtys   = _slParseQueue(q.f);
+    _slRenderLevels(document.getElementById("bidList"), bidPrices, bidQtys, "bid");
+    _slRenderLevels(document.getElementById("askList"), askPrices, askQtys, "ask");
+
+    // OHLY
+    const setNum = (id, val) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const n = parseFloat(val);
+      el.textContent = (isNaN(n) || n <= 0) ? "--" : n.toFixed(2);
+    };
+    setNum("baOpen", q.o);
+    setNum("baHigh", q.h);
+    setNum("baLow",  q.l);
+    setNum("baYest", q.y);
+  }
+
+  // 時間 + 狀態
+  const metaEl = document.getElementById("liveMeta");
+  if (metaEl) {
+    const open = isMarketOpen();
+    metaEl.textContent = (open ? "盤中 " : "盤後 ") + (q.t || "");
+  }
+}
+
+async function _slTick() {
+  if (_SL.paused) return;
+  const prefix = _SL.market === "otc" ? "otc_" : "tse_";
+  const ex_ch = `${prefix}${_SL.code}.tw`;
+  try {
+    const resp = await fetch("/api/quote?ex_ch=" + encodeURIComponent(ex_ch), {
+      cache: "no-store"
+    });
+    if (!resp.ok) return;
+    const data = await resp.json();
+    if (data && data.msgArray && data.msgArray[0]) {
+      _slUpdate(data.msgArray[0]);
+    }
+  } catch (e) {
+    // 靜默失敗，下一輪繼續
+  }
+}
+
+function _slSchedule() {
+  clearTimeout(_SL.timer);
+  if (_SL.paused || document.hidden) return;
+  const interval = isMarketOpen() ? SL_POLL_OPEN : SL_POLL_CLOSED;
+  _SL.timer = setTimeout(async () => {
+    await _slTick();
+    _slSchedule();
+  }, interval);
+}
+
+function _slSetButton(state) {
+  const btn = document.getElementById("liveToggle");
+  if (!btn) return;
+  btn.classList.toggle("paused", state === "paused");
+  const txt = btn.querySelector(".live-toggle-text");
+  if (txt) txt.textContent = state === "paused" ? "已暫停" : "即時";
+}
+
+function startStockLive(code, stock) {
+  if (!code || !stock) return;
+  // 興櫃股 MIS 沒提供，不打
+  if (stock.market === "emerging") return;
+
+  _SL.code = code;
+  _SL.market = stock.market || "listed";
+  _SL.last = null;
+  _SL.paused = false;
+  _slSetButton("running");
+
+  // 立刻跑一次
+  _slTick().then(_slSchedule);
+
+  // Toggle 暫停／恢復
+  const btn = document.getElementById("liveToggle");
+  if (btn && !btn._wired) {
+    btn._wired = true;
+    btn.addEventListener("click", () => {
+      _SL.paused = !_SL.paused;
+      _slSetButton(_SL.paused ? "paused" : "running");
+      if (_SL.paused) {
+        clearTimeout(_SL.timer);
+      } else {
+        _slTick().then(_slSchedule);
+      }
+    });
+  }
+
+  // 隱藏分頁暫停
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      clearTimeout(_SL.timer);
+    } else if (!_SL.paused) {
+      _slTick().then(_slSchedule);
     }
   });
 }
