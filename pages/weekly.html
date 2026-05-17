@@ -109,11 +109,17 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span>·</span>
           <span>🕐 ${generatedAt} 自動生成</span>
         </div>
-        <button type="button" class="weekly-tts-all" id="weeklyTtsAll" title="朗讀整篇週報">
-          <span class="wtts-icon">🔊</span>
-          <span class="wtts-text">朗讀整篇週報</span>
-          <span class="wtts-hint">（約 7 分鐘）</span>
-        </button>
+        <div class="weekly-tools">
+          <button type="button" class="weekly-tts-all" id="weeklyTtsAll" title="朗讀整篇週報">
+            <span class="wtts-icon">🔊</span>
+            <span class="wtts-text">朗讀整篇週報</span>
+            <span class="wtts-hint">（約 7 分鐘）</span>
+          </button>
+          <button type="button" class="weekly-fontsize" id="weeklyFontsize" title="切換字級大小">
+            <span class="wfs-icon">A</span>
+            <span class="wfs-text">字級 標準</span>
+          </button>
+        </div>
       </header>
 
       <section class="weekly-section weekly-market">
@@ -139,7 +145,39 @@ document.addEventListener("DOMContentLoaded", async () => {
   `;
 
   setupTTSButtons(data);
+  setupFontSize();
 });
+
+function setupFontSize() {
+  const btn = document.getElementById("weeklyFontsize");
+  if (!btn) return;
+  const STORAGE_KEY = "leadfu_weekly_fontsize";
+  // 3 段：standard / large / xlarge
+  const sizes = [
+    { id: "standard", label: "字級 標準",  zoom: "A" },
+    { id: "large",    label: "字級 大",   zoom: "A+" },
+    { id: "xlarge",   label: "字級 特大", zoom: "A++" }
+  ];
+
+  let idx = 0;
+  const saved = localStorage.getItem(STORAGE_KEY);
+  const savedIdx = sizes.findIndex(s => s.id === saved);
+  if (savedIdx >= 0) idx = savedIdx;
+
+  function apply() {
+    const cur = sizes[idx];
+    document.body.setAttribute("data-fontsize", cur.id);
+    btn.querySelector(".wfs-icon").textContent = cur.zoom;
+    btn.querySelector(".wfs-text").textContent = cur.label;
+    localStorage.setItem(STORAGE_KEY, cur.id);
+  }
+  apply();
+
+  btn.addEventListener("click", () => {
+    idx = (idx + 1) % sizes.length;
+    apply();
+  });
+}
 
 function setupTTSButtons(data) {
   const TTS = window.LeadFuTTS;

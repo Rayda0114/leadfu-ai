@@ -4162,12 +4162,20 @@ body.theme-red .daily-brief-weekly-cta {
   flex-wrap: wrap;
 }
 
+/* header 區工具列（朗讀 + 字級調整） */
+.weekly-tools {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  align-items: center;
+}
+
 /* 整篇朗讀大按鈕 */
 .weekly-tts-all {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 16px;
   background: linear-gradient(90deg, #1B4332 0%, #2d5f4a 100%);
   color: #C5A572;
   border: none;
@@ -4201,6 +4209,77 @@ body.theme-red .weekly-tts-all {
 }
 body.theme-red .weekly-tts-all.playing {
   background: linear-gradient(90deg, #D4AF37 0%, #7F1D1D 100%);
+}
+
+/* 字級切換按鈕 */
+.weekly-fontsize {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: #1B4332;
+  border: 1.5px solid #C5A572;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.5px;
+}
+.weekly-fontsize:hover {
+  background: #C5A572;
+  color: #fff;
+  transform: translateY(-1px);
+}
+.weekly-fontsize .wfs-icon {
+  font-size: 16px;
+  font-weight: 700;
+  color: #C5A572;
+  transition: color 0.15s;
+  font-family: Georgia, serif;
+}
+.weekly-fontsize:hover .wfs-icon { color: #fff; }
+body.theme-red .weekly-fontsize {
+  color: #7F1D1D;
+  border-color: #D4AF37;
+}
+body.theme-red .weekly-fontsize .wfs-icon { color: #D4AF37; }
+body.theme-red .weekly-fontsize:hover {
+  background: #D4AF37;
+  color: #fff;
+}
+
+/* 字級三段：根據 body[data-fontsize] 覆寫週報內文字級 */
+body[data-fontsize="large"] .weekly-text {
+  font-size: 16.5px;
+  line-height: 2.0;
+}
+body[data-fontsize="large"] .weekly-h2 { font-size: 20px; }
+body[data-fontsize="large"] .ind-name { font-size: 22px; }
+body[data-fontsize="large"] .ind-stats { font-size: 13.5px; }
+body[data-fontsize="large"] .ind-hl-stock { font-size: 14.5px; }
+body[data-fontsize="large"] .ind-hl-value { font-size: 13.5px; }
+body[data-fontsize="large"] .weekly-title { font-size: 30px; }
+
+body[data-fontsize="xlarge"] .weekly-text {
+  font-size: 18.5px;
+  line-height: 2.1;
+}
+body[data-fontsize="xlarge"] .weekly-h2 { font-size: 22px; }
+body[data-fontsize="xlarge"] .ind-name { font-size: 24px; }
+body[data-fontsize="xlarge"] .ind-stats { font-size: 14.5px; }
+body[data-fontsize="xlarge"] .ind-hl-stock { font-size: 15.5px; }
+body[data-fontsize="xlarge"] .ind-hl-value { font-size: 14.5px; }
+body[data-fontsize="xlarge"] .weekly-title { font-size: 32px; }
+body[data-fontsize="xlarge"] .weekly-meta { font-size: 13.5px; }
+
+@media (max-width: 768px) {
+  body[data-fontsize="large"] .weekly-text { font-size: 16px; }
+  body[data-fontsize="xlarge"] .weekly-text { font-size: 18px; }
+  body[data-fontsize="large"] .weekly-title { font-size: 24px; }
+  body[data-fontsize="xlarge"] .weekly-title { font-size: 26px; }
 }
 
 /* 單段／單產業朗讀按鈕（嵌在 h2 / ind-name 標題裡） */
