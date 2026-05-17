@@ -4133,18 +4133,6 @@ body.theme-red .daily-brief-weekly-cta {
   border-radius: 6px;
   padding: 36px 44px 44px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  position: relative;
-}
-.weekly-report::before {
-  content: "領富 AI · LeadFu Weekly Industry Report";
-  position: absolute;
-  top: 12px;
-  right: 18px;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  color: #C5A572;
-  text-transform: uppercase;
-  font-weight: 600;
 }
 .weekly-head {
   border-bottom: 2px solid #1B4332;
