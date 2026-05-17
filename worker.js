@@ -262,12 +262,20 @@ async function handleAsk(request, env) {
     ? body.model
     : (env.NVIDIA_MODEL || DEFAULT_MODEL);
 
+  // body.max_tokens 覆寫（給後端腳本用，例如產業週報需要 4000 tokens；
+  // 前端聊天保持預設 800 避免單次回覆過長）
+  const maxTokens = (typeof body.max_tokens === "number"
+                    && body.max_tokens > 0
+                    && body.max_tokens <= 4096)
+    ? body.max_tokens
+    : 800;
+
   const requestBody = JSON.stringify({
     model,
     messages: finalMessages,
     temperature: 0.4,
     top_p: 0.9,
-    max_tokens: 800,
+    max_tokens: maxTokens,
     stream: wantStream
   });
 
