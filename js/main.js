@@ -1581,8 +1581,72 @@ function injectStockJsonLd() {
                     : s.market === "emerging" ? "興櫃" : (s.status || "");
   const co = (STOCK_DATA.companies && STOCK_DATA.companies[code]) || null;
   const rev = (STOCK_DATA.revenue && STOCK_DATA.revenue[code]) || null;
+  const val = (STOCK_DATA.valuation && STOCK_DATA.valuation[code]) || null;
+  const inst = (STOCK_DATA.institutional && STOCK_DATA.institutional[code]) || null;
   const url = SITE_ORIGIN + "/pages/stock-detail.html?code=" + code;
   const pct = pctChange(s.price, s.change);
+
+  // ── 動態 SEO：每檔個股都有獨特 title / meta description / og tags ──
+  const dirText = s.change > 0 ? "上漲" : s.change < 0 ? "下跌" : "持平";
+  const pctText = (s.change >= 0 ? "+" : "") + pct.toFixed(2) + "%";
+
+  // 1) <title>：「2330 台積電 股價 2,265 上漲 5.30% | 即時報價、月營收、本益比 - 領富 AI」
+  const seoTitle = `${s.code} ${s.name} 股價 ${fmtPrice(s.price)} ${dirText} ${pctText} | ${marketLabel} ${s.category} - 領富 AI`;
+  document.title = seoTitle;
+  const pageTitleEl = document.getElementById("pageTitle");
+  if (pageTitleEl) pageTitleEl.textContent = seoTitle;
+
+  // 2) <meta description>：含關鍵資料點，<160 字
+  let descParts = [`${s.code} ${s.name}（${marketLabel}・${s.category}）即時報價 ${fmtPrice(s.price)} 元`];
+  descParts.push(`今日${dirText} ${pctText}、成交量 ${s.volume.toLocaleString()} 張`);
+  if (val) {
+    if (val.pe_ratio) descParts.push(`本益比 ${val.pe_ratio.toFixed(2)}`);
+    if (val.yield_pct) descParts.push(`殖利率 ${val.yield_pct.toFixed(2)}%`);
+    if (val.pb_ratio) descParts.push(`股價淨值比 ${val.pb_ratio.toFixed(2)}`);
+  }
+  if (rev && typeof rev.yoy === "number") descParts.push(`月營收年增 ${rev.yoy.toFixed(1)}%`);
+  if (co && co.chairman) descParts.push(`董事長 ${co.chairman}`);
+  descParts.push("資料來源 TWSE/TPEx 公開 API，每日更新");
+  const seoDesc = descParts.join("、").slice(0, 158);
+
+  function setMeta(selector, attrName, attrVal, contentVal) {
+    let el = document.head.querySelector(selector);
+    if (!el) {
+      el = document.createElement("meta");
+      el.setAttribute(attrName, attrVal);
+      document.head.appendChild(el);
+    }
+    el.setAttribute("content", contentVal);
+  }
+
+  setMeta('meta[name="description"]', "name", "description", seoDesc);
+  setMeta('meta[name="keywords"]', "name", "keywords",
+    `${s.code},${s.name},${s.name}股價,${s.name}本益比,${s.name}月營收,${marketLabel},${s.category},台股,${s.code}即時報價`);
+
+  // 3) Open Graph：分享到 LINE/FB 時的卡片
+  setMeta('meta[property="og:title"]', "property", "og:title",
+    `${s.code} ${s.name} ${fmtPrice(s.price)} 元 ${dirText} ${pctText}`);
+  setMeta('meta[property="og:description"]', "property", "og:description", seoDesc);
+  setMeta('meta[property="og:type"]', "property", "og:type", "article");
+  setMeta('meta[property="og:url"]', "property", "og:url", url);
+  setMeta('meta[property="og:image"]', "property", "og:image", SITE_ORIGIN + "/icons/icon-512.png");
+  setMeta('meta[property="og:locale"]', "property", "og:locale", "zh_TW");
+  setMeta('meta[property="og:site_name"]', "property", "og:site_name", "領富 AI");
+
+  // Twitter Card
+  setMeta('meta[name="twitter:card"]', "name", "twitter:card", "summary");
+  setMeta('meta[name="twitter:title"]', "name", "twitter:title",
+    `${s.code} ${s.name} | 領富 AI`);
+  setMeta('meta[name="twitter:description"]', "name", "twitter:description", seoDesc);
+
+  // 4) Canonical（正規 URL）
+  let canonical = document.head.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement("link");
+    canonical.rel = "canonical";
+    document.head.appendChild(canonical);
+  }
+  canonical.href = url;
 
   const additionalProperty = [
     { "@type": "PropertyValue", "name": "市場", "value": marketLabel },
@@ -1594,6 +1658,18 @@ function injectStockJsonLd() {
     { "@type": "PropertyValue", "name": "今日漲跌幅", "value": pct.toFixed(2) + "%" },
     { "@type": "PropertyValue", "name": "今日成交量", "value": s.volume + " 張" }
   ];
+  // 估值指標
+  if (val) {
+    if (val.pe_ratio) additionalProperty.push({ "@type": "PropertyValue", "name": "本益比 P/E", "value": val.pe_ratio.toFixed(2) });
+    if (val.yield_pct) additionalProperty.push({ "@type": "PropertyValue", "name": "殖利率", "value": val.yield_pct.toFixed(2) + "%" });
+    if (val.pb_ratio) additionalProperty.push({ "@type": "PropertyValue", "name": "股價淨值比 P/B", "value": val.pb_ratio.toFixed(2) });
+  }
+  // 三大法人買賣超
+  if (inst) {
+    if (typeof inst.foreign_net_lots === "number") additionalProperty.push({ "@type": "PropertyValue", "name": "外資買賣超", "value": inst.foreign_net_lots.toLocaleString() + " 張" });
+    if (typeof inst.trust_net_lots === "number") additionalProperty.push({ "@type": "PropertyValue", "name": "投信買賣超", "value": inst.trust_net_lots.toLocaleString() + " 張" });
+    if (typeof inst.total_net_lots === "number") additionalProperty.push({ "@type": "PropertyValue", "name": "三大法人合計", "value": inst.total_net_lots.toLocaleString() + " 張" });
+  }
   if (co) {
     if (co.chairman) additionalProperty.push({ "@type": "PropertyValue", "name": "董事長",   "value": co.chairman });
     if (co.president)additionalProperty.push({ "@type": "PropertyValue", "name": "總經理",   "value": co.president });
@@ -1620,11 +1696,32 @@ function injectStockJsonLd() {
         "alternateName": [s.code, s.name],
         "category": marketLabel + " ・ " + s.category,
         "url": url,
-        "description": `${s.code} ${s.name}，${marketLabel}市場 ${s.category} 類股。截至 ${STOCK_DATA.updatedAt || "今日"}，股價 ${s.price} TWD，今日漲跌 ${s.change.toFixed(2)} (${pct.toFixed(2)}%)，成交量 ${s.volume} 張。`,
+        "description": seoDesc,
         "provider": { "@id": "https://leadfuai.com/#organization" },
         "additionalProperty": additionalProperty,
         "audience": { "@type": "Audience", "name": "Taiwan retail investors" },
-        "inLanguage": "zh-TW"
+        "inLanguage": "zh-TW",
+        "offers": {
+          "@type": "Offer",
+          "price": s.price,
+          "priceCurrency": "TWD",
+          "availability": "https://schema.org/InStock",
+          "validFrom": STOCK_DATA.updatedAt || new Date().toISOString().split("T")[0]
+        }
+      },
+      {
+        "@type": "Article",
+        "@id": url + "#article",
+        "headline": seoTitle,
+        "description": seoDesc,
+        "url": url,
+        "datePublished": new Date().toISOString().split("T")[0],
+        "dateModified": new Date().toISOString().split("T")[0],
+        "author": { "@id": "https://leadfuai.com/#organization" },
+        "publisher": { "@id": "https://leadfuai.com/#organization" },
+        "about": { "@id": url + "#stock" },
+        "inLanguage": "zh-TW",
+        "isAccessibleForFree": true
       },
       co ? {
         "@type": "Organization",
