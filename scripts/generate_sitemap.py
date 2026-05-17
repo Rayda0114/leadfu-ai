@@ -52,6 +52,7 @@ STATIC_PAGES = [
     ("/pages/dividends.html",          "daily",   0.85),
     ("/pages/margin.html",             "daily",   0.85),
     ("/pages/sbl.html",                "daily",   0.8),
+    ("/pages/weekly.html",             "weekly",  0.9),
 ]
 
 

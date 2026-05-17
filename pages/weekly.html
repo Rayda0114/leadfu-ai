@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📰 產業週報 - 領富 AI（AI 整理上週台股 10 大產業重點）</title>
+<meta name="description" content="領富 AI 每週一自動發布的台股產業週報：10 大產業上週動向、外資買賣超、籌碼變化、重點個股整理。AI 撰寫、穩重客觀、不給買賣建議。">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">股價總覽</a></li>
+      <li><a href="institutional.html">三大法人</a></li>
+      <li><a href="margin.html">融資融券</a></li>
+      <li><a href="dividends.html">💰 殖利率</a></li>
+      <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
+      <li class="active"><a href="weekly.html">📰 產業週報</a></li>
+      <li><a href="ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>📰 產業週報</h1>
+    <div class="breadcrumb">首頁 ▸ AI 產業週報</div>
+  </div>
+</div>
+
+<main class="container weekly-main" style="padding: 20px 12px 40px;">
+  <div id="weeklyShell">
+    <div style="padding:60px;text-align:center;color:#888;">📰 週報載入中...</div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+const INDUSTRY_ICONS = {
+  "半導體": "🔬", "電子零組件": "⚙️", "光電": "💡", "電腦及周邊": "💻",
+  "通信網路": "📡", "金融保險": "🏦", "生技醫療": "💊", "鋼鐵": "🏗",
+  "化學": "⚗️", "建材營造": "🏢", "電機機械": "🔧", "汽車": "🚗",
+  "食品": "🍱", "紡織": "🧶", "觀光餐旅": "🏨", "綠能環保": "🌱",
+  "資訊服務": "🖥", "數位雲端": "☁️", "其他電子": "🔌"
+};
+const HIGHLIGHT_ICONS = {
+  "週漲幅 #1": "🚀", "週跌幅 #1": "📉",
+  "法人加碼": "🏦", "外資借券放空": "📕",
+  "月營收年增": "📈", "高殖利率": "💰"
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const shell = document.getElementById("weeklyShell");
+  let data;
+  try {
+    const resp = await fetch("../data/weekly_report.json", { cache: "no-cache" });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    data = await resp.json();
+  } catch (e) {
+    shell.innerHTML = `<div class="weekly-empty">
+      <div class="weekly-empty-icon">📰</div>
+      <h2>本週週報生成中</h2>
+      <p>每週一早上 8:00 自動發布上一週的台股產業整理。</p>
+      <p style="font-size:12px;color:#888;">(${e.message})</p>
+    </div>`;
+    return;
+  }
+
+  const generatedAt = data.generatedAt || "";
+  const market = data.market || {};
+  const industries = data.industries || [];
+
+  shell.innerHTML = `
+    <article class="weekly-report">
+      <header class="weekly-head">
+        <div class="weekly-eyebrow">領富 AI · 第 ${data.weekNum} 週產業週報</div>
+        <h1 class="weekly-title">📰 ${data.weekStart} ~ ${data.weekEnd}<br>台股 10 大產業觀察</h1>
+        <div class="weekly-meta">
+          <span>🤖 AI 撰寫</span>
+          <span>·</span>
+          <span>📊 含 ${market.totalStocks || "?"} 檔個股、${industries.length} 大產業</span>
+          <span>·</span>
+          <span>🕐 ${generatedAt} 自動生成</span>
+        </div>
+      </header>
+
+      <section class="weekly-section weekly-market">
+        <h2 class="weekly-h2">📊 整體市場觀察</h2>
+        <p class="weekly-text">${escapeHtml(market.summary || "")}</p>
+      </section>
+
+      <section class="weekly-section">
+        <h2 class="weekly-h2">🔍 10 大產業逐一觀察</h2>
+        <p class="weekly-sub">點任一個重點個股即可進詳情頁查看完整資料。</p>
+      </section>
+
+      ${industries.map((ind, i) => renderIndustry(ind, i + 1)).join("")}
+
+      <section class="weekly-section weekly-disclaimer">
+        <p>※ 本週報由 AI 自動依據公開資料（TWSE / TPEx / MOPS）整理撰寫，不構成個股推薦或買賣建議。<br>
+        ※ 個股表現分散投資人風險偏好不同，買賣決定請您自行評估或諮詢合法投顧。</p>
+      </section>
+    </article>
+  `;
+});
+
+function renderIndustry(ind, idx) {
+  const icon = INDUSTRY_ICONS[ind.name] || "📈";
+  const wkClass = ind.avgWeekReturn > 0 ? "up" : (ind.avgWeekReturn < 0 ? "down" : "flat");
+  const wkArrow = ind.avgWeekReturn > 0 ? "▲" : (ind.avgWeekReturn < 0 ? "▼" : "─");
+  const foreignClass = ind.foreignNetTotal >= 0 ? "up" : "down";
+  const fmtNet = (n) => {
+    const abs = Math.abs(n);
+    if (abs >= 100000) return (n / 10000).toFixed(1) + " 萬張";
+    return n.toLocaleString() + " 張";
+  };
+  return `
+    <section class="weekly-section weekly-industry">
+      <div class="ind-head">
+        <div class="ind-num">${String(idx).padStart(2, '0')}</div>
+        <div>
+          <h2 class="ind-name">${icon} ${ind.name}</h2>
+          <div class="ind-stats">
+            <span>${ind.stockCount} 檔</span>
+            <span class="${wkClass}">平均週漲跌 ${wkArrow} ${Math.abs(ind.avgWeekReturn || 0).toFixed(2)}%</span>
+            <span class="${foreignClass}">外資 ${ind.foreignNetTotal >= 0 ? '買超' : '賣超'} ${fmtNet(Math.abs(ind.foreignNetTotal))}</span>
+          </div>
+        </div>
+      </div>
+      <p class="weekly-text">${escapeHtml(ind.narrative || "")}</p>
+      ${ind.highlights && ind.highlights.length ? `
+      <div class="ind-highlights">
+        <div class="ind-hl-label">本週重點個股</div>
+        <div class="ind-hl-grid">
+          ${ind.highlights.map(h => `
+            <a class="ind-hl-card" href="stock-detail.html?code=${h.code}">
+              <div class="ind-hl-kind">${HIGHLIGHT_ICONS[h.kind] || "📌"} ${h.kind}</div>
+              <div class="ind-hl-stock"><strong>${h.code}</strong> ${h.name}</div>
+              <div class="ind-hl-value">${h.value}</div>
+            </a>
+          `).join("")}
+        </div>
+      </div>` : ""}
+    </section>
+  `;
+}
+
+function escapeHtml(s) {
+  return String(s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\n/g, "<br>");
+}
+</script>
+</body>
+</html>

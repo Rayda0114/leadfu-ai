@@ -4098,6 +4098,245 @@ body.theme-red .inapp-warning-banner {
   }
 }
 
+/* 首頁 daily-brief 底下「看完整週報」CTA */
+.daily-brief-weekly-cta {
+  display: block;
+  margin-top: 12px;
+  text-align: center;
+  padding: 10px 14px;
+  background: linear-gradient(90deg, #1B4332 0%, #2d5f4a 100%);
+  color: #C5A572;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+}
+.daily-brief-weekly-cta:hover {
+  background: linear-gradient(90deg, #2d5f4a 0%, #1B4332 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(27, 67, 50, 0.2);
+}
+body.theme-red .daily-brief-weekly-cta {
+  background: linear-gradient(90deg, #7F1D1D 0%, #991B1B 100%);
+  color: #D4AF37;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   產業週報 pages/weekly.html — 紙本報告質感
+   ───────────────────────────────────────────────────────────── */
+.weekly-main { max-width: 920px; }
+.weekly-report {
+  background: #fff;
+  border: 1px solid #e0e3e8;
+  border-radius: 6px;
+  padding: 36px 44px 44px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  position: relative;
+}
+.weekly-report::before {
+  content: "領富 AI · LeadFu Weekly Industry Report";
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #C5A572;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.weekly-head {
+  border-bottom: 2px solid #1B4332;
+  padding-bottom: 24px;
+  margin-bottom: 28px;
+}
+.weekly-eyebrow {
+  font-size: 11px;
+  color: #C5A572;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.weekly-title {
+  font-size: 28px;
+  color: #1B4332;
+  line-height: 1.35;
+  margin: 0 0 14px;
+  font-weight: 700;
+}
+.weekly-meta {
+  font-size: 12px;
+  color: #888;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.weekly-section { margin: 32px 0; }
+.weekly-h2 {
+  font-size: 18px;
+  color: #1B4332;
+  margin: 0 0 14px;
+  padding-left: 12px;
+  border-left: 4px solid #C5A572;
+  line-height: 1.4;
+}
+.weekly-sub {
+  font-size: 12px;
+  color: #888;
+  margin: -8px 0 0 16px;
+}
+.weekly-text {
+  font-size: 14.5px;
+  line-height: 1.9;
+  color: #333;
+  margin: 0;
+  text-align: justify;
+}
+.weekly-market .weekly-text {
+  background: linear-gradient(180deg, #f8fbf6 0%, #fefefe 100%);
+  border-left: 3px solid #1B4332;
+  padding: 16px 20px;
+  border-radius: 4px;
+}
+
+/* 每個產業區塊 */
+.weekly-industry {
+  border-top: 1px dashed #e2e8f0;
+  padding-top: 28px;
+}
+.ind-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+.ind-num {
+  font-size: 36px;
+  color: #C5A572;
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -1px;
+  font-family: ui-monospace, "Consolas", monospace;
+  min-width: 56px;
+}
+.ind-name {
+  font-size: 20px;
+  color: #1B4332;
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+.ind-stats {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: #6b7280;
+  flex-wrap: wrap;
+}
+.ind-stats span.up { color: #dc2626; font-weight: 600; }
+.ind-stats span.down { color: #16a34a; font-weight: 600; }
+.ind-highlights {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+}
+.ind-hl-label {
+  font-size: 11px;
+  color: #C5A572;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.ind-hl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+.ind-hl-card {
+  display: block;
+  background: #fafbfc;
+  border: 1px solid #eef0f3;
+  border-radius: 5px;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.15s;
+}
+.ind-hl-card:hover {
+  border-color: #1B4332;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(27, 67, 50, 0.08);
+}
+.ind-hl-kind {
+  font-size: 10px;
+  color: #888;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.ind-hl-stock {
+  font-size: 13px;
+  color: #1B4332;
+  margin-bottom: 3px;
+}
+.ind-hl-stock strong {
+  font-family: ui-monospace, "Consolas", monospace;
+  margin-right: 4px;
+}
+.ind-hl-value {
+  font-size: 12px;
+  color: #B45309;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.weekly-disclaimer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eef0f3;
+  font-size: 11px;
+  color: #888;
+  line-height: 1.7;
+}
+.weekly-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+.weekly-empty-icon { font-size: 48px; margin-bottom: 16px; }
+.weekly-empty h2 { color: #1B4332; margin: 0 0 8px; }
+
+/* 紅金主題 */
+body.theme-red .weekly-eyebrow,
+body.theme-red .ind-num,
+body.theme-red .ind-hl-label { color: #D4AF37; }
+body.theme-red .weekly-title,
+body.theme-red .weekly-h2,
+body.theme-red .ind-name,
+body.theme-red .ind-hl-stock,
+body.theme-red .weekly-empty h2 { color: #7F1D1D; }
+body.theme-red .weekly-head { border-bottom-color: #7F1D1D; }
+body.theme-red .weekly-h2 { border-left-color: #D4AF37; }
+body.theme-red .weekly-market .weekly-text {
+  background: linear-gradient(180deg, #fef9f0 0%, #fefefe 100%);
+  border-left-color: #7F1D1D;
+}
+body.theme-red .ind-hl-card:hover {
+  border-color: #7F1D1D;
+  box-shadow: 0 2px 6px rgba(127, 29, 29, 0.08);
+}
+body.theme-red .ind-hl-value { color: #92400e; }
+
+@media (max-width: 768px) {
+  .weekly-report { padding: 24px 18px 30px; }
+  .weekly-title { font-size: 22px; }
+  .weekly-h2 { font-size: 16px; }
+  .weekly-text { font-size: 14px; }
+  .ind-head { gap: 12px; }
+  .ind-num { font-size: 28px; min-width: 40px; }
+  .ind-name { font-size: 17px; }
+  .ind-hl-grid { grid-template-columns: 1fr 1fr; }
+}
+
 /* ─────────────────────────────────────────────────────────────
    即時行情列（5 秒延遲、TWSE MIS 公開 API）
    首頁 hero 下方一條，加權 + 櫃買 + 自選股前 5
