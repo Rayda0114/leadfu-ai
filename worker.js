@@ -369,12 +369,77 @@ function handleHealth(env) {
 }
 
 
+/* /api/quote — TWSE MIS 即時報價代理（5 秒延遲）
+ *
+ * 用法：/api/quote?ex_ch=tse_2330.tw|tse_t00.tw|otc_o00.tw
+ *   - 上市股 / t00 加權指數：tse_<code>.tw
+ *   - 上櫃股 / o00 櫃買指數：otc_<code>.tw
+ *   - 最多 50 檔一次查（避免被擋）
+ *
+ * 為什麼要走 Worker：
+ *   - mis.twse.com.tw 沒開 CORS，前端不能直接 fetch
+ *   - Worker 代理 + 邊緣快取 5 秒 = 同樣 5 秒間隔 polling 不會打爆來源
+ */
+async function handleQuote(request) {
+  const url = new URL(request.url);
+  const ex_ch = (url.searchParams.get("ex_ch") || "").trim();
+  if (!ex_ch) {
+    return new Response(JSON.stringify({ error: "missing ex_ch param" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json", ...corsHeaders() }
+    });
+  }
+  // 簡單清洗：只允許 [a-z0-9._|] 避免被當作 SSRF 跳板
+  if (!/^[a-z0-9._|]+$/i.test(ex_ch)) {
+    return new Response(JSON.stringify({ error: "invalid ex_ch chars" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json", ...corsHeaders() }
+    });
+  }
+  // 限制最多 50 個（保護 upstream）
+  const segs = ex_ch.split("|").filter(Boolean);
+  if (segs.length > 50) {
+    return new Response(JSON.stringify({ error: "max 50 codes" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json", ...corsHeaders() }
+    });
+  }
+
+  const target = `https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=${encodeURIComponent(ex_ch)}&json=1&delay=0&_=${Math.floor(Date.now() / 5000)}`;
+  try {
+    const resp = await fetch(target, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 LeadFuAI/1.0",
+        "Accept": "application/json",
+        "Referer": "https://mis.twse.com.tw/stock/fibest.jsp"
+      },
+      cf: { cacheTtl: 5, cacheEverything: true }
+    });
+    const body = await resp.text();
+    return new Response(body, {
+      status: resp.status,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "public, max-age=5",
+        ...corsHeaders()
+      }
+    });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: "upstream failed", detail: String(e) }), {
+      status: 502,
+      headers: { "Content-Type": "application/json", ...corsHeaders() }
+    });
+  }
+}
+
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
     if (url.pathname === "/api/ask")    return handleAsk(request, env);
     if (url.pathname === "/api/health") return handleHealth(env);
+    if (url.pathname === "/api/quote")  return handleQuote(request);
 
     // 其他 path → 交給 ASSETS binding 處理（保留所有原本的靜態行為）
     return env.ASSETS.fetch(request);

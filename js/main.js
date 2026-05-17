@@ -2057,6 +2057,225 @@ function dataUrl(file) {
   return (inPages ? "../" : "") + "data/" + file;
 }
 
+/* ============================================================
+ * 即時行情列（5 秒延遲 - TWSE MIS 公開 API via /api/quote）
+ * 只在首頁有 #liveQuoteBar 元素時運作。
+ * 自動暫停：頁面 hidden 時不 poll；台股盤外（非 9:00-13:30）改為 30 秒一次
+ * ============================================================ */
+const LQ_POLL_OPEN  = 10_000;   // 盤中 10 秒
+const LQ_POLL_CLOSED = 60_000;  // 盤外 60 秒（拿最後收盤）
+const LQ_TIMEOUT     = 5_000;
+
+let _lqTimer = null;
+let _lqLast = {};   // code → 上一筆值（給閃爍動畫用）
+
+function isMarketOpen() {
+  const now = new Date();
+  // 轉成台灣時區 — 簡單做：用 Asia/Taipei 偏移計算
+  const tw = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
+  const day = tw.getDay();   // 0=日 6=六
+  if (day === 0 || day === 6) return false;
+  const m = tw.getHours() * 60 + tw.getMinutes();
+  return m >= 9 * 60 && m <= 13 * 60 + 30;
+}
+
+function lqFlash(el, oldVal, newVal) {
+  if (!el) return;
+  if (oldVal === undefined || oldVal === null) return;
+  if (newVal === oldVal) return;
+  el.classList.remove("lq-flash-up", "lq-flash-down");
+  // 強制重排觸發動畫
+  void el.offsetWidth;
+  el.classList.add(newVal > oldVal ? "lq-flash-up" : "lq-flash-down");
+}
+
+function fmtIndexValue(v) {
+  if (v == null || v === "-" || v === "") return "--";
+  const n = parseFloat(v);
+  if (isNaN(n)) return "--";
+  return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function lqUpdateIndex(blockId, q) {
+  const block = document.getElementById(blockId);
+  if (!block || !q) return;
+  const valEl = block.querySelector(".lq-value");
+  const chEl  = block.querySelector(".lq-change");
+
+  const z = parseFloat(q.z);  // 當前
+  const y = parseFloat(q.y);  // 昨收
+  if (isNaN(z) || isNaN(y) || z <= 0 || y <= 0) return;
+
+  const change = z - y;
+  const pct = (change / y * 100);
+
+  const cls = change > 0 ? "up" : (change < 0 ? "down" : "flat");
+  const arrow = change > 0 ? "▲" : (change < 0 ? "▼" : "─");
+
+  const prev = _lqLast[blockId];
+  valEl.textContent = fmtIndexValue(z);
+  chEl.textContent = `${arrow} ${Math.abs(change).toFixed(2)} (${change > 0 ? '+' : ''}${pct.toFixed(2)}%)`;
+  chEl.className = "lq-change " + cls;
+  valEl.className = "lq-value " + cls;
+  lqFlash(valEl, prev, z);
+  _lqLast[blockId] = z;
+}
+
+function lqUpdateWatchlistRow(rowEl, q) {
+  if (!rowEl || !q) return;
+  const code = rowEl.dataset.code;
+  const priceEl = rowEl.querySelector(".lqw-price");
+  const chEl    = rowEl.querySelector(".lqw-change");
+
+  // MIS：z = 當前成交（盤中），如果是 "-" 就用 pz（上一筆成交）
+  let z = parseFloat(q.z);
+  if (isNaN(z) || z <= 0) z = parseFloat(q.pz);
+  const y = parseFloat(q.y);
+  if (isNaN(z) || isNaN(y) || z <= 0 || y <= 0) return;
+
+  const change = z - y;
+  const pct = (change / y * 100);
+  const cls = change > 0 ? "up" : (change < 0 ? "down" : "flat");
+
+  const prev = _lqLast["w_" + code];
+  priceEl.textContent = z.toFixed(2);
+  chEl.textContent = `${change > 0 ? '+' : ''}${pct.toFixed(2)}%`;
+  priceEl.className = "lqw-price " + cls;
+  chEl.className = "lqw-change " + cls;
+  lqFlash(priceEl, prev, z);
+  _lqLast["w_" + code] = z;
+}
+
+function lqBuildWatchlistRows() {
+  const container = document.getElementById("lqWatchlist");
+  if (!container) return [];
+
+  // 自選股優先，沒有就用熱門前 5
+  let codes = [];
+  try {
+    const wl = JSON.parse(localStorage.getItem("leadfu_watchlist") || "[]");
+    codes = wl.slice(0, 5);
+  } catch { /* ignore */ }
+  let useFallback = codes.length === 0;
+  if (useFallback) {
+    codes = (STOCK_DATA.stocks || [])
+      .filter(s => s.price > 0 && (s.market === "listed" || s.market === "otc"))
+      .sort((a, b) => (b.volume || 0) - (a.volume || 0))
+      .slice(0, 5)
+      .map(s => s.code);
+  }
+
+  // 解析每檔的 market → ex_ch prefix
+  const items = codes.map(c => {
+    const s = (STOCK_DATA.stocks || []).find(x => x.code === c);
+    const market = s ? s.market : "listed";
+    return {
+      code: c,
+      name: s ? s.name : c,
+      market,
+      prefix: market === "otc" ? "otc_" : "tse_"
+    };
+  });
+
+  // 興櫃股 MIS 沒有，跳過
+  const visible = items.filter(it => it.market !== "emerging");
+
+  container.innerHTML = `
+    <div class="lq-watchlist-label">${useFallback ? "熱門" : "自選"}</div>
+    ${visible.map(it => `
+      <a class="lq-w-row" data-code="${it.code}" data-market="${it.market}" href="${pageHref('stock-detail.html?code=' + it.code)}">
+        <span class="lqw-name">${it.code} ${it.name}</span>
+        <span class="lqw-price">--</span>
+        <span class="lqw-change">--</span>
+      </a>
+    `).join("")}
+  `;
+  return visible;
+}
+
+async function lqFetchQuotes(exChList) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), LQ_TIMEOUT);
+  try {
+    const resp = await fetch("/api/quote?ex_ch=" + encodeURIComponent(exChList.join("|")), {
+      signal: ctrl.signal,
+      cache: "no-store"
+    });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    return await resp.json();
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+async function lqTick(watchlistItems) {
+  const statusEl = document.getElementById("lqStatusText");
+  const updEl    = document.getElementById("lqUpdated");
+
+  const exChs = [
+    "tse_t00.tw",   // 加權指數
+    "otc_o00.tw",   // 櫃買指數
+    ...watchlistItems.map(it => `${it.prefix}${it.code}.tw`)
+  ];
+
+  try {
+    const data = await lqFetchQuotes(exChs);
+    if (!data || data.rtcode !== "0000") {
+      statusEl.textContent = "離線";
+      return;
+    }
+    const arr = data.msgArray || [];
+    arr.forEach(q => {
+      if (q.c === "t00") lqUpdateIndex("lqTaiex", q);
+      else if (q.c === "o00") lqUpdateIndex("lqOtc", q);
+      else {
+        const row = document.querySelector(`.lq-w-row[data-code="${q.c}"]`);
+        if (row) lqUpdateWatchlistRow(row, q);
+      }
+    });
+    const open = isMarketOpen();
+    statusEl.textContent = open ? "盤中" : "盤後";
+    statusEl.parentElement.classList.toggle("open", open);
+    if (updEl) {
+      const now = new Date();
+      updEl.textContent = "更新 " + now.toLocaleTimeString("zh-TW", { hour12: false });
+    }
+  } catch (e) {
+    if (statusEl) statusEl.textContent = "重試中…";
+  }
+}
+
+function lqStart() {
+  const bar = document.getElementById("liveQuoteBar");
+  if (!bar) return;   // 不是首頁
+
+  const items = lqBuildWatchlistRows();
+  const tick = () => lqTick(items);
+
+  // 立刻跑一次
+  tick();
+
+  function schedule() {
+    clearTimeout(_lqTimer);
+    if (document.hidden) return;
+    const interval = isMarketOpen() ? LQ_POLL_OPEN : LQ_POLL_CLOSED;
+    _lqTimer = setTimeout(() => {
+      tick();
+      schedule();
+    }, interval);
+  }
+  schedule();
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      clearTimeout(_lqTimer);
+    } else {
+      tick();
+      schedule();
+    }
+  });
+}
+
 async function fetchJson(file) {
   const resp = await fetch(dataUrl(file), { cache: "no-cache" });
   if (!resp.ok) throw new Error("HTTP " + resp.status);
@@ -2236,6 +2455,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   injectStockJsonLd();  // GEO：個股詳情頁注入 JSON-LD（FinancialProduct + Organization + BreadcrumbList）
   renderTicker();
+  lqStart();           // 即時行情列（首頁才有 #liveQuoteBar，其他頁自動跳過）
   renderHeroCards();   // 首頁三張卡片（其他頁沒有 #heroCards 會自動跳過）
   renderStockTable();
   renderNews();

@@ -113,8 +113,37 @@
   </div>
 </section>
 
+<!-- 即時指數列（5 秒延遲，TWSE MIS 公開 API） -->
+<div class="live-quote-bar" id="liveQuoteBar">
+  <div class="container live-quote-inner">
+    <div class="lq-status">
+      <span class="lq-pulse"></span>
+      <span class="lq-status-text" id="lqStatusText">連線中…</span>
+      <span class="lq-delay">5 秒延遲</span>
+    </div>
+    <div class="lq-indices">
+      <div class="lq-index" id="lqTaiex">
+        <span class="lq-name">加權</span>
+        <span class="lq-value">--</span>
+        <span class="lq-change">--</span>
+      </div>
+      <div class="lq-index" id="lqOtc">
+        <span class="lq-name">櫃買</span>
+        <span class="lq-value">--</span>
+        <span class="lq-change">--</span>
+      </div>
+    </div>
+    <div class="lq-watchlist" id="lqWatchlist">
+      <!-- 自選股前 5 名：登入用戶才填，否則顯示前 5 熱門股 -->
+    </div>
+    <div class="lq-meta">
+      <span id="lqUpdated">--</span>
+    </div>
+  </div>
+</div>
+
 <div class="ticker">
-  <div class="ticker-label">即時行情</div>
+  <div class="ticker-label">熱門排行</div>
   <div class="ticker-track" id="tickerTrack">載入中...</div>
 </div>
 
