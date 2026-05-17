@@ -108,7 +108,7 @@
       <span class="preset-pill" data-preset="volume">🔥 成交量爆量</span>
       <span class="preset-pill" data-preset="ai">🤖 AI 概念股</span>
       <span class="preset-pill" data-preset="bio">💊 生技醫療</span>
-      <span class="preset-pill" data-preset="ipo">🆕 準上市</span>
+      <span class="preset-pill" data-preset="ipo">🆕 新興產業</span>
       <span class="preset-pill" data-preset="high">📊 高價股 ($500+)</span>
       <span class="preset-pill" data-preset="low">💰 低價股 ($100-)</span>
     </div>
@@ -144,9 +144,9 @@
       <div class="filter-card">
         <h4>市場狀態</h4>
         <div class="check-list" id="statusList">
+          <label><input type="checkbox" value="上市"> 上市</label>
+          <label><input type="checkbox" value="上櫃"> 上櫃</label>
           <label><input type="checkbox" value="興櫃"> 興櫃</label>
-          <label><input type="checkbox" value="未上市"> 未上市</label>
-          <label><input type="checkbox" value="準上市"> 準上市</label>
         </div>
       </div>
 
@@ -320,7 +320,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (preset === "volume") setVal("volMin", "500");
       if (preset === "ai") { checkVal("catList","半導體"); checkVal("catList","IC設計"); checkVal("catList","伺服器"); }
       if (preset === "bio") checkVal("catList","生技醫療");
-      if (preset === "ipo") checkVal("statusList","準上市");
+      if (preset === "ipo") checkVal("statusList","興櫃");
       if (preset === "high") setVal("priceMin", "500");
       if (preset === "low") setVal("priceMax", "100");
       apply();

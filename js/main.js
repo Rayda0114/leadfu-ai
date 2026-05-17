@@ -16,47 +16,47 @@ const STOCK_DATA = {
   updatedAt: "2026-05-12 09:30",
   stocks: [
     { code: "6488", name: "環球晶", price: 462.5, change: 8.5,  volume: 1245,  category: "半導體",       status: "興櫃" },
-    { code: "3552", name: "同致",   price: 178.0, change: -2.0, volume: 320,   category: "電子零組件",   status: "未上市" },
+    { code: "3552", name: "同致",   price: 178.0, change: -2.0, volume: 320,   category: "電子零組件",   status: "興櫃" },
     { code: "6515", name: "穎崴",   price: 1245,  change: 35.0, volume: 88,    category: "半導體",       status: "興櫃" },
-    { code: "8038", name: "長園科", price: 92.3,  change: 1.2,  volume: 540,   category: "電池材料",     status: "未上市" },
+    { code: "8038", name: "長園科", price: 92.3,  change: 1.2,  volume: 540,   category: "電池材料",     status: "興櫃" },
     { code: "6531", name: "愛普",   price: 1820,  change: -45,  volume: 45,    category: "IC設計",       status: "興櫃" },
-    { code: "6770", name: "力積電", price: 28.5,  change: 0.5,  volume: 2850,  category: "晶圓代工",     status: "未上市" },
+    { code: "6770", name: "力積電", price: 28.5,  change: 0.5,  volume: 2850,  category: "晶圓代工",     status: "興櫃" },
     { code: "6841", name: "長聖",   price: 215,   change: 5,    volume: 180,   category: "生技醫療",     status: "興櫃" },
-    { code: "4174", name: "浩鼎",   price: 320,   change: -8,   volume: 95,    category: "生技醫療",     status: "準上市" },
-    { code: "6962", name: "拓凱",   price: 156,   change: 2.5,  volume: 420,   category: "運動器材",     status: "未上市" },
+    { code: "4174", name: "浩鼎",   price: 320,   change: -8,   volume: 95,    category: "生技醫療",     status: "興櫃" },
+    { code: "6962", name: "拓凱",   price: 156,   change: 2.5,  volume: 420,   category: "運動器材",     status: "興櫃" },
     { code: "8155", name: "博智",   price: 386,   change: 11,   volume: 230,   category: "PCB",          status: "興櫃" },
-    { code: "5483", name: "中美晶", price: 132.5, change: -1.5, volume: 680,   category: "半導體",       status: "未上市" },
-    { code: "2069", name: "運錩",   price: 56.4,  change: 0.8,  volume: 1100,  category: "鋼鐵",         status: "未上市" },
-    { code: "6116", name: "彩晶",   price: 8.95,  change: -0.05,volume: 12500, category: "面板",         status: "準上市" },
+    { code: "5483", name: "中美晶", price: 132.5, change: -1.5, volume: 680,   category: "半導體",       status: "興櫃" },
+    { code: "2069", name: "運錩",   price: 56.4,  change: 0.8,  volume: 1100,  category: "鋼鐵",         status: "興櫃" },
+    { code: "6116", name: "彩晶",   price: 8.95,  change: -0.05,volume: 12500, category: "面板",         status: "興櫃" },
     { code: "3265", name: "台星科", price: 88,    change: 1.5,  volume: 380,   category: "半導體封測",   status: "興櫃" },
-    { code: "4438", name: "廣越",   price: 245,   change: 4.5,  volume: 145,   category: "紡織成衣",     status: "未上市" },
-    { code: "3293", name: "鈊象",   price: 985,   change: 22,   volume: 320,   category: "遊戲軟體",     status: "未上市" },
+    { code: "4438", name: "廣越",   price: 245,   change: 4.5,  volume: 145,   category: "紡織成衣",     status: "興櫃" },
+    { code: "3293", name: "鈊象",   price: 985,   change: 22,   volume: 320,   category: "遊戲軟體",     status: "興櫃" },
     { code: "8261", name: "富鼎",   price: 215,   change: -3.5, volume: 280,   category: "電源管理IC",   status: "興櫃" },
-    { code: "6679", name: "鈺太",   price: 458,   change: 12,   volume: 165,   category: "IC設計",       status: "未上市" },
-    { code: "6196", name: "帆宣",   price: 178,   change: 4.5,  volume: 920,   category: "電子設備",     status: "未上市" },
-    { code: "8482", name: "商億-KY",price: 132,   change: -2.5, volume: 220,   category: "家具",         status: "未上市" },
-    { code: "6859", name: "頎邦",   price: 78.5,  change: 1.2,  volume: 1850,  category: "半導體封測",   status: "未上市" },
+    { code: "6679", name: "鈺太",   price: 458,   change: 12,   volume: 165,   category: "IC設計",       status: "興櫃" },
+    { code: "6196", name: "帆宣",   price: 178,   change: 4.5,  volume: 920,   category: "電子設備",     status: "興櫃" },
+    { code: "8482", name: "商億-KY",price: 132,   change: -2.5, volume: 220,   category: "家具",         status: "興櫃" },
+    { code: "6859", name: "頎邦",   price: 78.5,  change: 1.2,  volume: 1850,  category: "半導體封測",   status: "興櫃" },
     { code: "3416", name: "融程電", price: 156,   change: 3.5,  volume: 380,   category: "工業電腦",     status: "興櫃" },
-    { code: "1597", name: "直得",   price: 92.5,  change: -1.5, volume: 450,   category: "機械",         status: "未上市" },
-    { code: "4763", name: "材料-KY",price: 285,   change: 8.5,  volume: 210,   category: "化學材料",     status: "未上市" },
+    { code: "1597", name: "直得",   price: 92.5,  change: -1.5, volume: 450,   category: "機械",         status: "興櫃" },
+    { code: "4763", name: "材料-KY",price: 285,   change: 8.5,  volume: 210,   category: "化學材料",     status: "興櫃" },
     { code: "6890", name: "宏觀",   price: 165,   change: 2,    volume: 320,   category: "PCB",          status: "興櫃" },
-    { code: "6664", name: "群翊",   price: 178,   change: 6,    volume: 280,   category: "電子設備",     status: "未上市" },
-    { code: "8358", name: "金居",   price: 92,    change: -0.5, volume: 1450,  category: "PCB銅箔",      status: "未上市" },
-    { code: "3373", name: "熱映",   price: 56,    change: 1.5,  volume: 680,   category: "光學元件",     status: "未上市" },
+    { code: "6664", name: "群翊",   price: 178,   change: 6,    volume: 280,   category: "電子設備",     status: "興櫃" },
+    { code: "8358", name: "金居",   price: 92,    change: -0.5, volume: 1450,  category: "PCB銅箔",      status: "興櫃" },
+    { code: "3373", name: "熱映",   price: 56,    change: 1.5,  volume: 680,   category: "光學元件",     status: "興櫃" },
     { code: "3217", name: "優群",   price: 145,   change: 5.5,  volume: 380,   category: "連接器",       status: "興櫃" },
-    { code: "6669", name: "緯穎",   price: 2850, change: 65,   volume: 28,    category: "伺服器",       status: "準上市" }
+    { code: "6669", name: "緯穎",   price: 2850, change: 65,   volume: 28,    category: "伺服器",       status: "興櫃" }
   ],
   news: [
     {
       id: 1, time: "09:25", date: "2026-05-12", tag: "熱門", related: ["6488","6515"],
-      title: "外資加碼半導體未上市股，環球晶連三紅",
+      title: "外資加碼半導體興櫃股，環球晶連三紅",
       author: "領富 AI編輯部 / 記者 王志明",
       body: [
-        "【台北報導】未上市股票市場今日延續強勢表現，半導體類股成為焦點。其中環球晶 (6488) 開盤即跳空上漲，盤中最高一度觸及 470 元，最終收在 462.5 元，連續三個交易日收紅。",
+        "【台北報導】興櫃股票市場今日延續強勢表現，半導體類股成為焦點。其中環球晶 (6488) 開盤即跳空上漲，盤中最高一度觸及 470 元，最終收在 462.5 元，連續三個交易日收紅。",
         "根據領富 AI統計，外資法人近五個交易日累積買超環球晶超過 1,200 張，買超金額達 5.5 億元，顯示國際資金看好台灣半導體供應鏈的中長期發展。",
         "業內人士分析，環球晶受惠於 AI 伺服器與先進製程晶圓需求大幅成長，12 吋矽晶圓出貨量逐月攀升。法人預估，公司 2026 全年營收可望年增 25% 以上。",
         "另一檔半導體類股穎崴 (6515) 同步走揚，今日上漲 35 元至 1,245 元，創 4 個月新高。穎崴所生產的 Probe Card 為 IC 測試關鍵設備，受惠於 AI 晶片測試需求暴增。",
-        "展望後市，分析師建議投資人留意半導體類股的回檔買點，但提醒未上市股票流動性較低，建議分批布局並控管部位。"
+        "展望後市，分析師建議投資人留意半導體類股的回檔買點，但提醒興櫃股票流動性較低，建議分批布局並控管部位。"
       ]
     },
     {
@@ -64,7 +64,7 @@ const STOCK_DATA = {
       title: "AI 概念股延燒至興櫃市場，IC 設計股表現亮眼",
       author: "領富 AI編輯部 / 記者 林佳穎",
       body: [
-        "【台北報導】AI 浪潮持續發酵，已從上市櫃市場延燒至興櫃與未上市股票。IC 設計類股今日普遍走高，其中愛普 (6531) 雖小幅回檔，但近一個月仍上漲超過 20%。",
+        "【台北報導】AI 浪潮持續發酵，已從上市櫃市場延燒至興櫃與興櫃股票。IC 設計類股今日普遍走高，其中愛普 (6531) 雖小幅回檔，但近一個月仍上漲超過 20%。",
         "業界觀察，AI 應用對高效能運算晶片需求殷切，相關 IC 設計公司訂單能見度延伸至 2027 年。法人指出，這波 AI 行情才剛開始發酵，建議留意尚未大漲的中小型 IC 設計股。",
         "除 IC 設計外，AI 伺服器供應鏈相關個股如博智 (8155)、緯穎 (6669) 等也受到關注。其中緯穎為國際雲端大廠主要供應商，受惠於資料中心擴建潮。"
       ]
@@ -95,10 +95,10 @@ const STOCK_DATA = {
     },
     {
       id: 5, time: "昨日", date: "2026-05-11", tag: "週評", related: [],
-      title: "未上市股市週評：成交量回升 15%，買盤轉趨積極",
+      title: "興櫃股市週評：成交量回升 15%，買盤轉趨積極",
       author: "領富 AI研究部",
       body: [
-        "【週評】上週未上市股票市場成交量較前週回升 15%，買盤轉趨積極，顯示市場信心逐步恢復。",
+        "【週評】上週興櫃股票市場成交量較前週回升 15%，買盤轉趨積極，顯示市場信心逐步恢復。",
         "類股表現方面，半導體類股漲幅居前，週漲幅達 5.2%；其次為生技醫療 (3.8%) 與電池材料 (3.1%)。下跌類股則以紡織成衣 (-1.2%) 為主。",
         "外資動向方面，本週前三大買超分別為環球晶、博智、長聖，賣超則集中於部分傳產類股。",
         "本週重點觀察：(1) 5/15 興櫃漲跌幅放寬政策上路影響、(2) 浩鼎、彩晶 IPO 抽籤、(3) 第一季財報全面公布。"
@@ -137,10 +137,10 @@ const STOCK_DATA = {
     },
     {
       id: 9, time: "5/11", date: "2026-05-11", tag: "週評", related: [],
-      title: "週評：未上市加權指數收 312.5 點，週漲 1.8%",
+      title: "週評：興櫃加權指數收 312.5 點，週漲 1.8%",
       author: "領富 AI研究部",
       body: [
-        "【週評】領富 AI自編未上市加權指數本週收在 312.5 點，週漲幅 1.8%。其中半導體類股貢獻最大，佔指數漲幅 60% 以上。",
+        "【週評】領富 AI自編興櫃加權指數本週收在 312.5 點，週漲幅 1.8%。其中半導體類股貢獻最大，佔指數漲幅 60% 以上。",
         "技術面觀察，指數已連續 3 週收紅，月線、季線皆呈現上揚走勢，中長期多頭格局確立。",
         "投資人情緒指標方面，領富 AI討論區看多比例升至 62%，創 6 個月新高。"
       ]
@@ -878,9 +878,9 @@ function mockAiResponse(action, code) {
       "listed":   "上市股票於集中市場交易，每日漲跌幅限制 ±10%。短線波動可能較大",
       "otc":      "上櫃股票於櫃買中心交易，每日漲跌幅限制 ±10%。部分中小型股流動性較低",
       "emerging": "興櫃股票每日漲跌幅 ±10%，流動性與資訊揭露弱於上市櫃，買賣價差較大",
-      "":         "未上市股票無集中市場、流動性低、價格不透明、買賣風險高"
+      "":         "興櫃股票無集中市場、流動性低、價格不透明、買賣風險高"
     };
-    const riskText = (s.market === "未上市" || s.status === "未上市")
+    const riskText = (s.market === "興櫃" || s.status === "興櫃")
       ? riskByMarket[""]
       : (riskByMarket[s.market] || riskByMarket["emerging"]);
 
@@ -1746,7 +1746,7 @@ function loadGA() {
 
 /* ============================================================
  * 全站切割聲明（合規）— 注入到 footer 上方，每頁都有
- * 明示「純資訊平台、不介入交易」，符合未上市股票資訊網的法律定位
+ * 明示「純資訊平台、不介入交易」，符合興櫃股票資訊網的法律定位
  * ============================================================ */
 function setupDisclaimer() {
   if (document.querySelector(".site-disclaimer")) return;
@@ -1760,10 +1760,10 @@ function setupDisclaimer() {
     <div class="container">
       <span class="disc-icon">⚠</span>
       <span>
-        <strong>領富 AI 為未上市／興櫃股票公開資訊整理平台。</strong>
+        <strong>領富 AI 為興櫃／興櫃股票公開資訊整理平台。</strong>
         本站<strong>不介入任何股票買賣、不撮合交易、不代為下單或過戶、不收受投資款項</strong>，
         亦非證券投資顧問事業。所有內容（含 AI 功能）僅為公開資料之整理與摘要，不構成投資建議。
-        未上市股票買賣應透過合法券商辦理，謹防詐騙 — 請參閱
+        興櫃股票買賣應透過合法券商辦理，謹防詐騙 — 請參閱
         <a href="${fraudHref}">投資人防詐須知</a>。
       </span>
     </div>`;
