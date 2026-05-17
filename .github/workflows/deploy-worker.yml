@@ -1,0 +1,50 @@
+name: 領富 AI · Cloudflare Worker 自動部署
+
+# 觸發時機：
+#  - push 到 main 且改動了 worker、靜態檔、SW
+#  - 也允許手動觸發（測試用）
+#
+# 自動跳過：純資料更新（只動 data/*.json）會走每日 workflow，
+# 這個 workflow 只在「程式碼或靜態資產有變」時啟動，避免每天無謂部署。
+on:
+  push:
+    branches: [main]
+    paths:
+      - "worker.js"
+      - "wrangler.jsonc"
+      - "index.html"
+      - "pages/**"
+      - "js/**"
+      - "css/**"
+      - "icons/**"
+      - "sw.js"
+      - "manifest.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Cloudflare Workers
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Deploy worker (含所有靜態資產)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+
+      - name: Show deploy result
+        run: |
+          echo "✅ Deployed to leadfuai.com"
+          echo "Worker version: $(grep -oP 'VERSION = \"\K[^\"]+' sw.js)"
