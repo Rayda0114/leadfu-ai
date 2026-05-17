@@ -4934,6 +4934,264 @@ body.theme-red .data-num.down  { color: #15803D; }
 body.theme-red .data-row:hover { background: #fef2f2; }
 
 /* ─────────────────────────────────────────────────────────────
+   防詐騙官方資訊 banner（首頁頂端）
+   ───────────────────────────────────────────────────────────── */
+.anti-fraud-banner {
+  background: linear-gradient(90deg, #7F1D1D 0%, #991B1B 50%, #B45309 100%);
+  color: #fff;
+  font-size: 12.5px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+  position: relative;
+  z-index: 100;
+}
+.afb-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  line-height: 1.55;
+}
+.afb-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.afb-text {
+  flex: 1;
+  font-weight: 400;
+}
+.afb-text strong { font-weight: 700; color: #FDE68A; }
+.afb-text code {
+  background: rgba(255,255,255,0.18);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: ui-monospace, "Consolas", monospace;
+  font-size: 12px;
+  color: #FDE68A;
+}
+.afb-line {
+  color: #FDE68A;
+  text-decoration: underline;
+  font-weight: 600;
+}
+.afb-line:hover { color: #fff; }
+.afb-warn { color: #FECACA; font-weight: 600; }
+.afb-165 {
+  color: #FDE68A;
+  text-decoration: underline;
+  font-weight: 700;
+}
+.afb-165:hover { color: #fff; }
+.afb-more {
+  color: rgba(255,255,255,0.95);
+  text-decoration: underline;
+  margin-left: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.afb-more:hover { color: #FDE68A; }
+.afb-close {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.afb-close:hover { color: #fff; }
+
+@media (max-width: 768px) {
+  .afb-inner { font-size: 11.5px; padding: 8px 10px; gap: 8px; }
+  .afb-icon { display: none; }
+  .afb-more { display: block; margin: 4px 0 0; }
+}
+
+/* 全站 footer 防詐 reminder（由 main.js 注入） */
+.footer-fraud-reminder {
+  background: #0F2A1F;
+  color: #94a3b8;
+  font-size: 11px;
+  text-align: center;
+  padding: 10px 14px;
+  border-top: 1px solid rgba(197, 165, 114, 0.15);
+  line-height: 1.7;
+}
+.footer-fraud-reminder strong { color: #C5A572; }
+.footer-fraud-reminder a {
+  color: #C5A572;
+  text-decoration: underline;
+}
+.footer-fraud-reminder a:hover { color: #fde68a; }
+body.theme-red .footer-fraud-reminder {
+  background: #1a0f0f;
+}
+body.theme-red .footer-fraud-reminder strong,
+body.theme-red .footer-fraud-reminder a { color: #D4AF37; }
+
+/* 關於我們：做什麼／不做什麼對照 */
+.about-dodont {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+.ad-col {
+  padding: 18px 20px;
+  border-radius: 6px;
+  border: 1px solid #eef0f3;
+}
+.ad-do {
+  background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%);
+  border-color: #bbf7d0;
+}
+.ad-dont {
+  background: linear-gradient(180deg, #fef2f2 0%, #fff 100%);
+  border-color: #fecaca;
+}
+.ad-col h3 {
+  font-size: 15px;
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid currentColor;
+}
+.ad-do h3 { color: #16a34a; }
+.ad-dont h3 { color: #dc2626; }
+.ad-col ul {
+  margin: 0;
+  padding-left: 20px;
+}
+.ad-col li {
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: #444;
+}
+@media (max-width: 768px) {
+  .about-dodont { grid-template-columns: 1fr; }
+}
+
+/* 品牌冒用提醒區塊 */
+.about-impersonation-notice {
+  background: linear-gradient(180deg, #fef2f2 0%, #fff 100%);
+  border: 2px solid #fecaca;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 12px 0 20px;
+}
+.about-impersonation-notice p { line-height: 1.85; }
+.about-impersonation-notice .fin-table th {
+  background: #7F1D1D;
+  color: #fff;
+}
+
+/* fraud-alert.html 官方資訊驗證盒（頁面最上方） */
+.official-verify-box {
+  background: linear-gradient(135deg, #1B4332 0%, #2d5f4a 100%);
+  color: #fff;
+  border-radius: 10px;
+  padding: 24px 28px 22px;
+  margin-bottom: 22px;
+  box-shadow: 0 6px 18px rgba(27, 67, 50, 0.18);
+  border: 2px solid #C5A572;
+}
+.ovb-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.ovb-shield {
+  font-size: 38px;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  background: rgba(197, 165, 114, 0.18);
+  border: 2px solid #C5A572;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ovb-title {
+  margin: 0 0 4px;
+  font-size: 19px;
+  color: #fff;
+  font-weight: 700;
+}
+.ovb-sub {
+  margin: 0;
+  font-size: 13px;
+  color: #C5A572;
+  line-height: 1.6;
+}
+.ovb-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.ovb-table th, .ovb-table td {
+  padding: 11px 14px;
+  text-align: left;
+  font-size: 13.5px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.ovb-table th {
+  background: rgba(0,0,0,0.25);
+  color: #C5A572;
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+.ovb-table tbody tr:last-child td { border-bottom: none; }
+.ovb-table td:first-child {
+  color: #cbd5e1;
+  font-size: 12.5px;
+  width: 20%;
+  white-space: nowrap;
+}
+.ovb-table .ovb-real, .ovb-table td:nth-child(2) { color: #86efac; }
+.ovb-table .ovb-fake, .ovb-table td:nth-child(3) { color: #fca5a5; }
+.ovb-table code {
+  background: rgba(255,255,255,0.12);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-family: ui-monospace, monospace;
+  font-size: 12.5px;
+  color: #FDE68A;
+}
+.ovb-table a { color: inherit; text-decoration: underline; }
+.ovb-warn {
+  background: rgba(127, 29, 29, 0.35);
+  border: 1px solid rgba(252, 165, 165, 0.5);
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #FECACA;
+}
+.ovb-warn a {
+  color: #FDE68A;
+  text-decoration: underline;
+  font-weight: 700;
+}
+.ovb-warn strong { color: #fff; }
+
+@media (max-width: 768px) {
+  .official-verify-box { padding: 18px 16px; }
+  .ovb-head { gap: 12px; margin-bottom: 14px; }
+  .ovb-shield { width: 44px; height: 44px; font-size: 28px; }
+  .ovb-title { font-size: 16px; }
+  .ovb-sub { font-size: 12px; }
+  .ovb-table th, .ovb-table td { padding: 8px 10px; font-size: 12px; }
+  .ovb-table td:first-child { width: 24%; }
+}
+
+/* ─────────────────────────────────────────────────────────────
    精選功能三張卡片（首頁差異化賣點）
    ───────────────────────────────────────────────────────────── */
 .feature-cards-section {

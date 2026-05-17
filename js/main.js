@@ -1107,6 +1107,52 @@ function setupFeedbackWidget() {
 }
 
 /* ============================================================
+ * 📢 防詐騙官方資訊 banner（首頁頂端，可關閉 7 天）
+ * ============================================================ */
+function setupAntiFraudBanner() {
+  const banner = document.getElementById("antiFraudBanner");
+  if (!banner) return;
+
+  // 7 天內關過 → 直接隱藏
+  const KEY = "leadfu_afb_closed_at";
+  const closedAt = parseInt(localStorage.getItem(KEY) || "0", 10);
+  const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+  if (closedAt && Date.now() - closedAt < SEVEN_DAYS) {
+    banner.style.display = "none";
+    return;
+  }
+
+  banner.addEventListener("click", (e) => {
+    if (e.target.closest('[data-action="close"]')) {
+      localStorage.setItem(KEY, String(Date.now()));
+      banner.style.display = "none";
+    }
+  });
+}
+
+/* ============================================================
+ * 全站 footer 防詐 reminder（自動注入到每個 site-footer 下方）
+ * 給搜尋引擎 / AI 爬蟲穩定錨點：本站絕不...
+ * ============================================================ */
+function injectFooterFraudReminder() {
+  const footer = document.querySelector(".site-footer");
+  if (!footer) return;
+  if (footer.querySelector(".footer-fraud-reminder")) return;
+  const reminder = document.createElement("div");
+  reminder.className = "footer-fraud-reminder";
+  reminder.innerHTML = `
+    <div class="container">
+      <strong>📢 領富 AI 官方聲明：</strong>本站<strong>不提供個股推薦</strong>、<strong>不收任何投資款項</strong>、<strong>不主動加 LINE 群組</strong>、<strong>未發行 APP</strong>。
+      唯一官方網址 <code style="background:rgba(197,165,114,0.15);padding:1px 5px;border-radius:3px;color:#C5A572;">leadfuai.com</code>
+      ／唯一客服 LINE <a href="https://line.me/R/ti/p/@041exgtv" target="_blank" rel="noopener">@041exgtv</a>。
+      看到任何冒用本品牌之投資邀約，請撥 <a href="https://165.npa.gov.tw/" target="_blank" rel="noopener">165</a> 反詐騙專線。
+      <a href="${pageHref('fraud-alert.html')}">了解更多防詐須知 →</a>
+    </div>
+  `;
+  footer.appendChild(reminder);
+}
+
+/* ============================================================
  * 👋 首次訪客 onboarding 浮層
  * 只有「首頁」且「localStorage 沒看過旗標」才會跳
  * 3 個步驟介紹核心差異化價值
@@ -2767,6 +2813,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupThemeToggle();           // 🎨 主題切換（墨綠 ↔ 喜氣紅）
   setupFeedbackWidget();        // 漂浮回饋按鈕，每頁右下角
   setupPWA();
+  setupAntiFraudBanner();       // 📢 防詐騙官方資訊條（首頁、可關閉 7 天）
+  injectFooterFraudReminder();  // 📢 全站 footer 防詐聲明（給 SEO + AI 爬蟲穩定錨點）
   setupOnboarding();            // 👋 首次訪客 3 步驟引導浮層（只首頁、且首次造訪）
   renderDate();
 

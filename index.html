@@ -30,6 +30,60 @@
 <meta name="twitter:card" content="summary">
 
 <link rel="stylesheet" href="css/style.css">
+
+<!-- Schema.org Organization：讓 Google / AI 認識「合法企業 + 提醒冒用」 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://leadfuai.com/#organization",
+  "name": "領富 AI",
+  "alternateName": ["LeadFu AI", "領富", "LeadFu"],
+  "legalName": "領富 AI（LeadFu）",
+  "url": "https://leadfuai.com",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://leadfuai.com/icons/icon-512.png",
+    "width": 512,
+    "height": 512
+  },
+  "description": "領富 AI 是台灣全市場（上市、上櫃、興櫃）2,310 檔股票公開資料整理平台，提供三大法人、融資融券、借券、月營收、估值、技術指標、AI 對話、AI 產業週報等服務。資料來源 TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站。不提供個股推薦、不代為下單、不收取任何投資款項。",
+  "disambiguatingDescription": "重要聲明：本品牌名稱「領富 AI」近期遭詐騙集團冒用於 Facebook / LINE / Instagram 招攬「飆股群組」「保證獲利」等不法投資詐騙。本公司唯一官方網址為 leadfuai.com，唯一官方 LINE 為 @041exgtv。本公司並無發行任何 APP，不主動加 LINE 群組，不保證獲利，不收受任何投資款項。如有疑似冒用，請撥 165 反詐騙專線檢舉。",
+  "knowsAbout": ["台股", "上市股票", "上櫃股票", "興櫃股票", "三大法人買賣超", "融資融券", "借券", "月營收", "本益比", "殖利率", "股價淨值比", "KD 指標", "MACD", "布林通道", "AI 投資助理", "產業分析"],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Taiwan"
+  },
+  "sameAs": [
+    "https://line.me/R/ti/p/@041exgtv"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Service",
+    "url": "https://line.me/R/ti/p/@041exgtv",
+    "availableLanguage": ["zh-TW", "zh-Hant", "Chinese"]
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://leadfuai.com/pages/stocks.html?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- WebSite schema：讓 Google sitelinks 顯示搜尋框 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://leadfuai.com/#website",
+  "url": "https://leadfuai.com",
+  "name": "領富 AI",
+  "alternateName": "LeadFu AI",
+  "publisher": { "@id": "https://leadfuai.com/#organization" },
+  "inLanguage": "zh-TW"
+}
+</script>
 </head>
 <body>
 
@@ -47,6 +101,20 @@
     </div>
   </div>
 </header>
+
+<!-- 防詐騙官方資訊 banner（可關閉、關閉後 7 天再出現） -->
+<div class="anti-fraud-banner" id="antiFraudBanner">
+  <div class="container afb-inner">
+    <div class="afb-icon">📢</div>
+    <div class="afb-text">
+      <strong>本站唯一官方資訊：</strong>網址 <code>leadfuai.com</code> · LINE
+      <a href="https://line.me/R/ti/p/@041exgtv" target="_blank" rel="noopener" class="afb-line">@041exgtv</a>
+      ｜<span class="afb-warn">⚠ 我們沒有 APP、不開飆股群組、不保證獲利</span>｜冒用請報 <a href="https://165.npa.gov.tw/" target="_blank" rel="noopener" class="afb-165">165</a>
+      <a href="pages/fraud-alert.html" class="afb-more">了解更多 →</a>
+    </div>
+    <button type="button" class="afb-close" aria-label="關閉" data-action="close">✕</button>
+  </div>
+</div>
 
 <div class="logo-bar">
   <div class="container logo-bar-inner">
