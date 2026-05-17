@@ -7,8 +7,13 @@
  *   其他         → 靜態資源（ASSETS binding）
  *
  * 環境變數（在 Cloudflare Dashboard → Settings → Variables and Secrets 設）：
- *   NVIDIA_API_KEY  (Secret)
- *   NVIDIA_MODEL    (Plain Text，預設 meta/llama-3.3-70b-instruct)
+ *   NVIDIA_API_KEY  (Secret)              主力 AI（Nvidia NIM）
+ *   NVIDIA_MODEL    (Plain Text，可選)     預設 qwen3-next-80b-a3b-instruct
+ *   GEMINI_API_KEY  (Secret)              備援 AI（Google AI Studio Gemini，免費 1500 req/day）
+ *
+ * AI 呼叫策略：先打 Nvidia，撞 429/5xx 時自動 fallback 到 Gemini，
+ * 兩家都失敗才回錯誤訊息給用戶。前端可從 response header
+ * X-LeadFu-Backend 看到是 "nvidia" 還是 "gemini-fallback"。
  */
 
 // 完整模型測試紀錄（2026-05-16 第二輪掃完 Nvidia NIM 完整名單）：
@@ -26,6 +31,10 @@
 //                  bytedance/seed-oss, google/gemma-*, microsoft/phi-*, ibm/granite, 01-ai/yi-large
 const DEFAULT_MODEL = "qwen/qwen3-next-80b-a3b-instruct";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
+
+// Gemini fallback：當 Nvidia 撞 429/5xx 時自動切換，每天免費 1500 req
+const GEMINI_MODEL = "gemini-2.0-flash";
+const GEMINI_ENDPOINT_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
 // 系統 prompt：正面說明角色、清楚列舉可做/不可做
 // 開頭 "detailed thinking off" 是給 Nemotron 系列模型用，告訴它不要做無聲推理直接回答；
@@ -136,6 +145,105 @@ function corsHeaders() {
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400"
   };
+}
+
+
+/* ============================================================
+ * Gemini fallback helpers
+ * 當 Nvidia 撞 rate limit 或 5xx 時自動切換，保證網站不斷線。
+ * Gemini 2.0 Flash 免費 1,500 req/day，中文品質很好。
+ * ============================================================ */
+
+/** 把 OpenAI 格式的 messages 轉成 Gemini 格式 */
+function toGeminiContents(messages) {
+  // OpenAI: [{role:"system",...}, {role:"user",...}, {role:"assistant",...}]
+  // Gemini: contents=[{role:"user",parts:[{text}]}, {role:"model",parts:[{text}]}]
+  //         systemInstruction={parts:[{text}]}
+  let systemText = "";
+  const contents = [];
+  for (const m of messages) {
+    if (!m || !m.content) continue;
+    if (m.role === "system") {
+      systemText += (systemText ? "\n\n" : "") + m.content;
+    } else if (m.role === "user") {
+      contents.push({ role: "user", parts: [{ text: String(m.content) }] });
+    } else if (m.role === "assistant") {
+      contents.push({ role: "model", parts: [{ text: String(m.content) }] });
+    }
+  }
+  // Gemini 第一條必須是 user
+  if (!contents.length || contents[0].role !== "user") {
+    contents.unshift({ role: "user", parts: [{ text: "請開始" }] });
+  }
+  return { contents, systemText };
+}
+
+/** 呼叫 Gemini（非串流） */
+async function callGemini(env, finalMessages, maxTokens) {
+  if (!env.GEMINI_API_KEY) {
+    return { ok: false, status: 0, error: "GEMINI_API_KEY not configured" };
+  }
+  const { contents, systemText } = toGeminiContents(finalMessages);
+  const body = {
+    contents,
+    generationConfig: {
+      temperature: 0.4,
+      topP: 0.9,
+      maxOutputTokens: maxTokens
+    }
+  };
+  if (systemText) {
+    body.systemInstruction = { parts: [{ text: systemText }] };
+  }
+  const url = `${GEMINI_ENDPOINT_BASE}/${GEMINI_MODEL}:generateContent?key=${env.GEMINI_API_KEY}`;
+  try {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if (!resp.ok) {
+      const errText = await resp.text().catch(() => "");
+      return { ok: false, status: resp.status, error: errText.slice(0, 300) };
+    }
+    const data = await resp.json();
+    const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const usage = data?.usageMetadata ? {
+      prompt_tokens: data.usageMetadata.promptTokenCount,
+      completion_tokens: data.usageMetadata.candidatesTokenCount,
+      total_tokens: data.usageMetadata.totalTokenCount
+    } : null;
+    return { ok: true, answer, usage, model: GEMINI_MODEL };
+  } catch (err) {
+    return { ok: false, status: 0, error: String(err) };
+  }
+}
+
+/** 把 Gemini 非串流回應包成 OpenAI-style SSE 一次性吐出（給 stream 模式 fallback） */
+function geminiToSSE(answer, model) {
+  const enc = new TextEncoder();
+  const stream = new ReadableStream({
+    start(controller) {
+      // 模擬 OpenAI streaming chunks：先 chunk 整段 content，再送 [DONE]
+      const chunk = {
+        choices: [{
+          delta: { content: answer },
+          index: 0,
+          finish_reason: null
+        }],
+        model
+      };
+      controller.enqueue(enc.encode(`data: ${JSON.stringify(chunk)}\n\n`));
+      const done = {
+        choices: [{ delta: {}, index: 0, finish_reason: "stop" }],
+        model
+      };
+      controller.enqueue(enc.encode(`data: ${JSON.stringify(done)}\n\n`));
+      controller.enqueue(enc.encode(`data: [DONE]\n\n`));
+      controller.close();
+    }
+  });
+  return stream;
 }
 
 
@@ -289,43 +397,60 @@ async function handleAsk(request, env) {
     body: requestBody
   });
 
-  let aiResp;
+  // 嘗試 Nvidia（含 429 / 5xx 一次重試），失敗則 fallback 到 Gemini
+  let aiResp = null;
+  let nvidiaError = null;
   try {
     aiResp = await callNvidia();
-    // 429 = rate limit，等 1.5 秒重試一次（免費 tier 容易遇到）
     if (aiResp.status === 429) {
       await new Promise(r => setTimeout(r, 1500));
       aiResp = await callNvidia();
     }
-    // 5xx 也重試一次（暫時服務問題）
     if (aiResp.status >= 500 && aiResp.status < 600) {
       await new Promise(r => setTimeout(r, 1200));
       aiResp = await callNvidia();
     }
   } catch (err) {
-    return new Response(JSON.stringify({ error: "AI 服務連線失敗，請稍後再試", detail: err.message }), {
-      status: 502,
-      headers: { "Content-Type": "application/json", ...corsHeaders() }
-    });
+    nvidiaError = err.message;
   }
 
-  // === Streaming 模式：直接把 Nvidia SSE 串流轉發給前端 ===
-  if (wantStream && aiResp.ok) {
-    return new Response(aiResp.body, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/event-stream; charset=utf-8",
-        "Cache-Control": "no-cache, no-transform",
-        "Connection": "keep-alive",
-        "X-Accel-Buffering": "no",
-        ...corsHeaders()
+  const nvidiaFailed = !aiResp || !aiResp.ok;
+  if (nvidiaFailed) {
+    // === Fallback：切到 Gemini ===
+    console.log(`[Worker] Nvidia 失敗 (${aiResp?.status || nvidiaError})，切換 Gemini fallback`);
+    const gem = await callGemini(env, finalMessages, maxTokens);
+    if (gem.ok) {
+      const answer = filterCompliance(gem.answer);
+      // Stream 模式：包成 SSE
+      if (wantStream) {
+        return new Response(geminiToSSE(answer, gem.model), {
+          status: 200,
+          headers: {
+            "Content-Type": "text/event-stream; charset=utf-8",
+            "Cache-Control": "no-cache, no-transform",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+            "X-LeadFu-Backend": "gemini-fallback",
+            ...corsHeaders()
+          }
+        });
       }
-    });
-  }
-
-  if (!aiResp.ok) {
-    const errText = await aiResp.text().catch(() => "");
-    // 把常見錯誤碼轉成中文（前端會直接顯示）
+      // 非串流：直接 JSON
+      return new Response(JSON.stringify({
+        answer,
+        model: gem.model,
+        usage: gem.usage,
+        backend: "gemini-fallback"
+      }), {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-LeadFu-Backend": "gemini-fallback",
+          ...corsHeaders()
+        }
+      });
+    }
+    // 兩家都失敗 → 回友善錯誤
+    const status = aiResp?.status || 502;
     const friendlyMap = {
       429: "AI 服務目前太忙，請稍等 5 秒再試（免費額度速率限制）",
       401: "AI 服務驗證失敗，請聯絡客服",
@@ -336,10 +461,31 @@ async function handleAsk(request, env) {
       503: "AI 服務暫不可用，請稍後再試",
       504: "AI 服務回應逾時，請稍後再試"
     };
-    const errMsg = friendlyMap[aiResp.status] || `AI 服務異常 (代碼 ${aiResp.status})`;
-    return new Response(JSON.stringify({ error: errMsg, status: aiResp.status, detail: errText.slice(0, 300) }), {
+    const errMsg = friendlyMap[status] || `AI 服務異常 (代碼 ${status})`;
+    return new Response(JSON.stringify({
+      error: errMsg,
+      status,
+      detail: `Nvidia: ${nvidiaError || status} | Gemini: ${gem.error || "未配置"}`
+    }), {
       status: 502,
       headers: { "Content-Type": "application/json", ...corsHeaders() }
+    });
+  }
+
+  // === Nvidia 成功，照原流程 ===
+
+  // Streaming 模式：直接把 Nvidia SSE 串流轉發給前端
+  if (wantStream) {
+    return new Response(aiResp.body, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/event-stream; charset=utf-8",
+        "Cache-Control": "no-cache, no-transform",
+        "Connection": "keep-alive",
+        "X-Accel-Buffering": "no",
+        "X-LeadFu-Backend": "nvidia",
+        ...corsHeaders()
+      }
     });
   }
 
@@ -359,9 +505,14 @@ async function handleAsk(request, env) {
   return new Response(JSON.stringify({
     answer,
     model,
-    usage: data?.usage || null
+    usage: data?.usage || null,
+    backend: "nvidia"
   }), {
-    headers: { "Content-Type": "application/json; charset=utf-8", ...corsHeaders() }
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-LeadFu-Backend": "nvidia",
+      ...corsHeaders()
+    }
   });
 }
 
@@ -370,8 +521,16 @@ async function handleAsk(request, env) {
 function handleHealth(env) {
   return new Response(JSON.stringify({
     ok: true,
-    hasKey: !!env.NVIDIA_API_KEY,
-    model: env.NVIDIA_MODEL || DEFAULT_MODEL,
+    primary: {
+      provider: "nvidia",
+      hasKey: !!env.NVIDIA_API_KEY,
+      model: env.NVIDIA_MODEL || DEFAULT_MODEL
+    },
+    fallback: {
+      provider: "gemini",
+      hasKey: !!env.GEMINI_API_KEY,
+      model: GEMINI_MODEL
+    },
     time: new Date().toISOString()
   }), { headers: { "Content-Type": "application/json", ...corsHeaders() } });
 }
