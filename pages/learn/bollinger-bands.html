@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>布林通道（Bollinger Bands）入門：上下軌怎麼解讀 - 領富 AI 學習中心</title>
+<meta name="description" content="布林通道用統計學的標準差判斷股價偏離中心線多少。本文 6 分鐘講清楚布林通道怎麼算、開口收口、上下軌突破、與其他指標搭配實戰，附台股案例。">
+<meta name="keywords" content="布林通道,Bollinger Bands,布林帶,標準差,通道突破,技術分析,均線,台股">
+<link rel="canonical" href="https://leadfuai.com/pages/learn/bollinger-bands.html">
+
+<meta property="og:title" content="布林通道入門：上下軌突破與開口收口完整解讀">
+<meta property="og:description" content="布林通道 = SMA20 中軸 ± 2σ。看股價是不是「超出統計範圍」的最直觀工具。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://leadfuai.com/pages/learn/bollinger-bands.html">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://leadfuai.com/pages/learn/bollinger-bands.html#article",
+      "headline": "布林通道（Bollinger Bands）入門：上下軌怎麼解讀",
+      "description": "布林通道用標準差判斷股價偏離中心線多少。本文講清楚怎麼算、開口收口、實戰應用。",
+      "datePublished": "2026-05-18",
+      "dateModified": "2026-05-18",
+      "author": { "@id": "https://leadfuai.com/#organization" },
+      "publisher": { "@id": "https://leadfuai.com/#organization" },
+      "inLanguage": "zh-TW",
+      "isAccessibleForFree": true,
+      "wordCount": 1000,
+      "articleSection": "技術分析教學",
+      "keywords": ["布林通道", "Bollinger Bands", "標準差", "技術分析"]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "布林通道是什麼？怎麼計算？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "布林通道由 John Bollinger 於 1980 年代發明，由三條線組成：中軸 = SMA20（20 日簡單移動平均線），上軌 = SMA20 + 2 倍標準差，下軌 = SMA20 − 2 倍標準差。理論上 95% 的時間股價會在通道內。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "股價突破上軌一定要賣嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "不一定。傳統解讀：突破上軌 = 超買訊號。但強勢趨勢中股價可能沿著上軌走（「布林帶 walk」），這時候反而是強勢延續訊號。建議搭配量能、MACD 一起判斷是趨勢還是過熱。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "布林通道「收口」和「開口」是什麼？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "收口：上下軌距離縮小，代表市場波動低、可能蓄勢待發。開口：通道擴大，代表波動加劇、趨勢開始。長期收口後的開口（「擠壓 Squeeze」）通常是大行情起點。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "布林通道適合短線還是長線？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "中短期（日線、週線）最有效。短線（5 分鐘、15 分鐘）噪音太大；長線（月線）布林通道反應太慢。台股最常用 BB(20, 2)，也就是 20 日 SMA + 2σ 標準差。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "領富 AI 哪裡可以查布林通道？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "領富 AI 個股詳情頁的「技術／籌碼」分頁，自動計算每檔個股的布林通道上軌、中軸、下軌，並對應綜合訊號（如「突破布林上軌」或「跌破布林下軌」）。1,957 檔上市櫃個股每日盤後自動更新。"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+        { "@type": "ListItem", "position": 2, "name": "學習中心", "item": "https://leadfuai.com/pages/learn.html" },
+        { "@type": "ListItem", "position": 3, "name": "布林通道入門" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="../login.html">會員登入</a><a href="../register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../../index.html">首頁</a></li>
+      <li><a href="../stocks.html">股價總覽</a></li>
+      <li><a href="../weekly.html">產業週報</a></li>
+      <li><a href="../risk-radar.html">防錯雷達</a></li>
+      <li class="active"><a href="../learn.html">📚 學習中心</a></li>
+      <li><a href="../ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container learn-article-main">
+  <article class="learn-article">
+
+    <div class="article-breadcrumb">
+      <a href="../../index.html">首頁</a> ▸
+      <a href="../learn.html">學習中心</a> ▸
+      <span>布林通道入門</span>
+    </div>
+
+    <header class="article-header">
+      <div class="article-category">🔧 技術分析教學</div>
+      <h1>布林通道（Bollinger Bands）入門：上下軌怎麼解讀</h1>
+      <div class="article-meta">
+        <span>📅 2026-05-18</span>
+        <span>⏱ 6 分鐘閱讀</span>
+        <span>🤖 AI 整理 · 領富 AI 編輯部</span>
+      </div>
+    </header>
+
+    <div class="article-toc">
+      <strong>本文重點</strong>
+      <ol>
+        <li><a href="#what">布林通道是什麼</a></li>
+        <li><a href="#calc">布林通道怎麼計算</a></li>
+        <li><a href="#read">三條線的解讀</a></li>
+        <li><a href="#squeeze">收口 vs 開口：擠壓蓄勢</a></li>
+        <li><a href="#breakout">突破上下軌怎麼用</a></li>
+        <li><a href="#combine">布林通道與其他指標搭配</a></li>
+        <li><a href="#tool">用領富 AI 查布林通道</a></li>
+        <li><a href="#faq">常見問題 FAQ</a></li>
+      </ol>
+    </div>
+
+    <section id="what" class="article-section">
+      <h2>1. 布林通道是什麼</h2>
+      <p>布林通道（<strong>Bollinger Bands</strong>，簡稱 BB 或布林帶）由美國技術分析師 John Bollinger 於 1980 年代發明，<strong>用統計學的「標準差」來判斷股價偏離平均的程度</strong>。</p>
+      <p>核心邏輯：</p>
+      <ul>
+        <li>找一條「<strong>中軸</strong>」代表「合理價格中心」（通常用 SMA20）</li>
+        <li>上下各畫一條「<strong>標準差</strong>」線（通常 ±2σ）</li>
+        <li>理論上 95% 的時間股價應該落在通道內</li>
+        <li>突出通道 = 股價偏離「統計常態」，可能反轉或趨勢加速</li>
+      </ul>
+    </section>
+
+    <section id="calc" class="article-section">
+      <h2>2. 布林通道怎麼計算</h2>
+      <p>台股標準參數 <strong>BB(20, 2)</strong>：</p>
+      <div class="formula-box">
+        <strong>中軸 ＝ SMA20（20 日簡單移動平均線）</strong><br>
+        <strong>上軌 ＝ SMA20 ＋ 2 倍標準差</strong><br>
+        <strong>下軌 ＝ SMA20 − 2 倍標準差</strong>
+      </div>
+      <p>「標準差」是統計學中衡量「資料分散程度」的指標。股價波動大 = 標準差大 = 通道寬；股價波動小 = 通道窄。</p>
+      <p><strong>實際你不用手算</strong>，看盤軟體跟領富 AI 都會自動畫好。重點是看通道的「形狀」與「位置」。</p>
+    </section>
+
+    <section id="read" class="article-section">
+      <h2>3. 三條線的解讀</h2>
+
+      <h3>📊 中軸（SMA20）= 趨勢分界</h3>
+      <ul>
+        <li>股價在中軸上方 → 偏多趨勢</li>
+        <li>股價在中軸下方 → 偏空趨勢</li>
+        <li>中軸<strong>向上彎</strong> = 中期多頭；<strong>向下彎</strong> = 中期空頭；<strong>橫盤</strong> = 盤整</li>
+      </ul>
+
+      <h3>📈 上軌 = 統計天花板</h3>
+      <ul>
+        <li>傳統解讀：股價「碰到」上軌 = 短期超買，可能回檔</li>
+        <li>強勢解讀：股價「沿著」上軌走 = 強勢趨勢延續</li>
+      </ul>
+
+      <h3>📉 下軌 = 統計地板</h3>
+      <ul>
+        <li>傳統解讀：股價「碰到」下軌 = 短期超賣，可能反彈</li>
+        <li>弱勢解讀：股價「沿著」下軌走 = 弱勢趨勢延續</li>
+      </ul>
+
+      <p><strong>關鍵</strong>：上下軌不是「絕對天花板/地板」，而是「統計上的偏離警示」。要結合趨勢方向看。</p>
+    </section>
+
+    <section id="squeeze" class="article-section">
+      <h2>4. 收口 vs 開口：擠壓蓄勢</h2>
+
+      <h3>🤏 布林帶「收口」（Squeeze）</h3>
+      <p>上下軌距離縮小、通道變窄。意義：</p>
+      <ul>
+        <li>市場波動降低</li>
+        <li>多空力量趨於平衡</li>
+        <li><strong>長期收口後容易爆發大行情</strong>（蓄勢待發）</li>
+      </ul>
+      <p>實戰：看到布林帶長期收口時，要準備好「行情啟動」的方向判斷。</p>
+
+      <h3>📢 布林帶「開口」（Expansion）</h3>
+      <p>上下軌距離擴大、通道張開。意義：</p>
+      <ul>
+        <li>市場波動加劇</li>
+        <li>有明確趨勢正在形成</li>
+        <li>方向由「股價突破方向」決定（向上開 = 多頭、向下開 = 空頭）</li>
+      </ul>
+
+      <h3>🎯 經典 Squeeze 突破策略</h3>
+      <ol>
+        <li>等布林帶持續收口 ≥ 10 個交易日（蓄勢）</li>
+        <li>觀察股價突破上軌 or 跌破下軌</li>
+        <li>突破方向就是新趨勢方向</li>
+        <li>進場後跟著趨勢走，直到布林帶再次收口</li>
+      </ol>
+    </section>
+
+    <section id="breakout" class="article-section">
+      <h2>5. 突破上下軌怎麼用</h2>
+
+      <h3>🔴 突破上軌</h3>
+      <p>不能直接當「賣訊」。要判斷：</p>
+      <ul>
+        <li><strong>量能放大</strong>且<strong>中軸向上</strong> → 強勢突破，可能續漲（沿軌走）</li>
+        <li>量能<strong>背離</strong>（價漲量縮） → 衝高無力，可能修正</li>
+        <li>突破後迅速跌回 → 假突破，是空頭陷阱</li>
+      </ul>
+
+      <h3>🟢 跌破下軌</h3>
+      <p>不能直接當「買訊」。要判斷：</p>
+      <ul>
+        <li><strong>量能放大</strong>且<strong>中軸向下</strong> → 強勢破底，可能續跌</li>
+        <li>跌破後快速拉回中軸 → 假跌破，可能反彈</li>
+        <li>跌破時 MACD 底部背離 → 反彈訊號加強</li>
+      </ul>
+    </section>
+
+    <section id="combine" class="article-section">
+      <h2>6. 布林通道與其他指標搭配</h2>
+
+      <h3>布林 + KD</h3>
+      <ul>
+        <li>股價碰上軌 + KD > 80 + KD 死叉 = 強烈短線出場訊號</li>
+        <li>股價碰下軌 + KD < 20 + KD 黃金交叉 = 強烈短線進場訊號</li>
+      </ul>
+
+      <h3>布林 + MACD</h3>
+      <ul>
+        <li>布林開口向上 + MACD 零軸上方多頭 = 確認強勢趨勢</li>
+        <li>布林收口 + MACD 接近零軸 = 趨勢即將啟動</li>
+      </ul>
+
+      <h3>布林 + 成交量</h3>
+      <ul>
+        <li>突破上軌「爆量」= 真突破</li>
+        <li>突破上軌「縮量」= 假突破機率高</li>
+      </ul>
+    </section>
+
+    <section id="tool" class="article-section article-tool-section">
+      <h2>7. 用領富 AI 查布林通道</h2>
+      <div class="tool-cards">
+        <a class="tool-card" href="../stock-detail.html?code=2330">
+          <div class="tc-icon">📊</div>
+          <div class="tc-title">個股詳情頁</div>
+          <div class="tc-desc">「技術／籌碼」分頁有布林上/中/下軌數值 + 綜合訊號文字</div>
+        </a>
+        <a class="tool-card" href="../weekly.html">
+          <div class="tc-icon">📰</div>
+          <div class="tc-title">AI 產業週報</div>
+          <div class="tc-desc">AI 分析產業整體技術指標動能</div>
+        </a>
+        <a class="tool-card" href="../ai.html">
+          <div class="tc-icon">🤖</div>
+          <div class="tc-title">AI 對話</div>
+          <div class="tc-desc">「台積電布林通道現在位置如何？」直接問</div>
+        </a>
+      </div>
+    </section>
+
+    <section id="faq" class="article-section article-faq">
+      <h2>8. 常見問題 FAQ</h2>
+      <details>
+        <summary><strong>Q1：布林通道參數一定要用 (20, 2) 嗎？</strong></summary>
+        <p>20 日 + 2 倍標準差是 John Bollinger 的原始建議，也是台股最普遍。短線可用 BB(10, 1.5)；長線可用 BB(50, 2.5)。但混用會讓自己訊號跟市場主流不同步。</p>
+      </details>
+      <details>
+        <summary><strong>Q2：股價可能一直在上軌外面嗎？</strong></summary>
+        <p>會。強勢趨勢時股價可能連續多日在上軌外，叫做「布林帶 walk」。這時候布林通道不能用來抓反轉，反而是強勢延續訊號。要等出現背離或破中軸才考慮出場。</p>
+      </details>
+      <details>
+        <summary><strong>Q3：布林通道適合所有股票嗎？</strong></summary>
+        <p>適合「流動性好、波動規律」的中大型股、ETF。不適合「成交量極小、跳動劇烈」的小型股，因為標準差會被異常單日大幅變動扭曲。</p>
+      </details>
+      <details>
+        <summary><strong>Q4：布林通道跟 ATR 哪個好？</strong></summary>
+        <p>用途不同。布林通道用「標準差」（含方向性、會跟著價格走勢）；ATR 是「平均真實區間」，只看波動大小不看方向。布林通道適合判斷區間，ATR 適合設停損點。兩者互補。</p>
+      </details>
+      <details>
+        <summary><strong>Q5：盤整盤怎麼用布林通道？</strong></summary>
+        <p>盤整盤中布林帶會收口、中軸橫盤。這時候可以做「<strong>區間操作</strong>」：碰下軌進場、碰上軌出場。但要設好停損（若突破上軌且收口開口，要立刻順勢翻多）。</p>
+      </details>
+    </section>
+
+    <footer class="article-footer">
+      <div class="article-disclaimer">
+        <strong>📌 免責聲明</strong><br>
+        本文僅為公開資料整理與技術分析概念說明，不構成個股推薦或買賣建議。
+        布林通道僅為技術分析參考之一，實際投資決策需綜合基本面、籌碼面、風險評估。
+        投資決定請您自行評估，或諮詢合法之證券投資顧問。
+      </div>
+
+      <div class="article-related">
+        <strong>📖 延伸閱讀</strong>
+        <ul>
+          <li><a href="kd-indicator.html">KD 指標教學</a></li>
+          <li><a href="macd-indicator.html">MACD 指標完整解讀</a></li>
+          <li><a href="margin-trading.html">融資融券是什麼？</a></li>
+        </ul>
+      </div>
+    </footer>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

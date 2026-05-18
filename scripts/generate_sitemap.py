@@ -59,6 +59,11 @@ STATIC_PAGES = [
     ("/pages/learn/dividend-yield.html",            "monthly", 0.85),
     ("/pages/learn/institutional-investors.html",   "monthly", 0.8),
     ("/pages/learn/securities-lending.html",        "monthly", 0.75),
+    ("/pages/learn/kd-indicator.html",              "monthly", 0.85),
+    ("/pages/learn/macd-indicator.html",            "monthly", 0.85),
+    ("/pages/learn/bollinger-bands.html",           "monthly", 0.8),
+    ("/pages/learn/margin-trading.html",            "monthly", 0.8),
+    ("/pages/learn/warning-stocks.html",            "monthly", 0.85),
 ]
 
 

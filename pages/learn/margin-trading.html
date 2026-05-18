@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>融資融券是什麼？散戶籌碼面完整教學 - 領富 AI 學習中心</title>
+<meta name="description" content="融資 = 跟券商借錢買股票；融券 = 跟券商借股票賣出（放空）。本文 6 分鐘講清楚信用交易的運作、融資維持率、斷頭風險、融券回補日，以及怎麼看散戶籌碼。">
+<keyword name="融資,融券,信用交易,融資維持率,斷頭,融券回補,散戶籌碼,台股,放空">
+<link rel="canonical" href="https://leadfuai.com/pages/learn/margin-trading.html">
+
+<meta property="og:title" content="融資融券是什麼？散戶籌碼面完整教學">
+<meta property="og:description" content="融資增加 = 散戶看多、融券增加 = 散戶看空。但小心 130% 斷頭風險。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://leadfuai.com/pages/learn/margin-trading.html">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://leadfuai.com/pages/learn/margin-trading.html#article",
+      "headline": "融資融券是什麼？散戶籌碼面完整教學",
+      "description": "融資 = 借錢買股、融券 = 借股放空。本文講清楚信用交易、斷頭風險、散戶籌碼解讀。",
+      "datePublished": "2026-05-18",
+      "dateModified": "2026-05-18",
+      "author": { "@id": "https://leadfuai.com/#organization" },
+      "publisher": { "@id": "https://leadfuai.com/#organization" },
+      "inLanguage": "zh-TW",
+      "isAccessibleForFree": true,
+      "wordCount": 1100,
+      "articleSection": "籌碼面教學",
+      "keywords": ["融資", "融券", "信用交易", "散戶籌碼"]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "融資融券是什麼？怎麼運作？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "融資 = 投資人付 4 成自備款，券商借 6 成讓你買股票（槓桿 2.5 倍）。融券 = 投資人付 9 成保證金，券商借股票讓你賣出（放空）。利息 5-7% 不等，需開立信用交易帳戶（一般 6 個月以上交易紀錄才能申請）。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "融資維持率是什麼？被斷頭怎麼辦？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "融資維持率 = 股票市值 ÷ 融資金額 × 100%。低於 130% 時券商會發出「追繳通知」，要求補錢。低於 130% 兩天後若未補錢，券商會強制賣出股票（斷頭），常造成連鎖賣壓推升大盤跌幅。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "融資增加代表什麼？該跟嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "融資增加 = 散戶積極看多、用槓桿加碼。傳統視為「散戶情緒指標」，但散戶籌碼集中是雙面刃：股價上漲時可形成多頭力量；下跌時容易斷頭引發踩踏。融資餘額過大時反而是反指標。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "融券有「90 天回補」限制嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "是。融券最長 90 天必須回補，且股東會、除權息前 5 個營業日必須強制回補。這是「軋空行情」的主要原因 — 大量融券到期被迫高價買回，推升股價。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "領富 AI 怎麼查融資融券？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "領富 AI 提供「融資融券」頁面，整合 TWSE MI_MARGN + TPEx 上櫃融資融券資料，共 1,930 檔上市櫃股票每日盤後更新。可切換「融資增加 / 減少 / 融券增加 / 減少」四種排序，並支援上市/上櫃市場切換。"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+        { "@type": "ListItem", "position": 2, "name": "學習中心", "item": "https://leadfuai.com/pages/learn.html" },
+        { "@type": "ListItem", "position": 3, "name": "融資融券是什麼" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="../login.html">會員登入</a><a href="../register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../../index.html">首頁</a></li>
+      <li><a href="../stocks.html">股價總覽</a></li>
+      <li><a href="../weekly.html">產業週報</a></li>
+      <li><a href="../risk-radar.html">防錯雷達</a></li>
+      <li class="active"><a href="../learn.html">📚 學習中心</a></li>
+      <li><a href="../ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container learn-article-main">
+  <article class="learn-article">
+
+    <div class="article-breadcrumb">
+      <a href="../../index.html">首頁</a> ▸
+      <a href="../learn.html">學習中心</a> ▸
+      <span>融資融券</span>
+    </div>
+
+    <header class="article-header">
+      <div class="article-category">📊 籌碼面教學</div>
+      <h1>融資融券是什麼？散戶籌碼面完整教學</h1>
+      <div class="article-meta">
+        <span>📅 2026-05-18</span>
+        <span>⏱ 6 分鐘閱讀</span>
+        <span>🤖 AI 整理 · 領富 AI 編輯部</span>
+      </div>
+    </header>
+
+    <div class="article-toc">
+      <strong>本文重點</strong>
+      <ol>
+        <li><a href="#what">融資融券是什麼</a></li>
+        <li><a href="#margin">融資：跟券商借錢買股票</a></li>
+        <li><a href="#short">融券：跟券商借股票放空</a></li>
+        <li><a href="#maintain">融資維持率與斷頭風險</a></li>
+        <li><a href="#read">怎麼看「散戶籌碼」</a></li>
+        <li><a href="#squeeze">融券強制回補與軋空</a></li>
+        <li><a href="#tool">用領富 AI 查融資融券</a></li>
+        <li><a href="#faq">常見問題 FAQ</a></li>
+      </ol>
+    </div>
+
+    <section id="what" class="article-section">
+      <h2>1. 融資融券是什麼</h2>
+      <p>「<strong>信用交易</strong>」是用槓桿買賣股票的兩種方式：</p>
+      <ul>
+        <li><strong>融資</strong>（Margin）：跟券商<strong>借錢</strong>買股票（看多用）</li>
+        <li><strong>融券</strong>（Short Sell）：跟券商<strong>借股票</strong>賣出（看空用）</li>
+      </ul>
+      <p>主要使用者是<strong>散戶與小型投資人</strong>。法人通常用「借券」（沒有 90 天限制、成本低）而不是融券。</p>
+      <p>看融資融券的核心目的：<strong>了解「散戶情緒」是看多還是看空</strong>。</p>
+    </section>
+
+    <section id="margin" class="article-section">
+      <h2>2. 融資：跟券商借錢買股票</h2>
+      <h3>運作流程</h3>
+      <ol>
+        <li>投資人開立信用交易帳戶（須有 6 個月以上交易紀錄）</li>
+        <li>看好某檔股票想買 10 萬元</li>
+        <li>融資成數 60%（一般股票）：投資人付 4 萬元（自備款），券商借 6 萬元</li>
+        <li>投資人帳戶持有 10 萬元股票，<strong>等於 2.5 倍槓桿</strong></li>
+        <li>每日繳券商借款利息（年利率約 5-7%）</li>
+      </ol>
+      <h3>融資成數規定</h3>
+      <div class="example-table">
+        <table class="fin-table">
+          <thead>
+            <tr><th>股票分類</th><th>融資成數</th><th>槓桿</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>上市一般股票</td><td>60%</td><td>2.5 倍</td></tr>
+            <tr><td>上櫃一般股票</td><td>50%</td><td>2 倍</td></tr>
+            <tr><td>注意股、處置股</td><td>降低或禁用</td><td>—</td></tr>
+            <tr><td>ETF（非反向/槓桿）</td><td>60%</td><td>2.5 倍</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="short" class="article-section">
+      <h2>3. 融券：跟券商借股票放空</h2>
+      <h3>運作流程</h3>
+      <ol>
+        <li>投資人看空某檔股票，想用 100 元賣空</li>
+        <li>融券保證金 90%：投資人付 90 元保證金</li>
+        <li>券商「借股票」給投資人，立即以 100 元賣出</li>
+        <li>等股價跌到 80 元，投資人買回股票還給券商</li>
+        <li>賺 20 元價差 − 利息 − 借券費</li>
+      </ol>
+      <h3>融券限制（重要）</h3>
+      <ul>
+        <li><strong>最長 90 天</strong>必須回補</li>
+        <li><strong>股東會、除權息前 5 個營業日</strong>強制回補</li>
+        <li>每年強制回補時容易發生「軋空行情」</li>
+        <li>注意股、處置股經常禁止融券</li>
+      </ul>
+    </section>
+
+    <section id="maintain" class="article-section">
+      <h2>4. 融資維持率與斷頭風險</h2>
+      <h3>什麼是融資維持率</h3>
+      <div class="formula-box">
+        <strong>融資維持率 ＝ 股票市值 ÷ 融資金額 × 100%</strong>
+      </div>
+      <p><strong>例子</strong>：投資人融資買 10 萬元股票，券商借 6 萬元：</p>
+      <ul>
+        <li>初始維持率 ＝ 100,000 ÷ 60,000 = <strong>166%</strong></li>
+        <li>股價跌 25%，市值剩 75,000 元：維持率 = 75,000 ÷ 60,000 = <strong>125%</strong></li>
+      </ul>
+
+      <h3>斷頭流程</h3>
+      <ol>
+        <li>維持率低於 <strong>130%</strong> → 券商發出「<strong>追繳通知</strong>」</li>
+        <li>投資人有 <strong>2 個營業日</strong>補錢（自備款），把維持率拉回 165%</li>
+        <li>未補錢 → 券商在第 3 個營業日<strong>強制賣出股票</strong>（斷頭）</li>
+        <li>斷頭賣出造成大量賣壓，常引發股價連續跌停</li>
+      </ol>
+
+      <p><strong>大盤層級風險</strong>：當大盤整體下跌時，很多融資戶會同時被斷頭，產生「<strong>融資斷頭潮</strong>」，加劇大盤跌幅。這是台股暴跌時的常見現象。</p>
+    </section>
+
+    <section id="read" class="article-section">
+      <h2>5. 怎麼看「散戶籌碼」</h2>
+
+      <h3>融資增加：散戶看多</h3>
+      <p>融資餘額增加 = 散戶用槓桿加碼，可能原因：</p>
+      <ul>
+        <li>個股有利多消息</li>
+        <li>大盤多頭氣氛</li>
+        <li>散戶追高</li>
+      </ul>
+      <p>但「<strong>融資餘額過大</strong>」反而是反指標 — 散戶通常進場太晚、出場太慢，融資爆量常是相對高點。</p>
+
+      <h3>融資減少：散戶停損／停利</h3>
+      <ul>
+        <li>融資減少 + 股價下跌 = 散戶停損（恐慌賣壓）</li>
+        <li>融資減少 + 股價上漲 = 散戶停利（獲利了結）</li>
+      </ul>
+
+      <h3>融券增加：散戶看空</h3>
+      <p>融券餘額增加 = 散戶看空。但散戶融券通常規模小、容易被軋空。</p>
+
+      <h3>融券減少：可能軋空</h3>
+      <p>融券大幅減少 + 股價上漲 = 「<strong>軋空</strong>」訊號（融券戶被迫高價回補）。</p>
+    </section>
+
+    <section id="squeeze" class="article-section">
+      <h2>6. 融券強制回補與軋空</h2>
+      <p>融券有兩種「強制回補」場景：</p>
+      <ul>
+        <li><strong>90 天到期</strong>：融券最長 90 天，到期必須回補</li>
+        <li><strong>股東會 / 除權息前</strong>：除權息前 5 個營業日所有融券必須回補</li>
+      </ul>
+      <p>當市場上某檔股票<strong>融券餘額很大</strong>，且接近強制回補日時，會發生「<strong>軋空行情</strong>」：</p>
+      <ol>
+        <li>融券戶必須在期限內買回股票</li>
+        <li>大量買盤同時湧入</li>
+        <li>股價被推升</li>
+        <li>更多融券戶被迫止損買回</li>
+        <li>連鎖推升 → 可能連續漲停</li>
+      </ol>
+      <p>每年股東會旺季（5-7 月）是台股軋空高峰，要特別注意融券餘額大的個股。</p>
+    </section>
+
+    <section id="tool" class="article-section article-tool-section">
+      <h2>7. 用領富 AI 查融資融券</h2>
+      <div class="tool-cards">
+        <a class="tool-card" href="../margin.html">
+          <div class="tc-icon">📊</div>
+          <div class="tc-title">融資融券排行</div>
+          <div class="tc-desc">1,930 檔上市櫃，融資增/減、融券增/減四種排序</div>
+        </a>
+        <a class="tool-card" href="../sbl.html">
+          <div class="tc-icon">📕</div>
+          <div class="tc-title">借券排行</div>
+          <div class="tc-desc">看法人空單（借券）動向</div>
+        </a>
+        <a class="tool-card" href="../risk-radar.html">
+          <div class="tc-icon">⚠</div>
+          <div class="tc-title">防錯雷達</div>
+          <div class="tc-desc">注意股、處置股警示（融資成數會被降低）</div>
+        </a>
+      </div>
+    </section>
+
+    <section id="faq" class="article-section article-faq">
+      <h2>8. 常見問題 FAQ</h2>
+      <details>
+        <summary><strong>Q1：什麼人可以使用融資融券？</strong></summary>
+        <p>需要 6 個月以上開戶交易紀錄、年所得 30 萬以上（一般等級）或財力證明（高等級）。要去券商辦理「信用交易帳戶」（簡稱「信用戶」）。</p>
+      </details>
+      <details>
+        <summary><strong>Q2：融資利息怎麼算？</strong></summary>
+        <p>年化 5-7%（依券商與股票分類）。每天計息、每月結算。例：融資 100 萬元、利率 6%，每天利息約 164 元，每月約 5,000 元。</p>
+      </details>
+      <details>
+        <summary><strong>Q3：融資維持率多少最安全？</strong></summary>
+        <p>保守一點維持 200% 以上（股價跌 35% 才會碰 130% 警戒）。激進的人可能到 160-170%（跌 25% 就警戒）。低於 150% 已經很危險。</p>
+      </details>
+      <details>
+        <summary><strong>Q4：借券和融券差在哪？</strong></summary>
+        <p>融券：散戶用、最長 90 天、強制回補日多、成本高。借券：法人專用、無 90 天限制、可長期持有空單、成本低。借券是法人放空的真實部位，融券大多是散戶情緒。詳見<a href="securities-lending.html">借券賣出文章</a>。</p>
+      </details>
+      <details>
+        <summary><strong>Q5：可以同時融資又融券嗎？</strong></summary>
+        <p>同一檔可以「資券相抵」（同日當沖）。不同檔股票可以分別融資、融券，但帳戶總金額受信用額度限制。新手不建議同時操作多空，難度高、風險大。</p>
+      </details>
+    </section>
+
+    <footer class="article-footer">
+      <div class="article-disclaimer">
+        <strong>📌 免責聲明</strong><br>
+        本文僅為公開資料整理與信用交易概念說明，不構成個股推薦或買賣建議。
+        融資融券使用槓桿，獲利與虧損都會放大，操作前請務必充分了解風險。
+        投資決定請您自行評估，或諮詢合法之證券投資顧問。
+      </div>
+
+      <div class="article-related">
+        <strong>📖 延伸閱讀</strong>
+        <ul>
+          <li><a href="securities-lending.html">借券賣出是什麼？</a></li>
+          <li><a href="institutional-investors.html">三大法人是誰？</a></li>
+          <li><a href="warning-stocks.html">注意股、處置股是什麼？</a></li>
+        </ul>
+      </div>
+    </footer>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

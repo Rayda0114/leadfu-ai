@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MACD 指標完整解讀：DIF、MACD、柱狀圖怎麼看 - 領富 AI 學習中心</title>
+<meta name="description" content="MACD 指標是判斷趨勢與動能的經典工具。本文 7 分鐘講清楚 DIF、MACD 訊號線、紅綠柱狀圖怎麼解讀、黃金交叉死亡交叉、背離訊號、實戰應用與常見誤區。">
+<meta name="keywords" content="MACD,DIF,MACD指標,黃金交叉,死亡交叉,柱狀圖,背離,技術分析,趨勢指標,台股">
+<link rel="canonical" href="https://leadfuai.com/pages/learn/macd-indicator.html">
+
+<meta property="og:title" content="MACD 指標完整解讀：DIF、MACD、柱狀圖怎麼看">
+<meta property="og:description" content="MACD 不是只看交叉。柱狀圖、背離、零軸位置才是進階看法。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://leadfuai.com/pages/learn/macd-indicator.html">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://leadfuai.com/pages/learn/macd-indicator.html#article",
+      "headline": "MACD 指標完整解讀：DIF、MACD、柱狀圖怎麼看",
+      "description": "MACD 指標完整解讀，含 DIF、MACD 訊號線、紅綠柱狀圖、背離訊號、實戰應用。",
+      "datePublished": "2026-05-18",
+      "dateModified": "2026-05-18",
+      "author": { "@id": "https://leadfuai.com/#organization" },
+      "publisher": { "@id": "https://leadfuai.com/#organization" },
+      "inLanguage": "zh-TW",
+      "isAccessibleForFree": true,
+      "wordCount": 1200,
+      "articleSection": "技術分析教學",
+      "keywords": ["MACD", "DIF", "黃金交叉", "背離", "技術分析"]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "MACD 指標是什麼？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "MACD（Moving Average Convergence Divergence，平滑異同移動平均線）由 Gerald Appel 於 1979 年發明，是利用快慢 EMA 的差距判斷趨勢轉折的工具。包含 DIF 線、MACD 訊號線、柱狀圖三個元素。台股標準參數 MACD(12,26,9)。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "DIF 和 MACD 訊號線怎麼看？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DIF = 12 日 EMA − 26 日 EMA，反映短期動能；MACD 訊號線 = 9 日 EMA of DIF，比 DIF 平滑。當 DIF 由下往上穿過 MACD = 黃金交叉（轉強）；DIF 由上往下穿過 MACD = 死亡交叉（轉弱）。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "MACD 柱狀圖怎麼解讀？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "柱狀圖 = DIF − MACD。紅柱（正值）= DIF 在 MACD 上方；綠柱（負值）= DIF 在 MACD 下方。紅柱「越長越強」、「縮短就是轉弱」。柱狀圖比交叉訊號更早預告轉折，是進階使用者的重點。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "MACD 背離是什麼？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "背離（Divergence）= 股價跟 MACD 走勢不同步。底部背離：股價創新低但 MACD 沒創新低 → 下跌動能衰竭，可能反彈。頂部背離：股價創新高但 MACD 沒創新高 → 上漲動能衰竭，可能修正。背離是 MACD 最強的進階訊號。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "MACD 跟 KD 哪個比較好？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "兩者用途不同。KD 短線敏感、適合震盪盤；MACD 平滑、訊號慢但較穩，適合趨勢盤。實戰建議：兩者搭配看。KD 確認進場時機，MACD 確認大方向；MACD 在零軸上方時，KD 黃金交叉勝率明顯較高。"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+        { "@type": "ListItem", "position": 2, "name": "學習中心", "item": "https://leadfuai.com/pages/learn.html" },
+        { "@type": "ListItem", "position": 3, "name": "MACD 指標完整解讀" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="../login.html">會員登入</a><a href="../register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../../index.html">首頁</a></li>
+      <li><a href="../stocks.html">股價總覽</a></li>
+      <li><a href="../weekly.html">產業週報</a></li>
+      <li><a href="../risk-radar.html">防錯雷達</a></li>
+      <li class="active"><a href="../learn.html">📚 學習中心</a></li>
+      <li><a href="../ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container learn-article-main">
+  <article class="learn-article">
+
+    <div class="article-breadcrumb">
+      <a href="../../index.html">首頁</a> ▸
+      <a href="../learn.html">學習中心</a> ▸
+      <span>MACD 指標</span>
+    </div>
+
+    <header class="article-header">
+      <div class="article-category">🔧 技術分析教學</div>
+      <h1>MACD 指標完整解讀：DIF、MACD、柱狀圖怎麼看</h1>
+      <div class="article-meta">
+        <span>📅 2026-05-18</span>
+        <span>⏱ 7 分鐘閱讀</span>
+        <span>🤖 AI 整理 · 領富 AI 編輯部</span>
+      </div>
+    </header>
+
+    <div class="article-toc">
+      <strong>本文重點</strong>
+      <ol>
+        <li><a href="#what">MACD 指標是什麼</a></li>
+        <li><a href="#calc">MACD 的三個元素：DIF、訊號線、柱狀圖</a></li>
+        <li><a href="#cross">黃金交叉與死亡交叉</a></li>
+        <li><a href="#zero">零軸位置：多頭與空頭分界</a></li>
+        <li><a href="#divergence">背離訊號：MACD 的看家本領</a></li>
+        <li><a href="#combine">MACD 跟 KD 怎麼搭配</a></li>
+        <li><a href="#tool">用領富 AI 看 MACD 訊號</a></li>
+        <li><a href="#faq">常見問題 FAQ</a></li>
+      </ol>
+    </div>
+
+    <section id="what" class="article-section">
+      <h2>1. MACD 指標是什麼</h2>
+      <p>MACD（<strong>Moving Average Convergence Divergence</strong>，中文叫「平滑異同移動平均線」）由 Gerald Appel 於 1979 年發明，是<strong>判斷趨勢與動能</strong>最經典的技術指標之一。</p>
+      <p>核心邏輯：<strong>用快、慢兩條 EMA（指數移動平均線）的差距，判斷股價趨勢的轉折點</strong>。</p>
+      <p>比 KD 平滑、訊號慢，但<strong>雜訊少、勝率較高</strong>。趨勢盤特別有效。</p>
+    </section>
+
+    <section id="calc" class="article-section">
+      <h2>2. MACD 的三個元素</h2>
+      <p>台股標準參數 <strong>MACD(12, 26, 9)</strong>，由三個東西組成：</p>
+
+      <h3>① DIF 線（快線）</h3>
+      <div class="formula-box">
+        <strong>DIF ＝ 12 日 EMA − 26 日 EMA</strong>
+      </div>
+      <p>反映「<strong>短期動能</strong>」。DIF 上升 = 動能轉強、下降 = 轉弱。</p>
+
+      <h3>② MACD 訊號線（慢線）</h3>
+      <div class="formula-box">
+        <strong>MACD ＝ DIF 的 9 日 EMA</strong>
+      </div>
+      <p>是 DIF 的<strong>平滑版</strong>。反應比 DIF 鈍，常用來跟 DIF 比較產生交叉訊號。</p>
+
+      <h3>③ 柱狀圖 OSC（histogram）</h3>
+      <div class="formula-box">
+        <strong>柱狀圖 ＝ DIF − MACD</strong>
+      </div>
+      <p>把兩條線的差距視覺化：</p>
+      <ul>
+        <li><strong>紅柱</strong>（正值）= DIF 在 MACD 上方，多頭力道</li>
+        <li><strong>綠柱</strong>（負值）= DIF 在 MACD 下方，空頭力道</li>
+        <li>柱越長 = 動能越強</li>
+        <li>柱「縮短」= 動能衰竭，可能轉折</li>
+      </ul>
+      <p><strong>進階使用者最重視柱狀圖</strong>，因為它比交叉訊號更早預告轉折。</p>
+    </section>
+
+    <section id="cross" class="article-section">
+      <h2>3. 黃金交叉與死亡交叉</h2>
+
+      <h3>🌟 黃金交叉（轉強訊號）</h3>
+      <p>DIF 線由下往上穿過 MACD 訊號線。代表：</p>
+      <ul>
+        <li>短期動能轉強</li>
+        <li>可能是上漲的起點</li>
+        <li><strong>零軸下方的黃金交叉</strong>（DIF & MACD 都 < 0）：底部反轉訊號，勝率較高</li>
+        <li>零軸上方的黃金交叉：回檔後的續強訊號</li>
+      </ul>
+
+      <h3>💀 死亡交叉（轉弱訊號）</h3>
+      <p>DIF 線由上往下穿過 MACD 訊號線。代表：</p>
+      <ul>
+        <li>短期動能轉弱</li>
+        <li>可能是下跌的起點</li>
+        <li><strong>零軸上方的死亡交叉</strong>（DIF & MACD 都 > 0）：高檔轉折警示</li>
+        <li>零軸下方的死亡交叉：弱勢續弱</li>
+      </ul>
+
+      <p>注意：MACD 交叉比 KD 慢，所以交叉確認時股價通常已經漲（跌）一段了。優點是雜訊少，缺點是進場較晚。</p>
+    </section>
+
+    <section id="zero" class="article-section">
+      <h2>4. 零軸位置：多頭與空頭分界</h2>
+      <p>MACD 的「零軸」（DIF = 0）是<strong>多空分界線</strong>：</p>
+      <div class="example-table">
+        <table class="fin-table">
+          <thead>
+            <tr><th>DIF 位置</th><th>MACD 訊號線位置</th><th>市場狀態</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="color:#dc2626;">DIF > 0</td><td>MACD > 0</td><td>多頭趨勢確立，股價在中長期均線上方</td></tr>
+            <tr><td style="color:#dc2626;">DIF > 0</td><td>MACD < 0</td><td>剛轉多，趨勢初期</td></tr>
+            <tr><td style="color:#16a34a;">DIF < 0</td><td>MACD > 0</td><td>剛轉空，趨勢初期</td></tr>
+            <tr><td style="color:#16a34a;">DIF < 0</td><td>MACD < 0</td><td>空頭趨勢確立</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>實戰原則</strong>：</p>
+      <ul>
+        <li>DIF & MACD 都在零軸上方 → 偏多操作</li>
+        <li>DIF & MACD 都在零軸下方 → 避免追多</li>
+        <li>DIF 由負轉正穿越零軸（零軸黃金交叉）→ 強勢轉折訊號</li>
+      </ul>
+    </section>
+
+    <section id="divergence" class="article-section">
+      <h2>5. 背離訊號：MACD 的看家本領</h2>
+      <p>「<strong>背離</strong>」（Divergence）是 MACD 最強、最被進階使用者重視的訊號 — 「股價走勢」跟「MACD 走勢」不一致：</p>
+
+      <h3>📉 頂部背離（看跌警示）</h3>
+      <p><strong>股價創新高，但 MACD（DIF / 柱狀圖）卻沒創新高</strong>。</p>
+      <p>意義：股價雖然漲到新高，但「上漲動能」其實在衰退，是反轉前的預警訊號。</p>
+
+      <h3>📈 底部背離（看漲機會）</h3>
+      <p><strong>股價創新低，但 MACD 卻沒創新低</strong>。</p>
+      <p>意義：股價雖然跌到新低，但「下跌動能」已經衰竭，是反彈訊號。</p>
+
+      <p><strong>實戰原則</strong>：</p>
+      <ul>
+        <li>背離不是「明天就反轉」，是「轉折機率高、要警戒」</li>
+        <li>背離 + 量能背離（價漲量縮）= 雙重確認，可信度更高</li>
+        <li>背離訊號最少要 2 次高點/低點才算成立（連續 3 次更強）</li>
+      </ul>
+    </section>
+
+    <section id="combine" class="article-section">
+      <h2>6. MACD 跟 KD 怎麼搭配</h2>
+      <p>KD + MACD 是台股最經典的組合：</p>
+      <ul>
+        <li><strong>用 MACD 確認大方向</strong>：DIF & MACD 都在零軸上方 = 多頭，反之空頭</li>
+        <li><strong>用 KD 抓進場時機</strong>：在多頭趨勢中，KD 跌到 30 以下黃金交叉 = 進場點</li>
+        <li><strong>兩者衝突時保守</strong>：MACD 看多但 KD 看空（或反之）→ 訊號不一致，避免進場</li>
+      </ul>
+      <p><strong>實戰策略</strong>：</p>
+      <ul>
+        <li>多頭趨勢 + KD 低檔黃金交叉 = 順勢回檔買進機會</li>
+        <li>MACD 頂部背離 + KD 高檔死叉 = 強烈出場訊號</li>
+        <li>盤整盤（MACD 平躺在零軸）= 避免重壓任一方向</li>
+      </ul>
+    </section>
+
+    <section id="tool" class="article-section article-tool-section">
+      <h2>7. 用領富 AI 看 MACD 訊號</h2>
+      <div class="tool-cards">
+        <a class="tool-card" href="../stock-detail.html?code=2330">
+          <div class="tc-icon">📈</div>
+          <div class="tc-title">個股詳情頁</div>
+          <div class="tc-desc">「技術／籌碼」分頁有 MACD DIF、訊號線、柱狀圖 + 綜合訊號文字</div>
+        </a>
+        <a class="tool-card" href="../weekly.html">
+          <div class="tc-icon">📰</div>
+          <div class="tc-title">AI 產業週報</div>
+          <div class="tc-desc">AI 整理產業 MACD 動能變化</div>
+        </a>
+        <a class="tool-card" href="../ai.html">
+          <div class="tc-icon">🤖</div>
+          <div class="tc-title">AI 對話</div>
+          <div class="tc-desc">「台積電 MACD 出黃金交叉了嗎？」直接問</div>
+        </a>
+      </div>
+    </section>
+
+    <section id="faq" class="article-section article-faq">
+      <h2>8. 常見問題 FAQ</h2>
+      <details>
+        <summary><strong>Q1：MACD 黃金交叉的勝率多少？</strong></summary>
+        <p>單純看 MACD 黃金交叉，歷史回測勝率約 50-55%。但加上「零軸下方」「成交量配合」「無多重頂背離」等過濾條件後，勝率可提升到 60-70%。沒有指標可以 100%，重點是搭配多重訊號降低錯誤率。</p>
+      </details>
+      <details>
+        <summary><strong>Q2：為什麼 MACD 訊號比較慢？</strong></summary>
+        <p>因為 MACD 用 12 / 26 日 EMA，是中長期均線，反應自然比短期 KD(9) 慢。優點是雜訊少、訊號穩定，缺點是進場較晚。短線交易者可以試 MACD(5,13,5) 縮短週期。</p>
+      </details>
+      <details>
+        <summary><strong>Q3：MACD 適合所有股票嗎？</strong></summary>
+        <p>不太適合「成交量小、價格跳動大」的小型股，因為這類股雜訊太多 MACD 容易失準。大型權值股、ETF 0050 / 0056 等流動性好的標的，MACD 訊號最有效。</p>
+      </details>
+      <details>
+        <summary><strong>Q4：MACD 在盤整盤怎麼用？</strong></summary>
+        <p>盤整盤中 MACD 會在零軸附近平躺、反覆交叉，訊號意義不大。這時候 KD 的高低區交叉反而更有用。建議盤整盤改用 RSI 50 軸操作。</p>
+      </details>
+      <details>
+        <summary><strong>Q5：日 MACD、週 MACD、月 MACD 差別？</strong></summary>
+        <p>日 MACD 看短中期波段；週 MACD 看中長期趨勢，是基金經理人最愛；月 MACD 訊號最稀少但最強。長線投資人看週 / 月 MACD，短線看日 MACD。混淆會誤判。</p>
+      </details>
+    </section>
+
+    <footer class="article-footer">
+      <div class="article-disclaimer">
+        <strong>📌 免責聲明</strong><br>
+        本文僅為公開資料整理與技術分析概念說明，不構成個股推薦或買賣建議。
+        MACD 指標僅為技術分析參考之一，實際投資決策需綜合基本面、籌碼面、風險評估。
+        投資決定請您自行評估，或諮詢合法之證券投資顧問。
+      </div>
+
+      <div class="article-related">
+        <strong>📖 延伸閱讀</strong>
+        <ul>
+          <li><a href="kd-indicator.html">KD 指標教學</a></li>
+          <li><a href="bollinger-bands.html">布林通道入門</a></li>
+          <li><a href="margin-trading.html">融資融券是什麼？</a></li>
+        </ul>
+      </div>
+    </footer>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>

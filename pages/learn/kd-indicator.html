@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KD 指標教學：超買超賣怎麼看？黃金交叉死亡交叉解讀 - 領富 AI 學習中心</title>
+<meta name="description" content="KD 指標（隨機指標）是台股最常用的技術分析工具。本文 7 分鐘講清楚 K 值 D 值怎麼算、20/80 超買超賣怎麼判斷、黃金交叉與死亡交叉、看 KD 投資的 3 個常見誤區。">
+<meta name="keywords" content="KD指標,K值,D值,隨機指標,黃金交叉,死亡交叉,超買,超賣,技術分析,台股">
+<link rel="canonical" href="https://leadfuai.com/pages/learn/kd-indicator.html">
+
+<meta property="og:title" content="KD 指標教學：超買超賣 + 黃金交叉死亡交叉完整解讀">
+<meta property="og:description" content="KD < 20 算超賣、> 80 算超買？黃金交叉一定漲？看完這篇你會用 KD 不會被騙。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://leadfuai.com/pages/learn/kd-indicator.html">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://leadfuai.com/pages/learn/kd-indicator.html#article",
+      "headline": "KD 指標教學：超買超賣怎麼看？黃金交叉死亡交叉解讀",
+      "description": "KD 指標（隨機指標）是台股最常用的技術分析工具。本文講清楚怎麼算、怎麼用、3 大誤區。",
+      "datePublished": "2026-05-18",
+      "dateModified": "2026-05-18",
+      "author": { "@id": "https://leadfuai.com/#organization" },
+      "publisher": { "@id": "https://leadfuai.com/#organization" },
+      "inLanguage": "zh-TW",
+      "isAccessibleForFree": true,
+      "wordCount": 1100,
+      "articleSection": "技術分析教學",
+      "keywords": ["KD指標", "隨機指標", "黃金交叉", "死亡交叉", "技術分析"]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "KD 指標是什麼？怎麼計算？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "KD 指標（Stochastic Oscillator）由喬治萊恩發明，用近 9 日最高/最低/收盤價計算未成熟隨機值 RSV，再加權平均得出 K 值與 D 值，數值介於 0-100。台股普遍用 KD(9) 參數。K 值反映短期動能，D 值是 K 值的平滑版。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "KD 超買超賣怎麼判斷？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "傳統定義：KD > 80 算超買、KD < 20 算超賣。但這只是「短期動能極端值」，不代表「一定會反轉」。強勢上漲時 KD 可能在 80 以上盤旋多日，弱勢下跌時 KD 可能 20 以下卡很久（KD 鈍化）。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "KD 黃金交叉、死亡交叉是什麼？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "黃金交叉：K 線由下往上穿越 D 線（轉強訊號）。死亡交叉：K 線由上往下穿越 D 線（轉弱訊號）。低檔黃金交叉勝率最高、高檔死亡交叉訊號最強。但中位數區間的交叉（KD 30-70）訊號意義較弱。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "為什麼有時候 KD 鈍化？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "強勢趨勢中 KD 會卡在 80+ 或 20- 區間，連續多日不交叉。原因是 KD 是「相對位置」指標，不擅長判斷「絕對價格」。趨勢明確時用 KD 反而會錯過或被甩。建議搭配均線、量能一起看。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "領富 AI 哪裡可以查 KD？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "領富 AI 個股詳情頁的「技術／籌碼」分頁，會自動計算每檔個股的 KD9、MACD、RSI、布林通道、5/10/20 日均線，並給出綜合訊號文字（例如「KD 高檔交叉 · MACD 多頭」）。1,957 檔上市櫃個股每日盤後自動更新。"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+        { "@type": "ListItem", "position": 2, "name": "學習中心", "item": "https://leadfuai.com/pages/learn.html" },
+        { "@type": "ListItem", "position": 3, "name": "KD 指標教學" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="../login.html">會員登入</a><a href="../register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../../index.html">首頁</a></li>
+      <li><a href="../stocks.html">股價總覽</a></li>
+      <li><a href="../weekly.html">產業週報</a></li>
+      <li><a href="../risk-radar.html">防錯雷達</a></li>
+      <li class="active"><a href="../learn.html">📚 學習中心</a></li>
+      <li><a href="../ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container learn-article-main">
+  <article class="learn-article">
+
+    <div class="article-breadcrumb">
+      <a href="../../index.html">首頁</a> ▸
+      <a href="../learn.html">學習中心</a> ▸
+      <span>KD 指標教學</span>
+    </div>
+
+    <header class="article-header">
+      <div class="article-category">🔧 技術分析教學</div>
+      <h1>KD 指標教學：超買超賣怎麼看？黃金交叉死亡交叉解讀</h1>
+      <div class="article-meta">
+        <span>📅 2026-05-18</span>
+        <span>⏱ 7 分鐘閱讀</span>
+        <span>🤖 AI 整理 · 領富 AI 編輯部</span>
+      </div>
+    </header>
+
+    <div class="article-toc">
+      <strong>本文重點</strong>
+      <ol>
+        <li><a href="#what">KD 指標是什麼</a></li>
+        <li><a href="#calc">KD 怎麼計算（看不懂可以跳過）</a></li>
+        <li><a href="#overbought">超買超賣怎麼判斷</a></li>
+        <li><a href="#cross">黃金交叉與死亡交叉</a></li>
+        <li><a href="#blunting">KD 鈍化是什麼</a></li>
+        <li><a href="#trap">看 KD 投資的 3 大誤區</a></li>
+        <li><a href="#tool">用領富 AI 查 KD 訊號</a></li>
+        <li><a href="#faq">常見問題 FAQ</a></li>
+      </ol>
+    </div>
+
+    <section id="what" class="article-section">
+      <h2>1. KD 指標是什麼</h2>
+      <p>KD 指標（英文 <strong>Stochastic Oscillator</strong>，又稱「<strong>隨機指標</strong>」）由美國技術分析師喬治萊恩（George Lane）於 1957 年發明，是<strong>台股最常用的短線技術指標</strong>。</p>
+      <p>KD 由兩條線組成：</p>
+      <ul>
+        <li><strong>K 值</strong>（快線）：對價格變化反應較敏感</li>
+        <li><strong>D 值</strong>（慢線）：K 值的平滑版，反應較鈍</li>
+      </ul>
+      <p>數值都介於 <strong>0 到 100</strong> 之間。它告訴你「現在股價相對於近期區間，是處在偏高還是偏低」。</p>
+    </section>
+
+    <section id="calc" class="article-section">
+      <h2>2. KD 怎麼計算（看不懂可以跳過）</h2>
+      <p>台股普遍用 <strong>KD(9)</strong> 參數，計算流程：</p>
+      <div class="formula-box">
+        <strong>步驟 1：先算 RSV（未成熟隨機值）</strong><br>
+        RSV = (今日收盤價 − 9 日內最低價) ÷ (9 日內最高價 − 9 日內最低價) × 100
+      </div>
+      <div class="formula-box">
+        <strong>步驟 2：算 K 值</strong><br>
+        今日 K = 昨日 K × 2/3 + 今日 RSV × 1/3
+      </div>
+      <div class="formula-box">
+        <strong>步驟 3：算 D 值</strong><br>
+        今日 D = 昨日 D × 2/3 + 今日 K × 1/3
+      </div>
+      <p>意義：RSV 反映「<strong>今天收盤價在最近 9 天的相對位置</strong>」，數值越高代表越靠近近期高點。K 跟 D 都是 RSV 的加權平均，越往後參考越久遠的歷史，所以 D 比 K 更平緩。</p>
+      <p><strong>實際上你不需要手算，</strong>看盤軟體或領富 AI 都會自動算好。重點是看「位置」跟「交叉」。</p>
+    </section>
+
+    <section id="overbought" class="article-section">
+      <h2>3. 超買超賣怎麼判斷</h2>
+      <div class="example-table">
+        <table class="fin-table">
+          <thead>
+            <tr><th>KD 區間</th><th>解讀</th><th>實戰意義</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="color:#dc2626;font-weight:700;">KD > 80</td><td>超買區</td><td>短期動能極強，但「越強越要小心修正」</td></tr>
+            <tr><td>KD 50-80</td><td>偏多區</td><td>動能不錯，可順勢看多</td></tr>
+            <tr><td>KD 20-50</td><td>偏空區</td><td>動能弱，避免追多</td></tr>
+            <tr><td style="color:#16a34a;font-weight:700;">KD < 20</td><td>超賣區</td><td>短期跌過頭，留意反彈訊號</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>注意</strong>：KD > 80 不代表「明天會跌」，KD < 20 不代表「明天會漲」。這只是「短期動能的極端值」。強勢趨勢中可能 KD 在 80+ 卡很多天（叫做「<strong>KD 鈍化</strong>」），這時候反而是強勢訊號，不是反轉訊號。</p>
+    </section>
+
+    <section id="cross" class="article-section">
+      <h2>4. 黃金交叉與死亡交叉</h2>
+      <p>KD 最常用的訊號是「<strong>兩條線交叉</strong>」：</p>
+
+      <h3>🌟 黃金交叉（Golden Cross）</h3>
+      <p>K 線由下往上穿越 D 線。代表：</p>
+      <ul>
+        <li>短期動能轉強</li>
+        <li>可能是反彈或上漲的開始</li>
+        <li><strong>低檔黃金交叉</strong>（KD < 30 時發生）：勝率最高、訊號最強</li>
+        <li>中位數黃金交叉（KD 40-60）：意義較弱</li>
+      </ul>
+
+      <h3>💀 死亡交叉（Death Cross）</h3>
+      <p>K 線由上往下穿越 D 線。代表：</p>
+      <ul>
+        <li>短期動能轉弱</li>
+        <li>可能是回檔或下跌的開始</li>
+        <li><strong>高檔死亡交叉</strong>（KD > 70 時發生）：訊號最強、最該警戒</li>
+      </ul>
+
+      <p><strong>實戰建議</strong>：</p>
+      <ul>
+        <li>低檔黃金交叉 + 同時 K 線跌深量縮 → 反彈機率高</li>
+        <li>高檔死亡交叉 + 量能放大下殺 → 趨勢轉弱機率高</li>
+        <li>中位數交叉（KD 40-60） → 訊號雜訊多，不建議單獨依賴</li>
+      </ul>
+    </section>
+
+    <section id="blunting" class="article-section">
+      <h2>5. KD 鈍化是什麼</h2>
+      <p>KD 是「<strong>相對位置</strong>」指標，所以強勢趨勢中容易「失靈」：</p>
+
+      <h3>高檔鈍化（強勢）</h3>
+      <p>股票連續上漲時，KD 可能一直卡在 80-100 區間，連續多日不交叉、不下來。這時候「KD > 80 = 超買」這個傳統解讀就會失靈。</p>
+      <p><strong>例</strong>：台積電 2024 年 AI 行情，KD 連續超過 80 達一個多月，期間股價仍持續上漲。如果在第一次 KD > 80 就賣，會錯過後續 30% 漲幅。</p>
+
+      <h3>低檔鈍化（弱勢）</h3>
+      <p>股票連續下跌時，KD 可能一直卡在 0-20 區間，反彈一下又馬上跌回。傳統「KD < 20 = 超賣可進場」會被一直甩巴掌。</p>
+
+      <p><strong>怎麼判斷現在是不是鈍化？</strong></p>
+      <ul>
+        <li>看 5 日 / 10 日 / 20 日<strong>均線方向</strong>：均線陡上行 = 強勢趨勢 = KD 易鈍化</li>
+        <li>看<strong>成交量</strong>：放大的趨勢更難由 KD 反轉</li>
+        <li>搭配 <strong>MACD</strong>：MACD 趨勢線方向一致才有強度</li>
+      </ul>
+    </section>
+
+    <section id="trap" class="article-section">
+      <h2>6. 看 KD 投資的 3 大誤區</h2>
+
+      <h3>誤區 1：只看 KD 不看趨勢</h3>
+      <p>「KD < 20 就買、KD > 80 就賣」這種機械化操作在<strong>盤整盤</strong>中可能還好，但<strong>趨勢盤</strong>會被反覆甩。建議搭配「均線方向」「MACD」一起判斷大趨勢。</p>
+
+      <h3>誤區 2：把 KD 當買賣訊號</h3>
+      <p>KD 黃金交叉只是「動能轉強」，不是「明天就漲」訊號。實戰中可能交叉後沒漲就再死叉、來回打巴掌。把 KD 當<strong>輔助確認</strong>，不要當<strong>進出場唯一訊號</strong>。</p>
+
+      <h3>誤區 3：忽略時間框架</h3>
+      <p>日 KD、週 KD、月 KD 訊號意義不同：</p>
+      <ul>
+        <li><strong>日 KD</strong>：短線進出參考（適合波段操作）</li>
+        <li><strong>週 KD</strong>：中線方向（更穩定）</li>
+        <li><strong>月 KD</strong>：長線轉折（很罕見、訊號最強）</li>
+      </ul>
+      <p>長線投資人看月 KD，短線交易者看日 KD，搞混時間框架會誤判。</p>
+    </section>
+
+    <section id="tool" class="article-section article-tool-section">
+      <h2>7. 用領富 AI 查 KD 訊號</h2>
+      <p>領富 AI 個股詳情頁自動算 <strong>1,957 檔個股</strong>的 KD9、MACD、RSI、布林、均線：</p>
+      <div class="tool-cards">
+        <a class="tool-card" href="../stock-detail.html?code=2330">
+          <div class="tc-icon">📈</div>
+          <div class="tc-title">個股詳情頁</div>
+          <div class="tc-desc">「技術／籌碼」分頁有 KD、MACD、RSI 完整指標 + 綜合訊號文字</div>
+        </a>
+        <a class="tool-card" href="../weekly.html">
+          <div class="tc-icon">📰</div>
+          <div class="tc-title">AI 產業週報</div>
+          <div class="tc-desc">每週一 AI 整理各產業技術指標重點</div>
+        </a>
+        <a class="tool-card" href="../ai.html">
+          <div class="tc-icon">🤖</div>
+          <div class="tc-title">AI 對話</div>
+          <div class="tc-desc">「台積電現在 KD 怎樣？」直接問</div>
+        </a>
+      </div>
+    </section>
+
+    <section id="faq" class="article-section article-faq">
+      <h2>8. 常見問題 FAQ</h2>
+      <details>
+        <summary><strong>Q1：KD 跟 RSI 哪個比較好？</strong></summary>
+        <p>用途不同。KD 看「相對位置 + 交叉訊號」，適合判斷短期動能轉折。RSI 看「漲跌力道強弱」，適合判斷趨勢強度。兩者搭配使用更完整。</p>
+      </details>
+      <details>
+        <summary><strong>Q2：KD 黃金交叉就一定漲嗎？</strong></summary>
+        <p>不一定。KD 黃金交叉的勝率約 50-60%（看歷史回測），不是穩賺。搭配「均線多頭排列」「量能配合」「MACD 同步走多」等多重訊號確認，勝率才會明顯提高。</p>
+      </details>
+      <details>
+        <summary><strong>Q3：KD 參數一定要用 9 嗎？</strong></summary>
+        <p>9 是台股最普遍。短線交易者可用 KD(5) 反應更靈敏；長線投資人可用 KD(14) 雜訊較少。但建議跟著主流，因為大家都看 KD(9) 會讓訊號更有效。</p>
+      </details>
+      <details>
+        <summary><strong>Q4：為什麼有人看「J 值」？</strong></summary>
+        <p>J 值是衍生指標：J = 3K − 2D。可能 > 100 或 < 0，反映「超超買」「超超賣」極端狀態。台股較少人用，國際上 KDJ 三線並看比較常見。</p>
+      </details>
+      <details>
+        <summary><strong>Q5：KD 在大盤指數有效嗎？</strong></summary>
+        <p>大盤指數的 KD 是「市場整體情緒」指標。大盤 KD < 20 + 月線多頭時，常是反彈起點；大盤 KD > 80 + 量能背離時，常是高檔警戒。但對單檔個股影響有限。</p>
+      </details>
+    </section>
+
+    <footer class="article-footer">
+      <div class="article-disclaimer">
+        <strong>📌 免責聲明</strong><br>
+        本文僅為公開資料整理與技術分析概念說明，不構成個股推薦或買賣建議。
+        KD 指標僅為技術分析參考之一，實際投資決策需綜合基本面、籌碼面、風險評估。
+        投資決定請您自行評估，或諮詢合法之證券投資顧問。
+      </div>
+
+      <div class="article-related">
+        <strong>📖 延伸閱讀</strong>
+        <ul>
+          <li><a href="macd-indicator.html">MACD 指標完整解讀</a></li>
+          <li><a href="bollinger-bands.html">布林通道入門</a></li>
+          <li><a href="institutional-investors.html">三大法人是誰？</a></li>
+        </ul>
+      </div>
+    </footer>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<script src="../../js/main.js"></script>
+</body>
+</html>
