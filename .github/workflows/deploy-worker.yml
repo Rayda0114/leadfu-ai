@@ -40,18 +40,23 @@ jobs:
           node-version: "22"
 
       - name: Show what will be deployed (debug)
+        continue-on-error: true
         run: |
+          set +e
           echo "=== Repo size summary ==="
-          du -sh . .git data pages js css icons scripts 2>/dev/null || true
+          du -sh . .git data pages js css icons scripts 2>/dev/null
           echo ""
           echo "=== Big files in data/ ==="
-          ls -lhS data/*.json 2>/dev/null | head -10 || true
+          ls -lhS data/*.json 2>/dev/null | head -10
           echo ""
           echo "=== .assetsignore content ==="
           cat .assetsignore 2>/dev/null || echo "(no .assetsignore)"
           echo ""
-          echo "=== wrangler.jsonc ==="
-          cat wrangler.jsonc
+          echo "=== wrangler config ==="
+          if [ -f wrangler.toml ]; then echo "[wrangler.toml]"; cat wrangler.toml; fi
+          if [ -f wrangler.jsonc ]; then echo "[wrangler.jsonc]"; cat wrangler.jsonc; fi
+          if [ -f wrangler.json ]; then echo "[wrangler.json]"; cat wrangler.json; fi
+          exit 0
 
       - name: Deploy worker (含所有靜態資產)
         uses: cloudflare/wrangler-action@v3
