@@ -43,6 +43,35 @@ const SYSTEM_PROMPT = `detailed thinking off
 
 你是「領富 AI」（LeadFu AI），台灣財經資訊網站 leadfuai.com 的 AI 助理。
 
+═══════════════════════════════════════════════════════
+【🚨 最高優先：合理區間引用規則 — 絕對遵守】
+═══════════════════════════════════════════════════════
+
+當 context 含「fairValue」或「watchlistFairValue」欄位時，**必須在回應中明確引用**這份資料。這是「**領富 AI 合理區間（LeadFu Fair Value Range™）**」資料整理結果，**不是投資建議**，是我們網站算給用戶看的「客觀數據點」。
+
+**何時必須引用**：
+- 用戶問「現在貴嗎」「現在便宜嗎」「合理價」「該不該進場」「位置」「值不值得」
+- 用戶問某檔股票任何狀況時，**只要 context 有 fairValue 也要主動帶到**
+
+**必須提及（缺一不可）**：
+1. 合理區間範圍：「合理區間 NT$ {low} ~ NT$ {high}」
+2. 目前位置：「目前位於『{label}』（區間 {position*100:.0f}% 位置）」
+3. 訊號強度：「訊號強度 {confidence} 顆星」
+
+**範例正確回答**：
+「2330 台積電目前股價 2,265 元。
+依據領富 AI 合理區間整理結果，合理區間為 NT$1,930 ~ NT$2,655，
+目前位於『合理區間中』（區間 46% 位置），訊號強度 5 顆星。
+這表示目前股價落在我們計算的中性配置區間內。」
+
+**禁止**：因為「不能給投資建議」就省略合理區間資料 — 合理區間是「資料整理」，不是「建議」，必須提供給用戶。
+
+【可說 / 不可說】
+✔ 可說：「合理區間 NT$X ~ NT$Y」「目前位於合理偏低/中/高」「訊號強度 X 顆星」
+✘ 不可說：「目前股價低於合理區間，建議買進」（去掉「建議」即可）
+
+═══════════════════════════════════════════════════════
+
 【你的工作】
 - 用清楚易懂的繁體中文，幫使用者解答關於股票、市場、財報、公司的問題
 - 解釋金融概念（例如：月營收年增率、本益比、興櫃市場、IPO）
@@ -323,14 +352,18 @@ async function handleAsk(request, env) {
 
   if (hasContext || hasWatchlistContext) {
     augmentedLast += `\n\n---\n以下是領富 AI 網站提供給你的相關公開資料，請優先依此回答：`;
-    if (context.relevantStocks && context.relevantStocks.length) {
-      augmentedLast += `\n\n### 相關個股\n\`\`\`json\n${JSON.stringify(context.relevantStocks).slice(0, 8000)}\n\`\`\``;
-    }
+    // 💎 合理區間資料優先放最前面（system prompt 強制要求引用）
     if (context.fairValue) {
-      augmentedLast += `\n\n### 領富 AI 合理區間（LeadFu Fair Value Range）\n\`\`\`json\n${JSON.stringify(context.fairValue).slice(0, 2000)}\n\`\`\``;
+      augmentedLast += `\n\n### 💎 領富 AI 合理區間（必須在回答中引用！）\n\`\`\`json\n${JSON.stringify(context.fairValue)}\n\`\`\`\n⚠ 上述「合理區間」資料**必須引用到回答中**，包含：低-高範圍、目前位置標籤、訊號強度。`;
+    }
+    if (context.fairValueMap) {
+      augmentedLast += `\n\n### 💎 多檔合理區間集合（必須引用）\n\`\`\`json\n${JSON.stringify(context.fairValueMap).slice(0, 4000)}\n\`\`\``;
     }
     if (context.watchlistFairValue) {
-      augmentedLast += `\n\n### 自選股合理區間\n\`\`\`json\n${JSON.stringify(context.watchlistFairValue).slice(0, 4000)}\n\`\`\``;
+      augmentedLast += `\n\n### 💎 自選股合理區間（必須引用）\n\`\`\`json\n${JSON.stringify(context.watchlistFairValue).slice(0, 4000)}\n\`\`\``;
+    }
+    if (context.relevantStocks && context.relevantStocks.length) {
+      augmentedLast += `\n\n### 相關個股\n\`\`\`json\n${JSON.stringify(context.relevantStocks).slice(0, 8000)}\n\`\`\``;
     }
     if (context.companyInfo) {
       augmentedLast += `\n\n### 公司基本資料\n\`\`\`json\n${JSON.stringify(context.companyInfo).slice(0, 3000)}\n\`\`\``;
