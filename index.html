@@ -823,13 +823,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       /💎\s*\*\*?領富\s*AI\s*合理區間\*\*?[\s\S]*?(?=\n\n[^💎]|\n\n$|$)/g,
       (block) => {
         const lowM = block.match(/合理區間[^N]*NT\$?\s*([\d,]+)\s*[~～-]\s*NT\$?\s*([\d,]+)/);
-        const posM = block.match(/目前位置[^：:]*[：:]\s*([^（(\n]+?)(?:\s*[（(]?\s*區間\s*(\d+)\s*%)?/);
+        // 位置：抓到下一個 「（」「(」「\n」「，」或結尾為止（greedy 但有清楚邊界）
+        const posM = block.match(/目前位置[^：:]*[：:]\s*([^（(,，\n]+)/);
+        const pctM = block.match(/區間\s*(\d+)\s*%/);
         const starsM = block.match(/(⭐+)/);
         if (!lowM) return block;
         const low = lowM[1];
         const high = lowM[2];
-        const label = posM ? posM[1].trim() : "—";
-        const pctNum = posM && posM[2] ? parseInt(posM[2], 10) : null;
+        const label = posM ? posM[1].trim().replace(/[。.]$/, "") : "—";
+        const pctNum = pctM ? parseInt(pctM[1], 10) : null;
         const fillPct = pctNum != null ? Math.max(0, Math.min(100, pctNum)) : 50;
         const stars = starsM ? starsM[1] : "⭐⭐⭐⭐⭐";
         // 提取「卡片之後」的解讀文字
