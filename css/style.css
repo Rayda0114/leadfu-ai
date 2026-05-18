@@ -4641,6 +4641,215 @@ body.theme-red .lq-watchlist-label { color: #D4AF37; }
 }
 
 /* ─────────────────────────────────────────────────────────────
+   💎 領富 AI 合理區間（LeadFu Fair Value Range™）
+   個股詳情頁 hero 下方的旗艦面板
+   ───────────────────────────────────────────────────────────── */
+.fair-value-section {
+  padding: 18px 0 24px;
+  background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
+}
+.fv-panel {
+  background: linear-gradient(135deg, #1B4332 0%, #2d5f4a 50%, #B45309 100%);
+  border-radius: 12px;
+  padding: 22px 28px 24px;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(27, 67, 50, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+.fv-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(197, 165, 114, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.fv-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+.fv-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.fv-icon { font-size: 22px; }
+.fv-label {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.fv-trademark {
+  font-size: 10px;
+  color: #C5A572;
+  font-style: italic;
+  letter-spacing: 1px;
+  margin-left: 4px;
+}
+.fv-confidence {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+}
+.fv-conf-label { letter-spacing: 1px; }
+.fv-conf-stars {
+  letter-spacing: 1px;
+  font-size: 12px;
+}
+
+/* 區間視覺化進度條 */
+.fv-bar-wrap {
+  margin: 14px 0 18px;
+  position: relative;
+  z-index: 1;
+}
+.fv-bar-track {
+  position: relative;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  overflow: visible;
+}
+.fv-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #86efac 0%, #fde68a 50%, #fca5a5 100%);
+  border-radius: 999px;
+  transition: width 0.6s ease-out;
+}
+.fv-bar-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  transition: left 0.6s ease-out;
+}
+.fv-marker-dot {
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border: 3px solid #1B4332;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4),
+              0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.fv-marker-tag {
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #1B4332;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.fv-marker-tag::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #fff;
+}
+.fv-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  font-variant-numeric: tabular-nums;
+}
+.fv-bar-low, .fv-bar-high {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+.fv-status {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+.fv-position-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.6;
+}
+.fv-position-text strong {
+  font-size: 18px;
+  color: #FDE68A;
+  margin: 0 6px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.fv-position-pct {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-left: 8px;
+}
+
+.fv-disclaimer {
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  z-index: 1;
+}
+.fv-disclaimer strong { color: #FDE68A; }
+
+/* 紅金主題覆寫 */
+body.theme-red .fv-panel {
+  background: linear-gradient(135deg, #7F1D1D 0%, #991B1B 50%, #D4AF37 100%);
+}
+body.theme-red .fv-trademark,
+body.theme-red .fv-position-text strong,
+body.theme-red .fv-disclaimer strong { color: #FEF3C7; }
+body.theme-red .fv-marker-dot { border-color: #7F1D1D; }
+body.theme-red .fv-marker-tag { color: #7F1D1D; }
+
+@media (max-width: 768px) {
+  .fv-panel { padding: 16px 18px 18px; }
+  .fv-label { font-size: 15px; }
+  .fv-trademark { display: none; }
+  .fv-confidence { font-size: 10px; padding: 3px 10px; }
+  .fv-position-text { font-size: 13px; }
+  .fv-position-text strong { font-size: 16px; }
+  .fv-marker-tag { font-size: 11px; padding: 3px 8px; }
+  .fv-bar-labels { font-size: 11px; }
+}
+
+/* ─────────────────────────────────────────────────────────────
    stock-detail.html 即時報價（hero 區下方）
    ───────────────────────────────────────────────────────────── */
 .live-mini {

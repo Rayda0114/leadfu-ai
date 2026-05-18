@@ -82,12 +82,23 @@ const SYSTEM_PROMPT = `detailed thinking off
 【資料來源】
 使用者訊息中可能含這些 context 欄位，請優先使用：
 - relevantStocks（個股報價）/ companyInfo / revenueInfo / industryStats
+- fairValue（領富 AI 合理區間，含 low/high/position/label/confidence）
 - watchlistStocks（使用者自選股即時報價）
 - watchlistCompanies（自選股公司基本資料）
 - watchlistRevenue（自選股月營收）
 - watchlistNews（自選股近期相關新聞）
 - watchlistAnnouncements（自選股重大公告 / 注意股）
+- watchlistFairValue（自選股合理區間集合）
 - watchlistIsEmpty: true（使用者還沒加任何自選股）
+
+【💎 領富 AI 合理區間（LeadFu Fair Value Range™）使用規則】
+若 context 含 fairValue 欄位（單檔）或 watchlistFairValue（自選股集合），
+回答「現在貴不貴」「合理價多少」「該不該進場」這類問題時，務必引用這個資料：
+- 「目前位置：{label}（區間 {position*100}% 位置）」
+- 「合理區間 NT${low} ~ NT${high}」
+- 「訊號強度：{confidence} 顆星」
+但絕對 NOT 講「演算法用了什麼」「怎麼算出來的」— 這是領富 AI 專有演算法，
+對外只露結果。被問演算法時友善回答「這是領富 AI 專有演算法，整合多項公開資料計算」。
 
 【被問自選股時】
 - 如 watchlistIsEmpty=true：友善告訴使用者「您還沒加任何自選股，先到個股頁面按『＋自選』加入幾檔，下次就能直接問我了」
@@ -314,6 +325,12 @@ async function handleAsk(request, env) {
     augmentedLast += `\n\n---\n以下是領富 AI 網站提供給你的相關公開資料，請優先依此回答：`;
     if (context.relevantStocks && context.relevantStocks.length) {
       augmentedLast += `\n\n### 相關個股\n\`\`\`json\n${JSON.stringify(context.relevantStocks).slice(0, 8000)}\n\`\`\``;
+    }
+    if (context.fairValue) {
+      augmentedLast += `\n\n### 領富 AI 合理區間（LeadFu Fair Value Range）\n\`\`\`json\n${JSON.stringify(context.fairValue).slice(0, 2000)}\n\`\`\``;
+    }
+    if (context.watchlistFairValue) {
+      augmentedLast += `\n\n### 自選股合理區間\n\`\`\`json\n${JSON.stringify(context.watchlistFairValue).slice(0, 4000)}\n\`\`\``;
     }
     if (context.companyInfo) {
       augmentedLast += `\n\n### 公司基本資料\n\`\`\`json\n${JSON.stringify(context.companyInfo).slice(0, 3000)}\n\`\`\``;

@@ -107,6 +107,52 @@
   </div>
 </section>
 
+<!-- 💎 領富 AI 合理區間（LeadFu Fair Value Range™）— 專有演算法 -->
+<section class="fair-value-section" id="fairValueSection" style="display:none;">
+  <div class="container">
+    <div class="fv-panel">
+      <div class="fv-head">
+        <div class="fv-title">
+          <span class="fv-icon">💎</span>
+          <span class="fv-label">領富 AI 合理區間</span>
+          <span class="fv-trademark">LeadFu Fair Value Range™</span>
+        </div>
+        <div class="fv-confidence" id="fvConfidence">
+          <span class="fv-conf-label">訊號強度</span>
+          <span class="fv-conf-stars" id="fvConfStars">⭐⭐⭐⭐⭐</span>
+        </div>
+      </div>
+
+      <div class="fv-bar-wrap">
+        <div class="fv-bar-track">
+          <div class="fv-bar-fill" id="fvBarFill"></div>
+          <div class="fv-bar-marker" id="fvBarMarker">
+            <div class="fv-marker-dot"></div>
+            <div class="fv-marker-tag" id="fvMarkerTag">現價 --</div>
+          </div>
+        </div>
+        <div class="fv-bar-labels">
+          <span class="fv-bar-low" id="fvBarLow">下限 NT$ --</span>
+          <span class="fv-bar-high" id="fvBarHigh">上限 NT$ --</span>
+        </div>
+      </div>
+
+      <div class="fv-status">
+        <div class="fv-position-text">
+          目前位置：<strong id="fvPositionLabel">--</strong>
+          <span class="fv-position-pct" id="fvPositionPct">--</span>
+        </div>
+      </div>
+
+      <p class="fv-disclaimer">
+        💡 依公開財報、技術指標、籌碼面、產業比較等公開資料，
+        經領富 AI 專有演算法整理之合理區間參考。<strong>不構成個股推薦或目標價建議</strong>，
+        投資決定請您自行評估或諮詢合法之證券投資顧問。
+      </p>
+    </div>
+  </div>
+</section>
+
 <div class="container" style="background:#fff;border:1px solid #e0e3e8;margin-top:20px;border-radius:4px;">
 
   <div class="detail-tabs">
@@ -468,6 +514,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     </li>
   `).join("");
 
+  // ★ 領富 AI 合理區間（LeadFu Fair Value Range™）
+  renderFairValue(code, s);
+
   // ★ 技術／籌碼面板（KD / MACD / 布林 / RSI / MA + 借券 + 大股東）
   renderTechPanel(code, s);
 
@@ -477,6 +526,57 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ★ AI 個股摘要自動載入（sessionStorage 快取，同 session 不重複呼叫）
   setupStockAiSummary(code, s);
 });
+
+function renderFairValue(code, stock) {
+  const L = window.LeadFu;
+  const fv = (L.data.fairValue && L.data.fairValue[code]) || null;
+  const section = document.getElementById("fairValueSection");
+  if (!section || !fv) return;
+
+  section.style.display = "block";
+
+  const low = fv.low;
+  const high = fv.high;
+  const price = stock.price;
+  const pos = fv.position;   // 0~1，可能 <0 或 >1
+
+  // 進度條填充寬度 (限制在 0-100%)
+  const fillPct = Math.max(0, Math.min(1, pos)) * 100;
+  document.getElementById("fvBarFill").style.width = fillPct + "%";
+
+  // 標記點位置（允許超出邊界視覺化）
+  const markerPos = Math.max(-5, Math.min(105, pos * 100));
+  const markerEl = document.getElementById("fvBarMarker");
+  markerEl.style.left = markerPos + "%";
+
+  // 標籤
+  document.getElementById("fvBarLow").textContent = "下限 NT$ " + low.toLocaleString();
+  document.getElementById("fvBarHigh").textContent = "上限 NT$ " + high.toLocaleString();
+  document.getElementById("fvMarkerTag").textContent = "現價 NT$ " + price.toLocaleString();
+
+  // 位置文字 + 百分比
+  document.getElementById("fvPositionLabel").textContent = fv.label;
+  const pctDisplay = pos < 0
+    ? `(低於下限 ${Math.abs(pos * 100).toFixed(1)}%)`
+    : pos > 1
+      ? `(超出上限 ${((pos - 1) * 100).toFixed(1)}%)`
+      : `(區間 ${(pos * 100).toFixed(1)}% 位置)`;
+  document.getElementById("fvPositionPct").textContent = pctDisplay;
+
+  // 顏色：依據位置
+  let labelColor = "#1B4332";   // 預設墨綠
+  if (pos < 0) labelColor = "#16a34a";          // 低於下限 = 綠（便宜）
+  else if (pos < 0.3) labelColor = "#16a34a";   // 合理偏低
+  else if (pos < 0.7) labelColor = "#1B4332";   // 合理區間中
+  else if (pos < 1.0) labelColor = "#B45309";   // 合理偏高
+  else labelColor = "#dc2626";                  // 超出上限 = 紅（昂貴）
+  document.getElementById("fvPositionLabel").style.color = labelColor;
+
+  // 訊號強度（星級）
+  const confInt = Math.round(fv.confidence);
+  const stars = "⭐".repeat(confInt) + "☆".repeat(5 - confInt);
+  document.getElementById("fvConfStars").textContent = stars;
+}
 
 function renderTechPanel(code, stock) {
   const L = window.LeadFu;

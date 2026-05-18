@@ -2897,6 +2897,17 @@ async function loadLiveData() {
   } catch (e) {
     console.log(`[領富 AI] ℹ️ 大股東名單未載入 (${e.message})`);
   }
+
+  // 14. 領富 AI 合理區間（LeadFu Fair Value Range™ — 專有演算法）
+  try {
+    const live = await fetchJson("fair_value_live.json");
+    if (live.data) {
+      STOCK_DATA.fairValue = live.data;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆合理區間 (LeadFu Fair Value)`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 合理區間未載入 (${e.message})`);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
