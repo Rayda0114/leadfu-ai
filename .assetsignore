@@ -1,0 +1,31 @@
+# Cloudflare Workers Assets ignore file
+# 排除不需要上傳到 CDN 的檔案，降低部署 payload 大小
+
+# 開發工具
+.git/
+.github/
+.claude/
+.vscode/
+.idea/
+node_modules/
+
+# 後端腳本（後端不在 Worker 跑，由 GitHub Actions 跑後寫入 data/）
+scripts/
+
+# Worker 自己（由 wrangler 處理，不該當靜態資產）
+worker.js
+wrangler.jsonc
+
+# 開發文件
+README.md
+.gitignore
+.gitattributes
+
+# 中間檔（不公開的原始資料）
+data/_*.json
+data/raw_*.json
+
+# 系統檔
+.DS_Store
+Thumbs.db
+*.log
