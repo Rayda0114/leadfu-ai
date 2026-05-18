@@ -55,10 +55,12 @@ jobs:
 
       - name: Deploy worker (含所有靜態資產)
         uses: cloudflare/wrangler-action@v3
+        env:
+          WRANGLER_LOG: debug
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --verbose
+          command: deploy
 
       - name: Show deploy result
         if: success()
