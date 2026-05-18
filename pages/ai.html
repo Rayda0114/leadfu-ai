@@ -439,6 +439,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     codes.forEach(c => { if (revenue[c]) rev[c] = revenue[c]; });
     if (Object.keys(rev).length) ctx.watchlistRevenue = rev;
 
+    // 3.5 💎 自選股合理區間（LeadFu Fair Value Range）
+    const fvMap = {};
+    const fvData = L.data.fairValue || {};
+    codes.forEach(c => { if (fvData[c]) fvMap[c] = fvData[c]; });
+    if (Object.keys(fvMap).length) ctx.watchlistFairValue = fvMap;
+
     // 4. 相關新聞（依 related 欄位過濾，取最近 8 則）
     const relNews = news.filter(n =>
       n.related && Array.isArray(n.related) && n.related.some(c => codes.includes(c))
@@ -483,6 +489,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (co) ctx.companyInfo = co;
       const rev = (L.data.revenue && L.data.revenue[targetStock.code]) || null;
       if (rev) ctx.revenueInfo = rev;
+      // 💎 領富 AI 合理區間
+      const fv = (L.data.fairValue && L.data.fairValue[targetStock.code]) || null;
+      if (fv) ctx.fairValue = fv;
       return ctx;
     }
 
@@ -509,6 +518,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       pool.sort((a, b) => (b.volume || 0) - (a.volume || 0));
     }
     ctx.relevantStocks = pool.slice(0, 15).map(normalizeStockForAI);
+    // 💎 多檔合理區間（集合形式）
+    if (L.data.fairValue) {
+      const fvMap = {};
+      ctx.relevantStocks.forEach(s => {
+        if (L.data.fairValue[s.code]) fvMap[s.code] = L.data.fairValue[s.code];
+      });
+      if (Object.keys(fvMap).length) ctx.fairValueMap = fvMap;
+    }
     return ctx;
   }
 
