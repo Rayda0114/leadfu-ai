@@ -471,6 +471,47 @@ function renderTopics() {
   ul.innerHTML = STOCK_DATA.hotTopics.map(t => `<li># ${t}</li>`).join("");
 }
 
+/* 首頁側欄：💎 合理區間偏低 TOP 5（用我們自己的 fair value 資料）*/
+function renderFairValueLow() {
+  const ul = document.getElementById("fvLowList");
+  if (!ul) return;
+  const fvData = STOCK_DATA.fairValue || {};
+  const stocks = STOCK_DATA.stocks || [];
+  if (!Object.keys(fvData).length) {
+    ul.innerHTML = `<li style="color:#888;padding:12px;">合理區間資料準備中...</li>`;
+    return;
+  }
+  // 篩條件：position < 0.25（合理偏低或更低）、confidence >= 4（訊號可靠）、流動性 OK
+  const candidates = Object.values(fvData).filter(fv => {
+    if (fv.position === null || fv.position === undefined) return false;
+    if (fv.position > 0.25) return false;
+    if ((fv.confidence || 0) < 4) return false;
+    // 排除超低價（< 10 元）跟超低流動性（避免地雷股）
+    const s = stocks.find(x => x.code === fv.code);
+    if (!s || s.price < 10 || (s.volume || 0) < 500) return false;
+    return true;
+  });
+  // 依 position 由低排到高（最低估的在最前面）
+  candidates.sort((a, b) => a.position - b.position);
+  const top5 = candidates.slice(0, 5);
+  if (!top5.length) {
+    ul.innerHTML = `<li style="color:#888;padding:12px;">今日無符合條件個股</li>`;
+    return;
+  }
+  ul.innerHTML = top5.map(fv => {
+    const s = stocks.find(x => x.code === fv.code);
+    const pct = (fv.position * 100).toFixed(0);
+    const price = s ? fmtPrice(s.price) : "—";
+    return `<li style="cursor:pointer;" onclick="location.href='${pageHref('stock-detail.html?code=' + fv.code)}'">
+      <div class="ipo-name">${fv.code} ${fv.name} <span style="float:right;font-weight:600;color:#1B4332;">${price}</span></div>
+      <div class="ipo-info">
+        合理區間 NT$${Math.round(fv.low).toLocaleString()} ~ NT$${Math.round(fv.high).toLocaleString()}
+        ・ <span style="color:#16a34a;font-weight:600;">${pct}% 偏低</span>
+      </div>
+    </li>`;
+  }).join("");
+}
+
 /* ============================================================
  * 首頁 Hero 三張卡片（動態載入熱門股，不再硬編碼）
  * ============================================================ */
@@ -2937,6 +2978,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderStockTable();
   renderNews();
   renderTopics();
+  renderFairValueLow();   // 💎 首頁側欄合理區間偏低 TOP 5
   bindTabs();
   bindAddFavBtns();
   bindMobileRowTap();
