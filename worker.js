@@ -124,7 +124,7 @@ const SYSTEM_PROMPT = `detailed thinking off
 若 context 含 fairValue 欄位（單檔）或 watchlistFairValue（自選股集合），
 回答「現在貴不貴」「合理價多少」「該不該進場」這類問題時，務必引用這個資料：
 - 「目前位置：{label}（區間 {position*100}% 位置）」
-- 「合理區間 NT${low} ~ NT${high}」
+- 「合理區間 NT$ {low} ~ NT$ {high}」
 - 「訊號強度：{confidence} 顆星」
 但絕對 NOT 講「演算法用了什麼」「怎麼算出來的」— 這是領富 AI 專有演算法，
 對外只露結果。被問演算法時友善回答「這是領富 AI 專有演算法，整合多項公開資料計算」。
