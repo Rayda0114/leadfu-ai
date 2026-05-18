@@ -2949,6 +2949,17 @@ async function loadLiveData() {
   } catch (e) {
     console.log(`[領富 AI] ℹ️ 合理區間未載入 (${e.message})`);
   }
+
+  // 15. 新股 IPO 行事曆（TWSE OpenAPI 上市申請 / 新掛牌）
+  try {
+    const live = await fetchJson("ipo_live.json");
+    if (live.data && live.data.length) {
+      STOCK_DATA.ipoCalendar = live.data;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆 IPO 行事曆`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ IPO 資料未載入 (${e.message})`);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {

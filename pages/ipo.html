@@ -56,23 +56,27 @@
 
     <div class="panel">
       <div class="panel-head">
-        <h2>近期 IPO 申購行事曆</h2>
+        <h2>近期 IPO 申請／掛牌</h2>
         <div class="panel-tabs">
           <button class="tab active" data-tab="all">全部</button>
-          <button class="tab" data-tab="open">開放申購中</button>
-          <button class="tab" data-tab="upcoming">即將開放</button>
+          <button class="tab" data-tab="listed">已掛牌</button>
+          <button class="tab" data-tab="pending">申請中</button>
         </div>
+      </div>
+      <div style="padding:10px 18px;background:#fafbfc;font-size:12px;color:#666;border-bottom:1px solid #eef0f3;">
+        📊 資料來源：TWSE 上市新公司公開資料 · 每日更新 · <strong id="ipoCount">--</strong> 檔
       </div>
       <table class="ipo-table">
         <thead>
           <tr>
             <th>代號</th><th>名稱</th>
+            <th>市場</th>
             <th>承銷價</th>
-            <th>申購起始</th>
-            <th>申購截止</th>
-            <th>掛牌市場</th>
-            <th>預估中籤率</th>
-            <th>操作</th>
+            <th>資本額（億）</th>
+            <th>申請日</th>
+            <th>核准日</th>
+            <th>掛牌日</th>
+            <th>狀態</th>
           </tr>
         </thead>
         <tbody id="ipoTbody"></tbody>
@@ -142,30 +146,48 @@ document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
   const { data, pageHref } = window.LeadFu;
 
-  function isOpen(item) {
-    return item.openDate.includes("2026") && !item.openDate.startsWith("預計");
+  const all = data.ipoCalendar || [];
+  document.getElementById("ipoCount").textContent = all.length;
+
+  function fmtDate(d) {
+    if (!d) return "—";
+    // 2026-05-19 → 2026/05/19（短）
+    return d.replace(/-/g, "/");
+  }
+
+  function statusClass(s) {
+    if (!s) return "";
+    if (s.includes("即將")) return "ipo-status-soon";
+    if (s.includes("新掛牌")) return "ipo-status-new";
+    if (s.includes("已掛牌")) return "ipo-status-listed";
+    return "ipo-status-pending";
   }
 
   function render(tab) {
-    let list = data.ipoCalendar.slice();
-    if (tab === "open") list = list.filter(isOpen);
-    if (tab === "upcoming") list = list.filter(i => !isOpen(i));
+    let list = all.slice();
+    if (tab === "listed") list = list.filter(i => i.listing_date);
+    if (tab === "pending") list = list.filter(i => !i.listing_date);
 
-    document.getElementById("ipoTbody").innerHTML = list.map(i => {
-      const open = isOpen(i);
+    const body = document.getElementById("ipoTbody");
+    if (!list.length) {
+      body.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:#888;">目前無符合條件的 IPO 資料</td></tr>`;
+      return;
+    }
+    body.innerHTML = list.map(i => {
+      const stockExists = data.stocks && data.stocks.some(s => s.code === i.code);
+      const codeCell = stockExists
+        ? `<a href="${pageHref('stock-detail.html?code=' + i.code)}">${i.code}</a>`
+        : i.code;
       return `<tr>
-        <td class="code"><a href="${pageHref('stock-detail.html?code=' + i.code)}">${i.code}</a></td>
+        <td class="code">${codeCell}</td>
         <td><strong>${i.name}</strong></td>
-        <td>${i.listPrice} 元</td>
-        <td>${i.openDate}</td>
-        <td>${i.closeDate}</td>
-        <td>${i.market}</td>
-        <td>${i.odds}</td>
-        <td>
-          ${open
-            ? `<button class="btn-apply">立即申購</button>`
-            : `<button class="btn-apply disabled" disabled>尚未開放</button>`}
-        </td>
+        <td>${i.market || "—"}</td>
+        <td>${i.underwriting_price ? "$" + i.underwriting_price : "—"}</td>
+        <td>${i.capital_yi || "—"}</td>
+        <td>${fmtDate(i.application_date)}</td>
+        <td>${fmtDate(i.approved_date)}</td>
+        <td>${fmtDate(i.listing_date)}</td>
+        <td><span class="ipo-pill ${statusClass(i.status)}">${i.status || "—"}</span></td>
       </tr>`;
     }).join("");
   }
