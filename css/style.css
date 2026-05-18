@@ -3425,6 +3425,22 @@ body.theme-red .fv-cc-head,
 body.theme-red .fv-cc-meta strong { color: #FEF3C7; }
 body.theme-red .fv-cc-bar-marker { border-color: #7F1D1D; }
 
+@media (max-width: 480px) {
+  .fv-chat-card {
+    padding: 12px 14px 10px;
+    font-size: 13px;
+  }
+  .fv-cc-head { font-size: 12px; margin-bottom: 8px; }
+  .fv-cc-bar { margin: 6px 0 10px; }
+  .fv-cc-bar-labels { font-size: 11px; margin-top: 6px; }
+  .fv-cc-meta {
+    gap: 8px 14px;
+    font-size: 12px;
+  }
+  .fv-cc-tag { font-size: 10px; padding: 1px 5px; }
+  .fv-cc-note { font-size: 12px; }
+}
+
 .chat-content p:last-child {
   margin-bottom: 0;
 }
