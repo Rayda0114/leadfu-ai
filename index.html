@@ -817,6 +817,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   function formatText(text) {
     if (!text) return "";
     let esc = String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    // 💎 偵測「合理區間」段落並轉成精美卡片
+    esc = esc.replace(
+      /💎\s*\*\*?領富\s*AI\s*合理區間\*\*?[\s\S]*?(?=\n\n[^💎]|\n\n$|$)/g,
+      (block) => {
+        const lowM = block.match(/合理區間[^N]*NT\$?\s*([\d,]+)\s*[~～-]\s*NT\$?\s*([\d,]+)/);
+        const posM = block.match(/目前位置[^：:]*[：:]\s*([^（(\n]+?)(?:\s*[（(]?\s*區間\s*(\d+)\s*%)?/);
+        const starsM = block.match(/(⭐+)/);
+        if (!lowM) return block;
+        const low = lowM[1];
+        const high = lowM[2];
+        const label = posM ? posM[1].trim() : "—";
+        const pctNum = posM && posM[2] ? parseInt(posM[2], 10) : null;
+        const fillPct = pctNum != null ? Math.max(0, Math.min(100, pctNum)) : 50;
+        const stars = starsM ? starsM[1] : "⭐⭐⭐⭐⭐";
+        // 提取「卡片之後」的解讀文字
+        const afterBlock = block.split(/⭐+/).pop().replace(/^\s*\n?/, "").trim();
+        return `<div class="fv-chat-card">
+          <div class="fv-cc-head">💎 領富 AI 合理區間</div>
+          <div class="fv-cc-bar">
+            <div class="fv-cc-bar-track">
+              <div class="fv-cc-bar-marker" style="left:${fillPct}%;"></div>
+            </div>
+            <div class="fv-cc-bar-labels">
+              <span>NT$ ${low}</span>
+              <span>NT$ ${high}</span>
+            </div>
+          </div>
+          <div class="fv-cc-meta">
+            <div><span class="fv-cc-tag">位置</span> <strong>${label}</strong>${pctNum != null ? ` <small>(${pctNum}%)</small>` : ""}</div>
+            <div><span class="fv-cc-tag">強度</span> ${stars}</div>
+          </div>
+          ${afterBlock ? `<div class="fv-cc-note">${afterBlock.replace(/\n/g, "<br>")}</div>` : ""}
+        </div>`;
+      }
+    );
+
     esc = esc.replace(/(^|[\s（(「『\[、，,])(\d{4})(\s+)([一-龥A-Za-z\-\*KY]{1,12})/g,
       (m, pre, code, sp, name) => {
         if (!_stockByCode[code]) return m;
