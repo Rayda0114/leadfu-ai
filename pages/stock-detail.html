@@ -755,6 +755,9 @@ async function loadAiSummary(code, stock, resultEl, cacheKey) {
   };
   if (co) context.companyInfo = co;
   if (rev) context.revenueInfo = rev;
+  // 💎 領富 AI 合理區間
+  const fv = (L.data.fairValue && L.data.fairValue[stock.code]) || null;
+  if (fv) context.fairValue = fv;
 
   const prompt = `請用 3-4 段簡短文字介紹 ${stock.code} ${stock.name} 這檔股票，給 45-75 歲一般投資人看的，淺白語言。內容包含：1) 公司是做什麼的（從產業類別與名稱推測）2) 今日股價與漲跌（用元跟%雙標示）3) 公司基本情況（董事長、成立年數、實收資本額，如有資料）4) 月營收近況（如有資料，含月增/年增率）。最後加一句中性風險提醒。不要做買賣建議。`;
 

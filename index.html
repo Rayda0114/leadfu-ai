@@ -989,6 +989,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (co) ctx.companyInfo = co;
       const rev = (L.data.revenue && L.data.revenue[targetStock.code]) || null;
       if (rev) ctx.revenueInfo = rev;
+      // 💎 領富 AI 合理區間
+      const fv = (L.data.fairValue && L.data.fairValue[targetStock.code]) || null;
+      if (fv) ctx.fairValue = fv;
       return ctx;
     }
     let market = null;
@@ -1007,6 +1010,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     else if (/跌|下跌/.test(question)) pool.sort((a, b) => L.pctChange(a.price, a.change) - L.pctChange(b.price, b.change));
     else pool.sort((a, b) => (b.volume || 0) - (a.volume || 0));
     ctx.relevantStocks = pool.slice(0, 15).map(normalizeStockForAI);
+    // 💎 多檔合理區間
+    if (L.data.fairValue) {
+      const fvMap = {};
+      ctx.relevantStocks.forEach(s => { if (L.data.fairValue[s.code]) fvMap[s.code] = L.data.fairValue[s.code]; });
+      if (Object.keys(fvMap).length) ctx.fairValueMap = fvMap;
+    }
     return ctx;
   }
 

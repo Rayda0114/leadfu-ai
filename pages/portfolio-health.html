@@ -249,8 +249,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       };
     });
 
+    // 💎 自選股合理區間
+    const watchlistFairValue = {};
+    const fvData = L.data.fairValue || {};
+    stocks.forEach(s => { if (fvData[s.code]) watchlistFairValue[s.code] = fvData[s.code]; });
+
     const context = {
       watchlistStocks,
+      ...(Object.keys(watchlistFairValue).length ? { watchlistFairValue } : {}),
       portfolioStats: {
         totalStocks: stocks.length,
         marketBreakdown: marketCounts,
