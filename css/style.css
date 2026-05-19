@@ -1013,11 +1013,31 @@ img { max-width: 100%; }
 /* === Hero with embedded AI chat（首頁主舞台）=== */
 .hero-with-chat {
   padding: 32px 0 40px;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 .hero-with-chat .hero-inner {
   grid-template-columns: 1.55fr 1fr;
   align-items: start;
   gap: 28px;
+  max-width: 100%;
+  min-width: 0;
+}
+.hero-with-chat .hero-text {
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+/* 🛠 鎖死整個 chat 鏈路的寬度，避免任一層子元素撐爆 viewport */
+.hero-with-chat .ai-chat-embed,
+.hero-with-chat .ai-chat-embed-head,
+.hero-with-chat .ai-chat-embed-scroll,
+.hero-with-chat .ai-chat-embed-list,
+.hero-with-chat .ai-chat-embed-input,
+.hero-with-chat #aiEmbedForm {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 .hero-mini-title {
   font-size: 30px;
@@ -3019,10 +3039,12 @@ body.theme-red .daily-brief-ai {
   padding: 12px 14px 10px;
 }
 #aiEmbedForm {
-  display: flex;
-  align-items: flex-end;
+  display: grid;                                 /* 🛠 grid 處理收縮比 flex 更可靠（iOS Safari quirk）*/
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: stretch;
   gap: 8px;
-  width: 100%;          /* 🛠 form 撐滿可用寬度，配合 input flex 收縮 */
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
 }
 #aiEmbedInput {
@@ -3093,29 +3115,63 @@ body.theme-red .daily-brief-ai {
     max-height: 65vh;
     border-radius: 12px;
   }
-  .ai-chat-embed-head { padding: 11px 14px; }
+  .ai-chat-embed-head { padding: 11px 14px; padding-right: 70px; }   /* 🛠 留位置給「新對話」按鈕 */
   .ai-chat-embed-head h2 { font-size: 14.5px; }
   .ai-chat-embed-sub { font-size: 11px; }
   .ai-chat-embed-newbtn { font-size: 11px; padding: 4px 8px; top: 12px; right: 12px; }
-  .ai-chat-embed-list { padding: 14px 12px 6px; }     /* 🛠 修：縮小左右 padding 給內容更多空間 */
+  .ai-chat-embed-list { padding: 12px 10px 6px; }     /* 🛠 修：再縮小左右 padding 給內容更多空間 */
   .ai-chat-embed .chat-content {
     font-size: 14.5px;
-    padding: 11px 13px;        /* 🛠 修：縮小 padding 讓字有更多換行空間 */
+    padding: 10px 12px;        /* 🛠 修：縮小 padding 讓字有更多換行空間 */
   }
-  .ai-chat-embed-input { padding: 10px 12px 8px; }
+  .ai-chat-embed-input {
+    padding: 8px 10px 6px;     /* 🛠 縮小 input 區 padding */
+  }
+  /* 🛠 form：用 grid 確保 input 在 minmax(0,1fr) 中縮到極小、送出鍵永遠看得到 */
+  #aiEmbedForm {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    gap: 6px !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
   #aiEmbedInput {
     font-size: 16px;            /* iOS 防自動縮放 */
-    min-height: 48px;
-    padding: 12px 14px;
+    min-height: 44px;
+    padding: 10px 12px;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
-  .ai-chat-embed-mic { width: 48px; height: 48px; }
-  .ai-chat-embed-mic svg { width: 24px; height: 24px; }
-  .ai-chat-embed-send { height: 48px; padding: 0 18px; font-size: 14.5px; }
+  .ai-chat-embed-mic {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+  .ai-chat-embed-mic svg { width: 22px; height: 22px; }
+  /* 🛠 送出鍵縮小，確保手機板永遠看得到 */
+  .ai-chat-embed-send {
+    height: 44px;
+    padding: 0 14px;
+    font-size: 13.5px;
+    flex-shrink: 0 !important;
+    white-space: nowrap;
+  }
   .ai-chat-embed-disclaimer {
     font-size: 10.5px;          /* 🛠 修：手機板免責縮小 + 允許換行 */
     line-height: 1.6;
     word-spacing: -2px;
     margin-top: 6px;
+    white-space: normal;
+  }
+}
+
+/* 🛠 超窄螢幕（< 380px）→ 送出鍵改成箭頭省空間 */
+@media (max-width: 380px) {
+  .ai-chat-embed-send {
+    padding: 0 10px !important;
+    font-size: 13px;
   }
 }
 
