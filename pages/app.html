@@ -3,8 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>領富 AI 手機 APP - 台股全市場 PWA</title>
-<meta name="description" content="領富 AI 手機 APP 提供台股全市場（上市/上櫃/興櫃）2,310 檔即時報價、AI 對話查股、自選股雲端同步、新聞即時推播。免下載直接加到主畫面就能用。">
+<title>手機使用指南 - 領富 AI（PWA 直接加到主畫面，無需 APP 下載）</title>
+<meta name="description" content="領富 AI 為純 Web/PWA 服務，未發行任何 iOS / Android 手機 APP。直接於 leadfuai.com 加到主畫面即可像原生 APP 使用。凡聲稱本站 APP 下載均為冒用。">
+<meta name="keywords" content="領富AI,手機版,PWA,加到主畫面,iOS,Android,leadfuai">
+<link rel="canonical" href="https://leadfuai.com/pages/app.html">
+
+<meta property="og:title" content="手機使用指南 - 領富 AI（PWA 免下載）">
+<meta property="og:description" content="領富 AI 為純 PWA，直接加到主畫面即可使用，不發行任何手機 APP。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://leadfuai.com/pages/app.html">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -22,6 +31,10 @@
       <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
       <span class="logo-sub">LeadFu · 領先市場兩步</span>
     </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
   </div>
 </div>
 
@@ -30,86 +43,132 @@
     <ul>
       <li><a href="../index.html">首頁</a></li>
       <li><a href="stocks.html">股價總覽</a></li>
-      <li><a href="news.html">財經新聞</a></li>
-      <li><a href="discussion.html">討論區</a></li>
-      <li><a href="ipo.html">新股抽籤</a></li>
-      <li><a href="announcements.html">公司公告</a></li>
-      <li><a href="watchlist.html">自選股</a></li>
-      <li><a href="vip.html">VIP 訂閱</a></li>
+      <li><a href="weekly.html">產業週報</a></li>
+      <li><a href="learn.html">📚 學習中心</a></li>
+      <li><a href="fraud-alert.html">⚠ 防詐須知</a></li>
+      <li><a href="about.html">關於我們</a></li>
     </ul>
   </div>
 </nav>
 
 <div class="page-head">
   <div class="container">
-    <h1>領富 AI手機 APP 下載</h1>
-    <div class="breadcrumb">首頁 ▸ 手機 APP</div>
+    <h1>📱 手機使用指南</h1>
+    <div class="breadcrumb">首頁 ▸ 手機使用指南</div>
   </div>
 </div>
 
-<main class="container" style="padding: 30px 12px 40px;">
+<main class="container" style="padding: 20px 12px 40px;">
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;">
-    <div>
-      <h2 style="font-size:28px;color:#163A2E;margin-bottom:12px;">台股全市場・隨時掌握</h2>
-      <p style="font-size:15px;color:#555;line-height:1.9;margin-bottom:20px;">
-        領富 AI 手機版整合**上市 + 上櫃 + 興櫃 2,310 檔**即時報價、AI 自然語言對話、新聞推播、自選股管理。<br>
-        免下載安裝，直接「加到主畫面」當原生 APP 用，省手機空間。
-      </p>
-
-      <h3 style="color:#1B4332;margin: 24px 0 12px;font-size:18px;">主要功能</h3>
-      <ul style="margin-left: 22px; font-size: 14px; line-height: 1.9;">
-        <li style="list-style:disc;">全市場（上市 / 上櫃 / 興櫃）即時報價</li>
-        <li style="list-style:disc;">AI 自然語言對話查股（中文 / 語音都可）</li>
-        <li style="list-style:disc;">個股公司基本資料 + 月營收 + K 線</li>
-        <li style="list-style:disc;">自選股雲端同步</li>
-        <li style="list-style:disc;">重大公告、新聞即時更新</li>
-        <li style="list-style:disc;">投資人防詐警示</li>
-        <li style="list-style:disc;">支援 iOS / Android / 桌機瀏覽器</li>
-      </ul>
-
-      <div style="display:flex;gap:12px;margin-top:24px;">
-        <a href="#" style="display:flex;align-items:center;gap:8px;background:#000;color:#fff;padding:12px 22px;border-radius:6px;text-decoration:none;">
-          <span style="font-size:24px;"></span>
-          <div><div style="font-size:11px;">Download on the</div><div style="font-size:16px;font-weight:700;">App Store</div></div>
-        </a>
-        <a href="#" style="display:flex;align-items:center;gap:8px;background:#01875f;color:#fff;padding:12px 22px;border-radius:6px;text-decoration:none;">
-          <span style="font-size:24px;">▶</span>
-          <div><div style="font-size:11px;">GET IT ON</div><div style="font-size:16px;font-weight:700;">Google Play</div></div>
-        </a>
+  <!-- 重要聲明 -->
+  <div class="official-verify-box">
+    <div class="ovb-head">
+      <div class="ovb-shield">🛡</div>
+      <div>
+        <h2 class="ovb-title">⚠ 重要聲明：本站未發行任何手機 APP</h2>
+        <p class="ovb-sub">凡聲稱「領富 AI iOS 版 / Android 版下載」之 APK 檔、App Store / Google Play 連結，均為詐騙集團冒用本品牌名稱</p>
       </div>
     </div>
+    <table class="ovb-table">
+      <thead>
+        <tr><th>項目</th><th class="ovb-real">✅ 本站官方</th><th class="ovb-fake">❌ 詐騙冒用</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>手機使用</td>
+          <td><strong>瀏覽器開 leadfuai.com 加到主畫面</strong></td>
+          <td>「下載 APK」「App Store 搜尋下載」</td>
+        </tr>
+        <tr>
+          <td>App Store</td>
+          <td>無上架（PWA 服務）</td>
+          <td>仿冒 App，名稱類似但開發者不同</td>
+        </tr>
+        <tr>
+          <td>Google Play</td>
+          <td>無上架（PWA 服務）</td>
+          <td>仿冒 App，可能含惡意程式</td>
+        </tr>
+        <tr>
+          <td>LINE 安裝引導</td>
+          <td>無，從不主動發 LINE</td>
+          <td>陌生 LINE 群組推送「APP 下載連結」</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="ovb-warn">
+      ⚠ 看到任何冒用「領富 AI」名義之 APP 下載連結，請：
+      <strong>立即撥打 <a href="https://165.npa.gov.tw/" target="_blank" rel="noopener">165 反詐騙專線</a></strong>
+      ／截圖保留證據／封鎖檢舉。
+    </p>
+  </div>
 
-    <div style="text-align:center;">
-      <div style="display:inline-block;background:linear-gradient(135deg,#163A2E,#1B4332);padding:18px;border-radius:32px;">
-        <div style="width:240px;height:480px;background:#fff;border-radius:24px;padding:14px;text-align:center;">
-          <div style="background:#163A2E;height:30px;border-radius:6px 6px 0 0;margin:-14px -14px 0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">領富 AI</div>
-          <div style="padding:20px 0;">
-            <div style="font-weight:700;font-size:18px;color:#1B4332;">領富 AI APP</div>
-            <div style="font-size:11px;color:#888;">LeadFu Pre-IPO</div>
-          </div>
-          <div style="background:#f8fafd;border-radius:8px;padding:12px;text-align:left;font-size:11px;line-height:1.6;margin-bottom:10px;">
-            <div style="color:#EF4444;font-weight:700;">6488 環球晶 ▲</div>
-            <div>462.50  +8.5 (+1.87%)</div>
-          </div>
-          <div style="background:#f8fafd;border-radius:8px;padding:12px;text-align:left;font-size:11px;line-height:1.6;margin-bottom:10px;">
-            <div style="color:#EF4444;font-weight:700;">6515 穎崴 ▲</div>
-            <div>1,245.00  +35 (+2.89%)</div>
-          </div>
-          <div style="background:#f8fafd;border-radius:8px;padding:12px;text-align:left;font-size:11px;line-height:1.6;">
-            <div style="color:#1a8e3e;font-weight:700;">3552 同致 ▼</div>
-            <div>178.00  -2.0 (-1.11%)</div>
-          </div>
-        </div>
+  <div class="panel" style="margin-top:20px;">
+    <div class="panel-head"><h2>📱 用手機體驗，完全免下載</h2></div>
+    <div style="padding:24px;line-height:1.9;color:#333;">
+      <p>領富 AI 為 <strong>PWA（Progressive Web App）</strong>服務，<strong>不需從 App Store / Google Play 下載</strong>。只要把 leadfuai.com 加到手機主畫面，就會像原生 APP 一樣有獨立圖示、開啟全螢幕、離線可瀏覽歷史資料。</p>
+      <div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:12px 16px;margin-top:14px;border-radius:4px;font-size:13.5px;line-height:1.8;">
+        <strong style="color:#15803D;">✅ PWA 的好處</strong><br>
+        · 不占手機儲存空間（< 1 MB）<br>
+        · 每次開都是最新版，不用更新<br>
+        · 純瀏覽器沙箱，<strong>無法存取通訊錄、相簿、位置等個資</strong><br>
+        · 跨平台一致體驗（iOS / Android / iPad / 桌機）
       </div>
     </div>
   </div>
 
-  <div class="qr-card" style="margin-top:40px;">
-    <div style="font-weight:700;color:#163A2E;font-size:16px;">用手機掃描下載</div>
-    <div class="qr-box"></div>
-    <div style="font-size:12px;color:#888;">支援 iOS 14+ / Android 9+</div>
+  <div class="panel" style="margin-top:20px;">
+    <div class="panel-head"><h2>🍎 iPhone / iPad 安裝步驟</h2></div>
+    <div style="padding:24px;line-height:2;">
+      <ol style="margin-left:24px;line-height:2.2;">
+        <li>用 <strong>Safari</strong> 打開 <code style="background:#f1f5f9;padding:2px 8px;border-radius:3px;color:#1B4332;">leadfuai.com</code>
+          <div style="font-size:12px;color:#888;margin-top:4px;">⚠ 必須用 Safari，Chrome / FB 內建瀏覽器不行</div></li>
+        <li>點下方工具列中央的 <strong>「分享」</strong>按鈕（往上箭頭 ⬆）</li>
+        <li>下拉找到 <strong>「加入主畫面」</strong> 並點一下</li>
+        <li>右上角點「<strong>加入</strong>」</li>
+        <li>桌面就會多一個「領富 AI」金色圖示</li>
+      </ol>
+    </div>
   </div>
+
+  <div class="panel" style="margin-top:20px;">
+    <div class="panel-head"><h2>🤖 Android 安裝步驟</h2></div>
+    <div style="padding:24px;line-height:2;">
+      <ol style="margin-left:24px;line-height:2.2;">
+        <li>用 <strong>Chrome</strong> 打開 <code style="background:#f1f5f9;padding:2px 8px;border-radius:3px;color:#1B4332;">leadfuai.com</code></li>
+        <li>瀏覽器底部會自動跳出「<strong>安裝領富 AI</strong>」提示，點「安裝」</li>
+        <li>若沒跳出，點右上角「⋮」選單 → <strong>「加到主畫面」</strong> 或 <strong>「安裝應用程式」</strong></li>
+        <li>桌面就會多一個「領富 AI」圖示，跟其他 APP 一樣使用</li>
+      </ol>
+      <div style="margin-top:18px;background:#fef9f0;border:1px solid #fde68a;border-radius:6px;padding:12px 16px;font-size:13px;color:#92400e;line-height:1.8;">
+        <strong>⚠ 安全提醒：</strong>請務必透過 Chrome 從 leadfuai.com 直接安裝。<strong>不要從第三方網站、簡訊連結、LINE 群組訊息下載任何「領富 AI APK 安裝包」</strong> — 那些都是詐騙集團冒用本品牌名稱所發布的惡意檔案。
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:20px;">
+    <div class="panel-head"><h2>🆚 PWA vs 原生 APP 比較</h2></div>
+    <div style="padding:20px;">
+      <table class="fin-table">
+        <thead>
+          <tr><th>項目</th><th>領富 AI PWA</th><th>仿冒「下載 APP」</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>需要下載安裝</td><td>不用</td><td>要</td></tr>
+          <tr><td>占手機空間</td><td>< 1 MB</td><td>50-200 MB</td></tr>
+          <tr><td>系統權限要求</td><td>無</td><td>要求多種權限</td></tr>
+          <tr><td>更新方式</td><td>自動最新版</td><td>需手動更新</td></tr>
+          <tr><td>跨平台</td><td>iOS / Android / 桌機都一樣</td><td>需分別開發版本</td></tr>
+          <tr><td>離線使用</td><td>支援歷史資料離線瀏覽</td><td>因 APP 而異</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p style="text-align:center;color:#888;font-size:12px;margin:24px 12px;line-height:1.7;">
+    ※ 領富 AI 為 PWA 服務，無 iOS / Android 原生 APP。<br>
+    ※ 任何「領富 AI APP 下載」之連結均為冒用，請報案 165。
+  </p>
 
 </main>
 
