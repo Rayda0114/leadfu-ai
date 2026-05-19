@@ -1176,17 +1176,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
   }
 
-  /** ⚡ 從 /api/quote 拉即時報價（5 秒延遲，TWSE MIS API） */
+  /** ⚡ 從 /api/quote 拉即時報價（5 秒延遲，TWSE MIS API）
+   *  正確格式：ex_ch=tse_2330.tw（上市）或 otc_6488.tw（上櫃）；興櫃 MIS 沒提供 */
   async function fetchLiveQuote(code) {
     if (!code) return null;
+    const stock = _stockByCode[code];
+    if (!stock) return null;
+    if (stock.market === "emerging") return null;  // 興櫃 MIS 沒有
+
+    const prefix = stock.market === "otc" ? "otc_" : "tse_";
+    const ex_ch = `${prefix}${code}.tw`;
     try {
-      const resp = await fetch(`/api/quote?codes=${code}`, { cache: "no-cache" });
+      const resp = await fetch(`/api/quote?ex_ch=${encodeURIComponent(ex_ch)}`, { cache: "no-cache" });
       if (!resp.ok) return null;
       const data = await resp.json();
-      if (data && Array.isArray(data.quotes) && data.quotes.length > 0) {
-        return data.quotes[0];
-      }
-      if (data && data.code) return data;
+      const q = data && data.msgArray && data.msgArray[0];
+      if (!q) return null;
+      // 解析 MIS 回應為 AI 易讀的格式
+      const z = parseFloat(q.z);
+      const pz = parseFloat(q.pz);
+      const y = parseFloat(q.y);
+      const price = (!isNaN(z) && z > 0) ? z : (!isNaN(pz) && pz > 0 ? pz : null);
+      if (price == null || isNaN(y)) return null;
+      const change = price - y;
+      const pct = (change / y) * 100;
+      return {
+        code: q.c || code,
+        name: q.n || stock.name,
+        price_TWD: Number(price.toFixed(2)),
+        prevClose_TWD: y,
+        change_TWD: Number(change.toFixed(2)),
+        changePercent: Number(pct.toFixed(2)),
+        volume_lots: parseFloat(q.v) || null,
+        timestamp: q.tlong ? new Date(parseInt(q.tlong)).toISOString() : null,
+        source: "TWSE MIS API (5 秒延遲)"
+      };
     } catch (e) { /* 即時報價失敗就 fallback 到 stocks_live.json */ }
     return null;
   }
