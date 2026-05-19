@@ -217,33 +217,18 @@
   <div class="ticker-track" id="tickerTrack">載入中...</div>
 </div>
 
-<!-- 精選功能：三張卡片（差異化賣點，給第一次來的用戶看） -->
-<section class="feature-cards-section">
+<!-- 💎 合理區間偏低 TOP 5（旗艦差異化功能，最顯眼位置） -->
+<section class="fv-low-hero-section">
   <div class="container">
-    <div class="fc-eyebrow">領富 AI 為您提供</div>
-    <h2 class="fc-h2">投資人最在意的三件事</h2>
-    <div class="feature-cards-grid">
-      <a class="feature-card fc-warning" href="pages/risk-radar.html">
-        <div class="fc-icon">⚠</div>
-        <div class="fc-title">防錯雷達</div>
-        <div class="fc-sub">幫您避開地雷股</div>
-        <p class="fc-desc">注意股、處置股、月營收暴跌、異常波動 — 每天自動掃描全市場 2,310 檔，及時警示。</p>
-        <div class="fc-cta">立即查看 →</div>
-      </a>
-      <a class="feature-card fc-ai" href="pages/ai.html">
-        <div class="fc-icon">🤖</div>
-        <div class="fc-title">AI 投資助理</div>
-        <div class="fc-sub">用講的問股票，免想關鍵字</div>
-        <p class="fc-desc">「台積電現在貴嗎？」「金融股殖利率前五名？」自然語言問答，AI 即時整理公開資料。</p>
-        <div class="fc-cta">立即對話 →</div>
-      </a>
-      <a class="feature-card fc-weekly" href="pages/weekly.html">
-        <div class="fc-icon">📰</div>
-        <div class="fc-title">AI 產業週報</div>
-        <div class="fc-sub">每週一 8:00 自動產出</div>
-        <p class="fc-desc">10 大產業逐一觀察、外資動向、重點個股 — AI 撰寫穩重客觀，含朗讀功能、字級調整。</p>
-        <div class="fc-cta">本週週報 →</div>
-      </a>
+    <div class="fv-low-eyebrow">💎 LeadFu Fair Value Range™</div>
+    <h2 class="fv-low-h2">今日合理區間偏低 TOP 5</h2>
+    <p class="fv-low-sub">領富 AI 專有演算法每日篩出股價落在合理區間下緣的個股，給您看「現在哪些被低估了」。</p>
+    <div class="fv-low-grid" id="fvLowHeroList">
+      <div class="fv-low-card-skel">資料載入中...</div>
+    </div>
+    <div class="fv-low-foot">
+      <a href="pages/stocks.html" class="fv-low-more">看完整排行 →</a>
+      <span class="fv-low-note">※ 排除股價 &lt; 10 元與低流動性，僅含訊號強度 ≥ 4 顆星</span>
     </div>
   </div>
 </section>
@@ -385,18 +370,31 @@
       </div>
     </div>
 
-    <div class="panel side-panel">
-      <div class="panel-head">
-        <h3>💎 合理區間偏低 TOP 5</h3>
-        <a class="more" href="pages/stocks.html">看更多 →</a>
+    <div class="panel side-panel side-features">
+      <div class="panel-head"><h3>🎯 投資人最在意三件事</h3></div>
+      <div class="side-feature-list">
+        <a class="side-feature-item" href="pages/risk-radar.html">
+          <div class="sfi-icon">⚠</div>
+          <div class="sfi-body">
+            <div class="sfi-title">防錯雷達</div>
+            <div class="sfi-desc">注意股／處置股／月營收暴跌</div>
+          </div>
+        </a>
+        <a class="side-feature-item" href="pages/ai.html">
+          <div class="sfi-icon">🤖</div>
+          <div class="sfi-body">
+            <div class="sfi-title">AI 投資助理</div>
+            <div class="sfi-desc">用自然語言問股票</div>
+          </div>
+        </a>
+        <a class="side-feature-item" href="pages/weekly.html">
+          <div class="sfi-icon">📰</div>
+          <div class="sfi-body">
+            <div class="sfi-title">AI 產業週報</div>
+            <div class="sfi-desc">每週一 8:00 自動產出</div>
+          </div>
+        </a>
       </div>
-      <ul class="ipo-list" id="fvLowList">
-        <li style="color:#888;">資料載入中...</li>
-      </ul>
-      <p style="padding:8px 14px 12px;font-size:11px;color:#888;line-height:1.6;margin:0;">
-        ※ 領富 AI 合理區間整理，每日更新。<br>
-        排序依據：現價落在合理區間下方者優先。
-      </p>
     </div>
 
     <div class="panel side-panel">

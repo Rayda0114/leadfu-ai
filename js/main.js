@@ -356,7 +356,8 @@ function renderTicker() {
  * 首頁股票表格
  * ============================================================ */
 let currentFilter = "all";
-const HOME_TABLE_TOP_N = 30;   // 首頁熱門股表格：每分類顯示前 N 名（按成交量）
+let homeTableExpanded = false;
+const HOME_TABLE_MAX = 30;   // 展開後最多顯示 N 筆
 
 function renderStockTable() {
   const tbody = document.getElementById("stockTbody");
@@ -364,11 +365,16 @@ function renderStockTable() {
   let pool = currentFilter === "all"
     ? STOCK_DATA.stocks
     : STOCK_DATA.stocks.filter(s => s.status === currentFilter);
-  // 按成交量取前 N 名（避免 dump 2300 筆）
-  const list = pool.filter(s => s.price > 0)
-                   .slice()
-                   .sort((a, b) => (b.volume || 0) - (a.volume || 0))
-                   .slice(0, HOME_TABLE_TOP_N);
+  // 按成交量取前 N 名
+  const fullList = pool.filter(s => s.price > 0)
+                       .slice()
+                       .sort((a, b) => (b.volume || 0) - (a.volume || 0))
+                       .slice(0, HOME_TABLE_MAX);
+
+  // 預設：手機 5 筆、桌機 10 筆；展開後顯示全部（最多 HOME_TABLE_MAX）
+  const isMobile = window.innerWidth <= 768;
+  const initialN = isMobile ? 5 : 10;
+  const list = homeTableExpanded ? fullList : fullList.slice(0, initialN);
 
   if (list.length === 0) {
     tbody.innerHTML = `<tr><td colspan="9" class="loading">沒有符合條件的個股</td></tr>`;
@@ -394,7 +400,55 @@ function renderStockTable() {
 
   const ts = document.getElementById("updatedAt");
   if (ts) ts.textContent = STOCK_DATA.updatedAt;
+
+  // 更新「展開／收合」按鈕（不在 tbody 裡，避免被覆蓋）
+  renderStockTableToggle(fullList.length, list.length, isMobile);
 }
+
+function renderStockTableToggle(totalN, shownN, isMobile) {
+  const table = document.querySelector(".stock-table");
+  if (!table) return;
+  let toggle = document.getElementById("homeTableToggle");
+  if (totalN <= shownN) {
+    // 已全部顯示或筆數不足 → 不顯示按鈕
+    if (toggle) toggle.remove();
+    return;
+  }
+  if (!toggle) {
+    toggle = document.createElement("div");
+    toggle.id = "homeTableToggle";
+    toggle.className = "home-table-toggle";
+    table.parentNode.insertBefore(toggle, table.nextSibling);
+  }
+  if (homeTableExpanded) {
+    toggle.innerHTML = `
+      <button type="button" data-action="collapse">收合</button>
+      <a class="home-table-jumplink" href="${pageHref('stocks.html')}">看完整 2,310 檔 →</a>
+    `;
+  } else {
+    const moreN = totalN - shownN;
+    toggle.innerHTML = `
+      <button type="button" data-action="expand">查看更多（再 ${moreN} 檔）</button>
+      <a class="home-table-jumplink" href="${pageHref('stocks.html')}">看完整 2,310 檔 →</a>
+    `;
+  }
+  // 綁定事件（每次重綁避免重複）
+  toggle.querySelectorAll("button[data-action]").forEach(b => {
+    b.addEventListener("click", () => {
+      homeTableExpanded = b.dataset.action === "expand";
+      renderStockTable();
+    });
+  });
+}
+
+// 視窗大小變更時重新渲染（手機橫轉直、桌機調整視窗）
+let _stockTableResizeTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(_stockTableResizeTimer);
+  _stockTableResizeTimer = setTimeout(() => {
+    if (document.getElementById("stockTbody")) renderStockTable();
+  }, 250);
+});
 
 function bindTabs() {
   document.querySelectorAll(".panel-tabs .tab").forEach(btn => {
@@ -471,45 +525,80 @@ function renderTopics() {
   ul.innerHTML = STOCK_DATA.hotTopics.map(t => `<li># ${t}</li>`).join("");
 }
 
-/* 首頁側欄：💎 合理區間偏低 TOP 5（用我們自己的 fair value 資料）*/
+/* 首頁旗艦區：💎 合理區間偏低 TOP 5（卡片網格） */
 function renderFairValueLow() {
-  const ul = document.getElementById("fvLowList");
-  if (!ul) return;
+  const grid = document.getElementById("fvLowHeroList");
+  const sideUl = document.getElementById("fvLowList");   // 兼容舊版（若還存在）
+  const target = grid || sideUl;
+  if (!target) return;
+
   const fvData = STOCK_DATA.fairValue || {};
   const stocks = STOCK_DATA.stocks || [];
   if (!Object.keys(fvData).length) {
-    ul.innerHTML = `<li style="color:#888;padding:12px;">合理區間資料準備中...</li>`;
+    if (grid) grid.innerHTML = `<div class="fv-low-card-skel">合理區間資料準備中...</div>`;
+    if (sideUl) sideUl.innerHTML = `<li style="color:#888;padding:12px;">合理區間資料準備中...</li>`;
     return;
   }
-  // 篩條件：position < 0.25（合理偏低或更低）、confidence >= 4（訊號可靠）、流動性 OK
+  // 篩條件：position < 0.25 + confidence ≥ 4 + 排除超低價/低流動性地雷
   const candidates = Object.values(fvData).filter(fv => {
     if (fv.position === null || fv.position === undefined) return false;
     if (fv.position > 0.25) return false;
     if ((fv.confidence || 0) < 4) return false;
-    // 排除超低價（< 10 元）跟超低流動性（避免地雷股）
     const s = stocks.find(x => x.code === fv.code);
     if (!s || s.price < 10 || (s.volume || 0) < 500) return false;
     return true;
   });
-  // 依 position 由低排到高（最低估的在最前面）
   candidates.sort((a, b) => a.position - b.position);
   const top5 = candidates.slice(0, 5);
   if (!top5.length) {
-    ul.innerHTML = `<li style="color:#888;padding:12px;">今日無符合條件個股</li>`;
+    if (grid) grid.innerHTML = `<div class="fv-low-card-skel">今日無符合條件個股</div>`;
+    if (sideUl) sideUl.innerHTML = `<li style="color:#888;padding:12px;">今日無符合條件個股</li>`;
     return;
   }
-  ul.innerHTML = top5.map(fv => {
-    const s = stocks.find(x => x.code === fv.code);
-    const pct = (fv.position * 100).toFixed(0);
-    const price = s ? fmtPrice(s.price) : "—";
-    return `<li style="cursor:pointer;" onclick="location.href='${pageHref('stock-detail.html?code=' + fv.code)}'">
-      <div class="ipo-name">${fv.code} ${fv.name} <span style="float:right;font-weight:600;color:#1B4332;">${price}</span></div>
-      <div class="ipo-info">
-        合理區間 NT$${Math.round(fv.low).toLocaleString()} ~ NT$${Math.round(fv.high).toLocaleString()}
-        ・ <span style="color:#16a34a;font-weight:600;">${pct}% 偏低</span>
-      </div>
-    </li>`;
-  }).join("");
+
+  // 主版面：卡片網格（5 張並排，手機自動單欄）
+  if (grid) {
+    grid.innerHTML = top5.map(fv => {
+      const s = stocks.find(x => x.code === fv.code);
+      const pct = (fv.position * 100).toFixed(0);
+      const price = s ? fmtPrice(s.price) : "—";
+      const chg = s ? pctChange(s.price, s.change) : 0;
+      const chgCls = chg > 0 ? "up" : (chg < 0 ? "down" : "flat");
+      const chgArrow = chg > 0 ? "▲" : (chg < 0 ? "▼" : "─");
+      return `<a class="fv-low-card" href="${pageHref('stock-detail.html?code=' + fv.code)}">
+        <div class="fv-low-card-head">
+          <span class="fv-low-card-code">${fv.code}</span>
+          <span class="fv-low-card-name">${fv.name}</span>
+        </div>
+        <div class="fv-low-card-price">
+          <span class="fv-low-card-now">NT$ ${price}</span>
+          <span class="fv-low-card-chg ${chgCls}">${chgArrow} ${Math.abs(chg).toFixed(2)}%</span>
+        </div>
+        <div class="fv-low-card-range">
+          合理區間 NT$${Math.round(fv.low).toLocaleString()} ~ ${Math.round(fv.high).toLocaleString()}
+        </div>
+        <div class="fv-low-card-pos">
+          <span class="fv-low-pill">${pct}% 偏低</span>
+          <span class="fv-low-stars">${"⭐".repeat(Math.round(fv.confidence || 0))}</span>
+        </div>
+      </a>`;
+    }).join("");
+  }
+  // 舊版兼容（不應該還存在，但留以防）
+  if (sideUl) {
+    sideUl.innerHTML = top5.map(fv => {
+      const s = stocks.find(x => x.code === fv.code);
+      const pct = (fv.position * 100).toFixed(0);
+      const price = s ? fmtPrice(s.price) : "—";
+      return `<li style="cursor:pointer;" onclick="location.href='${pageHref('stock-detail.html?code=' + fv.code)}'">
+        <div class="ipo-name">${fv.code} ${fv.name} <span style="float:right;font-weight:600;color:#1B4332;">${price}</span></div>
+        <div class="ipo-info">
+          合理區間 NT$${Math.round(fv.low).toLocaleString()} ~ NT$${Math.round(fv.high).toLocaleString()}
+          ・ <span style="color:#16a34a;font-weight:600;">${pct}% 偏低</span>
+        </div>
+      </li>`;
+    }).join("");
+  }
 }
 
 /* ============================================================
