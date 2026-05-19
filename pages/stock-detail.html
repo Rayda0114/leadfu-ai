@@ -4,6 +4,114 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitle">個股詳情 - 領富 AI</title>
+<meta name="description" id="metaDesc" content="領富 AI 提供台股個股完整公開資料整理：即時報價、合理區間、月營收、本益比、ROE、三大法人、籌碼分析。不推薦、不代操、純資料整理。資料來源 TWSE/TPEx/MOPS。">
+<link rel="canonical" id="canonicalLink" href="https://leadfuai.com/pages/stock-detail.html">
+
+<!-- Open Graph -->
+<meta property="og:title" id="ogTitle" content="個股完整資訊 - 領富 AI">
+<meta property="og:description" id="ogDesc" content="即時報價 + 合理區間 + AI 分析 + 14 項公開資料源整合。看清楚再決定。">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta property="og:type" content="article">
+<meta property="og:url" id="ogUrl" content="https://leadfuai.com/pages/stock-detail.html">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" id="twTitle" content="個股完整資訊 - 領富 AI">
+<meta name="twitter:description" id="twDesc" content="即時報價 + 合理區間 + AI 分析">
+<meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta name="theme-color" content="#1B4332">
+<link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
+
+<!-- 🚀 SSR-lite：第一時間從 URL ?code= 拉資料填首屏（避免 SEO 看到 --） -->
+<script>
+(function preRenderStock() {
+  try {
+    const code = new URLSearchParams(location.search).get("code");
+    if (!code || !/^\d{4,6}[A-Z]?$/.test(code)) return;
+
+    // 立即更新 title / meta（不等資料）— Google 至少看到「2330」而非「個股詳情」
+    document.title = `${code} - 領富 AI 個股完整資訊`;
+    const setMeta = (id, content) => {
+      const el = document.getElementById(id);
+      if (el) el.setAttribute(el.tagName === "META" ? "content" : "href", content);
+    };
+    setMeta("metaDesc", `領富 AI 整理 ${code} 完整公開資料：即時報價、合理區間、月營收、本益比、ROE、三大法人、籌碼分析。資料來源 TWSE/TPEx/MOPS。`);
+    setMeta("ogTitle", `${code} - 領富 AI 個股完整資訊`);
+    setMeta("ogDesc", `${code} 完整公開資料整理：即時報價、合理區間、月營收、籌碼。`);
+    setMeta("ogUrl", `https://leadfuai.com/pages/stock-detail.html?code=${code}`);
+    setMeta("twTitle", `${code} - 領富 AI`);
+    setMeta("twDesc", `${code} 即時報價 + 合理區間 + AI 分析`);
+    setMeta("canonicalLink", `https://leadfuai.com/pages/stock-detail.html?code=${code}`);
+
+    // 同步把 code 填到可見 DOM（會在 body 載入後執行）
+    document.addEventListener("DOMContentLoaded", () => {
+      const elCode = document.getElementById("stockCode");
+      const elBc = document.getElementById("bcCode");
+      if (elCode) elCode.textContent = code;
+      if (elBc) elBc.textContent = code;
+    });
+
+    // 嘗試從 stocks_live.json 拉真實名稱／價格（瀏覽器本身會 cache）
+    fetch("../data/stocks_live.json", { cache: "default" })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!data || !data.stocks) return;
+        const s = data.stocks.find(x => x.code === code);
+        if (!s) return;
+
+        // 動態 title + meta 帶上股名
+        document.title = `${code} ${s.name} 股價、合理區間 - 領富 AI`;
+        setMeta("metaDesc", `${code} ${s.name}（${s.status || ""}）即時股價 NT$${s.price}，今日漲跌 ${s.change > 0 ? "+" : ""}${s.change}。產業：${s.category || ""}。領富 AI 提供合理區間、月營收、本益比、籌碼分析、AI 對話。資料源 TWSE+TPEx+MOPS。`);
+        setMeta("ogTitle", `${code} ${s.name} 股價 NT$${s.price} - 領富 AI`);
+        setMeta("ogDesc", `${code} ${s.name} | ${s.category || ""} | 即時 NT$${s.price} (${s.change > 0 ? "+" : ""}${s.change}) | 領富 AI 合理區間 + AI 分析`);
+        setMeta("twTitle", `${code} ${s.name} - 領富 AI`);
+        setMeta("twDesc", `${code} ${s.name} 即時 NT$${s.price} (${s.change > 0 ? "+" : ""}${s.change})`);
+
+        // 把可見 DOM 也填上 — 用戶等不到 main.js 就先看到名字／價格
+        const ready = () => {
+          const setText = (id, txt) => { const el = document.getElementById(id); if (el && el.textContent.trim() === "--") el.textContent = txt; };
+          setText("stockName", s.name);
+          setText("stockPrice", "NT$" + s.price);
+          setText("stockChange", `${s.change > 0 ? "+" : ""}${s.change} (${((s.change / (s.price - s.change)) * 100).toFixed(2)}%)`);
+          setText("qsVol", (s.volume || 0).toLocaleString() + " 張");
+          const status = document.getElementById("stockStatus");
+          if (status && !status.textContent.trim()) status.textContent = s.status || "";
+        };
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", ready);
+        } else {
+          ready();
+        }
+
+        // 注入 JSON-LD FinancialProduct
+        const jsonLd = {
+          "@context": "https://schema.org",
+          "@type": "FinancialProduct",
+          "name": `${code} ${s.name}`,
+          "alternateName": [s.name, code],
+          "identifier": code,
+          "category": s.category || "股票",
+          "url": `https://leadfuai.com/pages/stock-detail.html?code=${code}`,
+          "provider": {
+            "@type": "Organization",
+            "name": "領富 AI",
+            "url": "https://leadfuai.com"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": s.price,
+            "priceCurrency": "TWD"
+          }
+        };
+        const script = document.createElement("script");
+        script.type = "application/ld+json";
+        script.textContent = JSON.stringify(jsonLd);
+        document.head.appendChild(script);
+      })
+      .catch(() => { /* 拉資料失敗就靠 main.js 慢慢補 */ });
+  } catch (e) { /* skip */ }
+})();
+</script>
+
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
