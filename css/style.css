@@ -320,69 +320,6 @@ img { max-width: 100%; }
 }
 .news-list li:last-child { border-bottom: none; }
 .news-list li:hover { background: #f8fafd; }
-
-/* === 卡片化新聞 li（給 .h-scroll 模式用，桌面版自動 fallback 回 row）=== */
-.news-card-li {
-  display: block !important;        /* 覆蓋 .news-list li 的 flex */
-  padding: 0 !important;
-  border-bottom: 1px solid #eef0f3;
-}
-.news-card-li:last-child { border-bottom: 0; }
-.news-card-link {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 16px;
-  text-decoration: none;
-  color: inherit;
-  transition: background 0.15s;
-}
-.news-card-link:hover { background: #f8fafd; text-decoration: none; }
-.news-card-li .news-card-title {
-  flex: 1;
-  min-width: 0;
-  font-size: 14px;
-  color: #1B4332;
-  font-weight: 600;
-  line-height: 1.5;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-@media (max-width: 768px) {
-  /* 手機板：橫向滑動 — .news-list 變 cards 排列 */
-  .news-list.h-scroll {
-    border-radius: 10px;
-  }
-  .news-card-li {
-    border: 1.5px solid #e5ebf0;
-    border-radius: 12px;
-    background: #fff;
-    overflow: hidden;
-    border-bottom: 1.5px solid #e5ebf0 !important;
-  }
-  .news-card-link {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 12px 14px;
-    height: 100%;
-  }
-  .news-card-li .news-card-title {
-    font-size: 13.5px;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    flex: 1;
-  }
-  .news-card-li .news-time {
-    font-size: 11px;
-    color: #999;
-  }
-}
 .news-time {
   color: #999;
   font-size: 12px;
