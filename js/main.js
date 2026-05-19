@@ -511,11 +511,15 @@ function bindMobileRowTap() {
 function renderNews() {
   const ul = document.getElementById("newsList");
   if (!ul) return;
+  // 手機板會自動切橫向滑動（.h-scroll 工具）
+  if (!ul.classList.contains("h-scroll")) ul.classList.add("h-scroll", "h-scroll-narrow");
   ul.innerHTML = STOCK_DATA.news.slice(0, 6).map(n => `
-    <li>
-      <span class="news-time">${n.time}</span>
-      <span class="news-tag ${n.tag}">${n.tag}</span>
-      <a class="news-title" href="${pageHref('news-detail.html?id=' + n.id)}">${n.title}</a>
+    <li class="news-card-li">
+      <a class="news-card-link" href="${pageHref('news-detail.html?id=' + n.id)}">
+        <span class="news-tag ${n.tag}">${n.tag}</span>
+        <div class="news-card-title">${n.title}</div>
+        <span class="news-time">${n.time}</span>
+      </a>
     </li>
   `).join("");
 }
