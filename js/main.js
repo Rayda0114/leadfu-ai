@@ -556,8 +556,9 @@ function renderFairValueLow() {
     return;
   }
 
-  // 主版面：卡片網格（5 張並排，手機自動單欄）
+  // 主版面：桌面 5 張並排 grid，手機板自動切橫向滑動（.h-scroll 工具）
   if (grid) {
+    if (!grid.classList.contains("h-scroll")) grid.classList.add("h-scroll");
     grid.innerHTML = top5.map(fv => {
       const s = stocks.find(x => x.code === fv.code);
       const pct = (fv.position * 100).toFixed(0);
