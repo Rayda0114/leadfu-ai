@@ -1271,9 +1271,11 @@ img { max-width: 100%; }
     overflow-x: auto;
     gap: 10px;
     padding-bottom: 6px;
-    scroll-snap-type: x mandatory;
+    /* 🛠 移除 scroll-snap mandatory — 改成 proximity，
+       讓用戶輕滑能停留在任何位置，不會強制吸回起點 */
+    scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
-    /* 🛠 不再用負 margin 撐出 container 邊界，避免撐寬 viewport */
+    scroll-padding: 0 8px;
   }
   .hero-with-chat .hero-card,
   .hero-with-chat .hero-card-v2 {
