@@ -423,13 +423,13 @@ function renderStockTableToggle(totalN, shownN, isMobile) {
   if (homeTableExpanded) {
     toggle.innerHTML = `
       <button type="button" data-action="collapse">收合</button>
-      <a class="home-table-jumplink" href="${pageHref('stocks.html')}">看完整 2,310 檔 →</a>
+      <a class="home-table-jumplink" href="${pageHref('stocks.html')}">看完整 ${(STOCK_DATA.stocks?.length || 2300).toLocaleString()} 檔 →</a>
     `;
   } else {
     const moreN = totalN - shownN;
     toggle.innerHTML = `
       <button type="button" data-action="expand">查看更多（再 ${moreN} 檔）</button>
-      <a class="home-table-jumplink" href="${pageHref('stocks.html')}">看完整 2,310 檔 →</a>
+      <a class="home-table-jumplink" href="${pageHref('stocks.html')}">看完整 ${(STOCK_DATA.stocks?.length || 2300).toLocaleString()} 檔 →</a>
     `;
   }
   // 綁定事件（每次重綁避免重複）
@@ -1360,7 +1360,7 @@ function showOnboarding() {
       eyebrow: "歡迎來到",
       icon: "👋",
       title: "領富 AI · 您的 AI 投資助理",
-      desc: "跨上市、上櫃、興櫃 2,310 檔台股，AI 幫您整理公開資料 — 看清楚再決定。",
+      desc: "跨上市、上櫃、興櫃 2,300+ 檔台股，AI 幫您整理公開資料 — 看清楚再決定。",
       features: [
         "全市場資料：三大法人、籌碼、月營收、技術指標",
         "AI 自然語言對話、每日盤後摘要、產業週報",
@@ -2927,14 +2927,28 @@ async function fetchJson(file) {
 }
 
 async function loadLiveData() {
-  // 1. 興櫃個股報價
+  // 1. 個股報價（含 metadata：updatedAt / source / stockCount / marketBreakdown）
   try {
     const live = await fetchJson("stocks_live.json");
     if (live.stocks && live.stocks.length) {
       STOCK_DATA.stocks = live.stocks;
       STOCK_DATA.updatedAt = (live.updatedAt || "") + " · " + (live.source || "TPEx");
       STOCK_DATA.source = live.source;
-      console.log(`[領富 AI] ✅ ${live.stocks.length} 檔 TPEx 即時報價 (${live.sourceDate})`);
+      // 📊 完整 meta — AI 引用資料時間／來源、UI 統一動態數字
+      STOCK_DATA.stocksMeta = {
+        updatedAt: live.updatedAt || "",
+        source: live.source || "",
+        sourceDate: live.sourceDate || "",
+        stockCount: live.stockCount || live.stocks.length,
+        marketBreakdown: live.marketBreakdown || {}
+      };
+      // 🔄 動態更新 UI 顯示「N 檔」的所有元素
+      const countEls = document.querySelectorAll('[data-stat="stockCount"]');
+      countEls.forEach(el => {
+        const n = live.stockCount || live.stocks.length;
+        el.textContent = n.toLocaleString();
+      });
+      console.log(`[領富 AI] ✅ ${live.stockCount || live.stocks.length} 檔 ${live.source} (${live.sourceDate})`);
     }
   } catch (e) {
     console.log(`[領富 AI] ℹ️ 個股報價用備份 (${e.message})`);

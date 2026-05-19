@@ -1,6 +1,6 @@
 # 領富 AI / LeadFu AI
 
-> 台灣全市場（上市・上櫃・興櫃）股票財經資訊網。提供 2,310 檔個股即時報價、公司基本資料、月營收、產業分類與 AI 整理摘要。資料來源為證交所（TWSE）與櫃買中心（TPEx）公開 OpenAPI，每日盤後更新。
+> 台灣全市場（上市・上櫃・興櫃）股票財經資訊網。提供 2,300+ 檔個股即時報價、公司基本資料、月營收、產業分類與 AI 整理摘要。資料來源為證交所（TWSE）與櫃買中心（TPEx）公開 OpenAPI，每日盤後更新。
 
 ## 關於本站
 
@@ -17,14 +17,14 @@
 - 上市股票（TWSE）約 1,084 檔
 - 上櫃股票（TPEx Mainboard）約 878 檔
 - 興櫃股票（TPEx Emerging Stock Board）約 348 檔
-- 共 **2,310 檔個股**，35 種產業類別
+- 共 **2,300+ 檔個股**，35 種產業類別
 
 ## 核心頁面
 
 ### 入口
 - [首頁 - 領富 AI](https://leadfuai.com/): AI 問答 + 熱門股 + 即時跑馬燈
 - [AI 問答](https://leadfuai.com/pages/ai.html): 自然語言搜尋，輸入「今天漲最多的上市股」「半導體上市熱門」「穎台基本面」等
-- [股價總覽](https://leadfuai.com/pages/stocks.html): 2,310 檔可篩選（市場 / 產業 / 排序）
+- [股價總覽](https://leadfuai.com/pages/stocks.html): 2,300+ 檔可篩選（市場 / 產業 / 排序）
 - [進階選股](https://leadfuai.com/pages/screener.html): 多條件篩選工具
 - [產業分類](https://leadfuai.com/pages/industries.html): 35 個產業類別瀏覽
 
@@ -75,7 +75,7 @@
 ## 開放資料
 
 每日盤後產生的 JSON（給開發者直接抓）：
-- https://leadfuai.com/data/stocks_live.json — 全市場 2,310 檔即時報價
+- https://leadfuai.com/data/stocks_live.json — 全市場 2,300+ 檔即時報價
 - https://leadfuai.com/data/companies_live.json — 2,322 家公司基本資料
 - https://leadfuai.com/data/revenue_live.json — 2,298 家月營收
 - https://leadfuai.com/data/announcements_live.json — 最新 120 筆公告

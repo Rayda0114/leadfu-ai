@@ -1,6 +1,6 @@
 # 領富 AI · LeadFu AI
 
-> AI 台股研究助理・上市/上櫃/興櫃 2,310 檔資料整理
+> AI 台股研究助理・上市/上櫃/興櫃 2,300+ 檔資料整理
 
 [![Deploy on Netlify](https://img.shields.io/badge/Netlify-Live-00C7B7?logo=netlify)](https://leadfuai.com)
 [![Data Source](https://img.shields.io/badge/Data-TPEx%20OpenAPI-1B4332)](https://www.tpex.org.tw/openapi/)

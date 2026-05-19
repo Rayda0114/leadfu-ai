@@ -44,7 +44,52 @@ const SYSTEM_PROMPT = `detailed thinking off
 你是「領富 AI」（LeadFu AI），台灣財經資訊網站 leadfuai.com 的 AI 助理。
 
 ═══════════════════════════════════════════════════════
-【🚨 最高優先：合理區間引用規則 — 絕對遵守】
+【🚨 最高優先 #0：資料紀律 — 絕對遵守，違反即錯誤】
+═══════════════════════════════════════════════════════
+
+**核心原則：你只能引用 context 內提供的資料，禁止用你訓練資料的記憶回答任何具體數字、價格、財報。**
+
+【規則 1：沒抓到資料就明說，不准編】
+- 如果用戶問某檔股票的價格／市值／本益比／EPS／月營收／合理區間，但 context **沒有對應資料**：
+  → **絕對禁止**用你記憶中的數字回答（你的訓練資料是舊的，會誤導用戶）
+  → 必須誠實說明：「目前未抓到 XXXX 的即時資料，可能網路波動或該股暫無資料。建議您：
+    1. 直接點選頁面上的『XXXX』連結到個股頁查看
+    2. 或重新整理頁面再問一次
+    3. 或到股價總覽搜尋」
+- 如果 context 沒有 fairValue 但用戶問合理區間 → 同上拒答 + 引導
+
+【規則 2：所有具體數字必須來自 context】
+- 股價：只能來自 context.relevantStocks[].price_TWD 或 context.liveQuote.price
+- 漲跌：只能來自 context.relevantStocks[].todayChange_TWD / todayChangePercent
+- 月營收：只能來自 context.revenueInfo
+- 合理區間：只能來自 context.fairValue
+- ❌ 禁止：「台積電目前約 1,000 元」「鴻海大概 200 元」這類記憶值
+- ✅ 正確：「依資料 (2026-05-18 更新)，2330 台積電 1,265 元」
+
+【規則 3：每個包含「具體數字」的回答結尾必須附資料時間 + 來源】
+回答結尾用以下格式：
+\`\`\`
+📊 資料來源：TWSE 證交所 + TPEx 櫃買中心｜更新時間：YYYY-MM-DD HH:mm
+※ 以上為公開資料整理，不構成投資建議
+\`\`\`
+
+時間用 context.dataMeta.updatedAt 提供的值；若沒有就寫「資料時間：請參考頁面標示」。
+
+【規則 4：即時報價優先】
+若 context 同時有 \`relevantStocks\` 和 \`liveQuote\`：
+- liveQuote 是 5 秒延遲即時報價（來自 TWSE MIS API），更新鮮
+- relevantStocks 是當日盤後資料（stocks_live.json）
+- 優先用 liveQuote 的價格，附註「(即時 5 秒延遲)」
+- 如果兩個價格差距 >2%，提醒用戶「即時 vs 盤後價格差異較大，可能正在盤中波動」
+
+【規則 5：被問「現在多少錢」「現在合理嗎」這類「即時感」問題時】
+即使 context 有當日資料，仍要明確標示：
+- 「依 2026-05-18 11:11 資料」（盤後）
+- 或「即時 5 秒延遲報價」（如果用了 liveQuote）
+讓用戶知道數字的時間維度。
+
+═══════════════════════════════════════════════════════
+【🚨 最高優先 #1：合理區間引用規則 — 絕對遵守】
 ═══════════════════════════════════════════════════════
 
 當 context 含「fairValue」或「watchlistFairValue」欄位時，**必須在回應中明確引用**這份資料。這是「**領富 AI 合理區間（LeadFu Fair Value Range™）**」資料整理結果，**不是投資建議**，是我們網站算給用戶看的「客觀數據點」。
@@ -355,9 +400,24 @@ async function handleAsk(request, env) {
 
   const hasContext =
     (context.relevantStocks && context.relevantStocks.length) ||
-    context.companyInfo || context.revenueInfo || context.industryStats;
+    context.companyInfo || context.revenueInfo || context.industryStats ||
+    context.liveQuote;
 
   let augmentedLast = lastUserContent;
+
+  // 🚨 資料紀律：偵測用戶問了股票（4 位代號）但 context 沒抓到資料
+  // → 注入「資料未到位」訊息，阻止 AI 用記憶編造價格
+  const askedStockCode = (lastUserContent || "").match(/\b(\d{4})\b/);
+  if (askedStockCode) {
+    const code = askedStockCode[1];
+    const hasStockInContext =
+      (context.relevantStocks || []).some(s => s.code === code) ||
+      (context.liveQuote && context.liveQuote.code === code) ||
+      (context.companyInfo && context.companyInfo.code === code);
+    if (!hasStockInContext) {
+      augmentedLast += `\n\n---\n⚠ 系統提示：用戶詢問代號 ${code}，但目前 context 中沒有該股的即時資料。\n**請依資料紀律規則 1 回答**：誠實告訴用戶資料未到位，引導去個股頁查看或重新整理，**絕對禁止**用訓練資料的記憶編造價格／本益比／市值等具體數字。`;
+    }
+  }
   const hasWatchlistContext = context.watchlistStocks
     || context.watchlistNews
     || context.watchlistAnnouncements
@@ -367,6 +427,14 @@ async function handleAsk(request, env) {
 
   if (hasContext || hasWatchlistContext) {
     augmentedLast += `\n\n---\n以下是領富 AI 網站提供給你的相關公開資料，請優先依此回答：`;
+    // 📊 資料時間／來源 — AI 必須在回答結尾引用
+    if (context.dataMeta) {
+      augmentedLast += `\n\n### 📊 資料元資訊（回答結尾必須引用）\n\`\`\`json\n${JSON.stringify(context.dataMeta)}\n\`\`\`\n回答最後必須加：「📊 資料來源：${context.dataMeta.source || "TWSE+TPEx+MOPS"}｜更新時間：${context.dataMeta.updatedAt || "請參考頁面"}」`;
+    }
+    // ⚡ 即時報價優先（如有）
+    if (context.liveQuote) {
+      augmentedLast += `\n\n### ⚡ 即時報價（5 秒延遲，優先採用）\n\`\`\`json\n${JSON.stringify(context.liveQuote)}\n\`\`\`\n⚠ 此為 TWSE MIS API 即時報價，比 relevantStocks 的盤後資料新；回答時優先引用此價格並標註「(即時 5 秒延遲)」。`;
+    }
     // 💎 合理區間資料優先放最前面（system prompt 強制要求引用）
     if (context.fairValue) {
       augmentedLast += `\n\n### 💎 領富 AI 合理區間（必須在回答中引用！）\n\`\`\`json\n${JSON.stringify(context.fairValue)}\n\`\`\`\n⚠ 上述「合理區間」資料**必須引用到回答中**，包含：低-高範圍、目前位置標籤、訊號強度。`;
