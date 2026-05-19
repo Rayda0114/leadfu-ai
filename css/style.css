@@ -3047,6 +3047,11 @@ body.theme-red .daily-brief-ai {
   max-width: 100%;
   box-sizing: border-box;
 }
+/* 🛠 明確綁定 grid column — 即使 mic 被 display:none 隱藏（Chrome 無 SR API 時），
+   textarea 跟 send 仍各自留在正確欄位，不會跑版 */
+#aiEmbedForm .ai-chat-embed-mic { grid-column: 1; }
+#aiEmbedForm #aiEmbedInput     { grid-column: 2; }
+#aiEmbedForm .ai-chat-embed-send { grid-column: 3; }
 #aiEmbedInput {
   flex: 1 1 0;          /* 🛠 改 1 1 0 確保可收縮，不會撐爆 form */
   min-width: 0;         /* 🛠 critical：flex item 預設 min-width: auto 會擋住收縮 */

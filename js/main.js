@@ -652,6 +652,13 @@ function renderHeroCards() {
     }
   }
 
+  // 🐛 Debug — 上線後若還是顯示 2 張卡，看 console 找原因
+  try {
+    console.log("[領富 AI] renderHeroCards slots:", slots.length,
+      "vol:", volStock?.code, "fv:", fvStock?.code, "gainer:", gainerStock?.code,
+      "all:", all.length, "volPool:", volPool.length);
+  } catch {}
+
   function reasonOf(slot) {
     const s = slot.s;
     const vol = (s.volume || 0).toLocaleString();
