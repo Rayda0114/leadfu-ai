@@ -1263,21 +1263,30 @@ img { max-width: 100%; }
     height: 440px !important;
     max-height: 65vh;
   }
-  /* 🛠 手機板 hero 右側問 AI 卡片：改成垂直 stack，徹底解決橫向滑動的吸附問題 */
+  /* 🛠 手機板 hero 卡片：回到橫向，套用 .h-scroll 工具（見下方）+ Codex 完整 overscroll 配方 */
   .hero-with-chat .hero-side { padding-top: 4px; }
   .hero-side-head { font-size: 12px; padding-left: 4px; }
   .hero-with-chat .hero-visual {
-    flex-direction: column;
-    overflow: visible;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
     gap: 10px;
-    padding-bottom: 0;
+    padding: 0 4px 8px;
+    /* 🔑 Codex 配方：完全無 snap + 阻擋 iOS 彈性回彈 */
+    scroll-snap-type: none !important;
+    scroll-behavior: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;     /* ← 關鍵：阻擋 iOS 橡皮筋回彈 */
+    /* 視覺提示：右邊淡出告訴用戶「還有更多」 */
+    mask-image: linear-gradient(to right, #000 0%, #000 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 90%, transparent 100%);
   }
   .hero-with-chat .hero-card,
   .hero-with-chat .hero-card-v2 {
-    min-width: 0;
-    max-width: 100%;
-    width: 100%;
-    flex-shrink: 1;
+    flex: 0 0 76vw;
+    max-width: 86vw;
+    scroll-snap-align: none !important;
+    scroll-snap-stop: normal !important;
     animation: none !important;
     transform: none !important;
   }
@@ -7489,6 +7498,73 @@ body.theme-red .onboard-features li .ob-check { background: #D4AF37; }
   .onboard-title { font-size: 19px; }
   .onboard-body { padding: 20px 20px 12px; }
   .onboard-foot { padding: 12px 20px 18px; }
+}
+
+/* ====================================================
+   📱 .h-scroll — 可重用的橫向滑動工具 class
+   ====================================================
+   用法：
+     <div class="h-scroll">
+       <div class="h-scroll-item">卡片 1</div>
+       <div class="h-scroll-item">卡片 2</div>
+       ...
+     </div>
+
+   為什麼這樣設計：
+   - 全域桌面版回退成 row + 自然 flex（不滑動）
+   - 手機板才啟用橫向滑動 + Codex 完整配方
+   - 阻擋 iOS 彈性回彈（overscroll-behavior-x: contain）
+   - 完全無 snap（mandatory/proximity 都會被用戶感到「拉回」）
+   - 右邊淡出視覺提示「還有更多」（mask-image）
+   - 子卡片 flex: 0 0 78vw 保證寬度一致
+
+   修改子卡片寬度：在外層加 modifier，例如 .h-scroll.h-scroll-wide → 卡片 88vw
+*/
+.h-scroll {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: visible;
+  overflow-y: visible;
+}
+.h-scroll-item {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .h-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 4px 8px;
+    scroll-snap-type: none !important;
+    scroll-behavior: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    mask-image: linear-gradient(to right, #000 0%, #000 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 90%, transparent 100%);
+  }
+  .h-scroll-item {
+    flex: 0 0 76vw;
+    max-width: 86vw;
+    scroll-snap-align: none !important;
+    scroll-snap-stop: normal !important;
+  }
+  /* modifier：較窄卡片（一次顯示 ~2 張）*/
+  .h-scroll.h-scroll-narrow .h-scroll-item {
+    flex: 0 0 46vw;
+    max-width: 50vw;
+  }
+  /* modifier：較寬卡片（佔螢幕大半，一次只顯示 1 張）*/
+  .h-scroll.h-scroll-wide .h-scroll-item {
+    flex: 0 0 88vw;
+    max-width: 92vw;
+  }
+  /* modifier：不要右邊淡出（用於背景複雜的場景）*/
+  .h-scroll.h-scroll-no-fade {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
 }
 
 /* ====================================================
