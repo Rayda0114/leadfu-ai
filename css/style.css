@@ -1269,20 +1269,20 @@ img { max-width: 100%; }
   .hero-with-chat .hero-visual {
     flex-direction: row;
     overflow-x: auto;
+    overflow-y: hidden;
     gap: 10px;
     padding-bottom: 6px;
-    /* 🛠 移除 scroll-snap mandatory — 改成 proximity，
-       讓用戶輕滑能停留在任何位置，不會強制吸回起點 */
-    scroll-snap-type: x proximity;
+    /* 🛠 完全拿掉 scroll-snap — 用戶要的是自由滑動，不要任何吸附 */
+    scroll-snap-type: none !important;
     -webkit-overflow-scrolling: touch;
-    scroll-padding: 0 8px;
+    scroll-behavior: auto;
   }
   .hero-with-chat .hero-card,
   .hero-with-chat .hero-card-v2 {
-    min-width: 68vw;          /* 🛠 縮小一點，讓用戶看到「右側還有一張」的視覺暗示 */
+    min-width: 68vw;
     max-width: 80vw;
     flex-shrink: 0;
-    scroll-snap-align: start;
+    scroll-snap-align: none !important;   /* 🛠 連 align 也拿掉，徹底無吸附 */
     animation: none !important;
     transform: none !important;
   }
