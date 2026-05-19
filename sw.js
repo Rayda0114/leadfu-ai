@@ -1,11 +1,12 @@
 /* 領富 AI · Service Worker
  * 策略：
- *   1. 靜態資產（HTML / CSS / JS / 圖示）→ stale-while-revalidate（快取優先，背景更新）
- *   2. 即時資料 data/*.json → network-first（永遠拿最新，斷網才退快取）
- *   3. 外部資源（Google News 連結等）→ pass through
+ *   1. CSS / JS → network-first（避免用戶卡在舊版，特別是手機板 layout fix）
+ *   2. 圖示 / manifest → stale-while-revalidate（變動少，快取優先）
+ *   3. 即時資料 data/*.json → network-first（永遠拿最新）
+ *   4. HTML 頁面 → network-first
  */
 
-const VERSION = "v3.15.6";
+const VERSION = "v3.15.7";
 const STATIC_CACHE  = "leadfu-static-"  + VERSION;
 const DATA_CACHE    = "leadfu-data-"    + VERSION;
 
@@ -56,8 +57,13 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // 🛠 CSS / JS 也用 network-first — 避免用戶卡在舊版（手機板 layout fix 時很關鍵）
+  if (url.pathname.endsWith(".css") || url.pathname.endsWith(".js")) {
+    event.respondWith(networkFirst(req));
+    return;
+  }
+
   // 導覽請求（HTML 頁面）也用 network-first
-  // 避免使用者卡在舊快取（例如 footer 連結更新後點不到）
   if (req.mode === "navigate" ||
       (req.destination === "document") ||
       url.pathname.endsWith(".html") ||
@@ -67,7 +73,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // 其餘純靜態資產（CSS/JS/圖片）：stale-while-revalidate
+  // 其餘（圖片 / manifest / svg）：stale-while-revalidate
   event.respondWith(staleWhileRevalidate(req));
 });
 
