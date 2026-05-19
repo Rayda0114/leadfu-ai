@@ -7255,3 +7255,403 @@ body.theme-red .onboard-features li .ob-check { background: #D4AF37; }
   .onboard-body { padding: 20px 20px 12px; }
   .onboard-foot { padding: 12px 20px 18px; }
 }
+
+/* ====================================================
+   🔥 AI 市場熱議榜（discussion.html 改造後）
+   ==================================================== */
+
+/* === 介紹 banner — 為什麼不開傳統討論區 === */
+.ht-intro-banner {
+  background: linear-gradient(135deg, #0A1F18 0%, #163A2E 50%, #1B4332 100%);
+  color: #fff;
+  padding: 32px 0;
+  position: relative;
+  overflow: hidden;
+}
+.ht-intro-banner::before {
+  content: "";
+  position: absolute;
+  top: -50px; right: -30px;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(197,165,114,0.2), transparent 70%);
+  pointer-events: none;
+}
+.ht-intro-inner {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 32px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.ht-intro-eyebrow {
+  display: inline-block;
+  background: rgba(197,165,114,0.15);
+  border: 1px solid rgba(197,165,114,0.4);
+  color: #C5A572;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.ht-intro-h2 {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.4;
+  margin: 0 0 14px;
+}
+.ht-intro-bad {
+  color: #FCA5A5;
+  background: rgba(239,68,68,0.15);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.ht-intro-p, .ht-intro-p2 {
+  font-size: 14px;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.9);
+  margin: 0 0 8px;
+}
+.ht-intro-p2 { background: rgba(197,165,114,0.08); padding: 10px 14px; border-radius: 8px; border-left: 3px solid #C5A572; margin-top: 12px; }
+.ht-intro-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ht-intro-stat {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 14px 18px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+.ht-stat-num {
+  color: #C5A572;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+.ht-stat-label {
+  color: rgba(255,255,255,0.8);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* === 熱議榜 panel === */
+.ht-panel {
+  margin-bottom: 20px;
+}
+.ht-panel-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.ht-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.ht-tab {
+  background: #f0f3f8;
+  color: #555;
+  border: 1px solid #d8dde5;
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.ht-tab:hover { background: #e3e8ef; }
+.ht-tab.active {
+  background: #1B4332;
+  color: #C5A572;
+  border-color: #1B4332;
+}
+
+.ht-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ht-item {
+  display: grid;
+  grid-template-columns: 36px 1fr 90px auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #eef1f4;
+  transition: background 0.15s;
+}
+.ht-item:hover { background: #fafbfc; }
+.ht-item:last-child { border-bottom: 0; }
+.ht-item-rank {
+  font-weight: 800;
+  color: #888;
+  font-size: 15px;
+}
+.ht-item:nth-child(1) .ht-item-rank { color: #C5A572; font-size: 17px; }
+.ht-item:nth-child(2) .ht-item-rank { color: #b9985f; }
+.ht-item:nth-child(3) .ht-item-rank { color: #a78d5f; }
+
+.ht-item-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ht-item-flag { font-size: 14px; }
+.ht-item-stock {
+  color: #1B4332;
+  text-decoration: none;
+}
+.ht-item-stock:hover { text-decoration: underline; color: #2D6A4F; }
+.ht-item-reason {
+  font-size: 12.5px;
+  color: #666;
+  line-height: 1.5;
+}
+.ht-item-price {
+  text-align: right;
+}
+.ht-item-price-num {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1B4332;
+}
+.ht-item-price-pct {
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.ht-up   { color: #EF4444; }
+.ht-down { color: #16A34A; }
+.ht-flat { color: #888; }
+
+.ht-item-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 100px;
+}
+.ht-item-ask {
+  background: linear-gradient(135deg, #C5A572 0%, #B8985F 100%);
+  color: #0A1F18;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 14px;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid rgba(10,31,24,0.15);
+  transition: all 0.15s;
+}
+.ht-item-ask:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(197,165,114,0.4);
+  text-decoration: none;
+}
+.ht-item-detail {
+  color: #666;
+  font-size: 11.5px;
+  text-decoration: none;
+  text-align: center;
+}
+.ht-item-detail:hover { color: #1B4332; text-decoration: underline; }
+
+.ht-empty {
+  padding: 40px;
+  text-align: center;
+  color: #999;
+  list-style: none;
+}
+.ht-foot {
+  padding: 12px 18px;
+  background: #fafbfc;
+  border-top: 1px solid #eef1f4;
+}
+.ht-foot-meta {
+  font-size: 11.5px;
+  color: #888;
+}
+
+/* === 本週最問 AI === */
+.ht-top-questions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 14px 16px;
+}
+.ht-tq-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1.5px solid #e5ebf0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: #1B4332;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.ht-tq-card:hover {
+  border-color: #C5A572;
+  background: linear-gradient(135deg, #fffaf0 0%, #fff 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(197,165,114,0.2);
+  text-decoration: none;
+}
+.ht-tq-icon { font-size: 22px; flex-shrink: 0; }
+.ht-tq-q { flex: 1; line-height: 1.4; }
+.ht-tq-go {
+  color: #C5A572;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* === 詐騙警示 panel === */
+.ht-fraud-panel {
+  border: 2px solid #FCA5A5;
+  background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+}
+.ht-fraud-head {
+  background: #DC2626 !important;
+  color: #fff !important;
+  border-bottom: 2px solid #B91C1C;
+}
+.ht-fraud-head h2 { color: #fff !important; font-size: 16px !important; }
+.ht-fraud-body {
+  padding: 16px 18px;
+}
+.ht-fraud-lead {
+  font-weight: 700;
+  color: #7F1D1D;
+  margin: 0 0 12px;
+  font-size: 14.5px;
+}
+.ht-fraud-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+}
+.ht-fraud-list li {
+  padding: 7px 0;
+  color: #7F1D1D;
+  font-size: 13.5px;
+  line-height: 1.6;
+  border-bottom: 1px dashed rgba(220,38,38,0.2);
+}
+.ht-fraud-list li:last-child { border-bottom: 0; }
+.ht-fraud-cta-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.ht-fraud-cta {
+  background: #DC2626;
+  color: #fff;
+  padding: 9px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+.ht-fraud-cta:hover {
+  background: #B91C1C;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.ht-fraud-cta-alt {
+  background: #fff;
+  color: #DC2626;
+  border: 2px solid #DC2626;
+}
+.ht-fraud-cta-alt:hover {
+  background: #FEE2E2;
+  color: #B91C1C;
+}
+
+/* === 側邊承諾 === */
+.ht-promise-body {
+  padding: 14px;
+  font-size: 12.5px;
+  color: #555;
+  line-height: 1.7;
+}
+.ht-promise-body p {
+  margin: 0 0 10px;
+  padding-left: 8px;
+  border-left: 3px solid #C5A572;
+}
+.ht-promise-body p:last-child { margin-bottom: 0; }
+
+.ht-radar-box {
+  padding: 14px;
+}
+.ht-radar-box p {
+  font-size: 13px;
+  color: #555;
+  margin: 0 0 10px;
+  line-height: 1.55;
+}
+
+/* === 手機板 === */
+@media (max-width: 768px) {
+  .ht-intro-banner { padding: 22px 0; }
+  .ht-intro-inner {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .ht-intro-h2 { font-size: 19px; }
+  .ht-intro-p, .ht-intro-p2 { font-size: 13px; }
+  .ht-intro-right { flex-direction: row; flex-wrap: wrap; }
+  .ht-intro-stat { flex: 1; min-width: 90px; padding: 10px 12px; }
+  .ht-stat-num { font-size: 20px; }
+  .ht-stat-label { font-size: 11px; }
+
+  .ht-panel-head { padding: 12px 14px; }
+  .ht-tabs { gap: 4px; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .ht-tab { font-size: 11.5px; padding: 5px 10px; flex-shrink: 0; }
+
+  .ht-item {
+    grid-template-columns: 28px 1fr;
+    grid-template-rows: auto auto;
+    gap: 6px 10px;
+    padding: 12px 14px;
+  }
+  .ht-item-rank { font-size: 13px; align-self: start; padding-top: 2px; }
+  .ht-item-title { font-size: 14px; }
+  .ht-item-reason { font-size: 11.5px; }
+  .ht-item-price {
+    grid-column: 2;
+    text-align: left;
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+  }
+  .ht-item-price-num { font-size: 14px; }
+  .ht-item-price-pct { font-size: 11.5px; margin-top: 0; }
+  .ht-item-actions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .ht-item-ask, .ht-item-detail { flex: 1; }
+
+  .ht-top-questions { grid-template-columns: 1fr; padding: 10px 12px; }
+  .ht-fraud-body { padding: 14px; }
+  .ht-fraud-list li { font-size: 12.5px; }
+}

@@ -149,7 +149,7 @@
       <li><a href="pages/weekly.html" style="color:#C5A572;">📰 產業週報</a></li>
       <li><a href="pages/learn.html" style="color:#C5A572;">📚 學習中心</a></li>
       <li><a href="pages/news.html">財經新聞</a></li>
-      <li><a href="pages/discussion.html">討論區</a></li>
+      <li><a href="pages/discussion.html">🔥 AI 熱議</a></li>
       <li><a href="pages/ipo.html">新股抽籤</a></li>
       <li><a href="pages/announcements.html">公告</a></li>
       <li><a href="pages/watchlist.html">自選股</a></li>
@@ -526,7 +526,7 @@
         <li><a href="pages/stocks.html?status=興櫃">興櫃行情</a></li>
         <li><a href="pages/ipo.html">新股抽籤 / 中籤股</a></li>
         <li><a href="pages/announcements.html">公司公告</a></li>
-        <li><a href="pages/discussion.html">投資人討論區</a></li>
+        <li><a href="pages/discussion.html">🔥 AI 市場熱議</a></li>
         <li><a href="pages/tax.html">證交稅專題</a></li>
       </ul>
     </div>
@@ -1376,6 +1376,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     history.forEach(renderBubble);
     scrollToBottom();
   }
+
+  // 🎯 從 URL 讀取 ?ask= 參數（其他頁的「問 AI」按鈕導到首頁時用）
+  try {
+    const params = new URLSearchParams(location.search);
+    const askText = params.get("ask");
+    if (askText && askText.trim()) {
+      // 清掉 URL 上的參數避免重新整理重複觸發
+      const cleanUrl = location.pathname + location.hash;
+      window.history.replaceState({}, "", cleanUrl);
+      // 滾到對話框 + 自動送出問題（小延遲讓 welcome 先 render 完）
+      setTimeout(() => {
+        const heroChat = document.getElementById("aiChatEmbed");
+        if (heroChat) heroChat.scrollIntoView({ behavior: "smooth", block: "start" });
+        setTimeout(() => sendMessage(askText.trim()), 400);
+      }, 100);
+    }
+  } catch (e) { /* URL 解析失敗就 skip */ }
 });
 </script>
 </body>

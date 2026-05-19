@@ -3,7 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>投資討論區 - 領富 AI</title>
+<title>AI 市場熱議榜 - 領富 AI｜真實資料 + AI 分析，比討論區更可信</title>
+<meta name="description" content="領富 AI 用真實成交量、漲跌幅、注意股、借券、合理區間資料整理「今日市場最熱議的個股」，每個熱議主題可一鍵問 AI 分析。我們不開傳統討論區，因為論壇 80% 的飆股推薦都是詐騙。">
+<meta name="theme-color" content="#1B4332">
+<link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
+
+<!-- Open Graph -->
+<meta property="og:title" content="🔥 AI 市場熱議榜 - 領富 AI">
+<meta property="og:description" content="真實資料 + AI 分析的市場熱議榜。為什麼我們不開傳統討論區？因為那裡 80% 飆股推薦都是詐騙。">
+<meta property="og:image" content="../icons/icon-512.png">
+<meta property="og:type" content="website">
+
 <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -11,7 +21,7 @@
 <header class="top-bar">
   <div class="container top-bar-inner">
     <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
-    <div class="top-right"><a href="#">會員登入</a><a href="#">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
   </div>
 </header>
 
@@ -22,7 +32,7 @@
       <span class="logo-sub">LeadFu · 領先市場兩步</span>
     </a>
     <div class="search-box">
-      <input type="text" id="stockSearch" placeholder="搜尋討論主題">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱 (例：2330 台積電)">
       <button id="searchBtn">查詢</button>
     </div>
   </div>
@@ -33,80 +43,184 @@
     <ul>
       <li><a href="../index.html">首頁</a></li>
       <li><a href="stocks.html">股價總覽</a></li>
-      <li><a href="stocks.html?status=興櫃">興櫃股票</a></li>
-      
+      <li><a href="screener.html">進階選股</a></li>
+      <li><a href="industries.html">產業分類</a></li>
+      <li><a href="risk-radar.html" style="color:#fecaca;">⚠ 防錯雷達</a></li>
+      <li><a href="dividends.html" style="color:#fde68a;">💰 殖利率</a></li>
+      <li><a href="weekly.html" style="color:#C5A572;">📰 產業週報</a></li>
+      <li><a href="learn.html" style="color:#C5A572;">📚 學習中心</a></li>
       <li><a href="news.html">財經新聞</a></li>
-      <li class="active"><a href="discussion.html">討論區</a></li>
-      <li><a href="tutorial.html">下單教學</a></li>
+      <li class="active"><a href="discussion.html">🔥 AI 熱議</a></li>
+      <li><a href="ipo.html">新股抽籤</a></li>
+      <li><a href="vip.html" style="color:#C5A572;">VIP</a></li>
     </ul>
   </div>
 </nav>
 
 <div class="page-head">
   <div class="container">
-    <h1>投資人討論區</h1>
-    <div class="breadcrumb">首頁 ▸ 討論區</div>
+    <h1>🔥 AI 市場熱議榜</h1>
+    <div class="breadcrumb">首頁 ▸ AI 市場熱議</div>
   </div>
 </div>
+
+<!-- 為什麼領富 AI 不開傳統討論區 — 反詐騙立場 -->
+<section class="ht-intro-banner">
+  <div class="container ht-intro-inner">
+    <div class="ht-intro-left">
+      <div class="ht-intro-eyebrow">💡 為什麼領富 AI 不開傳統用戶討論區？</div>
+      <h2 class="ht-intro-h2">因為論壇 80% 的「飆股推薦」都是<span class="ht-intro-bad">詐騙</span>。</h2>
+      <p class="ht-intro-p">
+        每年 165 反詐騙專線接獲<strong>超過 1.2 萬件投資詐騙案</strong>，
+        手法 8 成都從「LINE 群組／論壇／FB 飆股推薦」開始。
+        傳統股票論壇缺乏即時內容審查，是詐騙集團最愛的釣魚場。
+      </p>
+      <p class="ht-intro-p2">
+        ✅ <strong>領富 AI 改用真實資料 + AI 分析</strong>替代用戶發文 —<br>
+        每個「熱議個股」都有公開資料佐證（成交量、外資、注意股、借券…），
+        想知道為什麼熱議？<strong>直接點「問 AI」一秒看懂</strong>。
+      </p>
+    </div>
+    <div class="ht-intro-right">
+      <div class="ht-intro-stat">
+        <div class="ht-stat-num">14</div>
+        <div class="ht-stat-label">官方資料源</div>
+      </div>
+      <div class="ht-intro-stat">
+        <div class="ht-stat-num">0</div>
+        <div class="ht-stat-label">廣告／推薦／盤商</div>
+      </div>
+      <div class="ht-intro-stat">
+        <div class="ht-stat-num">每日</div>
+        <div class="ht-stat-label">資料更新</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <main class="container main-grid">
   <section class="col-main">
 
-    <div class="panel">
-      <div class="panel-head">
-        <h2>熱門討論</h2>
-        <div class="panel-tabs">
-          <button class="tab active" data-cat="all">全部</button>
-          <button class="tab" data-cat="個股">個股</button>
-          <button class="tab" data-cat="興櫃">興櫃</button>
-          <button class="tab" data-cat="新股">新股抽籤</button>
-          <button class="tab" data-cat="閒聊">閒聊</button>
+    <!-- 🔥 今日熱議榜 — 多視角 -->
+    <div class="panel ht-panel">
+      <div class="panel-head ht-panel-head">
+        <h2>🔥 今日市場熱議</h2>
+        <div class="ht-tabs" id="htTabs">
+          <button class="ht-tab active" data-view="volume">💧 爆量榜</button>
+          <button class="ht-tab" data-view="up">📈 漲幅榜</button>
+          <button class="ht-tab" data-view="down">📉 跌幅榜</button>
+          <button class="ht-tab" data-view="warn">⚠ 注意股</button>
+          <button class="ht-tab" data-view="fvLow">💎 偏低</button>
         </div>
       </div>
-
-      <ul class="thread-list" id="threadList"></ul>
-
-      <div style="padding: 14px 16px; text-align:center; background:#fafbfc; border-top:1px solid #eee;">
-        <button class="btn-primary" style="width:auto;padding:8px 28px;">＋ 我要發文</button>
+      <ul class="ht-list" id="htList">
+        <li class="ht-empty">資料載入中...</li>
+      </ul>
+      <div class="ht-foot">
+        <span class="ht-foot-meta">資料更新：<span id="htUpdatedAt">--</span> · 排除股價 &lt; 10 元、流動性過低個股</span>
       </div>
     </div>
 
-    <div class="ai-panel">
-      <div class="ai-panel-head">
-        <div class="ai-panel-title">AI 討論區熱點分析</div>
-        <button class="ai-trigger" data-action="threadSummary" data-target="#aiThreadResult">產生今日熱點 →</button>
+    <!-- 💬 投資人本週最問 AI -->
+    <div class="panel ht-panel">
+      <div class="panel-head"><h2>💬 投資人本週最問 AI</h2></div>
+      <div class="ht-top-questions">
+        <a class="ht-tq-card" data-ask="高股息 ETF 還能買嗎">
+          <span class="ht-tq-icon">💰</span>
+          <span class="ht-tq-q">高股息 ETF 還能買嗎？</span>
+          <span class="ht-tq-go">問 AI →</span>
+        </a>
+        <a class="ht-tq-card" data-ask="半導體現在算高點還是低點">
+          <span class="ht-tq-icon">🔬</span>
+          <span class="ht-tq-q">半導體現在算高點還是低點？</span>
+          <span class="ht-tq-go">問 AI →</span>
+        </a>
+        <a class="ht-tq-card" data-ask="100 萬怎麼配置才穩">
+          <span class="ht-tq-icon">📊</span>
+          <span class="ht-tq-q">100 萬怎麼配置才穩？</span>
+          <span class="ht-tq-go">問 AI →</span>
+        </a>
+        <a class="ht-tq-card" data-ask="我買到處置股怎麼辦">
+          <span class="ht-tq-icon">⚠</span>
+          <span class="ht-tq-q">我買到處置股怎麼辦？</span>
+          <span class="ht-tq-go">問 AI →</span>
+        </a>
+        <a class="ht-tq-card" data-ask="2330 台積電現在合理嗎">
+          <span class="ht-tq-icon">💎</span>
+          <span class="ht-tq-q">2330 台積電現在合理嗎？</span>
+          <span class="ht-tq-go">問 AI →</span>
+        </a>
+        <a class="ht-tq-card" data-ask="退休族存股推薦哪些">
+          <span class="ht-tq-icon">🏖️</span>
+          <span class="ht-tq-q">退休族存股推薦哪些？</span>
+          <span class="ht-tq-go">問 AI →</span>
+        </a>
       </div>
-      <p class="ai-placeholder">AI 自動整理今日討論區熱門話題、看多看空比例、投資人情緒指標。</p>
-      <div id="aiThreadResult" style="margin-top:12px;"></div>
+    </div>
+
+    <!-- 🚨 本月詐騙警示 -->
+    <div class="panel ht-fraud-panel">
+      <div class="panel-head ht-fraud-head"><h2>🚨 本月詐騙警示</h2></div>
+      <div class="ht-fraud-body">
+        <p class="ht-fraud-lead">最近詐騙集團最愛用的「飆股推薦」話術（請勿相信）：</p>
+        <ul class="ht-fraud-list">
+          <li>❌「XX 老師 LINE 群組」推薦的「未上市飆股」（含「領富 AI」名義冒用）</li>
+          <li>❌「漲停密技」「每日 3 支飆股」訂閱式群組</li>
+          <li>❌「內線消息」「主力作帳股」加群即可獲得</li>
+          <li>❌「保證獲利」「30% 報酬」「跟單操作」</li>
+          <li>❌ 私訊推薦「未上市股票」、「IPO 抽籤代抽」</li>
+        </ul>
+        <div class="ht-fraud-cta-row">
+          <a href="fraud-alert.html" class="ht-fraud-cta">🛡️ 看防詐騙完整指南</a>
+          <a href="https://165.npa.gov.tw/" target="_blank" rel="noopener" class="ht-fraud-cta ht-fraud-cta-alt">📞 165 反詐騙專線</a>
+        </div>
+      </div>
     </div>
 
   </section>
 
   <aside class="col-side">
 
-    <div class="panel side-panel">
-      <div class="panel-head"><h3>看板規則</h3></div>
-      <div style="padding: 14px; font-size: 12px; color: #555; line-height: 1.8;">
-        <p><strong style="color:#c0392b;">1. 禁止張貼買賣資訊</strong><br>不得張貼求售、求購、報價或私下交易聯絡方式。</p>
-        <p><strong style="color:#c0392b;">2. 禁止盤商招攬</strong><br>不得張貼盤商廣告或興櫃股票兜售訊息，違者立即刪文並停權。</p>
-        <p>3. 禁止人身攻擊、不實謠言及與投資無關之廣告。</p>
-        <p>4. 個股討論請註明代號與名稱。</p>
-        <p>5. 所有發言均為網友個人意見，僅供參考，本站不背書、不負任何損失之責。</p>
-        <p>6. 本站僅提供討論空間，<strong>不介入、不撮合任何交易</strong>。</p>
+    <!-- 看板規則 → 改成「我們的承諾」 -->
+    <div class="panel side-panel ht-promise">
+      <div class="panel-head"><h3>🤝 領富 AI 的承諾</h3></div>
+      <div class="ht-promise-body">
+        <p><strong style="color:#1B4332;">1. 不開傳統發文討論區</strong><br>避免成為詐騙釣魚場。</p>
+        <p><strong style="color:#1B4332;">2. 不收任何投資款</strong><br>不代客操作、不收會員費以外的錢。</p>
+        <p><strong style="color:#1B4332;">3. 不推薦個股</strong><br>只整理公開資料，不下「買進」結論。</p>
+        <p><strong style="color:#1B4332;">4. 唯一 LINE 客服</strong><br>@041exgtv，其他都是冒用。</p>
+        <p><strong style="color:#1B4332;">5. 所有 AI 回答附資料源</strong><br>TWSE / TPEx / MOPS 都公開可查。</p>
       </div>
     </div>
 
+    <!-- 防錯雷達 CTA -->
     <div class="panel side-panel">
-      <div class="panel-head"><h3>熱門看板</h3></div>
-      <ul class="topic-list" id="topicList"></ul>
+      <div class="panel-head"><h3>⚠ 防錯雷達</h3></div>
+      <div class="ht-radar-box">
+        <p>注意股 / 處置股 / 月營收暴跌 / 借券暴增 — 一頁看全。</p>
+        <a href="risk-radar.html" class="btn-primary" style="width:100%;text-align:center;text-decoration:none;display:block;padding:10px;border-radius:8px;">看防錯雷達 →</a>
+      </div>
     </div>
 
+    <!-- VIP CTA -->
     <div class="panel side-panel ad-box">
-      <div class="ad-tag">廣告</div>
+      <div class="ad-tag">VIP</div>
       <div class="ad-body">
-        <div class="ad-title">加入 VIP 看完整對話</div>
-        <p>VIP 會員可閱讀全部精華討論與內幕分享</p>
-        <button class="btn-primary">立即升級</button>
+        <div class="ad-title">💎 限時 5 折優惠</div>
+        <p>VIP 進階 NT$199/月（前 3 個月）<br>解鎖完整合理區間 + 持股健診</p>
+        <a href="vip.html" class="btn-primary" style="display:block;text-align:center;text-decoration:none;padding:10px;border-radius:8px;">看 VIP 方案 →</a>
+      </div>
+    </div>
+
+    <!-- LINE -->
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>💬 LINE 客服</h3></div>
+      <div class="line-box">
+        <div class="line-icon">LINE</div>
+        <div>
+          <p>有任何疑問？官方 LINE 立即回覆</p>
+          <a href="https://line.me/R/ti/p/@041exgtv" target="_blank" rel="noopener" class="btn-line" style="display:inline-block;text-decoration:none;">@041exgtv</a>
+        </div>
       </div>
     </div>
 
@@ -114,55 +228,178 @@
 </main>
 
 <footer class="site-footer">
-  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-logo">領富 AI</div>
+      <p>台股全市場財經資訊網<br>客服 LINE：<a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="color:#06C755;font-weight:600;">@041exgtv</a></p>
+    </div>
+    <div>
+      <h4>網站服務</h4>
+      <ul>
+        <li><a href="stocks.html">股價總覽</a></li>
+        <li><a href="screener.html">進階選股</a></li>
+        <li><a href="industries.html">產業分類</a></li>
+        <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
+        <li><a href="weekly.html">📰 AI 產業週報</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>關於我們</h4>
+      <ul>
+        <li><a href="about.html">公司簡介</a></li>
+        <li><a href="fraud-alert.html">🛡️ 防詐騙專區</a></li>
+        <li><a href="terms.html">服務條款</a></li>
+        <li><a href="privacy.html">隱私權政策</a></li>
+        <li><a href="contact.html">聯絡客服</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="copyright">
+    <div class="container">© 2026 領富 AI. All rights reserved.</div>
+  </div>
 </footer>
 
 <script src="../js/main.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
-  const threads = [
-    { id: 1, cat: "個股", title: "[請益] 環球晶 6488 現在進場會不會太晚？", author: "stock_god", replies: 128, time: "5 分鐘前", hot: true },
-    { id: 2, cat: "興櫃", title: "穎崴 6515 法說會重點整理", author: "ai_fan",     replies: 87,  time: "15 分鐘前" },
-    { id: 3, cat: "新股", title: "[抽籤] 浩鼎 4174 下週開放，承銷價 305 元", author: "ipo_hunter", replies: 56, time: "30 分鐘前" },
-    { id: 4, cat: "個股", title: "[討論] 力積電 6770 何時送件 IPO？最新進度", author: "chip_lover", replies: 42, time: "1 小時前" },
-    { id: 5, cat: "個股", title: "[心得] 同致 3552 觀察一年的心得分享", author: "long_term",  replies: 35, time: "2 小時前" },
-    { id: 6, cat: "閒聊", title: "[閒聊] 大家覺得 2026 下半年興櫃市場怎麼看？", author: "newbie",   replies: 92, time: "3 小時前", hot: true },
-    { id: 7, cat: "個股", title: "[請益] 廣越 4438 適合長期持有嗎？", author: "tex_invest",  replies: 18, time: "4 小時前" },
-    { id: 8, cat: "興櫃", title: "[新聞] 5/15 興櫃漲跌幅放寬，大家怎麼看？", author: "policy_watch", replies: 64, time: "5 小時前" },
-    { id: 9, cat: "個股", title: "[討論] 長聖 6841 細胞治療進度更新", author: "bio_fan",    replies: 28, time: "6 小時前" },
-    { id: 10, cat: "新股", title: "[抽籤] 彩晶 6116 5/20 開放，中籤率預估", author: "lucky_guy", replies: 71, time: "8 小時前" },
-    { id: 11, cat: "閒聊", title: "[閒聊] 新手請問興櫃股票要怎麼開戶？", author: "first_time", replies: 15, time: "10 小時前" },
-    { id: 12, cat: "個股", title: "[警示] 注意！xx 公司被列入注意股", author: "risk_alert", replies: 102, time: "昨日" }
-  ];
+  const L = window.LeadFu;
+  const all = (L.data.stocks || []).filter(s => s.price && s.price >= 10 && s.volume >= 100);
 
-  function render(cat) {
-    const list = cat === "all" ? threads : threads.filter(t => t.cat === cat);
-    const ul = document.getElementById("threadList");
-    if (list.length === 0) {
-      ul.innerHTML = `<li style="display:block;text-align:center;color:#999;padding:30px;">沒有此分類的討論</li>`;
-      return;
-    }
-    ul.innerHTML = list.map(t => `
-      <li>
-        <span class="thread-cat">${t.cat}</span>
-        <a href="thread-detail.html?id=${t.id}" class="thread-title">${t.hot ? "🔥 " : ""}${t.title}</a>
-        <span class="thread-author">${t.author}</span>
-        <span class="thread-replies">${t.replies} 回</span>
-        <span class="thread-time">${t.time}</span>
-      </li>
-    `).join("");
+  // 取得「注意股」資料（若有 indicators_live / valuation_live）
+  let warnSet = new Set();
+  try {
+    const ind = L.data.indicators || {};
+    Object.keys(ind).forEach(code => {
+      const i = ind[code];
+      if (i && (i.notice || i.attention || i.warning)) warnSet.add(code);
+    });
+  } catch {}
+
+  // 合理區間偏低個股
+  const fv = L.data.fairValue || {};
+
+  function pctChange(s) {
+    if (!s.price || s.change == null) return 0;
+    const prev = s.price - s.change;
+    if (!prev) return 0;
+    return (s.change / prev) * 100;
   }
 
-  document.querySelectorAll(".panel-tabs .tab").forEach(btn => {
+  function reasonText(s, view) {
+    const pct = pctChange(s).toFixed(2);
+    const sign = s.change > 0 ? "+" : "";
+    const vol = (s.volume || 0).toLocaleString();
+    switch (view) {
+      case "volume": return `成交量 ${vol} 張 · 漲跌 ${sign}${pct}% · ${s.category || "其他"}`;
+      case "up":     return `漲幅 ${sign}${pct}% · 成交量 ${vol} 張 · ${s.category || "其他"}`;
+      case "down":   return `跌幅 ${pct}% · 成交量 ${vol} 張 · ${s.category || "其他"}`;
+      case "warn":   {
+        const reasons = [];
+        if (warnSet.has(s.code)) reasons.push("已列入注意股");
+        if (pct < -5) reasons.push("單日跌 >5%");
+        if (pct > 9.5) reasons.push("漲停（注意過熱）");
+        if (s.volume > 50000 && pct < -3) reasons.push("放量下跌");
+        return reasons.length ? reasons.join(" · ") : `近期波動異常 · 跌幅 ${pct}%`;
+      }
+      case "fvLow":  {
+        const f = fv[s.code];
+        if (f) {
+          const pos = (f.position * 100).toFixed(0);
+          const stars = "⭐".repeat(f.confidence || 0);
+          return `合理區間 NT$${f.low}~${f.high} · 目前位置 ${pos}% · ${stars}`;
+        }
+        return `目前股價偏低 · 成交量 ${vol} 張`;
+      }
+    }
+    return "";
+  }
+
+  function sortFor(view) {
+    let pool;
+    if (view === "warn") {
+      pool = all.filter(s => warnSet.has(s.code) || Math.abs(pctChange(s)) > 5);
+      pool.sort((a, b) => Math.abs(pctChange(b)) - Math.abs(pctChange(a)));
+    } else if (view === "fvLow") {
+      pool = all.filter(s => {
+        const f = fv[s.code];
+        return f && f.position != null && f.position <= 0.35 && (f.confidence || 0) >= 4;
+      });
+      pool.sort((a, b) => (fv[a.code].position || 0) - (fv[b.code].position || 0));
+    } else if (view === "up") {
+      pool = all.slice().filter(s => s.change > 0);
+      pool.sort((a, b) => pctChange(b) - pctChange(a));
+    } else if (view === "down") {
+      pool = all.slice().filter(s => s.change < 0);
+      pool.sort((a, b) => pctChange(a) - pctChange(b));
+    } else {
+      pool = all.slice();
+      pool.sort((a, b) => (b.volume || 0) - (a.volume || 0));
+    }
+    return pool.slice(0, 12);
+  }
+
+  function render(view) {
+    const list = sortFor(view);
+    const ul = document.getElementById("htList");
+    if (!list.length) {
+      ul.innerHTML = `<li class="ht-empty">目前沒有符合條件的個股</li>`;
+      return;
+    }
+    ul.innerHTML = list.map((s, i) => {
+      const pct = pctChange(s);
+      const pctTxt = (pct > 0 ? "+" : "") + pct.toFixed(2) + "%";
+      const pctCls = pct > 0 ? "ht-up" : (pct < 0 ? "ht-down" : "ht-flat");
+      const flag = view === "warn" ? "⚠" : (view === "fvLow" ? "💎" : (i < 3 ? "🔥" : ""));
+      const askText = encodeURIComponent(`${s.code} ${s.name} 現在分析一下`);
+      return `
+        <li class="ht-item">
+          <div class="ht-item-rank">#${i + 1}</div>
+          <div class="ht-item-main">
+            <div class="ht-item-title">
+              ${flag ? `<span class="ht-item-flag">${flag}</span>` : ""}
+              <a href="stock-detail.html?code=${s.code}" class="ht-item-stock">${s.code} ${s.name}</a>
+            </div>
+            <div class="ht-item-reason">${reasonText(s, view)}</div>
+          </div>
+          <div class="ht-item-price">
+            <div class="ht-item-price-num">NT$${s.price}</div>
+            <div class="ht-item-price-pct ${pctCls}">${pctTxt}</div>
+          </div>
+          <div class="ht-item-actions">
+            <a href="../index.html?ask=${askText}" class="ht-item-ask">📊 問 AI</a>
+            <a href="stock-detail.html?code=${s.code}" class="ht-item-detail">查看 →</a>
+          </div>
+        </li>
+      `;
+    }).join("");
+  }
+
+  // tabs
+  document.querySelectorAll("#htTabs .ht-tab").forEach(btn => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".panel-tabs .tab").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll("#htTabs .ht-tab").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-      render(btn.dataset.cat);
+      render(btn.dataset.view);
     });
   });
 
-  render("all");
+  // 本週最問 AI cards
+  document.querySelectorAll(".ht-tq-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const q = encodeURIComponent(card.dataset.ask || "");
+      if (q) location.href = `../index.html?ask=${q}`;
+    });
+    card.style.cursor = "pointer";
+  });
+
+  // updated time
+  const stocksMeta = L.data.stocksMeta || {};
+  const upd = stocksMeta.updatedAt || L.data.updatedAt || "--";
+  const updEl = document.getElementById("htUpdatedAt");
+  if (updEl) updEl.textContent = upd;
+
+  render("volume");
 });
 </script>
 </body>
