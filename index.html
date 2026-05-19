@@ -1398,10 +1398,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     showWelcome();
   });
 
-  // 語音輸入
+  // 語音輸入（B 方案：不支援就顯示引導，不隱藏麥克風）
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
-    micBtn.style.display = "none";
+    // 偵測 iOS 上非 Safari 的瀏覽器（Chrome / Firefox / Edge on iOS 都用 WKWebView 沒語音 API）
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const isIOSChrome = isIOS && /CriOS/.test(ua);
+    const isIOSFirefox = isIOS && /FxiOS/.test(ua);
+    const isIOSEdge = isIOS && /EdgiOS/.test(ua);
+    const isIOSNonSafari = isIOSChrome || isIOSFirefox || isIOSEdge;
+
+    micBtn.classList.add("chat-mic-unsupported");
+    micBtn.setAttribute("title", "語音輸入小提示");
+    micBtn.addEventListener("click", () => showVoiceUpsellModal(isIOSNonSafari));
   } else {
     let recog = null;
     micBtn.addEventListener("click", () => {
@@ -1432,6 +1442,63 @@ document.addEventListener("DOMContentLoaded", async () => {
       };
       try { recog.start(); } catch { micBtn.classList.remove("chat-mic-active"); recog = null; }
     });
+  }
+
+  /** 不支援語音輸入時的引導 modal */
+  function showVoiceUpsellModal(isIOSNonSafari) {
+    // 已有 modal 就 focus 它
+    if (document.getElementById("voiceUpsellModal")) return;
+    const ov = document.createElement("div");
+    ov.id = "voiceUpsellModal";
+    ov.className = "voice-upsell-overlay";
+    const stepsHTML = isIOSNonSafari
+      ? `
+        <div class="vu-option">
+          <div class="vu-opt-head">
+            <span class="vu-opt-num">1</span>
+            <strong>把領富 AI 加到主畫面（推薦）</strong>
+          </div>
+          <ol class="vu-steps">
+            <li>點瀏覽器右上角的「分享」<span class="vu-key">⎙</span></li>
+            <li>選「加到主畫面」</li>
+            <li>下次從主畫面打開 — <strong>就能用語音了</strong></li>
+          </ol>
+        </div>
+        <div class="vu-divider">或</div>
+        <div class="vu-option">
+          <div class="vu-opt-head">
+            <span class="vu-opt-num">2</span>
+            <strong>用 Safari 打開 leadfuai.com</strong>
+          </div>
+          <p class="vu-desc">Safari 是 iPhone 唯一支援網頁語音輸入的瀏覽器</p>
+        </div>`
+      : `
+        <p class="vu-generic">
+          您目前使用的瀏覽器不支援網頁語音輸入。
+          建議改用 <strong>Safari</strong>（iPhone）或 <strong>Chrome 桌面版</strong> 來使用語音功能。
+        </p>
+        <p class="vu-desc-2">
+          您仍然可以正常打字使用領富 AI 所有功能 — 只是少了語音的便利。
+        </p>`;
+    ov.innerHTML = `
+      <div class="voice-upsell-modal" role="dialog" aria-modal="true">
+        <button class="vu-close" aria-label="關閉" type="button">✕</button>
+        <div class="vu-icon">🎤</div>
+        <h3 class="vu-title">語音輸入需要 Safari</h3>
+        <p class="vu-sub">${isIOSNonSafari
+          ? "Apple 政策只允許 Safari 使用網頁語音 API，您現在用的瀏覽器不行。但有兩個簡單的解法："
+          : "您的瀏覽器不支援語音輸入。"}</p>
+        ${stepsHTML}
+        <div class="vu-foot">
+          <button class="vu-foot-btn" type="button" data-action="ok">我知道了</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(ov);
+    const close = () => ov.remove();
+    ov.addEventListener("click", (e) => { if (e.target === ov) close(); });
+    ov.querySelector(".vu-close").addEventListener("click", close);
+    ov.querySelector('[data-action="ok"]').addEventListener("click", close);
   }
 
   // 初始化：有歷史就 render，沒就 welcome
