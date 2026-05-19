@@ -1056,7 +1056,133 @@ img { max-width: 100%; }
   letter-spacing: 0.3px;
 }
 .hero-with-chat .hero-visual {
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* === 右側區塊 — 標頭 === */
+.hero-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding-top: 8px;
+}
+.hero-side-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #C5A572;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 0 2px 4px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+.hero-side-spark {
+  font-size: 16px;
+  filter: drop-shadow(0 0 6px rgba(197,165,114,0.6));
+}
+
+/* === 新版 hero card v2（白底 + 金邊 + 三種類別色標）=== */
+.hero-card-v2 {
+  background: #fff !important;
+  backdrop-filter: none !important;
+  border: 1.5px solid rgba(197,165,114,0.55) !important;
+  border-radius: 14px !important;
+  padding: 13px 15px !important;
+  color: #0A1F18 !important;
+  text-decoration: none !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.28) !important;
+  display: block !important;
+  transition: all 0.22s ease-out !important;
+  animation: none !important;
+  transform: none !important;
+  position: relative;
+}
+.hero-card-v2:hover {
+  transform: translateY(-3px) translateX(-3px) !important;
+  box-shadow: 0 14px 32px rgba(197,165,114,0.45) !important;
+  border-color: #C5A572 !important;
+  text-decoration: none !important;
+}
+.hero-card-v2.hero-card-skel {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* 類別標籤（小膠囊）*/
+.hc-cat-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin-bottom: 7px;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
+}
+.hc-cat-volume .hc-cat-tag { background: linear-gradient(135deg, #FEF3C7, #FDE68A); color: #92400E; }
+.hc-cat-fv-low .hc-cat-tag { background: linear-gradient(135deg, #D1FAE5, #A7F3D0); color: #065F46; }
+.hc-cat-gainer .hc-cat-tag { background: linear-gradient(135deg, #FEE2E2, #FECACA); color: #991B1B; }
+
+/* 股票名稱 */
+.hc-stock-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0A1F18 !important;
+  margin-bottom: 4px;
+  letter-spacing: 0.2px;
+}
+
+/* 價格列 */
+.hc-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.hc-price-v2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0A1F18 !important;
+  letter-spacing: 0.3px;
+}
+.hc-pct-v2 {
+  font-size: 13px;
+  font-weight: 700;
+}
+.hc-pct-v2.up,   .hc-pct-v2.ht-up   { color: #EF4444; }
+.hc-pct-v2.down, .hc-pct-v2.ht-down { color: #16A34A; }
+.hc-pct-v2.flat                    { color: #888; }
+
+/* 原因 */
+.hero-card-v2 .hc-reason {
+  font-size: 11.5px;
+  color: #555 !important;
+  padding-top: 7px;
+  border-top: 1px dashed #e5ebf0;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* CTA 按鈕（卡片底部）*/
+.hc-cta-v2 {
+  background: linear-gradient(135deg, #C5A572 0%, #B8985F 100%);
+  color: #0A1F18;
+  font-size: 12.5px;
+  font-weight: 800;
+  padding: 7px 12px;
+  border-radius: 12px;
+  text-align: center;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 6px rgba(197,165,114,0.3);
+  transition: all 0.18s;
+}
+.hero-card-v2:hover .hc-cta-v2 {
+  background: linear-gradient(135deg, #D4B580 0%, #C5A572 100%);
+  box-shadow: 0 4px 12px rgba(197,165,114,0.5);
 }
 
 /* === 智能下一步 CTA chip（AI 回答後出現）=== */
@@ -1115,25 +1241,31 @@ img { max-width: 100%; }
     height: 440px !important;
     max-height: 65vh;
   }
-  /* 手機板 hero 右側 ticker 卡片橫向滾動 */
+  /* 手機板 hero 右側問 AI 卡片橫向滾動 */
+  .hero-with-chat .hero-side { padding-top: 4px; }
+  .hero-side-head { font-size: 12px; padding-left: 4px; }
   .hero-with-chat .hero-visual {
     flex-direction: row;
     overflow-x: auto;
-    gap: 8px;
-    padding-bottom: 4px;
+    gap: 10px;
+    padding-bottom: 6px;
     margin: 0 -16px;
     padding-left: 16px;
     padding-right: 16px;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
   }
-  .hero-with-chat .hero-card {
-    min-width: 220px;
+  .hero-with-chat .hero-card,
+  .hero-with-chat .hero-card-v2 {
+    min-width: 230px;
     flex-shrink: 0;
     scroll-snap-align: start;
     animation: none !important;
     transform: none !important;
   }
+  .hc-stock-name { font-size: 14px; }
+  .hc-price-v2 { font-size: 18px; }
+  .hc-cat-tag { font-size: 10.5px; }
   .chat-next-ctas { margin-left: 30px; gap: 5px; }
   .chat-next-chip { font-size: 11.5px; padding: 5px 10px; }
 }

@@ -602,30 +602,81 @@ function renderFairValueLow() {
 }
 
 /* ============================================================
- * 首頁 Hero 三張卡片（動態載入熱門股，不再硬編碼）
+ * 首頁 Hero 三張「問 AI 起手卡」
+ * 三個視角：🔥 爆量、💎 合理區間偏低、📈 漲幅冠軍
+ * 每張卡點下去直接帶問題到首頁 AI 對話框（?ask= 機制）
  * ============================================================ */
 function renderHeroCards() {
   const host = document.getElementById("heroCards");
   if (!host) return;
-  // 取上市熱門股 top 3（成交量），缺資料時自動退而求其次
-  const all = STOCK_DATA.stocks || [];
-  const listed = all.filter(s => s.market === "listed" && s.price > 0)
-                    .sort((a, b) => (b.volume || 0) - (a.volume || 0));
-  const pool = listed.length >= 3 ? listed : all.filter(s => s.price > 0)
-                                                .sort((a, b) => (b.volume || 0) - (a.volume || 0));
-  const top3 = pool.slice(0, 3);
-  if (top3.length === 0) return;
+  const all = (STOCK_DATA.stocks || []).filter(s => s.price && s.price >= 10);
+  if (all.length === 0) return;
 
-  const cards = top3.map(s => {
+  const fv = STOCK_DATA.fairValue || {};
+
+  // 1) 🔥 爆量股（上市優先，成交量最大）
+  const volPool = all.filter(s => s.market === "listed").sort((a, b) => (b.volume || 0) - (a.volume || 0));
+  const volStock = volPool[0] || all.sort((a, b) => (b.volume || 0) - (a.volume || 0))[0];
+
+  // 2) 💎 合理區間最偏低 + 確信度高（避免跟左側「合理區間 TOP 5」重複的第一名，取第 1）
+  const fvCandidates = all.filter(s => {
+    const f = fv[s.code];
+    return f && f.position != null && f.position <= 0.30 && (f.confidence || 0) >= 4;
+  }).sort((a, b) => (fv[a.code].position || 0) - (fv[b.code].position || 0));
+  const fvStock = fvCandidates[0];
+
+  // 3) 📈 漲幅冠軍（要排除已選過的）
+  const usedCodes = new Set([volStock && volStock.code, fvStock && fvStock.code]);
+  const gainerPool = all.filter(s => s.change > 0 && !usedCodes.has(s.code))
+                        .sort((a, b) => pctChange(b.price, b.change) - pctChange(a.price, a.change));
+  const gainerStock = gainerPool[0];
+
+  const slots = [];
+  if (volStock)    slots.push({ cat: "volume",  s: volStock,    label: "🔥 今日爆量",    askKey: "為什麼今天爆量" });
+  if (fvStock)     slots.push({ cat: "fv-low",  s: fvStock,     label: "💎 合理區間偏低", askKey: "現在是不是低點" });
+  if (gainerStock) slots.push({ cat: "gainer",  s: gainerStock, label: "📈 今日漲幅冠軍", askKey: "為什麼今天大漲" });
+  // 若資料不足 3 個就用爆量榜接續補
+  while (slots.length < 3 && volPool.length > slots.length) {
+    const fill = volPool[slots.length];
+    if (fill && !slots.find(x => x.s.code === fill.code)) {
+      slots.push({ cat: "volume", s: fill, label: "🔥 成交活躍", askKey: "現在分析一下" });
+    } else break;
+  }
+
+  function reasonOf(slot) {
+    const s = slot.s;
+    const vol = (s.volume || 0).toLocaleString();
+    if (slot.cat === "fv-low") {
+      const f = fv[s.code];
+      if (f) {
+        const pos = Math.round((f.position || 0) * 100);
+        const stars = "⭐".repeat(f.confidence || 0);
+        return `合理區間 NT$${f.low}~${f.high} · 位置 ${pos}% · ${stars}`;
+      }
+      return `${s.category || ""} · 成交量 ${vol} 張`;
+    }
+    if (slot.cat === "gainer") {
+      const pct = pctChange(s.price, s.change).toFixed(2);
+      return `漲幅 +${pct}% · 成交量 ${vol} 張 · ${s.category || ""}`;
+    }
+    return `成交量 ${vol} 張 · ${s.category || ""}`;
+  }
+
+  const cards = slots.map(slot => {
+    const s = slot.s;
     const pct = pctChange(s.price, s.change);
     const cls = changeClass(s.change);
-    const marketLabel = s.status || (s.market === "listed" ? "上市"
-                                   : s.market === "otc"    ? "上櫃"
-                                   : s.market === "emerging" ? "興櫃" : "");
-    return `<a class="hero-card" href="${pageHref('stock-detail.html?code=' + s.code)}" style="text-decoration:none;color:inherit;">
-      <div class="hc-row"><span class="hc-name">${s.code} ${s.name}</span><span class="hc-price">${fmtPrice(s.price)}</span></div>
-      <div class="hc-row"><span class="hc-pct ${cls}">${arrow(s.change)} ${fmtPct(pct)}</span><span style="font-size:11px;opacity:0.7;">${marketLabel}</span></div>
-      <div class="hc-ai">AI 摘要：成交量 ${s.volume.toLocaleString()} 張・${s.category}</div>
+    const askText = encodeURIComponent(`${s.code} ${s.name} ${slot.askKey}`);
+    // hero cards 只在首頁出現，直接用相對路徑 ?ask=
+    return `<a class="hero-card hero-card-v2 hc-cat-${slot.cat}" href="?ask=${askText}">
+      <div class="hc-cat-tag">${slot.label}</div>
+      <div class="hc-stock-name">${s.code} ${s.name}</div>
+      <div class="hc-price-row">
+        <span class="hc-price-v2">${fmtPrice(s.price)}</span>
+        <span class="hc-pct-v2 ${cls}">${arrow(s.change)} ${fmtPct(pct)}</span>
+      </div>
+      <div class="hc-reason">${reasonOf(slot)}</div>
+      <div class="hc-cta-v2">💬 點我問 AI →</div>
     </a>`;
   }).join("");
   host.innerHTML = cards;
