@@ -4200,6 +4200,133 @@ body.theme-red .va-item-highlight {
 body.theme-red .ca-table th { background: #7F1D1D; }
 body.theme-red .ca-table .ca-highlight td:first-child { color: #7F1D1D; }
 
+/* ─────────────────────────────────────────────────────────────
+   VIP 訂閱卡片：限時 5 折優惠 + 月付/年付雙按鈕
+   ───────────────────────────────────────────────────────────── */
+.plan-badge-discount {
+  background: linear-gradient(90deg, #B45309, #DC2626) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  animation: plan-badge-pulse 2.5s infinite;
+}
+@keyframes plan-badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+}
+.plan-popular {
+  display: inline-block;
+  font-size: 11px;
+  background: rgba(27, 67, 50, 0.1);
+  color: #1B4332;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+  font-weight: 600;
+}
+.plan-popular-pro {
+  background: rgba(180, 83, 9, 0.12);
+  color: #B45309;
+}
+.plan-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 14px 0 6px;
+  flex-wrap: wrap;
+}
+.plan-price-original {
+  font-size: 18px;
+  color: #9ca3af;
+  text-decoration: line-through;
+  font-weight: 600;
+}
+.plan-price-new {
+  font-size: 36px;
+  font-weight: 800;
+  color: #B45309;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+}
+.plan-price-unit {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+.plan-promo-note {
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 11.5px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+  border-left: 3px solid #f59e0b;
+}
+.plan-cta-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+.plan-cta-annual {
+  background: transparent !important;
+  color: #1B4332 !important;
+  border: 1.5px dashed #1B4332 !important;
+  font-size: 13px !important;
+  padding: 9px 14px !important;
+  font-weight: 600 !important;
+}
+.plan-cta-annual:hover {
+  background: #1B4332 !important;
+  color: #fff !important;
+}
+.plan-save {
+  display: inline-block;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-left: 4px;
+}
+.plan-cta-annual:hover .plan-save {
+  background: #fff;
+  color: #15803d;
+}
+.plan-card-pro {
+  border: 2px solid #fde68a !important;
+  background: linear-gradient(180deg, #fefdf8 0%, #fff 100%) !important;
+}
+.plan-disclaimer {
+  text-align: center;
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #15803d;
+  line-height: 1.7;
+}
+.plan-disclaimer strong { color: #166534; }
+
+body.theme-red .plan-price-new { color: #7F1D1D; }
+body.theme-red .plan-popular { background: rgba(127, 29, 29, 0.1); color: #7F1D1D; }
+body.theme-red .plan-popular-pro { background: rgba(212, 175, 55, 0.18); color: #92400e; }
+body.theme-red .plan-cta-annual { color: #7F1D1D !important; border-color: #7F1D1D !important; }
+body.theme-red .plan-cta-annual:hover { background: #7F1D1D !important; }
+body.theme-red .plan-card-pro { border-color: #D4AF37 !important; }
+body.theme-red .plan-disclaimer { background: #fef9f0; border-color: #D4AF37; color: #92400e; }
+
+@media (max-width: 768px) {
+  .plan-price-new { font-size: 32px; }
+  .plan-price-original { font-size: 16px; }
+  .plan-promo-note { font-size: 11px; }
+}
+
 @media (max-width: 768px) {
   .va-grid { grid-template-columns: repeat(2, 1fr); }
   .va-item-highlight { transform: none; }
