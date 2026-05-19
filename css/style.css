@@ -1668,17 +1668,27 @@ img { max-width: 100%; }
   .logo-bar-inner {
     flex-wrap: wrap;
     height: auto;
-    padding: 12px 0;
-    gap: 12px;
+    padding: 10px 0;
+    gap: 10px;
   }
-  .logo-bi, .logo-net { font-size: 28px; }
+  .logo-bi, .logo-ai { font-size: 26px; }
   .logo-sub { display: none; }
   .search-box {
     order: 3;
     width: 100%;
     max-width: none;
   }
-  .search-box input { padding: 8px 10px; font-size: 13px; }
+  /* 🛠 手機板：placeholder 太長會被切，整體縮小一點 + iOS 防縮放 */
+  .search-box input {
+    padding: 9px 12px;
+    font-size: 14px;
+    min-width: 0;            /* 允許 input 在 flex 容器內收縮 */
+  }
+  .search-box button {
+    padding: 9px 14px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
   .quick-links { display: none; }
 
   /* 主選單變漢堡 */
@@ -3069,24 +3079,34 @@ body.theme-red .daily-brief-ai {
 
 @media (max-width: 768px) {
   .ai-chat-embed {
-    height: 460px;
-    max-height: 70vh;
-    border-radius: 10px;
+    height: 440px;            /* 🛠 微調：手機板高度略縮，讓下方卡片露出 */
+    max-height: 65vh;
+    border-radius: 12px;
   }
-  .ai-chat-embed-head { padding: 12px 14px; }
-  .ai-chat-embed-head h2 { font-size: 15px; }
-  .ai-chat-embed-sub { font-size: 11.5px; }
+  .ai-chat-embed-head { padding: 11px 14px; }
+  .ai-chat-embed-head h2 { font-size: 14.5px; }
+  .ai-chat-embed-sub { font-size: 11px; }
   .ai-chat-embed-newbtn { font-size: 11px; padding: 4px 8px; top: 12px; right: 12px; }
-  .ai-chat-embed .chat-content { font-size: 14.5px; }
-  .ai-chat-embed-input { padding: 12px 12px 10px; }
+  .ai-chat-embed-list { padding: 14px 12px 6px; }     /* 🛠 修：縮小左右 padding 給內容更多空間 */
+  .ai-chat-embed .chat-content {
+    font-size: 14.5px;
+    padding: 11px 13px;        /* 🛠 修：縮小 padding 讓字有更多換行空間 */
+  }
+  .ai-chat-embed-input { padding: 10px 12px 8px; }
   #aiEmbedInput {
     font-size: 16px;            /* iOS 防自動縮放 */
-    min-height: 52px;
-    padding: 14px 14px;
+    min-height: 48px;
+    padding: 12px 14px;
   }
-  .ai-chat-embed-mic { width: 52px; height: 52px; }
-  .ai-chat-embed-mic svg { width: 26px; height: 26px; }
-  .ai-chat-embed-send { height: 52px; padding: 0 20px; font-size: 15px; }
+  .ai-chat-embed-mic { width: 48px; height: 48px; }
+  .ai-chat-embed-mic svg { width: 24px; height: 24px; }
+  .ai-chat-embed-send { height: 48px; padding: 0 18px; font-size: 14.5px; }
+  .ai-chat-embed-disclaimer {
+    font-size: 10.5px;          /* 🛠 修：手機板免責縮小 + 允許換行 */
+    line-height: 1.6;
+    word-spacing: -2px;
+    margin-top: 6px;
+  }
 }
 
 /* 舊的 ai-hero-panel 保留樣式給 ai.html 也許還用到 */
@@ -3289,11 +3309,22 @@ body.theme-red .daily-brief-ai {
 
 @media (max-width: 768px) {
   .feedback-fab {
-    /* 手機上要避開 bottom-tab-bar（高度約 56px）*/
-    bottom: 70px;
-    right: 14px;
-    padding: 10px 14px;
-    font-size: 13px;
+    /* 手機板：縮成 44x44 圓鈕，只顯示 emoji，避免擋內容 */
+    bottom: 70px;             /* 避開 bottom-tab-bar */
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 18px;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(27, 67, 50, 0.28);
+  }
+  .feedback-fab .feedback-fab-label {
+    display: none;            /* 手機板隱藏文字「回饋」字樣 */
+  }
+  .feedback-fab .feedback-fab-emoji {
+    font-size: 22px;
   }
 }
 
@@ -3544,7 +3575,7 @@ body.theme-red .daily-brief-ai {
 .chat-bubble {
   display: flex;
   gap: 10px;
-  max-width: 88%;
+  max-width: 92%;          /* 🛠 修：原 88% 太緊，配合 chat-content flex 收縮 */
   animation: chat-fade-in 0.25s ease-out;
 }
 @keyframes chat-fade-in {
@@ -3557,6 +3588,7 @@ body.theme-red .daily-brief-ai {
 }
 .chat-bubble-assistant {
   align-self: flex-start;
+  width: 100%;             /* 🛠 修：AI 訊息允許吃滿可用寬度避免文字溢出 */
 }
 .chat-avatar {
   flex-shrink: 0;
@@ -3586,6 +3618,9 @@ body.theme-red .daily-brief-ai {
   line-height: 1.8;        /* 行距加大易讀 */
   color: #1f1f1f;
   word-break: break-word;
+  overflow-wrap: anywhere;
+  min-width: 0;            /* 🛠 修：在 flex 容器內讓 content 能正確收縮 */
+  flex: 1 1 auto;          /* 🛠 修：佔滿剩餘空間但允許收縮 */
 }
 .chat-bubble-user .chat-content {
   background: linear-gradient(135deg, #1B4332, #2D6A4F);
