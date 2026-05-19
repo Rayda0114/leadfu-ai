@@ -1008,6 +1008,136 @@ img { max-width: 100%; }
   .hero-card:nth-child(2) { transform: none; }
 }
 
+/* === Hero with embedded AI chat（首頁主舞台）=== */
+.hero-with-chat {
+  padding: 32px 0 40px;
+}
+.hero-with-chat .hero-inner {
+  grid-template-columns: 1.55fr 1fr;
+  align-items: start;
+  gap: 28px;
+}
+.hero-mini-title {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 6px 0 6px;
+  letter-spacing: 0.5px;
+  color: #fff;
+}
+.hero-mini-title .accent {
+  background: linear-gradient(135deg, #C5A572 0%, #2D6A4F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-mini-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.88);
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+.hero-mini-sub strong {
+  color: #C5A572;
+}
+/* 對話框放進 hero — 加金邊 + 強陰影讓它在深色 hero 上跳出 */
+.hero-chat {
+  height: 480px !important;
+  max-height: 62vh;
+  border-radius: 16px !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.45) !important;
+  border: 1px solid rgba(197,165,114,0.45) !important;
+  margin: 0 !important;
+}
+.hero-chat .ai-chat-embed-disclaimer {
+  color: #2D6A4F;
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: 0.3px;
+}
+.hero-with-chat .hero-visual {
+  padding-top: 8px;
+}
+
+/* === 智能下一步 CTA chip（AI 回答後出現）=== */
+.chat-next-ctas {
+  margin: 2px 0 6px 38px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+  animation: ctaFadeIn 0.4s ease-out;
+}
+@keyframes ctaFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.chat-next-label {
+  width: 100%;
+  font-size: 12px;
+  color: #1B4332;
+  font-weight: 700;
+  margin-bottom: 2px;
+  letter-spacing: 0.3px;
+}
+.chat-next-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #C5A572 0%, #B8985F 100%);
+  color: #0A1F18;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 7px 13px;
+  border-radius: 18px;
+  text-decoration: none;
+  border: 1px solid rgba(10,31,24,0.15);
+  transition: all 0.18s;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(197,165,114,0.25);
+}
+.chat-next-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(197,165,114,0.5);
+  text-decoration: none;
+  background: linear-gradient(135deg, #D4B580 0%, #C5A572 100%);
+}
+
+@media (max-width: 768px) {
+  .hero-with-chat { padding: 20px 0 28px; }
+  .hero-with-chat .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .hero-mini-title { font-size: 22px; }
+  .hero-mini-sub { font-size: 12.5px; margin-bottom: 10px; }
+  .hero-chat {
+    height: 440px !important;
+    max-height: 65vh;
+  }
+  /* 手機板 hero 右側 ticker 卡片橫向滾動 */
+  .hero-with-chat .hero-visual {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+    margin: 0 -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hero-with-chat .hero-card {
+    min-width: 220px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    animation: none !important;
+    transform: none !important;
+  }
+  .chat-next-ctas { margin-left: 30px; gap: 5px; }
+  .chat-next-chip { font-size: 11.5px; padding: 5px 10px; }
+}
+
 /* ========== AI placeholder area（電光綠＋深紫 = AI 科技感）========== */
 .ai-panel {
   background: linear-gradient(135deg, #faf5ff 0%, #f0fdf4 50%, #f3e8ff 100%);

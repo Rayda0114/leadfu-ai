@@ -158,20 +158,33 @@
   </div>
 </nav>
 
-<section class="hero">
+<section class="hero hero-with-chat">
   <div class="container hero-inner">
     <div class="hero-text">
-      <span class="hero-badge">✨ AI Powered Stock Analytics</span>
-      <h1 class="hero-title">看清楚<span class="accent">再決定</span><br>您的 AI 台股研究助理</h1>
-      <p class="hero-sub">跨上市、上櫃、興櫃 2,310 檔個股<br>AI 整理三大法人、籌碼、月營收、技術指標</p>
-      <div class="hero-stats">
-        <div><strong>2,310</strong>追蹤個股</div>
-        <div><strong>AI</strong>智能整理</div>
-        <div><strong>0 元</strong>免費註冊</div>
-      </div>
-      <div class="hero-cta">
-        <a href="pages/screener.html" class="hero-btn primary">🔍 立即查詢</a>
-        <a href="pages/register.html" class="hero-btn ghost">免費註冊 →</a>
+      <span class="hero-badge">✨ AI 台股研究助理 · 全市場 2,310 檔</span>
+      <h1 class="hero-mini-title">看清楚<span class="accent">再決定</span></h1>
+      <p class="hero-mini-sub">問股票、找合理區間、看產業 — <strong>一個對話框搞定</strong></p>
+
+      <!-- ✨ 領富 AI 對話框（首頁主舞台） -->
+      <div class="ai-chat-embed hero-chat" id="aiChatEmbed">
+        <div class="ai-chat-embed-head">
+          <h2><span class="ai-sparkle">✨</span> 領富 AI · 直接問我</h2>
+          <div class="ai-chat-embed-sub">即時報價 · 合理區間 · 引用來源</div>
+          <button type="button" class="ai-chat-embed-newbtn" id="aiEmbedNewBtn" title="新對話">＋ 新對話</button>
+        </div>
+        <div class="ai-chat-embed-scroll" id="aiEmbedScroll">
+          <div class="ai-chat-embed-list" id="aiEmbedList"></div>
+        </div>
+        <div class="ai-chat-embed-input">
+          <form id="aiEmbedForm" autocomplete="off">
+            <button type="button" id="aiEmbedMicBtn" class="ai-chat-embed-mic" aria-label="語音輸入" title="語音輸入">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5.91-3a.91.91 0 0 0-.91.91A4.99 4.99 0 0 1 12 17a4.99 4.99 0 0 1-5-5.09.91.91 0 1 0-1.82 0A6.81 6.81 0 0 0 11 18.91V21a1 1 0 1 0 2 0v-2.09a6.81 6.81 0 0 0 5.82-6.91.91.91 0 0 0-.91-.91z"/></svg>
+            </button>
+            <textarea id="aiEmbedInput" placeholder="輸入問題或按麥克風講話..." rows="1" maxlength="800"></textarea>
+            <button type="submit" id="aiEmbedSendBtn" class="ai-chat-embed-send">送出</button>
+          </form>
+          <p class="ai-chat-embed-disclaimer">✅ 即時報價　✅ 合理區間　✅ 引用來源　✅ 0 元免費</p>
+        </div>
       </div>
     </div>
     <div class="hero-visual" id="heroCards">
@@ -339,28 +352,6 @@
       <a href="pages/weekly.html" class="daily-brief-weekly-cta">
         📰 看完整「本週產業週報」 →
       </a>
-    </div>
-
-    <!-- ✨ 領富 AI 內嵌對話視窗 -->
-    <div class="ai-chat-embed" id="aiChatEmbed">
-      <div class="ai-chat-embed-head">
-        <h2><span class="ai-sparkle">✨</span> 跟領富 AI 對話</h2>
-        <div class="ai-chat-embed-sub">跨上市/上櫃/興櫃 2,310 檔，AI 即時幫你找資料</div>
-        <button type="button" class="ai-chat-embed-newbtn" id="aiEmbedNewBtn" title="新對話">＋ 新對話</button>
-      </div>
-      <div class="ai-chat-embed-scroll" id="aiEmbedScroll">
-        <div class="ai-chat-embed-list" id="aiEmbedList"></div>
-      </div>
-      <div class="ai-chat-embed-input">
-        <form id="aiEmbedForm" autocomplete="off">
-          <button type="button" id="aiEmbedMicBtn" class="ai-chat-embed-mic" aria-label="語音輸入" title="語音輸入">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5.91-3a.91.91 0 0 0-.91.91A4.99 4.99 0 0 1 12 17a4.99 4.99 0 0 1-5-5.09.91.91 0 1 0-1.82 0A6.81 6.81 0 0 0 11 18.91V21a1 1 0 1 0 2 0v-2.09a6.81 6.81 0 0 0 5.82-6.91.91.91 0 0 0-.91-.91z"/></svg>
-          </button>
-          <textarea id="aiEmbedInput" placeholder="輸入或按麥克風講話..." rows="1" maxlength="800"></textarea>
-          <button type="submit" id="aiEmbedSendBtn" class="ai-chat-embed-send">送出</button>
-        </form>
-        <p class="ai-chat-embed-disclaimer">※ AI 整理公開資料，不構成投資建議</p>
-      </div>
     </div>
 
     <div class="panel">
@@ -1002,13 +993,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function showWelcome() {
-    renderBubble({ role: "assistant", content: "您好！我是領富 AI 助理 ✨\n\n問我股票代號、公司名、產業熱門、財經概念都可以。也可以按麥克風用講的：" });
+    renderBubble({ role: "assistant", content: "您好！我是領富 AI ✨\n\n問股票、找合理區間、看產業熱門 — 直接問我就好。\n也可以按麥克風🎤用講的，或試試下面這些範例：" });
     renderSuggestionChips([
-      { icon: "📈", text: "今天漲最多的上市股" },
-      { icon: "🔬", text: "半導體上市熱門股" },
-      { icon: "💊", text: "生技上櫃熱門" },
-      { icon: "⚡", text: "興櫃成交活躍" },
-      { icon: "⚠", text: "怎麼避免投資詐騙" }
+      { icon: "💎", text: "2330 台積電現在合理嗎" },
+      { icon: "🔬", text: "半導體現在熱門股" },
+      { icon: "💰", text: "高股息推薦哪幾檔" },
+      { icon: "⚠", text: "我買到注意股怎麼辦" },
+      { icon: "📊", text: "100 萬怎麼配置才穩" },
+      { icon: "🚨", text: "怎麼避免投資詐騙" }
     ]);
     scrollToBottom();
   }
@@ -1051,8 +1043,70 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
           contentEl.insertBefore(btn, contentEl.firstChild);
         }
+        // 🎯 智能下一步 CTA — 根據用戶問題 + AI 回答關鍵字自動推薦相關功能
+        const lastUserMsg = history.filter(m => m.role === "user").pop();
+        const ctas = detectNextStepCTAs(lastUserMsg ? lastUserMsg.content : "", lastText);
+        if (ctas.length) renderNextStepCTAs(ctas);
       }
     };
+  }
+
+  /** 依用戶問題 + AI 回答內容偵測下一步行動建議 */
+  function detectNextStepCTAs(userQuestion, aiAnswer) {
+    const ctas = [];
+    const q = (userQuestion + " " + (aiAnswer || "")).toLowerCase();
+    // 偵測 4 位數股票代號 → 給「看詳細頁」連結（最高優先）
+    const codeMatch = (userQuestion || "").match(/\b(\d{4})\b/);
+    if (codeMatch && _stockByCode[codeMatch[1]]) {
+      const s = _stockByCode[codeMatch[1]];
+      ctas.push({ icon: "📊", text: `看 ${s.code} ${s.name} 完整分析`, href: `pages/stock-detail.html?code=${s.code}` });
+    }
+    if (/合理區間|偏低|偏高|低估|高估|被低估|公允/.test(q)) {
+      ctas.push({ icon: "💎", text: "看合理區間偏低 TOP 5", href: "pages/stocks.html?sort=fv_low" });
+    }
+    if (/詐騙|被騙|騙人|飆股群組|line.*群組|老師.*飆/.test(q)) {
+      ctas.push({ icon: "🚨", text: "看防詐騙專區", href: "pages/fraud-alert.html" });
+    }
+    if (/注意股|處置股|警示|借券|融券|風險/.test(q)) {
+      ctas.push({ icon: "⚠", text: "看防錯雷達", href: "pages/risk-radar.html" });
+    }
+    if (/持股|配置|組合|資產配置|健診|健檢|多少錢配/.test(q)) {
+      ctas.push({ icon: "📋", text: "做持股健診", href: "pages/portfolio-health.html" });
+    }
+    if (/週報|產業趨勢|本週|這週|產業.*熱門|產業.*分析/.test(q)) {
+      ctas.push({ icon: "📰", text: "看 AI 產業週報", href: "pages/weekly.html" });
+    }
+    if (/殖利率|配息|股息|現金股利|高股息/.test(q)) {
+      ctas.push({ icon: "💰", text: "看高殖利率排行", href: "pages/dividends.html" });
+    }
+    if (/月營收|營收公告|公司.*公告|重大訊息/.test(q)) {
+      ctas.push({ icon: "📢", text: "看公司公告", href: "pages/announcements.html" });
+    }
+    if (/開戶|券商|複委託|手續費|美股.*買/.test(q)) {
+      ctas.push({ icon: "🏦", text: "VIP 訂閱（開戶推薦即將推出）", href: "pages/vip.html" });
+    }
+    if (/vip|訂閱|付費|升級|多少錢/.test(q)) {
+      ctas.push({ icon: "💎", text: "VIP 限時 5 折 →", href: "pages/vip.html" });
+    }
+    if (/三大法人|外資|投信|自營/.test(q)) {
+      ctas.push({ icon: "👥", text: "看三大法人買賣超", href: "pages/institutional.html" });
+    }
+    if (/篩選|選股|挑股/.test(q)) {
+      ctas.push({ icon: "🔍", text: "用進階選股工具", href: "pages/screener.html" });
+    }
+    // 去重 + 最多 3 個
+    const seen = new Set();
+    return ctas.filter(c => { if (seen.has(c.href)) return false; seen.add(c.href); return true; }).slice(0, 3);
+  }
+
+  function renderNextStepCTAs(ctas) {
+    if (!ctas.length) return;
+    const wrap = document.createElement("div");
+    wrap.className = "chat-next-ctas";
+    wrap.innerHTML = `<div class="chat-next-label">💬 下一步你可能想看：</div>` +
+      ctas.map(c => `<a href="${c.href}" class="chat-next-chip">${c.icon} ${c.text}</a>`).join("");
+    list.appendChild(wrap);
+    scrollToBottomIfNearBottom();
   }
 
   /** 欄位名自帶單位，避免 AI 把金額誤讀為 % */
