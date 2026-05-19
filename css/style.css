@@ -6,6 +6,8 @@ html, body {
   color: #222;
   background: #f3f5f8;
   line-height: 1.5;
+  overflow-x: hidden;        /* 🛠 防止手機板任何子元素的負 margin / 寬度造成 viewport 溢出 */
+  width: 100%;
 }
 a { color: #163A2E; text-decoration: none; }
 a:hover { color: #1B4332; text-decoration: underline; }
@@ -1249,15 +1251,14 @@ img { max-width: 100%; }
     overflow-x: auto;
     gap: 10px;
     padding-bottom: 6px;
-    margin: 0 -16px;
-    padding-left: 16px;
-    padding-right: 16px;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    /* 🛠 不再用負 margin 撐出 container 邊界，避免撐寬 viewport */
   }
   .hero-with-chat .hero-card,
   .hero-with-chat .hero-card-v2 {
-    min-width: 230px;
+    min-width: 78vw;          /* 🛠 改用 vw 確保不會超出 viewport */
+    max-width: 88vw;
     flex-shrink: 0;
     scroll-snap-align: start;
     animation: none !important;
@@ -2946,6 +2947,10 @@ body.theme-red .daily-brief-ai {
   flex-direction: column;
   height: 540px;
   max-height: 70vh;
+  width: 100%;             /* 🛠 明確限制寬度，避免子層撐出 viewport */
+  max-width: 100%;
+  min-width: 0;            /* 🛠 在 flex/grid 容器內允許收縮 */
+  box-sizing: border-box;
 }
 .ai-chat-embed-head {
   background: linear-gradient(135deg, #0A1F18, #1B4332 60%, #2D6A4F);
@@ -3017,9 +3022,13 @@ body.theme-red .daily-brief-ai {
   display: flex;
   align-items: flex-end;
   gap: 8px;
+  width: 100%;          /* 🛠 form 撐滿可用寬度，配合 input flex 收縮 */
+  box-sizing: border-box;
 }
 #aiEmbedInput {
-  flex: 1;
+  flex: 1 1 0;          /* 🛠 改 1 1 0 確保可收縮，不會撐爆 form */
+  min-width: 0;         /* 🛠 critical：flex item 預設 min-width: auto 會擋住收縮 */
+  width: 0;             /* 🛠 配合 min-width:0 強制收縮對齊 */
   border: 2px solid #d0d5dc;
   border-radius: 10px;
   padding: 13px 14px;
@@ -3030,6 +3039,7 @@ body.theme-red .daily-brief-ai {
   outline: none;
   max-height: 160px;
   min-height: 50px;     /* 之前 38px 太擠，放大 */
+  box-sizing: border-box;
   transition: border-color 0.15s;
 }
 #aiEmbedInput:focus { border-color: #1B4332; }

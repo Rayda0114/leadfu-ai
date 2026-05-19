@@ -635,12 +635,21 @@ function renderHeroCards() {
   if (volStock)    slots.push({ cat: "volume",  s: volStock,    label: "🔥 今日爆量",    askKey: "為什麼今天爆量" });
   if (fvStock)     slots.push({ cat: "fv-low",  s: fvStock,     label: "💎 合理區間偏低", askKey: "現在是不是低點" });
   if (gainerStock) slots.push({ cat: "gainer",  s: gainerStock, label: "📈 今日漲幅冠軍", askKey: "為什麼今天大漲" });
-  // 若資料不足 3 個就用爆量榜接續補
-  while (slots.length < 3 && volPool.length > slots.length) {
-    const fill = volPool[slots.length];
+  // 若資料不足 3 個就用爆量榜接續補（迭代整個 volPool 不要遇到重複就 break）
+  let volIdx = 0;
+  while (slots.length < 3 && volIdx < volPool.length) {
+    const fill = volPool[volIdx++];
     if (fill && !slots.find(x => x.s.code === fill.code)) {
       slots.push({ cat: "volume", s: fill, label: "🔥 成交活躍", askKey: "現在分析一下" });
-    } else break;
+    }
+  }
+  // 還不足 3 個（極罕見）→ 用 all 任挑
+  if (slots.length < 3) {
+    for (const s of all) {
+      if (slots.find(x => x.s.code === s.code)) continue;
+      slots.push({ cat: "volume", s, label: "🔥 熱門個股", askKey: "現在分析一下" });
+      if (slots.length >= 3) break;
+    }
   }
 
   function reasonOf(slot) {
