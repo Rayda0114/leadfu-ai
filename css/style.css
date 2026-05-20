@@ -154,6 +154,10 @@ img { max-width: 100%; }
 .ticker {
   background: #fff8e1;
   border-bottom: 1px solid #f0d77a;
+  overflow: hidden;
+}
+/* 🛠 內層用 container 對齊（跟 live-quote-bar 同左緣）*/
+.ticker-bar-inner {
   display: flex;
   align-items: center;
   height: 36px;

@@ -31,7 +31,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="css/style.css?v=3.15.20">
+<link rel="stylesheet" href="css/style.css?v=3.15.21">
 
 <!-- Schema.org Organization：讓 Google / AI 認識「合法企業 + 提醒冒用」 -->
 <script type="application/ld+json">
@@ -234,8 +234,10 @@
 </div>
 
 <div class="ticker">
-  <div class="ticker-label">熱門排行</div>
-  <div class="ticker-track" id="tickerTrack">載入中...</div>
+  <div class="container ticker-bar-inner">
+    <div class="ticker-label">熱門排行</div>
+    <div class="ticker-track" id="tickerTrack">載入中...</div>
+  </div>
 </div>
 
 <!-- 💎 合理區間偏低 TOP 5（旗艦差異化功能，最顯眼位置） -->
@@ -726,7 +728,7 @@
 }
 </script>
 
-<script src="js/main.js?v=3.15.20"></script>
+<script src="js/main.js?v=3.15.21"></script>
 <script>
 // 📊 今日 AI 盤後摘要（每日生成，6 小時內快取）
 document.addEventListener("DOMContentLoaded", async () => {
