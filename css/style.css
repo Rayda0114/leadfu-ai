@@ -6840,6 +6840,20 @@ body.theme-red .learn-card:hover {
   margin-bottom: 28px;
   font-size: 13.5px;
 }
+/* 文章內紅色警示框（防詐文章用）*/
+.article-alert {
+  background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+  border: 1.5px solid #FCA5A5;
+  border-left: 4px solid #DC2626;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 0 0 24px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #7F1D1D;
+}
+.article-alert strong { color: #B91C1C; }
+.article-alert a { color: #B91C1C; font-weight: 700; }
 .article-toc strong {
   color: #1B4332;
   display: block;
