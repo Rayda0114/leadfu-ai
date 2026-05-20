@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-05-19 02:38",
+  "updatedAt": "2026-05-20 10:28",
   "source": "TWSE OpenAPI 上市新公司資料",
-  "count": 38,
+  "count": 39,
   "data": [
     {
       "code": "6909",
@@ -482,6 +482,21 @@
       "market": "上市",
       "status": "申請中",
       "note": "科技事業"
+    },
+    {
+      "code": "7818",
+      "name": "溢泰實業",
+      "chairman": "林慶雄",
+      "capital_yi": 14.99,
+      "underwriter": "凱基",
+      "underwriting_price": 70.0,
+      "application_date": "2025-10-15",
+      "approved_date": "2025-12-16",
+      "committee_date": "2025-11-25",
+      "listing_date": "",
+      "market": "上市",
+      "status": "申請中",
+      "note": ""
     },
     {
       "code": "6908",
