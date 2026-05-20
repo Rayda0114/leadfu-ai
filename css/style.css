@@ -8654,3 +8654,280 @@ body.theme-red .brand-faq-eyebrow { color: #DC2626; }
   .ht-fraud-body { padding: 14px; }
   .ht-fraud-list li { font-size: 12.5px; }
 }
+
+/* ====================================================
+   🌎 美股專區即將開放（us-market.html）
+   ==================================================== */
+.us-hero {
+  background: linear-gradient(135deg, #0A1F18 0%, #163A2E 40%, #1B4332 100%);
+  color: #fff;
+  padding: 56px 0 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.us-hero::before {
+  content: "";
+  position: absolute;
+  top: -80px; right: -60px;
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(197,165,114,0.22), transparent 70%);
+  pointer-events: none;
+}
+.us-hero-badge {
+  display: inline-block;
+  background: rgba(197,165,114,0.18);
+  border: 1px solid rgba(197,165,114,0.5);
+  color: #C5A572;
+  padding: 6px 16px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+  animation: us-badge-pulse 2.5s ease-in-out infinite;
+}
+@keyframes us-badge-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.us-hero-title {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 18px;
+  position: relative;
+  z-index: 1;
+}
+.us-hero-accent {
+  background: linear-gradient(135deg, #C5A572 0%, #2D6A4F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.us-hero-sub {
+  font-size: 16px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.9);
+  margin: 0 auto 28px;
+  max-width: 600px;
+  position: relative;
+  z-index: 1;
+}
+.us-hero-sub strong { color: #C5A572; }
+.us-hero-cta {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.us-cta-primary {
+  background: #C5A572;
+  color: #0A1F18;
+  padding: 14px 28px;
+  border-radius: 28px;
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 6px 22px rgba(197,165,114,0.45);
+  transition: all 0.18s;
+}
+.us-cta-primary:hover {
+  background: #fff;
+  color: #0A1F18;
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.us-cta-ghost {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 28px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.18s;
+}
+.us-cta-ghost:hover { background: rgba(255,255,255,0.2); color: #fff; text-decoration: none; }
+.us-hero-note {
+  margin-top: 16px;
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.6);
+  position: relative;
+  z-index: 1;
+}
+
+.us-sec-eyebrow {
+  text-align: center;
+  color: #C5A572;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.us-sec-h2 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  color: #1B4332;
+  margin: 0 0 28px;
+}
+.us-features { margin-bottom: 44px; }
+.us-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.us-feature-card {
+  background: #fff;
+  border: 1.5px solid #e5ebf0;
+  border-radius: 14px;
+  padding: 22px 20px;
+  position: relative;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+}
+.us-feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(27,67,50,0.12);
+  border-color: #C5A572;
+}
+.us-fc-icon { font-size: 34px; margin-bottom: 10px; }
+.us-fc-title { font-size: 17px; font-weight: 800; color: #1B4332; margin-bottom: 8px; }
+.us-fc-desc { font-size: 13.5px; line-height: 1.65; color: #555; }
+.us-fc-tag {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+}
+.us-fc-tag-free { background: #DCFCE7; color: #166534; }
+.us-fc-tag-vip { background: linear-gradient(135deg, #C5A572, #B8985F); color: #0A1F18; }
+.us-fc-tag-star { background: #FEF3C7; color: #92400E; }
+
+.us-coverage { margin-bottom: 44px; }
+.us-cov-groups {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  max-width: 820px;
+  margin: 0 auto;
+}
+.us-cov-group {
+  background: #fafbfc;
+  border: 1px solid #e5ebf0;
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.us-cov-label { font-size: 15px; font-weight: 800; color: #1B4332; margin-bottom: 8px; }
+.us-cov-tags { font-size: 13.5px; color: #555; line-height: 1.7; letter-spacing: 0.3px; }
+.us-cov-note { text-align: center; font-size: 13px; color: #888; margin-top: 16px; }
+
+.us-why {
+  background: linear-gradient(135deg, #fffaf0 0%, #fff 100%);
+  border: 1.5px solid #f0e6d2;
+  border-radius: 16px;
+  padding: 32px 28px;
+  margin-bottom: 44px;
+}
+.us-why-h2 { font-size: 22px; font-weight: 800; color: #1B4332; margin: 0 0 18px; text-align: center; }
+.us-why-list { max-width: 640px; margin: 0 auto; list-style: none; padding: 0; }
+.us-why-list li {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #444;
+  padding: 6px 0;
+  border-bottom: 1px dashed #eee;
+}
+.us-why-list li:last-child { border-bottom: 0; }
+.us-why-list strong { color: #B45309; }
+
+.us-bottom-cta {
+  text-align: center;
+  background: linear-gradient(135deg, #0A1F18, #1B4332);
+  color: #fff;
+  border-radius: 16px;
+  padding: 40px 28px;
+}
+.us-bottom-cta h2 { font-size: 24px; font-weight: 800; margin: 0 0 10px; }
+.us-bottom-cta > p { font-size: 15px; color: rgba(255,255,255,0.85); margin: 0 0 22px; }
+.us-disclaimer { font-size: 11.5px; color: rgba(255,255,255,0.5); margin-top: 18px; }
+
+body.theme-red .us-hero,
+body.theme-red .us-bottom-cta { background: linear-gradient(135deg, #4A0E0E, #7F1D1D); }
+body.theme-red .us-sec-h2,
+body.theme-red .us-why-h2,
+body.theme-red .us-fc-title { color: #7F1D1D; }
+
+@media (max-width: 768px) {
+  .us-hero { padding: 40px 0 44px; }
+  .us-hero-title { font-size: 32px; }
+  .us-hero-sub { font-size: 14.5px; }
+  .us-sec-h2 { font-size: 21px; }
+  .us-feature-grid { grid-template-columns: 1fr; }
+  .us-cov-groups { grid-template-columns: 1fr; }
+  .us-why { padding: 24px 18px; }
+  .us-why-list li { font-size: 14px; }
+  .us-bottom-cta { padding: 30px 18px; }
+  .us-bottom-cta h2 { font-size: 20px; }
+  .us-cta-primary, .us-cta-ghost { padding: 12px 22px; font-size: 14px; }
+}
+
+/* 🌎 首頁美股 teaser banner */
+.us-teaser-banner {
+  display: block;
+  background: linear-gradient(100deg, #0A1F18 0%, #1B4332 55%, #2D6A4F 100%);
+  text-decoration: none;
+  border-top: 2px solid #C5A572;
+  border-bottom: 2px solid #C5A572;
+  transition: filter 0.18s;
+}
+.us-teaser-banner:hover { filter: brightness(1.12); text-decoration: none; }
+.us-teaser-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 12px;
+}
+.us-teaser-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.us-teaser-badge {
+  background: rgba(197,165,114,0.2);
+  border: 1px solid rgba(197,165,114,0.5);
+  color: #C5A572;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  animation: us-badge-pulse 2.5s ease-in-out infinite;
+}
+.us-teaser-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.us-teaser-text strong { color: #fff; font-size: 16px; }
+.us-teaser-text span { color: rgba(255,255,255,0.78); font-size: 12.5px; line-height: 1.4; }
+.us-teaser-cta {
+  background: #C5A572;
+  color: #0A1F18;
+  font-weight: 800;
+  font-size: 13.5px;
+  padding: 9px 18px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+body.theme-red .us-teaser-banner { background: linear-gradient(100deg, #4A0E0E, #7F1D1D 55%, #991B1B 100%); }
+@media (max-width: 768px) {
+  .us-teaser-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .us-teaser-text strong { font-size: 15px; }
+  .us-teaser-text span { font-size: 12px; }
+  .us-teaser-cta { align-self: stretch; text-align: center; }
+}
