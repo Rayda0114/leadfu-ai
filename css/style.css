@@ -6130,7 +6130,7 @@ body.theme-red .ind-hl-value { color: #92400e; }
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
-  margin-left: auto;
+  /* 🛠 拿掉 margin-left:auto — 換行時熱門股左對齊（跟盤後同起點），不再右飄 */
 }
 .lq-watchlist-label {
   font-size: 10px;
@@ -6160,6 +6160,7 @@ body.theme-red .ind-hl-value { color: #92400e; }
 .lq-meta {
   font-size: 10px;
   color: #94a3b8;
+  margin-left: auto;        /* 🛠 更新時間靠右，其他內容自然左排 */
 }
 
 /* 紅金主題：保持深綠 bar（即時感較強），只調金色 */
