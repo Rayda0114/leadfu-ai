@@ -7623,6 +7623,103 @@ body.theme-red .onboard-features li .ob-check { background: #D4AF37; }
 }
 
 /* ====================================================
+   ❓ 品牌 FAQ 區塊（首頁，FAQPage schema 對應）
+   ==================================================== */
+.brand-faq-section {
+  background: #fff;
+  padding: 40px 0 48px;
+  border-top: 1px solid #eef1f4;
+}
+.brand-faq-eyebrow {
+  text-align: center;
+  color: #C5A572;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.brand-faq-h2 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  color: #1B4332;
+  margin: 0 0 28px;
+}
+.brand-faq-list {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+.brand-faq-item {
+  border: 1.5px solid #e5ebf0;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.brand-faq-item[open] {
+  border-color: #C5A572;
+  box-shadow: 0 4px 16px rgba(197, 165, 114, 0.15);
+}
+.brand-faq-item summary {
+  padding: 16px 48px 16px 18px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1B4332;
+  cursor: pointer;
+  position: relative;
+  list-style: none;
+  user-select: none;
+  background: #fafbfc;
+  transition: background 0.15s;
+}
+.brand-faq-item summary::-webkit-details-marker { display: none; }
+.brand-faq-item summary:hover { background: #f0f3f8; }
+.brand-faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  font-weight: 400;
+  color: #C5A572;
+  transition: transform 0.2s;
+}
+.brand-faq-item[open] summary { background: #fff; }
+.brand-faq-item[open] summary::after {
+  content: "−";
+  transform: translateY(-50%);
+}
+.brand-faq-ans {
+  padding: 4px 18px 18px;
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: #444;
+}
+.brand-faq-ans strong { color: #1B4332; }
+.brand-faq-ans code {
+  background: #f0f3f8;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.92em;
+  color: #1B4332;
+}
+.brand-faq-ans a { color: #B45309; font-weight: 600; }
+
+body.theme-red .brand-faq-item[open] { border-color: #DC2626; box-shadow: 0 4px 16px rgba(220,38,38,0.12); }
+body.theme-red .brand-faq-h2,
+body.theme-red .brand-faq-ans strong { color: #7F1D1D; }
+body.theme-red .brand-faq-eyebrow { color: #DC2626; }
+
+@media (max-width: 768px) {
+  .brand-faq-section { padding: 28px 0 32px; }
+  .brand-faq-h2 { font-size: 21px; margin-bottom: 20px; }
+  .brand-faq-item summary { font-size: 14.5px; padding: 14px 42px 14px 14px; }
+  .brand-faq-ans { font-size: 13.5px; padding: 2px 14px 14px; }
+}
+
+/* ====================================================
    📱 .h-scroll — 可重用的橫向滑動工具 class
    ====================================================
    用法：
