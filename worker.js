@@ -401,14 +401,17 @@ async function handleAsk(request, env) {
   const hasContext =
     (context.relevantStocks && context.relevantStocks.length) ||
     context.companyInfo || context.revenueInfo || context.industryStats ||
-    context.liveQuote;
+    context.liveQuote || context.dataMeta;
 
   let augmentedLast = lastUserContent;
 
   // 🚨 資料紀律：偵測用戶問了股票（4 位代號）但 context 沒抓到資料
   // → 注入「資料未到位」訊息，阻止 AI 用記憶編造價格
+  // ⚠ 市場摘要 / 盤後整理（isMarketBrief）跳過此檢查 —
+  //   避免「下跌 1143 家」這類數字被誤判為股票代號 1143
+  const stockIntent = /合理|貴|便宜|股價|現在|怎樣|怎麼樣|分析|該不該|位置|值不值|本益比|殖利率|市值|目標價|這檔|這支|買|賣/;
   const askedStockCode = (lastUserContent || "").match(/\b(\d{4})\b/);
-  if (askedStockCode) {
+  if (askedStockCode && !context.isMarketBrief && stockIntent.test(lastUserContent || "")) {
     const code = askedStockCode[1];
     const hasStockInContext =
       (context.relevantStocks || []).some(s => s.code === code) ||

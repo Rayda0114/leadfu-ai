@@ -31,7 +31,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="css/style.css?v=3.17.0">
+<link rel="stylesheet" href="css/style.css?v=3.17.1">
 
 <!-- Schema.org Organization：讓 Google / AI 認識「合法企業 + 提醒冒用」 -->
 <script type="application/ld+json">
@@ -861,7 +861,7 @@
 }
 </script>
 
-<script src="js/main.js?v=3.17.0"></script>
+<script src="js/main.js?v=3.17.1"></script>
 <script>
 // 📊 今日 AI 盤後摘要（每日生成，6 小時內快取）
 document.addEventListener("DOMContentLoaded", async () => {
@@ -919,7 +919,8 @@ async function setupDailyBrief() {
     : topDown.map(i => `<span class="daily-ind-pill daily-ind-pill-down">${i.name} <em>${i.avg.toFixed(2)}%</em></span>`).join(" ");
 
   // 2. AI 摘要（快取 6 小時，避免每次刷新都呼叫 API）
-  const cacheKey = "leadfu_daily_brief_" + d.toISOString().slice(0, 10);
+  // v2：修掉「代號1143 誤判」+「日期幻覺」後換 key，讓舊壞快取失效
+  const cacheKey = "leadfu_daily_brief_v2_" + d.toISOString().slice(0, 10);
   const cacheRaw = localStorage.getItem(cacheKey);
   let cached = null;
   if (cacheRaw) {
@@ -963,12 +964,21 @@ async function setupDailyBrief() {
 async function fetchDailyBriefAi(stats, bodyEl, ttsBtn, cacheKey) {
   const prompt = `請用 2-3 句話幫我整理今天台股全市場的盤後重點，給 45-75 歲一般投資人看的，淺白語言。資料如下：\n\n上漲 ${stats.upCount} 家、下跌 ${stats.downCount} 家、平盤 ${stats.flatCount} 家、注意股 ${stats.warnCount} 檔。\n領漲產業：${stats.topUpIndustries.map(i => i.name+" "+i.avg+"%").join("、")}。\n領跌產業：${stats.topDownIndustries.map(i => i.name+" "+i.avg+"%").join("、")}。\n\n只寫盤面客觀觀察，不要推薦個股，不要預測明日走勢。`;
 
+  // 傳真實資料時間 + 標記為市場摘要（worker 會跳過股票代號誤判）
+  const _meta = (window.LeadFu && window.LeadFu.data && window.LeadFu.data.stocksMeta) || {};
   try {
     const resp = await fetch("/api/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json; charset=utf-8", "Accept": "text/event-stream" },
       body: JSON.stringify({
         messages: [{ role: "user", content: prompt }],
+        context: {
+          isMarketBrief: true,
+          dataMeta: {
+            updatedAt: _meta.updatedAt || "請參考頁面標示",
+            source: _meta.source || "TWSE 證交所 + TPEx 櫃買中心"
+          }
+        },
         stream: true
       })
     });
