@@ -12,6 +12,16 @@ const GA_MEASUREMENT_ID = "G-FM7DSZ7V2R";
 /* 網站主網域（之後綁自有網域時改這裡） */
 const SITE_ORIGIN = "https://leadfuai.com";
 
+/* ════════════════════════════════════════════════════════════
+ * 💎 合理區間 VIP 分級開關
+ * ════════════════════════════════════════════════════════════
+ * false（現在）：首頁 TOP 5 全部 open，衝流量建信任
+ * true （金流上線那天）：TOP 5 名字鎖住（顯示數據，名字 → 🔒 解鎖）、
+ *                       完整排行第 6-10 名免費、TOP 5 由 VIP 解鎖
+ * 啟用方式：金流串接完成 + 會員 VIP 驗證就緒後，把這行改成 true 即可。
+ * ════════════════════════════════════════════════════════════ */
+const FAIR_VALUE_GATE = false;
+
 const STOCK_DATA = {
   updatedAt: "2026-05-12 09:30",
   stocks: [
@@ -566,6 +576,30 @@ function renderFairValueLow() {
       const chg = s ? pctChange(s.price, s.change) : 0;
       const chgCls = chg > 0 ? "up" : (chg < 0 ? "down" : "flat");
       const chgArrow = chg > 0 ? "▲" : (chg < 0 ? "▼" : "─");
+
+      // 💎 VIP 分級開關 ON：TOP 5 是「最被低估的精華」→ 數據照顯示、名字鎖住、導向 VIP
+      if (FAIR_VALUE_GATE) {
+        return `<a class="fv-low-card fv-low-card-locked" href="${pageHref('vip.html')}">
+          <div class="fv-low-card-head fv-low-locked-head">
+            <span class="fv-low-lock-icon">🔒</span>
+            <span class="fv-low-lock-text">解鎖看是哪檔</span>
+          </div>
+          <div class="fv-low-card-price">
+            <span class="fv-low-card-now">NT$ ${price}</span>
+            <span class="fv-low-card-chg ${chgCls}">${chgArrow} ${Math.abs(chg).toFixed(2)}%</span>
+          </div>
+          <div class="fv-low-card-range">
+            合理區間 NT$${Math.round(fv.low).toLocaleString()} ~ ${Math.round(fv.high).toLocaleString()}
+          </div>
+          <div class="fv-low-card-pos">
+            <span class="fv-low-pill">${pct}% 偏低</span>
+            <span class="fv-low-stars">${"⭐".repeat(Math.round(fv.confidence || 0))}</span>
+          </div>
+          <div class="fv-low-vip-tag">💎 VIP 解鎖</div>
+        </a>`;
+      }
+
+      // 開關 OFF（現在）：全 open
       return `<a class="fv-low-card" href="${pageHref('stock-detail.html?code=' + fv.code)}">
         <div class="fv-low-card-head">
           <span class="fv-low-card-code">${fv.code}</span>
@@ -584,6 +618,15 @@ function renderFairValueLow() {
         </div>
       </a>`;
     }).join("");
+
+    // 開關 ON 時，副標補一句說明免費/VIP 分界
+    if (FAIR_VALUE_GATE) {
+      const sub = document.querySelector(".fv-low-sub");
+      if (sub && !sub.dataset.gated) {
+        sub.dataset.gated = "1";
+        sub.innerHTML = "最被低估的 TOP 5 由 VIP 解鎖看是哪檔 🔒｜免費看完整排行第 6 名後。";
+      }
+    }
   }
   // 舊版兼容（不應該還存在，但留以防）
   if (sideUl) {

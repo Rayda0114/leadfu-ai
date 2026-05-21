@@ -3843,6 +3843,41 @@ body.theme-red .fv-cc-bar-marker { border-color: #7F1D1D; }
   gap: 12px;
   padding: 0 12px;
 }
+/* 💎 合理區間 TOP 5 鎖定卡（FAIR_VALUE_GATE 開啟時）*/
+.fv-low-card-locked {
+  position: relative;
+  border-color: #C5A572 !important;
+  background: linear-gradient(135deg, #FFFBEF 0%, #fff 70%) !important;
+}
+.fv-low-locked-head {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0 2px;
+}
+.fv-low-lock-icon { font-size: 18px; }
+.fv-low-lock-text {
+  font-size: 14px;
+  font-weight: 800;
+  color: #B45309;
+  letter-spacing: 0.3px;
+}
+.fv-low-vip-tag {
+  margin-top: 8px;
+  text-align: center;
+  background: linear-gradient(135deg, #C5A572, #B8985F);
+  color: #0A1F18;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 0;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+}
+.fv-low-card-locked:hover {
+  box-shadow: 0 8px 24px rgba(197,165,114,0.35) !important;
+  transform: translateY(-2px);
+}
+
 .fv-low-card {
   display: block;
   background: #fff;
