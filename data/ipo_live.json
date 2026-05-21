@@ -1,23 +1,8 @@
 {
-  "updatedAt": "2026-05-20 10:28",
+  "updatedAt": "2026-05-21 10:46",
   "source": "TWSE OpenAPI 上市新公司資料",
   "count": 39,
   "data": [
-    {
-      "code": "6909",
-      "name": "創控",
-      "chairman": "王禮鵬",
-      "capital_yi": 6.11,
-      "underwriter": "國泰",
-      "underwriting_price": 32.0,
-      "application_date": "2024-11-26",
-      "approved_date": "2025-01-21",
-      "committee_date": "2025-01-06",
-      "listing_date": "",
-      "market": "上市",
-      "status": "申請中",
-      "note": ""
-    },
     {
       "code": "6944",
       "name": "兆聯實業",
@@ -557,6 +542,21 @@
       "market": "上市",
       "status": "申請中",
       "note": "科技事業"
+    },
+    {
+      "code": "7803",
+      "name": "雲象科技-創",
+      "chairman": "葉肇元",
+      "capital_yi": 8.89,
+      "underwriter": "兆豐",
+      "underwriting_price": 23.12,
+      "application_date": "2025-11-21",
+      "approved_date": "2026-01-20",
+      "committee_date": "2025-12-31",
+      "listing_date": "",
+      "market": "上市",
+      "status": "申請中",
+      "note": "創新板"
     },
     {
       "code": "7760",
