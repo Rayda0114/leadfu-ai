@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-05-22 10:28",
+  "updatedAt": "2026-05-25 11:18",
   "source": "TWSE OpenAPI 上市新公司資料",
-  "count": 39,
+  "count": 40,
   "data": [
     {
       "code": "6944",
@@ -583,6 +583,21 @@
       "application_date": "2025-12-23",
       "approved_date": "2026-02-24",
       "committee_date": "2026-02-03",
+      "listing_date": "",
+      "market": "上市",
+      "status": "申請中",
+      "note": "創新板"
+    },
+    {
+      "code": "4582",
+      "name": "聚恆-創",
+      "chairman": "周恒豪",
+      "capital_yi": 6.66,
+      "underwriter": "統一",
+      "underwriting_price": 24.34,
+      "application_date": "2025-12-30",
+      "approved_date": "2026-02-24",
+      "committee_date": "2026-02-06",
       "listing_date": "",
       "market": "上市",
       "status": "申請中",
