@@ -6,7 +6,7 @@
  *   4. HTML 頁面 → network-first
  */
 
-const VERSION = "v3.17.3";
+const VERSION = "v3.18.0";
 const STATIC_CACHE  = "leadfu-static-"  + VERSION;
 const DATA_CACHE    = "leadfu-data-"    + VERSION;
 

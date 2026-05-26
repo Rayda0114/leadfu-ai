@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>美股專區即將開放 - 美股合理區間 + AI 分析 - 領富 AI</title>
-<meta name="description" content="領富 AI 美股專區即將開放！七巨頭、半導體、高股息 ETF 即時報價 + 獨家美股合理區間分析。台灣首個用 AI 算美股合理價的平台。VIP 會員搶先體驗，加官方 LINE 搶先通知。">
-<meta name="keywords" content="美股,美股推薦,美股投資,美股ETF,美股合理價,七巨頭,複委託,美股開戶,AI美股">
+<title>美股精選 100 - 七巨頭 / 半導體 / 高股息 ETF - 領富 AI</title>
+<meta name="description" content="台灣人最常買的 100 檔美股一站看清楚！七巨頭、半導體、大盤 ETF、退休族最愛高股息 ETF、配息個股、加密 ETF、防禦資產 — 領富 AI 美股專區（首波 100 檔精選名單）。">
+<meta name="keywords" content="美股,美股推薦,美股投資,美股ETF,七巨頭,SCHD,JEPI,VOO,QQQ,高股息ETF,複委託,美股開戶">
 <link rel="canonical" href="https://leadfuai.com/pages/us-market.html">
 
-<meta property="og:title" content="美股專區即將開放 - 美股合理區間 + AI 分析 - 領富 AI">
-<meta property="og:description" content="七巨頭、半導體、高股息 ETF 即時報價 + 獨家美股合理區間。台灣首個 AI 算美股合理價的平台，VIP 搶先體驗。">
+<meta property="og:title" content="美股精選 100 - 七巨頭 / 半導體 / 高股息 ETF - 領富 AI">
+<meta property="og:description" content="台灣人最常買的 100 檔美股一站看清楚 — 七巨頭、半導體、高股息 ETF、退休防禦、加密 ETF。台股+美股一站式。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://leadfuai.com/pages/us-market.html">
 <meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
@@ -17,7 +17,85 @@
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
 
-<link rel="stylesheet" href="../css/style.css?v=3.16.2">
+<link rel="stylesheet" href="../css/style.css?v=3.18.0">
+
+<style>
+/* ===== 美股專區 P1：100 檔卡片網格 + filter tabs + search ===== */
+.us-hero-mini { background: linear-gradient(135deg, #0A1F18 0%, #1B4332 60%, #2D6A4F 100%); padding: 36px 0 28px; color: #fff; }
+.us-hero-mini .container { text-align: center; }
+.us-hero-mini h1 { font-size: 30px; margin: 0 0 8px; font-weight: 800; letter-spacing: -0.5px; }
+.us-hero-mini h1 .accent { color: #C5A572; }
+.us-hero-mini .sub { color: #d4e4dc; font-size: 15px; margin: 0 auto 14px; max-width: 640px; line-height: 1.65; }
+.us-hero-mini .count-line { display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center; font-size: 13px; color: #C5A572; }
+.us-hero-mini .count-line span { background: rgba(197,165,114,0.10); padding: 4px 12px; border-radius: 999px; border: 1px solid rgba(197,165,114,0.3); }
+
+/* Filter bar */
+.us-toolbar { position: sticky; top: 0; z-index: 30; background: #fff; border-bottom: 1px solid #e5e7eb; padding: 12px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+.us-toolbar-inner { display: flex; flex-direction: column; gap: 10px; }
+.us-search-row { display: flex; gap: 10px; align-items: center; }
+.us-search-row input { flex: 1; min-width: 0; padding: 10px 14px; border: 1.5px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.15s; }
+.us-search-row input:focus { border-color: #1B4332; }
+.us-search-row .us-count-badge { background: #1B4332; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.us-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.us-tabs::-webkit-scrollbar { height: 4px; }
+.us-tabs::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
+.us-tab { flex-shrink: 0; padding: 7px 14px; border: 1.5px solid #e5e7eb; background: #fff; border-radius: 999px; cursor: pointer; font-size: 13px; color: #4b5563; transition: all 0.15s; font-family: inherit; white-space: nowrap; }
+.us-tab:hover { border-color: #1B4332; color: #1B4332; }
+.us-tab.active { background: #1B4332; color: #fff; border-color: #1B4332; }
+.us-tab .cnt { opacity: 0.7; font-size: 11px; margin-left: 4px; }
+
+/* Card grid */
+.us-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; padding: 20px 0 36px; }
+.us-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; transition: all 0.15s; }
+.us-card:hover { border-color: #C5A572; box-shadow: 0 6px 20px rgba(27,67,50,0.08); transform: translateY(-2px); }
+.us-card-head { display: flex; align-items: center; gap: 12px; }
+.us-card-logo { width: 40px; height: 40px; border-radius: 8px; object-fit: contain; background: #f9fafb; padding: 4px; flex-shrink: 0; border: 1px solid #f3f4f6; }
+.us-card-logo-fallback { width: 40px; height: 40px; border-radius: 8px; background: #1B4332; color: #C5A572; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+.us-card-titles { flex: 1; min-width: 0; }
+.us-card-ticker { font-size: 16px; font-weight: 800; color: #1B4332; letter-spacing: 0.5px; }
+.us-card-name { font-size: 13px; color: #6b7280; line-height: 1.3; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.us-card-cat { display: inline-block; font-size: 11px; color: #C5A572; background: rgba(197,165,114,0.10); padding: 3px 8px; border-radius: 999px; border: 1px solid rgba(197,165,114,0.3); align-self: flex-start; }
+.us-card-desc { font-size: 13px; color: #374151; line-height: 1.55; flex: 1; }
+.us-card-industry { font-size: 12px; color: #6b7280; }
+.us-card-industry::before { content: "🏷 "; opacity: 0.6; }
+.us-card-actions { display: flex; gap: 8px; padding-top: 10px; border-top: 1px solid #f3f4f6; }
+.us-card-actions a, .us-card-actions button { flex: 1; padding: 8px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; text-align: center; text-decoration: none; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; font-family: inherit; }
+.us-card-yahoo { background: #1B4332; color: #fff; }
+.us-card-yahoo:hover { background: #163A2E; }
+.us-card-watch { background: #fff; color: #6b7280; border: 1px solid #e5e7eb; cursor: not-allowed; }
+.us-card-watch:hover { color: #6b7280; }
+
+/* Empty state */
+.us-empty { text-align: center; padding: 60px 20px; color: #6b7280; }
+.us-empty h3 { color: #374151; margin: 0 0 8px; font-size: 18px; }
+
+/* Broker CTA banner */
+.us-broker-cta { background: linear-gradient(135deg, #C5A572 0%, #b8915c 100%); color: #1B4332; border-radius: 16px; padding: 24px; margin: 36px 0 28px; text-align: center; }
+.us-broker-cta h3 { font-size: 20px; margin: 0 0 8px; font-weight: 800; }
+.us-broker-cta p { margin: 0 0 16px; font-size: 14px; line-height: 1.6; color: #1B4332; opacity: 0.85; }
+.us-broker-cta .us-broker-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.us-broker-cta .us-broker-btn { background: #1B4332; color: #C5A572; padding: 11px 22px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 14px; transition: all 0.15s; }
+.us-broker-cta .us-broker-btn:hover { background: #0A1F18; transform: translateY(-1px); }
+.us-broker-cta .us-broker-btn.disabled { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
+.us-broker-cta .us-broker-note { font-size: 11px; margin-top: 12px; color: #1B4332; opacity: 0.7; }
+
+/* Bottom CTA */
+.us-bottom-cta { background: #1B4332; color: #fff; padding: 36px 24px; border-radius: 16px; text-align: center; margin: 32px 0; }
+.us-bottom-cta h2 { margin: 0 0 10px; color: #fff; font-size: 22px; }
+.us-bottom-cta p { color: #d4e4dc; margin: 0 0 18px; font-size: 14px; }
+.us-bottom-cta .us-hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.us-cta-primary { background: #C5A572; color: #1B4332; padding: 12px 24px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 14px; }
+.us-cta-ghost { background: transparent; color: #C5A572; padding: 12px 24px; border-radius: 999px; text-decoration: none; font-weight: 600; border: 1.5px solid #C5A572; font-size: 14px; }
+.us-disclaimer { font-size: 11px; color: #9ca3af; margin-top: 20px; line-height: 1.6; padding: 0 12px; }
+
+@media (max-width: 640px) {
+  .us-hero-mini h1 { font-size: 24px; }
+  .us-hero-mini .sub { font-size: 13.5px; }
+  .us-grid { grid-template-columns: 1fr; gap: 12px; padding: 16px 0 28px; }
+  .us-broker-cta { padding: 20px 18px; }
+  .us-broker-cta h3 { font-size: 17px; }
+}
+</style>
 </head>
 <body>
 
@@ -57,117 +135,68 @@
   </div>
 </nav>
 
-<!-- Hero：即將開放 -->
-<section class="us-hero">
+<!-- Hero（精簡版）-->
+<section class="us-hero-mini">
   <div class="container">
-    <div class="us-hero-badge">🌎 COMING SOON · 即將開放</div>
-    <h1 class="us-hero-title">美股專區<br><span class="us-hero-accent">即將登場</span></h1>
-    <p class="us-hero-sub">
-      台灣<strong>第一個</strong>用 AI 算「美股合理區間」的平台。<br>
-      七巨頭、半導體、高股息 ETF — 看清楚再決定，這次連美股一起。
-    </p>
-    <div class="us-hero-cta">
-      <a href="https://line.me/R/ti/p/@041exgtv" target="_blank" rel="noopener" class="us-cta-primary">🔔 加 LINE 搶先通知我</a>
-      <a href="vip.html" class="us-cta-ghost">💎 VIP 會員搶先體驗 →</a>
+    <h1>美股精選 <span class="accent">100</span></h1>
+    <p class="sub">台灣人最常買、退休族最該認識的 100 檔美股 — 七巨頭、半導體、高股息 ETF、防禦資產一站到位。</p>
+    <div class="count-line">
+      <span>🚀 七巨頭 7</span>
+      <span>🔬 半導體 10</span>
+      <span>📊 大盤 ETF 8</span>
+      <span>💰 配息 ETF 12</span>
+      <span>🏛 道瓊藍籌 15</span>
+      <span>🛡 退休防禦 8</span>
     </div>
-    <div class="us-hero-note">上線通知不漏接 · VIP 會員享美股專區搶先使用權</div>
   </div>
 </section>
 
-<main class="container" style="padding: 32px 12px 48px;">
-
-  <!-- 即將提供的功能 -->
-  <section class="us-features">
-    <div class="us-sec-eyebrow">上線後你可以做什麼</div>
-    <h2 class="us-sec-h2">不只報價，是「美股版合理區間」</h2>
-
-    <div class="us-feature-grid">
-      <div class="us-feature-card">
-        <div class="us-fc-icon">💎</div>
-        <div class="us-fc-title">美股合理區間</div>
-        <div class="us-fc-desc">領富 AI 專有演算法搬到美股 — 看 AAPL、NVDA、TSLA 現在是貴還是便宜，台灣沒人這樣做。</div>
-        <div class="us-fc-tag us-fc-tag-star">獨家</div>
-      </div>
-      <div class="us-feature-card">
-        <div class="us-fc-icon">📈</div>
-        <div class="us-fc-title">即時報價</div>
-        <div class="us-fc-desc">七巨頭、半導體、台廠 ADR、熱門 ETF（VOO/QQQ/SCHD）即時行情，免費查。</div>
-        <div class="us-fc-tag us-fc-tag-free">免費</div>
-      </div>
-      <div class="us-feature-card">
-        <div class="us-fc-icon">🤖</div>
-        <div class="us-fc-title">AI 美股問答</div>
-        <div class="us-fc-desc">用中文問「蘋果現在合理嗎」「QQQ 跟 VOO 差在哪」，AI 附即時資料 + 來源。</div>
-        <div class="us-fc-tag us-fc-tag-free">免費</div>
-      </div>
-      <div class="us-feature-card">
-        <div class="us-fc-icon">🔔</div>
-        <div class="us-fc-title">美股警示推播</div>
-        <div class="us-fc-desc">財報日、股價跌破合理區間、ETF 配息提醒 — VIP 會員專屬。</div>
-        <div class="us-fc-tag us-fc-tag-vip">VIP</div>
-      </div>
-      <div class="us-feature-card">
-        <div class="us-fc-icon">📋</div>
-        <div class="us-fc-title">美股持股健診</div>
-        <div class="us-fc-desc">你的美股 + 台股一起健診，看整體配置、產業集中度、匯率曝險 — VIP 專屬。</div>
-        <div class="us-fc-tag us-fc-tag-vip">VIP</div>
-      </div>
-      <div class="us-feature-card">
-        <div class="us-fc-icon">🏦</div>
-        <div class="us-fc-title">開戶比較</div>
-        <div class="us-fc-desc">複委託 vs 海外券商怎麼選、手續費比較、合法管道整理，幫你少走冤枉路。</div>
-        <div class="us-fc-tag us-fc-tag-free">免費</div>
-      </div>
+<!-- Sticky toolbar：search + filter tabs -->
+<div class="us-toolbar">
+  <div class="container us-toolbar-inner">
+    <div class="us-search-row">
+      <input type="text" id="usSearch" placeholder="搜尋 ticker（AAPL）或中英文名（蘋果 / Apple）" autocomplete="off">
+      <span class="us-count-badge" id="usCountBadge">100 檔</span>
     </div>
+    <div class="us-tabs" id="usTabs">
+      <!-- JS 動態 render -->
+    </div>
+  </div>
+</div>
+
+<main class="container" style="padding: 0 12px 48px;">
+
+  <!-- Card grid -->
+  <div class="us-grid" id="usGrid">
+    <!-- JS 動態 render -->
+  </div>
+
+  <div class="us-empty" id="usEmpty" style="display:none;">
+    <h3>找不到符合的標的</h3>
+    <p>試試不同的關鍵字，或切換上方分類。</p>
+  </div>
+
+  <!-- Broker CTA -->
+  <section class="us-broker-cta">
+    <h3>📈 想開始買美股？</h3>
+    <p>領富 AI 整理台灣人最熱門的開戶選項，含 IB（Interactive Brokers）、Firstrade、複委託比較。<br>透過官方推薦連結開戶，雙方都有開戶禮。</p>
+    <div class="us-broker-btns">
+      <a href="#" class="us-broker-btn disabled" title="IB 推薦連結準備中">🏛 IB 開戶推薦（準備中）</a>
+      <a href="#" class="us-broker-btn disabled" title="Firstrade 推薦連結準備中">🇺🇸 Firstrade 開戶（準備中）</a>
+      <a href="https://line.me/R/ti/p/@041exgtv" target="_blank" rel="noopener" class="us-broker-btn">💬 加 LINE 收上線通知</a>
+    </div>
+    <div class="us-broker-note">※ 開戶推薦連結即將上線，加 LINE 第一時間通知。海外券商開戶涉及匯款與美國稅務，請審慎評估。</div>
   </section>
 
-  <!-- 涵蓋標的 -->
-  <section class="us-coverage">
-    <div class="us-sec-eyebrow">即將收錄</div>
-    <h2 class="us-sec-h2">台灣人最愛的美股，一次到位</h2>
-    <div class="us-cov-groups">
-      <div class="us-cov-group">
-        <div class="us-cov-label">🚀 七巨頭</div>
-        <div class="us-cov-tags">AAPL · MSFT · NVDA · GOOGL · AMZN · META · TSLA</div>
-      </div>
-      <div class="us-cov-group">
-        <div class="us-cov-label">🔬 半導體</div>
-        <div class="us-cov-tags">TSM · AVGO · AMD · ASML · MU · QCOM</div>
-      </div>
-      <div class="us-cov-group">
-        <div class="us-cov-label">📊 大型 ETF</div>
-        <div class="us-cov-tags">VOO · QQQ · VTI · SPY · SCHD · JEPI</div>
-      </div>
-      <div class="us-cov-group">
-        <div class="us-cov-label">🏖️ 退休族最愛</div>
-        <div class="us-cov-tags">KO · JNJ · PG · MCD · V · BRK.B · 高股息</div>
-      </div>
-    </div>
-    <p class="us-cov-note">首波收錄台灣人最常買的 100 檔美股，涵蓋 95% 的美股投資需求。</p>
-  </section>
-
-  <!-- 為什麼領富 AI 做美股 -->
-  <section class="us-why">
-    <div class="us-why-inner">
-      <h2 class="us-why-h2">為什麼是領富 AI 來做美股？</h2>
-      <ul class="us-why-list">
-        <li>✅ ChatGPT 問美股<strong>沒即時資料、會編數字</strong>；領富 AI 串接真實報價 + 附來源</li>
-        <li>✅ 一般美股 App 只給報價；領富 AI 給<strong>獨家合理區間</strong>，看出貴還是便宜</li>
-        <li>✅ 台股 + 美股<strong>一個平台一起看</strong>，不用切換好幾個 App</li>
-        <li>✅ 同樣的「看清楚再決定」精神，這次延伸到全球市場</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 底部 CTA -->
+  <!-- Bottom CTA -->
   <section class="us-bottom-cta">
-    <h2>美股專區上線，第一時間通知你</h2>
-    <p>加官方 LINE，上線當天搶先收到通知。VIP 會員更享搶先體驗權。</p>
+    <h2>把台股 + 美股一起看清楚</h2>
+    <p>領富 AI 從台股 2,300+ 檔擴張到美股精選 100 檔，下一步加入即時報價 + 美股版合理區間。</p>
     <div class="us-hero-cta">
       <a href="https://line.me/R/ti/p/@041exgtv" target="_blank" rel="noopener" class="us-cta-primary">🔔 加 LINE 搶先通知</a>
       <a href="vip.html" class="us-cta-ghost">💎 看 VIP 方案</a>
     </div>
-    <p class="us-disclaimer">※ 領富 AI 整理公開資料，不構成投資建議。美股投資涉及匯率與海外市場風險，請審慎評估。</p>
+    <p class="us-disclaimer">※ 領富 AI 整理公開資料，不構成投資建議。美股投資涉及匯率與海外市場風險，請審慎評估。即時報價請依各券商或交易所為準。</p>
   </section>
 
 </main>
@@ -202,6 +231,126 @@
   </div>
 </footer>
 
-<script src="../js/main.js?v=3.16.2"></script>
+<script src="../js/main.js?v=3.18.0"></script>
+
+<script>
+// ===== 美股專區 P1 邏輯 =====
+(async function () {
+  const grid = document.getElementById('usGrid');
+  const empty = document.getElementById('usEmpty');
+  const tabsBar = document.getElementById('usTabs');
+  const searchInput = document.getElementById('usSearch');
+  const countBadge = document.getElementById('usCountBadge');
+
+  let allStocks = [];
+  let categories = [];
+  let activeCategory = '全部';
+  let searchTerm = '';
+
+  // 載入 metadata
+  try {
+    const res = await fetch('../data/us_stocks_meta.json?v=3.18.0', { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    allStocks = Object.values(json.data);
+    categories = ['全部', ...(json.categories || [])];
+  } catch (err) {
+    grid.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#9ca3af;">資料載入失敗：' + err.message + '</div>';
+    return;
+  }
+
+  // 計算每個 category 數量
+  function countByCategory() {
+    const cnts = { '全部': allStocks.length };
+    allStocks.forEach(s => { cnts[s.category] = (cnts[s.category] || 0) + 1; });
+    return cnts;
+  }
+
+  // Render tabs
+  function renderTabs() {
+    const cnts = countByCategory();
+    tabsBar.innerHTML = categories.map(c => {
+      const cnt = cnts[c] || 0;
+      const isActive = c === activeCategory ? ' active' : '';
+      return `<button class="us-tab${isActive}" data-cat="${c}">${c}<span class="cnt">${cnt}</span></button>`;
+    }).join('');
+    tabsBar.querySelectorAll('.us-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeCategory = btn.dataset.cat;
+        renderTabs();
+        renderGrid();
+      });
+    });
+  }
+
+  // Logo 失敗時 fallback 成首字母
+  function logoFallbackHTML(ticker) {
+    return `<div class="us-card-logo-fallback">${ticker.slice(0, 2)}</div>`;
+  }
+
+  // Render grid
+  function renderGrid() {
+    const term = searchTerm.trim().toLowerCase();
+    const filtered = allStocks.filter(s => {
+      const matchCat = activeCategory === '全部' || s.category === activeCategory;
+      if (!matchCat) return false;
+      if (!term) return true;
+      return (
+        s.ticker.toLowerCase().includes(term) ||
+        s.name_en.toLowerCase().includes(term) ||
+        s.name_zh.toLowerCase().includes(term) ||
+        s.industry.toLowerCase().includes(term)
+      );
+    });
+
+    countBadge.textContent = filtered.length + ' 檔';
+
+    if (filtered.length === 0) {
+      grid.style.display = 'none';
+      empty.style.display = 'block';
+      return;
+    }
+    grid.style.display = 'grid';
+    empty.style.display = 'none';
+
+    grid.innerHTML = filtered.map(s => {
+      const logoUrl = `https://logo.clearbit.com/${s.logo_domain}`;
+      const yahooUrl = `https://finance.yahoo.com/quote/${encodeURIComponent(s.ticker)}/`;
+      return `
+        <div class="us-card" data-ticker="${s.ticker}">
+          <div class="us-card-head">
+            <img src="${logoUrl}" alt="${s.ticker} logo" class="us-card-logo" loading="lazy"
+                 onerror="this.outerHTML='${logoFallbackHTML(s.ticker).replace(/'/g, "\\'")}'">
+            <div class="us-card-titles">
+              <div class="us-card-ticker">${s.ticker}</div>
+              <div class="us-card-name">${s.name_zh} · ${s.name_en}</div>
+            </div>
+          </div>
+          <span class="us-card-cat">${s.category}</span>
+          <div class="us-card-industry">${s.industry}</div>
+          <div class="us-card-desc">${s.description}</div>
+          <div class="us-card-actions">
+            <a href="${yahooUrl}" target="_blank" rel="noopener" class="us-card-yahoo">📊 Yahoo 查報價</a>
+            <button class="us-card-watch" title="即將推出：加入自選 + VIP 警示推播" disabled>⭐ 加自選</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Search input
+  let searchTimer = null;
+  searchInput.addEventListener('input', e => {
+    searchTerm = e.target.value;
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(renderGrid, 120);
+  });
+
+  // 初次 render
+  renderTabs();
+  renderGrid();
+})();
+</script>
+
 </body>
 </html>
