@@ -17,7 +17,7 @@
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
 
-<link rel="stylesheet" href="../css/style.css?v=3.18.0">
+<link rel="stylesheet" href="../css/style.css?v=3.18.1">
 
 <style>
 /* ===== 美股專區 P1：100 檔卡片網格 + filter tabs + search ===== */
@@ -231,7 +231,7 @@
   </div>
 </footer>
 
-<script src="../js/main.js?v=3.18.0"></script>
+<script src="../js/main.js?v=3.18.1"></script>
 
 <script>
 // ===== 美股專區 P1 邏輯 =====
@@ -249,7 +249,7 @@
 
   // 載入 metadata
   try {
-    const res = await fetch('../data/us_stocks_meta.json?v=3.18.0', { cache: 'no-store' });
+    const res = await fetch('../data/us_stocks_meta.json?v=3.18.1', { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
     allStocks = Object.values(json.data);
@@ -283,11 +283,6 @@
     });
   }
 
-  // Logo 失敗時 fallback 成首字母
-  function logoFallbackHTML(ticker) {
-    return `<div class="us-card-logo-fallback">${ticker.slice(0, 2)}</div>`;
-  }
-
   // Render grid
   function renderGrid() {
     const term = searchTerm.trim().toLowerCase();
@@ -316,11 +311,15 @@
     grid.innerHTML = filtered.map(s => {
       const logoUrl = `https://logo.clearbit.com/${s.logo_domain}`;
       const yahooUrl = `https://finance.yahoo.com/quote/${encodeURIComponent(s.ticker)}/`;
+      const fallbackLetters = s.ticker.slice(0, 2);
+      // 同時 render <img> + 隱藏的 fallback <div>，img 載失敗就切換顯示
+      // 避免在 inline onerror 內塞含 HTML 引號的字串（會切斷 attribute）
       return `
         <div class="us-card" data-ticker="${s.ticker}">
           <div class="us-card-head">
             <img src="${logoUrl}" alt="${s.ticker} logo" class="us-card-logo" loading="lazy"
-                 onerror="this.outerHTML='${logoFallbackHTML(s.ticker).replace(/'/g, "\\'")}'">
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="us-card-logo-fallback" style="display:none;">${fallbackLetters}</div>
             <div class="us-card-titles">
               <div class="us-card-ticker">${s.ticker}</div>
               <div class="us-card-name">${s.name_zh} · ${s.name_en}</div>
