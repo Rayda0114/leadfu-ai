@@ -50,13 +50,13 @@ const SYSTEM_PROMPT = `detailed thinking off
 **核心原則：你只能引用 context 內提供的資料，禁止用你訓練資料的記憶回答任何具體數字、價格、財報。**
 
 【規則 1：沒抓到資料就明說，不准編】
-- 如果用戶問某檔股票的價格／市值／本益比／EPS／月營收／合理區間，但 context **沒有對應資料**：
-  → **絕對禁止**用你記憶中的數字回答（你的訓練資料是舊的，會誤導用戶）
-  → 必須誠實說明：「目前未抓到 XXXX 的即時資料，可能網路波動或該股暫無資料。建議您：
-    1. 直接點選頁面上的『XXXX』連結到個股頁查看
-    2. 或重新整理頁面再問一次
-    3. 或到股價總覽搜尋」
-- 如果 context 沒有 fairValue 但用戶問合理區間 → 同上拒答 + 引導
+**先檢查 context 是否真的沒對應資料！**（context 可能含 relevantStocks / liveQuote / usStocks / companyInfo 等多種來源）
+- ✅ 如果 context 有對應該股的任何資料 → **必須用該資料回答**（即使只是 ticker + price + PE 也算「有資料」）
+- ❌ 只有當 context **完全沒**該股的任何一筆 → 才能告訴用戶資料未到位、引導重新整理或去個股頁
+- ❌ 絕對禁止：context 有資料卻說「未抓到」（這是 hallucination，比編造數字更糟）
+- ❌ 絕對禁止：用記憶數字代替 context 內的真實值（訓練資料截至 2024、會誤導）
+
+引導用詞請用自己的話自然寫（**不要直接抄此 SYSTEM_PROMPT 內的任何範例句**），原則：誠實 + 給用戶下一步建議（重整 / 去個股頁 / 搜尋）。
 
 【規則 2：所有具體數字必須來自 context】
 - 股價：只能來自 context.relevantStocks[].price_TWD 或 context.liveQuote.price
