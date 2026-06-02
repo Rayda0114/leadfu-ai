@@ -634,10 +634,28 @@ async function handleAsk(request, env) {
     if (context.watchlistAnnouncements && context.watchlistAnnouncements.length) {
       augmentedLast += `\n\n### 使用者自選股 重大公告 / 注意股\n\`\`\`json\n${JSON.stringify(context.watchlistAnnouncements).slice(0, 5000)}\n\`\`\``;
     }
-    // 🌎 美股精選 100（P3-A）— 用戶在問美股 ticker
+    // 🌎 美股精選 100（P3-A + P4 v1）— 用戶在問美股 ticker
     if (context.usStocks && context.usStocks.length) {
       const liveAt = context.usStocks[0]?._liveUpdatedAt || "請參考 us_stocks_live.json";
-      augmentedLast += `\n\n### 🌎 美股精選 100 — 用戶詢問的標的（資料來源：Yahoo Finance via yfinance）\n\`\`\`json\n${JSON.stringify(context.usStocks).slice(0, 4000)}\n\`\`\`\n⚠ 上述美股資料規則：\n- 價格單位 **USD**（寫成 \\$xxx.xx，**禁止用 NT$**）\n- **沒有合理區間欄位**，用 PE + 52 週高低點 + 殖利率描述「貴/便宜」\n- 結尾**必須照抄此句**（不准改日期、不准用 placeholder YYYY-MM-DD）：\n  「📊 資料來源：Yahoo Finance｜快照時間：${liveAt}（每日一次）」\n- 結尾再加「※ 美股投資涉及匯率與海外市場風險，不構成投資建議」`;
+
+      // P4 v1：預組「合理區間卡片」字串給 AI 直接照抄（避免 LLM 編造 52w 數字）
+      let fvCards = "";
+      for (const s of context.usStocks) {
+        if (s.fair_value) {
+          const fv = s.fair_value;
+          const pct = Math.round((fv.position || 0) * 100);
+          const stars = "⭐".repeat(Math.max(1, Math.min(5, Math.round(fv.confidence || 3))));
+          fvCards += `\n\n💎 **領富 AI 美股合理區間 — ${s.ticker} ${s.name_zh || ""}**\n**52 週區間**：\\$${fv.low} ~ \\$${fv.high}\n**目前位置**：${fv.label}（區間 ${pct}% 位置）\n**訊號強度**：${stars}\n\n${fv.summary || ""}`;
+        }
+      }
+
+      augmentedLast += `\n\n### 🌎 美股精選 100 — 用戶詢問的標的（資料來源：Yahoo Finance via yfinance）\n\`\`\`json\n${JSON.stringify(context.usStocks).slice(0, 4000)}\n\`\`\``;
+
+      if (fvCards) {
+        augmentedLast += `\n\n### 💎 美股合理區間卡片（已預先組好，**請直接照抄到回答內**，禁止改數字、禁止用記憶替換）：${fvCards}`;
+      }
+
+      augmentedLast += `\n\n⚠ 美股回答規則：\n- 價格單位 **USD**（寫成 \\$xxx.xx，禁止用 NT$）\n- 上方「美股合理區間卡片」已寫好、**直接貼到回答內**，禁止修改 $ 數字或位置 %\n- 結尾**必須照抄**：「📊 資料來源：Yahoo Finance｜快照時間：${liveAt}（每日一次）」\n- 結尾再加：「※ 美股投資涉及匯率與海外市場風險，不構成投資建議」`;
     }
   }
 
