@@ -30,3 +30,6 @@ berich-deploy.zip
 !.dev.vars.example
 .env*
 !.env.example
+
+# Python venv（本地 yfinance 用）
+.venv/

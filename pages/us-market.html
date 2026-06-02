@@ -17,7 +17,7 @@
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
 
-<link rel="stylesheet" href="../css/style.css?v=3.18.1">
+<link rel="stylesheet" href="../css/style.css?v=3.19.0">
 
 <style>
 /* ===== 美股專區 P1：100 檔卡片網格 + filter tabs + search ===== */
@@ -64,6 +64,24 @@
 .us-card-yahoo:hover { background: #163A2E; }
 .us-card-watch { background: #fff; color: #6b7280; border: 1px solid #e5e7eb; cursor: not-allowed; }
 .us-card-watch:hover { color: #6b7280; }
+
+/* Quote 區塊（live data：price + change + PE + yield） */
+.us-card-quote { display: flex; align-items: baseline; justify-content: space-between; padding: 10px 0 4px; border-top: 1px solid #f3f4f6; margin-top: 4px; gap: 8px; }
+.us-card-price { font-size: 19px; font-weight: 800; color: #1B4332; letter-spacing: -0.3px; }
+.us-card-change { font-size: 13px; font-weight: 700; white-space: nowrap; }
+.us-card-change.up   { color: #16A34A; }   /* 美股慣例綠漲（跟台股相反！）*/
+.us-card-change.down { color: #EF4444; }   /* 美股慣例紅跌 */
+.us-card-change.flat { color: #6b7280; }
+.us-card-metrics { display: flex; gap: 14px; font-size: 11.5px; color: #6b7280; padding: 0 0 6px; border-bottom: 1px solid #f3f4f6; }
+.us-card-metrics strong { color: #374151; font-weight: 700; }
+.us-card-quote.loading { color: #9ca3af; font-size: 12px; font-weight: 500; padding: 14px 0; border-top: 1px solid #f3f4f6; }
+
+/* Sort row + updated time */
+.us-sort-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.us-sort { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #4b5563; }
+.us-sort select { padding: 6px 26px 6px 10px; border: 1.5px solid #d1d5db; border-radius: 6px; font-size: 12.5px; background: #fff; color: #1B4332; font-family: inherit; cursor: pointer; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M5 6L0 0h10z' fill='%231B4332'/></svg>"); background-repeat: no-repeat; background-position: right 8px center; }
+.us-sort select:focus { outline: none; border-color: #1B4332; }
+.us-updated { font-size: 11px; color: #9ca3af; }
 
 /* Empty state */
 .us-empty { text-align: center; padding: 60px 20px; color: #6b7280; }
@@ -158,6 +176,19 @@
       <input type="text" id="usSearch" placeholder="搜尋 ticker（AAPL）或中英文名（蘋果 / Apple）" autocomplete="off">
       <span class="us-count-badge" id="usCountBadge">100 檔</span>
     </div>
+    <div class="us-sort-row">
+      <div class="us-sort">
+        <span>排序：</span>
+        <select id="usSort" title="排序方式">
+          <option value="default">預設順序</option>
+          <option value="market_cap">市值由大到小</option>
+          <option value="yield">殖利率由高到低</option>
+          <option value="change_pct">今日漲幅</option>
+          <option value="pe">本益比由低到高</option>
+        </select>
+      </div>
+      <span class="us-updated" id="usUpdated">報價載入中…</span>
+    </div>
     <div class="us-tabs" id="usTabs">
       <!-- JS 動態 render -->
     </div>
@@ -231,7 +262,7 @@
   </div>
 </footer>
 
-<script src="../js/main.js?v=3.18.1"></script>
+<script src="../js/main.js?v=3.19.0"></script>
 
 <script>
 // ===== 美股專區 P1 邏輯 =====
@@ -241,19 +272,36 @@
   const tabsBar = document.getElementById('usTabs');
   const searchInput = document.getElementById('usSearch');
   const countBadge = document.getElementById('usCountBadge');
+  const sortSelect = document.getElementById('usSort');
+  const updatedEl = document.getElementById('usUpdated');
 
   let allStocks = [];
+  let liveData = {};
   let categories = [];
   let activeCategory = '全部';
   let searchTerm = '';
+  let sortBy = 'default';
 
-  // 載入 metadata
+  // 並行載入 metadata + live 報價快照
   try {
-    const res = await fetch('../data/us_stocks_meta.json?v=3.18.1', { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    allStocks = Object.values(json.data);
-    categories = ['全部', ...(json.categories || [])];
+    const [metaRes, liveRes] = await Promise.all([
+      fetch('../data/us_stocks_meta.json?v=3.19.0', { cache: 'no-store' }),
+      fetch('../data/us_stocks_live.json?v=3.19.0', { cache: 'no-store' }).catch(() => null)
+    ]);
+    if (!metaRes.ok) throw new Error('meta HTTP ' + metaRes.status);
+    const metaJson = await metaRes.json();
+    allStocks = Object.values(metaJson.data);
+    categories = ['全部', ...(metaJson.categories || [])];
+
+    if (liveRes && liveRes.ok) {
+      const liveJson = await liveRes.json();
+      liveData = liveJson.data || {};
+      if (updatedEl) {
+        updatedEl.textContent = '報價快照：' + (liveJson.updatedAt || '—') + '（Yahoo Finance）';
+      }
+    } else if (updatedEl) {
+      updatedEl.textContent = '（無即時報價，請點卡片 Yahoo 連結查最新）';
+    }
   } catch (err) {
     grid.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#9ca3af;">資料載入失敗：' + err.message + '</div>';
     return;
@@ -283,10 +331,30 @@
     });
   }
 
+  // Sort 函數
+  function sortStocks(arr) {
+    if (sortBy === 'default') return arr;
+    const sorted = arr.slice();
+    const numKey = {
+      market_cap: 'market_cap', yield: 'yield_pct', change_pct: 'change_pct', pe: 'pe_ratio'
+    }[sortBy];
+    const ascending = sortBy === 'pe'; // PE 由低到高、其他由大到小
+    sorted.sort((a, b) => {
+      const va = (liveData[a.ticker] || {})[numKey];
+      const vb = (liveData[b.ticker] || {})[numKey];
+      // null sink 到列表底
+      if (va == null && vb == null) return 0;
+      if (va == null) return 1;
+      if (vb == null) return -1;
+      return ascending ? (va - vb) : (vb - va);
+    });
+    return sorted;
+  }
+
   // Render grid
   function renderGrid() {
     const term = searchTerm.trim().toLowerCase();
-    const filtered = allStocks.filter(s => {
+    let filtered = allStocks.filter(s => {
       const matchCat = activeCategory === '全部' || s.category === activeCategory;
       if (!matchCat) return false;
       if (!term) return true;
@@ -297,6 +365,7 @@
         s.industry.toLowerCase().includes(term)
       );
     });
+    filtered = sortStocks(filtered);
 
     countBadge.textContent = filtered.length + ' 檔';
 
@@ -312,8 +381,36 @@
       const logoUrl = `https://logo.clearbit.com/${s.logo_domain}`;
       const yahooUrl = `https://finance.yahoo.com/quote/${encodeURIComponent(s.ticker)}/`;
       const fallbackLetters = s.ticker.slice(0, 2);
-      // 同時 render <img> + 隱藏的 fallback <div>，img 載失敗就切換顯示
-      // 避免在 inline onerror 內塞含 HTML 引號的字串（會切斷 attribute）
+      const live = liveData[s.ticker];
+
+      // Quote 區塊（price / change / PE / yield）
+      let quoteHtml = '';
+      if (live && live.price != null) {
+        const price = '$' + Number(live.price).toFixed(2);
+        const chgPct = live.change_pct;
+        let chgStr = '—';
+        let chgCls = 'flat';
+        if (chgPct != null) {
+          chgStr = (chgPct >= 0 ? '+' : '') + Number(chgPct).toFixed(2) + '%';
+          chgCls = chgPct > 0 ? 'up' : (chgPct < 0 ? 'down' : 'flat');
+        }
+        const pe = live.pe_ratio != null ? Number(live.pe_ratio).toFixed(1) : '—';
+        const yld = live.yield_pct != null ? Number(live.yield_pct).toFixed(2) + '%' : '—';
+        quoteHtml = `
+          <div class="us-card-quote">
+            <span class="us-card-price">${price}</span>
+            <span class="us-card-change ${chgCls}">${chgStr}</span>
+          </div>
+          <div class="us-card-metrics">
+            <span>PE <strong>${pe}</strong></span>
+            <span>殖利率 <strong>${yld}</strong></span>
+          </div>
+        `;
+      } else {
+        quoteHtml = `<div class="us-card-quote loading">（暫無報價，請點 Yahoo 查最新）</div>`;
+      }
+
+      // 同時 render <img> + 隱藏 fallback <div>，img 載失敗就切換顯示
       return `
         <div class="us-card" data-ticker="${s.ticker}">
           <div class="us-card-head">
@@ -328,8 +425,9 @@
           <span class="us-card-cat">${s.category}</span>
           <div class="us-card-industry">${s.industry}</div>
           <div class="us-card-desc">${s.description}</div>
+          ${quoteHtml}
           <div class="us-card-actions">
-            <a href="${yahooUrl}" target="_blank" rel="noopener" class="us-card-yahoo">📊 Yahoo 查報價</a>
+            <a href="${yahooUrl}" target="_blank" rel="noopener" class="us-card-yahoo">📊 Yahoo 詳情</a>
             <button class="us-card-watch" title="即將推出：加入自選 + VIP 警示推播" disabled>⭐ 加自選</button>
           </div>
         </div>
@@ -344,6 +442,14 @@
     clearTimeout(searchTimer);
     searchTimer = setTimeout(renderGrid, 120);
   });
+
+  // Sort dropdown
+  if (sortSelect) {
+    sortSelect.addEventListener('change', e => {
+      sortBy = e.target.value;
+      renderGrid();
+    });
+  }
 
   // 初次 render
   renderTabs();
