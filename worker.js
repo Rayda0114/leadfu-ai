@@ -315,11 +315,11 @@ function fixUsFairValue(text, usStocks) {
   const fv = usStocks[0]?.fair_value;
   if (!fv) return text;
 
-  // 1. 52 週區間：$X ~ $Y
+  // 1. 52 週區間：$X ~ $Y — 用 callback 避免 $1$XX 被誤判
   if (fv.low != null && fv.high != null) {
     text = text.replace(
       /(\*{0,2}52\s*週區間\*{0,2}[：:]\s*)\$[\d,.]+\s*~\s*\$[\d,.]+/g,
-      `$1$${fv.low} ~ $${fv.high}`
+      (_m, g1) => `${g1}$${fv.low} ~ $${fv.high}`
     );
   }
 
@@ -328,7 +328,7 @@ function fixUsFairValue(text, usStocks) {
     const pct = Math.round(fv.position * 100);
     text = text.replace(
       /(\*{0,2}目前位置\*{0,2}[：:]\s*)[^\n（(]*?\s*[（(]\s*區間\s*\d+\s*%\s*位置\s*[)）]/g,
-      `$1${fv.label}（區間 ${pct}% 位置）`
+      (_m, g1) => `${g1}${fv.label}（區間 ${pct}% 位置）`
     );
   }
 
@@ -337,7 +337,7 @@ function fixUsFairValue(text, usStocks) {
     const stars = "⭐".repeat(Math.max(1, Math.min(5, Math.round(fv.confidence))));
     text = text.replace(
       /(\*{0,2}訊號強度\*{0,2}[：:]\s*)⭐+\s*/g,
-      `$1${stars} `
+      (_m, g1) => `${g1}${stars} `
     );
   }
 
