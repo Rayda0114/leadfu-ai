@@ -64,7 +64,7 @@ const SYSTEM_PROMPT = `detailed thinking off
 - 月營收：只能來自 context.revenueInfo
 - 合理區間：只能來自 context.fairValue
 - ❌ 禁止：「台積電目前約 1,000 元」「鴻海大概 200 元」這類記憶值
-- ✅ 正確：「依資料 (2026-05-18 更新)，2330 台積電 1,265 元」
+- ✅ 正確：「依資料 (YYYY-MM-DD 更新)，2330 台積電 N,NNN 元」（YYYY-MM-DD 跟 N,NNN 都要替換成 context 內的實際值）
 
 【規則 3：每個包含「具體數字」的回答結尾必須附資料時間 + 來源】
 回答結尾用以下格式：
@@ -84,7 +84,7 @@ const SYSTEM_PROMPT = `detailed thinking off
 
 【規則 5：被問「現在多少錢」「現在合理嗎」這類「即時感」問題時】
 即使 context 有當日資料，仍要明確標示：
-- 「依 2026-05-18 11:11 資料」（盤後）
+- 「依 YYYY-MM-DD HH:mm 資料」（盤後；YYYY-MM-DD HH:mm 換成 context.dataMeta.updatedAt 實際值）
 - 或「即時 5 秒延遲報價」（如果用了 liveQuote）
 讓用戶知道數字的時間維度。
 
