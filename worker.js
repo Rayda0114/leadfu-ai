@@ -303,6 +303,47 @@ function fixUsSnapshotDate(text, usStocks) {
   );
 }
 
+/* 美股合理區間數字修正（P4 v1）：
+ * Qwen 會把 2026 真實價格「修正」回 2024/2025 訓練資料記憶值（AAPL $306→$198 等）
+ * 後處理用 regex 強制替換 AI 輸出內的：
+ *   - 「52 週區間：$X ~ $Y」→ 真實 fair_value.low/high
+ *   - 「目前位置：{label}（區間 X% 位置）」→ 真實 fair_value.label / position
+ * 注意：只替換用戶詢問的第一檔（usStocks[0]），多檔對應暫不處理（v2 再做）
+ */
+function fixUsFairValue(text, usStocks) {
+  if (!text || !usStocks || !usStocks.length) return text;
+  const fv = usStocks[0]?.fair_value;
+  if (!fv) return text;
+
+  // 1. 52 週區間：$X ~ $Y
+  if (fv.low != null && fv.high != null) {
+    text = text.replace(
+      /(\*{0,2}52\s*週區間\*{0,2}[：:]\s*)\$[\d,.]+\s*~\s*\$[\d,.]+/g,
+      `$1$${fv.low} ~ $${fv.high}`
+    );
+  }
+
+  // 2. 目前位置：{label}（區間 X% 位置）
+  if (fv.label && fv.position != null) {
+    const pct = Math.round(fv.position * 100);
+    text = text.replace(
+      /(\*{0,2}目前位置\*{0,2}[：:]\s*)[^\n（(]*?\s*[（(]\s*區間\s*\d+\s*%\s*位置\s*[)）]/g,
+      `$1${fv.label}（區間 ${pct}% 位置）`
+    );
+  }
+
+  // 3. 訊號強度：⭐ × N（依 confidence）
+  if (fv.confidence != null) {
+    const stars = "⭐".repeat(Math.max(1, Math.min(5, Math.round(fv.confidence))));
+    text = text.replace(
+      /(\*{0,2}訊號強度\*{0,2}[：:]\s*)⭐+\s*/g,
+      `$1${stars} `
+    );
+  }
+
+  return text;
+}
+
 
 /* CORS / preflight */
 function corsHeaders() {
@@ -726,6 +767,7 @@ async function handleAsk(request, env) {
     if (gem.ok) {
       let answer = filterCompliance(gem.answer);
       answer = fixUsSnapshotDate(answer, context.usStocks);
+      answer = fixUsFairValue(answer, context.usStocks);
       // Stream 模式：包成 SSE
       if (wantStream) {
         return new Response(geminiToSSE(answer, gem.model), {
@@ -807,6 +849,7 @@ async function handleAsk(request, env) {
   let answer = data?.choices?.[0]?.message?.content || "";
   answer = filterCompliance(answer);
   answer = fixUsSnapshotDate(answer, context.usStocks);
+  answer = fixUsFairValue(answer, context.usStocks);
 
   return new Response(JSON.stringify({
     answer,
