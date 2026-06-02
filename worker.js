@@ -438,30 +438,36 @@ function extractUsTickerCandidates(text) {
   return [...new Set(matches.filter(t => !US_TICKER_BLOCKLIST.has(t)))];
 }
 
-// 從 ASSETS binding 抓美股 meta + live + fair_value，合併並過濾出 candidates 內的 ticker
+// 從 ASSETS binding 抓美股 meta + live + (可選) fair_value，合併並過濾 candidates
+// 採 split try/catch：fair_value fetch 失敗不影響 meta+live 主流程
 async function getUsStockData(env, candidates) {
   if (!env.ASSETS || !candidates || !candidates.length) return null;
   try {
-    const [metaRes, liveRes, fvRes] = await Promise.all([
+    // 必要：meta + live
+    const [metaRes, liveRes] = await Promise.all([
       env.ASSETS.fetch(new Request("https://placeholder/data/us_stocks_meta.json")),
-      env.ASSETS.fetch(new Request("https://placeholder/data/us_stocks_live.json")),
-      env.ASSETS.fetch(new Request("https://placeholder/data/us_fair_value_live.json"))
+      env.ASSETS.fetch(new Request("https://placeholder/data/us_stocks_live.json"))
     ]);
     if (!metaRes.ok) return null;
     const meta = await metaRes.json();
     const metaData = meta?.data || {};
     let liveData = {};
     let liveUpdatedAt = null;
-    if (liveRes.ok) {
+    if (liveRes && liveRes.ok) {
       const live = await liveRes.json();
       liveData = live?.data || {};
       liveUpdatedAt = live?.updatedAt || null;
     }
+    // 可選：fair_value（fail 不影響整體）
     let fvData = {};
-    if (fvRes && fvRes.ok) {
-      const fv = await fvRes.json();
-      fvData = fv?.data || {};
-    }
+    try {
+      const fvRes = await env.ASSETS.fetch(new Request("https://placeholder/data/us_fair_value_live.json"));
+      if (fvRes && fvRes.ok) {
+        const fv = await fvRes.json();
+        fvData = fv?.data || {};
+      }
+    } catch (_fvErr) { /* 沒 fair_value 也能正常運作 */ }
+
     const result = [];
     for (const ticker of candidates) {
       if (!metaData[ticker]) continue;   // 不在 100 檔精選庫就 skip
