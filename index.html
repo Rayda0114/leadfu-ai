@@ -307,17 +307,17 @@
             <div class="vs-mini-fv-head">💎 LeadFu Fair Value Range</div>
             <div class="vs-mini-bar">
               <div class="vs-mini-bar-track">
-                <div class="vs-mini-bar-marker" style="left:46%;"></div>
+                <div class="vs-mini-bar-marker" id="fvDemoMarker" style="left:29%;"></div>
               </div>
               <div class="vs-mini-bar-labels">
-                <span>NT$ 1,930</span>
-                <span>NT$ 2,655</span>
+                <span id="fvDemoLow">NT$ 2,105</span>
+                <span id="fvDemoHigh">NT$ 2,768</span>
               </div>
             </div>
-            <div class="vs-mini-fv-meta">
-              <span class="vs-mini-tag">位置</span> <strong>合理區間中 (46%)</strong> · <span class="vs-mini-tag">強度</span> ⭐⭐⭐⭐⭐
+            <div class="vs-mini-fv-meta" id="fvDemoMeta">
+              <span class="vs-mini-tag">位置</span> <strong>合理偏低 (29%)</strong> · <span class="vs-mini-tag">強度</span> ⭐⭐⭐⭐⭐
             </div>
-            <p class="vs-mini-note">目前股價 2,265 元落在中性配置區間，非偏低也非偏高。</p>
+            <p class="vs-mini-note" id="fvDemoNote">目前股價 2,295 元，位於合理區間偏低位置，相對便宜。</p>
           </div>
         </div>
         <div class="vs-card-tags">
@@ -1673,6 +1673,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   } catch (e) { /* URL 解析失敗就 skip */ }
 });
+</script>
+
+<script>
+/* 動態更新首頁 hero「ChatGPT vs 領富 AI」對比區塊內的 2330 合理區間
+   讀 fair_value_live.json（已被 main.js 載入到 window.LeadFu.data.fairValue），
+   避免 hardcode 數字過時。失敗就保留 HTML fallback。 */
+(async () => {
+  try {
+    if (!window.LeadFu || !window.LeadFu.ready) return;
+    await window.LeadFu.ready;
+    const fv = window.LeadFu.data && window.LeadFu.data.fairValue && window.LeadFu.data.fairValue["2330"];
+    if (!fv) return;
+    const pos = Math.max(0, Math.min(100, fv.position * 100));
+    const fmt = n => Math.round(n).toLocaleString();
+    const $ = id => document.getElementById(id);
+    if ($("fvDemoMarker")) $("fvDemoMarker").style.left = pos.toFixed(1) + "%";
+    if ($("fvDemoLow"))    $("fvDemoLow").textContent   = "NT$ " + fmt(fv.low);
+    if ($("fvDemoHigh"))   $("fvDemoHigh").textContent  = "NT$ " + fmt(fv.high);
+    if ($("fvDemoMeta")) {
+      const stars = "⭐".repeat(Math.max(1, Math.min(5, Math.round(fv.confidence))));
+      $("fvDemoMeta").innerHTML =
+        `<span class="vs-mini-tag">位置</span> <strong>${fv.label} (${pos.toFixed(0)}%)</strong> · <span class="vs-mini-tag">強度</span> ${stars}`;
+    }
+    if ($("fvDemoNote")) {
+      const noteMap = {
+        "低於合理區間":  "位置已跌破合理區間下緣",
+        "合理區間下緣":  "位於合理區間下緣，相對偏便宜",
+        "合理偏低":      "位於合理區間偏低位置，相對便宜",
+        "合理區間中":    "落在中性配置區間，非偏低也非偏高",
+        "合理偏高":      "位於合理區間偏高位置，相對偏貴",
+        "合理區間上緣":  "位於合理區間上緣，相對偏貴",
+        "高於合理區間":  "位置已突破合理區間上緣，相對偏貴"
+      };
+      const desc = noteMap[fv.label] || "請參考合理區間判斷現價位置";
+      $("fvDemoNote").textContent = `目前股價 ${fv.price.toLocaleString()} 元，${desc}。`;
+    }
+  } catch (e) { /* 失敗就保留 HTML fallback */ }
+})();
 </script>
 </body>
 </html>
