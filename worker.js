@@ -270,6 +270,22 @@ function filterCompliance(text) {
 }
 
 
+/* 美股快照時間修正（P3-A）：
+ * Qwen / Gemini 等 LLM 看到 2026 日期會「修正」回訓練資料截止年（如 2024-06），
+ * 不管 prompt 多強調都會搞錯快照時間。後處理直接 regex 找「快照時間：YYYY-MM-DD ...」
+ * 強制替換成 context.usStocks 內的真實 _liveUpdatedAt。
+ */
+function fixUsSnapshotDate(text, usStocks) {
+  if (!text || !usStocks || !usStocks.length) return text;
+  const liveAt = usStocks[0]?._liveUpdatedAt;
+  if (!liveAt) return text;
+  return text.replace(
+    /(快照時間[：:]\s*)\d{4}[-/]\d{1,2}[-/]\d{1,2}(?:[\s,]+\d{1,2}[:：]\d{2}(?::\d{2})?)?/g,
+    `$1${liveAt}`
+  );
+}
+
+
 /* CORS / preflight */
 function corsHeaders() {
   return {
@@ -667,7 +683,8 @@ async function handleAsk(request, env) {
     console.log(`[Worker] Nvidia 失敗 (${aiResp?.status || nvidiaError})，切換 Gemini fallback`);
     const gem = await callGemini(env, finalMessages, maxTokens);
     if (gem.ok) {
-      const answer = filterCompliance(gem.answer);
+      let answer = filterCompliance(gem.answer);
+      answer = fixUsSnapshotDate(answer, context.usStocks);
       // Stream 模式：包成 SSE
       if (wantStream) {
         return new Response(geminiToSSE(answer, gem.model), {
@@ -748,6 +765,7 @@ async function handleAsk(request, env) {
 
   let answer = data?.choices?.[0]?.message?.content || "";
   answer = filterCompliance(answer);
+  answer = fixUsSnapshotDate(answer, context.usStocks);
 
   return new Response(JSON.stringify({
     answer,
