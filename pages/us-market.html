@@ -17,7 +17,7 @@
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
 
-<link rel="stylesheet" href="../css/style.css?v=3.19.0">
+<link rel="stylesheet" href="../css/style.css?v=3.20.0">
 
 <style>
 /* ===== 美股專區 P1：100 檔卡片網格 + filter tabs + search ===== */
@@ -262,7 +262,7 @@
   </div>
 </footer>
 
-<script src="../js/main.js?v=3.19.0"></script>
+<script src="../js/main.js?v=3.20.0"></script>
 
 <script>
 // ===== 美股專區 P1 邏輯 =====
@@ -285,8 +285,8 @@
   // 並行載入 metadata + live 報價快照
   try {
     const [metaRes, liveRes] = await Promise.all([
-      fetch('../data/us_stocks_meta.json?v=3.19.0', { cache: 'no-store' }),
-      fetch('../data/us_stocks_live.json?v=3.19.0', { cache: 'no-store' }).catch(() => null)
+      fetch('../data/us_stocks_meta.json?v=3.20.0', { cache: 'no-store' }),
+      fetch('../data/us_stocks_live.json?v=3.20.0', { cache: 'no-store' }).catch(() => null)
     ]);
     if (!metaRes.ok) throw new Error('meta HTTP ' + metaRes.status);
     const metaJson = await metaRes.json();

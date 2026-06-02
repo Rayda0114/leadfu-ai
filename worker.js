@@ -198,6 +198,39 @@ const SYSTEM_PROMPT = `detailed thinking off
   - 「我自選股有沒有公告」→ 用 watchlistAnnouncements 提醒注意股或處置股
   - 「自選股全部一次幫我看」→ 跨資料源綜合整理（股價 + 新聞 + 重大訊息）
 
+═══════════════════════════════════════════════════════
+【🌎 美股題型 — 美股精選 100 庫】
+═══════════════════════════════════════════════════════
+
+當 context 含 \`usStocks\` 欄位 → 用戶在問美股（領富 AI 美股精選 100 內的標的）。
+資料結構：每個 entry 含 ticker / name_en / name_zh / category / industry / description（meta）
++ price / change_pct / pe_ratio / yield_pct / market_cap / w52_high / w52_low / sector / _liveUpdatedAt（live）
+
+【美股 vs 台股關鍵差異】
+- 價格單位 **USD**（不是 NT$），寫成「$306.31」「$2,768」（萬位以上加千分位）
+- 美股慣例「綠漲紅跌」（跟台股相反，但文字只要正負號就 OK）
+- 資料來源：**Yahoo Finance via yfinance**（不是 TWSE/TPEx）
+- 資料時間：用 \`_liveUpdatedAt\` 標示（每天美股收盤後 cron 抓一次快照）
+- 結尾必須附：「📊 資料來源：Yahoo Finance｜快照時間：YYYY-MM-DD HH:MM（每日一次）」
+
+【美股**目前沒有合理區間**（P4 才會做）】
+- usStocks 沒提供 fairValue 欄位
+- 用戶問「貴不貴」「現在合理嗎」→ 用 PE + 52 週高低點 + 殖利率描述：
+  範例：「AAPL 現價 $306.31，PE 37.0（科技股偏高）；52 週區間 $195-$315，目前接近 52 週高點」
+- 對 ETF：強調殖利率（yield_pct）+ 過去 12 個月配息穩定度
+  範例：「SCHD 殖利率 3.5%，是退休族配置主力之一；近 1 年區間 $26-$29 中段」
+
+【100 檔範圍外的美股】
+- 若用戶問的 ticker context 沒給（不在 us_stocks_meta 100 檔內）→ 引導：
+  「您問的 OOO 目前不在領富 AI 美股精選 100 內，建議到 leadfuai.com/pages/us-market.html 看清單，或直接 Google『OOO Yahoo Finance』查最新報價。」
+- ❌ 絕對禁止用記憶編造美股價格／PE／市值（你的訓練資料是舊的）
+
+【美股合規 — 跟台股一致】
+- 不准建議買進賣出
+- 不准給目標價、不准預測股價
+- 「PE 偏高/偏低」「殖利率高/低於某 ETF 平均」這類客觀描述 OK
+- 結尾「※ 美股投資涉及匯率與海外市場風險，不構成投資建議」
+
 【⚠ 重要：欄位單位區分（絕對不要搞混）】
 個股資料 (relevantStocks) 內的欄位代表的單位：
 - price_TWD：股價（新台幣「元」）
@@ -347,6 +380,64 @@ function geminiToSSE(answer, model) {
 }
 
 
+/* ============================================================
+ * 美股資料抓取（P3-A）：用 env.ASSETS.fetch 從 same-origin static
+ * assets 拿 us_stocks_meta + us_stocks_live，找到對應 ticker 後
+ * 合併欄位回傳。完全後端、客戶端零侵入。
+ * ============================================================ */
+
+// 排除常見英文單字（避免「I / IS / NO / OK」等被誤判 ticker）
+const US_TICKER_BLOCKLIST = new Set([
+  "I","A","AM","AN","AS","AT","BE","BY","DO","GO","IF","IN","IS","IT","NO",
+  "OF","ON","OR","OK","SO","TO","UP","US","WE","MY","ME","HE","UK",
+  "AND","ARE","BUT","CAN","FOR","GET","HAS","HAD","HER","HIM","HIS","HOW",
+  "ITS","NOT","NOW","OUR","OUT","SHE","THE","WAS","WHO","WHY","YES","YOU",
+  "WAY","WHO","DID","TWO","ONE","ALL","ANY","NEW","OLD","SEE","SAY","USE",
+  "AI","API","CEO","CFO","CTO","COO","IPO","PE","ETF","NYC","USA","USD",
+  "URL","FAQ","SOP","SDK","SQL","XML","JSON","HTTP","HTTPS"
+]);
+
+// 提取訊息內可能的美股 ticker（1-5 個大寫字母 + 可選 -X 後綴如 BRK-B）
+function extractUsTickerCandidates(text) {
+  if (!text) return [];
+  const matches = text.match(/\b[A-Z]{1,5}(?:-[A-Z])?\b/g) || [];
+  return [...new Set(matches.filter(t => !US_TICKER_BLOCKLIST.has(t)))];
+}
+
+// 從 ASSETS binding 抓美股 meta + live，合併並過濾出 candidates 內的 ticker
+async function getUsStockData(env, candidates) {
+  if (!env.ASSETS || !candidates || !candidates.length) return null;
+  try {
+    const [metaRes, liveRes] = await Promise.all([
+      env.ASSETS.fetch(new Request("https://placeholder/data/us_stocks_meta.json")),
+      env.ASSETS.fetch(new Request("https://placeholder/data/us_stocks_live.json"))
+    ]);
+    if (!metaRes.ok) return null;
+    const meta = await metaRes.json();
+    const metaData = meta?.data || {};
+    let liveData = {};
+    let liveUpdatedAt = null;
+    if (liveRes.ok) {
+      const live = await liveRes.json();
+      liveData = live?.data || {};
+      liveUpdatedAt = live?.updatedAt || null;
+    }
+    const result = [];
+    for (const ticker of candidates) {
+      if (!metaData[ticker]) continue;   // 不在 100 檔精選庫就 skip
+      result.push({
+        ...metaData[ticker],
+        ...(liveData[ticker] || {}),
+        _liveUpdatedAt: liveUpdatedAt
+      });
+    }
+    return result.length ? result : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+
 /* /api/ask 處理 */
 async function handleAsk(request, env) {
   if (request.method === "OPTIONS") {
@@ -401,7 +492,8 @@ async function handleAsk(request, env) {
   const hasContext =
     (context.relevantStocks && context.relevantStocks.length) ||
     context.companyInfo || context.revenueInfo || context.industryStats ||
-    context.liveQuote || context.dataMeta;
+    context.liveQuote || context.dataMeta ||
+    (context.usStocks && context.usStocks.length);
 
   let augmentedLast = lastUserContent;
 
@@ -421,6 +513,20 @@ async function handleAsk(request, env) {
       augmentedLast += `\n\n---\n⚠ 系統提示：用戶詢問代號 ${code}，但目前 context 中沒有該股的即時資料。\n**請依資料紀律規則 1 回答**：誠實告訴用戶資料未到位，引導去個股頁查看或重新整理，**絕對禁止**用訓練資料的記憶編造價格／本益比／市值等具體數字。`;
     }
   }
+
+  // 🌎 美股偵測（P3-A）：抓 1-5 大寫字母（含 BRK-B 那種 -X 後綴）
+  //   排除常見英文後若仍有 candidate → 用 env.ASSETS 從 us_stocks_meta/live 抓對應資料
+  //   注入 context.usStocks 給後續 augmentedLast 階段用
+  if (!context.usStocks || !context.usStocks.length) {
+    const usTickerCandidates = extractUsTickerCandidates(lastUserContent || "");
+    if (usTickerCandidates.length && !context.isMarketBrief) {
+      const usData = await getUsStockData(env, usTickerCandidates);
+      if (usData && usData.length) {
+        context.usStocks = usData;
+      }
+    }
+  }
+
   const hasWatchlistContext = context.watchlistStocks
     || context.watchlistNews
     || context.watchlistAnnouncements
@@ -479,6 +585,10 @@ async function handleAsk(request, env) {
     }
     if (context.watchlistAnnouncements && context.watchlistAnnouncements.length) {
       augmentedLast += `\n\n### 使用者自選股 重大公告 / 注意股\n\`\`\`json\n${JSON.stringify(context.watchlistAnnouncements).slice(0, 5000)}\n\`\`\``;
+    }
+    // 🌎 美股精選 100（P3-A）— 用戶在問美股 ticker
+    if (context.usStocks && context.usStocks.length) {
+      augmentedLast += `\n\n### 🌎 美股精選 100 — 用戶詢問的標的（資料來源：Yahoo Finance via yfinance）\n\`\`\`json\n${JSON.stringify(context.usStocks).slice(0, 4000)}\n\`\`\`\n⚠ 上述美股資料：價格單位 USD（寫成 \\$xxx.xx）；資料時間在每個 entry 的 \`_liveUpdatedAt\`（每日一次快照，非即時）；**沒有合理區間欄位**，用 PE + 52 週高低點 + 殖利率描述「貴/便宜」；結尾必須附「📊 資料來源：Yahoo Finance｜快照時間：\${_liveUpdatedAt}」。`;
     }
   }
 
