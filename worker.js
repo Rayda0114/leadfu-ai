@@ -588,7 +588,8 @@ async function handleAsk(request, env) {
     }
     // 🌎 美股精選 100（P3-A）— 用戶在問美股 ticker
     if (context.usStocks && context.usStocks.length) {
-      augmentedLast += `\n\n### 🌎 美股精選 100 — 用戶詢問的標的（資料來源：Yahoo Finance via yfinance）\n\`\`\`json\n${JSON.stringify(context.usStocks).slice(0, 4000)}\n\`\`\`\n⚠ 上述美股資料：價格單位 USD（寫成 \\$xxx.xx）；資料時間在每個 entry 的 \`_liveUpdatedAt\`（每日一次快照，非即時）；**沒有合理區間欄位**，用 PE + 52 週高低點 + 殖利率描述「貴/便宜」；結尾必須附「📊 資料來源：Yahoo Finance｜快照時間：\${_liveUpdatedAt}」。`;
+      const liveAt = context.usStocks[0]?._liveUpdatedAt || "請參考 us_stocks_live.json";
+      augmentedLast += `\n\n### 🌎 美股精選 100 — 用戶詢問的標的（資料來源：Yahoo Finance via yfinance）\n\`\`\`json\n${JSON.stringify(context.usStocks).slice(0, 4000)}\n\`\`\`\n⚠ 上述美股資料規則：\n- 價格單位 **USD**（寫成 \\$xxx.xx，**禁止用 NT$**）\n- **沒有合理區間欄位**，用 PE + 52 週高低點 + 殖利率描述「貴/便宜」\n- 結尾**必須照抄此句**（不准改日期、不准用 placeholder YYYY-MM-DD）：\n  「📊 資料來源：Yahoo Finance｜快照時間：${liveAt}（每日一次）」\n- 結尾再加「※ 美股投資涉及匯率與海外市場風險，不構成投資建議」`;
     }
   }
 
