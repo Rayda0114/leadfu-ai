@@ -34,20 +34,28 @@ jobs:
         env:
           PYTHONIOENCODING: utf-8
 
+      - name: Calc US fair value (P4 v1)
+        run: python scripts/calc_us_fair_value.py
+        env:
+          PYTHONIOENCODING: utf-8
+
       - name: Show summary
         run: |
           echo "=== data/us_stocks_live.json header ==="
-          python -c "import json; d=json.load(open('data/us_stocks_live.json')); print(f\"updatedAt: {d.get('updatedAt')}\"); print(f\"count: {d.get('count')}/{d.get('expected')}\"); print(f\"errors: {len(d.get('errors', []))}\")"
+          python -c "import json; d=json.load(open('data/us_stocks_live.json')); print(f\"live updatedAt: {d.get('updatedAt')}\"); print(f\"live count: {d.get('count')}/{d.get('expected')}\"); print(f\"errors: {len(d.get('errors', []))}\")"
+          echo ""
+          echo "=== data/us_fair_value_live.json header ==="
+          python -c "import json; d=json.load(open('data/us_fair_value_live.json')); print(f\"fv updatedAt: {d.get('updatedAt')}\"); print(f\"fv count: {d.get('count')}\"); print(f\"algo: {d.get('algorithm_version')}\")"
 
       - name: Commit if changed
         run: |
           git config user.name "leadfu-ai-bot"
           git config user.email "bot@leadfu.ai"
-          git add data/us_stocks_live.json
+          git add data/us_stocks_live.json data/us_fair_value_live.json
           # 只有真的有 diff 才 commit
           if ! git diff --staged --quiet; then
             DATE=$(date -u +"%Y-%m-%d")
-            git commit -m "data: 美股 100 檔報價更新 ($DATE)"
+            git commit -m "data: 美股 100 檔報價 + 合理區間更新 ($DATE)"
             git push
             echo "✅ 已 commit 並 push"
           else

@@ -213,12 +213,27 @@ const SYSTEM_PROMPT = `detailed thinking off
 - 資料時間：用 \`_liveUpdatedAt\` 標示（每天美股收盤後 cron 抓一次快照）
 - 結尾必須附：「📊 資料來源：Yahoo Finance｜快照時間：YYYY-MM-DD HH:MM（每日一次）」
 
-【美股**目前沒有合理區間**（P4 才會做）】
-- usStocks 沒提供 fairValue 欄位
-- 用戶問「貴不貴」「現在合理嗎」→ 用 PE + 52 週高低點 + 殖利率描述：
-  範例：「AAPL 現價 $306.31，PE 37.0（科技股偏高）；52 週區間 $195-$315，目前接近 52 週高點」
-- 對 ETF：強調殖利率（yield_pct）+ 過去 12 個月配息穩定度
-  範例：「SCHD 殖利率 3.5%，是退休族配置主力之一；近 1 年區間 $26-$29 中段」
+【💎 美股版合理區間 v1（LeadFu US Fair Value Range v1）— 2026-06-02 上線】
+usStocks 每個 entry 可能含 \`fair_value\` 子物件：
+- \`low / high\`：52 週區間（USD）
+- \`position\`：現價在區間的位置（0-1，越接近 1 越偏高點）
+- \`label\`：低於合理區間 / 合理區間下緣 / 合理偏低 / 合理區間中 / 合理偏高 / 合理區間上緣 / 高於合理區間
+- \`confidence\`：1-5 顆星訊號強度
+- \`summary\`：一句話描述（系統已寫好，可直接引用）
+
+演算法：52 週區間位置（主軸）+ sector PE 帶（科技股 15-35、金融 8-18 等業界常識）+ ETF 殖利率分類修正
+
+**回答時必須照下列格式輸出（跟台股版一致，差別是 USD 跟 52 週區間）**：
+
+💎 **領富 AI 美股合理區間**
+
+**52 週區間**：\\$XXX ~ \\$XXX
+**目前位置**：{label}（區間 XX% 位置）
+**訊號強度**：⭐⭐⭐⭐ （依 confidence 數值對應 ⭐）
+
+接著用 1-2 句白話寫 \`summary\` 內容或自己重述。
+
+若 usStocks entry **沒有** \`fair_value\` 欄位（資料不完整）→ 退回用 PE + 52w 高低點 + 殖利率描述
 
 【100 檔範圍外的美股】
 - 若用戶問的 ticker context 沒給（不在 us_stocks_meta 100 檔內）→ 引導：
@@ -420,13 +435,14 @@ function extractUsTickerCandidates(text) {
   return [...new Set(matches.filter(t => !US_TICKER_BLOCKLIST.has(t)))];
 }
 
-// 從 ASSETS binding 抓美股 meta + live，合併並過濾出 candidates 內的 ticker
+// 從 ASSETS binding 抓美股 meta + live + fair_value，合併並過濾出 candidates 內的 ticker
 async function getUsStockData(env, candidates) {
   if (!env.ASSETS || !candidates || !candidates.length) return null;
   try {
-    const [metaRes, liveRes] = await Promise.all([
+    const [metaRes, liveRes, fvRes] = await Promise.all([
       env.ASSETS.fetch(new Request("https://placeholder/data/us_stocks_meta.json")),
-      env.ASSETS.fetch(new Request("https://placeholder/data/us_stocks_live.json"))
+      env.ASSETS.fetch(new Request("https://placeholder/data/us_stocks_live.json")),
+      env.ASSETS.fetch(new Request("https://placeholder/data/us_fair_value_live.json"))
     ]);
     if (!metaRes.ok) return null;
     const meta = await metaRes.json();
@@ -438,13 +454,29 @@ async function getUsStockData(env, candidates) {
       liveData = live?.data || {};
       liveUpdatedAt = live?.updatedAt || null;
     }
+    let fvData = {};
+    if (fvRes && fvRes.ok) {
+      const fv = await fvRes.json();
+      fvData = fv?.data || {};
+    }
     const result = [];
     for (const ticker of candidates) {
       if (!metaData[ticker]) continue;   // 不在 100 檔精選庫就 skip
+      const fairValue = fvData[ticker];
       result.push({
         ...metaData[ticker],
         ...(liveData[ticker] || {}),
-        _liveUpdatedAt: liveUpdatedAt
+        _liveUpdatedAt: liveUpdatedAt,
+        ...(fairValue ? {
+          fair_value: {
+            low: fairValue.low,
+            high: fairValue.high,
+            position: fairValue.position,
+            label: fairValue.label,
+            confidence: fairValue.confidence,
+            summary: fairValue.summary
+          }
+        } : {})
       });
     }
     return result.length ? result : null;
