@@ -817,6 +817,9 @@ async function handleAsk(request, env) {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "X-LeadFu-Backend": "nvidia",
+      "X-LeadFu-Us-Count": String(context.usStocks?.length || 0),
+      "X-LeadFu-Us-Tickers": (context.usStocks || []).map(s => s.ticker).join(",") || "none",
+      "X-LeadFu-Us-HasFv": String(!!(context.usStocks?.[0]?.fair_value)),
       ...corsHeaders()
     }
   });
