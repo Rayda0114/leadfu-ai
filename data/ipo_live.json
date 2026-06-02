@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-05-29 10:52",
+  "updatedAt": "2026-06-02 11:26",
   "source": "TWSE OpenAPI 上市新公司資料",
-  "count": 40,
+  "count": 41,
   "data": [
     {
       "code": "6944",
@@ -557,6 +557,21 @@
       "market": "上市",
       "status": "申請中",
       "note": "創新板"
+    },
+    {
+      "code": "7827",
+      "name": "漢康-KY創",
+      "chairman": "劉世高",
+      "capital_yi": 13.02,
+      "underwriter": "國泰",
+      "underwriting_price": 120.0,
+      "application_date": "2025-11-24",
+      "approved_date": "2026-03-24",
+      "committee_date": "2026-03-09",
+      "listing_date": "",
+      "market": "上市",
+      "status": "申請中",
+      "note": "創新板第一上市"
     },
     {
       "code": "7760",
