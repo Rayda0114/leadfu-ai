@@ -1,0 +1,31 @@
+name: 領富 AI · Supabase Keep-Alive
+
+# Supabase free tier 專案閒置超過 7 天會被自動 pause（會員系統整個掛掉）。
+# 這支每天對 profiles 表做一次極輕量讀取，製造「資料庫活動」避免被 pause。
+# 排程：每天 UTC 01:00（台北 09:00）+ 每天 UTC 13:00（台北 21:00）= 一天兩次保險
+on:
+  schedule:
+    - cron: "0 1 * * *"
+    - cron: "0 13 * * *"
+  workflow_dispatch:        # 允許手動觸發
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase profiles table
+        run: |
+          SUPABASE_URL="https://lhwxpnyzplylajxunlua.supabase.co"
+          SUPABASE_KEY="sb_publishable_hBrtHt8ham91nuXSU_tdmA__BqcfIX1"
+          echo "🔔 $(date -u +'%Y-%m-%d %H:%M:%S UTC') ping Supabase keep-alive"
+          HTTP=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 \
+            -H "apikey: ${SUPABASE_KEY}" \
+            -H "Range: 0-0" \
+            "${SUPABASE_URL}/rest/v1/profiles?select=id")
+          echo "profiles?select=id → HTTP ${HTTP}"
+          if [ "$HTTP" = "200" ] || [ "$HTTP" = "206" ]; then
+            echo "✅ Supabase 活著，keep-alive 成功"
+          else
+            echo "⚠️ 非預期狀態碼 ${HTTP} — Supabase 可能已被 pause 或 key 失效，請去 dashboard 檢查"
+            exit 1
+          fi
