@@ -1733,7 +1733,7 @@ function setupInAppBrowserWarning() {
       <span class="inapp-warning-icon">⚠</span>
       <div class="inapp-warning-text">
         <strong>您正在 ${inApp.name} 內建瀏覽器中</strong>
-        <span>Google／Facebook 登入會被擋。請${inApp.tip}，再回來這頁。</span>
+        <span>Google 登入會被擋。請${inApp.tip}，再回來這頁。</span>
       </div>
       <button class="inapp-warning-copy" type="button">複製網址</button>
     </div>`;
@@ -1752,9 +1752,9 @@ function setupInAppBrowserWarning() {
     }
   });
 
-  // 攔截 Google / Facebook OAuth 按鈕 click → 改跳警告 modal（不要直接送出去被擋）
+  // 攔截 Google OAuth 按鈕 click → 改跳警告 modal（不要直接送出去被擋）
   const oauthBtns = document.querySelectorAll(
-    "#googleLoginBtn, #googleRegBtn, #facebookLoginBtn, #facebookRegBtn"
+    "#googleLoginBtn, #googleRegBtn"
   );
   oauthBtns.forEach(btn => {
     // 用 capture 階段先攔截，stopImmediatePropagation 擋掉原本的 click
@@ -1772,7 +1772,7 @@ function _showInAppModal(inApp) {
   el.innerHTML = `
     <div class="inapp-modal-box">
       <div class="inapp-modal-icon">🚫</div>
-      <h2>${inApp.name} 內無法使用<br>Google／Facebook 一鍵登入</h2>
+      <h2>${inApp.name} 內無法使用<br>Google 一鍵登入</h2>
       <p>這是 Google 的安全規定，不是網站問題。請依下方步驟改用外部瀏覽器，即可順利登入。</p>
       <div class="inapp-modal-steps">
         <div class="inapp-modal-step">

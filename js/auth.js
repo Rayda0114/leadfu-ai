@@ -41,7 +41,7 @@ window.LeadFuAuth = {
     return data;
   },
 
-  /* 社群一鍵登入（Google / Facebook）
+  /* 社群一鍵登入（Google / LINE）
      會跳轉到第三方授權頁，授權後自動導回 member.html */
   async signInWithProvider(provider) {
     const { data, error } = await _sb.auth.signInWithOAuth({
@@ -54,7 +54,6 @@ window.LeadFuAuth = {
     return data;
   },
   async signInWithGoogle()   { return this.signInWithProvider("google"); },
-  async signInWithFacebook() { return this.signInWithProvider("facebook"); },
   // LINE 一鍵登入：Supabase Custom OIDC Provider（identifier 必須是 custom:line）
   // LINE 是標準 OIDC（issuer https://access.line.me），Supabase Dashboard 加 custom provider 即可
   async signInWithLine()     { return this.signInWithProvider("custom:line"); },
