@@ -157,6 +157,57 @@ document.addEventListener("DOMContentLoaded", async () => {
     `<div class="info-row"><div class="info-label">${l}</div><div class="info-value">${v}</div></div>`
   ).join("");
 
+  // ── A1：一鍵登入（Google/LINE）使用者補完手機 / 投資經驗 ──
+  // OAuth 一鍵登入不經過註冊表單，phone/experience 會是空的（LINE 連 email 都沒有）
+  if (!user.phone || !user.experience) {
+    showProfileCompletion(!user.phone, !user.experience);
+  }
+  function showProfileCompletion(needPhone, needExp) {
+    const phoneField = needPhone
+      ? `<div class="form-group"><label>手機號碼</label><input type="tel" id="pcPhone" placeholder="09xx-xxx-xxx" autocomplete="tel"></div>`
+      : "";
+    const expField = needExp
+      ? `<div class="form-group"><label>投資經驗</label><select id="pcExp"><option value="">請選擇</option><option>新手 (1 年以下)</option><option>有經驗 (1-5 年)</option><option>資深 (5 年以上)</option></select></div>`
+      : "";
+    const panel = document.createElement("div");
+    panel.className = "panel";
+    panel.id = "profileCompletePanel";
+    panel.style.cssText = "border:2px solid #C5A572;";
+    panel.innerHTML = `
+      <div class="panel-head"><h2>✨ 完善您的資料（約 30 秒）</h2></div>
+      <div style="padding:16px 20px;">
+        <p style="font-size:14px;color:#555;line-height:1.7;margin-bottom:14px;">
+          用 LINE／Google 一鍵登入很方便，但我們還差一點資料，才能提供<strong>盤後推播、即時通知與客服聯繫</strong>。資料僅用於會員服務、絕不外流。
+        </p>
+        ${phoneField}${expField}
+        <div style="display:flex;gap:10px;align-items:center;margin-top:6px;">
+          <button type="button" class="form-btn" id="pcSave" style="flex:1;">儲存資料</button>
+          <button type="button" id="pcSkip" style="background:none;border:none;color:#999;font-size:13px;cursor:pointer;white-space:nowrap;">稍後再說</button>
+        </div>
+      </div>`;
+    const mainCol = document.querySelector(".col-main");
+    mainCol.insertBefore(panel, mainCol.firstElementChild);
+
+    document.getElementById("pcSave").addEventListener("click", async () => {
+      const fields = {};
+      const phoneEl = document.getElementById("pcPhone");
+      const expEl = document.getElementById("pcExp");
+      if (phoneEl && phoneEl.value.trim()) fields.phone = phoneEl.value.trim();
+      if (expEl && expEl.value) fields.experience = expEl.value;
+      if (Object.keys(fields).length === 0) { alert("請至少填寫一項再儲存"); return; }
+      const btn = document.getElementById("pcSave");
+      btn.disabled = true; btn.textContent = "儲存中…";
+      try {
+        await window.LeadFuAuth.updateProfile(fields);
+        location.reload();
+      } catch (err) {
+        alert(window.LeadFuAuth.zhError(err));
+        btn.disabled = false; btn.textContent = "儲存資料";
+      }
+    });
+    document.getElementById("pcSkip").addEventListener("click", () => panel.remove());
+  }
+
   // 自選股預覽（前 5 檔）
   const favCodes = getWatchlist().slice(0, 5);
   if (favCodes.length === 0) {
