@@ -55,6 +55,9 @@ window.LeadFuAuth = {
   },
   async signInWithGoogle()   { return this.signInWithProvider("google"); },
   async signInWithFacebook() { return this.signInWithProvider("facebook"); },
+  // LINE 一鍵登入：Supabase Custom OIDC Provider（identifier 必須是 custom:line）
+  // LINE 是標準 OIDC（issuer https://access.line.me），Supabase Dashboard 加 custom provider 即可
+  async signInWithLine()     { return this.signInWithProvider("custom:line"); },
 
   /* 登出 */
   async signOut() {
@@ -103,7 +106,9 @@ window.LeadFuAuth = {
       "Password should be at least 6 characters": "密碼至少要 6 碼",
       "Unable to validate email address": "Email 格式不正確",
       "Email not confirmed": "請先到信箱收確認信並點擊連結",
-      "For security purposes, you can only request this after": "操作太頻繁，請稍等幾秒再試"
+      "For security purposes, you can only request this after": "操作太頻繁，請稍等幾秒再試",
+      "Unsupported provider": "這個登入方式即將開放，請先用 Email 或 Google 登入",
+      "provider is not enabled": "這個登入方式即將開放，請先用 Email 或 Google 登入"
     };
     for (const key in map) {
       if (msg.includes(key)) return map[key];
