@@ -2540,6 +2540,7 @@ window.LeadFu = {
   // 第 1 層 AI 問答工具（ai.html 用）
   parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
   startStockLive,  // 個股詳情頁即時報價 polling
+  loadKlines,      // 個股詳情頁延後載入 9.8MB K 線（不再全站每頁載）
   lineUrl: LINE_URL, lineId: LINE_ID,
   ready: _readyPromise
 };
@@ -2986,6 +2987,26 @@ async function fetchJson(file) {
   return resp.json();
 }
 
+/* 個股詳情頁專用：延後載入 K 線歷史（klines.json 約 9.8MB）
+   原本在 loadLiveData 全站每頁載入，改成只有個股頁呼叫 window.LeadFu.loadKlines()，
+   首頁/列表頁省下約 10MB 流量與解析負擔。idempotent：同頁多次呼叫只抓一次。*/
+let _klinesLoaded = false;
+async function loadKlines() {
+  if (_klinesLoaded) return STOCK_DATA.klines;
+  try {
+    const live = await fetchJson("klines.json");
+    if (live.klines) {
+      STOCK_DATA.klines = live.klines;
+      _klinesLoaded = true;
+      const days = Object.values(live.klines)[0]?.length || 0;
+      console.log(`[領富 AI] ✅ ${live.stockCount || 0} 檔 K 線（累積 ${days} 天，個股頁延後載入）`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ K 線用 mock (${e.message})`);
+  }
+  return STOCK_DATA.klines;
+}
+
 async function loadLiveData() {
   // 1. 個股報價（含 metadata：updatedAt / source / stockCount / marketBreakdown）
   try {
@@ -3036,17 +3057,8 @@ async function loadLiveData() {
     console.log(`[領富 AI] ℹ️ 公告用備份 (${e.message})`);
   }
 
-  // 4. K 線歷史（不存進 STOCK_DATA，個股詳情頁另外讀）
-  try {
-    const live = await fetchJson("klines.json");
-    if (live.klines) {
-      STOCK_DATA.klines = live.klines;
-      const days = Object.values(live.klines)[0]?.length || 0;
-      console.log(`[領富 AI] ✅ ${live.stockCount || 0} 檔 K 線（累積 ${days} 天）`);
-    }
-  } catch (e) {
-    console.log(`[領富 AI] ℹ️ K 線用 mock (${e.message})`);
-  }
+  // 4. K 線歷史（klines.json 約 9.8MB）：已改為「個股詳情頁才載入」
+  //    （window.LeadFu.loadKlines），不再全站每頁載入 —— 大幅省流量與解析負擔
 
   // 5. 公司基本資料（887 筆，董事長/地址/網站/成立日/實收資本...）
   try {

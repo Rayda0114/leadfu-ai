@@ -410,6 +410,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   syncFavBtn();
 
   // K 線：優先用 TPEx 累積真實資料 → 退 mock 詳情 kline → 退隨機漂移
+  // klines.json（約 9.8MB）改為個股頁才載入，不再全站每頁載
+  await window.LeadFu.loadKlines();
   let kdata, kSource;
   const liveKlines = (data.klines || {})[code];
   if (liveKlines && liveKlines.length >= 3) {
