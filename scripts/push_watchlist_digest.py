@@ -118,7 +118,9 @@ def build_digest(codes, code2name, anns_today, news):
         for n in my_news:
             lines.append(f"・{n.get('title', '').strip()[:42]}")
         lines.append("")
-    lines.append(f"🔗 我的自選股：{SITE}/pages/watchlist")
+    # openExternalBrowser=1：讓 LINE 用手機預設瀏覽器開（跳出 LINE 內建瀏覽器，
+    # 才帶得到登入 session、看得到雲端自選股；否則 LINE webview 未登入會顯示空清單）
+    lines.append(f"🔗 我的自選股：{SITE}/pages/watchlist?openExternalBrowser=1")
     lines.append("")
     lines.append("※ 以上為公開資訊整理，非投資建議。")
     lines.append("如不想再收到，可至領富 AI 會員中心關閉推播通知。")
