@@ -157,6 +157,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  // 雲端同步完成後重繪（登入者跨裝置：剛載入時雲端清單會補進本地）
+  document.addEventListener("leadfu:watchlist-synced", render);
   render();
 });
 </script>

@@ -96,6 +96,23 @@ window.LeadFuAuth = {
     if (error) throw error;
   },
 
+  /* ── 自選股雲端同步（profiles.watchlist 欄位，jsonb）── */
+  // 讀雲端自選股；未登入回 null、讀失敗回 null（呼叫端會退回本地 localStorage）
+  async getCloudWatchlist() {
+    const user = await this.getUser();
+    if (!user) return null;
+    const { data, error } = await _sb.from("profiles").select("watchlist").eq("id", user.id).single();
+    if (error) { console.warn("[領富 AI] 讀雲端自選失敗:", error.message); return null; }
+    return Array.isArray(data && data.watchlist) ? data.watchlist : [];
+  },
+  // 寫雲端自選股（整份覆蓋；未登入則 no-op）
+  async setCloudWatchlist(codes) {
+    const user = await this.getUser();
+    if (!user) return;
+    const { error } = await _sb.from("profiles").update({ watchlist: codes }).eq("id", user.id);
+    if (error) console.warn("[領富 AI] 寫雲端自選失敗:", error.message);
+  },
+
   /* 把 Supabase 錯誤碼轉成中文（給 45-75 歲族群看得懂）*/
   zhError(error) {
     const msg = (error && error.message) || String(error);

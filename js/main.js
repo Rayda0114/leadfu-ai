@@ -314,14 +314,64 @@ function addToWatchlist(code) {
   if (!list.includes(code)) {
     list.push(code);
     localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list));
+    _pushWatchlistToCloud();   // 登入者才真的寫雲端（內部自行判斷）
   }
 }
 function removeFromWatchlist(code) {
   const list = getWatchlist().filter(c => c !== code);
   localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list));
+  _pushWatchlistToCloud();
 }
 function isInWatchlist(code) {
   return getWatchlist().includes(code);
+}
+
+/* ── 自選股雲端同步（登入者）──
+   匿名訪客完全不載 Supabase（零負擔）；偵測到 session token 才懶載入 auth.js */
+function _hasSupabaseSession() {
+  try { return Object.keys(localStorage).some(k => /^sb-.*-auth-token$/.test(k)); }
+  catch { return false; }
+}
+let _authLoadPromise = null;
+function _ensureAuth() {
+  if (window.LeadFuAuth) return Promise.resolve(window.LeadFuAuth);
+  if (!_hasSupabaseSession()) return Promise.resolve(null);   // 匿名：不載
+  if (_authLoadPromise) return _authLoadPromise;
+  _authLoadPromise = new Promise((resolve) => {
+    const base = location.pathname.includes("/pages/") ? "../" : "";
+    const inject = (src, onload) => {
+      const s = document.createElement("script");
+      s.src = src; s.onload = onload; s.onerror = () => resolve(null);
+      document.head.appendChild(s);
+    };
+    // 先載 Supabase CDN（auth.js 依賴 window.supabase），再載 auth.js
+    inject("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2", () => {
+      inject(base + "js/auth.js", () => resolve(window.LeadFuAuth || null));
+    });
+  });
+  return _authLoadPromise;
+}
+// 載入時：本地 ∪ 雲端 合併（登入者）
+async function syncWatchlistFromCloud() {
+  const auth = await _ensureAuth();
+  if (!auth) return;
+  const cloud = await auth.getCloudWatchlist();
+  if (cloud == null) return;
+  const local = getWatchlist();
+  const merged = Array.from(new Set([...cloud, ...local]));
+  localStorage.setItem(WATCHLIST_KEY, JSON.stringify(merged));
+  if (merged.length !== cloud.length) await auth.setCloudWatchlist(merged);  // 本地有新的 → 補回雲端
+  document.dispatchEvent(new CustomEvent("leadfu:watchlist-synced"));
+}
+// 變更時：debounce 寫回雲端（登入者）
+let _wlPushTimer = null;
+function _pushWatchlistToCloud() {
+  if (!_hasSupabaseSession()) return;   // 匿名：no-op
+  clearTimeout(_wlPushTimer);
+  _wlPushTimer = setTimeout(async () => {
+    const auth = await _ensureAuth();
+    if (auth) await auth.setCloudWatchlist(getWatchlist());
+  }, 800);
 }
 
 /* ============================================================
@@ -3223,6 +3273,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindTabs();
   bindAddFavBtns();
   bindMobileRowTap();
+  // 自選股雲端同步（登入者才動作，匿名 no-op）；同步完成後刷新自選按鈕狀態
+  document.addEventListener("leadfu:watchlist-synced", () => { try { bindAddFavBtns(); } catch (e) {} });
+  syncWatchlistFromCloud();
   bindSearch();
   setupVoiceSearch();   // 🎤 語音搜尋（每頁 search-box 自動注入麥克風按鈕）
   bindAiPlaceholders();

@@ -403,11 +403,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
   favBtn.addEventListener("click", () => {
-    if (isInWatchlist(code)) removeFromWatchlist(code);
+    const wasIn = isInWatchlist(code);
+    if (wasIn) removeFromWatchlist(code);
     else addToWatchlist(code);
     syncFavBtn();
+    if (!wasIn) maybePromptFavLogin();   // 剛加入 → 匿名訪客軟提示登入
   });
   syncFavBtn();
+
+  // 加入自選後，對「匿名訪客」軟性引導登入（換裝置同步 + 之後 LINE 提醒）；每 session 最多一次
+  function maybePromptFavLogin() {
+    const loggedIn = Object.keys(localStorage).some(k => /^sb-.*-auth-token$/.test(k));
+    if (loggedIn) return;
+    if (sessionStorage.getItem("leadfu_fav_login_prompted")) return;
+    sessionStorage.setItem("leadfu_fav_login_prompted", "1");
+    const box = document.createElement("div");
+    box.style.cssText = "position:fixed;left:50%;bottom:76px;transform:translateX(-50%);z-index:9999;max-width:92%;width:420px;background:#fff;border:2px solid #C5A572;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:16px 18px;font-size:14px;line-height:1.6;color:#1B4332;";
+    box.innerHTML = `
+      <div style="font-weight:700;margin-bottom:6px;">✓ 已加入自選股</div>
+      <div style="color:#555;margin-bottom:12px;">登入會員，<strong>換手機 / 電腦也看得到</strong>你的自選股，之後還能收<strong>盤後 LINE 提醒</strong>。</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <a href="login.html" style="flex:1;text-align:center;background:#06C755;color:#fff;font-weight:700;padding:10px;border-radius:8px;text-decoration:none;">用 LINE / Google 登入</a>
+        <button type="button" id="favPromptSkip" style="background:none;border:none;color:#999;font-size:13px;cursor:pointer;white-space:nowrap;">略過</button>
+      </div>`;
+    document.body.appendChild(box);
+    box.querySelector("#favPromptSkip").addEventListener("click", () => box.remove());
+    setTimeout(() => { if (box.parentNode) box.remove(); }, 12000);   // 12 秒自動收
+  }
 
   // K 線：優先用 TPEx 累積真實資料 → 退 mock 詳情 kline → 退隨機漂移
   // klines.json（約 9.8MB）改為個股頁才載入，不再全站每頁載
