@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("clearAll").addEventListener("click", () => {
     if (confirm("確定要清空全部自選股？")) {
-      localStorage.removeItem("berich_watchlist");
+      localStorage.removeItem(WATCHLIST_KEY);
       render();
     }
   });

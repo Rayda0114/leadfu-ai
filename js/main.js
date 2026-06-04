@@ -2663,11 +2663,7 @@ function lqBuildWatchlistRows() {
   if (!container) return [];
 
   // 自選股優先，沒有就用熱門前 5
-  let codes = [];
-  try {
-    const wl = JSON.parse(localStorage.getItem("leadfu_watchlist") || "[]");
-    codes = wl.slice(0, 5);
-  } catch { /* ignore */ }
+  let codes = getWatchlist().slice(0, 5);
   let useFallback = codes.length === 0;
   if (useFallback) {
     codes = (STOCK_DATA.stocks || [])
