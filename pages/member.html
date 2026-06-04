@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           const d = i.identity_data || {};
           cands.push(d.sub, d.user_id, d.provider_id, i.id);
         });
-        if (au && au.user_metadata) cands.push(au.user_metadata.sub, au.user_metadata.provider_id);
+        if (au && au.user_metadata) cands.push(au.user_metadata.line_user_id, au.user_metadata.sub, au.user_metadata.provider_id);
         lineUserId = cands.find(v => typeof v === "string" && /^U[0-9a-f]{32}$/i.test(v)) || null;
         if (lineUserId) await window.LeadFuAuth.updateProfile({ line_user_id: lineUserId });
       } catch (e) { console.warn("[領富 AI] 存 LINE userId 失敗:", e); }

@@ -952,13 +952,188 @@ async function handleQuote(request) {
 }
 
 
+/* ============================================================
+ * LINE 一鍵登入（方法 ①：Worker 端跑 LINE OAuth，繞過 Supabase OIDC）
+ *
+ * 為什麼不走 Supabase Custom OIDC：
+ *   LINE 的 id_token 用 HS256（對稱、channel secret 當 HMAC 金鑰）簽，
+ *   但 LINE discovery 卻宣告 ES256 → Supabase 通用 OIDC 驗證器只收
+ *   ES256/RS256（JWKS），永遠驗不過：
+ *     "failed to verify ID token: oidc: id token signed with
+ *      unsupported algorithm, expected [ES256] got HS256"
+ *   → 這就是為什麼領富每次 LINE 登入都在 Supabase 端失敗。
+ *
+ * 解法（最穩、完全避開 JWT 簽章）：
+ *   1. code → access_token（LINE token endpoint）
+ *   2. GET https://api.line.me/v2/profile（Bearer）→ { userId, displayName, pictureUrl }
+ *   3. Supabase admin API：用 line userId 派生固定 email、建/找該用戶，
+ *      把 line_user_id 寫進 profiles
+ *   4. admin generate_link（magiclink）→ 回 token_hash 給前端
+ *      前端 verifyOtp(token_hash) 建立正式 session
+ *
+ * 安全性：
+ *   - 只有完成本 channel LINE 授權、拿到有效 code 的人，才換得到自己
+ *     userId 的 session（code 無法偽造、單次有效）。
+ *   - service_role / channel secret 只在 Worker 端（env secret），絕不回前端。
+ *   - 只回單次有效、短時效的 token_hash。CORS 限 leadfuai.com。
+ * ============================================================ */
+const LINE_LOGIN_CHANNEL_ID = "2010279883";
+const LINE_LOGIN_REDIRECT_URI = "https://leadfuai.com/pages/line-callback.html";
+const SUPABASE_PROJECT_URL = "https://lhwxpnyzplylajxunlua.supabase.co";
+
+function lineAuthError(msg, status) {
+  return new Response(JSON.stringify({ error: msg }), {
+    status: status || 400,
+    headers: { "Content-Type": "application/json", ...corsHeaders() }
+  });
+}
+
+async function handleLineAuth(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: corsHeaders() });
+  }
+  if (request.method !== "POST") return lineAuthError("method not allowed", 405);
+
+  if (!env.LINE_LOGIN_CHANNEL_SECRET || !env.SUPABASE_SERVICE_ROLE_KEY) {
+    return lineAuthError("server not configured (missing LINE secret or service role key)", 500);
+  }
+
+  let body;
+  try { body = await request.json(); }
+  catch { return lineAuthError("invalid json body"); }
+  const code = (body && body.code || "").trim();
+  if (!code) return lineAuthError("missing code");
+
+  // 1) code → access_token
+  let accessToken;
+  try {
+    const tokenRes = await fetch("https://api.line.me/oauth2/v2.1/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        code,
+        redirect_uri: LINE_LOGIN_REDIRECT_URI,
+        client_id: LINE_LOGIN_CHANNEL_ID,
+        client_secret: env.LINE_LOGIN_CHANNEL_SECRET
+      })
+    });
+    const tokenData = await tokenRes.json();
+    if (!tokenRes.ok || !tokenData.access_token) {
+      return lineAuthError("line token exchange failed: " + (tokenData.error_description || tokenData.error || tokenRes.status), 400);
+    }
+    accessToken = tokenData.access_token;
+  } catch (e) {
+    return lineAuthError("line token exchange error: " + String(e), 502);
+  }
+
+  // 2) access_token → profile（不驗 id_token，直接打 profile API）
+  let profile;
+  try {
+    const profRes = await fetch("https://api.line.me/v2/profile", {
+      headers: { "Authorization": `Bearer ${accessToken}` }
+    });
+    profile = await profRes.json();
+    if (!profRes.ok || !profile.userId) {
+      return lineAuthError("line profile fetch failed: " + (profile.message || profRes.status), 400);
+    }
+  } catch (e) {
+    return lineAuthError("line profile error: " + String(e), 502);
+  }
+
+  const lineUserId = profile.userId;                 // 形如 U + 32 hex
+  if (!/^U[0-9a-f]{32}$/i.test(lineUserId)) {
+    return lineAuthError("unexpected line userId format", 400);
+  }
+  const displayName = profile.displayName || "LINE 會員";
+  const pictureUrl = profile.pictureUrl || "";
+  const email = `line_${lineUserId.toLowerCase()}@line.leadfuai.com`;  // 固定派生、僅作識別鍵，不收信
+
+  const adminHeaders = {
+    "apikey": env.SUPABASE_SERVICE_ROLE_KEY,
+    "Authorization": `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+    "Content-Type": "application/json"
+  };
+
+  // 3) Supabase admin：建用戶。
+  //    盡力而為——回頭客的 email 已存在，不同 GoTrue 版本回 400/409/422 不一，
+  //    一律不在這裡 fail；真正的關卡是下一步 generate_link（成功才代表用戶可登入）。
+  let userId = null;
+  try {
+    const createRes = await fetch(`${SUPABASE_PROJECT_URL}/auth/v1/admin/users`, {
+      method: "POST",
+      headers: adminHeaders,
+      body: JSON.stringify({
+        email,
+        email_confirm: true,
+        user_metadata: { name: displayName, picture: pictureUrl, line_user_id: lineUserId, provider: "line" }
+      })
+    });
+    if (createRes.ok) {
+      const created = await createRes.json();
+      userId = created.id || (created.user && created.user.id) || null;
+    }
+    // 非 ok（多半是 email 已存在）→ 略過，交給 generate_link
+  } catch (e) {
+    // 網路層錯誤也不致命，往下讓 generate_link 當關卡
+    console.warn("[line-auth] create user error:", String(e));
+  }
+
+  // 4) generate_link（magiclink）→ 拿 token_hash（順便補 userId）
+  let tokenHash = null;
+  try {
+    const linkRes = await fetch(`${SUPABASE_PROJECT_URL}/auth/v1/admin/generate_link`, {
+      method: "POST",
+      headers: adminHeaders,
+      body: JSON.stringify({ type: "magiclink", email })
+    });
+    const linkData = await linkRes.json();
+    if (!linkRes.ok) {
+      return lineAuthError("supabase generate_link failed: " + linkRes.status + " " + JSON.stringify(linkData).slice(0, 200), 500);
+    }
+    tokenHash = linkData.hashed_token
+      || (linkData.properties && linkData.properties.hashed_token)
+      || null;
+    if (!userId) {
+      userId = linkData.id || (linkData.user && linkData.user.id) || null;
+    }
+    if (!tokenHash) {
+      return lineAuthError("supabase generate_link returned no token", 500);
+    }
+  } catch (e) {
+    return lineAuthError("supabase generate_link error: " + String(e), 502);
+  }
+
+  // 5) 把 line_user_id 寫進 profiles（盡力而為，失敗不擋登入；
+  //    前端 member.html 也有後備擷取）
+  if (userId) {
+    try {
+      await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?id=eq.${userId}`, {
+        method: "PATCH",
+        headers: { ...adminHeaders, "Prefer": "return=minimal" },
+        body: JSON.stringify({ line_user_id: lineUserId })
+      });
+    } catch (e) {
+      // 不致命：登入仍成功，line_user_id 之後可由前端補上
+      console.warn("[line-auth] profiles patch failed:", String(e));
+    }
+  }
+
+  return new Response(JSON.stringify({ token_hash: tokenHash, email }), {
+    status: 200,
+    headers: { "Content-Type": "application/json", ...corsHeaders() }
+  });
+}
+
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    if (url.pathname === "/api/ask")    return handleAsk(request, env);
-    if (url.pathname === "/api/health") return handleHealth(env);
-    if (url.pathname === "/api/quote")  return handleQuote(request);
+    if (url.pathname === "/api/ask")       return handleAsk(request, env);
+    if (url.pathname === "/api/health")    return handleHealth(env);
+    if (url.pathname === "/api/quote")     return handleQuote(request);
+    if (url.pathname === "/api/line-auth") return handleLineAuth(request, env);
 
     // 其他 path → 交給 ASSETS binding 處理（保留所有原本的靜態行為）
     return env.ASSETS.fetch(request);

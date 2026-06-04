@@ -54,9 +54,35 @@ window.LeadFuAuth = {
     return data;
   },
   async signInWithGoogle()   { return this.signInWithProvider("google"); },
-  // LINE 一鍵登入：Supabase Custom OIDC Provider（identifier 必須是 custom:line）
-  // LINE 是標準 OIDC（issuer https://access.line.me），Supabase Dashboard 加 custom provider 即可
-  async signInWithLine()     { return this.signInWithProvider("custom:line"); },
+
+  /* LINE 一鍵登入（方法 ①：自走 LINE OAuth，繞過 Supabase OIDC）
+     不用 Supabase Custom OIDC——LINE id_token 是 HS256，Supabase 通用
+     OIDC 驗證器只收 ES256/JWKS，永遠驗不過。改成：
+       導去 LINE authorize → 回 /pages/line-callback.html（帶 code）
+       → callback 把 code 丟給 Worker /api/line-auth 換 session。
+     參見 worker.js handleLineAuth。 */
+  async signInWithLine() {
+    const CHANNEL_ID = "2010279883";
+    const REDIRECT_URI = "https://leadfuai.com/pages/line-callback.html";
+    // CSRF state
+    const rnd = new Uint8Array(16);
+    (window.crypto || {}).getRandomValues && window.crypto.getRandomValues(rnd);
+    const state = Array.from(rnd, b => b.toString(16).padStart(2, "0")).join("");
+    try {
+      sessionStorage.setItem("line_login_state", state);
+      // 登入後要回哪頁（預設會員中心；登入/註冊頁也都導去會員中心）
+      sessionStorage.setItem("line_login_next", "/pages/member.html");
+    } catch (e) { /* 隱私模式可能擋 sessionStorage，state 驗證會略過 */ }
+    const authUrl = "https://access.line.me/oauth2/v2.1/authorize?" +
+      new URLSearchParams({
+        response_type: "code",
+        client_id: CHANNEL_ID,
+        redirect_uri: REDIRECT_URI,
+        state,
+        scope: "profile openid"
+      }).toString();
+    window.location.href = authUrl;
+  },
 
   /* 登出 */
   async signOut() {
