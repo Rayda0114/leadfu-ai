@@ -545,6 +545,15 @@ function bindAddFavBtns() {
   });
 }
 
+/* 同步/重繪後，把「已在自選」的按鈕標成已加入狀態（純視覺，不綁事件）
+   ⚠ 絕不可改用 bindAddFavBtns()——那會再掛一個 document click 委派 → 一次點擊觸發兩次 */
+function refreshFavBtnStates() {
+  document.querySelectorAll(".add-btn").forEach(btn => {
+    const code = btn.dataset.code;
+    if (code && isInWatchlist(code)) { btn.textContent = "✓ 已加入"; btn.classList.add("in-fav"); }
+  });
+}
+
 /* 手機版：整列卡片可點擊跳轉個股 */
 function bindMobileRowTap() {
   // 整個 .stock-table 的 tr[data-code] 都可點，桌機/手機都通
@@ -3273,8 +3282,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindTabs();
   bindAddFavBtns();
   bindMobileRowTap();
-  // 自選股雲端同步（登入者才動作，匿名 no-op）；同步完成後刷新自選按鈕狀態
-  document.addEventListener("leadfu:watchlist-synced", () => { try { bindAddFavBtns(); } catch (e) {} });
+  // 自選股雲端同步（登入者才動作，匿名 no-op）；同步完成「只刷新視覺狀態」，不可重綁 bindAddFavBtns（會疊加 document click 委派 → 一次點擊觸發兩次）
+  document.addEventListener("leadfu:watchlist-synced", () => { try { refreshFavBtnStates(); } catch (e) {} });
   syncWatchlistFromCloud();
   bindSearch();
   setupVoiceSearch();   // 🎤 語音搜尋（每頁 search-box 自動注入麥克風按鈕）
