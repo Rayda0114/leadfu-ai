@@ -1,0 +1,34 @@
+name: 領富 AI · 每日自選股推播
+
+# 台灣時間 15:45（UTC 07:45）—— 排在「每日資料更新」(15:00) 之後，
+# 讀會員自選股 → 比對當日公告/新聞 → 透過 LINE 官方帳號推播。
+on:
+  schedule:
+    - cron: "45 7 * * 1-5"   # 週一到週五，資料更新後
+  workflow_dispatch:           # 允許手動觸發（測試用）
+    inputs:
+      dry_run:
+        description: "只測試、不實際推播（true = 只印訊息）"
+        required: false
+        default: "true"
+
+jobs:
+  push-digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Push watchlist digest
+        run: python scripts/push_watchlist_digest.py
+        env:
+          PYTHONIOENCODING: utf-8
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          # 手動觸發時 dry_run=true → 只印不推；排程觸發時為空 → 實際推播
+          DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}

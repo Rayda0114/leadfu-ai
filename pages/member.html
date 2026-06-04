@@ -157,6 +157,52 @@ document.addEventListener("DOMContentLoaded", async () => {
     `<div class="info-row"><div class="info-label">${l}</div><div class="info-value">${v}</div></div>`
   ).join("");
 
+  // ── LINE 推播：存 userId + 引導加好友 + 退訂開關 ──
+  (async () => {
+    // 1) LINE 登入者：抓出 LINE userId（U+32碼）存進 profiles，作為推播對象
+    let lineUserId = user.line_user_id || null;
+    if (!lineUserId) {
+      try {
+        const au = await window.LeadFuAuth.getUser();
+        const cands = [];
+        ((au && au.identities) || []).forEach(i => {
+          const d = i.identity_data || {};
+          cands.push(d.sub, d.user_id, d.provider_id, i.id);
+        });
+        if (au && au.user_metadata) cands.push(au.user_metadata.sub, au.user_metadata.provider_id);
+        lineUserId = cands.find(v => typeof v === "string" && /^U[0-9a-f]{32}$/i.test(v)) || null;
+        if (lineUserId) await window.LeadFuAuth.updateProfile({ line_user_id: lineUserId });
+      } catch (e) { console.warn("[領富 AI] 存 LINE userId 失敗:", e); }
+    }
+
+    // 2) LINE 會員 → 引導加官方帳號好友（沒加好友收不到推播）
+    if (lineUserId) {
+      const banner = document.createElement("div");
+      banner.className = "panel";
+      banner.style.cssText = "border:2px solid #06C755;margin-bottom:16px;";
+      banner.innerHTML = `
+        <div style="padding:16px 20px;">
+          <div style="font-weight:700;margin-bottom:6px;">🔔 開啟自選股 LINE 提醒</div>
+          <div style="color:#555;font-size:14px;line-height:1.7;margin-bottom:12px;">加入官方帳號「領富 AI」為好友，每天盤後就會收到你自選股的公告與相關新聞整理。</div>
+          <a href="https://line.me/R/ti/p/@130tqckv" target="_blank" rel="noopener" style="display:inline-block;background:#06C755;color:#fff;font-weight:700;padding:10px 20px;border-radius:8px;text-decoration:none;">＋ 加入好友接收提醒</a>
+        </div>`;
+      const col = document.querySelector(".col-main");
+      col.insertBefore(banner, col.firstElementChild);
+    }
+
+    // 3) 推播訂閱開關（push_optin，預設開）
+    const optedIn = user.push_optin !== false;
+    const toggle = document.createElement("div");
+    toggle.className = "info-row";
+    toggle.innerHTML = `<div class="info-label">每日 LINE 推播</div>` +
+      `<div class="info-value"><label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;"><input type="checkbox" id="pushOptin" ${optedIn ? "checked" : ""}> 接收自選股每日快訊</label></div>`;
+    document.getElementById("profileGrid").appendChild(toggle);
+    document.getElementById("pushOptin").addEventListener("change", async (e) => {
+      try { await window.LeadFuAuth.updateProfile({ push_optin: e.target.checked }); }
+      catch (err) { alert(window.LeadFuAuth.zhError(err)); e.target.checked = !e.target.checked; }
+    });
+  })();
+
   // ── A1：一鍵登入（Google/LINE）使用者補完手機 / 投資經驗 ──
   // OAuth 一鍵登入不經過註冊表單，phone/experience 會是空的（LINE 連 email 都沒有）
   if (!user.phone || !user.experience) {
