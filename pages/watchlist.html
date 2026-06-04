@@ -111,7 +111,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
-  const { data, findStock, getWatchlist, removeFromWatchlist, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, pageHref } = window.LeadFu;
+  const { data, findStock, getWatchlist, removeFromWatchlist, clearWatchlist, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, pageHref } = window.LeadFu;
 
   // 是否已登入（看 localStorage 有沒有 Supabase session token；不必載 Supabase）
   const isLoggedIn = () => {
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("clearAll").addEventListener("click", () => {
     if (confirm("確定要清空全部自選股？")) {
-      localStorage.removeItem(WATCHLIST_KEY);
+      clearWatchlist();   // 清本機 +（登入者）一併清雲端，避免重整後又同步回來
       render();
     }
   });

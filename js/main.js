@@ -322,6 +322,10 @@ function removeFromWatchlist(code) {
   localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list));
   _pushWatchlistToCloud();
 }
+function clearWatchlist() {
+  localStorage.setItem(WATCHLIST_KEY, JSON.stringify([]));
+  _pushWatchlistToCloud();   // 登入者：一併清空雲端（否則重整會從雲端同步回來）
+}
 function isInWatchlist(code) {
   return getWatchlist().includes(code);
 }
@@ -2626,7 +2630,7 @@ window.LeadFu = {
   data: STOCK_DATA,
   fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow,
   findStock, pageHref, homeHref,
-  getWatchlist, addToWatchlist, removeFromWatchlist, isInWatchlist,
+  getWatchlist, addToWatchlist, removeFromWatchlist, clearWatchlist, isInWatchlist,
   mockAiResponse, startLivePriceSimulation, showToast,
   // 第 1 層 AI 問答工具（ai.html 用）
   parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
