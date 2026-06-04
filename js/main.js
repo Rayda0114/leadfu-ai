@@ -522,6 +522,31 @@ function bindTabs() {
   });
 }
 
+/* 頂部列：登入後把「會員登入/免費註冊」換成「👤 會員中心 / 登出」
+   全站適用；用 localStorage 的 sb-*-auth-token 同步判斷，不需載 Supabase */
+function updateHeaderAuthState() {
+  if (!_hasSupabaseSession()) return;   // 未登入：維持原本登入/註冊
+  const inPages = location.pathname.includes("/pages/");
+  document.querySelectorAll(".top-right").forEach(tr => {
+    const loginLink = tr.querySelector('a[href*="login"]');
+    const regLink = tr.querySelector('a[href*="register"]');
+    if (loginLink) {
+      loginLink.textContent = "👤 會員中心";
+      loginLink.setAttribute("href", (inPages ? "" : "pages/") + "member.html");
+    }
+    if (regLink) {
+      regLink.textContent = "登出";
+      regLink.setAttribute("href", "#");
+      regLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try { const a = await _ensureAuth(); if (a) await a.signOut(); } catch (e2) {}
+        Object.keys(localStorage).filter(k => /^sb-.*-auth-token$/.test(k)).forEach(k => localStorage.removeItem(k));
+        location.href = inPages ? "../index.html" : "index.html";
+      });
+    }
+  });
+}
+
 function bindAddFavBtns() {
   document.addEventListener("click", (e) => {
     const btn = e.target.closest(".add-btn");
@@ -3266,6 +3291,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   injectFooterFraudReminder();  // 📢 全站 footer 防詐聲明（給 SEO + AI 爬蟲穩定錨點）
   setupOnboarding();            // 👋 首次訪客 3 步驟引導浮層（只首頁、且首次造訪）
   renderDate();
+  updateHeaderAuthState();   // 登入後頂部顯示「👤 會員中心 / 登出」（全站，同步判斷不需載 Supabase）
 
   // 先抓即時資料再渲染表格
   await loadLiveData();
