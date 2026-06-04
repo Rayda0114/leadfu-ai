@@ -843,6 +843,7 @@ async function setupStockAiSummary(code, stock) {
 
 async function loadAiSummary(code, stock, resultEl, cacheKey) {
   const L = window.LeadFu;
+  L && L.trackEvent("ai_summary", { source: "stock" });
   const co = (L.data.companies && L.data.companies[code]) || null;
   const rev = (L.data.revenue && L.data.revenue[code]) || null;
   const pct = L.pctChange(stock.price, stock.change);

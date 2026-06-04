@@ -276,6 +276,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!text) return;
     if (_pending) return;  // 上一個還在跑就不送
     _pending = true;
+    window.LeadFu && window.LeadFu.trackEvent("ai_chat", { source: "ai_page" });
 
     chatList.querySelectorAll(".chat-suggestions").forEach(el => el.remove());
 

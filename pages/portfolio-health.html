@@ -292,6 +292,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 請用淺白繁中，給 45-75 歲長輩看得懂。不要推薦個股，不要說「值得買進」「應該賣出」。`;
 
+    window.LeadFu && window.LeadFu.trackEvent("ai_summary", { source: "portfolio" });
     try {
       const resp = await fetch("/api/ask", {
         method: "POST",

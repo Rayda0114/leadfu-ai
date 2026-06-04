@@ -962,6 +962,7 @@ async function setupDailyBrief() {
 }
 
 async function fetchDailyBriefAi(stats, bodyEl, ttsBtn, cacheKey) {
+  window.LeadFu && window.LeadFu.trackEvent("ai_summary", { source: "daily_brief" });
   const prompt = `請用 2-3 句話幫我整理今天台股全市場的盤後重點，給 45-75 歲一般投資人看的，淺白語言。資料如下：\n\n上漲 ${stats.upCount} 家、下跌 ${stats.downCount} 家、平盤 ${stats.flatCount} 家、注意股 ${stats.warnCount} 檔。\n領漲產業：${stats.topUpIndustries.map(i => i.name+" "+i.avg+"%").join("、")}。\n領跌產業：${stats.topDownIndustries.map(i => i.name+" "+i.avg+"%").join("、")}。\n\n只寫盤面客觀觀察，不要推薦個股，不要預測明日走勢。`;
 
   // 傳真實資料時間 + 標記為市場摘要（worker 會跳過股票代號誤判）
@@ -1418,6 +1419,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!text) return;
     if (_pending) return;
     _pending = true;
+    window.LeadFu && window.LeadFu.trackEvent("ai_chat", { source: "home" });
     list.querySelectorAll(".chat-suggestions").forEach(el => el.remove());
 
     const userMsg = { role: "user", content: text, ts: Date.now() };

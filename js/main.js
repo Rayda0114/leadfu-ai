@@ -2531,6 +2531,13 @@ function startLivePriceSimulation(intervalMs = 3000) {
 let _resolveReady;
 const _readyPromise = new Promise(r => { _resolveReady = r; });
 
+/* GA4 自訂事件（gtag 由 setupGA 動態載入；stub 已先建好，呼叫會排隊補送）
+   ai_chat = 使用者主動問答；ai_summary = 系統自動生成摘要 */
+function trackEvent(name, params) {
+  try { if (typeof window.gtag === "function") window.gtag("event", name, params || {}); }
+  catch (e) { /* 追蹤失敗不影響功能 */ }
+}
+
 window.LeadFu = {
   data: STOCK_DATA,
   fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow,
@@ -2541,6 +2548,7 @@ window.LeadFu = {
   parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
   startStockLive,  // 個股詳情頁即時報價 polling
   loadKlines,      // 個股詳情頁延後載入 9.8MB K 線（不再全站每頁載）
+  trackEvent,      // GA4 自訂事件（ai_chat / ai_summary 等）
   lineUrl: LINE_URL, lineId: LINE_ID,
   ready: _readyPromise
 };
