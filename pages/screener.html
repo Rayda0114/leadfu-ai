@@ -47,6 +47,15 @@
   .scan-card p { font-size:12px; line-height:1.7; color:#d9e8e0; margin-bottom:10px; }
   .scan-card button { width:100%; background:#C5A572; color:#fff; border:none; padding:9px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; }
   .scan-card .soon { font-size:10px; background:rgba(255,255,255,.2); padding:1px 6px; border-radius:8px; margin-left:5px; }
+  .strat-list { display:flex; flex-direction:column; gap:6px; margin-bottom:8px; }
+  .strat-item { display:flex; align-items:center; gap:4px; font-size:12.5px; padding:6px 8px; border:1px solid #e8eaee; border-radius:6px; background:#fafbfc; }
+  .strat-item .sname { flex:1; color:#1B4332; font-weight:600; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .strat-item .sname:hover { text-decoration:underline; }
+  .strat-item .sbtn { border:none; background:none; cursor:pointer; font-size:15px; padding:2px 4px; line-height:1; }
+  .strat-item .scan-off { filter:grayscale(1); opacity:.5; }
+  .strat-item .del { color:#c9ccd1; font-size:13px; }
+  .strat-item .del:hover { color:#c0392b; }
+  .strat-empty { font-size:11.5px; color:#aaa; padding:4px 2px; }
 </style>
 </head>
 <body>
@@ -118,9 +127,9 @@
     <aside>
 
       <div class="scan-card">
-        <h4>🔔 每日自動掃描 <span class="soon">即將推出</span></h4>
-        <p>把篩選條件存成策略並開啟自動掃描，每天盤後我們幫你掃全市場，<strong>符合條件的「新」股票</strong>直接推到你的 LINE — 不用自己每天開來篩。</p>
-        <button id="scanToggleBtn" type="button">登入後開啟每日掃描</button>
+        <h4>🔔 每日自動掃描</h4>
+        <p>把條件存成策略、按 🔔 開啟，每天盤後我們幫你掃全市場，<strong>「新」符合條件的股票</strong>直接推到你的 LINE — 不用自己每天開來篩。</p>
+        <button id="scanToggleBtn" type="button">如何開啟每日掃描？</button>
       </div>
 
       <div class="filter-card">
@@ -203,11 +212,9 @@
 
       <div class="filter-card">
         <h4>💾 我的策略</h4>
-        <div style="display:flex;gap:6px;align-items:center;">
-          <select id="strategySelect" style="flex:1;padding:5px 6px;border:1px solid #d0d5dc;border-radius:3px;font-size:12px;"><option value="">— 載入已存策略 —</option></select>
-          <button id="saveStrategyBtn" style="background:#fff;border:1px solid #1B4332;color:#1B4332;padding:5px 10px;border-radius:3px;font-size:12px;white-space:nowrap;cursor:pointer;">＋ 存</button>
-        </div>
-        <div style="font-size:11px;color:#999;margin-top:6px;">把目前條件存起來，下次一鍵套用，也是每日自動掃描的依據。</div>
+        <div id="stratList" class="strat-list"></div>
+        <button id="saveStrategyBtn" style="width:100%;background:#fff;border:1px solid #1B4332;color:#1B4332;padding:7px 10px;border-radius:6px;font-size:12.5px;cursor:pointer;">＋ 存目前條件為策略</button>
+        <div style="font-size:11px;color:#999;margin-top:7px;">存起來下次一鍵套用；按 🔔 開啟「每日自動掃描」，新符合的股票會推到你的 LINE（需 LINE 登入）。</div>
       </div>
 
       <div style="display:flex;gap:6px;">
@@ -481,17 +488,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("resetBtn").addEventListener("click", reset);
   document.getElementById("sortBy").addEventListener("change", apply);
   document.getElementById("scanToggleBtn").addEventListener("click", () => {
-    showToast && showToast("每日自動掃描即將推出，敬請期待 🔔", "success");
+    if (!(L.hasSession && L.hasSession())) {
+      showToast && showToast("請先用 LINE 登入：登入後在下方『我的策略』存策略、按 🔔 即可開啟每日掃描", "success");
+      return;
+    }
+    const card = document.getElementById("stratList").closest(".filter-card");
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+    showToast && showToast("在『我的策略』把要自動掃描的策略按 🔔 開啟即可（沒有的話先存一個）", "success");
   });
 
-  // 💾 我的策略（localStorage）
-  const STRAT_KEY = "leadfu_screener_strategies";
-  const getStrategies = () => { try { return JSON.parse(localStorage.getItem(STRAT_KEY) || "[]"); } catch { return []; } };
-  function refreshStrategyList() {
-    const sel = document.getElementById("strategySelect");
-    sel.innerHTML = `<option value="">— 載入已存策略 —</option>`
-      + getStrategies().map((s, i) => `<option value="${i}">${s.name}</option>`).join("");
-  }
+  // 💾 我的策略（雲端同步：main.js getStrategies / saveStrategies）
   function writeFilters(f) {
     reset();
     const setV = (id, v) => { if (v != null && v !== "") document.getElementById(id).value = v; };
@@ -503,21 +509,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     (f.cats || []).forEach(v => { const el = document.querySelector(`#catList input[value="${v}"]`); if (el) { el.checked = true; el.parentElement.classList.add("checked"); } });
     if (f.sort) document.getElementById("sortBy").value = f.sort;
   }
+  const stratListEl = document.getElementById("stratList");
+  function renderStrategies() {
+    const list = L.getStrategies ? L.getStrategies() : [];
+    if (!list.length) { stratListEl.innerHTML = `<div class="strat-empty">尚無策略。設好條件後按下方「＋ 存目前條件」。</div>`; return; }
+    stratListEl.innerHTML = list.map((s, i) => `
+      <div class="strat-item" data-i="${i}">
+        <span class="sname" title="套用此策略">${s.name}</span>
+        <button class="sbtn scan ${s.scan ? '' : 'scan-off'}" title="${s.scan ? '每日掃描中（點擊關閉）' : '開啟每日自動掃描通知'}">🔔</button>
+        <button class="sbtn del" title="刪除策略">✕</button>
+      </div>`).join("");
+  }
+  stratListEl.addEventListener("click", (e) => {
+    const item = e.target.closest(".strat-item"); if (!item) return;
+    const list = L.getStrategies(); const s = list[+item.dataset.i]; if (!s) return;
+    if (e.target.classList.contains("sname")) { writeFilters(s.filters); apply(); showToast && showToast(`已套用策略「${s.name}」`, "success"); return; }
+    if (e.target.classList.contains("del")) { if (!confirm(`刪除策略「${s.name}」？`)) return; list.splice(+item.dataset.i, 1); L.saveStrategies(list); renderStrategies(); return; }
+    if (e.target.classList.contains("scan")) {
+      if (!s.scan && !(L.hasSession && L.hasSession())) { showToast && showToast("請先用 LINE 登入，才能開啟每日掃描通知 🔔", "success"); return; }
+      s.scan = !s.scan;
+      if (s.scan && !Array.isArray(s.last_codes)) { s.last_codes = []; s.last_scan = ""; }
+      L.saveStrategies(list); renderStrategies();
+      showToast && showToast(s.scan ? `已開啟「${s.name}」每日掃描 🔔　盤後幫你掃，新符合的推到 LINE` : `已關閉「${s.name}」每日掃描`, "success");
+    }
+  });
   document.getElementById("saveStrategyBtn").addEventListener("click", () => {
     const name = (prompt("幫這個選股策略取個名字（例：高股息存股、合理區間偏低）：") || "").trim();
     if (!name) return;
-    const strats = getStrategies();
-    strats.push({ name, filters: readFilters() });
-    localStorage.setItem(STRAT_KEY, JSON.stringify(strats));
-    refreshStrategyList();
-    alert(`已儲存策略「${name}」。下次可一鍵套用；每日自動掃描上線後也會用這些策略幫你掃。`);
+    const list = (L.getStrategies() || []).filter(x => x.name !== name);
+    list.push({ name, filters: readFilters(), scan: false, last_codes: [], last_scan: "" });
+    L.saveStrategies(list); renderStrategies();
+    showToast && showToast(`已儲存策略「${name}」`, "success");
   });
-  document.getElementById("strategySelect").addEventListener("change", (e) => {
-    if (e.target.value === "") return;
-    const s = getStrategies()[+e.target.value];
-    if (s) { writeFilters(s.filters); apply(); }
-  });
-  refreshStrategyList();
+  // 雲端策略同步回來（登入者跨裝置）→ 重繪清單
+  document.addEventListener("leadfu:strategies-synced", renderStrategies);
+  renderStrategies();
 
   apply();
 });

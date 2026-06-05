@@ -1,0 +1,34 @@
+name: 領富 AI · 每日選股策略掃描
+
+# 台灣時間 15:55（UTC 07:55）—— 排在「每日資料更新」(15:00) 與「自選股推播」(15:45) 之後。
+# 讀會員存的選股策略(scan=true) → 掃今日全市場 → 把「新進榜」的股票透過 LINE 推播。
+on:
+  schedule:
+    - cron: "55 7 * * 1-5"   # 週一到週五，資料更新後
+  workflow_dispatch:           # 允許手動觸發（測試用）
+    inputs:
+      dry_run:
+        description: "只測試、不實際推播/不回寫（true = 只印訊息）"
+        required: false
+        default: "true"
+
+jobs:
+  scan-strategies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Scan member strategies and push new matches
+        run: python scripts/scan_strategies.py
+        env:
+          PYTHONIOENCODING: utf-8
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          # 手動觸發 dry_run=true → 只印不推；排程觸發為空 → 實際推播
+          DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}

@@ -154,6 +154,23 @@ window.LeadFuAuth = {
     if (error) console.warn("[領富 AI] 寫雲端持股失敗:", error.message);
   },
 
+  /* ── 選股策略雲端同步（profiles.scan_strategies 欄位，jsonb 陣列）──
+     每個策略：{ name, filters, scan:bool, last_codes:[...], last_scan:"YYYY-MM-DD" }
+     scan=true 的策略由 scripts/scan_strategies.py 每日盤後掃描、把新符合的股票推到 LINE。*/
+  async getCloudStrategies() {
+    const user = await this.getUser();
+    if (!user) return null;
+    const { data, error } = await _sb.from("profiles").select("scan_strategies").eq("id", user.id).single();
+    if (error) { console.warn("[領富 AI] 讀雲端策略失敗:", error.message); return null; }
+    return Array.isArray(data && data.scan_strategies) ? data.scan_strategies : [];
+  },
+  async setCloudStrategies(strategies) {
+    const user = await this.getUser();
+    if (!user) return;
+    const { error } = await _sb.from("profiles").update({ scan_strategies: strategies }).eq("id", user.id);
+    if (error) console.warn("[領富 AI] 寫雲端策略失敗:", error.message);
+  },
+
   /* 把 Supabase 錯誤碼轉成中文（給 45-75 歲族群看得懂）*/
   zhError(error) {
     const msg = (error && error.message) || String(error);

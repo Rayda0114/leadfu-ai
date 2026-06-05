@@ -424,6 +424,45 @@ function _pushHoldingsToCloud() {
   }, 800);
 }
 
+/* ── 選股策略（localStorage + 雲端同步，登入者）──
+   格式：[{ name, filters, scan:bool, last_codes:[], last_scan:"YYYY-MM-DD" }, ...]
+   scan=true 的策略由 scripts/scan_strategies.py 每日盤後掃描，把「新符合」的股票推到 LINE */
+const STRATEGIES_KEY = "leadfu_screener_strategies";
+function getStrategies() {
+  try { const a = JSON.parse(localStorage.getItem(STRATEGIES_KEY) || "[]"); return Array.isArray(a) ? a : []; }
+  catch { return []; }
+}
+function saveStrategies(arr) {
+  if (!Array.isArray(arr)) return;
+  localStorage.setItem(STRATEGIES_KEY, JSON.stringify(arr));
+  _pushStrategiesToCloud();
+}
+function _mergeStrategies(local, cloud) {
+  const byName = {};
+  (local || []).forEach(s => { if (s && s.name) byName[s.name] = s; });
+  (cloud || []).forEach(s => { if (s && s.name) byName[s.name] = s; });   // 雲端優先（含 last_codes）
+  return Object.values(byName);
+}
+async function syncStrategiesFromCloud() {
+  const auth = await _ensureAuth();
+  if (!auth) return;
+  const cloud = await auth.getCloudStrategies();
+  if (cloud == null) return;
+  const merged = _mergeStrategies(getStrategies(), cloud);
+  localStorage.setItem(STRATEGIES_KEY, JSON.stringify(merged));
+  if (JSON.stringify(merged) !== JSON.stringify(cloud)) await auth.setCloudStrategies(merged);
+  document.dispatchEvent(new CustomEvent("leadfu:strategies-synced"));
+}
+let _stPushTimer = null;
+function _pushStrategiesToCloud() {
+  if (!_hasSupabaseSession()) return;   // 匿名：no-op
+  clearTimeout(_stPushTimer);
+  _stPushTimer = setTimeout(async () => {
+    const auth = await _ensureAuth();
+    if (auth) await auth.setCloudStrategies(getStrategies());
+  }, 800);
+}
+
 /* ============================================================
  * 今日日期 (top bar)
  * ============================================================ */
@@ -2761,6 +2800,7 @@ window.LeadFu = {
   findStock, pageHref, homeHref,
   getWatchlist, addToWatchlist, removeFromWatchlist, clearWatchlist, isInWatchlist,
   getHoldings, setHolding, removeHolding,
+  getStrategies, saveStrategies, hasSession: _hasSupabaseSession,
   mockAiResponse, startLivePriceSimulation, showToast,
   // 第 1 層 AI 問答工具（ai.html 用）
   parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
@@ -3458,6 +3498,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.addEventListener("leadfu:watchlist-synced", () => { try { refreshFavBtnStates(); } catch (e) {} });
   syncWatchlistFromCloud();
   syncHoldingsFromCloud();
+  syncStrategiesFromCloud();
   bindSearch();
   setupVoiceSearch();   // 🎤 語音搜尋（每頁 search-box 自動注入麥克風按鈕）
   bindAiPlaceholders();
