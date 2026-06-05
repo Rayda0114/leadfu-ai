@@ -68,6 +68,8 @@
     cursor: pointer;
   }
   .preset-pill:hover { background: #f0d77a; color: #fff; }
+  .fund-row { font-size: 13px; color: #555; display: flex; align-items: center; gap: 6px; }
+  .fund-row input { width: 64px; padding: 4px 6px; border: 1px solid #d0d5dc; border-radius: 3px; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -127,6 +129,9 @@
       <span class="preset-pill" data-preset="ipo">🆕 新興產業</span>
       <span class="preset-pill" data-preset="high">📊 高價股 ($500+)</span>
       <span class="preset-pill" data-preset="low">💰 低價股 ($100-)</span>
+      <span class="preset-pill" data-preset="dividend" style="background:#e7f5ec;border-color:#9ad3b0;color:#1e7e44;">💵 高股息(殖利率≥5%)</span>
+      <span class="preset-pill" data-preset="value" style="background:#e7f5ec;border-color:#9ad3b0;color:#1e7e44;">💎 價值股(低PE+高毛利)</span>
+      <span class="preset-pill" data-preset="growth" style="background:#e7f5ec;border-color:#9ad3b0;color:#1e7e44;">🚀 成長股(營收增+本業賺)</span>
     </div>
   </div>
 
@@ -171,6 +176,30 @@
         <div class="check-list" id="catList"></div>
       </div>
 
+      <div class="filter-card">
+        <h4>📊 基本面 / 籌碼條件</h4>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <label class="fund-row">月營收年增 ≥ <input type="number" id="revMin" placeholder="10" step="1"> %</label>
+          <label class="fund-row">毛利率 ≥ <input type="number" id="gmMin" placeholder="30" step="1"> %</label>
+          <label class="fund-row">本益比 ≤ <input type="number" id="peMax" placeholder="20" step="1"> 倍</label>
+          <label class="fund-row">殖利率 ≥ <input type="number" id="yldMin" placeholder="5" step="0.1"> %</label>
+        </div>
+        <div class="check-list" id="fundChecks" style="margin-top:10px;">
+          <label><input type="checkbox" id="chkMa20"> 站上月線</label>
+          <label><input type="checkbox" id="chkForeign"> 外資買超</label>
+          <label><input type="checkbox" id="chkOpProfit"> 本業獲利</label>
+        </div>
+      </div>
+
+      <div class="filter-card">
+        <h4>💾 我的策略</h4>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <select id="strategySelect" style="flex:1;padding:5px 6px;border:1px solid #d0d5dc;border-radius:3px;font-size:12px;"><option value="">— 載入已存策略 —</option></select>
+          <button id="saveStrategyBtn" style="background:#fff;border:1px solid #1B4332;color:#1B4332;padding:5px 10px;border-radius:3px;font-size:12px;white-space:nowrap;cursor:pointer;">＋ 存</button>
+        </div>
+        <div style="font-size:11px;color:#999;margin-top:6px;">把目前條件存起來，下次一鍵套用。</div>
+      </div>
+
       <div style="display:flex;gap:6px;">
         <button id="applyBtn" class="btn-primary" style="flex:1;">套用篩選</button>
         <button id="resetBtn" style="background:#fff;border:1px solid #d0d5dc;padding:8px 14px;border-radius:3px;color:#555;">重設</button>
@@ -189,6 +218,10 @@
                 <option value="pctAsc">跌幅大→小</option>
                 <option value="volDesc">量大→小</option>
                 <option value="priceDesc">價高→低</option>
+                <option value="revDesc">營收年增高→低</option>
+                <option value="yldDesc">殖利率高→低</option>
+                <option value="peAsc">本益比低→高</option>
+                <option value="gmDesc">毛利率高→低</option>
               </select>
             </label>
             <span style="font-size:12px;color:#666;">共 <span id="resultCount" style="color:#1B4332;font-weight:700;">0</span> 檔</span>
@@ -199,8 +232,11 @@
             <tr>
               <th>代號</th><th>名稱</th>
               <th class="num">成交價</th>
-              <th class="num">漲跌</th>
               <th class="num">漲跌幅</th>
+              <th class="num">月營收<br>年增</th>
+              <th class="num">毛利率</th>
+              <th class="num">本益比</th>
+              <th class="num">殖利率</th>
               <th class="num">成交量</th>
               <th>類別</th><th>狀態</th><th></th>
             </tr>
@@ -254,6 +290,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (v("pctMax")) f.pctMax = +v("pctMax");
     if (v("volMin")) f.volMin = +v("volMin");
     if (v("volMax")) f.volMax = +v("volMax");
+    if (v("revMin")) f.revMin = +v("revMin");
+    if (v("gmMin"))  f.gmMin  = +v("gmMin");
+    if (v("peMax"))  f.peMax  = +v("peMax");
+    if (v("yldMin")) f.yldMin = +v("yldMin");
+    f.ma20     = document.getElementById("chkMa20").checked;
+    f.foreign  = document.getElementById("chkForeign").checked;
+    f.opProfit = document.getElementById("chkOpProfit").checked;
     f.status = [...document.querySelectorAll("#statusList input:checked")].map(x => x.value);
     f.cats   = [...document.querySelectorAll("#catList input:checked")].map(x => x.value);
     f.sort = document.getElementById("sortBy").value;
@@ -279,31 +322,60 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
+    // 基本面 / 籌碼條件
+    const rev = data.revenue || {}, fin = data.financials || {}, val = data.valuation || {}, ind = data.indicators || {}, inst = data.institutional || {};
+    if (f.revMin != null) list = list.filter(s => { const x = rev[s.code]; return x && typeof x.yoy === "number" && x.yoy >= f.revMin; });
+    if (f.gmMin  != null) list = list.filter(s => { const x = fin[s.code]; return x && typeof x.gross_margin === "number" && x.gross_margin >= f.gmMin; });
+    if (f.peMax  != null) list = list.filter(s => { const x = val[s.code]; return x && x.pe_ratio > 0 && x.pe_ratio <= f.peMax; });
+    if (f.yldMin != null) list = list.filter(s => { const x = val[s.code]; return x && typeof x.yield_pct === "number" && x.yield_pct >= f.yldMin; });
+    if (f.ma20)     list = list.filter(s => { const x = ind[s.code]; return x && x.ma20 && s.price > x.ma20; });
+    if (f.foreign)  list = list.filter(s => { const x = inst[s.code]; return x && typeof x.foreign_net_lots === "number" && x.foreign_net_lots > 0; });
+    if (f.opProfit) list = list.filter(s => { const x = fin[s.code]; return x && typeof x.op_margin === "number" && x.op_margin > 0; });
+
     // 排序
+    const numOr = (x, lo) => (typeof x === "number" ? x : (lo ? -1e12 : 1e12));   // null 排最後
+    const gYoy = c => numOr(rev[c] && rev[c].yoy, true);
+    const gYld = c => numOr(val[c] && val[c].yield_pct, true);
+    const gPe  = c => { const p = val[c] && val[c].pe_ratio; return (p > 0) ? p : 1e12; };
+    const gGm  = c => numOr(fin[c] && fin[c].gross_margin, true);
     list.sort((a, b) => {
       if (f.sort === "pctDesc") return pctChange(b.price, b.change) - pctChange(a.price, a.change);
       if (f.sort === "pctAsc")  return pctChange(a.price, a.change) - pctChange(b.price, b.change);
       if (f.sort === "volDesc") return b.volume - a.volume;
       if (f.sort === "priceDesc") return b.price - a.price;
+      if (f.sort === "revDesc") return gYoy(b.code) - gYoy(a.code);
+      if (f.sort === "yldDesc") return gYld(b.code) - gYld(a.code);
+      if (f.sort === "peAsc")   return gPe(a.code) - gPe(b.code);
+      if (f.sort === "gmDesc")  return gGm(b.code) - gGm(a.code);
       return a.code.localeCompare(b.code);
     });
 
     document.getElementById("resultCount").textContent = list.length;
     const tbody = document.getElementById("resultTbody");
     if (list.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="9" class="loading">沒有符合條件的個股</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="12" class="loading">沒有符合條件的個股</td></tr>`;
       return;
     }
+    const rev2 = data.revenue || {}, fin2 = data.financials || {}, val2 = data.valuation || {};
     tbody.innerHTML = list.map(s => {
       const pct = pctChange(s.price, s.change);
       const cls = changeClass(s.change);
       const fav = isInWatchlist(s.code);
+      const r = rev2[s.code], fnl = fin2[s.code], vl = val2[s.code];
+      const yoy = (r && typeof r.yoy === "number") ? `${r.yoy >= 0 ? "+" : ""}${r.yoy.toFixed(1)}%` : "—";
+      const yoyCls = (r && r.yoy > 0) ? "up" : (r && r.yoy < 0) ? "down" : "";
+      const gm = (fnl && typeof fnl.gross_margin === "number") ? fnl.gross_margin.toFixed(1) + "%" : "—";
+      const pe = (vl && vl.pe_ratio > 0) ? vl.pe_ratio.toFixed(1) : "—";
+      const yld = (vl && typeof vl.yield_pct === "number") ? vl.yield_pct.toFixed(2) + "%" : "—";
       return `<tr data-code="${s.code}">
         <td class="code"><a href="${pageHref('stock-detail.html?code=' + s.code)}">${s.code}</a></td>
         <td><a href="${pageHref('stock-detail.html?code=' + s.code)}" style="color:inherit;">${s.name}</a></td>
         <td class="num ${cls}">${fmtPrice(s.price)}</td>
-        <td class="num ${cls}">${arrow(s.change)} ${fmtChange(s.change)}</td>
         <td class="num ${cls}">${fmtPct(pct)}</td>
+        <td class="num ${yoyCls}">${yoy}</td>
+        <td class="num">${gm}</td>
+        <td class="num">${pe}</td>
+        <td class="num">${yld}</td>
         <td class="num">${s.volume.toLocaleString("zh-TW")}</td>
         <td>${s.category}</td>
         <td><span class="status-pill status-${s.status}">${s.status}</span></td>
@@ -327,10 +399,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       reset();
       const preset = p.dataset.preset;
       const setVal = (id, v) => { document.getElementById(id).value = v; };
+      const setChk = (id) => { const el = document.getElementById(id); if (el) { el.checked = true; el.parentElement.classList.add("checked"); } };
       const checkVal = (group, val) => {
         const el = document.querySelector(`#${group} input[value="${val}"]`);
         if (el) { el.checked = true; el.parentElement.classList.add("checked"); }
       };
+      if (preset === "dividend") { setVal("yldMin", "5"); }
+      if (preset === "value")    { setVal("peMax", "15"); setVal("gmMin", "30"); }
+      if (preset === "growth")   { setVal("revMin", "10"); setChk("chkOpProfit"); }
       if (preset === "up") setVal("pctMin", "0.01");
       if (preset === "down") setVal("pctMax", "-0.01");
       if (preset === "volume") setVal("volMin", "500");
@@ -346,6 +422,41 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("applyBtn").addEventListener("click", apply);
   document.getElementById("resetBtn").addEventListener("click", reset);
   document.getElementById("sortBy").addEventListener("change", apply);
+
+  // 💾 我的策略（存 / 載，localStorage）
+  const STRAT_KEY = "leadfu_screener_strategies";
+  const getStrategies = () => { try { return JSON.parse(localStorage.getItem(STRAT_KEY) || "[]"); } catch { return []; } };
+  function refreshStrategyList() {
+    const sel = document.getElementById("strategySelect");
+    sel.innerHTML = `<option value="">— 載入已存策略 —</option>`
+      + getStrategies().map((s, i) => `<option value="${i}">${s.name}</option>`).join("");
+  }
+  function writeFilters(f) {
+    reset();
+    const setV = (id, v) => { if (v != null) document.getElementById(id).value = v; };
+    ["priceMin", "priceMax", "pctMin", "pctMax", "volMin", "volMax", "revMin", "gmMin", "peMax", "yldMin"].forEach(id => setV(id, f[id]));
+    if (f.ma20) document.getElementById("chkMa20").checked = true;
+    if (f.foreign) document.getElementById("chkForeign").checked = true;
+    if (f.opProfit) document.getElementById("chkOpProfit").checked = true;
+    (f.status || []).forEach(v => { const el = document.querySelector(`#statusList input[value="${v}"]`); if (el) { el.checked = true; el.parentElement.classList.add("checked"); } });
+    (f.cats || []).forEach(v => { const el = document.querySelector(`#catList input[value="${v}"]`); if (el) { el.checked = true; el.parentElement.classList.add("checked"); } });
+    if (f.sort) document.getElementById("sortBy").value = f.sort;
+  }
+  document.getElementById("saveStrategyBtn").addEventListener("click", () => {
+    const name = (prompt("幫這個選股策略取個名字（例：高股息存股、低PE成長股）：") || "").trim();
+    if (!name) return;
+    const strats = getStrategies();
+    strats.push({ name, filters: readFilters() });
+    localStorage.setItem(STRAT_KEY, JSON.stringify(strats));
+    refreshStrategyList();
+    alert(`已儲存策略「${name}」，下次可從上方下拉一鍵套用。`);
+  });
+  document.getElementById("strategySelect").addEventListener("change", (e) => {
+    if (e.target.value === "") return;
+    const s = getStrategies()[+e.target.value];
+    if (s) { writeFilters(s.filters); apply(); }
+  });
+  refreshStrategyList();
 
   apply();
 });
