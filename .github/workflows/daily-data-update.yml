@@ -27,6 +27,14 @@ jobs:
         env:
           PYTHONIOENCODING: utf-8
 
+      # 新聞抓完後，用 AI 幫每則標「利多/利空、短/長期、影響個股」，寫回 news_live.json。
+      # 失敗不擋整體更新（當天新聞就只是少了 AI 標註）。呼叫線上 /api/ask，無需 secret。
+      - name: AI 新聞判斷
+        continue-on-error: true
+        run: python scripts/analyze_news.py
+        env:
+          PYTHONIOENCODING: utf-8
+
       - name: Show data summary
         run: |
           echo "=== data/ files ==="

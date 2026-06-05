@@ -130,13 +130,27 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
 </footer>
 
+<style>
+  /* 只作用於本頁新聞列表：改直排，容納 AI 判斷標籤/解讀/影響個股 */
+  #newsList li { flex-direction: column; align-items: flex-start; gap: 5px; padding: 12px 16px; }
+  #newsList .news-line1 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: 100%; }
+  #newsList .news-line1 .news-title { flex: 1; min-width: 220px; }
+  .news-sent { font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; }
+  .news-sent.up { background: #fdecec; color: #d23b3b; }      /* 利多＝紅 */
+  .news-sent.down { background: #e7f5ec; color: #1e9e54; }    /* 利空＝綠 */
+  .news-sent.flat { background: #f1f1f1; color: #999; }
+  .news-ainote { color: #555; font-size: 13px; line-height: 1.6; }
+  .news-ainote .horizon { color: #aaa; }
+  .news-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .news-chip { font-size: 12px; background: #eef4f0; color: #1B4332; border-radius: 5px; padding: 2px 9px; text-decoration: none; }
+  .news-chip:hover { background: #dcebe2; }
+</style>
 <script src="../js/main.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
-  const { data } = window.LeadFu;
+  const { data, findStock } = window.LeadFu;
 
-  // Use all news from core data (already 10 entries with body)
   const allNews = data.news;
 
   function render(cat) {
@@ -145,13 +159,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("newsList").innerHTML = `<li style="display:block;text-align:center;color:#999;padding:30px;">沒有此分類的新聞</li>`;
       return;
     }
-    document.getElementById("newsList").innerHTML = list.map(n => `
+    document.getElementById("newsList").innerHTML = list.map(n => {
+      const s = n.ai_sentiment;
+      const sentB = s === "利多" ? '<span class="news-sent up">利多</span>'
+                  : s === "利空" ? '<span class="news-sent down">利空</span>'
+                  : s ? '<span class="news-sent flat">中性</span>' : "";
+      const chips = (n.ai_related || []).map(c => {
+        const st = findStock(c);
+        return `<a class="news-chip" href="stock-detail.html?code=${c}">${c} ${st ? st.name : ""}</a>`;
+      }).join("");
+      const hz = (n.ai_horizon && n.ai_horizon !== "不明") ? ` <span class="horizon">・${n.ai_horizon}影響</span>` : "";
+      const note = n.ai_note ? `<div class="news-ainote">💡 ${n.ai_note}${hz}</div>` : "";
+      return `
       <li>
-        <span class="news-time">${n.time}</span>
-        <span class="news-tag ${n.tag}">${n.tag}</span>
-        <a class="news-title" href="news-detail.html?id=${n.id}">${n.title}</a>
-      </li>
-    `).join("");
+        <div class="news-line1">
+          <span class="news-time">${n.time}</span>
+          <span class="news-tag ${n.tag}">${n.tag}</span>
+          ${sentB}
+          <a class="news-title" href="news-detail.html?id=${n.id}">${n.title}</a>
+        </div>
+        ${note}
+        ${chips ? `<div class="news-chips">${chips}</div>` : ""}
+      </li>`;
+    }).join("");
   }
 
   document.querySelectorAll(".panel-tabs .tab").forEach(btn => {

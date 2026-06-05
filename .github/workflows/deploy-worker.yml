@@ -18,6 +18,7 @@ on:
       - "js/**"
       - "css/**"
       - "icons/**"
+      - "data/**"
       - "sw.js"
       - "manifest.json"
       - ".github/workflows/deploy-worker.yml"

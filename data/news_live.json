@@ -11,7 +11,11 @@
       "tag": "個股",
       "source": "",
       "summary": "證交所攜手上市公司於COMPUTEX 2026 展現臺灣在全球AI與半導體產業競爭之關鍵地位 Yahoo新聞",
-      "id": 1
+      "id": 1,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [],
+      "ai_note": "證交所與上市公司於COMPUTEX展示台灣半導體與AI地位"
     },
     {
       "title": "吊車大王買股慘賠445萬！「神明指名做1事」秒放棄股東會算帳 | 民視新聞網 - LINE TODAY",
@@ -21,7 +25,11 @@
       "tag": "個股",
       "source": "",
       "summary": "吊車大王買股慘賠445萬！「神明指名做1事」秒放棄股東會算帳 | 民視新聞網 LINE TODAY",
-      "id": 2
+      "id": 2,
+      "ai_sentiment": "利空",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "個人投資損失案例，未提具體公司"
     },
     {
       "title": "《興櫃股》豐技生技5月營收為0.13億元，年減31.68% - 富聯網",
@@ -31,7 +39,13 @@
       "tag": "個股",
       "source": "",
       "summary": "《興櫃股》豐技生技5月營收為0.13億元，年減31.68% 富聯網",
-      "id": 3
+      "id": 3,
+      "ai_sentiment": "利空",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "6744"
+      ],
+      "ai_note": "豐技生技5月營收年減31.68%"
     },
     {
       "title": "SpaceX IPO 懶人包：上市時間、成長動能一次看！SpaceX 概念股有哪些？ - StockFeel 股感",
@@ -41,7 +55,11 @@
       "tag": "焦點",
       "source": "",
       "summary": "SpaceX IPO 懶人包：上市時間、成長動能一次看！SpaceX 概念股有哪些？ StockFeel 股感",
-      "id": 4
+      "id": 4,
+      "ai_sentiment": "中性",
+      "ai_horizon": "不明",
+      "ai_related": [],
+      "ai_note": "報導SpaceX IPO潛在概念股，未明確列具體台股公司"
     },
     {
       "title": "《興櫃股》台鎔科技6月5日參加永豐金證法人座談會 - 富聯網",
@@ -51,7 +69,13 @@
       "tag": "個股",
       "source": "",
       "summary": "《興櫃股》台鎔科技6月5日參加永豐金證法人座談會 富聯網",
-      "id": 5
+      "id": 5,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "6947"
+      ],
+      "ai_note": "台鎔科技參加法人座談會，無營收或價量訊息"
     },
     {
       "title": "《上市類股資金流向4-1》半導體類股比重(33.66%) - 富聯網",
@@ -61,7 +85,11 @@
       "tag": "個股",
       "source": "",
       "summary": "《上市類股資金流向4-1》半導體類股比重(33.66%) 富聯網",
-      "id": 6
+      "id": 6,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "半導體類股資金比重33.66%，未提個別公司"
     },
     {
       "title": "達人網6／15以36元掛牌上櫃 公開申購至明天 潛在獲利空間67％ - 工商時報",
@@ -71,7 +99,13 @@
       "tag": "抽籤",
       "source": "工商時報",
       "summary": "達人網6／15以36元掛牌上櫃 公開申購至明天 潛在獲利空間67％ 工商時報",
-      "id": 7
+      "id": 7,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "7839"
+      ],
+      "ai_note": "達人網擬上櫃，公開申購中"
     },
     {
       "title": "《半導體》台積電股利政策不變員工分紅成長動能持續- 上市櫃 - 旺得富理財網",
@@ -81,7 +115,13 @@
       "tag": "個股",
       "source": "",
       "summary": "《半導體》台積電股利政策不變員工分紅成長動能持續- 上市櫃 旺得富理財網",
-      "id": 8
+      "id": 8,
+      "ai_sentiment": "利多",
+      "ai_horizon": "長期",
+      "ai_related": [
+        "2330"
+      ],
+      "ai_note": "台積電股利政策不變，員工分紅持續"
     },
     {
       "title": "〈台股盤前要聞〉4天飆漲2824點連續跨欄站上4萬6、上市櫃99檔列注意、處置股 - news.cnyes.com",
@@ -91,7 +131,11 @@
       "tag": "焦點",
       "source": "",
       "summary": "〈台股盤前要聞〉4天飆漲2824點連續跨欄站上4萬6、上市櫃99檔列注意、處置股 news.cnyes.com",
-      "id": 9
+      "id": 9,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "台股指數漲勢與注意股列表，未提具體公司"
     },
     {
       "title": "黃仁勳開金口台股、台積雙創高- 上市櫃 - 旺得富理財網",
@@ -101,7 +145,13 @@
       "tag": "焦點",
       "source": "",
       "summary": "黃仁勳開金口台股、台積雙創高- 上市櫃 旺得富理財網",
-      "id": 10
+      "id": 10,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "2330"
+      ],
+      "ai_note": "黃仁勳提及台積電創高，無具體價格或預測"
     },
     {
       "title": "SpaceX 上市傳每股135美元 晨星潑冷水 認為只值一半 - 經濟日報",
@@ -111,7 +161,11 @@
       "tag": "焦點",
       "source": "經濟日報",
       "summary": "SpaceX 上市傳每股135美元 晨星潑冷水 認為只值一半 經濟日報",
-      "id": 11
+      "id": 11,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [],
+      "ai_note": "SpaceX上市估值存在分歧，市場看法不一"
     },
     {
       "title": "聯嘉投控(3717)現金增資公開申購，報酬率16%值得抽嗎？股票抽籤該注意什麼？ - 鏈新聞 ABMedia",
@@ -121,7 +175,13 @@
       "tag": "抽籤",
       "source": "",
       "summary": "聯嘉投控(3717)現金增資公開申購，報酬率16%值得抽嗎？股票抽籤該注意什麼？ 鏈新聞 ABMedia",
-      "id": 12
+      "id": 12,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "3717"
+      ],
+      "ai_note": "聯嘉投控現金增資，抽籤報酬率為市場討論話題"
     },
     {
       "title": "台股錢淹腳目！連4日創高攻破46000點 上市櫃逾百檔漲停助攻｜Yahoo財經掃描 - Yahoo股市",
@@ -131,7 +191,11 @@
       "tag": "焦點",
       "source": "",
       "summary": "台股錢淹腳目！連4日創高攻破46000點 上市櫃逾百檔漲停助攻｜Yahoo財經掃描 Yahoo股市",
-      "id": 13
+      "id": 13,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "台股指數連四日創高，多檔股票漲停反映市場熱絡"
     },
     {
       "title": "【2026最新】半導體業平均薪資出爐！日月光628萬奪冠、台積電破400萬 - 104職場力",
@@ -141,7 +205,13 @@
       "tag": "個股",
       "source": "",
       "summary": "【2026最新】半導體業平均薪資出爐！日月光628萬奪冠、台積電破400萬 104職場力",
-      "id": 14
+      "id": 14,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [
+        "2330"
+      ],
+      "ai_note": "半導體業平均薪資數據公布，反映人力成本結構"
     },
     {
       "title": "2025上市櫃高薪排行榜出爐、前十名都超過400萬元日月光投控員工平均年薪628萬奪冠，台積電7.7萬員工平均年薪逾400萬 - CSR@天下",
@@ -151,7 +221,14 @@
       "tag": "個股",
       "source": "",
       "summary": "2025上市櫃高薪排行榜出爐、前十名都超過400萬元日月光投控員工平均年薪628萬奪冠，台積電7.7萬員工平均年薪逾400萬 CSR@天下",
-      "id": 15
+      "id": 15,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [
+        "3711",
+        "2330"
+      ],
+      "ai_note": "上市櫃高薪排行榜顯示半導體業薪資水準"
     },
     {
       "title": "SpaceX IPO預計6月掛牌上市！台灣投資人如何佈局SPCX美股交易？ - 加密城市CryptoCity",
@@ -161,7 +238,11 @@
       "tag": "抽籤",
       "source": "",
       "summary": "SpaceX IPO預計6月掛牌上市！台灣投資人如何佈局SPCX美股交易？ 加密城市CryptoCity",
-      "id": 16
+      "id": 16,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [],
+      "ai_note": "SpaceX預計IPO，台灣投資人關注美股參與管道"
     },
     {
       "title": "台普威明日登興櫃 搶AI算力基礎建設新市場 - news.cnyes.com",
@@ -171,7 +252,13 @@
       "tag": "個股",
       "source": "",
       "summary": "台普威明日登興櫃 搶AI算力基礎建設新市場 news.cnyes.com",
-      "id": 17
+      "id": 17,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "7921"
+      ],
+      "ai_note": "台普威將登興櫃，聚焦AI算力基礎建設市場"
     },
     {
       "title": "SpaceX IPO 台灣人怎麼投資？Pre-IPO 到上市日，4個合規管道完整攻略 - 動區動趨",
@@ -181,7 +268,11 @@
       "tag": "抽籤",
       "source": "",
       "summary": "SpaceX IPO 台灣人怎麼投資？Pre-IPO 到上市日，4個合規管道完整攻略 動區動趨",
-      "id": 18
+      "id": 18,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [],
+      "ai_note": "SpaceX IPO提供台灣投資人多種合規參與方式"
     },
     {
       "title": "【即時新聞】SpaceX(SPCX)啟動IPO！散戶可透過3大券商直接申購打破華爾街壟斷 - CMoney投資網誌",
@@ -191,7 +282,11 @@
       "tag": "抽籤",
       "source": "",
       "summary": "【即時新聞】SpaceX(SPCX)啟動IPO！散戶可透過3大券商直接申購打破華爾街壟斷 CMoney投資網誌",
-      "id": 19
+      "id": 19,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "SpaceX啟動IPO，散戶可透過券商直接申購"
     },
     {
       "title": "3595 山太士- 興櫃不會再被黑是割韭菜園地新的ETF 00405A將納入興櫃-股市爆料同學會 - CMoney",
@@ -201,7 +296,13 @@
       "tag": "個股",
       "source": "",
       "summary": "3595 山太士- 興櫃不會再被黑是割韭菜園地新的ETF 00405A將納入興櫃-股市爆料同學會 CMoney",
-      "id": 20
+      "id": 20,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "3595"
+      ],
+      "ai_note": "山太士登興櫃，未來可能納入ETF 00405A"
     },
     {
       "title": "獲科技業大咖漢民加持，博訊生技11月啟動登興櫃- 新聞 - MoneyDJ",
@@ -211,7 +312,11 @@
       "tag": "個股",
       "source": "",
       "summary": "獲科技業大咖漢民加持，博訊生技11月啟動登興櫃- 新聞 MoneyDJ",
-      "id": 21
+      "id": 21,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "博訊生技將啟動登興櫃，受漢民加持吸引市場關注"
     },
     {
       "title": "生技潛力股2／4000億美元專利懸崖來襲 興櫃最被低估的「寶藏產業」曝光 - Yahoo新聞",
@@ -221,7 +326,11 @@
       "tag": "個股",
       "source": "",
       "summary": "生技潛力股2／4000億美元專利懸崖來襲 興櫃最被低估的「寶藏產業」曝光 Yahoo新聞",
-      "id": 22
+      "id": 22,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [],
+      "ai_note": "泛談生技產業潛力，未提具體公司"
     },
     {
       "title": "季報是什麼？什麼時候公布？｜豐雲學堂 2026 年 06 月 - sinotrade.com.tw",
@@ -231,7 +340,11 @@
       "tag": "公告",
       "source": "",
       "summary": "季報是什麼？什麼時候公布？｜豐雲學堂 2026 年 06 月 sinotrade.com.tw",
-      "id": 23
+      "id": 23,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [],
+      "ai_note": "解釋季報基本概念，無具體公司影響"
     },
     {
       "title": "興櫃嗨翻 七檔單周翻倍漲 - Yahoo股市",
@@ -241,7 +354,11 @@
       "tag": "個股",
       "source": "",
       "summary": "興櫃嗨翻 七檔單周翻倍漲 Yahoo股市",
-      "id": 24
+      "id": 24,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "興櫃市場七檔股票單周翻倍，反映短期熱度"
     },
     {
       "title": "【04/16處置股公告】台勝科(3532) 04/16到04/29列入處置股，約每5分鐘撮合一次 - CMoney",
@@ -251,7 +368,13 @@
       "tag": "公告",
       "source": "",
       "summary": "【04/16處置股公告】台勝科(3532) 04/16到04/29列入處置股，約每5分鐘撮合一次 CMoney",
-      "id": 25
+      "id": 25,
+      "ai_sentiment": "利空",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "3532"
+      ],
+      "ai_note": "台勝科被列處置股，交易頻率降低可能影響流動性"
     },
     {
       "title": "AMAX-KY遭列注意股 公告2月自結獲利2100萬元EPS 0.49元 - news.cnyes.com",
@@ -261,7 +384,13 @@
       "tag": "公告",
       "source": "",
       "summary": "AMAX-KY遭列注意股 公告2月自結獲利2100萬元EPS 0.49元 news.cnyes.com",
-      "id": 26
+      "id": 26,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "6933"
+      ],
+      "ai_note": "AMAX-KY公告2月獲利，雖被列注意股但財務表現佳"
     },
     {
       "title": "證交所公告33檔有價證券遭列注意股 台積電入列 - 自由財經",
@@ -271,7 +400,13 @@
       "tag": "公告",
       "source": "自由財經",
       "summary": "證交所公告33檔有價證券遭列注意股 台積電入列 自由財經",
-      "id": 27
+      "id": 27,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "2330"
+      ],
+      "ai_note": "台積電被列注意股，原因未明，需觀察後續公告"
     },
     {
       "title": "七檔台股 ETF 公告本月配息 - 經濟日報",
@@ -281,7 +416,11 @@
       "tag": "公告",
       "source": "經濟日報",
       "summary": "七檔台股 ETF 公告本月配息 經濟日報",
-      "id": 28
+      "id": 28,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "七檔台股ETF公告配息，屬常態性資訊"
     },
     {
       "title": "不賣股票也能借錢？2026台股新制：零股、興櫃股票也能當擔保品，教你活化存股資產｜豐雲學堂2026 年 06 月 - sinotrade.com.tw",
@@ -291,7 +430,11 @@
       "tag": "個股",
       "source": "",
       "summary": "不賣股票也能借錢？2026台股新制：零股、興櫃股票也能當擔保品，教你活化存股資產｜豐雲學堂2026 年 06 月 sinotrade.com.tw",
-      "id": 29
+      "id": 29,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [],
+      "ai_note": "新制允許零股與興櫃股票當擔保品，政策面調整"
     },
     {
       "title": "輔導券商國泰和凱基請辭 興櫃生技股國鼎恐中止交易 股價一天重挫46％ - 信傳媒",
@@ -301,7 +444,11 @@
       "tag": "個股",
       "source": "",
       "summary": "輔導券商國泰和凱基請辭 興櫃生技股國鼎恐中止交易 股價一天重挫46％ 信傳媒",
-      "id": 30
+      "id": 30,
+      "ai_sentiment": "利空",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "國鼎輔導券商請辭，恐中止交易導致股價重挫"
     }
   ]
 }
