@@ -733,8 +733,9 @@ function renderPeers(code, stock) {
   }));
   if (peers.length < 2) { panel.innerHTML = `<div class="peers-empty">「${cat}」同業資料不足，無法比較。</div>`; return; }
 
-  // 營收成長：排除「基期過低」失真值（去年近 0 → 動輒上萬 %），只取合理區間
-  const saneGrow = peers.filter(p => p.yoy != null && p.yoy >= -100 && p.yoy <= 500);
+  // 營收成長：排除「基期過低」失真值（去年近 0 → 動輒上萬 %）。上限 +1000% 以
+  // 與下方表格（列成交量前 12、未濾）一致，避免「成長王」卡片與表頭對不上。
+  const saneGrow = peers.filter(p => p.yoy != null && p.yoy >= -100 && p.yoy <= 1000);
   // 同業之最
   const best = (key, dir, pool) => { const a = (pool || peers).filter(p => p[key] != null).sort((x, y) => (y[key] - x[key]) * (dir || 1)); return a[0] || null; };
   const sumCard = (ttl, p, fmt) => p ? `<div class="peers-sum-card"><div class="ttl">${ttl}</div><div class="who">${p.code === code ? "<b>" : ""}${p.name}${p.code === code ? "</b>" : ""} <span style="color:#888;font-weight:400;">${fmt(p)}</span></div></div>` : "";
