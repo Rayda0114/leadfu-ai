@@ -207,6 +207,7 @@
           <label><input type="checkbox" id="chkMargin"> 融資增加</label>
           <label><input type="checkbox" id="chkAnnounce"> 近日重大公告</label>
           <label><input type="checkbox" id="chkExLowVol"> 排除低流動性</label>
+          <label><input type="checkbox" id="chkExAttention"> 排除注意股</label>
         </div>
       </div>
 
@@ -299,6 +300,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     (aj.announcements || []).forEach(a => { if (a.code) annSet.add(String(a.code)); });
   } catch (e) { /* 取不到就當沒有公告條件 */ }
 
+  // 注意股 / 處置股集合（「排除注意股」用）— 來自 STOCK_DATA.attention（main.js 已載）
+  const attSet = new Set(Object.keys(data.attention || {}));
+
   // 合理區間位置 → 分類
   function fvClass(code){
     const x = (data.fairValue || {})[code];
@@ -344,6 +348,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     f.margin    = document.getElementById("chkMargin").checked;
     f.announce  = document.getElementById("chkAnnounce").checked;
     f.exLowVol  = document.getElementById("chkExLowVol").checked;
+    f.exAttention = document.getElementById("chkExAttention").checked;
     f.status = [...document.querySelectorAll("#statusList input:checked")].map(x => x.value);
     f.cats   = [...document.querySelectorAll("#catList input:checked")].map(x => x.value);
     f.sort = document.getElementById("sortBy").value;
@@ -381,6 +386,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (f.sbl)      list = list.filter(s => { const x = sbl[s.code]; return x && typeof x.sbl_change === "number" && x.sbl_change > 0; });
     if (f.margin)   list = list.filter(s => { const x = mgn[s.code]; return x && typeof x.margin_change === "number" && x.margin_change > 0; });
     if (f.announce) list = list.filter(s => annSet.has(String(s.code)));
+    if (f.exAttention) list = list.filter(s => !attSet.has(s.code));
     return list;
   }
 
@@ -503,7 +509,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const setV = (id, v) => { if (v != null && v !== "") document.getElementById(id).value = v; };
     ["priceMin","priceMax","pctMin","pctMax","volMin","volMax","revMin","momMin","gmMin","peMax","yldMin","confMin"].forEach(id => setV(id, f[id]));
     if (f.fvPos) document.getElementById("fvPos").value = f.fvPos;
-    [["ma20","chkMa20"],["foreign","chkForeign"],["trust","chkTrust"],["opProfit","chkOpProfit"],["sbl","chkSbl"],["margin","chkMargin"],["announce","chkAnnounce"],["exLowVol","chkExLowVol"]]
+    [["ma20","chkMa20"],["foreign","chkForeign"],["trust","chkTrust"],["opProfit","chkOpProfit"],["sbl","chkSbl"],["margin","chkMargin"],["announce","chkAnnounce"],["exLowVol","chkExLowVol"],["exAttention","chkExAttention"]]
       .forEach(([k,id]) => { if (f[k]) { const el = document.getElementById(id); el.checked = true; el.parentElement.classList.add("checked"); } });
     (f.status || []).forEach(v => { const el = document.querySelector(`#statusList input[value="${v}"]`); if (el) { el.checked = true; el.parentElement.classList.add("checked"); } });
     (f.cats || []).forEach(v => { const el = document.querySelector(`#catList input[value="${v}"]`); if (el) { el.checked = true; el.parentElement.classList.add("checked"); } });

@@ -3450,6 +3450,17 @@ async function loadLiveData() {
     console.log(`[領富 AI] ℹ️ 合理區間未載入 (${e.message})`);
   }
 
+  // 14b. 注意股 / 處置股名單（TWSE + TPEx，由 fetch_attention.py 產生）
+  try {
+    const live = await fetchJson("attention_live.json");
+    if (live.data) {
+      STOCK_DATA.attention = live.data;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆注意/處置股`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 注意/處置股未載入 (${e.message})`);
+  }
+
   // 15. 新股 IPO 行事曆（TWSE OpenAPI 上市申請 / 新掛牌）
   try {
     const live = await fetchJson("ipo_live.json");

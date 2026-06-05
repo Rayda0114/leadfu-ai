@@ -106,7 +106,7 @@ def normalize_warning(raw):
     for r in raw:
         code = (r.get("證券代號") or "").strip()
         name = (r.get("證券名稱") or "").strip()
-        info = (r.get("注意股資訊") or "").strip()
+        info = (r.get("注意交易資訊") or r.get("注意股資訊") or "").strip()
         date = roc_to_iso(r.get("公告日期", ""))
         if not (code and name and info):
             continue
@@ -130,7 +130,7 @@ def normalize_disposal(raw):
         name = (r.get("證券名稱") or "").strip()
         reason = (r.get("處置原因") or "").strip()
         detail = (r.get("處置內容") or "").strip()
-        date = roc_to_iso(r.get("公告日期", ""))
+        date = roc_to_iso(r.get("公布日期") or r.get("公告日期", ""))
         if not (code and name):
             continue
         title = f"[處置股] {reason}"

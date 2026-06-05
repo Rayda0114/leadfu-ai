@@ -64,6 +64,7 @@ def load_data():
         mgn=mgn,
         fv=load_json("fair_value_live.json").get("data", {}) or {},
         ann=set(str(a.get("code")) for a in load_json("announcements_live.json").get("announcements", []) if a.get("code")),
+        att=set(str(c) for c in (load_json("attention_live.json").get("data") or {}).keys()),
     )
 
 
@@ -164,6 +165,8 @@ def run_filter(f, D):
             if not (x and num(x.get("margin_change")) is not None and x["margin_change"] > 0):
                 continue
         if f.get("announce") and str(c) not in D["ann"]:
+            continue
+        if f.get("exAttention") and str(c) in D["att"]:
             continue
         out.append(s)
     return out

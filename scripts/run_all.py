@@ -39,6 +39,7 @@ SCRIPTS = [
     "fetch_revenue.py",
     "fetch_news.py",
     "fetch_announcements.py",
+    "fetch_attention.py",       # 注意股/處置股名單（TWSE+TPEx）→ 進階選股「注意股排除」
     "fetch_institutional.py",   # 三大法人買賣超（上市，TWSE T86）
     "fetch_valuation.py",       # 本益比/殖利率/股價淨值比（上市，TWSE BWIBBU_d）
     "fetch_financials.py",      # 營益分析：毛利率/營業利益率/純益率（上市+上櫃，MOPS t187ap17）
