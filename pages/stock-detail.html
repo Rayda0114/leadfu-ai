@@ -200,9 +200,7 @@
         </div>
         <div class="stock-action-row">
           <button class="btn-primary" id="favBtn">＋ 加入自選</button>
-          <button>聯絡營業員下單</button>
-          <button>下載個股報告</button>
-          <button>分享</button>
+          <button id="shareBtn">🔗 分享</button>
         </div>
       </div>
       <div>
@@ -521,6 +519,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!wasIn) maybePromptFavLogin();   // 剛加入 → 匿名訪客軟提示登入
   });
   syncFavBtn();
+
+  // 分享：手機用原生分享，桌機退「複製連結」
+  const shareBtn = document.getElementById("shareBtn");
+  if (shareBtn) shareBtn.addEventListener("click", async () => {
+    const url = location.href;
+    const title = `${s.name} ${s.code}・領富 AI`;
+    if (navigator.share) {
+      try { await navigator.share({ title, text: title, url }); } catch (e) {}
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      const old = shareBtn.textContent;
+      shareBtn.textContent = "✓ 已複製連結";
+      setTimeout(() => { shareBtn.textContent = old; }, 2000);
+    } catch (e) { prompt("複製此連結分享：", url); }
+  });
 
   // 加入自選後，對「匿名訪客」軟性引導登入（換裝置同步 + 之後 LINE 提醒）；每 session 最多一次
   function maybePromptFavLogin() {
