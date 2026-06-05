@@ -105,14 +105,22 @@ def index_series(months):
 
 
 def main():
-    months = months_back(6)
+    months = months_back(8)  # 抓 8 個月桶，確保涵蓋 180 天前基準點，r6m 才是真半年
     stocks = json.loads((DATA_DIR / "stocks_live.json").read_text(encoding="utf-8")).get("stocks", [])
     listed = [s for s in stocks if s.get("market") == "listed" and str(s.get("code", "")).isdigit()]
 
-    prev = {}
-    if OUT.exists():
-        try: prev = json.loads(OUT.read_text(encoding="utf-8")).get("data", {})
-        except Exception: prev = {}
+    # 每週重算一次即可（報酬非天天劇變，且為重量級抓取）。資料未滿 7 天就跳過；--force 強制。
+    if "--force" not in sys.argv and OUT.exists():
+        try:
+            age = (datetime.date.today() - datetime.datetime.strptime(
+                json.loads(OUT.read_text(encoding="utf-8")).get("updatedAt", "")[:10], "%Y-%m-%d").date()).days
+        except Exception:
+            age = 999
+        if age < 7:
+            print(f"[skip] 報酬資料 {age} 天前已更新（<7 天），本次不重算。--force 可強制。")
+            return
+
+    prev = {}  # 每次重算全部，確保 r1m/r3m/r6m 為「當前」值，不沿用舊日期指標
 
     # 指數（每次重算）
     try:

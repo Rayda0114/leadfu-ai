@@ -55,6 +55,7 @@ SCRIPTS = [
     "calc_fair_value.py",       # 💎 領富 AI 合理區間（LeadFu Fair Value Range™）— 旗艦功能
     "calc_risk_score.py",       # ⚠ 個股風險分數 0-100（防錯雷達；需上面各資料齊全）+ 警示歷史累積
     "snapshot_fundamentals.py", # 每週存基本面快照（為未來真回測鋪路）
+    "calc_returns.py",          # 各股近 1/3/6 月報酬 + 回撤（回測簡單版）；腳本自身週頻 gate，僅 7 天才重算
     "fetch_ipo.py",             # 新股 IPO 行事曆（TWSE 上市申請）
     "generate_sitemap.py",
 ]

@@ -53,6 +53,15 @@
   .strat-item .sname:hover { text-decoration:underline; }
   .strat-item .sbtn { border:none; background:none; cursor:pointer; font-size:15px; padding:2px 4px; line-height:1; }
   .strat-item .scan-off { filter:grayscale(1); opacity:.5; }
+  .bt-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px; }
+  .bt-card { border:1px solid #e6e9ee; border-radius:6px; padding:12px 10px; text-align:center; background:#fcfdfe; }
+  .bt-lbl { font-size:12px; color:#666; margin-bottom:4px; }
+  .bt-big { font-size:24px; font-weight:800; line-height:1.1; }
+  .bt-sub { font-size:11px; color:#999; margin-bottom:8px; }
+  .bt-row { display:flex; justify-content:space-between; font-size:12px; color:#555; padding:3px 4px; border-top:1px dashed #eef0f3; }
+  .bt-row b { font-weight:700; }
+  .bt-mdd { font-size:12px; color:#555; padding:9px 12px; background:#fafbfc; border-radius:6px; }
+  @media(max-width:560px){ .bt-grid{ grid-template-columns:1fr; } }
   .strat-item .del { color:#c9ccd1; font-size:13px; }
   .strat-item .del:hover { color:#c0392b; }
   .strat-empty { font-size:11.5px; color:#aaa; padding:4px 2px; }
@@ -270,6 +279,17 @@
         </table>
       </div>
 
+      <div class="panel" id="backtestPanel" style="display:none;">
+        <div class="panel-head">
+          <h2>📈 這籃股票過去表現 <span style="font-size:12px;color:#999;font-weight:400;">回測・簡單版</span></h2>
+          <span style="font-size:12px;color:#666;">採樣 <span id="btCovered" style="color:#1B4332;font-weight:700;">0</span>/<span id="btTotal">0</span> 檔有歷史資料</span>
+        </div>
+        <div id="backtestBody" style="padding:14px 18px;"></div>
+        <div style="padding:10px 18px 16px;font-size:11px;color:#999;line-height:1.7;border-top:1px solid #eef0f3;">
+          ⚠ <strong>重要說明：</strong>此為「<strong>目前</strong>符合條件之個股、過去一段期間的<strong>實際漲跌彙整</strong>」，<strong>非歷史選股回測</strong>——篩選用的是<strong>今日</strong>的財報／法人／估值，存在<strong>倖存者偏誤</strong>（今天還在、數據漂亮的股票，回頭看表現自然偏好）。<strong>過去績效不代表未來</strong>，僅供了解這籃股票的歷史波動，不構成買賣建議。資料：TWSE 日收盤（目前涵蓋上市股，上櫃暫無，故「採樣」檔數可能少於命中數）；「大盤」為同期發行量加權股價指數。
+        </div>
+      </div>
+
       <div class="ai-panel">
         <div class="ai-panel-head">
           <div class="ai-panel-title">AI 篩選結果摘要</div>
@@ -308,6 +328,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     const aj = await r.json();
     (aj.announcements || []).forEach(a => { if (a.code) annSet.add(String(a.code)); });
   } catch (e) { /* 取不到就當沒有公告條件 */ }
+
+  // 回測資料：各股近 1/3/6 月報酬 + 最大回撤、大盤同期（returns_live.json）
+  let retData = {}, retIndex = {};
+  try {
+    const inPages = location.pathname.includes("/pages/");
+    const rr = await fetch((inPages ? "../" : "") + "data/returns_live.json", { cache: "no-cache" });
+    const rj = await rr.json();
+    retData = rj.data || {}; retIndex = rj.index || {};
+  } catch (e) { /* 無回測資料 → 面板自動隱藏 */ }
 
   // 注意股 / 處置股集合（「排除注意股」用）— 來自 STOCK_DATA.attention（main.js 已載）
   const attSet = new Set(Object.keys(data.attention || {}));
@@ -401,6 +430,46 @@ document.addEventListener("DOMContentLoaded", async () => {
     return list;
   }
 
+  // 回測（簡單版）：把目前命中的這籃股票，過去報酬彙整成 平均/勝率/vs大盤/回撤
+  function btMean(a){ return a.length ? a.reduce((s,x)=>s+x,0)/a.length : null; }
+  function btSign(x,d){ d=(d==null?1:d); return (x>=0?"+":"")+x.toFixed(d)+"%"; }
+  function btCls(x){ return x==null?"":(x>=0?"up":"down"); }
+  function renderBacktest(list){
+    const panel = document.getElementById("backtestPanel");
+    if (!panel) return;
+    if (!list || !list.length) { panel.style.display = "none"; return; }
+    const covered = list.filter(s => retData[s.code]);
+    document.getElementById("btTotal").textContent = list.length;
+    document.getElementById("btCovered").textContent = covered.length;
+    const body = document.getElementById("backtestBody");
+    panel.style.display = "block";
+    if (covered.length < 3) {
+      body.innerHTML = `<p style="color:#888;font-size:13px;margin:4px 0;">符合條件且有歷史報酬資料者僅 ${covered.length} 檔，樣本太少、參考性低，暫不計算統計。</p>`;
+      return;
+    }
+    const periods = [["r1m","近 1 個月"],["r3m","近 3 個月"],["r6m","近半年"]];
+    const cards = periods.map(([k,lbl]) => {
+      const vals = covered.map(s => retData[s.code][k]).filter(x => typeof x === "number");
+      const avg = btMean(vals);
+      const win = vals.length ? vals.filter(x => x>0).length / vals.length * 100 : null;
+      const idx = (typeof retIndex[k] === "number") ? retIndex[k] : null;
+      const ex = (avg!=null && idx!=null) ? avg - idx : null;
+      return `<div class="bt-card">
+        <div class="bt-lbl">${lbl}</div>
+        <div class="bt-big ${btCls(avg)}">${avg==null?'—':btSign(avg)}</div>
+        <div class="bt-sub">平均報酬（${vals.length} 檔）</div>
+        <div class="bt-row"><span>勝率</span><b>${win==null?'—':win.toFixed(0)+'%'}</b></div>
+        <div class="bt-row"><span>大盤同期</span><b class="${btCls(idx)}">${idx==null?'—':btSign(idx)}</b></div>
+        <div class="bt-row"><span>超額 vs 大盤</span><b class="${btCls(ex)}">${ex==null?'—':btSign(ex)}</b></div>
+      </div>`;
+    }).join("");
+    const mdds = covered.map(s => retData[s.code].mdd).filter(x => typeof x === "number");
+    const avgMdd = btMean(mdds);
+    const idxMdd = retIndex.mdd;
+    body.innerHTML = `<div class="bt-grid">${cards}</div>
+      <div class="bt-mdd">期間<strong>最大回撤</strong>（平均）：<b class="down">${avgMdd==null?'—':'−'+avgMdd.toFixed(1)+'%'}</b>${typeof idxMdd==="number"?`　・大盤同期 <b class="down">−${idxMdd.toFixed(1)}%</b>`:''}　<span style="color:#aaa;">數字越大＝波段跌幅越深</span></div>`;
+  }
+
   function apply() {
     const f = readFilters();
     let list = runFilter(f, data.stocks);
@@ -432,6 +501,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     document.getElementById("resultCount").textContent = list.length;
+    renderBacktest(list);
     const tbody = document.getElementById("resultTbody");
     if (list.length === 0) {
       tbody.innerHTML = `<tr><td colspan="13" class="loading">沒有符合條件的個股</td></tr>`;
