@@ -238,6 +238,18 @@ def main():
     (DATA_DIR / "risk_score_history.json").write_text(
         json.dumps(history, ensure_ascii=False), encoding="utf-8")
 
+    # 警示歷史：每天存一筆當日高風險事件（score≥50），保留近 60 天 → 給「警示歷史」用
+    names = {s.get("code"): s.get("name", "") for s in stocks if s.get("code")}
+    today_items = [{"code": c, "name": names.get(c, ""), "score": v["score"], "level": v["level"], "reasons": v["reasons"][:3]}
+                   for c, v in sorted(out.items(), key=lambda kv: -kv[1]["score"]) if v["score"] >= 50]
+    ah = load("alert_history.json") or {}
+    hist_list = [e for e in (ah.get("history") or []) if isinstance(e, dict) and e.get("date") != TODAY_S]
+    hist_list.append({"date": TODAY_S, "count": len(today_items), "items": today_items[:40]})
+    hist_list = sorted(hist_list, key=lambda e: e.get("date", ""))[-60:]
+    (DATA_DIR / "alert_history.json").write_text(json.dumps(
+        {"updatedAt": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"), "history": hist_list},
+        ensure_ascii=False), encoding="utf-8")
+
     lv = {}
     for v in out.values():
         lv[v["level"]] = lv.get(v["level"], 0) + 1

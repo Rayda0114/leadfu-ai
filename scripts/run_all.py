@@ -53,7 +53,8 @@ SCRIPTS = [
     "fetch_klines_daily.py",    # K 線：每日全市場 +1 根（取代舊 fetch_klines.py 只更新興櫃）
     "calc_indicators.py",       # 技術指標 KD/MACD/布林/RSI/MA（從 klines 計算）
     "calc_fair_value.py",       # 💎 領富 AI 合理區間（LeadFu Fair Value Range™）— 旗艦功能
-    "calc_risk_score.py",       # ⚠ 個股風險分數 0-100（防錯雷達；需上面各資料齊全）
+    "calc_risk_score.py",       # ⚠ 個股風險分數 0-100（防錯雷達；需上面各資料齊全）+ 警示歷史累積
+    "snapshot_fundamentals.py", # 每週存基本面快照（為未來真回測鋪路）
     "fetch_ipo.py",             # 新股 IPO 行事曆（TWSE 上市申請）
     "generate_sitemap.py",
 ]
