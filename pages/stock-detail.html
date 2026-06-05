@@ -266,6 +266,22 @@
   </div>
 </section>
 
+<!-- 🛑 投資前提醒（行為風險：追高/流動性/集中度/波動/本業）-->
+<style>
+  #riskSection { margin-top: 14px; border-radius: 10px; padding: 14px 20px; }
+  #riskSection.warn { background: #fff8ed; border: 1px solid #f0d9a8; }
+  #riskSection.ok { background: #f3f9f5; border: 1px solid #d9ebe0; }
+  .risk-head { font-size: 15px; font-weight: 800; color: #c0392b; margin-bottom: 8px; }
+  .risk-list { list-style: none; padding: 0; margin: 0; }
+  .risk-list li { font-size: 14px; color: #444; line-height: 1.65; padding: 5px 0 5px 4px; }
+  .risk-list li b { color: #c0392b; }
+  .risk-disc { font-size: 11px; color: #aaa; margin-top: 8px; line-height: 1.6; }
+  .risk-ok { font-size: 14px; color: #1e9e54; font-weight: 600; }
+</style>
+<section class="container" id="riskSection" style="display:none;">
+  <div id="riskBody"></div>
+</section>
+
 <!-- 💎 領富 AI 合理區間（LeadFu Fair Value Range™）— 專有演算法 -->
 <section class="fair-value-section" id="fairValueSection" style="display:none;">
   <div class="container">
@@ -731,6 +747,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ★ 財報健檢（營益分析紅綠燈）
   renderFinHealth(code, s);
 
+  // ★ 投資前提醒（行為風險：追高/流動性/集中度/波動）
+  renderRiskAlert(code, s);
+
   // ★ 領富 AI 合理區間（LeadFu Fair Value Range™）
   renderFairValue(code, s);
 
@@ -743,6 +762,70 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ★ AI 個股摘要自動載入（sessionStorage 快取，同 session 不重複呼叫）
   setupStockAiSummary(code, s);
 });
+
+function renderRiskAlert(code, stock) {
+  const L = window.LeadFu;
+  const sec = document.getElementById("riskSection");
+  if (!sec || !stock) return;
+  const ind = (L.data.indicators && L.data.indicators[code]) || null;
+  const fin = (L.data.financials && L.data.financials[code]) || null;
+  const kl = (L.data.klines && L.data.klines[code]) || null;
+  const warns = [];
+
+  // 1) 追高：股價高出月線太多 / RSI 過熱
+  if (ind && ind.ma20 && stock.price) {
+    const dev = (stock.price - ind.ma20) / ind.ma20;
+    if (dev > 0.15) warns.push(`📈 近期漲多：股價已高出月線 <b>${(dev * 100).toFixed(0)}%</b>，<b>追高風險</b>較大`);
+    else if (typeof ind.rsi === "number" && ind.rsi >= 80) warns.push(`🌡️ RSI <b>${ind.rsi.toFixed(0)}</b> 短線過熱，留意拉回`);
+  }
+  // 2) 低流動性：近 5 日日均量
+  if (kl && kl.length >= 5) {
+    const r = kl.slice(-5);
+    const avgVol = r.reduce((a, k) => a + (k.volume || 0), 0) / r.length;
+    if (avgVol < 100) warns.push(`💧 成交量偏低（日均約 <b>${Math.round(avgVol).toLocaleString("zh-TW")}</b> 張）：<b>流動性風險</b>，進出不易、價格易被牽動`);
+  } else if (typeof stock.volume === "number" && stock.volume < 100) {
+    warns.push(`💧 成交量偏低（今日 <b>${stock.volume.toLocaleString("zh-TW")}</b> 張）：<b>流動性風險</b>`);
+  }
+  // 3) 本業虧損
+  if (fin && typeof fin.op_margin === "number" && fin.op_margin < 0) {
+    warns.push(`🔴 本業虧損（營業利益率 <b>${fin.op_margin}%</b>）：別只看股價，留意基本面`);
+  }
+  // 4) 波動大：近 10 日振幅
+  if (kl && kl.length >= 10) {
+    const last = kl.slice(-10);
+    const highs = last.map(k => k.high || k.close || 0).filter(Boolean);
+    const lows = last.map(k => k.low || k.close || 0).filter(Boolean);
+    const avg = last.reduce((a, k) => a + (k.close || 0), 0) / last.length;
+    if (highs.length && lows.length && avg > 0) {
+      const amp = (Math.max(...highs) - Math.min(...lows)) / avg;
+      if (amp > 0.25) warns.push(`🎢 近期波動大（10 日振幅約 <b>${(amp * 100).toFixed(0)}%</b>）：短線起伏劇烈，留意風險承受度`);
+    }
+  }
+  // 5) 產業重疊（個人化）：自選股已有幾檔同產業
+  try {
+    const wl = (L.getWatchlist ? L.getWatchlist() : []).filter(c => c !== code);
+    const cat = stock.category;
+    if (cat && wl.length) {
+      const sameN = wl.filter(c => {
+        const s2 = (L.data.stocks || []).find(x => x.code === c);
+        return s2 && s2.category === cat;
+      }).length;
+      if (sameN >= 3) warns.push(`🧺 你的自選股已有 <b>${sameN}</b> 檔「${cat}」：再加恐<b>過度集中單一產業</b>，適度分散有助降風險`);
+    }
+  } catch (e) {}
+
+  const body = document.getElementById("riskBody");
+  if (warns.length) {
+    body.innerHTML = `<div class="risk-head">🛑 投資前提醒（${warns.length}）</div>`
+      + `<ul class="risk-list">${warns.map(w => `<li>${w}</li>`).join("")}</ul>`
+      + `<div class="risk-disc">※ 提醒常見的「追高、流動性、過度集中」等行為風險，幫你買進前三思；非投資建議。</div>`;
+    sec.className = "container warn";
+  } else {
+    body.innerHTML = `<div class="risk-ok">✓ 目前無明顯「追高／流動性／過度集中」等行為風險訊號</div>`;
+    sec.className = "container ok";
+  }
+  sec.style.display = "block";
+}
 
 function renderFinHealth(code, stock) {
   const L = window.LeadFu;
