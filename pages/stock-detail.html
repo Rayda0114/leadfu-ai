@@ -200,6 +200,7 @@
         </div>
         <div class="stock-action-row">
           <button class="btn-primary" id="favBtn">＋ 加入自選</button>
+          <a id="checkLink" href="check.html" style="display:inline-flex;align-items:center;justify-content:center;padding:8px 14px;border:1px solid #1B4332;border-radius:4px;color:#1B4332;text-decoration:none;font-size:14px;font-weight:600;">🔍 買前檢查</a>
           <button id="shareBtn">🔗 分享</button>
         </div>
       </div>
@@ -519,6 +520,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!wasIn) maybePromptFavLogin();   // 剛加入 → 匿名訪客軟提示登入
   });
   syncFavBtn();
+
+  // 買前檢查連結（帶本檔代號）
+  const checkLink = document.getElementById("checkLink");
+  if (checkLink) checkLink.href = `check.html?code=${s.code}`;
 
   // 分享：手機用原生分享，桌機退「複製連結」
   const shareBtn = document.getElementById("shareBtn");

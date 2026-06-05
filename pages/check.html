@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>買前檢查器 - 一鍵體檢個股紅旗 - 領富 AI</title>
+<meta name="description" content="輸入股票代號，領富 AI 買前檢查器一頁告訴你：是否注意/處置股、流動性夠不夠、營收有沒有轉弱、法人是否連賣、借券是否增加、股價是否偏高、近期有無重大公告，適合短線還是長期觀察。">
+<link rel="canonical" href="https://leadfuai.com/pages/check.html">
+<meta property="og:title" content="買前檢查器 - 一鍵體檢個股紅旗 - 領富 AI">
+<meta property="og:description" content="輸入代號，一頁看完該檔的 8 項紅旗檢查 + 短線/長期觀察建議。買進前先看清楚。">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leadfuai.com/pages/check.html">
+<meta name="theme-color" content="#1B4332">
+<link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="stocks.html">股價總覽</a></li>
+      <li class="active"><a href="check.html">🔍 買前檢查</a></li>
+      <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
+      <li><a href="screener.html">進階選股</a></li>
+      <li><a href="portfolio-health.html">📊 投資儀表板</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>🔍 買前檢查器</h1>
+    <div class="breadcrumb">首頁 ▸ 買前檢查</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 18px 12px 44px; max-width: 820px;">
+
+  <div class="panel" style="margin-bottom:16px;">
+    <div style="padding:20px 22px;">
+      <p style="font-size:14px;color:#444;line-height:1.7;margin:0 0 14px;">輸入你想買的股票，一頁看完 <strong>8 項紅旗檢查</strong> —— 買進前先確認有沒有地雷。</p>
+      <div class="chk-search">
+        <input type="text" id="chkInput" autocomplete="off" placeholder="輸入股票代號或名稱，例如 2330 或 台積電">
+        <div class="ta-box" id="chkSugg" style="display:none;"></div>
+        <button class="btn-primary" id="chkBtn">體檢</button>
+      </div>
+      <div id="chkHint" style="font-size:12.5px;color:#c0392b;margin-top:8px;display:none;"></div>
+    </div>
+  </div>
+
+  <div id="chkResult" style="display:none;"></div>
+
+  <div id="chkWelcome" class="panel" style="padding:30px 24px;text-align:center;color:#888;">
+    <div style="font-size:48px;margin-bottom:10px;">🔍</div>
+    <p style="font-size:14px;line-height:1.8;">在上面輸入一檔股票，立刻幫你檢查<br>注意/處置股、流動性、營收、法人、借券、估值、公告，<br>並判斷比較適合<strong>短線</strong>還是<strong>長期</strong>觀察。</p>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
+</footer>
+
+<style>
+  .chk-search { display:flex; gap:10px; align-items:stretch; position:relative; flex-wrap:wrap; }
+  .chk-search input#chkInput { flex:1; min-width:200px; padding:12px 14px; border:1px solid #d0d5dc; border-radius:8px; font-size:15px; }
+  .chk-search input#chkInput:focus { outline:none; border-color:#1B4332; }
+  .chk-search .btn-primary { width:auto; padding:12px 26px; white-space:nowrap; }
+  .ta-box { position:absolute; top:calc(100% + 2px); left:0; right:90px; z-index:30; background:#fff; border:1px solid #e0e3e8; border-radius:8px; box-shadow:0 8px 22px rgba(0,0,0,.12); max-height:300px; overflow-y:auto; }
+  .ta-item { padding:10px 13px; font-size:14px; cursor:pointer; border-bottom:1px solid #f1f3f5; }
+  .ta-item:hover { background:#f0f7f3; } .ta-item b { color:#1B4332; }
+  /* 結果頭 */
+  .chk-head { display:flex; align-items:center; gap:16px; flex-wrap:wrap; padding:18px 22px; border-bottom:1px solid #eef0f3; }
+  .chk-score { font-size:40px; font-weight:800; line-height:1; min-width:78px; text-align:center; }
+  .chk-score small { font-size:12px; color:#bbb; font-weight:400; }
+  .chk-h-name { font-size:20px; font-weight:800; color:#1B4332; }
+  .chk-h-sub { font-size:13px; color:#777; margin-top:4px; }
+  .chk-h-level { font-size:12px; padding:3px 10px; border-radius:12px; font-weight:700; margin-left:8px; }
+  .chk-verdict { padding:14px 22px; font-size:14.5px; line-height:1.7; background:#f7faf8; border-bottom:1px solid #eef0f3; }
+  .chk-verdict b { color:#1B4332; }
+  /* 檢查項 */
+  .chk-item { display:flex; gap:13px; padding:14px 22px; border-bottom:1px solid #f3f4f6; align-items:flex-start; }
+  .chk-ico { font-size:20px; line-height:1.3; flex-shrink:0; width:24px; text-align:center; }
+  .chk-body { flex:1; min-width:0; }
+  .chk-t { font-size:14.5px; font-weight:700; color:#333; }
+  .chk-d { font-size:13px; color:#666; margin-top:3px; line-height:1.6; }
+  .chk-item.ok .chk-t { color:#1a7a45; }
+  .chk-item.warn .chk-t { color:#a8690a; }
+  .chk-item.danger .chk-t { color:#c0392b; }
+  .chk-item.neutral .chk-t { color:#888; }
+  .chk-term { display:flex; gap:10px; padding:16px 22px; }
+  .chk-term .tg { flex:1; text-align:center; padding:12px; border-radius:10px; font-size:13px; }
+  .chk-term .tg.on { font-weight:800; }
+  .chk-actions { display:flex; gap:10px; flex-wrap:wrap; padding:16px 22px; border-top:1px solid #eef0f3; }
+  .chk-actions a, .chk-actions button { flex:1; min-width:130px; text-align:center; padding:11px; border-radius:8px; font-size:14px; text-decoration:none; cursor:pointer; border:1px solid #1B4332; color:#1B4332; background:#fff; }
+  .chk-actions .primary { background:#1B4332; color:#fff; }
+  .chk-foot { padding:12px 22px; font-size:11.5px; color:#aaa; line-height:1.7; }
+</style>
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const all = L.data.stocks || [];
+  const byCode = {}; all.forEach(s => byCode[s.code] = s);
+
+  // 公告（非全域，另抓）
+  let annMap = {};
+  try {
+    const base = location.pathname.includes("/pages/") ? "../" : "";
+    const aj = await (await fetch(base + "data/announcements_live.json", { cache: "no-cache" })).json();
+    (aj.announcements || []).forEach(a => { if (a.code) { (annMap[a.code] = annMap[a.code] || []).push(a); } });
+  } catch (e) {}
+
+  const D = {
+    risk: L.data.riskScore || {}, att: L.data.attention || {}, rev: L.data.revenue || {},
+    streak: L.data.instStreak || {}, sbl: L.data.sbl || {}, fv: L.data.fairValue || {},
+    fin: L.data.financials || {}, val: L.data.valuation || {}, ind: L.data.indicators || {}
+  };
+  const rkColor = lv => ({ "極高":"#991B1B", "高":"#DC2626", "中":"#D97706", "低":"#16A34A" }[lv] || "#16A34A");
+
+  // ===== 8 項檢查 =====
+  function checks(s) {
+    const c = s.code, out = [];
+    const att = D.att[c], r = D.rev[c], st = D.streak[c], sb = D.sbl[c], fv = D.fv[c],
+          fin = D.fin[c], val = D.val[c], ind = D.ind[c];
+    const vol = s.volume || 0;
+
+    // 1 注意/處置股
+    if (att && att.type === "處置") out.push({ lv:"danger", i:"🔴", t:"已被列為「處置股」", d:`交易受限（可能全額交割／分盤集合競價），務必先了解原因。${att.reason || ""}` });
+    else if (att) out.push({ lv:"warn", i:"⚠️", t:"已被列為「注意股」", d:`近期交易資訊達注意標準。${att.reason || ""}` });
+    else out.push({ lv:"ok", i:"✅", t:"目前不是注意／處置股", d:"未被交易所列為注意或處置。" });
+
+    // 2 流動性
+    if (vol < 50) out.push({ lv:"danger", i:"🔴", t:"流動性極低", d:`今日成交僅 ${vol.toLocaleString()} 張 — 可能買不到、想賣也賣不掉，價差大。` });
+    else if (vol < 500) out.push({ lv:"warn", i:"⚠️", t:"流動性偏低", d:`今日成交 ${vol.toLocaleString()} 張 — 大單進出容易影響價格。` });
+    else out.push({ lv:"ok", i:"✅", t:"流動性足夠", d:`今日成交 ${vol.toLocaleString()} 張。` });
+
+    // 3 營收
+    if (r && typeof r.yoy === "number") {
+      const yoy = r.yoy;
+      if (yoy <= -30) out.push({ lv:"danger", i:"🔴", t:"營收明顯轉弱", d:`最新月營收年減 ${Math.abs(yoy).toFixed(0)}%（${r.period || ""}）。` });
+      else if (yoy < 0) out.push({ lv:"warn", i:"⚠️", t:"營收動能轉弱", d:`最新月營收年減 ${Math.abs(yoy).toFixed(0)}%，留意後續。` });
+      else if (yoy >= 20) out.push({ lv:"ok", i:"✅", t:"營收成長動能佳", d:`月營收年增 ${yoy.toFixed(0)}%（${r.period || ""}）。` });
+      else out.push({ lv:"ok", i:"✅", t:"營收持平／小幅成長", d:`月營收年增 ${yoy.toFixed(0)}%。` });
+    } else out.push({ lv:"neutral", i:"➖", t:"無月營收資料", d:"此檔暫無月營收年增資料。" });
+
+    // 4 法人連賣
+    if (st && st.dir === "sell") out.push({ lv: st.days >= 3 ? "danger" : "warn", i: st.days >= 3 ? "🔴" : "⚠️", t:`外資${st.days >= 2 ? `連賣 ${st.days} 日` : "賣超"}`, d:`外資近期賣超（今日 ${Math.abs(st.foreign||0).toLocaleString()} 張），法人在調節。` });
+    else if (st && st.dir === "buy") out.push({ lv:"ok", i:"✅", t:`外資${st.days >= 2 ? `連買 ${st.days} 日` : "買超"}`, d:`外資近期買超（今日 ${(st.foreign||0).toLocaleString()} 張）。` });
+    else out.push({ lv:"neutral", i:"➖", t:"法人買賣超不明顯", d:"今日外資無明顯方向，或非上市股（無此資料）。" });
+
+    // 5 借券
+    if (sb && typeof sb.sbl_change === "number" && sb.sbl_change > 0) out.push({ lv:"warn", i:"⚠️", t:"借券餘額增加", d:`借券（可供空方賣出）增加 ${sb.sbl_change.toLocaleString()} — 空方力道可能增強。` });
+    else if (sb) out.push({ lv:"ok", i:"✅", t:"借券無明顯增加", d:"借券賣出壓力未明顯上升。" });
+    else out.push({ lv:"neutral", i:"➖", t:"無借券資料", d:"此檔暫無借券資料。" });
+
+    // 6 股價偏高（合理區間）
+    if (fv && typeof fv.position === "number") {
+      const p = fv.position;
+      if (p > 1) out.push({ lv:"danger", i:"🔴", t:"股價已高於合理區間上緣", d:`現價 ${L.fmtPrice(s.price)} 高於合理區間（${L.fmtPrice(fv.low)}–${L.fmtPrice(fv.high)}），追高風險大。` });
+      else if (p > 0.8) out.push({ lv:"warn", i:"⚠️", t:"股價接近合理區間上緣", d:`現價接近區間上緣（${L.fmtPrice(fv.low)}–${L.fmtPrice(fv.high)}），偏貴。` });
+      else if (p < 0.2) out.push({ lv:"ok", i:"✅", t:"股價相對便宜", d:`現價接近／低於合理區間下緣（${L.fmtPrice(fv.low)}–${L.fmtPrice(fv.high)}）— 但便宜仍需確認基本面。` });
+      else out.push({ lv:"ok", i:"✅", t:"股價在合理區間內", d:`合理區間 ${L.fmtPrice(fv.low)}–${L.fmtPrice(fv.high)}。` });
+    } else out.push({ lv:"neutral", i:"➖", t:"無合理區間資料", d:"此檔暫無合理區間估值。" });
+
+    // 7 近期重大公告
+    const anns = annMap[c] || [];
+    if (anns.length) {
+      const a = anns[0];
+      const title = (a.title || "").replace(/\r|\n/g, " ").trim().slice(0, 46);
+      out.push({ lv: (a.type === "處置股" || a.type === "注意股") ? "warn" : "neutral", i:"📢", t:`近期有公告（${anns.length} 則）`, d:`${a.date || ""}：${title}` });
+    } else out.push({ lv:"ok", i:"✅", t:"近期無重大公告", d:"未抓到此檔近期重大訊息。" });
+
+    return out;
+  }
+
+  // 短線 vs 長期 判斷
+  function termVerdict(s) {
+    const c = s.code;
+    const att = D.att[c], r = D.rev[c], st = D.streak[c], fv = D.fv[c], fin = D.fin[c], val = D.val[c], ind = D.ind[c];
+    let longPts = 0, caution = 0;
+    if (fin && typeof fin.op_margin === "number" && fin.op_margin > 0) longPts++;
+    if (r && typeof r.yoy === "number" && r.yoy > 0) longPts++;
+    if (val && val.pe_ratio > 0 && val.pe_ratio <= 25) longPts++;
+    if (val && typeof val.yield_pct === "number" && val.yield_pct >= 3) longPts++;
+    if (att) caution += (att.type === "處置" ? 2 : 1);
+    if (st && st.dir === "sell" && st.days >= 2) caution++;
+    if (r && typeof r.yoy === "number" && r.yoy < 0) caution++;
+    if (fv && typeof fv.position === "number" && fv.position > 1) caution++;
+    if (fin && typeof fin.op_margin === "number" && fin.op_margin < 0) caution++;
+    let bbw = null;
+    if (ind && ind.bb_upper && ind.bb_lower && ind.bb_middle) bbw = (ind.bb_upper - ind.bb_lower) / ind.bb_middle * 100;
+    const volatile = bbw != null && bbw > 40;
+
+    let verdict, mode;
+    if (caution >= 3 || (att && att.type === "處置")) { mode = "caution"; verdict = "風險偏高 —— 短線、長期都需謹慎，買進前務必先弄清楚上面的紅旗原因。"; }
+    else if (longPts >= 2 && caution <= 1) { mode = "long"; verdict = "基本面相對穩健（本業獲利／營收成長／估值合理之中符合多項），<b>較適合「長期觀察」</b>，可分批、看基本面。"; }
+    else if (volatile || caution >= 1) { mode = "short"; verdict = "波動較大或有短期風險訊號，<b>偏「短線觀察」</b>，若參與請嚴設停損、控制部位。"; }
+    else { mode = "neutral"; verdict = "訊號中性，<b>可再觀察</b>。建議搭配你自己的投資目標與風險承受度判斷。"; }
+    return { verdict, mode, longPts, caution };
+  }
+
+  // ===== 渲染 =====
+  function render(code) {
+    const s = byCode[code];
+    const wrap = document.getElementById("chkResult");
+    const welcome = document.getElementById("chkWelcome");
+    if (!s) { showHint("找不到這檔股票，請從建議清單選擇。"); return; }
+    showHint("");
+    welcome.style.display = "none";
+    wrap.style.display = "block";
+
+    const rk = D.risk[code];
+    const score = rk ? rk.score : null;
+    const level = rk ? rk.level : "低";
+    const col = rkColor(level);
+    const items = checks(s);
+    const tv = termVerdict(s);
+    const pct = L.pctChange(s.price, s.change), cls = L.changeClass(s.change);
+    const mk = s.market === "listed" ? "上市" : s.market === "otc" ? "上櫃" : s.market === "emerging" ? "興櫃" : "";
+    const inWl = L.isInWatchlist && L.isInWatchlist(code);
+
+    const termTags = [["short","🎯 短線觀察"],["long","🌱 長期觀察"],["caution","⚠️ 都需謹慎"]];
+    const termHtml = termTags.map(([m, label]) => {
+      const on = tv.mode === m || (tv.mode === "neutral" && false);
+      const bg = on ? (m === "long" ? "#e9f7ee" : m === "short" ? "#fff4e2" : "#fdecec") : "#f5f6f8";
+      const fg = on ? (m === "long" ? "#1a7a45" : m === "short" ? "#a8690a" : "#c0392b") : "#bbb";
+      return `<div class="tg ${on ? "on" : ""}" style="background:${bg};color:${fg};">${label}</div>`;
+    }).join("");
+
+    wrap.innerHTML = `<div class="panel">
+      <div class="chk-head">
+        <div class="chk-score" style="color:${col};">${score != null ? score : "—"}<small>${score != null ? "/100" : ""}</small></div>
+        <div style="flex:1;min-width:0;">
+          <div class="chk-h-name">${s.code} ${s.name}
+            <span class="chk-h-level" style="background:${col}22;color:${col};">${level}風險</span>
+            ${inWl ? `<span class="chk-h-level" style="background:#163A2E;color:#fff;">⭐ 自選中</span>` : ""}
+          </div>
+          <div class="chk-h-sub">${mk} ${s.category || ""} · ${L.fmtPrice(s.price)} <span class="${cls}">${L.arrow(s.change)} ${L.fmtPct(pct)}</span></div>
+        </div>
+      </div>
+      <div class="chk-verdict">📋 一句話：${tv.verdict}</div>
+      <div class="chk-term">${termHtml}</div>
+      ${items.map(it => `<div class="chk-item ${it.lv}"><div class="chk-ico">${it.i}</div><div class="chk-body"><div class="chk-t">${it.t}</div><div class="chk-d">${it.d}</div></div></div>`).join("")}
+      <div class="chk-actions">
+        <button class="primary" id="chkFav">${inWl ? "✓ 已在自選" : "＋ 加入自選股"}</button>
+        <a href="stock-detail.html?code=${code}">看完整個股頁 →</a>
+        <a href="risk-radar.html">看防錯雷達 →</a>
+      </div>
+      <div class="chk-foot">※ 本檢查為公開資料（TWSE／TPEx 盤後）整理，僅供「買進前先看清楚」之參考，不構成買賣建議。<br>※ 「適合短線／長期」是依風險與基本面訊號的中立判斷，請依您自身投資目標與風險承受度決定。</div>
+    </div>`;
+
+    const favBtn = document.getElementById("chkFav");
+    if (favBtn) favBtn.addEventListener("click", () => {
+      if (L.isInWatchlist && L.isInWatchlist(code)) { L.showToast && L.showToast("已在自選股中", "success"); return; }
+      if (L.addToWatchlist) { L.addToWatchlist(code); favBtn.textContent = "✓ 已加入自選"; L.showToast && L.showToast(`已加入 ${code} ${s.name}`, "success"); }
+    });
+
+    // 更新網址（可分享 / 重整保留）
+    try { history.replaceState(null, "", `check.html?code=${code}`); } catch (e) {}
+    document.title = `${s.code} ${s.name} 買前檢查 - 領富 AI`;
+  }
+
+  // ===== 搜尋 typeahead =====
+  const input = document.getElementById("chkInput");
+  const sugg = document.getElementById("chkSugg");
+  let picked = null;
+  function showHint(m) { const h = document.getElementById("chkHint"); h.textContent = m; h.style.display = m ? "block" : "none"; }
+  input.addEventListener("input", () => {
+    const q = input.value.trim().toLowerCase(); picked = null;
+    if (!q) { sugg.style.display = "none"; return; }
+    const m = all.filter(s => s.code.toLowerCase().includes(q) || (s.name && s.name.toLowerCase().includes(q))).slice(0, 8);
+    sugg.innerHTML = m.map(s => `<div class="ta-item" data-code="${s.code}"><b>${s.code}</b> ${s.name} <span style="color:#888;">${L.fmtPrice(s.price)}</span></div>`).join("");
+    sugg.style.display = m.length ? "block" : "none";
+  });
+  sugg.addEventListener("click", (e) => {
+    const it = e.target.closest(".ta-item"); if (!it) return;
+    picked = it.dataset.code; input.value = `${picked} ${byCode[picked].name}`; sugg.style.display = "none";
+    render(picked);
+  });
+  document.addEventListener("click", (e) => { if (!e.target.closest(".chk-search")) sugg.style.display = "none"; });
+  function go() {
+    let code = picked;
+    if (!code) {
+      const q = input.value.trim();
+      const m = all.find(s => s.code === q || s.name === q || `${s.code} ${s.name}` === q)
+             || all.find(s => s.code.toLowerCase() === q.toLowerCase());
+      code = m ? m.code : null;
+    }
+    if (!code) { showHint("找不到這檔股票，請從建議清單選擇。"); return; }
+    render(code);
+  }
+  document.getElementById("chkBtn").addEventListener("click", go);
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") { sugg.style.display = "none"; go(); } });
+
+  // 帶 ?code= 直接體檢
+  const initCode = new URLSearchParams(location.search).get("code");
+  if (initCode && byCode[initCode]) { input.value = `${initCode} ${byCode[initCode].name}`; render(initCode); }
+});
+</script>
+</body>
+</html>
