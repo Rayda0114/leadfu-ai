@@ -1221,11 +1221,94 @@ function bindAiPlaceholders() {
     const target = document.querySelector(btn.dataset.target);
     if (!target) return;
     const action = btn.dataset.action || "analyze";
+    // 今日新聞摘要（列表頁）/ 本篇新聞分析（個別新聞頁）→ 接真 AI
+    if (action === "newsSummary") { generateNewsSummary(target, btn); return; }
+    if (action === "articleSummary") { generateArticleSummary(target, btn); return; }
     target.innerHTML = `<div class="ai-loading"><span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span> AI 分析中...</div>`;
     setTimeout(() => {
       target.innerHTML = window.LeadFu.mockAiResponse(action, btn.dataset.code);
     }, 1200);
   });
+}
+
+// 今日新聞 AI 摘要（真 AI，呼叫 /api/ask）
+async function generateNewsSummary(target, btn) {
+  const news = (STOCK_DATA.news || []).slice(0, 25);
+  if (!news.length) { target.innerHTML = `<div class="ai-result"><p>目前沒有新聞可摘要。</p></div>`; return; }
+  target.innerHTML = `<div class="ai-loading"><span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span> AI 彙整今日新聞中…</div>`;
+  if (btn) btn.disabled = true;
+  try { if (window.LeadFu && window.LeadFu.trackEvent) window.LeadFu.trackEvent("ai_summary", { source: "news" }); } catch (e) {}
+
+  const s2n = {};
+  (STOCK_DATA.stocks || []).forEach(s => { s2n[s.code] = s.name; });
+  const lines = news.map((n, i) => {
+    const tag = n.ai_sentiment ? `[${n.ai_sentiment}]` : "";
+    const rel = (n.ai_related || []).map(c => `${c}${s2n[c] || ""}`).join("、");
+    return `${i + 1}. ${tag} ${n.title}${rel ? `（影響：${rel}）` : ""}`;
+  }).join("\n");
+  const prompt = "以下是今日台股財經新聞（含 AI 標註的利多/利空與影響個股）。請用淺白繁體中文寫一份「今日新聞重點摘要」，給 45–75 歲投資人看：\n"
+    + "1. 今日整體市場主題（2–3 個重點）\n2. 值得留意的利多與利空（各舉幾則）\n3. 主要影響的個股／族群\n4. 一句風險提醒\n"
+    + "中立陳述、不要推薦買賣、不要喊目標價，約 250–350 字。\n\n新聞：\n" + lines;
+
+  try {
+    const resp = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: prompt, max_tokens: 700, stream: false })
+    });
+    const data = await resp.json().catch(() => ({}));
+    const ans = (data && data.answer || "").trim();
+    if (!resp.ok || !ans) throw new Error((data && data.error) || ("HTTP " + resp.status));
+    const esc = ans.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
+    const html = esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+    target.innerHTML = `<div class="ai-result"><div class="ai-result-head">📋 今日新聞 AI 摘要</div>${html}`
+      + `<p class="ai-disclaimer">※ AI 彙整今日公開新聞重點，不代表本站立場，亦不構成投資建議。</p></div>`;
+  } catch (err) {
+    target.innerHTML = `<div class="ai-result"><p>AI 摘要暫時無法產生，請稍後再試。</p></div>`;
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+// 本篇新聞分析（個別新聞頁，真 AI）
+async function generateArticleSummary(target, btn) {
+  const id = new URLSearchParams(location.search).get("id");
+  const article = (STOCK_DATA.news || []).find(n => String(n.id) === String(id));
+  if (!article) { target.innerHTML = `<div class="ai-result"><p>找不到本篇新聞資料，請回新聞列表重試。</p></div>`; return; }
+  target.innerHTML = `<div class="ai-loading"><span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span> AI 分析本篇新聞中…</div>`;
+  if (btn) btn.disabled = true;
+  try { if (window.LeadFu && window.LeadFu.trackEvent) window.LeadFu.trackEvent("ai_summary", { source: "news_article" }); } catch (e) {}
+
+  const s2n = {};
+  (STOCK_DATA.stocks || []).forEach(s => { s2n[s.code] = s.name; });
+  const rel = (article.ai_related || []).map(c => `${c}${s2n[c] || ""}`).join("、");
+  const ctx = `新聞標題：${article.title}\n`
+    + (article.ai_sentiment ? `初步判讀：${article.ai_sentiment}／${article.ai_horizon || "不明"}影響\n` : "")
+    + (rel ? `可能影響個股：${rel}\n` : "");
+  const prompt = "針對以下這「一則」台股財經新聞，用淺白繁體中文寫重點分析（給 45–75 歲投資人看）：\n"
+    + "1. 這則新聞在講什麼（1–2 句）\n2. 屬利多／利空／中性，影響短期或長期\n3. 可能影響哪些公司或族群\n4. 一句風險或注意事項\n"
+    + "中立陳述、不要推薦買賣、不要喊目標價，約 150–250 字。\n\n" + ctx;
+
+  try {
+    const resp = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: prompt, max_tokens: 600, stream: false })
+    });
+    const data = await resp.json().catch(() => ({}));
+    const ans = (data && data.answer || "").trim();
+    if (!resp.ok || !ans) throw new Error((data && data.error) || ("HTTP " + resp.status));
+    const esc = ans.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
+    const html = esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+    target.innerHTML = `<div class="ai-result"><div class="ai-result-head">📋 本篇新聞 AI 重點分析</div>${html}`
+      + `<p class="ai-disclaimer">※ AI 依本篇公開新聞整理之重點，不代表本站立場，亦不構成投資建議。</p></div>`;
+  } catch (err) {
+    target.innerHTML = `<div class="ai-result"><p>AI 分析暫時無法產生，請稍後再試。</p></div>`;
+  } finally {
+    if (btn) btn.disabled = false;
+  }
 }
 
 function mockAiResponse(action, code) {
