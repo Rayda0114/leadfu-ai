@@ -31,10 +31,6 @@ import urllib.request
 import urllib.error
 from pathlib import Path
 
-# 同目錄模組：自選股「今日異動」警示偵測（直接執行 python scripts/xxx.py 時
-# scripts/ 會在 sys.path[0]，故可直接 import）
-from watchlist_alerts import load_alert_data, alerts_for_codes
-
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://lhwxpnyzplylajxunlua.supabase.co").rstrip("/")
 SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
@@ -61,7 +57,7 @@ def fetch_members():
         print("[error] 缺 SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY，無法讀會員")
         sys.exit(1)
     url = (f"{SUPABASE_URL}/rest/v1/profiles"
-           "?select=id,name,watchlist,line_user_id,push_optin"
+           "?select=id,name,watchlist,holdings,line_user_id,push_optin"
            "&line_user_id=not.is.null&push_optin=eq.true")
     req = urllib.request.Request(url, headers={
         "apikey": SERVICE_KEY,
@@ -98,60 +94,81 @@ def push_message(to, text):
         return False
 
 
-def build_digest(codes, code2name, anns_today, news, alerts, risk=None):
-    """為單一會員組出推播文字；沒有相關內容回 None。
-    alerts: {code: [警示字串,...]}；risk: {code: {score,level,reasons,...}} 風險分數。"""
+def _names(codes, c2n, k=3):
+    """把代碼列表轉成『2330 台積電、…』最多 k 檔，多的用『等N檔』。"""
+    show = "、".join(f"{c} {c2n.get(c, '')}".strip() for c in codes[:k])
+    return show + (f" 等{len(codes)}檔" if len(codes) > k else "")
+
+
+def build_digest(codes, code2name, cat_of, anns_today, news, alerts, risk, attention, streak, revenue):
+    """為單一會員組「每日我的風險摘要」；沒風險也沒公告/新聞回 None（不擾民）。
+    codes: 該會員 自選∪持股 代碼；cat_of: code→產業；risk/attention/streak/revenue: 各風險資料。"""
+    if not codes:
+        return None
     codeset = set(codes)
     names = [code2name.get(c, "") for c in codes if code2name.get(c)]
-    risk = risk or {}
+    risk, attention, streak, revenue = risk or {}, attention or {}, streak or {}, revenue or {}
 
-    # 高風險持股（分數 ≥ 50 或近期升高）
-    my_risk = sorted(
-        [(c, risk[c]) for c in codes
-         if c in risk and (risk[c].get("score", 0) >= 50 or risk[c].get("trend") == "up")],
-        key=lambda x: -x[1].get("score", 0))
-    my_ann = [a for a in anns_today if a.get("code") in codeset][:MAX_ANN]
-    my_news = [n for n in news
-               if any(nm and nm in n.get("title", "") for nm in names)][:MAX_NEWS]
+    # 各類風險訊號（該會員的股之中）
+    notice = [c for c in codes if c in attention]
+    sell = [c for c in codes if (streak.get(c) or {}).get("dir") == "sell" and (streak.get(c) or {}).get("days", 0) >= 2]
+    revdrop = [c for c in codes if isinstance((revenue.get(c) or {}).get("yoy"), (int, float)) and revenue[c]["yoy"] <= -50]
+    risky = sorted([(c, risk[c]) for c in codes if c in risk], key=lambda x: -x[1].get("score", 0))
+    high = [c for c, r in risky if r.get("score", 0) >= 50]
+    flagged = set(notice) | set(sell) | set(revdrop) | set(high)
 
-    if not my_risk and not alerts and not my_ann and not my_news:
+    # 產業集中度（以檔數計）
+    cats = {}
+    for c in codes:
+        cat = cat_of.get(c)
+        if cat:
+            cats[cat] = cats.get(cat, 0) + 1
+    top_cat, top_n = (max(cats.items(), key=lambda x: x[1]) if cats else ("", 0))
+    conc = round(top_n / len(codes) * 100) if codes else 0
+
+    my_ann = [a for a in anns_today if a.get("code") in codeset][:3]
+    my_news = [n for n in news if any(nm and nm in n.get("title", "") for nm in names)][:2]
+
+    # 完全沒風險、也沒公告/新聞 → 不推（避免天天報平安洗版）
+    if not flagged and not my_ann and not my_news:
         return None
 
-    lines = ["📊 領富 AI ・ 今日自選股快訊", ""]
-    if my_risk:
-        lines.append("🚨 高風險持股（建議重新檢查持有理由，非買賣建議）")
-        for c, r in my_risk[:MAX_ANN]:
-            reason = (r.get("reasons") or [""])[0]
-            up = "・風險升高" if r.get("trend") == "up" else ""
-            lines.append(f"・{c} {code2name.get(c, '')}｜風險 {r.get('score')} {r.get('level')}"
-                         + (f"・{reason}" if reason else "") + up)
-        lines.append("")
-    if alerts:
-        lines.append("⚠️ 今日異動")
-        for c in codes:  # 依會員自選股原順序列出
-            if c in alerts:
-                nm = code2name.get(c, "")
-                for a in alerts[c]:
-                    lines.append(f"・{c} {nm}｜{a}")
-        lines.append("")
-    if my_ann:
-        lines.append("📢 公司公告")
-        for a in my_ann:
-            title = a.get("title", "").replace("\r", " ").replace("\n", " ").strip()[:40]
-            lines.append(f"・{a.get('code')} {a.get('name', '')}：{title}")
-        lines.append("")
-    if my_news:
-        lines.append("📰 相關新聞")
-        for n in my_news:
-            lines.append(f"・{n.get('title', '').strip()[:42]}")
-        lines.append("")
-    # openExternalBrowser=1：讓 LINE 用手機預設瀏覽器開（跳出 LINE 內建瀏覽器，
-    # 才帶得到登入 session、看得到雲端自選股；否則 LINE webview 未登入會顯示空清單）
-    lines.append(f"🔗 我的自選股：{SITE}/pages/watchlist?openExternalBrowser=1")
+    lines = ["📋 領富 AI ・ 你的每日風險摘要", ""]
+    lines.append(f"你追蹤的 {len(codes)} 檔，今天有 {len(flagged)} 檔出現風險訊號：")
+    if notice:
+        lines.append(f"⚠️ {len(notice)} 檔列注意/處置股：{_names(notice, code2name)}")
+    if sell:
+        lines.append(f"👥 {len(sell)} 檔外資連賣：{_names(sell, code2name)}")
+    if revdrop:
+        lines.append(f"📉 {len(revdrop)} 檔月營收年減 >50%：{_names(revdrop, code2name)}")
+    if high:
+        lines.append(f"🚨 {len(high)} 檔風險分數偏高(≥50)：{_names(high, code2name)}")
+    if not flagged:
+        lines.append("✓ 今天沒有明顯風險訊號。")
     lines.append("")
-    lines.append("※ 以上為公開資訊整理，非投資建議。")
-    lines.append("如不想再收到，可至領富 AI 會員中心關閉推播通知。")
-    return "\n".join(lines)[:4900]  # LINE 單則文字上限約 5000 字
+
+    if top_cat and conc >= 40 and len(codes) >= 3:
+        warn = "，集中度偏高、留意產業齊跌風險" if conc >= 50 else ""
+        lines.append(f"🏭 你的部位集中在「{top_cat}」約 {conc}%{warn}。")
+        lines.append("")
+
+    if risky:
+        top3 = "、".join(f"{c} {code2name.get(c, '')}".strip() for c, _ in risky[:3])
+        lines.append(f"🔎 本週請優先檢查：{top3}")
+        lines.append("（風險分數最高，建議重新確認當初的持有理由，非買賣建議）")
+        lines.append("")
+
+    if my_ann:
+        lines.append("📢 相關公告：" + "；".join(f"{a.get('code')} {a.get('name', '')}".strip() for a in my_ann))
+    if my_news:
+        lines.append("📰 " + my_news[0].get("title", "").strip()[:38])
+    if my_ann or my_news:
+        lines.append("")
+
+    # openExternalBrowser=1：用手機預設瀏覽器開（跳出 LINE webview，帶得到登入 session）
+    lines.append(f"🔗 看完整風險：{SITE}/pages/risk-radar?openExternalBrowser=1")
+    lines.append("※ 公開資料整理，非投資建議。可至會員中心關閉推播。")
+    return "\n".join(lines)[:4900]
 
 
 def main():
@@ -159,28 +176,30 @@ def main():
     news = load_json("news_live.json").get("news", [])
     stocks = load_json("stocks_live.json").get("stocks", [])
     risk = load_json("risk_score_live.json").get("data", {})
+    attention = load_json("attention_live.json").get("data", {})
+    streak = load_json("inst_streak_live.json").get("data", {})
+    revenue = load_json("revenue_live.json").get("revenue", {})
     code2name = {s["code"]: s.get("name", "") for s in stocks if s.get("code")}
+    cat_of = {s["code"]: s.get("category", "") for s in stocks if s.get("code")}
 
     # 只取最新一天的公告（避免推到舊公告）
     latest = max((a.get("date", "") for a in anns), default="")
     anns_today = [a for a in anns if a.get("date") == latest] if latest else anns
     print(f"[info] 公告基準日 {latest}，當日公告 {len(anns_today)} 筆；新聞 {len(news)} 則")
-
-    # 自選股「今日異動」警示資料（klines/指標/法人），整批只載一次
-    alert_data = load_alert_data()
-    print(f"[info] 警示資料：klines {len(alert_data['kl'])}、指標 {len(alert_data['ind'])}、法人 {len(alert_data['inst'])}")
+    print(f"[info] 風險 {len(risk)}、注意/處置 {len(attention)}、法人連買賣 {len(streak)} 筆")
 
     members = fetch_members()
     print(f"[info] 可推播會員 {len(members)} 位（已登入 LINE + 未退訂）")
 
     sent = skipped = 0
     for m in members:
-        codes = m.get("watchlist") or []
+        wl = m.get("watchlist") or []
+        hold = list((m.get("holdings") or {}).keys())
+        codes = list(dict.fromkeys(wl + hold))   # 自選 ∪ 持股，去重保序
         if not codes:
             skipped += 1
             continue
-        alerts = alerts_for_codes(codes, alert_data)
-        text = build_digest(codes, code2name, anns_today, news, alerts, risk)
+        text = build_digest(codes, code2name, cat_of, anns_today, news, None, risk, attention, streak, revenue)
         if not text:
             skipped += 1
             continue
