@@ -155,7 +155,7 @@
       </details>
       <details style="margin-bottom:12px;border-bottom:1px solid #eef0f3;padding-bottom:12px;">
         <summary style="cursor:pointer;font-weight:600;color:#163A2E;">Q：VIP 訂閱可以退費嗎？</summary>
-        <p style="margin-top:8px;color:#555;">訂閱後 7 天內可申請全額退費，請來信客服信箱說明訂單編號。</p>
+        <p style="margin-top:8px;color:#555;">訂閱後 30 天內可申請全額退費，請來信客服信箱或 LINE 客服說明訂單編號。</p>
       </details>
       <details style="margin-bottom:12px;border-bottom:1px solid #eef0f3;padding-bottom:12px;">
         <summary style="cursor:pointer;font-weight:600;color:#163A2E;">Q：報價資料更新頻率？</summary>
@@ -182,10 +182,39 @@
 
 <script src="../js/main.js"></script>
 <script>
-document.getElementById("contactForm").addEventListener("submit", e => {
+document.getElementById("contactForm").addEventListener("submit", async e => {
   e.preventDefault();
-  alert("留言已送出，客服將於 24 小時內回覆您（範例環境，未串接真實後端）");
-  e.target.reset();
+  const btn = e.target.querySelector('button[type="submit"]') || e.target.querySelector("button");
+  const name = (document.getElementById("name").value || "").trim();
+  const email = (document.getElementById("email").value || "").trim();
+  const phone = (document.getElementById("phone").value || "").trim();
+  const msg = (document.getElementById("msg").value || "").trim();
+  if (btn) { btn.disabled = true; btn.dataset.t = btn.textContent; btn.textContent = "送出中…"; }
+  const payload = {
+    category: "聯絡客服",
+    message: `【聯絡表單】${name}${phone ? "・" + phone : ""}\n${msg}`.slice(0, 500),
+    email: email.slice(0, 120) || null,
+    page_url: location.href,
+    user_agent: navigator.userAgent.slice(0, 240)
+  };
+  try {
+    const resp = await fetch("https://lhwxpnyzplylajxunlua.supabase.co/rest/v1/feedback", {
+      method: "POST",
+      headers: {
+        "apikey": "sb_publishable_hBrtHt8ham91nuXSU_tdmA__BqcfIX1",
+        "Authorization": "Bearer sb_publishable_hBrtHt8ham91nuXSU_tdmA__BqcfIX1",
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify(payload)
+    });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    alert("已收到您的訊息，我們會儘快透過 Email 或 LINE 客服回覆您。");
+    e.target.reset();
+  } catch (err) {
+    alert("送出失敗，請改用 LINE 客服 @041exgtv 或來信客服信箱，謝謝。");
+  }
+  if (btn) { btn.disabled = false; btn.textContent = btn.dataset.t || "送出"; }
 });
 </script>
 </body>

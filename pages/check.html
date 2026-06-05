@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const p = fv.position;
       if (p > 1) out.push({ lv:"danger", i:"🔴", t:"股價已高於合理區間上緣", d:`現價 ${L.fmtPrice(s.price)} 高於合理區間（${L.fmtPrice(fv.low)}–${L.fmtPrice(fv.high)}），追高風險大。` });
       else if (p > 0.8) out.push({ lv:"warn", i:"⚠️", t:"股價接近合理區間上緣", d:`現價接近區間上緣（${L.fmtPrice(fv.low)}–${L.fmtPrice(fv.high)}），偏貴。` });
-      else if (p < 0.2) out.push({ lv:"ok", i:"✅", t:"股價相對便宜", d:`現價接近／低於合理區間下緣（${L.fmtPrice(fv.low)}–${L.fmtPrice(fv.high)}）— 但便宜仍需確認基本面。` });
+      else if (p < 0.2) out.push({ lv:"ok", i:"✅", t:"估值位置偏低", d:`現價接近／低於合理區間下緣（${L.fmtPrice(fv.low)}–${L.fmtPrice(fv.high)}）— 估值偏低仍須確認基本面。` });
       else out.push({ lv:"ok", i:"✅", t:"股價在合理區間內", d:`合理區間 ${L.fmtPrice(fv.low)}–${L.fmtPrice(fv.high)}。` });
     } else out.push({ lv:"neutral", i:"➖", t:"無合理區間資料", d:"此檔暫無合理區間估值。" });
 
@@ -242,10 +242,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const volatile = bbw != null && bbw > 40;
 
     let verdict, mode;
-    if (caution >= 3 || (att && att.type === "處置")) { mode = "caution"; verdict = "風險偏高 —— 短線、長期都需謹慎，買進前務必先弄清楚上面的紅旗原因。"; }
-    else if (longPts >= 2 && caution <= 1) { mode = "long"; verdict = "基本面相對穩健（本業獲利／營收成長／估值合理之中符合多項），<b>較適合「長期觀察」</b>，可分批、看基本面。"; }
-    else if (volatile || caution >= 1) { mode = "short"; verdict = "波動較大或有短期風險訊號，<b>偏「短線觀察」</b>，若參與請嚴設停損、控制部位。"; }
-    else { mode = "neutral"; verdict = "訊號中性，<b>可再觀察</b>。建議搭配你自己的投資目標與風險承受度判斷。"; }
+    if (caution >= 3 || (att && att.type === "處置")) { mode = "caution"; verdict = "風險訊號偏多 —— 不論短期或長期都需留意，建議先釐清上面的紅旗原因。"; }
+    else if (longPts >= 2 && caution <= 1) { mode = "long"; verdict = "基本面訊號較穩健（本業獲利／營收成長／估值位置之中符合多項），<b>觀察型態偏「長期基本面」</b>。"; }
+    else if (volatile || caution >= 1) { mode = "short"; verdict = "波動較大或有短期風險訊號，<b>觀察型態偏「短期波動」</b>，請依自身風險承受度評估。"; }
+    else { mode = "neutral"; verdict = "訊號中性，<b>可再觀察</b>，建議搭配你自己的投資目標與風險承受度判斷。"; }
     return { verdict, mode, longPts, caution };
   }
 
@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const mk = s.market === "listed" ? "上市" : s.market === "otc" ? "上櫃" : s.market === "emerging" ? "興櫃" : "";
     const inWl = L.isInWatchlist && L.isInWatchlist(code);
 
-    const termTags = [["short","🎯 短線觀察"],["long","🌱 長期觀察"],["caution","⚠️ 都需謹慎"]];
+    const termTags = [["short","📈 短期波動型"],["long","🌱 長期基本面型"],["caution","⚠️ 風險偏高"]];
     const termHtml = termTags.map(([m, label]) => {
       const on = tv.mode === m || (tv.mode === "neutral" && false);
       const bg = on ? (m === "long" ? "#e9f7ee" : m === "short" ? "#fff4e2" : "#fdecec") : "#f5f6f8";

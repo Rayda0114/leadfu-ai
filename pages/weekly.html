@@ -120,6 +120,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const market = data.market || {};
   const industries = data.industries || [];
 
+  // 資料新鮮度標示
+  let freshTag = "";
+  if (generatedAt) {
+    const g = new Date(generatedAt.replace(" ", "T") + ":00");
+    const days = isNaN(g.getTime()) ? -1 : Math.floor((Date.now() - g.getTime()) / 86400000);
+    const base = "display:inline-block;padding:1px 9px;border-radius:999px;font-weight:700;font-size:12px;";
+    if (days < 0) freshTag = "";
+    else if (days <= 7) freshTag = `<span style="${base}background:#dcfce7;color:#166534;">🟢 本週最新（${days} 天前產生）</span>`;
+    else if (days <= 14) freshTag = `<span style="${base}background:#fef9c3;color:#854d0e;">🟡 已 ${days} 天，下週一將更新</span>`;
+    else freshTag = `<span style="${base}background:#fee2e2;color:#991b1b;">🔴 已逾 ${days} 天，內容時效偏舊請斟酌</span>`;
+  }
+
   shell.innerHTML = `
     <article class="weekly-report">
       <header class="weekly-head">
@@ -131,6 +143,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span>📊 含 ${market.totalStocks || "?"} 檔個股、${industries.length} 大產業</span>
           <span>·</span>
           <span>🕐 ${generatedAt} 自動生成</span>
+        </div>
+        <div class="weekly-meta" style="margin-top:6px;">
+          <span>📅 報導期間 <strong>${data.weekStart} ~ ${data.weekEnd}</strong></span>
+          ${freshTag ? '<span>·</span>' + freshTag : ''}
         </div>
         <div class="weekly-tools">
           <button type="button" class="weekly-tts-all" id="weeklyTtsAll" title="朗讀整篇週報">

@@ -1124,9 +1124,9 @@ function renderFairValue(code, stock) {
     // 安全邊際價位（合理區間下限）
     if (price > low) {
       const ds = (price - low) / price * 100;
-      lines.push(`安全邊際價位約 <b>NT$ ${low.toLocaleString()}</b>（合理區間下限），現價距此約 <b>${ds.toFixed(0)}%</b> 下檔空間`);
+      lines.push(`合理區間下緣約 <b>NT$ ${low.toLocaleString()}</b>，現價距此約 <b>${ds.toFixed(0)}%</b>`);
     } else {
-      lines.push(`現價已接近／低於合理區間下限 <b>NT$ ${low.toLocaleString()}</b>，相對較有安全邊際`);
+      lines.push(`現價已接近／低於合理區間下緣 <b>NT$ ${low.toLocaleString()}</b>，估值位置偏低`);
     }
     fvExtraEl.innerHTML = lines.length
       ? `<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18);">`
