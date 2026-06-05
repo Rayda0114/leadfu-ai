@@ -3483,6 +3483,17 @@ async function loadLiveData() {
     console.log(`[領富 AI] ℹ️ 法人連買資料未載入 (${e.message})`);
   }
 
+  // 14e. 股息現金流（fetch_dividend.py：除息日/現金股利/一次性偵測）
+  try {
+    const live = await fetchJson("dividend_live.json");
+    if (live.data) {
+      STOCK_DATA.dividend = live.data;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆股息資料`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 股息資料未載入 (${e.message})`);
+  }
+
   // 15. 新股 IPO 行事曆（TWSE OpenAPI 上市申請 / 新掛牌）
   try {
     const live = await fetchJson("ipo_live.json");

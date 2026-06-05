@@ -133,6 +133,12 @@
       </div>
     </div>
 
+    <!-- 💰 股息現金流規劃 -->
+    <div class="panel" id="divPanel" style="margin-bottom:14px;display:none;">
+      <div class="panel-head"><h2>💰 股息現金流規劃</h2><span style="font-size:12px;color:#888;">退休／存股族</span></div>
+      <div id="divBody" style="padding:14px 18px;"></div>
+    </div>
+
     <!-- 風險體檢 -->
     <div class="panel" style="margin-bottom:14px;">
       <div class="panel-head"><h2>🩺 風險體檢</h2><span style="font-size:12px;color:#888;">依市值權重</span></div>
@@ -480,6 +486,54 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /* ===== 持股明細表 ===== */
+  /* ===== 💰 股息現金流規劃 ===== */
+  const MONTH_NAMES = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+  function renderDividend(m){
+    const div = L.data.dividend || {};
+    const panel = document.getElementById("divPanel");
+    let annual = 0, pending = 0;
+    const byMonth = {};
+    const warns = [];
+    m.valid.forEach(it => {
+      const dv = div[it.code], val = valuation[it.code] || {};
+      let amt = 0;
+      if (dv && dv.cash > 0) amt = dv.cash * it.h.shares;
+      else if (val.yield_pct) amt = it.value * val.yield_pct / 100;
+      if (amt > 0) {
+        annual += amt;
+        if (dv && dv.ex_month) byMonth[dv.ex_month] = (byMonth[dv.ex_month] || 0) + amt;
+        else pending += amt;
+      }
+      if (val.yield_pct && val.yield_pct >= 8)
+        warns.push({ lv:"warn", t:`${it.s.code} ${it.s.name}　殖利率 ${val.yield_pct.toFixed(1)}% 偏高`, d:"超高殖利率常伴隨股價下跌或一次性配息，留意是否能持續。" });
+      if (dv && dv.oneoff)
+        warns.push({ lv:"danger", t:`${it.s.code} ${it.s.name}　配息可能非經常性`, d: dv.oneoff_reason || "配息來源含公積／非當年獲利。" });
+    });
+    if (annual <= 0) { panel.style.display = "none"; return; }
+    panel.style.display = "block";
+    const monthly = annual / 12;
+    const yc = m.totalValue > 0 ? annual / m.totalValue * 100 : 0;
+    const maxM = Math.max(1, ...Object.values(byMonth));
+    let monthsHtml = "";
+    for (let mo = 1; mo <= 12; mo++) {
+      const v = byMonth[mo]; if (!v) continue;
+      monthsHtml += `<div class="ph-bar-row"><div class="ph-bar-label">${MONTH_NAMES[mo-1]}</div><div class="ph-bar-track"><div class="ph-bar-fill" style="width:${(v/maxM*100).toFixed(0)}%;background:#C5A572;"></div></div><div class="ph-bar-val">${money(v)}</div></div>`;
+    }
+    if (pending > 0) monthsHtml += `<div class="ph-bar-row"><div class="ph-bar-label" style="color:#999;">待公告</div><div class="ph-bar-track"><div class="ph-bar-fill" style="width:8%;background:#cfd4da;"></div></div><div class="ph-bar-val">${money(pending)}</div></div>`;
+    document.getElementById("divBody").innerHTML =
+      `<div class="pnl-metrics">
+         <div class="pnl-m"><div class="lab">預估一年股息</div><div class="val">${money(annual)}</div></div>
+         <div class="pnl-m"><div class="lab">平均每月現金流</div><div class="val">${money(monthly)}</div></div>
+         <div class="pnl-m"><div class="lab">整體殖利率</div><div class="val">${yc.toFixed(2)}%</div></div>
+       </div>
+       <div class="pf-sub" style="margin-top:16px;">📅 除息月份分布（現金股利落在哪些月）</div>
+       <div class="ph-bar-chart">${monthsHtml || '<div style="color:#999;font-size:13px;">持股目前尚無公告除息日（多數台股在 6–8 月除息）。</div>'}</div>
+       ${warns.length
+         ? `<div class="pf-sub" style="margin-top:14px;">🔎 配息品質提醒</div>` + warns.map(w => `<div class="pf-flag ${w.lv}" style="margin-bottom:7px;"><span class="fi">${w.lv === "danger" ? "🛑" : "⚠️"}</span><div><b>${w.t}</b><br><span style="font-size:12px;">${w.d}</span></div></div>`).join("")
+         : `<div class="pf-flag ok" style="margin-top:12px;"><span class="fi">✅</span><div>持股股息來源正常，未發現殖利率過高或「配老本」疑慮。</div></div>`}
+       <div style="margin-top:10px;font-size:11px;color:#aaa;">※ 股息＝現金股利/股 × 股數（無則以殖利率推估），實際以公司公告為準；填息紀錄需歷史資料、後續推出。非投資建議。</div>`;
+  }
+
   function renderTable(m){
     document.getElementById("holdCount").textContent = m.valid.length + " 檔";
     const head = `<thead><tr>
@@ -584,6 +638,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("phContent").style.display = "block";
     renderSummary(m);
     const risk = renderRisk(m);
+    renderDividend(m);
     renderAlerts(m);
     renderSnap(m, risk);
     renderTable(m);
