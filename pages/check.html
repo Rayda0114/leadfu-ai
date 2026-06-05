@@ -128,6 +128,21 @@
   .chk-actions a, .chk-actions button { flex:1; min-width:130px; text-align:center; padding:11px; border-radius:8px; font-size:14px; text-decoration:none; cursor:pointer; border:1px solid #1B4332; color:#1B4332; background:#fff; }
   .chk-actions .primary { background:#1B4332; color:#fff; }
   .chk-foot { padding:12px 22px; font-size:11.5px; color:#aaa; line-height:1.7; }
+  /* 列印 / 下載 PDF：只留報告本體 */
+  .print-only { display:none; }
+  @media print {
+    .top-bar, .logo-bar, .main-nav, .page-head, .site-footer,
+    .chk-search, #chkWelcome, .chk-actions, [class*="feedback"], [id*="feedback"], [class*="fab"] { display:none !important; }
+    body { background:#fff !important; }
+    main.container { max-width:100% !important; padding:0 !important; }
+    .panel { box-shadow:none !important; border:none !important; margin:0 !important; }
+    .chk-item, .chk-verdict, .chk-term { break-inside:avoid; }
+    .print-only { display:block !important; }
+    .print-head { text-align:center; padding:6px 0 14px; border-bottom:2px solid #1B4332; margin-bottom:8px; }
+    .print-head .pb { font-size:19px; font-weight:800; color:#1B4332; }
+    .print-head .pd { font-size:12px; color:#777; margin-top:4px; }
+    a[href]:after { content:""; }
+  }
 </style>
 <script src="../js/main.js"></script>
 <script>
@@ -263,6 +278,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }).join("");
 
     wrap.innerHTML = `<div class="panel">
+      <div class="print-only print-head"><div class="pb">領富 AI ・ 個股決策報告</div><div class="pd">${s.code} ${s.name}　報告日 ${new Date().toLocaleDateString("zh-TW")}　leadfuai.com</div></div>
       <div class="chk-head">
         <div class="chk-score" style="color:${col};">${score != null ? score : "—"}<small>${score != null ? "/100" : ""}</small></div>
         <div style="flex:1;min-width:0;">
@@ -277,7 +293,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       <div class="chk-term">${termHtml}</div>
       ${items.map(it => `<div class="chk-item ${it.lv}"><div class="chk-ico">${it.i}</div><div class="chk-body"><div class="chk-t">${it.t}</div><div class="chk-d">${it.d}</div></div></div>`).join("")}
       <div class="chk-actions">
-        <button class="primary" id="chkFav">${inWl ? "✓ 已在自選" : "＋ 加入自選股"}</button>
+        <button class="primary" id="chkPrint">🖨️ 下載 PDF</button>
+        <button id="chkFav">${inWl ? "✓ 已在自選" : "＋ 加入自選股"}</button>
         <a href="stock-detail.html?code=${code}">看完整個股頁 →</a>
         <a href="risk-radar.html">看防錯雷達 →</a>
       </div>
@@ -289,6 +306,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (L.isInWatchlist && L.isInWatchlist(code)) { L.showToast && L.showToast("已在自選股中", "success"); return; }
       if (L.addToWatchlist) { L.addToWatchlist(code); favBtn.textContent = "✓ 已加入自選"; L.showToast && L.showToast(`已加入 ${code} ${s.name}`, "success"); }
     });
+    const printBtn = document.getElementById("chkPrint");
+    if (printBtn) printBtn.addEventListener("click", () => window.print());
 
     // 更新網址（可分享 / 重整保留）
     try { history.replaceState(null, "", `check.html?code=${code}`); } catch (e) {}
