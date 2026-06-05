@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>站長後台 · 意見回饋 - 領富 AI</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .ad-wrap{max-width:920px;margin:0 auto;padding:24px 16px 60px;}
+  .ad-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px;}
+  .ad-title{font-size:22px;font-weight:800;color:#1B4332;}
+  .ad-title .ai{color:#B08D57;}
+  .ad-sub{color:#777;font-size:13px;margin-bottom:18px;}
+  .ad-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
+  .ad-chip{border:1px solid #d9d5cc;background:#fff;color:#555;border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;}
+  .ad-chip.on{background:#1B4332;color:#fff;border-color:#1B4332;}
+  .ad-refresh{margin-left:auto;border:1px solid #d9d5cc;background:#fff;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;color:#1B4332;}
+  .ad-card{background:#fff;border:1px solid #e8e4db;border-radius:12px;padding:16px 18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(27,67,50,.04);}
+  .ad-card.lead{border-color:#B08D57;background:#fdfbf6;}
+  .ad-row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .ad-cat{font-weight:700;font-size:13px;color:#1B4332;background:#eef4f0;border-radius:6px;padding:3px 10px;}
+  .ad-cat.lead{color:#8a6d3b;background:#f5ecd8;}
+  .ad-stars{color:#E8A33D;font-size:14px;letter-spacing:1px;}
+  .ad-id{color:#aaa;font-size:12px;}
+  .ad-badge{font-size:11px;border-radius:6px;padding:2px 8px;}
+  .ad-badge.done{background:#e6f4ea;color:#1e7e34;}
+  .ad-badge.wait{background:#f1f1f1;color:#999;}
+  .ad-msg{color:#333;font-size:15px;line-height:1.7;white-space:pre-wrap;word-break:break-word;margin-bottom:10px;}
+  .ad-meta{display:flex;gap:16px;flex-wrap:wrap;color:#888;font-size:12px;}
+  .ad-meta a{color:#1B4332;}
+  .ad-empty,.ad-state{text-align:center;padding:60px 20px;color:#888;}
+  .ad-state .ad-icon{font-size:42px;margin-bottom:14px;}
+  .ad-btn{display:inline-block;background:#1B4332;color:#fff;font-weight:700;padding:11px 26px;border-radius:8px;text-decoration:none;margin-top:8px;}
+  .ad-link{display:inline-block;margin-top:12px;color:#1B4332;font-size:13px;}
+</style>
+</head>
+<body>
+<div class="ad-wrap">
+  <div class="ad-head">
+    <div class="ad-title">領富 <span class="ai">AI</span> · 站長後台</div>
+    <a href="../index.html" style="color:#1B4332;font-size:13px;">← 回首頁</a>
+  </div>
+  <div class="ad-sub">意見回饋（含 VIP 訂閱意願）· 僅站長本人可見</div>
+
+  <div id="adBody">
+    <div class="ad-state"><div class="ad-icon">⏳</div>載入中…</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/auth.js"></script>
+<script>
+(async () => {
+  const body = document.getElementById("adBody");
+  const sb = window.LeadFuAuth.client;
+
+  const esc = (s) => (s == null ? "" : String(s).replace(/[&<>"']/g, c => (
+    { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c])));
+
+  const stateHtml = (icon, msg, extra) =>
+    `<div class="ad-state"><div class="ad-icon">${icon}</div><div>${msg}</div>${extra || ""}</div>`;
+
+  // 1) 取登入 session
+  let session = null;
+  try { session = (await sb.auth.getSession()).data.session; } catch (e) {}
+  if (!session) {
+    body.innerHTML = stateHtml("🔒", "請先用<strong>站長帳號</strong>登入才能查看回饋。",
+      `<div><a class="ad-btn" href="login.html">會員登入 →</a></div>`);
+    return;
+  }
+
+  // 2) 打 owner-only API
+  let rows = null, errStatus = 0, errMsg = "";
+  try {
+    const res = await fetch("/api/admin-feedback", {
+      headers: { "Authorization": "Bearer " + session.access_token }
+    });
+    if (res.ok) {
+      rows = (await res.json()).feedback || [];
+    } else {
+      errStatus = res.status;
+      errMsg = ((await res.json().catch(() => ({}))).error) || ("HTTP " + res.status);
+    }
+  } catch (e) { errMsg = String(e); }
+
+  if (rows == null) {
+    if (errStatus === 403) {
+      body.innerHTML = stateHtml("🚫", "此帳號無權限查看（請用站長帳號登入）。",
+        `<div><a class="ad-link" href="#" id="adLogout">登出，改用其他帳號 →</a></div>`);
+      const lo = document.getElementById("adLogout");
+      if (lo) lo.addEventListener("click", async (e) => { e.preventDefault(); try { await sb.auth.signOut(); } catch (e2) {} location.href = "login.html"; });
+    } else {
+      body.innerHTML = stateHtml("😕", "讀取失敗：" + esc(errMsg),
+        `<div><a class="ad-link" href="#" onclick="location.reload();return false;">重新整理</a></div>`);
+    }
+    return;
+  }
+
+  // 3) 渲染
+  const isLead = (cat) => /VIP|訂閱|付費/.test(cat || "");
+  let activeCat = "全部";
+
+  function render() {
+    const cats = ["全部", ...Array.from(new Set(rows.map(r => (r.category || "其他"))))];
+    const shown = activeCat === "全部" ? rows : rows.filter(r => (r.category || "其他") === activeCat);
+
+    const chips = cats.map(c =>
+      `<button class="ad-chip ${c === activeCat ? "on" : ""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+
+    const list = shown.length === 0
+      ? `<div class="ad-empty">此分類目前沒有回饋。</div>`
+      : shown.map(r => {
+          const lead = isLead(r.category);
+          const stars = r.rating ? ("★".repeat(r.rating) + "☆".repeat(5 - r.rating)) : "";
+          const when = r.created_at ? new Date(r.created_at).toLocaleString("zh-TW") : "";
+          const page = r.page_url ? `<a href="${esc(r.page_url)}" target="_blank" rel="noopener">來源頁</a>` : "";
+          return `
+            <div class="ad-card ${lead ? "lead" : ""}">
+              <div class="ad-row1">
+                <span class="ad-cat ${lead ? "lead" : ""}">${lead ? "💰 " : ""}${esc(r.category || "其他")}</span>
+                ${stars ? `<span class="ad-stars">${stars}</span>` : ""}
+                <span class="ad-id">#${r.id}</span>
+                <span class="ad-badge ${r.notified ? "done" : "wait"}">${r.notified ? "已通知" : "待通知"}</span>
+              </div>
+              <div class="ad-msg">${esc(r.message) || "（無文字內容）"}</div>
+              <div class="ad-meta">
+                <span>✉️ ${esc(r.email) || "未留"}</span>
+                ${page ? `<span>${page}</span>` : ""}
+                ${when ? `<span>🕒 ${esc(when)}</span>` : ""}
+              </div>
+            </div>`;
+        }).join("");
+
+    body.innerHTML =
+      `<div class="ad-bar">${chips}<button class="ad-refresh" id="adRefresh">↻ 重新整理</button></div>` +
+      `<div style="color:#999;font-size:12px;margin-bottom:10px;">共 ${rows.length} 筆回饋</div>` +
+      list;
+
+    body.querySelectorAll(".ad-chip").forEach(ch =>
+      ch.addEventListener("click", () => { activeCat = ch.dataset.cat; render(); }));
+    const rf = document.getElementById("adRefresh");
+    if (rf) rf.addEventListener("click", () => location.reload());
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

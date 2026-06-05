@@ -1126,14 +1126,92 @@ async function handleLineAuth(request, env) {
 }
 
 
+/* ============================================================
+ * 站長後台：意見回饋清單（owner-only）
+ *
+ * 安全：含用戶 email，絕不可公開。
+ *   1. 前端帶 Supabase access token（登入者的）
+ *   2. Worker 用該 token 打 /auth/v1/user 驗證 → 取 user.id
+ *   3. user.id 必須在 OWNER_UIDS 白名單，否則 403
+ *   4. 通過才用 service_role 撈全部 feedback 回傳（service_role 只在 Worker 端）
+ * 不需改 DB / RLS，也不需新密鑰（沿用 SUPABASE_SERVICE_ROLE_KEY）。
+ * ============================================================ */
+const SUPABASE_ANON_KEY = "sb_publishable_hBrtHt8ham91nuXSU_tdmA__BqcfIX1"; // 公開金鑰，僅用來驗 token
+const OWNER_UIDS = [
+  "5f5a8d9a-4fa6-4b38-a110-8211edc970e0", // leadwealthai.ai@gmail.com（Google）
+  "1f5502ba-7d0a-427f-936f-bbc8b445b03e", // rayda0114@gmail.com（Google）
+  "697c1764-e500-42e5-9266-c844fb587890"  // Da（LINE 登入）
+  // 之後若新增站長帳號，把該 auth user 的 id 加進這個白名單即可
+];
+
+function adminError(msg, status) {
+  return new Response(JSON.stringify({ error: msg }), {
+    status: status || 400,
+    headers: { "Content-Type": "application/json", ...corsHeaders() }
+  });
+}
+
+async function handleAdminFeedback(request, env) {
+  if (request.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: corsHeaders() });
+  }
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return adminError("server not configured", 500);
+
+  // 1) 取登入者 token
+  const authz = request.headers.get("Authorization") || "";
+  const token = authz.replace(/^Bearer\s+/i, "").trim();
+  if (!token) return adminError("缺少登入憑證", 401);
+
+  // 2) 驗 token → user
+  let user = null;
+  try {
+    const ures = await fetch(`${SUPABASE_PROJECT_URL}/auth/v1/user`, {
+      headers: { "Authorization": `Bearer ${token}`, "apikey": SUPABASE_ANON_KEY }
+    });
+    if (!ures.ok) return adminError("登入已失效，請重新登入", 401);
+    user = await ures.json();
+  } catch (e) {
+    return adminError("驗證失敗: " + String(e), 502);
+  }
+
+  // 3) 站長白名單檢查
+  if (!user || !user.id || !OWNER_UIDS.includes(user.id)) {
+    return adminError("此帳號無權限（請用站長帳號登入）", 403);
+  }
+
+  // 4) service_role 撈全部 feedback（最新在前）
+  try {
+    const fres = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/feedback?select=*&order=id.desc`, {
+      headers: {
+        "apikey": env.SUPABASE_SERVICE_ROLE_KEY,
+        "Authorization": `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+        "Accept": "application/json"
+      }
+    });
+    if (!fres.ok) {
+      const t = await fres.text();
+      return adminError("讀取失敗: " + fres.status + " " + t.slice(0, 120), 500);
+    }
+    const data = await fres.json();
+    return new Response(JSON.stringify({ feedback: data }), {
+      status: 200,
+      headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...corsHeaders() }
+    });
+  } catch (e) {
+    return adminError("讀取錯誤: " + String(e), 502);
+  }
+}
+
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    if (url.pathname === "/api/ask")       return handleAsk(request, env);
-    if (url.pathname === "/api/health")    return handleHealth(env);
-    if (url.pathname === "/api/quote")     return handleQuote(request);
-    if (url.pathname === "/api/line-auth") return handleLineAuth(request, env);
+    if (url.pathname === "/api/ask")            return handleAsk(request, env);
+    if (url.pathname === "/api/health")         return handleHealth(env);
+    if (url.pathname === "/api/quote")          return handleQuote(request);
+    if (url.pathname === "/api/line-auth")      return handleLineAuth(request, env);
+    if (url.pathname === "/api/admin-feedback") return handleAdminFeedback(request, env);
 
     // 其他 path → 交給 ASSETS binding 處理（保留所有原本的靜態行為）
     return env.ASSETS.fetch(request);
