@@ -3472,6 +3472,17 @@ async function loadLiveData() {
     console.log(`[領富 AI] ℹ️ 風險分數未載入 (${e.message})`);
   }
 
+  // 14d. 外資連買/連賣天數（calc_inst_streak.py，每日累積）
+  try {
+    const live = await fetchJson("inst_streak_live.json");
+    if (live.data) {
+      STOCK_DATA.instStreak = live.data;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆法人連買/連賣`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 法人連買資料未載入 (${e.message})`);
+  }
+
   // 15. 新股 IPO 行事曆（TWSE OpenAPI 上市申請 / 新掛牌）
   try {
     const live = await fetchJson("ipo_live.json");

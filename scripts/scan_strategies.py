@@ -65,6 +65,7 @@ def load_data():
         fv=load_json("fair_value_live.json").get("data", {}) or {},
         ann=set(str(a.get("code")) for a in load_json("announcements_live.json").get("announcements", []) if a.get("code")),
         att=set(str(c) for c in (load_json("attention_live.json").get("data") or {}).keys()),
+        streak=load_json("inst_streak_live.json").get("data") or {},
     )
 
 
@@ -168,6 +169,10 @@ def run_filter(f, D):
             continue
         if f.get("exAttention") and str(c) in D["att"]:
             continue
+        if f.get("instBuyDays"):
+            x = D["streak"].get(c)
+            if not (x and x.get("dir") == "buy" and x.get("days", 0) >= f["instBuyDays"]):
+                continue
         out.append(s)
     return out
 

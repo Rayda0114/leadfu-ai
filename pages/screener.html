@@ -198,6 +198,7 @@
 
       <div class="filter-card vip">
         <h4>🏦 籌碼 / 題材</h4>
+        <label class="fund-row" style="margin-bottom:8px;">外資<strong>連買</strong> ≥ <input type="number" id="instBuyDays" placeholder="3" step="1" min="1"> 日</label>
         <div class="check-list" id="fundChecks">
           <label><input type="checkbox" id="chkMa20"> 站上月線</label>
           <label><input type="checkbox" id="chkForeign"> 外資買超</label>
@@ -339,6 +340,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (v("peMax"))  f.peMax  = +v("peMax");
     if (v("yldMin")) f.yldMin = +v("yldMin");
     if (v("confMin")) f.confMin = +v("confMin");
+    if (v("instBuyDays")) f.instBuyDays = +v("instBuyDays");
     f.fvPos = v("fvPos");
     f.ma20      = document.getElementById("chkMa20").checked;
     f.foreign   = document.getElementById("chkForeign").checked;
@@ -387,6 +389,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (f.margin)   list = list.filter(s => { const x = mgn[s.code]; return x && typeof x.margin_change === "number" && x.margin_change > 0; });
     if (f.announce) list = list.filter(s => annSet.has(String(s.code)));
     if (f.exAttention) list = list.filter(s => !attSet.has(s.code));
+    if (f.instBuyDays) list = list.filter(s => { const x = (data.instStreak || {})[s.code]; return x && x.dir === "buy" && x.days >= f.instBuyDays; });
     return list;
   }
 
@@ -507,7 +510,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function writeFilters(f) {
     reset();
     const setV = (id, v) => { if (v != null && v !== "") document.getElementById(id).value = v; };
-    ["priceMin","priceMax","pctMin","pctMax","volMin","volMax","revMin","momMin","gmMin","peMax","yldMin","confMin"].forEach(id => setV(id, f[id]));
+    ["priceMin","priceMax","pctMin","pctMax","volMin","volMax","revMin","momMin","gmMin","peMax","yldMin","confMin","instBuyDays"].forEach(id => setV(id, f[id]));
     if (f.fvPos) document.getElementById("fvPos").value = f.fvPos;
     [["ma20","chkMa20"],["foreign","chkForeign"],["trust","chkTrust"],["opProfit","chkOpProfit"],["sbl","chkSbl"],["margin","chkMargin"],["announce","chkAnnounce"],["exLowVol","chkExLowVol"],["exAttention","chkExAttention"]]
       .forEach(([k,id]) => { if (f[k]) { const el = document.getElementById(id); el.checked = true; el.parentElement.classList.add("checked"); } });
