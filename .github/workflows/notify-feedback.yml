@@ -1,0 +1,40 @@
+name: 領富 AI · 新回饋 LINE 通知
+
+# 每 15 分鐘檢查一次 feedback 表，有 notified=false 的新回饋就推到站長 LINE。
+# （對「意見回饋」來說足夠即時；想要秒級可改 Supabase Database Webhook）
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "只測試、不實際推播也不標記（true = 只印訊息）"
+        required: false
+        default: "true"
+
+# 同時間只跑一個，避免兩個排程重疊重複推
+concurrency:
+  group: notify-feedback
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Notify new feedback
+        run: python scripts/notify_feedback.py
+        env:
+          PYTHONIOENCODING: utf-8
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          OWNER_LINE_USER_ID: ${{ secrets.OWNER_LINE_USER_ID }}
+          # 手動觸發時 dry_run=true → 只印不推；排程觸發時為空 → 實際推播
+          DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
