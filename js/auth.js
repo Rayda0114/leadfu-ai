@@ -171,6 +171,25 @@ window.LeadFuAuth = {
     if (error) console.warn("[領富 AI] 寫雲端策略失敗:", error.message);
   },
 
+  /* ── 新聞推播訂閱雲端同步（profiles.news_subs 欄位，jsonb 物件）──
+     格式：{ topics:[...], active:bool, last_pushed:"YYYY-MM-DD" }
+     由 scripts/push_news_digest.py 每日比對今日新聞、把相符主題推到會員 LINE。
+     一併回傳 hasLine（是否已綁 line_user_id），UI 用來判斷能否推播。*/
+  async getCloudNewsSubs() {
+    const user = await this.getUser();
+    if (!user) return null;
+    const { data, error } = await _sb.from("profiles").select("news_subs,line_user_id").eq("id", user.id).single();
+    if (error) { console.warn("[領富 AI] 讀雲端新聞訂閱失敗:", error.message); return null; }
+    const subs = (data && data.news_subs && typeof data.news_subs === "object") ? data.news_subs : {};
+    return { subs, hasLine: !!(data && data.line_user_id) };
+  },
+  async setCloudNewsSubs(subs) {
+    const user = await this.getUser();
+    if (!user) return;
+    const { error } = await _sb.from("profiles").update({ news_subs: subs }).eq("id", user.id);
+    if (error) console.warn("[領富 AI] 寫雲端新聞訂閱失敗:", error.message);
+  },
+
   /* 把 Supabase 錯誤碼轉成中文（給 45-75 歲族群看得懂）*/
   zhError(error) {
     const msg = (error && error.message) || String(error);

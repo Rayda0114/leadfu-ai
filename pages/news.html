@@ -71,6 +71,24 @@
 <main class="container main-grid">
   <section class="col-main">
 
+    <style>
+      #newsPushPanel .np-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(108px,1fr)); gap:6px; margin-bottom:12px; }
+      #newsPushPanel .np-chk { display:flex; align-items:center; gap:5px; font-size:13px; padding:6px 8px; border:1px solid #e0e3e8; border-radius:6px; cursor:pointer; background:#fff; }
+      #newsPushPanel .np-chk:has(input:checked) { background:#e9f5ee; border-color:#1B4332; color:#1B4332; font-weight:600; }
+      #newsPushPanel .np-active { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:#163A2E; }
+    </style>
+    <div class="panel" id="newsPushPanel">
+      <div class="panel-head">
+        <h2>📩 每日新聞推播到 LINE <span style="font-size:11px;background:#f3ede1;color:#8B6F47;border:1px solid #d9c39a;padding:1px 7px;border-radius:10px;vertical-align:middle;">VIP</span></h2>
+      </div>
+      <div style="padding:14px 18px;">
+        <p style="font-size:13px;color:#555;line-height:1.7;margin-bottom:12px;">
+          勾選你關心的主題，我們每天盤後把<strong>相符的新聞整理</strong>推到你的 LINE — 不用自己每天滑。<span style="color:#999;">（公開新聞整理、非投資建議；可隨時關閉）</span>
+        </p>
+        <div id="newsPushBody"><p style="color:#999;font-size:13px;">載入中…</p></div>
+      </div>
+    </div>
+
     <div class="panel">
       <div class="panel-head">
         <h2>頭條快報</h2>
@@ -159,6 +177,49 @@
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
   const { data, findStock } = window.LeadFu;
+
+  // ── 每日新聞推播訂閱面板（第一期：勾主題 → 每日推 LINE）──
+  (function initNewsPush(){
+    const L = window.LeadFu;
+    const TOPICS = ["半導體","AI 人工智慧","電動車","蘋果供應鏈","金融","生技醫療","航運","綠能重電","軍工航太","台股大盤"];
+    const body = document.getElementById("newsPushBody");
+    if (!body) return;
+    let lastPushed = null;
+    async function render(){
+      if (!(L.hasSession && L.hasSession())) {
+        body.innerHTML = `<p style="font-size:13px;color:#555;">請先在右上角<strong>登入</strong>（建議用 <strong>LINE 登入</strong>），再回此頁開啟推播。</p>`;
+        return;
+      }
+      const res = await L.getNewsSubs();
+      if (!res) { body.innerHTML = `<p style="font-size:13px;color:#555;">請先登入後再設定。</p>`; return; }
+      const { subs, hasLine } = res;
+      lastPushed = (subs && subs.last_pushed) || null;
+      if (!hasLine) {
+        body.innerHTML = `<div style="background:#fff8e1;border:1px solid #f0d77a;border-radius:6px;padding:12px;font-size:13px;color:#8a6d00;">⚠ 此帳號尚未綁定 LINE。請改用「<strong>LINE 登入</strong>」一次，即可開啟新聞推播到你的 LINE。</div>`;
+        return;
+      }
+      const chosen = new Set((subs && subs.topics) || []);
+      const active = !!(subs && subs.active);
+      body.innerHTML =
+        `<div class="np-grid">${TOPICS.map(t=>`<label class="np-chk"><input type="checkbox" value="${t}"${chosen.has(t)?" checked":""}> ${t}</label>`).join("")}</div>`+
+        `<label class="np-active"><input type="checkbox" id="npActive"${active?" checked":""}> 啟用每日推播</label>`+
+        ` <button id="npSave" class="btn-primary" style="margin-top:10px;">儲存設定</button>`+
+        `<span id="npStatus" style="margin-left:10px;font-size:12px;"></span>`;
+      document.getElementById("npSave").addEventListener("click", save);
+    }
+    async function save(){
+      const topics=[...body.querySelectorAll(".np-grid input:checked")].map(x=>x.value);
+      const active=document.getElementById("npActive").checked;
+      const btn=document.getElementById("npSave"), st=document.getElementById("npStatus");
+      if (active && !topics.length){ st.style.color="#dc2626"; st.textContent="請至少勾一個主題"; return; }
+      btn.disabled=true; st.style.color="#999"; st.textContent="儲存中…";
+      const ok = await L.saveNewsSubs({ topics, active, last_pushed:lastPushed });
+      btn.disabled=false;
+      if (ok){ st.style.color="#16a34a"; st.textContent = active?"✅ 已啟用，明天起每天盤後推播":"已儲存（推播未啟用）"; }
+      else { st.style.color="#dc2626"; st.textContent="儲存失敗，請稍後再試"; }
+    }
+    render();
+  })();
 
   const allNews = data.news;
 

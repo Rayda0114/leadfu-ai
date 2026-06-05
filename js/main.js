@@ -463,6 +463,20 @@ function _pushStrategiesToCloud() {
   }, 800);
 }
 
+// ── 新聞推播訂閱（純雲端、需登入；供 news.html 訂閱面板用）──
+// getNewsSubs() → { subs:{topics:[],active,last_pushed}, hasLine } ；未登入回 null
+async function getNewsSubs() {
+  const auth = await _ensureAuth();
+  if (!auth) return null;
+  return await auth.getCloudNewsSubs();
+}
+async function saveNewsSubs(subs) {
+  const auth = await _ensureAuth();
+  if (!auth) return false;
+  await auth.setCloudNewsSubs(subs);
+  return true;
+}
+
 /* ============================================================
  * 今日日期 (top bar)
  * ============================================================ */
@@ -2800,7 +2814,7 @@ window.LeadFu = {
   findStock, pageHref, homeHref,
   getWatchlist, addToWatchlist, removeFromWatchlist, clearWatchlist, isInWatchlist,
   getHoldings, setHolding, removeHolding,
-  getStrategies, saveStrategies, hasSession: _hasSupabaseSession,
+  getStrategies, saveStrategies, getNewsSubs, saveNewsSubs, hasSession: _hasSupabaseSession,
   mockAiResponse, startLivePriceSimulation, showToast,
   // 第 1 層 AI 問答工具（ai.html 用）
   parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
