@@ -215,6 +215,57 @@
   </div>
 </section>
 
+<!-- 🧭 個股判斷卡（規則化整理現有資料，非投資建議）-->
+<style>
+  #judgeSection { margin-top: 20px; }
+  .judge-card { background:#fff; border:1px solid #e0e3e8; border-radius:10px; padding:18px 22px; box-shadow:0 2px 10px rgba(27,67,50,.05); }
+  .judge-head { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+  .judge-status { font-size:15px; font-weight:800; padding:5px 16px; border-radius:8px; white-space:nowrap; }
+  .judge-status.strong { background:#fdecec; color:#d23b3b; }
+  .judge-status.weak { background:#e7f5ec; color:#1e9e54; }
+  .judge-status.neutral { background:#f1f1f1; color:#777; }
+  .judge-title { font-size:17px; font-weight:800; color:#1B4332; }
+  .judge-sub { font-size:12px; color:#aaa; margin-left:auto; }
+  .judge-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:600px) { .judge-grid { grid-template-columns:1fr; } }
+  .judge-col-h { font-size:13px; font-weight:700; margin-bottom:6px; }
+  .judge-col-h.up { color:#d23b3b; } .judge-col-h.down { color:#1e9e54; }
+  .judge-list { list-style:none; padding:0; margin:0; }
+  .judge-list li { font-size:14px; color:#444; line-height:1.5; padding:4px 0 4px 16px; position:relative; }
+  .judge-list li:before { content:"・"; position:absolute; left:0; color:#bbb; }
+  .judge-list li b { color:#1B4332; }
+  .judge-list .judge-none { color:#aaa; }
+  .judge-foot { margin-top:14px; padding-top:12px; border-top:1px dashed #e2ded4; }
+  .judge-foot-row { display:flex; gap:10px; align-items:baseline; margin-bottom:6px; font-size:14px; color:#444; flex-wrap:wrap; }
+  .judge-foot-lab { font-size:12px; color:#888; min-width:72px; }
+  .judge-tag { display:inline-block; background:#eef4f0; color:#1B4332; border-radius:6px; padding:2px 10px; font-size:13px; margin-right:6px; }
+  .judge-disc { font-size:11px; color:#aaa; margin-top:12px; line-height:1.6; }
+</style>
+<section class="container" id="judgeSection" style="display:none;">
+  <div class="judge-card">
+    <div class="judge-head">
+      <span class="judge-status neutral" id="judgeStatus">--</span>
+      <span class="judge-title">🧭 個股判斷卡</span>
+      <span class="judge-sub">資料面整理 · 非投資建議</span>
+    </div>
+    <div class="judge-grid">
+      <div>
+        <div class="judge-col-h up">📈 主要理由</div>
+        <ul class="judge-list" id="judgeReasons"></ul>
+      </div>
+      <div>
+        <div class="judge-col-h down">⚠️ 主要風險</div>
+        <ul class="judge-list" id="judgeRisks"></ul>
+      </div>
+    </div>
+    <div class="judge-foot">
+      <div class="judge-foot-row"><span class="judge-foot-lab">適合類型</span><span id="judgeTypes"></span></div>
+      <div class="judge-foot-row"><span class="judge-foot-lab">下一個觀察點</span><span id="judgeWatch"></span></div>
+    </div>
+    <p class="judge-disc">※ 以上為「營收／法人／技術／估值」公開資料的規則化整理，幫你快速判斷「現在值不值得多看一眼」，<strong>不構成買賣建議或目標價</strong>。</p>
+  </div>
+</section>
+
 <!-- 💎 領富 AI 合理區間（LeadFu Fair Value Range™）— 專有演算法 -->
 <section class="fair-value-section" id="fairValueSection" style="display:none;">
   <div class="container">
@@ -621,6 +672,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       </li>`).join("")
     : `<li style="display:block;text-align:center;padding:30px;color:#999;">尚無此個股公告</li>`;
 
+  // ★ 個股判斷卡（規則化整理現有資料）
+  renderJudgeCard(code, s);
+
   // ★ 領富 AI 合理區間（LeadFu Fair Value Range™）
   renderFairValue(code, s);
 
@@ -633,6 +687,78 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ★ AI 個股摘要自動載入（sessionStorage 快取，同 session 不重複呼叫）
   setupStockAiSummary(code, s);
 });
+
+function renderJudgeCard(code, stock) {
+  const L = window.LeadFu;
+  const sec = document.getElementById("judgeSection");
+  if (!sec || !stock) return;
+  const rev  = (L.data.revenue && L.data.revenue[code]) || null;
+  const inst = (L.data.institutional && L.data.institutional[code]) || null;
+  const ind  = (L.data.indicators && L.data.indicators[code]) || null;
+  const val  = (L.data.valuation && L.data.valuation[code]) || null;
+  const fv   = (L.data.fairValue && L.data.fairValue[code]) || null;
+
+  const reasons = [], risks = [];
+  let score = 0;
+
+  // 1) 月營收年增
+  if (rev && typeof rev.yoy === "number") {
+    if (rev.yoy >= 10) { reasons.push(`月營收年增 <b>+${rev.yoy.toFixed(1)}%</b>（成長）`); score++; }
+    else if (rev.yoy <= -10) { risks.push(`月營收年減 <b>${rev.yoy.toFixed(1)}%</b>（衰退）`); score--; }
+  }
+  // 2) 外資買賣超
+  if (inst && typeof inst.foreign_net_lots === "number") {
+    const f = inst.foreign_net_lots;
+    if (f >= 1000) { reasons.push(`外資買超 <b>${f.toLocaleString("zh-TW")}</b> 張`); score++; }
+    else if (f <= -1000) { risks.push(`外資賣超 <b>${Math.abs(f).toLocaleString("zh-TW")}</b> 張`); score--; }
+  }
+  // 3) 技術：相對月線 + signal + RSI
+  if (ind && ind.ma20 && stock.price) {
+    if (stock.price > ind.ma20) { reasons.push(`股價站上月線（MA20 ${ind.ma20.toFixed(1)}）`); score++; }
+    else if (stock.price < ind.ma20) { risks.push(`股價跌破月線（MA20 ${ind.ma20.toFixed(1)}）`); score--; }
+    if (ind.signal) {
+      if (/黃金交叉|突破布林上軌/.test(ind.signal)) reasons.push(`技術轉強：${ind.signal}`);
+      else if (/死亡交叉|空頭/.test(ind.signal)) risks.push(`技術轉弱：${ind.signal}`);
+    }
+    if (typeof ind.rsi === "number" && ind.rsi >= 80) risks.push(`RSI ${ind.rsi.toFixed(0)} 偏高（短線過熱）`);
+  }
+  // 4) 估值：合理區間位置 + 本益比
+  if (fv && typeof fv.position === "number") {
+    if (fv.position > 1) { risks.push(`股價已超過合理區間上限（偏貴）`); score--; }
+    else if (fv.position < 0.35) { reasons.push(`股價位於合理區間中下緣（相對不貴）`); score++; }
+  }
+  if (val && typeof val.pe_ratio === "number" && val.pe_ratio > 40) {
+    risks.push(`本益比 ${val.pe_ratio.toFixed(0)} 偏高`);
+  }
+
+  // 狀態
+  let status = "中性／觀望", statusCls = "neutral";
+  if (score >= 2) { status = "資料面偏強"; statusCls = "strong"; }
+  else if (score <= -2) { status = "資料面偏弱"; statusCls = "weak"; }
+
+  // 適合類型
+  const types = [];
+  const yld = val && typeof val.yield_pct === "number" ? val.yield_pct : null;
+  if (yld !== null && yld >= 4) types.push("高股息");
+  else if (yld !== null && yld >= 2.5 && stock.market === "listed") types.push("存股／保守");
+  if (score >= 2 && ind && ind.ma20 && stock.price > ind.ma20) types.push("波段／動能");
+  if (rev && rev.yoy >= 10 && fv && typeof fv.position === "number" && fv.position <= 0.6) types.push("長期成長");
+  if (!types.length) types.push("觀望為宜");
+
+  // 觀察點
+  const watch = ["下月營收（每月 10 日前公布）"];
+  if (ind && ind.ma20) watch.push(`月線 ${ind.ma20.toFixed(1)} 附近支撐／壓力`);
+
+  document.getElementById("judgeStatus").textContent = status;
+  document.getElementById("judgeStatus").className = "judge-status " + statusCls;
+  document.getElementById("judgeReasons").innerHTML = reasons.length
+    ? reasons.map(r => `<li>${r}</li>`).join("") : `<li class="judge-none">目前資料面無明顯偏多訊號</li>`;
+  document.getElementById("judgeRisks").innerHTML = risks.length
+    ? risks.map(r => `<li>${r}</li>`).join("") : `<li class="judge-none">目前資料面無明顯風險訊號</li>`;
+  document.getElementById("judgeTypes").innerHTML = types.map(t => `<span class="judge-tag">${t}</span>`).join("");
+  document.getElementById("judgeWatch").textContent = watch.join("　·　");
+  sec.style.display = "block";
+}
 
 function renderFairValue(code, stock) {
   const L = window.LeadFu;
