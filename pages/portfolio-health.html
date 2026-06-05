@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>持股健診 - 自選股 AI 風險檢測 - 領富 AI</title>
-<meta name="description" content="領富 AI 自動檢查您的自選股集中度、注意股暴露、法人賣超風險。每日自動分析，給您完整健診報告。">
+<title>我的投資儀表板 - 持股損益・風險健診 - 領富 AI</title>
+<meta name="description" content="領富 AI 投資儀表板：輸入持股與成本，自動算總損益、產業/市場集中度、高波動部位、預估股息，對標 0050/00878/大盤，每日標出有警示的持股。資料只存你的帳號。">
 <link rel="canonical" href="https://leadfuai.com/pages/portfolio-health.html">
 
 <!-- Open Graph -->
-<meta property="og:title" content="持股健診 - 自選股 AI 風險檢測 - 領富 AI">
-<meta property="og:description" content="領富 AI 自動檢查您的自選股集中度、注意股暴露、法人賣超風險。每日自動分析，給您完整健診報告。">
+<meta property="og:title" content="我的投資儀表板 - 持股損益・風險健診 - 領富 AI">
+<meta property="og:description" content="輸入持股，自動算損益、集中度、波動、股息，對標 0050/00878/大盤，每日標出有警示的持股。">
 <meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://leadfuai.com/pages/portfolio-health.html">
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="持股健診 - 自選股 AI 風險檢測 - 領富 AI">
-<meta name="twitter:description" content="領富 AI 自動檢查您的自選股集中度、注意股暴露、法人賣超風險。每日自動分析，給您完整健診報告。">
+<meta name="twitter:title" content="我的投資儀表板 - 領富 AI">
+<meta name="twitter:description" content="輸入持股，自動算損益、集中度、波動、股息，對標 0050/00878/大盤。">
 <meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
@@ -60,94 +60,132 @@
 
 <div class="page-head">
   <div class="container">
-    <h1>📋 持股健診</h1>
-    <div class="breadcrumb">首頁 ▸ 持股健診</div>
+    <h1>📊 我的投資儀表板</h1>
+    <div class="breadcrumb">首頁 ▸ 投資儀表板（持股健診）</div>
   </div>
 </div>
 
 <main class="container" style="padding: 18px 12px 40px;">
 
-  <div id="phEmpty" class="panel" style="display:none;padding:50px 24px;text-align:center;">
-    <div style="font-size:56px;margin-bottom:12px;">📋</div>
-    <h2 style="color:#1B4332;margin-bottom:8px;">您還沒加任何自選股</h2>
-    <p style="color:#666;font-size:14px;line-height:1.8;margin-bottom:20px;">
-      持股健診會分析您自選股的市場分散度、產業集中度、平均殖利率與本益比。<br>
-      先到個股頁面按「＋自選」加入幾檔，再回來這頁。
+  <!-- ➕ 新增 / 管理持股 -->
+  <div class="panel" id="addPanel" style="margin-bottom:14px;">
+    <div class="panel-head"><h2>➕ 新增持股</h2><span style="font-size:12px;color:#888;" id="addSyncNote">資料只存在你的帳號・登入後跨裝置同步</span></div>
+    <div style="padding:16px 18px;">
+      <div class="pf-add">
+        <div class="fld pf-add-search">
+          <label>股票</label>
+          <input type="text" id="addSearch" autocomplete="off" placeholder="輸入代號 / 名稱，例如 2330 或 台積電">
+          <div class="ta-box" id="addSugg" style="display:none;"></div>
+        </div>
+        <div class="fld" style="width:108px;">
+          <label>股數</label>
+          <input type="number" id="addShares" min="0" step="1000" placeholder="例 1000" inputmode="numeric">
+        </div>
+        <div class="fld" style="width:108px;">
+          <label>成本價</label>
+          <input type="number" id="addCost" min="0" step="0.01" placeholder="買入均價" inputmode="decimal">
+        </div>
+        <button class="btn-primary" id="addBtn" style="width:auto;padding:10px 22px;white-space:nowrap;">加入</button>
+      </div>
+      <div id="addHint" style="font-size:12.5px;color:#c0392b;margin-top:8px;display:none;"></div>
+      <div id="wlQuick" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <!-- 空狀態 -->
+  <div id="phEmpty" class="panel" style="display:none;padding:42px 24px;text-align:center;">
+    <div style="font-size:52px;margin-bottom:10px;">📊</div>
+    <h2 style="color:#1B4332;margin-bottom:8px;">還沒有任何持股</h2>
+    <p style="color:#666;font-size:14px;line-height:1.8;">
+      在上面「<strong>新增持股</strong>」填入你手上的股票、股數與成本，<br>
+      儀表板就會自動算出損益、產業/市場集中度、高波動部位、預估股息，<br>
+      並對標 0050 / 00878 / 大盤、每天標出有警示的持股。
     </p>
-    <a href="stocks.html" class="btn-primary" style="display:inline-block;width:auto;padding:11px 28px;text-decoration:none;">去逛逛股價總覽 →</a>
   </div>
 
   <div id="phContent" style="display:none;">
-    <!-- 💰 我的持股損益（填入股數+成本才顯示） -->
-    <div class="panel" id="phPnlPanel" style="display:none;margin-bottom:14px;">
-      <div class="panel-head"><h2>💰 我的持股損益</h2><span style="font-size:12px;color:#888;">即時計算・依現價</span></div>
-      <div id="phPnlBody" style="padding:16px 20px;"></div>
-    </div>
-    <div class="panel" id="phPnlHint" style="display:none;margin-bottom:14px;">
-      <div style="padding:16px 20px;color:#555;font-size:14px;line-height:1.75;">
-        💡 在下方「<strong>持股明細</strong>」每檔填入<strong>股數</strong>與<strong>成本價</strong>，這裡就會即時算出你的
-        <strong>未實現損益、今日損益、有沒有贏大盤、年化股息</strong>。資料只存在你的帳號（登入後跨裝置同步）。
-      </div>
-    </div>
 
-    <!-- 摘要卡片 -->
+    <!-- 摘要儀表 -->
     <div class="ph-summary">
       <div class="ph-summary-card">
-        <div class="ph-num" id="phCount">--</div>
-        <div class="ph-label">追蹤檔數</div>
+        <div class="ph-num" id="sumValue">--</div>
+        <div class="ph-label">總市值</div>
       </div>
       <div class="ph-summary-card">
-        <div class="ph-num" id="phAvgPe">--</div>
-        <div class="ph-label">平均本益比</div>
+        <div class="ph-num" id="sumPnl">--</div>
+        <div class="ph-label" id="sumPnlLab">未實現損益</div>
       </div>
       <div class="ph-summary-card">
-        <div class="ph-num" id="phAvgYield">--</div>
-        <div class="ph-label">平均殖利率</div>
+        <div class="ph-num" id="sumToday">--</div>
+        <div class="ph-label">今日損益</div>
       </div>
-      <div class="ph-summary-card" id="phRiskCard">
-        <div class="ph-num" id="phRisk">--</div>
-        <div class="ph-label">集中度風險</div>
-      </div>
-    </div>
-
-    <!-- 兩欄：市場分散 + 產業集中 -->
-    <div class="ph-grid">
-      <div class="panel">
-        <div class="panel-head"><h2>🌐 市場分散度</h2></div>
-        <div id="phMarketChart" class="ph-bar-chart"></div>
-      </div>
-      <div class="panel">
-        <div class="panel-head"><h2>🏭 產業集中度</h2></div>
-        <div id="phIndustryChart" class="ph-bar-chart"></div>
+      <div class="ph-summary-card">
+        <div class="ph-num" id="sumDiv">--</div>
+        <div class="ph-label" id="sumDivLab">預估年股息</div>
       </div>
     </div>
 
-    <!-- 持股清單 -->
-    <div class="panel" style="margin-top:14px;">
-      <div class="panel-head">
-        <h2>📑 持股明細</h2>
-        <span class="radar-count" id="phStockCount" style="background:#1B4332;">--</span>
+    <!-- 績效對標 -->
+    <div class="panel" style="margin-bottom:14px;">
+      <div class="panel-head"><h2>📈 績效對標</h2><span style="font-size:12px;color:#888;">今日漲跌・即時報價(約5秒延遲)</span></div>
+      <div id="perfBody" style="padding:16px 20px;">
+        <div style="color:#999;font-size:13px;">讀取大盤 / 0050 / 00878 中…</div>
       </div>
-      <div id="phStockList" class="ph-stock-list"></div>
     </div>
 
-    <!-- AI 健診報告 -->
-    <div class="panel" style="margin-top:14px;">
-      <div class="panel-head">
-        <h2>✨ AI 健診報告</h2>
-        <button type="button" class="stock-ai-refresh" id="phAiRefresh" title="重新整理">🔄</button>
-      </div>
-      <div id="phAiResult" class="stock-ai-result">
-        <div class="stock-ai-loading">
-          <span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span>
-          AI 健診中...
+    <!-- 風險體檢 -->
+    <div class="panel" style="margin-bottom:14px;">
+      <div class="panel-head"><h2>🩺 風險體檢</h2><span style="font-size:12px;color:#888;">依市值權重</span></div>
+      <div style="padding:14px 18px;">
+        <div id="riskFlags" class="pf-flags"></div>
+        <div class="ph-grid" style="margin-top:6px;">
+          <div>
+            <div class="pf-sub">🌐 市場別分佈</div>
+            <div id="marketChart" class="ph-bar-chart"></div>
+          </div>
+          <div>
+            <div class="pf-sub">🏭 產業分佈</div>
+            <div id="industryChart" class="ph-bar-chart"></div>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- 今日持股警示 -->
+    <div class="panel" style="margin-bottom:14px;">
+      <div class="panel-head"><h2>🚨 今日持股警示</h2><span class="radar-count" id="alertCount" style="background:#c0392b;">--</span></div>
+      <div id="alertBody" style="padding:8px 0;"></div>
+    </div>
+
+    <!-- 本週風險變化 -->
+    <div class="panel" style="margin-bottom:14px;">
+      <div class="panel-head"><h2>📅 本週風險變化</h2></div>
+      <div id="snapBody" style="padding:14px 18px;color:#555;font-size:13.5px;line-height:1.9;"></div>
+    </div>
+
+    <!-- 持股明細 -->
+    <div class="panel" style="margin-bottom:14px;">
+      <div class="panel-head"><h2>📑 持股明細</h2><span class="radar-count" id="holdCount" style="background:#1B4332;">--</span></div>
+      <div style="overflow-x:auto;">
+        <table class="pf-table" id="holdTable"></table>
+      </div>
+      <div style="padding:10px 16px;font-size:11px;color:#aaa;">※ 依目前股價試算，未含手續費/稅；點欄位可直接改股數/成本，自動儲存。</div>
+    </div>
+
+    <!-- AI 健診報告 -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2>✨ AI 健診報告</h2>
+        <button type="button" class="stock-ai-refresh" id="aiRefresh" title="重新整理">🔄</button>
+      </div>
+      <div id="aiResult" class="stock-ai-result">
+        <div class="stock-ai-loading"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span> AI 健診中...</div>
+      </div>
+    </div>
+
     <p style="text-align:center;color:#888;font-size:12px;margin-top:18px;line-height:1.8;">
-      ※ 持股健診為公開資料整理，不構成個股推薦或買賣建議。<br>
-      ※ 健診結果僅供參考，實際投資決定請依您自身風險承受度與投資目標評估。
+      ※ 投資儀表板為公開資料整理，不構成個股推薦或買賣建議。<br>
+      ※ 結果僅供參考，實際投資決定請依您自身風險承受度與投資目標評估。
     </p>
   </div>
 
@@ -158,353 +196,544 @@
 </footer>
 
 <style>
-  /* 持股損益面板 */
-  .pnl-metrics { display:flex; flex-wrap:wrap; gap:14px 28px; }
-  .pnl-m { min-width:120px; }
-  .pnl-m .lab { font-size:12px; color:#888; margin-bottom:3px; }
-  .pnl-m .val { font-size:20px; font-weight:800; color:#1B4332; }
-  .pnl-m .val.up { color:#d23b3b; }      /* 賺＝紅 */
-  .pnl-m .val.down { color:#1e9e54; }    /* 賠＝綠 */
-  .pnl-vs { margin-top:14px; padding-top:14px; border-top:1px dashed #e2ded4; font-size:14px; color:#444; line-height:1.8; }
-  .pnl-vs b.up { color:#d23b3b; } .pnl-vs b.down { color:#1e9e54; }
-  /* 持股明細列（可輸入股數/成本） */
-  #phStockList .ph-stock-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; padding:11px 14px; border-bottom:1px solid #eef0f3; }
-  #phStockList .ph-stock-row:hover { background:#f8fafd; }
-  .phs-name { color:inherit; text-decoration:none; min-width:180px; flex:1; }
-  .phs-name b { color:#1B4332; }
-  .phs-price { font-size:13px; margin-left:6px; }
-  .phs-price.up { color:#d23b3b; } .phs-price.down { color:#1e9e54; } .phs-price.flat { color:#888; }
-  .phs-inputs { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-  .phs-inputs label { font-size:12px; color:#888; display:inline-flex; align-items:center; gap:4px; }
-  .phs-inputs input { width:78px; padding:5px 7px; border:1px solid #d0d5dc; border-radius:6px; font-size:13px; text-align:right; }
-  .phs-pnl { font-size:13px; font-weight:700; min-width:96px; text-align:right; }
-  .phs-pnl.up { color:#d23b3b; } .phs-pnl.down { color:#1e9e54; } .phs-pnl.none { color:#bbb; font-weight:400; }
+  /* 新增持股表單 */
+  .pf-add { display:flex; flex-wrap:wrap; gap:10px 12px; align-items:flex-end; }
+  .pf-add .fld { display:flex; flex-direction:column; gap:4px; }
+  .pf-add .fld.pf-add-search { position:relative; flex:1; min-width:200px; }
+  .pf-add label { font-size:12px; color:#888; }
+  .pf-add input { padding:9px 11px; border:1px solid #d0d5dc; border-radius:8px; font-size:14px; width:100%; }
+  .pf-add input:focus { outline:none; border-color:#1B4332; }
+  .ta-box { position:absolute; top:100%; left:0; right:0; z-index:30; background:#fff; border:1px solid #e0e3e8; border-radius:0 0 8px 8px; box-shadow:0 8px 20px rgba(0,0,0,.1); max-height:280px; overflow-y:auto; }
+  .ta-item { padding:9px 12px; font-size:14px; cursor:pointer; border-bottom:1px solid #f1f3f5; }
+  .ta-item:hover, .ta-item.active { background:#f0f7f3; }
+  .ta-item b { color:#1B4332; }
+  /* 自選股快速帶入 */
+  #wlQuick .wlq-lab { font-size:12px; color:#888; margin-right:6px; }
+  .wlq-chip { display:inline-block; background:#f4f6f8; border:1px solid #e0e3e8; border-radius:14px; padding:4px 11px; font-size:12.5px; margin:3px 4px 3px 0; cursor:pointer; color:#1B4332; }
+  .wlq-chip:hover { background:#e7f0eb; }
+  /* 摘要色 */
+  .ph-num.up { color:#d23b3b; } .ph-num.down { color:#1e9e54; }
+  /* 風險旗標 */
+  .pf-flags { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+  .pf-flag { display:flex; align-items:flex-start; gap:9px; padding:10px 13px; border-radius:9px; font-size:13.5px; line-height:1.5; }
+  .pf-flag.ok    { background:#eef8f1; color:#1a7a45; }
+  .pf-flag.warn  { background:#fff5e6; color:#a8690a; }
+  .pf-flag.danger{ background:#fdeced; color:#c0392b; }
+  .pf-flag .fi { font-size:16px; line-height:1.3; }
+  .pf-flag b { font-weight:800; }
+  .pf-sub { font-size:13px; font-weight:700; color:#1B4332; margin:6px 0 8px; }
+  /* 績效對標 bars */
+  .perf-row { display:flex; align-items:center; gap:10px; margin:7px 0; font-size:13.5px; }
+  .perf-name { width:96px; flex-shrink:0; color:#444; }
+  .perf-name.me { font-weight:800; color:#1B4332; }
+  .perf-bar-wrap { flex:1; height:18px; background:#f1f3f5; border-radius:9px; position:relative; overflow:hidden; }
+  .perf-bar { position:absolute; top:0; bottom:0; left:50%; }
+  .perf-bar.up { background:#e2786f; }
+  .perf-bar.down { background:#4fb07a; }
+  .perf-val { width:66px; flex-shrink:0; text-align:right; font-weight:700; }
+  .perf-val.up { color:#d23b3b; } .perf-val.down { color:#1e9e54; }
+  .perf-verdict { margin-top:12px; padding-top:11px; border-top:1px dashed #e2ded4; font-size:14px; line-height:1.85; color:#444; }
+  .perf-verdict b.up { color:#d23b3b; } .perf-verdict b.down { color:#1e9e54; }
+  /* 警示列 */
+  .pf-alert { padding:11px 16px; border-bottom:1px solid #eef0f3; }
+  .pf-alert .pa-head { font-size:14px; }
+  .pf-alert .pa-head a { color:#1B4332; font-weight:700; text-decoration:none; }
+  .pf-alert .pa-tags { margin-top:5px; display:flex; flex-wrap:wrap; gap:6px; }
+  .pa-tag { font-size:11.5px; padding:3px 9px; border-radius:11px; }
+  .pa-tag.danger { background:#fdeced; color:#c0392b; }
+  .pa-tag.warn   { background:#fff5e6; color:#a8690a; }
+  .pa-tag.info   { background:#eaf1f8; color:#2c6da3; }
+  .pf-noalert { padding:16px; text-align:center; color:#1a7a45; font-size:14px; }
+  /* 持股明細表 */
+  .pf-table { width:100%; border-collapse:collapse; min-width:620px; }
+  .pf-table th { font-size:11.5px; color:#888; font-weight:600; text-align:right; padding:8px 10px; border-bottom:1px solid #eef0f3; white-space:nowrap; }
+  .pf-table th:first-child { text-align:left; }
+  .pf-table td { padding:9px 10px; border-bottom:1px solid #f3f4f6; text-align:right; font-size:13.5px; white-space:nowrap; }
+  .pf-table td:first-child { text-align:left; }
+  .pf-table tr:hover td { background:#f8fafd; }
+  .pf-table .pt-name a { color:#1B4332; font-weight:700; text-decoration:none; }
+  .pf-table .pt-name small { color:#999; font-weight:400; }
+  .pf-table input { width:78px; padding:5px 7px; border:1px solid #d0d5dc; border-radius:6px; font-size:13px; text-align:right; }
+  .pf-table .pt-up { color:#d23b3b; } .pf-table .pt-down { color:#1e9e54; } .pf-table .pt-flat { color:#888; }
+  .pt-del { background:none; border:none; cursor:pointer; color:#c9ccd1; font-size:16px; padding:2px 6px; }
+  .pt-del:hover { color:#c0392b; }
+  .pt-w-bar { display:inline-block; height:6px; border-radius:3px; background:#1B4332; vertical-align:middle; margin-left:6px; }
+  @media (max-width:600px){ .pf-add .fld.pf-add-search { min-width:100%; } }
 </style>
 <script src="../js/main.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
   const L = window.LeadFu;
-  const all = L.data.stocks || [];
-  const companies = L.data.companies || {};
-  const valuation = L.data.valuation || {};
-  const revenue = L.data.revenue || {};
+  const allStocks  = L.data.stocks || [];
+  const valuation  = L.data.valuation || {};
+  const indicators = L.data.indicators || {};
+  const fairValue  = L.data.fairValue || {};
+  const institutional = L.data.institutional || {};
+  const financials = L.data.financials || {};
+  const revenue    = L.data.revenue || {};
+  const byCode = {}; allStocks.forEach(s => byCode[s.code] = s);
 
-  const codes = L.getWatchlist ? L.getWatchlist() : [];
-  if (!codes.length) {
-    document.getElementById("phEmpty").style.display = "block";
-    return;
-  }
+  const HIVOL_BBW = 25;     // 布林帶寬 >25% = 高波動（約最波動的前 30%）
+  const SINGLE_WARN = 30;   // 單一持股市值 >30% = 過度集中
+  const TOP3_WARN = 70;     // 前 3 大產業 >70%
+  const EMERGING_WARN = 25; // 興櫃部位 >25%
+  const FOREIGN_SELL = 3000;// 外資當日淨賣 ≥3000 張 = 大賣
 
-  // 抓自選股完整資料
-  const stocks = codes.map(c => all.find(s => s.code === c)).filter(Boolean);
-  if (!stocks.length) {
-    document.getElementById("phEmpty").style.display = "block";
-    return;
-  }
-  document.getElementById("phContent").style.display = "block";
-
-  // === 1. 摘要計算 ===
-  const peList = stocks.map(s => valuation[s.code]?.pe_ratio).filter(v => v && v > 0);
-  const yieldList = stocks.map(s => valuation[s.code]?.yield_pct).filter(v => v !== null && v !== undefined);
-  const avgPe = peList.length ? (peList.reduce((a,b)=>a+b,0)/peList.length).toFixed(1) : "—";
-  const avgYield = yieldList.length ? (yieldList.reduce((a,b)=>a+b,0)/yieldList.length).toFixed(2) + "%" : "—";
-
-  document.getElementById("phCount").textContent = stocks.length;
-  document.getElementById("phAvgPe").textContent = avgPe;
-  document.getElementById("phAvgYield").textContent = avgYield;
-
-  // === 2. 市場分散 ===
-  const marketCounts = { listed: 0, otc: 0, emerging: 0 };
-  stocks.forEach(s => { if (marketCounts[s.market] !== undefined) marketCounts[s.market]++; });
-  const marketTotal = stocks.length;
-  const marketLabels = { listed: "🟢 上市", otc: "🟡 上櫃", emerging: "🟠 興櫃" };
-  const marketColors = { listed: "#16A34A", otc: "#C5A572", emerging: "#EF4444" };
-  document.getElementById("phMarketChart").innerHTML = Object.entries(marketCounts)
-    .filter(([, n]) => n > 0)
-    .map(([k, n]) => {
-      const pct = (n / marketTotal * 100).toFixed(0);
-      return `<div class="ph-bar-row">
-        <div class="ph-bar-label">${marketLabels[k]}</div>
-        <div class="ph-bar-track"><div class="ph-bar-fill" style="width:${pct}%;background:${marketColors[k]};"></div></div>
-        <div class="ph-bar-val">${n} 檔 (${pct}%)</div>
-      </div>`;
-    }).join("");
-
-  // === 3. 產業集中度 ===
-  const indCounts = {};
-  stocks.forEach(s => {
-    const cat = s.category || "未分類";
-    indCounts[cat] = (indCounts[cat] || 0) + 1;
-  });
-  const indSorted = Object.entries(indCounts).sort((a,b) => b[1] - a[1]);
-  const top3Total = indSorted.slice(0, 3).reduce((sum, [, n]) => sum + n, 0);
-  const concentration = (top3Total / stocks.length * 100).toFixed(0);
-
-  document.getElementById("phIndustryChart").innerHTML = indSorted.slice(0, 6).map(([cat, n]) => {
-    const pct = (n / stocks.length * 100).toFixed(0);
-    return `<div class="ph-bar-row">
-      <div class="ph-bar-label">${cat}</div>
-      <div class="ph-bar-track"><div class="ph-bar-fill" style="width:${pct}%;background:#1B4332;"></div></div>
-      <div class="ph-bar-val">${n} 檔 (${pct}%)</div>
-    </div>`;
-  }).join("");
-
-  // 集中度風險
-  let riskLabel, riskColor;
-  if (concentration >= 80) { riskLabel = "高"; riskColor = "#EF4444"; }
-  else if (concentration >= 60) { riskLabel = "中"; riskColor = "#C5A572"; }
-  else { riskLabel = "低"; riskColor = "#16A34A"; }
-  document.getElementById("phRisk").innerHTML = `<span style="color:${riskColor}">${riskLabel}</span><div style="font-size:12px;color:#666;margin-top:2px;">前 3 大產業占 ${concentration}%</div>`;
-
-  // === 4. 持股明細列表（可填股數/成本 → 算單檔損益）===
-  function renderStockList() {
-    const holdings = L.getHoldings ? L.getHoldings() : {};
-    document.getElementById("phStockCount").textContent = stocks.length + " 檔";
-    document.getElementById("phStockList").innerHTML = stocks.map(s => {
-      const pct = L.pctChange(s.price, s.change);
-      const cls = L.changeClass(s.change);
-      const h = holdings[s.code] || {};
-      const shares = h.shares > 0 ? h.shares : "";
-      const cost = h.cost > 0 ? h.cost : "";
-      let pnlHtml = '<span class="phs-pnl none">填股數/成本</span>';
-      if (h.shares > 0 && h.cost > 0) {
-        const pnl = h.shares * (s.price - h.cost);
-        const pnlPct = (s.price - h.cost) / h.cost * 100;
-        const c = pnl > 0 ? "up" : pnl < 0 ? "down" : "flat";
-        pnlHtml = `<span class="phs-pnl ${c}">${pnl >= 0 ? "+" : ""}${Math.round(pnl).toLocaleString("zh-TW")} <span style="font-size:11px;">(${pnlPct >= 0 ? "+" : ""}${pnlPct.toFixed(1)}%)</span></span>`;
-      }
-      return `<div class="ph-stock-row" data-code="${s.code}">
-        <a class="phs-name" href="stock-detail.html?code=${s.code}">
-          <b>${s.code}</b> ${s.name}
-          <span class="phs-price ${cls}">${L.fmtPrice(s.price)} ${L.arrow(s.change)}${L.fmtPct(pct)}</span>
-        </a>
-        <div class="phs-inputs">
-          <label>股數 <input type="number" class="phs-shares" data-code="${s.code}" value="${shares}" min="0" step="1000" placeholder="0"></label>
-          <label>成本 <input type="number" class="phs-cost" data-code="${s.code}" value="${cost}" min="0" step="0.01" placeholder="—"></label>
-          ${pnlHtml}
-        </div>
-      </div>`;
-    }).join("");
-  }
-  renderStockList();
-
-  // === 4b. 持股損益 + 對標大盤 ===
-  let marketTwPct = null;   // 加權指數今日漲跌%
-
-  function computePnl() {
-    const holdings = L.getHoldings ? L.getHoldings() : {};
-    let totalCost = 0, totalValue = 0, todayGain = 0, yesterdayValue = 0, annualDiv = 0, n = 0;
-    stocks.forEach(s => {
-      const h = holdings[s.code];
-      if (!h || !(h.shares > 0)) return;
-      n++;
-      const value = h.shares * s.price;
-      totalValue += value;
-      if (h.cost > 0) totalCost += h.shares * h.cost;
-      todayGain += h.shares * (s.change || 0);
-      yesterdayValue += h.shares * (s.price - (s.change || 0));
-      const y = (valuation[s.code] || {}).yield_pct;
-      if (y) annualDiv += value * y / 100;
-    });
-    const unreal = totalCost > 0 ? (totalValue - totalCost) : null;
-    const unrealPct = (unreal !== null && totalCost > 0) ? (unreal / totalCost * 100) : null;
-    const todayPct = yesterdayValue > 0 ? (todayGain / yesterdayValue * 100) : null;
-    return { n, totalCost, totalValue, unreal, unrealPct, todayGain, todayPct, annualDiv };
-  }
+  const marketLabel = { listed:"🟢 上市", otc:"🟡 上櫃", emerging:"🟠 興櫃" };
+  const marketColor = { listed:"#16A34A", otc:"#C5A572", emerging:"#EF4444" };
 
   const ud = v => v > 0 ? "up" : v < 0 ? "down" : "flat";
   const money = v => (v < 0 ? "-" : "") + Math.abs(Math.round(v)).toLocaleString("zh-TW");
-
-  function renderPnl() {
-    const p = computePnl();
-    const panel = document.getElementById("phPnlPanel");
-    const hint = document.getElementById("phPnlHint");
-    if (p.n === 0) { panel.style.display = "none"; hint.style.display = "block"; return; }
-    hint.style.display = "none"; panel.style.display = "block";
-
-    const cards = [];
-    cards.push(`<div class="pnl-m"><div class="lab">總市值</div><div class="val">${money(p.totalValue)}</div></div>`);
-    if (p.totalCost > 0) cards.push(`<div class="pnl-m"><div class="lab">總成本</div><div class="val">${money(p.totalCost)}</div></div>`);
-    if (p.unreal !== null) cards.push(`<div class="pnl-m"><div class="lab">未實現損益</div><div class="val ${ud(p.unreal)}">${p.unreal >= 0 ? "+" : ""}${money(p.unreal)} <span style="font-size:13px;">(${p.unrealPct >= 0 ? "+" : ""}${p.unrealPct.toFixed(1)}%)</span></div></div>`);
-    if (p.todayGain !== 0) cards.push(`<div class="pnl-m"><div class="lab">今日損益</div><div class="val ${ud(p.todayGain)}">${p.todayGain >= 0 ? "+" : ""}${money(p.todayGain)}</div></div>`);
-    if (p.annualDiv > 0) cards.push(`<div class="pnl-m"><div class="lab">預估年股息</div><div class="val">${money(p.annualDiv)}</div></div>`);
-
-    let vsHtml = "";
-    if (p.todayPct !== null) {
-      let line = `今日你的組合 <b class="${ud(p.todayPct)}">${p.todayPct >= 0 ? "+" : ""}${p.todayPct.toFixed(2)}%</b>`;
-      if (marketTwPct !== null) {
-        const diff = p.todayPct - marketTwPct;
-        line += `　vs　加權指數 ${marketTwPct >= 0 ? "+" : ""}${marketTwPct.toFixed(2)}%　→　`
-          + `<b class="${ud(diff)}">${diff >= 0 ? "贏大盤 +" : "輸大盤 "}${diff.toFixed(2)}%</b>`;
-      }
-      vsHtml = `<div class="pnl-vs">📊 ${line}</div>`;
-    }
-
-    document.getElementById("phPnlBody").innerHTML =
-      `<div class="pnl-metrics">${cards.join("")}</div>${vsHtml}`
-      + `<div style="margin-top:12px;font-size:11px;color:#aaa;">※ 依目前股價試算，僅供參考，不含手續費/稅；非投資建議。</div>`;
+  const pctTxt = v => (v >= 0 ? "+" : "") + v.toFixed(2) + "%";
+  function bbWidth(code){
+    const i = indicators[code];
+    if (!i || !i.bb_upper || !i.bb_lower || !i.bb_middle || i.bb_middle <= 0) return null;
+    return (i.bb_upper - i.bb_lower) / i.bb_middle * 100;
   }
 
-  async function fetchMarketIndex() {
+  /* ===== 組合模型（市值加權）===== */
+  function model(){
+    const holdings = L.getHoldings ? L.getHoldings() : {};
+    const items = Object.keys(holdings).map(c => {
+      const h = holdings[c];
+      if (!(h.shares > 0)) return null;
+      const s = byCode[c] || null;
+      const price = s ? s.price : 0;
+      const value = s ? h.shares * price : 0;
+      const cost  = h.cost > 0 ? h.shares * h.cost : 0;
+      return { code:c, s, h, price, value, cost,
+        change: s ? (s.change || 0) : 0,
+        todayGain: s ? h.shares * (s.change || 0) : 0,
+        yValue: s ? h.shares * (price - (s.change || 0)) : 0 };
+    }).filter(Boolean);
+    const valid = items.filter(it => it.s);
+    const totalValue = valid.reduce((a,b) => a + b.value, 0);
+    const totalCost  = valid.reduce((a,b) => a + b.cost, 0);
+    const todayGain  = valid.reduce((a,b) => a + b.todayGain, 0);
+    const yValue     = valid.reduce((a,b) => a + b.yValue, 0);
+    let annualDiv = 0;
+    valid.forEach(it => { const y = (valuation[it.code] || {}).yield_pct; if (y) annualDiv += it.value * y / 100; });
+    valid.forEach(it => it.weight = totalValue > 0 ? it.value / totalValue : 0);
+    valid.sort((a,b) => b.value - a.value);
+    return { items, valid, totalValue, totalCost, todayGain, yValue, annualDiv,
+      unreal:    totalCost > 0 ? totalValue - totalCost : null,
+      unrealPct: totalCost > 0 ? (totalValue - totalCost) / totalCost * 100 : null,
+      todayPct:  yValue > 0 ? todayGain / yValue * 100 : null };
+  }
+
+  /* ===== 摘要 ===== */
+  function renderSummary(m){
+    document.getElementById("sumValue").textContent = money(m.totalValue);
+    const pnlEl = document.getElementById("sumPnl");
+    if (m.unreal !== null) {
+      pnlEl.className = "ph-num " + ud(m.unreal);
+      pnlEl.innerHTML = `${m.unreal >= 0 ? "+" : ""}${money(m.unreal)}<div style="font-size:12px;color:#666;margin-top:2px;">${pctTxt(m.unrealPct)}</div>`;
+      document.getElementById("sumPnlLab").textContent = "未實現損益（持有以來）";
+    } else {
+      pnlEl.className = "ph-num"; pnlEl.textContent = "—";
+      document.getElementById("sumPnlLab").textContent = "未實現損益（填成本）";
+    }
+    const tEl = document.getElementById("sumToday");
+    tEl.className = "ph-num " + ud(m.todayGain);
+    tEl.innerHTML = `${m.todayGain >= 0 ? "+" : ""}${money(m.todayGain)}` + (m.todayPct !== null ? `<div style="font-size:12px;color:#666;margin-top:2px;">${pctTxt(m.todayPct)}</div>` : "");
+    const dEl = document.getElementById("sumDiv");
+    if (m.annualDiv > 0) {
+      const yieldPct = m.totalValue > 0 ? m.annualDiv / m.totalValue * 100 : 0;
+      dEl.textContent = money(m.annualDiv);
+      document.getElementById("sumDivLab").textContent = `預估年股息（殖利率 ${yieldPct.toFixed(2)}%）`;
+    } else { dEl.textContent = "—"; document.getElementById("sumDivLab").textContent = "預估年股息"; }
+  }
+
+  /* ===== 風險體檢 ===== */
+  function renderRisk(m){
+    // 產業（加權）
+    const indMap = {};
+    m.valid.forEach(it => { const c = it.s.category || "其他"; indMap[c] = (indMap[c] || 0) + it.weight; });
+    const indSorted = Object.entries(indMap).sort((a,b) => b[1] - a[1]);
+    const top3 = indSorted.slice(0,3).reduce((a,[,w]) => a + w, 0) * 100;
+    // 市場別（加權）
+    const mkt = { listed:0, otc:0, emerging:0 };
+    m.valid.forEach(it => { if (mkt[it.s.market] !== undefined) mkt[it.s.market] += it.weight; });
+    // 最大單一持股
+    const maxHold = m.valid[0] || null;
+    const maxPct = maxHold ? maxHold.weight * 100 : 0;
+    // 高波動部位
+    let hiVolW = 0, coveredW = 0;
+    m.valid.forEach(it => { const w = bbWidth(it.code); if (w != null) { coveredW += it.weight; if (w > HIVOL_BBW) hiVolW += it.weight; } });
+    const hiVolPct = hiVolW * 100;
+
+    // 旗標
+    const flags = [];
+    if (maxHold && maxPct >= SINGLE_WARN)
+      flags.push({ lv:"danger", i:"⚠️", h:`單一持股過度集中`, d:`<b>${maxHold.s.code} ${maxHold.s.name}</b> 佔 <b>${maxPct.toFixed(0)}%</b>，一檔波動就牽動整體，可考慮分散。` });
+    else if (maxHold)
+      flags.push({ lv:"ok", i:"✅", h:`單一持股分散度尚可`, d:`最大單一持股 ${maxHold.s.code} ${maxHold.s.name} 佔 ${maxPct.toFixed(0)}%。` });
+    if (top3 >= TOP3_WARN)
+      flags.push({ lv:"warn", i:"🏭", h:`產業集中`, d:`前 3 大產業合計佔 <b>${top3.toFixed(0)}%</b>（${indSorted.slice(0,3).map(([c])=>c).join("、")}），同產業常一起漲跌。` });
+    else
+      flags.push({ lv:"ok", i:"✅", h:`產業分散度尚可`, d:`前 3 大產業合計佔 ${top3.toFixed(0)}%。` });
+    if (mkt.emerging * 100 >= EMERGING_WARN)
+      flags.push({ lv:"warn", i:"🟠", h:`興櫃部位偏高`, d:`興櫃佔 <b>${(mkt.emerging*100).toFixed(0)}%</b>，興櫃流動性低、波動大，留意買賣價差。` });
+    if (hiVolPct >= 40)
+      flags.push({ lv:"warn", i:"📈", h:`高波動部位偏高`, d:`高波動股票（近期振幅大）約佔 <b>${hiVolPct.toFixed(0)}%</b>，整體淨值起伏會比較大。` });
+    else
+      flags.push({ lv:"ok", i:"📈", h:`波動度可控`, d:`高波動部位約 ${hiVolPct.toFixed(0)}%${coveredW < 0.99 ? "（部分標的無波動資料）" : ""}。` });
+    document.getElementById("riskFlags").innerHTML = flags.map(f =>
+      `<div class="pf-flag ${f.lv}"><span class="fi">${f.i}</span><div><b>${f.h}</b>　${f.d}</div></div>`).join("");
+
+    // 市場別 bar
+    document.getElementById("marketChart").innerHTML = ["listed","otc","emerging"].filter(k => mkt[k] > 0).map(k => {
+      const pct = (mkt[k] * 100).toFixed(0);
+      return `<div class="ph-bar-row"><div class="ph-bar-label">${marketLabel[k]}</div>
+        <div class="ph-bar-track"><div class="ph-bar-fill" style="width:${pct}%;background:${marketColor[k]};"></div></div>
+        <div class="ph-bar-val">${pct}%</div></div>`;
+    }).join("");
+    // 產業 bar
+    document.getElementById("industryChart").innerHTML = indSorted.slice(0,6).map(([c,w]) => {
+      const pct = (w * 100).toFixed(0);
+      return `<div class="ph-bar-row"><div class="ph-bar-label">${c}</div>
+        <div class="ph-bar-track"><div class="ph-bar-fill" style="width:${pct}%;background:#1B4332;"></div></div>
+        <div class="ph-bar-val">${pct}%</div></div>`;
+    }).join("");
+
+    return { top3, maxPct, hiVolPct, emergingPct: mkt.emerging * 100 };
+  }
+
+  /* ===== 今日持股警示 ===== */
+  function alertsFor(it){
+    const s = it.s, out = [];
+    const ind = indicators[it.code] || {}, fv = fairValue[it.code], inst = institutional[it.code] || {}, fin = financials[it.code];
+    const pct = L.pctChange(s.price, s.change);
+    if (fv && fv.low && s.price < fv.low)
+      out.push({ lv:"danger", t:`跌破合理區間下緣`, d:`現價 ${L.fmtPrice(s.price)} ＜ 下緣 ${L.fmtPrice(fv.low)}` });
+    else if (fv && fv.high && s.price > fv.high)
+      out.push({ lv:"info", t:`已高於合理區間上緣`, d:`現價 ${L.fmtPrice(s.price)} ＞ 上緣 ${L.fmtPrice(fv.high)}（追高留意）` });
+    if (ind.ma20 && s.price < ind.ma20)
+      out.push({ lv:"warn", t:`跌破月線`, d:`現價 ＜ MA20 ${L.fmtPrice(ind.ma20)}` });
+    if (inst.foreign_net_lots != null && inst.foreign_net_lots <= -FOREIGN_SELL)
+      out.push({ lv:"warn", t:`外資今日大賣`, d:`淨賣 ${Math.abs(inst.foreign_net_lots).toLocaleString("zh-TW")} 張` });
+    if (fin && fin.op_margin != null && fin.op_margin < 0)
+      out.push({ lv:"danger", t:`本業虧損`, d:`營業利益率 ${fin.op_margin}%（最新季）` });
+    if (pct <= -5)
+      out.push({ lv:"warn", t:`今日重挫`, d:`${pct.toFixed(1)}%` });
+    return out;
+  }
+  function renderAlerts(m){
+    const rows = m.valid.map(it => ({ it, a: alertsFor(it) })).filter(x => x.a.length);
+    rows.sort((a,b) => b.it.weight - a.it.weight);
+    document.getElementById("alertCount").textContent = rows.length + " 檔";
+    const body = document.getElementById("alertBody");
+    if (!rows.length) {
+      body.innerHTML = `<div class="pf-noalert">✅ 今日你的持股沒有觸發警示（跌破合理區間/月線、外資大賣、本業虧損、重挫）。</div>`;
+      return;
+    }
+    body.innerHTML = rows.map(({ it, a }) => `
+      <div class="pf-alert">
+        <div class="pa-head"><a href="stock-detail.html?code=${it.code}"><b>${it.code}</b> ${it.s.name}</a>
+          <span style="color:#999;font-size:12px;margin-left:6px;">佔 ${(it.weight*100).toFixed(0)}%</span></div>
+        <div class="pa-tags">${a.map(x => `<span class="pa-tag ${x.lv}">${x.t}：${x.d}</span>`).join("")}</div>
+      </div>`).join("");
+  }
+
+  /* ===== 本週風險變化（每日快照，存本機）===== */
+  const SNAP_KEY = "leadfu_pf_snap";
+  function todayStr(){ const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
+  function loadSnaps(){ try { const a = JSON.parse(localStorage.getItem(SNAP_KEY) || "[]"); return Array.isArray(a) ? a : []; } catch { return []; } }
+  function renderSnap(m, risk){
+    const today = todayStr();
+    const snap = { date: today, value: Math.round(m.totalValue), top3: Math.round(risk.top3), maxPct: Math.round(risk.maxPct), hiVol: Math.round(risk.hiVolPct), emerging: Math.round(risk.emergingPct), alerts: m.valid.filter(it => alertsFor(it).length).length };
+    let arr = loadSnaps().filter(x => x.date !== today);
+    arr.push(snap); arr = arr.slice(-40);
+    try { localStorage.setItem(SNAP_KEY, JSON.stringify(arr)); } catch {}
+    // 找 ≥6 天前最近一筆
+    const past = arr.filter(x => x.date !== today && (new Date(today) - new Date(x.date)) >= 6*864e5);
+    const prev = past.length ? past[past.length-1] : null;
+    const el = document.getElementById("snapBody");
+    if (!prev) {
+      el.innerHTML = `🗓️ 已開始記錄你的組合風險快照（${today}）。<strong>約一週後</strong>這裡會顯示集中度、波動、警示數的變化趨勢，幫你看出風險是變高還變低。`;
+      return;
+    }
+    const arrow = (now, before, unit, goodDown=true) => {
+      const diff = now - before;
+      if (diff === 0) return `持平（${now}${unit}）`;
+      const up = diff > 0;
+      const cls = (goodDown ? !up : up) ? "color:#1e9e54" : "color:#d23b3b";
+      return `${before}${unit} → <b style="${cls}">${now}${unit} ${up ? "↑" : "↓"}${Math.abs(diff)}${unit}</b>`;
+    };
+    el.innerHTML = `<div style="margin-bottom:6px;color:#888;">對比 ${prev.date}：</div>
+      🏭 前3大產業集中：${arrow(snap.top3, prev.top3, "%")}<br>
+      🎯 最大單一持股：${arrow(snap.maxPct, prev.maxPct, "%")}<br>
+      📈 高波動部位：${arrow(snap.hiVol, prev.hiVol, "%")}<br>
+      🚨 觸發警示檔數：${arrow(snap.alerts, prev.alerts, " 檔")}`;
+  }
+
+  /* ===== 持股明細表 ===== */
+  function renderTable(m){
+    document.getElementById("holdCount").textContent = m.valid.length + " 檔";
+    const head = `<thead><tr>
+      <th>股票</th><th>現價/漲跌</th><th>股數</th><th>成本</th><th>市值</th><th>佔比</th><th>損益</th><th></th>
+    </tr></thead>`;
+    const rows = m.valid.map(it => {
+      const s = it.s, pct = L.pctChange(s.price, s.change), cls = L.changeClass(s.change);
+      const w = (it.weight * 100);
+      let pnlCell = `<span class="pt-flat">—</span>`;
+      if (it.cost > 0) {
+        const pnl = it.value - it.cost, pp = (s.price - it.h.cost) / it.h.cost * 100;
+        pnlCell = `<span class="pt-${ud(pnl)}">${pnl >= 0 ? "+" : ""}${money(pnl)}<br><small>${pp >= 0 ? "+" : ""}${pp.toFixed(1)}%</small></span>`;
+      }
+      return `<tr data-code="${it.code}">
+        <td class="pt-name"><a href="stock-detail.html?code=${it.code}"><b>${it.code}</b> ${s.name}</a><br><small>${marketLabel[s.market] || ""} ${s.category || ""}</small></td>
+        <td class="pt-${cls}">${L.fmtPrice(s.price)}<br><small>${L.arrow(s.change)}${L.fmtPct(pct)}</small></td>
+        <td><input type="number" class="pt-shares" min="0" step="1000" value="${it.h.shares}"></td>
+        <td><input type="number" class="pt-cost" min="0" step="0.01" value="${it.h.cost > 0 ? it.h.cost : ""}" placeholder="—"></td>
+        <td>${money(it.value)}</td>
+        <td>${w.toFixed(0)}%<span class="pt-w-bar" style="width:${Math.max(4, Math.min(w,100)*0.5)}px;"></span></td>
+        <td>${pnlCell}</td>
+        <td><button class="pt-del" title="刪除">✕</button></td>
+      </tr>`;
+    }).join("");
+    document.getElementById("holdTable").innerHTML = head + `<tbody>${rows}</tbody>`;
+  }
+
+  /* ===== 績效對標（/api/quote 一次抓 大盤+0050+00878）===== */
+  let benchmarks = null;
+  async function fetchBenchmarks(){
     try {
-      const r = await fetch("/api/quote?ex_ch=tse_t00.tw");
+      const r = await fetch("/api/quote?ex_ch=tse_t00.tw|tse_0050.tw|tse_00878.tw");
       const d = await r.json();
-      const q = (d.msgArray || []).find(x => x.c === "t00");
-      if (q) {
+      const out = {};
+      (d.msgArray || []).forEach(q => {
         let z = parseFloat(q.z); if (isNaN(z) || z <= 0) z = parseFloat(q.pz);
         const y = parseFloat(q.y);
-        if (!isNaN(z) && !isNaN(y) && y > 0) { marketTwPct = (z - y) / y * 100; renderPnl(); }
-      }
-    } catch (e) { /* 取不到大盤就只是不顯示對標，不影響損益 */ }
+        if (!isNaN(z) && !isNaN(y) && y > 0) out[q.c] = (z - y) / y * 100;
+      });
+      benchmarks = out;
+    } catch (e) { benchmarks = {}; }
+  }
+  function renderPerf(m){
+    const el = document.getElementById("perfBody");
+    const mine = m.todayPct;
+    const b = benchmarks || {};
+    const rows = [
+      { name:"我的組合", v: mine, me:true },
+      { name:"0050 台灣50", v: b["0050"] },
+      { name:"00878 高股息", v: b["00878"] },
+      { name:"大盤 加權指數", v: b["t00"] }
+    ].filter(r => r.v != null && !isNaN(r.v));
+    if (!rows.length) { el.innerHTML = `<div style="color:#999;font-size:13px;">暫時取不到報價，稍後重整再試。</div>`; return; }
+    const maxAbs = Math.max(1, ...rows.map(r => Math.abs(r.v)));
+    let html = rows.map(r => {
+      const c = ud(r.v), w = Math.abs(r.v) / maxAbs * 50;
+      const style = r.v >= 0 ? `left:50%;width:${w}%;` : `right:50%;width:${w}%;left:auto;`;
+      return `<div class="perf-row">
+        <div class="perf-name ${r.me ? "me" : ""}">${r.name}</div>
+        <div class="perf-bar-wrap"><div class="perf-bar ${c}" style="${style}"></div></div>
+        <div class="perf-val ${c}">${pctTxt(r.v)}</div></div>`;
+    }).join("");
+    // 對標結論
+    if (mine != null && b["t00"] != null) {
+      const diff = mine - b["t00"];
+      html += `<div class="perf-verdict">📊 今日你的組合 <b class="${ud(mine)}">${pctTxt(mine)}</b>，`
+        + `<b class="${ud(diff)}">${diff >= 0 ? "贏大盤 +" : "輸大盤 "}${diff.toFixed(2)}%</b>。`;
+      if (m.unrealPct != null) html += `<br>💼 持有以來總報酬 <b class="${ud(m.unrealPct)}">${pctTxt(m.unrealPct)}</b>（依你填的成本）。`;
+      html += `</div>`;
+    } else if (m.unrealPct != null) {
+      html += `<div class="perf-verdict">💼 持有以來總報酬 <b class="${ud(m.unrealPct)}">${pctTxt(m.unrealPct)}</b>（依你填的成本）。</div>`;
+    }
+    el.innerHTML = html;
   }
 
-  // 輸入股數/成本 → 存 + 就地更新該列損益 + 重算總損益（不整列重繪，保住輸入焦點）
-  document.getElementById("phStockList").addEventListener("change", (e) => {
-    const el = e.target;
-    if (!el.classList || (!el.classList.contains("phs-shares") && !el.classList.contains("phs-cost"))) return;
-    const code = el.dataset.code;
-    const row = el.closest(".ph-stock-row");
-    if (!row) return;
-    if (L.setHolding) L.setHolding(code, row.querySelector(".phs-shares").value, row.querySelector(".phs-cost").value);
-    const s = stocks.find(x => x.code === code);
-    const h = (L.getHoldings ? L.getHoldings() : {})[code];
-    const pnlEl = row.querySelector(".phs-pnl");
-    if (pnlEl && s) {
-      if (h && h.shares > 0 && h.cost > 0) {
-        const pnl = h.shares * (s.price - h.cost), pct = (s.price - h.cost) / h.cost * 100;
-        pnlEl.className = "phs-pnl " + ud(pnl);
-        pnlEl.innerHTML = `${pnl >= 0 ? "+" : ""}${Math.round(pnl).toLocaleString("zh-TW")} <span style="font-size:11px;">(${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%)</span>`;
-      } else { pnlEl.className = "phs-pnl none"; pnlEl.textContent = "填股數/成本"; }
+  /* ===== 自選股快速帶入 ===== */
+  function renderWlQuick(){
+    const wl = L.getWatchlist ? L.getWatchlist() : [];
+    const holds = L.getHoldings ? L.getHoldings() : {};
+    const cand = wl.filter(c => !(holds[c] && holds[c].shares > 0) && byCode[c]).slice(0, 12);
+    const box = document.getElementById("wlQuick");
+    if (!cand.length) { box.innerHTML = ""; return; }
+    box.innerHTML = `<span class="wlq-lab">從自選股帶入：</span>` +
+      cand.map(c => `<span class="wlq-chip" data-code="${c}">${c} ${byCode[c].name}</span>`).join("");
+  }
+
+  /* ===== 主渲染 ===== */
+  function renderAll(){
+    const m = model();
+    renderWlQuick();
+    if (!m.valid.length) {
+      document.getElementById("phContent").style.display = "none";
+      document.getElementById("phEmpty").style.display = "block";
+      return;
     }
-    renderPnl();
+    document.getElementById("phEmpty").style.display = "none";
+    document.getElementById("phContent").style.display = "block";
+    renderSummary(m);
+    const risk = renderRisk(m);
+    renderAlerts(m);
+    renderSnap(m, risk);
+    renderTable(m);
+    renderPerf(m);
+    return m;
+  }
+
+  /* ===== 新增持股：typeahead ===== */
+  const search = document.getElementById("addSearch");
+  const sugg = document.getElementById("addSugg");
+  const sharesIn = document.getElementById("addShares");
+  const costIn = document.getElementById("addCost");
+  let picked = null;
+  function showHint(msg){ const h = document.getElementById("addHint"); h.textContent = msg; h.style.display = msg ? "block" : "none"; }
+  search.addEventListener("input", () => {
+    const q = search.value.trim().toLowerCase(); picked = null;
+    if (!q) { sugg.style.display = "none"; return; }
+    const matches = allStocks.filter(s => s.code.toLowerCase().includes(q) || (s.name && s.name.toLowerCase().includes(q))).slice(0, 8);
+    sugg.innerHTML = matches.map(s => `<div class="ta-item" data-code="${s.code}"><b>${s.code}</b> ${s.name} <span style="color:#888;">${L.fmtPrice(s.price)}</span></div>`).join("");
+    sugg.style.display = matches.length ? "block" : "none";
+  });
+  sugg.addEventListener("click", (e) => {
+    const it = e.target.closest(".ta-item"); if (!it) return;
+    picked = it.dataset.code;
+    const s = byCode[picked];
+    search.value = `${s.code} ${s.name}`;
+    sugg.style.display = "none";
+    costIn.placeholder = "現價 " + L.fmtPrice(s.price);
+    sharesIn.focus();
+    showHint("");
+  });
+  document.addEventListener("click", (e) => { if (!e.target.closest(".pf-add-search")) sugg.style.display = "none"; });
+
+  function resolveCode(){
+    if (picked) return picked;
+    const q = search.value.trim();
+    if (!q) return null;
+    const m = allStocks.find(s => s.code === q || s.name === q || `${s.code} ${s.name}` === q);
+    if (m) return m.code;
+    const low = q.toLowerCase();
+    const part = allStocks.filter(s => s.code.toLowerCase() === low || (s.name && s.name.toLowerCase() === low));
+    return part.length === 1 ? part[0].code : null;
+  }
+  function doAdd(){
+    const code = resolveCode();
+    if (!code) { showHint("找不到這檔股票，請從下拉建議中點選。"); return; }
+    const shares = parseFloat(sharesIn.value);
+    if (!(shares > 0)) { showHint("請輸入股數（大於 0）。"); return; }
+    const cost = parseFloat(costIn.value) || 0;
+    if (L.setHolding) L.setHolding(code, shares, cost);
+    L.trackEvent && L.trackEvent("portfolio_add", { code });
+    search.value = ""; sharesIn.value = ""; costIn.value = ""; costIn.placeholder = "買入均價"; picked = null;
+    showHint("");
+    renderAll();
+    L.showToast && L.showToast(`已加入 ${code} ${byCode[code] ? byCode[code].name : ""}`, "success");
+  }
+  document.getElementById("addBtn").addEventListener("click", doAdd);
+  costIn.addEventListener("keydown", (e) => { if (e.key === "Enter") doAdd(); });
+
+  // 自選股快速帶入 → 填入搜尋欄
+  document.getElementById("wlQuick").addEventListener("click", (e) => {
+    const chip = e.target.closest(".wlq-chip"); if (!chip) return;
+    const code = chip.dataset.code, s = byCode[code]; if (!s) return;
+    picked = code; search.value = `${s.code} ${s.name}`;
+    costIn.placeholder = "現價 " + L.fmtPrice(s.price);
+    sharesIn.focus();
   });
 
-  // 雲端持股同步回來（登入者跨裝置）→ 整列重繪
-  document.addEventListener("leadfu:holdings-synced", () => { renderStockList(); renderPnl(); });
+  /* ===== 明細表：改股數/成本 + 刪除 ===== */
+  document.getElementById("holdTable").addEventListener("change", (e) => {
+    const row = e.target.closest("tr"); if (!row) return;
+    const code = row.dataset.code;
+    if (e.target.classList.contains("pt-shares") || e.target.classList.contains("pt-cost")) {
+      const sh = row.querySelector(".pt-shares").value;
+      const co = row.querySelector(".pt-cost").value;
+      if (L.setHolding) L.setHolding(code, sh, co);
+      renderAll();
+    }
+  });
+  document.getElementById("holdTable").addEventListener("click", (e) => {
+    if (!e.target.classList.contains("pt-del")) return;
+    const row = e.target.closest("tr"); if (!row) return;
+    const code = row.dataset.code;
+    if (L.removeHolding) L.removeHolding(code);
+    renderAll();
+  });
 
-  renderPnl();
-  fetchMarketIndex();
+  // 雲端持股同步回來 → 重繪
+  document.addEventListener("leadfu:holdings-synced", () => renderAll());
 
-  // === 5. AI 健診報告（streaming）===
-  const aiResult = document.getElementById("phAiResult");
-  const refreshBtn = document.getElementById("phAiRefresh");
-
-  async function loadAiHealthCheck() {
+  /* ===== AI 健診（streaming）===== */
+  const aiResult = document.getElementById("aiResult");
+  async function loadAi(){
+    const m = model();
+    if (!m.valid.length) { aiResult.innerHTML = `<div style="padding:16px;color:#888;">先新增持股，AI 才能幫你健診。</div>`; return; }
     aiResult.innerHTML = `<div class="stock-ai-loading"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span> AI 健診中...</div>`;
 
-    // 組裝 context
-    const watchlistStocks = stocks.map(s => {
-      const val = valuation[s.code] || {};
-      const rev = revenue[s.code] || {};
-      const pct = L.pctChange(s.price, s.change);
-      return {
-        code: s.code, name: s.name, market: s.market, category: s.category,
-        price_TWD: s.price,
-        todayChangePercent: Number(pct.toFixed(2)),
-        pe_ratio: val.pe_ratio,
-        yield_pct: val.yield_pct,
-        pb_ratio: val.pb_ratio,
-        revenue_yoy: rev.yoy
-      };
-    });
-
-    // 💎 自選股合理區間
-    const watchlistFairValue = {};
-    const fvData = L.data.fairValue || {};
-    stocks.forEach(s => { if (fvData[s.code]) watchlistFairValue[s.code] = fvData[s.code]; });
-
+    const indMap = {}; m.valid.forEach(it => { const c = it.s.category || "其他"; indMap[c] = (indMap[c] || 0) + it.weight; });
+    const indSorted = Object.entries(indMap).sort((a,b) => b[1] - a[1]);
+    const mkt = { listed:0, otc:0, emerging:0 }; m.valid.forEach(it => { if (mkt[it.s.market] !== undefined) mkt[it.s.market] += it.weight; });
+    const holdings = m.valid.map(it => ({
+      code: it.code, name: it.s.name, market: it.s.market, category: it.s.category,
+      weightPct: Number((it.weight*100).toFixed(1)),
+      price: it.s.price, todayChangePct: Number(L.pctChange(it.s.price, it.s.change).toFixed(2)),
+      pnlPct: it.cost > 0 ? Number(((it.s.price - it.h.cost)/it.h.cost*100).toFixed(1)) : null,
+      yield_pct: (valuation[it.code]||{}).yield_pct, pe_ratio: (valuation[it.code]||{}).pe_ratio,
+      alerts: alertsFor(it).map(a => a.t)
+    }));
     const context = {
-      watchlistStocks,
-      ...(Object.keys(watchlistFairValue).length ? { watchlistFairValue } : {}),
+      portfolioHoldings: holdings,
       portfolioStats: {
-        totalStocks: stocks.length,
-        marketBreakdown: marketCounts,
-        topIndustries: indSorted.slice(0, 5).map(([k, v]) => ({ name: k, count: v, pct: Math.round(v/stocks.length*100) })),
-        concentrationTop3Pct: Number(concentration),
-        avgPe: peList.length ? Number((peList.reduce((a,b)=>a+b,0)/peList.length).toFixed(2)) : null,
-        avgYield: yieldList.length ? Number((yieldList.reduce((a,b)=>a+b,0)/yieldList.length).toFixed(2)) : null
+        holdingCount: m.valid.length,
+        totalValue: Math.round(m.totalValue),
+        unrealizedPnlPct: m.unrealPct != null ? Number(m.unrealPct.toFixed(1)) : null,
+        marketWeight: { 上市: Math.round(mkt.listed*100), 上櫃: Math.round(mkt.otc*100), 興櫃: Math.round(mkt.emerging*100) },
+        topIndustries: indSorted.slice(0,5).map(([c,w]) => ({ name:c, pct: Math.round(w*100) })),
+        top3IndustryPct: Math.round(indSorted.slice(0,3).reduce((a,[,w])=>a+w,0)*100),
+        estAnnualDividend: Math.round(m.annualDiv),
+        estYieldPct: m.totalValue > 0 ? Number((m.annualDiv/m.totalValue*100).toFixed(2)) : null
       }
     };
-
-    const prompt = `這是一份持股健診報告。我有 ${stocks.length} 檔自選股。請用「資料整理＋觀察」的中立角度，幫我寫一份 4-5 段的健診分析：
-
-1. 整體分散度（市場分散、產業集中度，前 3 大產業占比 ${concentration}%）
-2. 估值水準（平均本益比 ${avgPe}、平均殖利率 ${avgYield}）— 跟一般大盤比較高還是低
-3. 風險觀察（若有單一產業占比過高、或市場集中於興櫃等）
-4. 給我一個重新分散投資的方向建議（不要推薦具體個股，只說「可以考慮加入其他產業」這種方向）
-5. 提醒這只是資料整理，買賣決定請自評
-
-請用淺白繁中，給 45-75 歲長輩看得懂。不要推薦個股，不要說「值得買進」「應該賣出」。`;
-
-    window.LeadFu && window.LeadFu.trackEvent("ai_summary", { source: "portfolio" });
+    const prompt = `這是我的投資組合健診。我有 ${m.valid.length} 檔持股（資料見 context）。請用「資料整理＋中立觀察」的角度，用淺白繁體中文寫一份 4-5 段、給 45-75 歲長輩看得懂的健診：
+1. 整體損益與今日表現的客觀描述
+2. 分散度（市場別、產業集中前3大佔比）是否健康
+3. 風險觀察（單一持股過重、興櫃偏高、有警示的持股）
+4. 一個「方向性」的分散建議（只說可考慮的方向，例如「可留意增加其他產業或防禦性資產」，不要推薦具體個股）
+5. 提醒這只是公開資料整理、非投資建議
+不要說「值得買進/應該賣出」、不要報明牌。`;
+    L.trackEvent && L.trackEvent("ai_summary", { source: "portfolio" });
     try {
       const resp = await fetch("/api/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8", "Accept": "text/event-stream" },
-        body: JSON.stringify({
-          messages: [{ role: "user", content: prompt }],
-          context,
-          stream: true
-        })
+        body: JSON.stringify({ messages: [{ role:"user", content: prompt }], context, stream: true })
       });
-      if (!resp.ok) {
-        aiResult.innerHTML = `<div style="padding:16px;color:#888;">AI 健診暫時無法載入，請稍後重試。</div>`;
-        return;
-      }
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      let buffer = "";
-      let fullText = "";
-      let gotFirst = false;
+      if (!resp.ok) { aiResult.innerHTML = `<div style="padding:16px;color:#888;">AI 健診暫時無法載入，請稍後重試。</div>`; return; }
+      const reader = resp.body.getReader(), decoder = new TextDecoder("utf-8");
+      let buffer = "", fullText = "";
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop() || "";
+        buffer += decoder.decode(value, { stream:true });
+        const lines = buffer.split("\n"); buffer = lines.pop() || "";
         for (const raw of lines) {
           const line = raw.trim();
           if (!line.startsWith("data:")) continue;
           const data = line.slice(5).trim();
           if (data === "[DONE]") continue;
-          try {
-            const json = JSON.parse(data);
-            const delta = json.choices?.[0]?.delta?.content;
-            if (delta) {
-              if (!gotFirst) gotFirst = true;
-              fullText += delta;
-              renderAi(aiResult, fullText);
-            }
-          } catch {}
+          try { const j = JSON.parse(data); const delta = j.choices?.[0]?.delta?.content; if (delta) { fullText += delta; renderAiText(fullText); } } catch {}
         }
       }
-    } catch (err) {
-      aiResult.innerHTML = `<div style="padding:16px;color:#888;">連線 AI 服務失敗，請刷新頁面再試。</div>`;
-    }
+    } catch (e) { aiResult.innerHTML = `<div style="padding:16px;color:#888;">連線 AI 服務失敗，請刷新頁面再試。</div>`; }
   }
-
-  function renderAi(el, text) {
-    let esc = String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  function renderAiText(text){
+    let esc = String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
     esc = esc.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
-    const html = esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
-    el.innerHTML = `<div class="stock-ai-body">${html}</div>
-      <div class="stock-ai-foot">
-        ${window.LeadFuTTS && window.LeadFuTTS.isSupported()
-          ? `<button type="button" class="chat-tts-btn stock-ai-tts" title="朗讀">🔊</button>` : ""}
-        <span class="stock-ai-disclaimer">※ AI 整理公開資料，不構成投資建議</span>
-      </div>`;
-    const tts = el.querySelector(".stock-ai-tts");
-    if (tts && window.LeadFuTTS) {
-      tts.addEventListener("click", (e) => {
-        e.preventDefault();
-        window.LeadFuTTS.toggleButton(tts, text);
-      });
-    }
+    const html = esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g,"<br>")}</p>`).join("");
+    aiResult.innerHTML = `<div class="stock-ai-body">${html}</div>
+      <div class="stock-ai-foot"><span class="stock-ai-disclaimer">※ AI 整理公開資料，不構成投資建議</span></div>`;
   }
+  document.getElementById("aiRefresh").addEventListener("click", loadAi);
 
-  loadAiHealthCheck();
-  refreshBtn.addEventListener("click", loadAiHealthCheck);
+  /* ===== 啟動 ===== */
+  const m0 = renderAll();
+  await fetchBenchmarks();
+  if (m0 && m0.valid.length) { renderPerf(model()); loadAi(); }
 });
 </script>
 </body>
