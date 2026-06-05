@@ -98,20 +98,34 @@ def push_message(to, text):
         return False
 
 
-def build_digest(codes, code2name, anns_today, news, alerts):
+def build_digest(codes, code2name, anns_today, news, alerts, risk=None):
     """為單一會員組出推播文字；沒有相關內容回 None。
-    alerts: {code: [警示字串,...]}，只含該會員自選股中有今日異動的股。"""
+    alerts: {code: [警示字串,...]}；risk: {code: {score,level,reasons,...}} 風險分數。"""
     codeset = set(codes)
     names = [code2name.get(c, "") for c in codes if code2name.get(c)]
+    risk = risk or {}
 
+    # 高風險持股（分數 ≥ 50 或近期升高）
+    my_risk = sorted(
+        [(c, risk[c]) for c in codes
+         if c in risk and (risk[c].get("score", 0) >= 50 or risk[c].get("trend") == "up")],
+        key=lambda x: -x[1].get("score", 0))
     my_ann = [a for a in anns_today if a.get("code") in codeset][:MAX_ANN]
     my_news = [n for n in news
                if any(nm and nm in n.get("title", "") for nm in names)][:MAX_NEWS]
 
-    if not alerts and not my_ann and not my_news:
+    if not my_risk and not alerts and not my_ann and not my_news:
         return None
 
     lines = ["📊 領富 AI ・ 今日自選股快訊", ""]
+    if my_risk:
+        lines.append("🚨 高風險持股（建議重新檢查持有理由，非買賣建議）")
+        for c, r in my_risk[:MAX_ANN]:
+            reason = (r.get("reasons") or [""])[0]
+            up = "・風險升高" if r.get("trend") == "up" else ""
+            lines.append(f"・{c} {code2name.get(c, '')}｜風險 {r.get('score')} {r.get('level')}"
+                         + (f"・{reason}" if reason else "") + up)
+        lines.append("")
     if alerts:
         lines.append("⚠️ 今日異動")
         for c in codes:  # 依會員自選股原順序列出
@@ -144,6 +158,7 @@ def main():
     anns = load_json("announcements_live.json").get("announcements", [])
     news = load_json("news_live.json").get("news", [])
     stocks = load_json("stocks_live.json").get("stocks", [])
+    risk = load_json("risk_score_live.json").get("data", {})
     code2name = {s["code"]: s.get("name", "") for s in stocks if s.get("code")}
 
     # 只取最新一天的公告（避免推到舊公告）
@@ -165,7 +180,7 @@ def main():
             skipped += 1
             continue
         alerts = alerts_for_codes(codes, alert_data)
-        text = build_digest(codes, code2name, anns_today, news, alerts)
+        text = build_digest(codes, code2name, anns_today, news, alerts, risk)
         if not text:
             skipped += 1
             continue

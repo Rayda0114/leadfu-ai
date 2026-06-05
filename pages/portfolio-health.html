@@ -271,6 +271,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const fairValue  = L.data.fairValue || {};
   const institutional = L.data.institutional || {};
   const financials = L.data.financials || {};
+  const riskScore  = L.data.riskScore || {};
+  const rkColor = lv => ({ "極高":"#991B1B", "高":"#DC2626", "中":"#D97706" }[lv] || "#16A34A");
   const revenue    = L.data.revenue || {};
   const byCode = {}; allStocks.forEach(s => byCode[s.code] = s);
 
@@ -365,6 +367,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 旗標
     const flags = [];
+    const riskyHoldings = m.valid
+      .map(it => ({ it, rk: riskScore[it.code] }))
+      .filter(x => x.rk && x.rk.score >= 50)
+      .sort((a, b) => b.rk.score - a.rk.score);
+    if (riskyHoldings.length) {
+      flags.push({ lv:"danger", i:"🚨", h:`持股中有 ${riskyHoldings.length} 檔高風險`,
+        d: riskyHoldings.slice(0, 3).map(x => `<b>${x.it.s.code} ${x.it.s.name}</b>（風險 ${x.rk.score}・${(x.rk.reasons || [])[0] || ""}）`).join("、")
+          + `。到 <a href="risk-radar.html" style="color:#c0392b;font-weight:700;">防錯雷達</a> 看原因，重新確認持有理由。` });
+    }
     if (maxHold && maxPct >= SINGLE_WARN)
       flags.push({ lv:"danger", i:"⚠️", h:`單一持股過度集中`, d:`<b>${maxHold.s.code} ${maxHold.s.name}</b> 佔 <b>${maxPct.toFixed(0)}%</b>，一檔波動就牽動整體，可考慮分散。` });
     else if (maxHold)
@@ -472,7 +483,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function renderTable(m){
     document.getElementById("holdCount").textContent = m.valid.length + " 檔";
     const head = `<thead><tr>
-      <th>股票</th><th>現價/漲跌</th><th>股數</th><th>成本</th><th>市值</th><th>佔比</th><th>損益</th><th></th>
+      <th>股票</th><th>現價/漲跌</th><th>股數</th><th>成本</th><th>市值</th><th>佔比</th><th>風險</th><th>損益</th><th></th>
     </tr></thead>`;
     const rows = m.valid.map(it => {
       const s = it.s, pct = L.pctChange(s.price, s.change), cls = L.changeClass(s.change);
@@ -482,6 +493,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const pnl = it.value - it.cost, pp = (s.price - it.h.cost) / it.h.cost * 100;
         pnlCell = `<span class="pt-${ud(pnl)}">${pnl >= 0 ? "+" : ""}${money(pnl)}<br><small>${pp >= 0 ? "+" : ""}${pp.toFixed(1)}%</small></span>`;
       }
+      const rk = riskScore[it.code];
+      const rkCell = rk
+        ? `<span style="font-weight:800;color:${rkColor(rk.level)};">${rk.score}</span><br><small style="color:${rkColor(rk.level)};">${rk.level}</small>`
+        : `<small style="color:#16A34A;font-weight:700;">低</small>`;
       return `<tr data-code="${it.code}">
         <td class="pt-name"><a href="stock-detail.html?code=${it.code}"><b>${it.code}</b> ${s.name}</a><br><small>${marketLabel[s.market] || ""} ${s.category || ""}</small></td>
         <td class="pt-${cls}">${L.fmtPrice(s.price)}<br><small>${L.arrow(s.change)}${L.fmtPct(pct)}</small></td>
@@ -489,6 +504,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td><input type="number" class="pt-cost" min="0" step="0.01" value="${it.h.cost > 0 ? it.h.cost : ""}" placeholder="—"></td>
         <td>${money(it.value)}</td>
         <td>${w.toFixed(0)}%<span class="pt-w-bar" style="width:${Math.max(4, Math.min(w,100)*0.5)}px;"></span></td>
+        <td>${rkCell}</td>
         <td>${pnlCell}</td>
         <td><button class="pt-del" title="刪除">✕</button></td>
       </tr>`;
