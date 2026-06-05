@@ -3461,6 +3461,17 @@ async function loadLiveData() {
     console.log(`[領富 AI] ℹ️ 注意/處置股未載入 (${e.message})`);
   }
 
+  // 14c. 個股風險分數 0-100（防錯雷達，由 calc_risk_score.py 產生）
+  try {
+    const live = await fetchJson("risk_score_live.json");
+    if (live.data) {
+      STOCK_DATA.riskScore = live.data;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆風險分數`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 風險分數未載入 (${e.message})`);
+  }
+
   // 15. 新股 IPO 行事曆（TWSE OpenAPI 上市申請 / 新掛牌）
   try {
     const live = await fetchJson("ipo_live.json");

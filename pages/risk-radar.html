@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>防錯雷達 - 注意股/處置股/月營收暴跌警示 - 領富 AI</title>
-<meta name="description" content="領富 AI 整理注意股、處置股、月營收年減 50% 以上、借券暴增等異常警示，幫您避雷。看清楚再決定。">
+<title>防錯雷達 - 個股風險分數 0-100・避雷工具 - 領富 AI</title>
+<meta name="description" content="領富 AI 防錯雷達：每檔股票 0-100 風險分數、低/中/高/極高等級、主要風險原因、近期是否升高，並標出你自選/持股中有風險的個股，提醒重新檢查持有理由。">
 <link rel="canonical" href="https://leadfuai.com/pages/risk-radar.html">
 
 <!-- Open Graph -->
-<meta property="og:title" content="防錯雷達 - 注意股/處置股/月營收暴跌警示 - 領富 AI">
-<meta property="og:description" content="領富 AI 整理注意股、處置股、月營收年減 50% 以上、借券暴增等異常警示，幫您避雷。看清楚再決定。">
+<meta property="og:title" content="防錯雷達 - 個股風險分數 0-100・避雷工具 - 領富 AI">
+<meta property="og:description" content="每檔股票 0-100 風險分數、等級、主要原因、近期是否升高，標出你持股中的風險，提醒重新檢查持有理由。">
 <meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://leadfuai.com/pages/risk-radar.html">
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="防錯雷達 - 注意股/處置股/月營收暴跌警示 - 領富 AI">
-<meta name="twitter:description" content="領富 AI 整理注意股、處置股、月營收年減 50% 以上、借券暴增等異常警示，幫您避雷。看清楚再決定。">
+<meta name="twitter:title" content="防錯雷達 - 個股風險分數 - 領富 AI">
+<meta name="twitter:description" content="每檔股票 0-100 風險分數、等級、原因、近期升高與否，標出你持股中的風險。">
 <meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
@@ -68,73 +68,41 @@
 
 <main class="container" style="padding: 18px 12px 40px;">
 
-  <!-- 簡介說明 -->
-  <div class="panel" style="margin-bottom:18px;">
-    <div style="padding: 18px 22px;">
+  <div class="panel" style="margin-bottom:16px;">
+    <div style="padding: 16px 20px;">
       <p style="font-size:14px;color:#444;line-height:1.8;margin:0;">
-        防錯雷達整合 <strong>TPEx 注意股 / 處置股公告</strong>、<strong>今日股價異常波動</strong>、<strong>月營收劇烈下滑</strong>、<strong>流動性極低</strong> 等多項警示，
-        幫您在投資前快速檢查目標個股有無紅旗。
-        <strong style="color:#B91C1C;">看到自選股出現在這裡，建議重新檢視持有理由。</strong>
+        每檔股票給一個 <strong>0-100 風險分數</strong>，綜合：交易所注意/處置股、今日大跌、成交量異常、外資大賣、月營收年減、本業虧損、跌破合理區間、波動與流動性等訊號。
+        <strong style="color:#B91C1C;">看到自選股/持股出現高分，不是叫你賣，而是提醒「重新檢查當初的持有理由」。</strong>
       </p>
     </div>
   </div>
 
-  <!-- 警示總數摘要 -->
-  <div class="radar-summary" id="radarSummary"></div>
+  <!-- 摘要 -->
+  <div class="rk-summary" id="rkSummary"></div>
 
-  <!-- ⚠ 注意股 -->
-  <div class="panel radar-section">
-    <div class="panel-head">
-      <h2>⚠ 注意股</h2>
-      <span class="radar-count" id="cntNotice">--</span>
-    </div>
-    <p class="radar-desc">交易所列為「注意股」的個股 — 可能因短期內漲跌幅、週轉率、本益比異常。建議買賣前先了解原因。</p>
-    <div id="listNotice" class="radar-list"></div>
+  <!-- 我的雷達 -->
+  <div class="panel" style="margin-bottom:16px;">
+    <div class="panel-head"><h2>🎯 我關注的股 · 風險檢查</h2><span class="radar-count" id="rkMineCount" style="background:#163A2E;">--</span></div>
+    <div id="rkMine" style="padding:14px 14px 4px;"></div>
   </div>
 
-  <!-- 🚫 處置股 -->
-  <div class="panel radar-section">
-    <div class="panel-head">
-      <h2>🚫 處置股</h2>
-      <span class="radar-count" id="cntDisposal">--</span>
+  <!-- 全市場風險榜 -->
+  <div class="panel">
+    <div class="panel-head"><h2>📡 全市場風險榜</h2></div>
+    <div style="padding:14px 14px 4px;">
+      <div class="rk-filter" id="rkFilter">
+        <span class="rk-fpill active" data-lv="hi">高風險以上</span>
+        <span class="rk-fpill" data-lv="極高">極高</span>
+        <span class="rk-fpill" data-lv="高">高</span>
+        <span class="rk-fpill" data-lv="中">中</span>
+      </div>
+      <div id="rkList"></div>
     </div>
-    <p class="radar-desc">交易所採取處置措施的個股 — 通常需全額交割或分盤集合競價，流動性與買賣方式受限。</p>
-    <div id="listDisposal" class="radar-list"></div>
   </div>
 
-  <!-- 🎯 今日漲跌停接近 -->
-  <div class="panel radar-section">
-    <div class="panel-head">
-      <h2>🎯 今日異常波動</h2>
-      <span class="radar-count" id="cntVolatile">--</span>
-    </div>
-    <p class="radar-desc">今日漲幅或跌幅超過 ±7%（接近漲跌停 ±10%）的個股 — 短線價格波動劇烈，請留意持倉風險。</p>
-    <div id="listVolatile" class="radar-list"></div>
-  </div>
-
-  <!-- 📉 月營收年減 50% 以上 -->
-  <div class="panel radar-section">
-    <div class="panel-head">
-      <h2>📉 月營收暴跌（年減 ≥ 50%）</h2>
-      <span class="radar-count" id="cntRevDrop">--</span>
-    </div>
-    <p class="radar-desc">最新月營收較去年同期下滑 50% 以上 — 公司營運可能正面臨重大挑戰，請審慎評估。</p>
-    <div id="listRevDrop" class="radar-list"></div>
-  </div>
-
-  <!-- 💀 極低流動性 -->
-  <div class="panel radar-section">
-    <div class="panel-head">
-      <h2>💀 流動性極低（今日成交 ≤ 5 張）</h2>
-      <span class="radar-count" id="cntZeroVol">--</span>
-    </div>
-    <p class="radar-desc">今日成交量低於 5 張的個股 — 想賣可能賣不掉、想買也可能拉不到。投資前請評估流動性風險。</p>
-    <div id="listZeroVol" class="radar-list"></div>
-  </div>
-
-  <p style="text-align:center;color:#888;font-size:12px;margin-top:24px;line-height:1.8;">
-    ※ 防錯雷達為公開資料整理，不構成個股推薦或不推薦。資料來源：TWSE 證交所、TPEx 櫃買中心、每日盤後更新。<br>
-    ※ 看到自選股出現於此並非要求賣出，但建議您主動了解原因、評估是否符合您的投資策略。
+  <p style="text-align:center;color:#888;font-size:12px;margin-top:22px;line-height:1.8;">
+    ※ 風險分數為公開資料（TWSE / TPEx 盤後）加權整理，僅供「重新檢查持有理由」之參考，不構成買賣建議。<br>
+    ※ 「近期風險升高」需累積每日分數，上線初期顯示「新偵測」，約一週後開始顯示趨勢。
   </p>
 
 </main>
@@ -143,132 +111,129 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
 </footer>
 
+<style>
+  .rk-summary { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+  .rk-sumc { flex:1; min-width:96px; background:#fff; border:1px solid #eef0f3; border-radius:10px; padding:14px; text-align:center; }
+  .rk-sumn { font-size:26px; font-weight:800; line-height:1; }
+  .rk-suml { font-size:12px; color:#888; margin-top:5px; }
+  .rk-card { background:#fff; border:1px solid #eef0f3; border-radius:10px; padding:13px 15px; margin-bottom:10px; }
+  .rk-top { display:flex; align-items:center; gap:14px; }
+  .rk-score { font-size:30px; font-weight:800; line-height:1; min-width:62px; text-align:center; }
+  .rk-score small { font-size:11px; color:#bbb; font-weight:400; }
+  .rk-meta { flex:1; min-width:0; }
+  .rk-name a { color:#1B4332; text-decoration:none; font-size:15px; font-weight:700; }
+  .rk-level { font-size:11px; padding:2px 8px; border-radius:10px; margin-left:8px; font-weight:700; white-space:nowrap; }
+  .rk-mine { font-size:11px; padding:2px 8px; border-radius:10px; background:#163A2E; color:#fff; margin-left:6px; white-space:nowrap; }
+  .rk-sub { font-size:12.5px; color:#777; margin-top:4px; }
+  .rk-up { color:#DC2626; font-weight:700; }
+  .rk-down { color:#16A34A; }
+  .rk-flat { color:#999; }
+  .rk-reasons { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .rk-rs { font-size:12px; background:#f4f6f8; border:1px solid #e8eaee; color:#555; border-radius:6px; padding:3px 9px; }
+  .rk-check { margin-top:10px; font-size:12.5px; color:#8a6d3b; background:#fff8ec; border-radius:6px; padding:8px 11px; line-height:1.65; }
+  .rk-empty { padding:18px; text-align:center; color:#1a7a45; font-size:14px; }
+  .rk-filter { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .rk-fpill { padding:6px 14px; border-radius:18px; border:1px solid #d0d5dc; background:#fff; cursor:pointer; font-size:13px; color:#555; }
+  .rk-fpill.active { background:#1B4332; color:#fff; border-color:#1B4332; }
+  .up { color:#d23b3b; } .down { color:#1e9e54; } .flat { color:#888; }
+</style>
 <script src="../js/main.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
   const L = window.LeadFu;
   const all = L.data.stocks || [];
-  const ann = L.data.announcements || [];
-  const rev = L.data.revenue || {};
-  const companies = L.data.companies || {};
+  const risk = L.data.riskScore || {};
+  const byCode = {}; all.forEach(s => byCode[s.code] = s);
+  const watchSet = new Set(L.getWatchlist ? L.getWatchlist() : []);
+  const holdSet = new Set(Object.keys(L.getHoldings ? L.getHoldings() : {}));
 
-  // 取個股完整資料（給 list 渲染用）
-  function findStock(code) { return all.find(s => s.code === code); }
+  const levelColor = { "極高": "#991B1B", "高": "#DC2626", "中": "#D97706", "低": "#16A34A" };
+  const levelBg    = { "極高": "#fde3e3", "高": "#fdecec", "中": "#fff4e2", "低": "#e9f7ee" };
 
   function pillMarket(s) {
-    const m = s.market === "listed" ? "上市"
-            : s.market === "otc"    ? "上櫃"
-            : s.market === "emerging" ? "興櫃" : (s.status || "");
+    const m = s.market === "listed" ? "上市" : s.market === "otc" ? "上櫃" : s.market === "emerging" ? "興櫃" : (s.status || "");
     return `<span class="status-pill status-${m}" style="font-size:10px;">${m}</span>`;
   }
 
-  function renderStockRow(s, extra) {
-    if (!s) return "";
-    const pct = L.pctChange(s.price, s.change);
-    const cls = L.changeClass(s.change);
-    return `<a class="radar-row" href="stock-detail.html?code=${s.code}">
-      <div class="radar-row-main">
-        <strong class="radar-code">${s.code}</strong>
-        <span class="radar-name">${s.name}</span>
-        ${pillMarket(s)}
-        <span class="radar-cat">${s.category || ""}</span>
-      </div>
-      <div class="radar-row-num">
-        <span class="${cls}" style="font-weight:700;">${L.fmtPrice(s.price)}</span>
-        <span class="${cls}" style="font-size:12px;">${L.arrow(s.change)} ${L.fmtPct(pct)}</span>
-      </div>
-      <div class="radar-row-extra">${extra || ""}</div>
-    </a>`;
+  // 全部有分數的個股（join 股價資料），分數高到低
+  const entries = Object.entries(risk)
+    .map(([code, r]) => ({ code, s: byCode[code], r }))
+    .filter(x => x.s)
+    .sort((a, b) => b.r.score - a.r.score);
+
+  function trendHtml(r) {
+    if (r.trend === "up")  return `<span class="rk-up">▲ 近期風險升高${r.prevScore != null ? `（${r.prevScore}→${r.score}）` : ""}</span>`;
+    if (r.trend === "down") return `<span class="rk-down">▼ 風險下降</span>`;
+    if (r.trend === "flat") return `<span class="rk-flat">— 風險持平</span>`;
+    return `<span class="rk-flat">新偵測</span>`;
   }
 
-  // 1. 注意股
-  const notice = ann.filter(a => a.type === "注意股");
-  document.getElementById("cntNotice").textContent = notice.length + " 檔";
-  document.getElementById("listNotice").innerHTML = notice.length === 0
-    ? `<div class="radar-empty">✓ 今日無「注意股」公告</div>`
-    : notice.map(a => {
-        const s = findStock(a.code);
-        const extra = `<span class="radar-warn">${(a.title || "").slice(0, 40)}</span>`;
-        return s ? renderStockRow(s, extra) : `<div class="radar-row">${a.code} ${a.name} ${a.title}</div>`;
-      }).join("");
+  function card(x) {
+    const { code, s, r } = x;
+    const col = levelColor[r.level] || "#888";
+    const bg = levelBg[r.level] || "#eee";
+    const pct = L.pctChange(s.price, s.change);
+    const cls = L.changeClass(s.change);
+    const mine = holdSet.has(code) ? `<span class="rk-mine">💼 我的持股</span>`
+               : watchSet.has(code) ? `<span class="rk-mine">⭐ 我的自選</span>` : "";
+    return `<div class="rk-card" style="border-left:5px solid ${col};">
+      <div class="rk-top">
+        <div class="rk-score" style="color:${col};">${r.score}<small>/100</small></div>
+        <div class="rk-meta">
+          <div class="rk-name">
+            <a href="stock-detail.html?code=${code}"><b>${code}</b> ${s.name}</a>
+            <span class="rk-level" style="background:${bg};color:${col};">${r.level}風險</span>${mine}
+          </div>
+          <div class="rk-sub">${pillMarket(s)} ${s.category || ""} · ${L.fmtPrice(s.price)} <span class="${cls}">${L.arrow(s.change)} ${L.fmtPct(pct)}</span> · ${trendHtml(r)}</div>
+        </div>
+      </div>
+      <div class="rk-reasons">${(r.reasons || []).map(t => `<span class="rk-rs">${t}</span>`).join("")}</div>
+      <div class="rk-check">💡 出現上述訊號，建議<b>重新檢查當初買進的理由是否仍然成立</b>，而不是急著買或賣。（公開資料整理，非投資建議）</div>
+    </div>`;
+  }
 
-  // 2. 處置股
-  const disposal = ann.filter(a => a.type === "處置股");
-  document.getElementById("cntDisposal").textContent = disposal.length + " 檔";
-  document.getElementById("listDisposal").innerHTML = disposal.length === 0
-    ? `<div class="radar-empty">✓ 今日無「處置股」公告</div>`
-    : disposal.map(a => {
-        const s = findStock(a.code);
-        const extra = `<span class="radar-warn">${(a.title || "").slice(0, 40)}</span>`;
-        return s ? renderStockRow(s, extra) : `<div class="radar-row">${a.code} ${a.name} ${a.title}</div>`;
-      }).join("");
+  // === 摘要 ===
+  const cnt = { "極高": 0, "高": 0, "中": 0 };
+  entries.forEach(x => { if (cnt[x.r.level] != null) cnt[x.r.level]++; });
+  const mineEntries = entries.filter(x => watchSet.has(x.code) || holdSet.has(x.code));
+  const mineRisky = mineEntries.filter(x => x.r.score >= 50);
+  document.getElementById("rkSummary").innerHTML = `
+    <div class="rk-sumc"><div class="rk-sumn" style="color:${levelColor['極高']}">${cnt['極高']}</div><div class="rk-suml">極高風險</div></div>
+    <div class="rk-sumc"><div class="rk-sumn" style="color:${levelColor['高']}">${cnt['高']}</div><div class="rk-suml">高風險</div></div>
+    <div class="rk-sumc"><div class="rk-sumn" style="color:${levelColor['中']}">${cnt['中']}</div><div class="rk-suml">中風險</div></div>
+    <div class="rk-sumc"><div class="rk-sumn" style="color:#163A2E;">${mineRisky.length}</div><div class="rk-suml">我關注的高風險</div></div>`;
 
-  // 3. 異常波動（漲跌 > 7%）
-  const volatile = all
-    .filter(s => s.price > 0 && Math.abs(L.pctChange(s.price, s.change)) >= 7)
-    .sort((a, b) => Math.abs(L.pctChange(b.price, b.change)) - Math.abs(L.pctChange(a.price, a.change)))
-    .slice(0, 30);
-  document.getElementById("cntVolatile").textContent = volatile.length + " 檔" + (volatile.length === 30 ? "+" : "");
-  document.getElementById("listVolatile").innerHTML = volatile.length === 0
-    ? `<div class="radar-empty">✓ 今日無 ±7% 以上異常波動</div>`
-    : volatile.map(s => {
-        const pct = L.pctChange(s.price, s.change);
-        const extra = `<span class="radar-warn">波動 ${pct > 0 ? "+" : ""}${pct.toFixed(2)}%</span>`;
-        return renderStockRow(s, extra);
-      }).join("");
+  // === 我的雷達 ===
+  const mineBox = document.getElementById("rkMine");
+  document.getElementById("rkMineCount").textContent = mineEntries.length + " 檔";
+  if (!watchSet.size && !holdSet.size) {
+    mineBox.innerHTML = `<div class="rk-empty" style="color:#666;">登入後加自選股、或到 <a href="portfolio-health.html" style="color:#1B4332;">投資儀表板</a> 填持股，這裡會優先幫你盯「你關注的股」有沒有風險。</div>`;
+  } else if (!mineEntries.length) {
+    mineBox.innerHTML = `<div class="rk-empty">✓ 你關注／持有的股，目前都沒有明顯風險訊號。</div>`;
+  } else {
+    mineBox.innerHTML = mineEntries.map(card).join("");
+  }
 
-  // 4. 月營收年減 50%+
-  const revDrop = Object.values(rev)
-    .filter(r => r && typeof r.yoy === "number" && r.yoy <= -50)
-    .sort((a, b) => a.yoy - b.yoy)
-    .slice(0, 30);
-  document.getElementById("cntRevDrop").textContent = revDrop.length + " 檔" + (revDrop.length === 30 ? "+" : "");
-  document.getElementById("listRevDrop").innerHTML = revDrop.length === 0
-    ? `<div class="radar-empty">✓ 無月營收年減 50% 以上的個股</div>`
-    : revDrop.map(r => {
-        const s = findStock(r.code);
-        const extra = `<span class="radar-warn">${r.period} 月營收 ${r.monthRevenueFmt}・年減 ${r.yoy.toFixed(1)}%</span>`;
-        return s ? renderStockRow(s, extra) : `<div class="radar-row">${r.code} ${r.name} 年減 ${r.yoy.toFixed(1)}%</div>`;
-      }).join("");
-
-  // 5. 極低流動性（成交量 ≤ 5 張）
-  const lowVol = all
-    .filter(s => s.price > 0 && s.volume >= 0 && s.volume <= 5)
-    .sort((a, b) => a.volume - b.volume)
-    .slice(0, 50);
-  document.getElementById("cntZeroVol").textContent = lowVol.length + " 檔" + (lowVol.length === 50 ? "+" : "");
-  document.getElementById("listZeroVol").innerHTML = lowVol.length === 0
-    ? `<div class="radar-empty">✓ 沒有極低流動性的個股</div>`
-    : lowVol.map(s => {
-        const extra = `<span class="radar-warn">成交量 ${s.volume} 張</span>`;
-        return renderStockRow(s, extra);
-      }).join("");
-
-  // 總數摘要
-  const total = notice.length + disposal.length + volatile.length + revDrop.length + lowVol.length;
-  document.getElementById("radarSummary").innerHTML = `
-    <div class="radar-summary-card">
-      <div class="radar-summary-num">${total}</div>
-      <div class="radar-summary-label">今日總警示</div>
-    </div>
-    <div class="radar-summary-card radar-summary-card-w">
-      <div class="radar-summary-num">${notice.length + disposal.length}</div>
-      <div class="radar-summary-label">交易所警示</div>
-    </div>
-    <div class="radar-summary-card radar-summary-card-v">
-      <div class="radar-summary-num">${volatile.length}</div>
-      <div class="radar-summary-label">異常波動</div>
-    </div>
-    <div class="radar-summary-card radar-summary-card-r">
-      <div class="radar-summary-num">${revDrop.length}</div>
-      <div class="radar-summary-label">營收暴跌</div>
-    </div>
-    <div class="radar-summary-card radar-summary-card-l">
-      <div class="radar-summary-num">${lowVol.length}</div>
-      <div class="radar-summary-label">流動性差</div>
-    </div>
-  `;
+  // === 全市場風險榜（可篩等級）===
+  let filter = "hi";
+  function renderList() {
+    const list = entries.filter(x => {
+      if (filter === "hi") return x.r.level === "極高" || x.r.level === "高";
+      return x.r.level === filter;
+    }).slice(0, 80);
+    document.getElementById("rkList").innerHTML = list.length
+      ? list.map(card).join("")
+      : `<div class="rk-empty">此等級目前沒有個股。</div>`;
+  }
+  document.getElementById("rkFilter").addEventListener("click", (e) => {
+    const pill = e.target.closest(".rk-fpill"); if (!pill) return;
+    document.querySelectorAll(".rk-fpill").forEach(p => p.classList.remove("active"));
+    pill.classList.add("active");
+    filter = pill.dataset.lv;
+    renderList();
+  });
+  renderList();
 });
 </script>
 </body>
