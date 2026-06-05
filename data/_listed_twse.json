@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-04 10:42",
+  "updatedAt": "2026-06-05 10:53",
   "source": "TWSE 證交所 OpenAPI",
   "market": "listed",
   "count": 1087,
@@ -29,7 +29,7 @@
       "name": "聯電",
       "price": 125.0,
       "change": -5.5,
-      "volume": 378286,
+      "volume": 380918,
       "category": "電子",
       "status": "上市",
       "market": "listed"
@@ -51,6 +51,16 @@
       "change": 0.25,
       "volume": 246346,
       "category": "觀光餐旅",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
+      "code": "0050",
+      "name": "元大台灣50",
+      "price": 106.1,
+      "change": -1.5,
+      "volume": 236782,
+      "category": "其他",
       "status": "上市",
       "market": "listed"
     },
@@ -135,16 +145,6 @@
       "market": "listed"
     },
     {
-      "code": "0050",
-      "name": "元大台灣50",
-      "price": 106.1,
-      "change": -1.5,
-      "volume": 121782,
-      "category": "其他",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
       "code": "1314",
       "name": "中石化",
       "price": 8.25,
@@ -159,7 +159,7 @@
       "name": "南亞科",
       "price": 395.0,
       "change": -6.5,
-      "volume": 114959,
+      "volume": 115749,
       "category": "半導體",
       "status": "上市",
       "market": "listed"
@@ -299,7 +299,7 @@
       "name": "力積電",
       "price": 81.0,
       "change": -3.6,
-      "volume": 72679,
+      "volume": 73514,
       "category": "其他",
       "status": "上市",
       "market": "listed"
@@ -745,6 +745,16 @@
       "market": "listed"
     },
     {
+      "code": "2330",
+      "name": "台積電",
+      "price": 2385.0,
+      "change": -40.0,
+      "volume": 32542,
+      "category": "電子",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
       "code": "3673",
       "name": "TPK-KY",
       "price": 87.6,
@@ -771,16 +781,6 @@
       "change": 0.15,
       "volume": 29039,
       "category": "觀光餐旅",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
-      "code": "2330",
-      "name": "台積電",
-      "price": 2385.0,
-      "change": -40.0,
-      "volume": 28441,
-      "category": "電子",
       "status": "上市",
       "market": "listed"
     },
@@ -1295,6 +1295,16 @@
       "market": "listed"
     },
     {
+      "code": "3036",
+      "name": "文曄",
+      "price": 282.0,
+      "change": -10.5,
+      "volume": 14366,
+      "category": "電子",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
       "code": "1612",
       "name": "宏泰",
       "price": 40.65,
@@ -1311,16 +1321,6 @@
       "change": 0.15,
       "volume": 14090,
       "category": "其他",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
-      "code": "3036",
-      "name": "文曄",
-      "price": 282.0,
-      "change": -10.5,
-      "volume": 14087,
-      "category": "電子",
       "status": "上市",
       "market": "listed"
     },
@@ -1385,6 +1385,16 @@
       "market": "listed"
     },
     {
+      "code": "3037",
+      "name": "欣興",
+      "price": 971.0,
+      "change": -29.0,
+      "volume": 13760,
+      "category": "電子",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
       "code": "8473",
       "name": "山林水",
       "price": 54.6,
@@ -1411,16 +1421,6 @@
       "change": 3.0,
       "volume": 13432,
       "category": "電腦周邊",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
-      "code": "3037",
-      "name": "欣興",
-      "price": 971.0,
-      "change": -29.0,
-      "volume": 13360,
-      "category": "電子",
       "status": "上市",
       "market": "listed"
     },
@@ -1595,6 +1595,16 @@
       "market": "listed"
     },
     {
+      "code": "2454",
+      "name": "聯發科",
+      "price": 4430.0,
+      "change": -115.0,
+      "volume": 11204,
+      "category": "半導體",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
       "code": "6451",
       "name": "訊芯-KY",
       "price": 680.0,
@@ -1745,16 +1755,6 @@
       "market": "listed"
     },
     {
-      "code": "2454",
-      "name": "聯發科",
-      "price": 4430.0,
-      "change": -115.0,
-      "volume": 9718,
-      "category": "半導體",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
       "code": "4904",
       "name": "遠傳",
       "price": 102.0,
@@ -1770,6 +1770,26 @@
       "price": 58.0,
       "change": -0.8,
       "volume": 9549,
+      "category": "電子",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
+      "code": "6139",
+      "name": "亞翔",
+      "price": 825.0,
+      "change": 41.0,
+      "volume": 9442,
+      "category": "證券",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
+      "code": "2308",
+      "name": "台達電",
+      "price": 2425.0,
+      "change": -30.0,
+      "volume": 9416,
       "category": "電子",
       "status": "上市",
       "market": "listed"
@@ -1791,16 +1811,6 @@
       "change": 0.5,
       "volume": 9312,
       "category": "電子",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
-      "code": "6139",
-      "name": "亞翔",
-      "price": 825.0,
-      "change": 41.0,
-      "volume": 9192,
-      "category": "證券",
       "status": "上市",
       "market": "listed"
     },
@@ -2011,16 +2021,6 @@
       "change": 0.0,
       "volume": 7987,
       "category": "百貨貿易",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
-      "code": "2308",
-      "name": "台達電",
-      "price": 2425.0,
-      "change": -30.0,
-      "volume": 7969,
-      "category": "電子",
       "status": "上市",
       "market": "listed"
     },
@@ -2495,6 +2495,16 @@
       "market": "listed"
     },
     {
+      "code": "6442",
+      "name": "光聖",
+      "price": 2145.0,
+      "change": 80.0,
+      "volume": 5777,
+      "category": "其他",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
       "code": "6919",
       "name": "康霈*",
       "price": 96.4,
@@ -2541,16 +2551,6 @@
       "change": -4.0,
       "volume": 5624,
       "category": "電子",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
-      "code": "6442",
-      "name": "光聖",
-      "price": 2145.0,
-      "change": 80.0,
-      "volume": 5622,
-      "category": "其他",
       "status": "上市",
       "market": "listed"
     },
@@ -2855,22 +2855,22 @@
       "market": "listed"
     },
     {
+      "code": "3017",
+      "name": "奇鋐",
+      "price": 2710.0,
+      "change": -145.0,
+      "volume": 4446,
+      "category": "電子",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
       "code": "6698",
       "name": "旭暉應材",
       "price": 44.75,
       "change": 2.45,
       "volume": 4437,
       "category": "其他",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
-      "code": "3017",
-      "name": "奇鋐",
-      "price": 2710.0,
-      "change": -145.0,
-      "volume": 4434,
-      "category": "電子",
       "status": "上市",
       "market": "listed"
     },
@@ -3805,12 +3805,32 @@
       "market": "listed"
     },
     {
+      "code": "2345",
+      "name": "智邦",
+      "price": 2510.0,
+      "change": -75.0,
+      "volume": 2462,
+      "category": "電子",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
       "code": "3024",
       "name": "憶聲",
       "price": 13.8,
       "change": -0.05,
       "volume": 2461,
       "category": "電子",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
+      "code": "3533",
+      "name": "嘉澤",
+      "price": 2400.0,
+      "change": -170.0,
+      "volume": 2460,
+      "category": "通訊網路",
       "status": "上市",
       "market": "listed"
     },
@@ -3841,16 +3861,6 @@
       "change": 0.25,
       "volume": 2416,
       "category": "觀光餐旅",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
-      "code": "3533",
-      "name": "嘉澤",
-      "price": 2400.0,
-      "change": -170.0,
-      "volume": 2387,
-      "category": "通訊網路",
       "status": "上市",
       "market": "listed"
     },
@@ -3981,16 +3991,6 @@
       "change": 0.18,
       "volume": 2271,
       "category": "鋼鐵",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
-      "code": "2345",
-      "name": "智邦",
-      "price": 2510.0,
-      "change": -75.0,
-      "volume": 2254,
-      "category": "電子",
       "status": "上市",
       "market": "listed"
     },
@@ -4425,6 +4425,16 @@
       "market": "listed"
     },
     {
+      "code": "2383",
+      "name": "台光電",
+      "price": 4830.0,
+      "change": 0.0,
+      "volume": 1722,
+      "category": "電子",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
       "code": "8374",
       "name": "羅昇",
       "price": 99.0,
@@ -4515,16 +4525,6 @@
       "market": "listed"
     },
     {
-      "code": "2383",
-      "name": "台光電",
-      "price": 4830.0,
-      "change": 0.0,
-      "volume": 1615,
-      "category": "電子",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
       "code": "2022",
       "name": "聚亨",
       "price": 8.08,
@@ -4601,6 +4601,16 @@
       "change": 0.05,
       "volume": 1566,
       "category": "鋼鐵",
+      "status": "上市",
+      "market": "listed"
+    },
+    {
+      "code": "3661",
+      "name": "世芯-KY",
+      "price": 4340.0,
+      "change": -255.0,
+      "volume": 1544,
+      "category": "電子零組件",
       "status": "上市",
       "market": "listed"
     },
@@ -4705,16 +4715,6 @@
       "market": "listed"
     },
     {
-      "code": "3661",
-      "name": "世芯-KY",
-      "price": 4340.0,
-      "change": -255.0,
-      "volume": 1474,
-      "category": "電子零組件",
-      "status": "上市",
-      "market": "listed"
-    },
-    {
       "code": "4588",
       "name": "玖鼎電力",
       "price": 62.8,
@@ -4789,7 +4789,7 @@
       "name": "創意",
       "price": 4400.0,
       "change": -205.0,
-      "volume": 1425,
+      "volume": 1429,
       "category": "光電",
       "status": "上市",
       "market": "listed"
