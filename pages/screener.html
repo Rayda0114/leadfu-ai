@@ -3,73 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>進階選股 - 多條件智慧篩選 - 領富 AI</title>
-<meta name="description" content="依本益比、殖利率、ROE、月營收年增、合理區間位置等 14 項條件智慧篩選台股。投資人選股最有效率的工具。">
+<title>進階選股 - 會員級多條件智慧篩選 - 領富 AI</title>
+<meta name="description" content="依合理區間位置、訊號強度、月營收 YoY/MoM、本益比、殖利率、毛利率、法人買超、借券/融資增加等 20+ 項條件智慧篩選台股，存策略、每日自動掃描通知。">
 <link rel="canonical" href="https://leadfuai.com/pages/screener.html">
 
 <!-- Open Graph -->
-<meta property="og:title" content="進階選股 - 多條件智慧篩選 - 領富 AI">
-<meta property="og:description" content="依本益比、殖利率、ROE、月營收年增、合理區間位置等 14 項條件智慧篩選台股。投資人選股最有效率的工具。">
+<meta property="og:title" content="進階選股 - 會員級多條件智慧篩選 - 領富 AI">
+<meta property="og:description" content="合理區間、訊號強度、月營收、本益比、殖利率、毛利率、法人買超、借券/融資增加等 20+ 項條件，存策略、每日自動掃描。">
 <meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://leadfuai.com/pages/screener.html">
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="進階選股 - 多條件智慧篩選 - 領富 AI">
-<meta name="twitter:description" content="依本益比、殖利率、ROE、月營收年增、合理區間位置等 14 項條件智慧篩選台股。投資人選股最有效率的工具。">
+<meta name="twitter:title" content="進階選股 - 會員級多條件智慧篩選 - 領富 AI">
+<meta name="twitter:description" content="20+ 項條件智慧篩選台股，存策略、每日自動掃描通知。">
 <meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
 <link rel="stylesheet" href="../css/style.css">
 <style>
-  .screener-grid { display: grid; grid-template-columns: 280px 1fr; gap: 16px; }
+  .screener-grid { display: grid; grid-template-columns: 290px 1fr; gap: 16px; }
   @media (max-width: 768px) { .screener-grid { grid-template-columns: 1fr; } }
-  .filter-card {
-    background: #fff;
-    border: 1px solid #e0e3e8;
-    border-radius: 4px;
-    padding: 14px;
-    margin-bottom: 12px;
-  }
-  .filter-card h4 {
-    font-size: 13px;
-    color: #163A2E;
-    margin-bottom: 10px;
-    border-left: 3px solid #1B4332;
-    padding-left: 8px;
-  }
+  .filter-card { background: #fff; border: 1px solid #e0e3e8; border-radius: 4px; padding: 14px; margin-bottom: 12px; }
+  .filter-card h4 { font-size: 13px; color: #163A2E; margin-bottom: 10px; border-left: 3px solid #1B4332; padding-left: 8px; }
+  .filter-card.vip h4 { border-left-color:#C5A572; color:#8B6F47; }
   .range-row { display: flex; gap: 6px; align-items: center; }
   .range-row input { width: 100%; padding: 6px 8px; border: 1px solid #d0d5dc; border-radius: 2px; font-size: 13px; }
   .check-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .check-list label {
-    font-size: 12px;
-    color: #444;
-    cursor: pointer;
-    padding: 4px 8px;
-    border: 1px solid #e0e3e8;
-    border-radius: 2px;
-    background: #fff;
-  }
-  .check-list label.checked {
-    background: #163A2E;
-    color: #fff;
-    border-color: #163A2E;
-  }
+  .check-list label { font-size: 12px; color: #444; cursor: pointer; padding: 4px 8px; border: 1px solid #e0e3e8; border-radius: 2px; background: #fff; }
+  .check-list label.checked { background: #163A2E; color: #fff; border-color: #163A2E; }
   .check-list input { display: none; }
-  .preset-pill {
-    display: inline-block;
-    padding: 4px 10px;
-    margin: 3px;
-    background: #fff8e1;
-    border: 1px solid #f0d77a;
-    color: #b07b00;
-    border-radius: 12px;
-    font-size: 11px;
-    cursor: pointer;
-  }
+  .preset-pill { display: inline-block; padding: 4px 10px; margin: 3px; background: #fff8e1; border: 1px solid #f0d77a; color: #b07b00; border-radius: 12px; font-size: 11px; cursor: pointer; }
   .preset-pill:hover { background: #f0d77a; color: #fff; }
+  .preset-pill.vip { background:#f3ede1; border-color:#d9c39a; color:#8B6F47; }
+  .preset-pill.vip:hover { background:#C5A572; color:#fff; }
   .fund-row { font-size: 13px; color: #555; display: flex; align-items: center; gap: 6px; }
   .fund-row input { width: 64px; padding: 4px 6px; border: 1px solid #d0d5dc; border-radius: 3px; font-size: 13px; }
+  .fund-row select { padding: 4px 6px; border: 1px solid #d0d5dc; border-radius: 3px; font-size: 13px; flex:1; }
+  .fv-pill { font-size:11px; padding:2px 7px; border-radius:10px; white-space:nowrap; }
+  .fv-low { background:#e7f5ec; color:#1e7e44; } .fv-fair { background:#eef0f3; color:#666; } .fv-high { background:#fdeced; color:#c0392b; }
+  .scan-card { background:linear-gradient(135deg,#1B4332,#2d5a44); color:#fff; border-radius:8px; padding:14px; margin-bottom:12px; }
+  .scan-card h4 { color:#fff; border:none; padding:0; font-size:13.5px; margin-bottom:6px; }
+  .scan-card p { font-size:12px; line-height:1.7; color:#d9e8e0; margin-bottom:10px; }
+  .scan-card button { width:100%; background:#C5A572; color:#fff; border:none; padding:9px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; }
+  .scan-card .soon { font-size:10px; background:rgba(255,255,255,.2); padding:1px 6px; border-radius:8px; margin-left:5px; }
 </style>
 </head>
 <body>
@@ -126,17 +103,25 @@
       <span class="preset-pill" data-preset="volume">🔥 成交量爆量</span>
       <span class="preset-pill" data-preset="ai">🤖 AI 概念股</span>
       <span class="preset-pill" data-preset="bio">💊 生技醫療</span>
-      <span class="preset-pill" data-preset="ipo">🆕 新興產業</span>
       <span class="preset-pill" data-preset="high">📊 高價股 ($500+)</span>
       <span class="preset-pill" data-preset="low">💰 低價股 ($100-)</span>
-      <span class="preset-pill" data-preset="dividend" style="background:#e7f5ec;border-color:#9ad3b0;color:#1e7e44;">💵 高股息(殖利率≥5%)</span>
-      <span class="preset-pill" data-preset="value" style="background:#e7f5ec;border-color:#9ad3b0;color:#1e7e44;">💎 價值股(低PE+高毛利)</span>
-      <span class="preset-pill" data-preset="growth" style="background:#e7f5ec;border-color:#9ad3b0;color:#1e7e44;">🚀 成長股(營收增+本業賺)</span>
+      <span class="preset-pill vip" data-preset="dividend">💵 高股息(殖利率≥5%)</span>
+      <span class="preset-pill vip" data-preset="value">💎 價值股(低PE+高毛利)</span>
+      <span class="preset-pill vip" data-preset="growth">🚀 成長股(營收增+本業賺)</span>
+      <span class="preset-pill vip" data-preset="undervalued">🎯 合理區間偏低+訊號強</span>
+      <span class="preset-pill vip" data-preset="chips">🏦 法人買+融資增</span>
+      <span class="preset-pill vip" data-preset="divgrow">🌱 高息+營收雙增</span>
     </div>
   </div>
 
   <div class="screener-grid">
     <aside>
+
+      <div class="scan-card">
+        <h4>🔔 每日自動掃描 <span class="soon">即將推出</span></h4>
+        <p>把篩選條件存成策略並開啟自動掃描，每天盤後我們幫你掃全市場，<strong>符合條件的「新」股票</strong>直接推到你的 LINE — 不用自己每天開來篩。</p>
+        <button id="scanToggleBtn" type="button">登入後開啟每日掃描</button>
+      </div>
 
       <div class="filter-card">
         <h4>價格區間</h4>
@@ -177,17 +162,42 @@
       </div>
 
       <div class="filter-card">
-        <h4>📊 基本面 / 籌碼條件</h4>
+        <h4>📊 基本面條件</h4>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <label class="fund-row">月營收年增 ≥ <input type="number" id="revMin" placeholder="10" step="1"> %</label>
+          <label class="fund-row">月營收年增(YoY) ≥ <input type="number" id="revMin" placeholder="10" step="1"> %</label>
+          <label class="fund-row">月營收月增(MoM) ≥ <input type="number" id="momMin" placeholder="0" step="1"> %</label>
           <label class="fund-row">毛利率 ≥ <input type="number" id="gmMin" placeholder="30" step="1"> %</label>
           <label class="fund-row">本益比 ≤ <input type="number" id="peMax" placeholder="20" step="1"> 倍</label>
           <label class="fund-row">殖利率 ≥ <input type="number" id="yldMin" placeholder="5" step="0.1"> %</label>
         </div>
-        <div class="check-list" id="fundChecks" style="margin-top:10px;">
+      </div>
+
+      <div class="filter-card vip">
+        <h4>💎 估值 / 訊號</h4>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <label class="fund-row" style="flex-wrap:wrap;">合理區間
+            <select id="fvPos">
+              <option value="">不限</option>
+              <option value="low">偏低（接近/低於下緣）</option>
+              <option value="fair">合理區間內</option>
+              <option value="high">偏高（接近/高於上緣）</option>
+            </select>
+          </label>
+          <label class="fund-row">訊號強度(信心) ≥ <input type="number" id="confMin" placeholder="3" step="0.1" min="0" max="5"> /5</label>
+        </div>
+      </div>
+
+      <div class="filter-card vip">
+        <h4>🏦 籌碼 / 題材</h4>
+        <div class="check-list" id="fundChecks">
           <label><input type="checkbox" id="chkMa20"> 站上月線</label>
           <label><input type="checkbox" id="chkForeign"> 外資買超</label>
+          <label><input type="checkbox" id="chkTrust"> 投信買超</label>
           <label><input type="checkbox" id="chkOpProfit"> 本業獲利</label>
+          <label><input type="checkbox" id="chkSbl"> 借券增加</label>
+          <label><input type="checkbox" id="chkMargin"> 融資增加</label>
+          <label><input type="checkbox" id="chkAnnounce"> 近日重大公告</label>
+          <label><input type="checkbox" id="chkExLowVol"> 排除低流動性</label>
         </div>
       </div>
 
@@ -197,7 +207,7 @@
           <select id="strategySelect" style="flex:1;padding:5px 6px;border:1px solid #d0d5dc;border-radius:3px;font-size:12px;"><option value="">— 載入已存策略 —</option></select>
           <button id="saveStrategyBtn" style="background:#fff;border:1px solid #1B4332;color:#1B4332;padding:5px 10px;border-radius:3px;font-size:12px;white-space:nowrap;cursor:pointer;">＋ 存</button>
         </div>
-        <div style="font-size:11px;color:#999;margin-top:6px;">把目前條件存起來，下次一鍵套用。</div>
+        <div style="font-size:11px;color:#999;margin-top:6px;">把目前條件存起來，下次一鍵套用，也是每日自動掃描的依據。</div>
       </div>
 
       <div style="display:flex;gap:6px;">
@@ -219,9 +229,12 @@
                 <option value="volDesc">量大→小</option>
                 <option value="priceDesc">價高→低</option>
                 <option value="revDesc">營收年增高→低</option>
+                <option value="momDesc">營收月增高→低</option>
                 <option value="yldDesc">殖利率高→低</option>
                 <option value="peAsc">本益比低→高</option>
                 <option value="gmDesc">毛利率高→低</option>
+                <option value="fvAsc">合理區間偏低→高</option>
+                <option value="confDesc">訊號強度高→低</option>
               </select>
             </label>
             <span style="font-size:12px;color:#666;">共 <span id="resultCount" style="color:#1B4332;font-weight:700;">0</span> 檔</span>
@@ -237,6 +250,7 @@
               <th class="num">毛利率</th>
               <th class="num">本益比</th>
               <th class="num">殖利率</th>
+              <th>合理<br>區間</th>
               <th class="num">成交量</th>
               <th>類別</th><th>狀態</th><th></th>
             </tr>
@@ -266,15 +280,33 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
-  const { data, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, pageHref, isInWatchlist } = window.LeadFu;
+  const L = window.LeadFu;
+  const { data, fmtPrice, fmtPct, pctChange, changeClass, pageHref, isInWatchlist, showToast } = L;
 
-  // 動態填入類別 (從現有資料取 unique)
+  // 公告代碼集合（近日有重大公告）— 另抓 announcements_live.json（非全域）
+  let annSet = new Set();
+  try {
+    const inPages = location.pathname.includes("/pages/");
+    const r = await fetch((inPages ? "../" : "") + "data/announcements_live.json", { cache: "no-cache" });
+    const aj = await r.json();
+    (aj.announcements || []).forEach(a => { if (a.code) annSet.add(String(a.code)); });
+  } catch (e) { /* 取不到就當沒有公告條件 */ }
+
+  // 合理區間位置 → 分類
+  function fvClass(code){
+    const x = (data.fairValue || {})[code];
+    if (!x || typeof x.position !== "number") return null;
+    if (x.position <= 0.30) return "low";
+    if (x.position >= 0.80) return "high";
+    return "fair";
+  }
+  const fvLabel = { low:"偏低", fair:"合理", high:"偏高" };
+
+  // 動態填入類別
   const cats = [...new Set(data.stocks.map(s => s.category))].sort();
   document.getElementById("catList").innerHTML = cats.map(c =>
-    `<label><input type="checkbox" value="${c}"> ${c}</label>`
-  ).join("");
+    `<label><input type="checkbox" value="${c}"> ${c}</label>`).join("");
 
-  // checkbox 視覺化
   document.addEventListener("change", e => {
     if (e.target.matches('.check-list input[type="checkbox"]')) {
       e.target.parentElement.classList.toggle("checked", e.target.checked);
@@ -291,82 +323,108 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (v("volMin")) f.volMin = +v("volMin");
     if (v("volMax")) f.volMax = +v("volMax");
     if (v("revMin")) f.revMin = +v("revMin");
+    if (v("momMin")) f.momMin = +v("momMin");
     if (v("gmMin"))  f.gmMin  = +v("gmMin");
     if (v("peMax"))  f.peMax  = +v("peMax");
     if (v("yldMin")) f.yldMin = +v("yldMin");
-    f.ma20     = document.getElementById("chkMa20").checked;
-    f.foreign  = document.getElementById("chkForeign").checked;
-    f.opProfit = document.getElementById("chkOpProfit").checked;
+    if (v("confMin")) f.confMin = +v("confMin");
+    f.fvPos = v("fvPos");
+    f.ma20      = document.getElementById("chkMa20").checked;
+    f.foreign   = document.getElementById("chkForeign").checked;
+    f.trust     = document.getElementById("chkTrust").checked;
+    f.opProfit  = document.getElementById("chkOpProfit").checked;
+    f.sbl       = document.getElementById("chkSbl").checked;
+    f.margin    = document.getElementById("chkMargin").checked;
+    f.announce  = document.getElementById("chkAnnounce").checked;
+    f.exLowVol  = document.getElementById("chkExLowVol").checked;
     f.status = [...document.querySelectorAll("#statusList input:checked")].map(x => x.value);
     f.cats   = [...document.querySelectorAll("#catList input:checked")].map(x => x.value);
     f.sort = document.getElementById("sortBy").value;
     return f;
   }
 
-  function apply() {
-    const f = readFilters();
-    let list = data.stocks.slice();
-
+  // 純函式：把 filters 套到 stock 陣列（自動掃描腳本也用同一套邏輯）
+  function runFilter(f, stocks) {
+    const rev = data.revenue || {}, fin = data.financials || {}, val = data.valuation || {},
+          ind = data.indicators || {}, inst = data.institutional || {}, sbl = data.sbl || {}, mgn = data.margin || {};
+    let list = stocks.slice();
     if (f.priceMin != null) list = list.filter(s => s.price >= f.priceMin);
     if (f.priceMax != null) list = list.filter(s => s.price <= f.priceMax);
     if (f.volMin != null)   list = list.filter(s => s.volume >= f.volMin);
     if (f.volMax != null)   list = list.filter(s => s.volume <= f.volMax);
-    if (f.status.length)    list = list.filter(s => f.status.includes(s.status));
-    if (f.cats.length)      list = list.filter(s => f.cats.includes(s.category));
+    if (f.exLowVol)         list = list.filter(s => (s.volume || 0) >= 100);
+    if (f.status && f.status.length) list = list.filter(s => f.status.includes(s.status));
+    if (f.cats && f.cats.length)     list = list.filter(s => f.cats.includes(s.category));
     if (f.pctMin != null || f.pctMax != null) {
-      list = list.filter(s => {
-        const p = pctChange(s.price, s.change);
+      list = list.filter(s => { const p = pctChange(s.price, s.change);
         if (f.pctMin != null && p < f.pctMin) return false;
-        if (f.pctMax != null && p > f.pctMax) return false;
-        return true;
-      });
+        if (f.pctMax != null && p > f.pctMax) return false; return true; });
     }
-
-    // 基本面 / 籌碼條件
-    const rev = data.revenue || {}, fin = data.financials || {}, val = data.valuation || {}, ind = data.indicators || {}, inst = data.institutional || {};
     if (f.revMin != null) list = list.filter(s => { const x = rev[s.code]; return x && typeof x.yoy === "number" && x.yoy >= f.revMin; });
+    if (f.momMin != null) list = list.filter(s => { const x = rev[s.code]; return x && typeof x.mom === "number" && x.mom >= f.momMin; });
     if (f.gmMin  != null) list = list.filter(s => { const x = fin[s.code]; return x && typeof x.gross_margin === "number" && x.gross_margin >= f.gmMin; });
     if (f.peMax  != null) list = list.filter(s => { const x = val[s.code]; return x && x.pe_ratio > 0 && x.pe_ratio <= f.peMax; });
     if (f.yldMin != null) list = list.filter(s => { const x = val[s.code]; return x && typeof x.yield_pct === "number" && x.yield_pct >= f.yldMin; });
+    if (f.confMin != null) list = list.filter(s => { const x = (data.fairValue||{})[s.code]; return x && typeof x.confidence === "number" && x.confidence >= f.confMin; });
+    if (f.fvPos)    list = list.filter(s => fvClass(s.code) === f.fvPos);
     if (f.ma20)     list = list.filter(s => { const x = ind[s.code]; return x && x.ma20 && s.price > x.ma20; });
     if (f.foreign)  list = list.filter(s => { const x = inst[s.code]; return x && typeof x.foreign_net_lots === "number" && x.foreign_net_lots > 0; });
+    if (f.trust)    list = list.filter(s => { const x = inst[s.code]; return x && typeof x.trust_net_lots === "number" && x.trust_net_lots > 0; });
     if (f.opProfit) list = list.filter(s => { const x = fin[s.code]; return x && typeof x.op_margin === "number" && x.op_margin > 0; });
+    if (f.sbl)      list = list.filter(s => { const x = sbl[s.code]; return x && typeof x.sbl_change === "number" && x.sbl_change > 0; });
+    if (f.margin)   list = list.filter(s => { const x = mgn[s.code]; return x && typeof x.margin_change === "number" && x.margin_change > 0; });
+    if (f.announce) list = list.filter(s => annSet.has(String(s.code)));
+    return list;
+  }
 
-    // 排序
-    const numOr = (x, lo) => (typeof x === "number" ? x : (lo ? -1e12 : 1e12));   // null 排最後
+  function apply() {
+    const f = readFilters();
+    let list = runFilter(f, data.stocks);
+
+    const rev = data.revenue || {}, fin = data.financials || {}, val = data.valuation || {};
+    const numOr = (x, lo) => (typeof x === "number" ? x : (lo ? -1e12 : 1e12));
     const gYoy = c => numOr(rev[c] && rev[c].yoy, true);
+    const gMom = c => numOr(rev[c] && rev[c].mom, true);
     const gYld = c => numOr(val[c] && val[c].yield_pct, true);
     const gPe  = c => { const p = val[c] && val[c].pe_ratio; return (p > 0) ? p : 1e12; };
     const gGm  = c => numOr(fin[c] && fin[c].gross_margin, true);
+    const gFv  = c => { const x = (data.fairValue||{})[c]; return (x && typeof x.position === "number") ? x.position : 1e12; };
+    const gConf= c => { const x = (data.fairValue||{})[c]; return (x && typeof x.confidence === "number") ? x.confidence : -1; };
     list.sort((a, b) => {
-      if (f.sort === "pctDesc") return pctChange(b.price, b.change) - pctChange(a.price, a.change);
-      if (f.sort === "pctAsc")  return pctChange(a.price, a.change) - pctChange(b.price, b.change);
-      if (f.sort === "volDesc") return b.volume - a.volume;
-      if (f.sort === "priceDesc") return b.price - a.price;
-      if (f.sort === "revDesc") return gYoy(b.code) - gYoy(a.code);
-      if (f.sort === "yldDesc") return gYld(b.code) - gYld(a.code);
-      if (f.sort === "peAsc")   return gPe(a.code) - gPe(b.code);
-      if (f.sort === "gmDesc")  return gGm(b.code) - gGm(a.code);
-      return a.code.localeCompare(b.code);
+      switch (f.sort) {
+        case "pctDesc": return pctChange(b.price, b.change) - pctChange(a.price, a.change);
+        case "pctAsc":  return pctChange(a.price, a.change) - pctChange(b.price, b.change);
+        case "volDesc": return b.volume - a.volume;
+        case "priceDesc": return b.price - a.price;
+        case "revDesc": return gYoy(b.code) - gYoy(a.code);
+        case "momDesc": return gMom(b.code) - gMom(a.code);
+        case "yldDesc": return gYld(b.code) - gYld(a.code);
+        case "peAsc":   return gPe(a.code) - gPe(b.code);
+        case "gmDesc":  return gGm(b.code) - gGm(a.code);
+        case "fvAsc":   return gFv(a.code) - gFv(b.code);
+        case "confDesc":return gConf(b.code) - gConf(a.code);
+        default: return a.code.localeCompare(b.code);
+      }
     });
 
     document.getElementById("resultCount").textContent = list.length;
     const tbody = document.getElementById("resultTbody");
     if (list.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="12" class="loading">沒有符合條件的個股</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="13" class="loading">沒有符合條件的個股</td></tr>`;
       return;
     }
-    const rev2 = data.revenue || {}, fin2 = data.financials || {}, val2 = data.valuation || {};
     tbody.innerHTML = list.map(s => {
       const pct = pctChange(s.price, s.change);
       const cls = changeClass(s.change);
       const fav = isInWatchlist(s.code);
-      const r = rev2[s.code], fnl = fin2[s.code], vl = val2[s.code];
+      const r = rev[s.code], fnl = fin[s.code], vl = val[s.code];
       const yoy = (r && typeof r.yoy === "number") ? `${r.yoy >= 0 ? "+" : ""}${r.yoy.toFixed(1)}%` : "—";
       const yoyCls = (r && r.yoy > 0) ? "up" : (r && r.yoy < 0) ? "down" : "";
       const gm = (fnl && typeof fnl.gross_margin === "number") ? fnl.gross_margin.toFixed(1) + "%" : "—";
       const pe = (vl && vl.pe_ratio > 0) ? vl.pe_ratio.toFixed(1) : "—";
       const yld = (vl && typeof vl.yield_pct === "number") ? vl.yield_pct.toFixed(2) + "%" : "—";
+      const fvc = fvClass(s.code);
+      const fvCell = fvc ? `<span class="fv-pill fv-${fvc}">${fvLabel[fvc]}</span>` : "—";
       return `<tr data-code="${s.code}">
         <td class="code"><a href="${pageHref('stock-detail.html?code=' + s.code)}">${s.code}</a></td>
         <td><a href="${pageHref('stock-detail.html?code=' + s.code)}" style="color:inherit;">${s.name}</a></td>
@@ -376,6 +434,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td class="num">${gm}</td>
         <td class="num">${pe}</td>
         <td class="num">${yld}</td>
+        <td>${fvCell}</td>
         <td class="num">${s.volume.toLocaleString("zh-TW")}</td>
         <td>${s.category}</td>
         <td><span class="status-pill status-${s.status}">${s.status}</span></td>
@@ -400,19 +459,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       const preset = p.dataset.preset;
       const setVal = (id, v) => { document.getElementById(id).value = v; };
       const setChk = (id) => { const el = document.getElementById(id); if (el) { el.checked = true; el.parentElement.classList.add("checked"); } };
-      const checkVal = (group, val) => {
-        const el = document.querySelector(`#${group} input[value="${val}"]`);
-        if (el) { el.checked = true; el.parentElement.classList.add("checked"); }
-      };
-      if (preset === "dividend") { setVal("yldMin", "5"); }
+      const checkVal = (group, val) => { const el = document.querySelector(`#${group} input[value="${val}"]`); if (el) { el.checked = true; el.parentElement.classList.add("checked"); } };
+      if (preset === "dividend") setVal("yldMin", "5");
       if (preset === "value")    { setVal("peMax", "15"); setVal("gmMin", "30"); }
       if (preset === "growth")   { setVal("revMin", "10"); setChk("chkOpProfit"); }
+      if (preset === "undervalued") { setVal("fvPos", "low"); setVal("confMin", "3"); }
+      if (preset === "chips")    { setChk("chkForeign"); setChk("chkMargin"); setChk("chkExLowVol"); }
+      if (preset === "divgrow")  { setVal("yldMin", "4"); setVal("revMin", "0"); setVal("momMin", "0"); }
       if (preset === "up") setVal("pctMin", "0.01");
       if (preset === "down") setVal("pctMax", "-0.01");
       if (preset === "volume") setVal("volMin", "500");
       if (preset === "ai") { checkVal("catList","半導體"); checkVal("catList","IC設計"); checkVal("catList","伺服器"); }
       if (preset === "bio") checkVal("catList","生技醫療");
-      if (preset === "ipo") checkVal("statusList","興櫃");
       if (preset === "high") setVal("priceMin", "500");
       if (preset === "low") setVal("priceMax", "100");
       apply();
@@ -422,8 +480,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("applyBtn").addEventListener("click", apply);
   document.getElementById("resetBtn").addEventListener("click", reset);
   document.getElementById("sortBy").addEventListener("change", apply);
+  document.getElementById("scanToggleBtn").addEventListener("click", () => {
+    showToast && showToast("每日自動掃描即將推出，敬請期待 🔔", "success");
+  });
 
-  // 💾 我的策略（存 / 載，localStorage）
+  // 💾 我的策略（localStorage）
   const STRAT_KEY = "leadfu_screener_strategies";
   const getStrategies = () => { try { return JSON.parse(localStorage.getItem(STRAT_KEY) || "[]"); } catch { return []; } };
   function refreshStrategyList() {
@@ -433,23 +494,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   function writeFilters(f) {
     reset();
-    const setV = (id, v) => { if (v != null) document.getElementById(id).value = v; };
-    ["priceMin", "priceMax", "pctMin", "pctMax", "volMin", "volMax", "revMin", "gmMin", "peMax", "yldMin"].forEach(id => setV(id, f[id]));
-    if (f.ma20) document.getElementById("chkMa20").checked = true;
-    if (f.foreign) document.getElementById("chkForeign").checked = true;
-    if (f.opProfit) document.getElementById("chkOpProfit").checked = true;
+    const setV = (id, v) => { if (v != null && v !== "") document.getElementById(id).value = v; };
+    ["priceMin","priceMax","pctMin","pctMax","volMin","volMax","revMin","momMin","gmMin","peMax","yldMin","confMin"].forEach(id => setV(id, f[id]));
+    if (f.fvPos) document.getElementById("fvPos").value = f.fvPos;
+    [["ma20","chkMa20"],["foreign","chkForeign"],["trust","chkTrust"],["opProfit","chkOpProfit"],["sbl","chkSbl"],["margin","chkMargin"],["announce","chkAnnounce"],["exLowVol","chkExLowVol"]]
+      .forEach(([k,id]) => { if (f[k]) { const el = document.getElementById(id); el.checked = true; el.parentElement.classList.add("checked"); } });
     (f.status || []).forEach(v => { const el = document.querySelector(`#statusList input[value="${v}"]`); if (el) { el.checked = true; el.parentElement.classList.add("checked"); } });
     (f.cats || []).forEach(v => { const el = document.querySelector(`#catList input[value="${v}"]`); if (el) { el.checked = true; el.parentElement.classList.add("checked"); } });
     if (f.sort) document.getElementById("sortBy").value = f.sort;
   }
   document.getElementById("saveStrategyBtn").addEventListener("click", () => {
-    const name = (prompt("幫這個選股策略取個名字（例：高股息存股、低PE成長股）：") || "").trim();
+    const name = (prompt("幫這個選股策略取個名字（例：高股息存股、合理區間偏低）：") || "").trim();
     if (!name) return;
     const strats = getStrategies();
     strats.push({ name, filters: readFilters() });
     localStorage.setItem(STRAT_KEY, JSON.stringify(strats));
     refreshStrategyList();
-    alert(`已儲存策略「${name}」，下次可從上方下拉一鍵套用。`);
+    alert(`已儲存策略「${name}」。下次可一鍵套用；每日自動掃描上線後也會用這些策略幫你掃。`);
   });
   document.getElementById("strategySelect").addEventListener("change", (e) => {
     if (e.target.value === "") return;
