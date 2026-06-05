@@ -3244,6 +3244,18 @@ async function loadLiveData() {
     console.log(`[領富 AI] ℹ️ 估值指標未載入 (${e.message})`);
   }
 
+  // 8b. 營益分析：毛利率/營業利益率/純益率（MOPS t187ap17，上市+上櫃）
+  try {
+    const live = await fetchJson("financials_live.json");
+    if (live.data) {
+      STOCK_DATA.financials = live.data;
+      STOCK_DATA.financialsPeriod = live.period;
+      console.log(`[領富 AI] ✅ ${live.count || 0} 筆財報（${live.period}）`);
+    }
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 財報未載入 (${e.message})`);
+  }
+
   // 9. 融資融券（散戶籌碼面 - TWSE MI_MARGN）
   try {
     const live = await fetchJson("margin_live.json");

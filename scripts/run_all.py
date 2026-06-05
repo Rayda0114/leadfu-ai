@@ -41,6 +41,7 @@ SCRIPTS = [
     "fetch_announcements.py",
     "fetch_institutional.py",   # 三大法人買賣超（上市，TWSE T86）
     "fetch_valuation.py",       # 本益比/殖利率/股價淨值比（上市，TWSE BWIBBU_d）
+    "fetch_financials.py",      # 營益分析：毛利率/營業利益率/純益率（上市+上櫃，MOPS t187ap17）
     "fetch_margin.py",          # 融資融券（上市，TWSE MI_MARGN）
     "fetch_margin_tpex.py",     # 融資融券（上櫃，TPEx balance）
     "fetch_sbl.py",             # 借券（外資空單，TWSE TWT93U）

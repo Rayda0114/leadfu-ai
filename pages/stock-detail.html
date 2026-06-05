@@ -321,6 +321,7 @@
     <button data-section="sec-news">個股新聞</button>
     <button data-section="sec-ann">公司公告</button>
     <button data-section="sec-peers">🏭 同業比較</button>
+    <button data-section="sec-fhealth">🩺 財報健檢</button>
     <button data-section="sec-ai">AI 智能分析</button>
   </div>
 
@@ -371,6 +372,31 @@
   </style>
   <div class="detail-section" id="sec-peers">
     <div id="peersPanel"></div>
+  </div>
+
+  <!-- 🩺 財報健檢（營益分析：毛利率/本業獲利/業外依賴） -->
+  <style>
+    #fhPanel { padding: 14px 16px; }
+    .fh-light { display:flex; align-items:center; gap:14px; padding:14px 16px; border-radius:10px; margin-bottom:16px; }
+    .fh-light.green { background:#e7f5ec; } .fh-light.yellow { background:#fff7e0; } .fh-light.red { background:#fdecec; } .fh-light.gray { background:#f1f1f1; }
+    .fh-dot { font-size:30px; }
+    .fh-verdict { font-size:17px; font-weight:800; }
+    .fh-light.green .fh-verdict { color:#1e9e54; } .fh-light.yellow .fh-verdict { color:#c98a00; } .fh-light.red .fh-verdict { color:#d23b3b; } .fh-light.gray .fh-verdict { color:#888; }
+    .fh-verdict-sub { font-size:13px; color:#666; margin-top:2px; }
+    .fh-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:14px; }
+    @media (max-width:600px){ .fh-metrics { grid-template-columns:1fr; } }
+    .fh-m { background:#f7f9f8; border:1px solid #e6ebe8; border-radius:8px; padding:12px 14px; }
+    .fh-m .lab { font-size:12px; color:#888; margin-bottom:4px; }
+    .fh-m .val { font-size:22px; font-weight:800; color:#1B4332; }
+    .fh-m .note { font-size:12px; color:#888; margin-top:3px; }
+    .fh-check { list-style:none; padding:0; margin:0 0 8px; }
+    .fh-check li { font-size:14px; color:#444; line-height:1.6; padding:5px 0 5px 24px; position:relative; }
+    .fh-check li .ic { position:absolute; left:0; }
+    .fh-disc { font-size:11px; color:#aaa; margin-top:10px; line-height:1.6; }
+    .fh-empty { color:#999; text-align:center; padding:36px 20px; }
+  </style>
+  <div class="detail-section" id="sec-fhealth">
+    <div id="fhPanel"></div>
   </div>
 
   <!-- AI 個股摘要（自動載入，sessionStorage 快取） -->
@@ -702,6 +728,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ★ 同業比較
   renderPeers(code, s);
 
+  // ★ 財報健檢（營益分析紅綠燈）
+  renderFinHealth(code, s);
+
   // ★ 領富 AI 合理區間（LeadFu Fair Value Range™）
   renderFairValue(code, s);
 
@@ -715,13 +744,69 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupStockAiSummary(code, s);
 });
 
+function renderFinHealth(code, stock) {
+  const L = window.LeadFu;
+  const panel = document.getElementById("fhPanel");
+  if (!panel) return;
+  const f = (L.data.financials && L.data.financials[code]) || null;
+  const period = (L.data.financialsPeriod) ? L.data.financialsPeriod.replace("Q", " 年第 ") + " 季" : "最新一季";
+
+  if (!f || f.gross_margin == null) {
+    panel.innerHTML = `<div class="fh-empty">此股暫無「營益分析」資料（金融／保險／興櫃等類股無毛利率概念，或尚未公布財報）。<br>其餘籌碼、技術、估值面可參考其他分頁。</div>`;
+    return;
+  }
+
+  const gross = f.gross_margin, op = f.op_margin, net = f.net_margin;
+  const checks = [];
+
+  // 毛利率
+  if (gross != null) {
+    const lvl = gross >= 40 ? "偏高（產品力強）" : gross >= 15 ? "中等" : "偏低（薄利／代工特性）";
+    const ic = gross >= 40 ? "✅" : gross >= 15 ? "🔹" : "⚠️";
+    checks.push(`<li><span class="ic">${ic}</span>毛利率 <b>${gross}%</b>，${lvl}</li>`);
+  }
+  // 本業獲利（營業利益率）
+  if (op != null) {
+    if (op > 0) checks.push(`<li><span class="ic">✅</span>營業利益率 <b>${op}%</b> → 本業有賺錢</li>`);
+    else checks.push(`<li><span class="ic">🔴</span>營業利益率 <b>${op}%</b> → <b>本業虧損</b>，要特別注意</li>`);
+  }
+  // 獲利品質（本業 vs 業外）
+  if (op != null && net != null) {
+    const gap = net - op;
+    if (op > 0 && gap >= 8) checks.push(`<li><span class="ic">⚠️</span>稅後純益率 <b>${net}%</b> 明顯高於營業利益率（多出 ${gap.toFixed(1)} 個百分點）→ <b>獲利有相當部分來自業外</b>（如處分資產、投資收益），本業外收益較不穩定</li>`);
+    else if (net < 0) checks.push(`<li><span class="ic">🔴</span>稅後純益率 <b>${net}%</b> → <b>本季實際虧損</b></li>`);
+    else if (net < op) checks.push(`<li><span class="ic">🔹</span>稅後純益率 <b>${net}%</b>（低於營益率，受稅負或業外損失影響），本業仍是主要獲利來源</li>`);
+    else checks.push(`<li><span class="ic">✅</span>稅後純益率 <b>${net}%</b>，獲利主要來自本業，品質佳</li>`);
+  }
+
+  // 燈號
+  let cls = "green", dot = "🟢", verdict = "營運健康", sub = "本業獲利、品質尚可";
+  if ((op != null && op < 0) || (net != null && net < 0)) { cls = "red"; dot = "🔴"; verdict = "數據惡化，留意"; sub = "本業或整體出現虧損，不宜只看表面"; }
+  else if ((op != null && net != null && (net - op) >= 8) || (gross != null && gross < 10)) { cls = "yellow"; dot = "🟡"; verdict = "有幾點要注意"; sub = "獲利偏賴業外或毛利偏低，留意持續性"; }
+
+  const metric = (lab, v, note) => `<div class="fh-m"><div class="lab">${lab}</div><div class="val">${v == null ? "—" : v + "%"}</div>${note ? `<div class="note">${note}</div>` : ""}</div>`;
+
+  panel.innerHTML = `
+    <div class="fh-light ${cls}">
+      <div class="fh-dot">${dot}</div>
+      <div><div class="fh-verdict">${verdict}</div><div class="fh-verdict-sub">${sub}（${period}）</div></div>
+    </div>
+    <div class="fh-metrics">
+      ${metric("毛利率", gross, "產品/服務的賺錢能力")}
+      ${metric("營業利益率", op, "本業的賺錢能力")}
+      ${metric("稅後純益率", net, "最後實際賺多少")}
+    </div>
+    <ul class="fh-check">${checks.join("")}</ul>
+    <div class="fh-disc">※ 依 MOPS 營益分析（${period}）整理，為「獲利能力」健檢；現金流、存貨、應收帳款、負債與「連續幾季趨勢」將陸續補上。非投資建議。</div>`;
+}
+
 function renderPeers(code, stock) {
   const L = window.LeadFu;
   const panel = document.getElementById("peersPanel");
   if (!panel || !stock) return;
   const cat = stock.category;
   const all = L.data.stocks || [];
-  const rev = L.data.revenue || {}, val = L.data.valuation || {}, inst = L.data.institutional || {};
+  const rev = L.data.revenue || {}, val = L.data.valuation || {}, inst = L.data.institutional || {}, fin = L.data.financials || {};
   if (!cat) { panel.innerHTML = `<div class="peers-empty">此股無產業分類，無法比較。</div>`; return; }
 
   let peers = all.filter(s => s.category === cat).map(s => ({
@@ -729,7 +814,8 @@ function renderPeers(code, stock) {
     yoy: (rev[s.code] && typeof rev[s.code].yoy === "number") ? rev[s.code].yoy : null,
     pe: (val[s.code] && val[s.code].pe_ratio > 0) ? val[s.code].pe_ratio : null,
     yld: (val[s.code] && typeof val[s.code].yield_pct === "number") ? val[s.code].yield_pct : null,
-    foreign: (inst[s.code] && typeof inst[s.code].foreign_net_lots === "number") ? inst[s.code].foreign_net_lots : null
+    foreign: (inst[s.code] && typeof inst[s.code].foreign_net_lots === "number") ? inst[s.code].foreign_net_lots : null,
+    gm: (fin[s.code] && typeof fin[s.code].gross_margin === "number") ? fin[s.code].gross_margin : null
   }));
   if (peers.length < 2) { panel.innerHTML = `<div class="peers-empty">「${cat}」同業資料不足，無法比較。</div>`; return; }
 
@@ -741,6 +827,7 @@ function renderPeers(code, stock) {
   const sumCard = (ttl, p, fmt) => p ? `<div class="peers-sum-card"><div class="ttl">${ttl}</div><div class="who">${p.code === code ? "<b>" : ""}${p.name}${p.code === code ? "</b>" : ""} <span style="color:#888;font-weight:400;">${fmt(p)}</span></div></div>` : "";
   const sumHtml = `<div class="peers-sum">
     ${sumCard("📈 營收成長王", best("yoy", 1, saneGrow), p => `+${p.yoy.toFixed(1)}%`)}
+    ${sumCard("🏆 毛利率最高", best("gm", 1), p => `${p.gm.toFixed(1)}%`)}
     ${sumCard("💰 最低本益比", best("pe", -1), p => `PE ${p.pe.toFixed(1)}`)}
     ${sumCard("🏦 殖利率最高", best("yld", 1), p => `${p.yld.toFixed(2)}%`)}
     ${sumCard("🐂 法人最愛", best("foreign", 1), p => `外資 ${p.foreign >= 0 ? "+" : ""}${p.foreign.toLocaleString("zh-TW")}張`)}
@@ -764,6 +851,7 @@ function renderPeers(code, stock) {
       <td class="name"><a href="stock-detail.html?code=${p.code}">${p.code === code ? "<b>" : ""}${p.code} ${p.name}${p.code === code ? "</b>" : ""}</a></td>
       <td>${chg}</td>
       <td class="${p.yoy > 0 ? "peers-up" : p.yoy < 0 ? "peers-down" : ""}">${yoyStr}</td>
+      <td>${p.gm != null ? p.gm.toFixed(1) + "%" : "—"}</td>
       <td>${p.pe != null ? p.pe.toFixed(1) : "—"}</td>
       <td>${p.yld != null ? p.yld.toFixed(2) + "%" : "—"}</td>
       <td class="${p.foreign > 0 ? "peers-up" : p.foreign < 0 ? "peers-down" : ""}">${p.foreign != null ? (p.foreign >= 0 ? "+" : "") + p.foreign.toLocaleString("zh-TW") : "—"}</td>
@@ -775,7 +863,7 @@ function renderPeers(code, stock) {
     ${sumHtml}${rankHtml}
     <div style="overflow-x:auto;">
     <table class="peers-table">
-      <thead><tr><th class="name">代號 名稱</th><th>現價</th><th>月營收年增</th><th>本益比</th><th>殖利率</th><th>外資買賣超</th></tr></thead>
+      <thead><tr><th class="name">代號 名稱</th><th>現價</th><th>月營收年增</th><th>毛利率</th><th>本益比</th><th>殖利率</th><th>外資買賣超</th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>
     <div style="font-size:11px;color:#aaa;margin-top:10px;">※ 同業公開資料整理，非投資建議；毛利率等完整財報指標待後續補上。</div>`;
@@ -822,6 +910,15 @@ function renderJudgeCard(code, stock) {
   }
   if (val && typeof val.pe_ratio === "number" && val.pe_ratio > 40) {
     risks.push(`本益比 ${val.pe_ratio.toFixed(0)} 偏高`);
+  }
+  // 5) 財報（營益分析）：本業獲利 + 毛利
+  const fin = (L.data.financials && L.data.financials[code]) || null;
+  if (fin) {
+    if (typeof fin.op_margin === "number" && fin.op_margin < 0) { risks.push(`本業虧損（營業利益率 ${fin.op_margin}%）`); score--; }
+    if (typeof fin.gross_margin === "number" && fin.gross_margin >= 40) { reasons.push(`高毛利 <b>${fin.gross_margin}%</b>（產品力強）`); score++; }
+    if (typeof fin.op_margin === "number" && typeof fin.net_margin === "number" && fin.op_margin > 0 && (fin.net_margin - fin.op_margin) >= 8) {
+      risks.push(`獲利偏賴業外（稅後純益率高於營益率 ${(fin.net_margin - fin.op_margin).toFixed(1)}pp）`);
+    }
   }
 
   // 狀態
