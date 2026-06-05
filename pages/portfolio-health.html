@@ -78,6 +78,18 @@
   </div>
 
   <div id="phContent" style="display:none;">
+    <!-- 💰 我的持股損益（填入股數+成本才顯示） -->
+    <div class="panel" id="phPnlPanel" style="display:none;margin-bottom:14px;">
+      <div class="panel-head"><h2>💰 我的持股損益</h2><span style="font-size:12px;color:#888;">即時計算・依現價</span></div>
+      <div id="phPnlBody" style="padding:16px 20px;"></div>
+    </div>
+    <div class="panel" id="phPnlHint" style="display:none;margin-bottom:14px;">
+      <div style="padding:16px 20px;color:#555;font-size:14px;line-height:1.75;">
+        💡 在下方「<strong>持股明細</strong>」每檔填入<strong>股數</strong>與<strong>成本價</strong>，這裡就會即時算出你的
+        <strong>未實現損益、今日損益、有沒有贏大盤、年化股息</strong>。資料只存在你的帳號（登入後跨裝置同步）。
+      </div>
+    </div>
+
     <!-- 摘要卡片 -->
     <div class="ph-summary">
       <div class="ph-summary-card">
@@ -145,6 +157,29 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
 </footer>
 
+<style>
+  /* 持股損益面板 */
+  .pnl-metrics { display:flex; flex-wrap:wrap; gap:14px 28px; }
+  .pnl-m { min-width:120px; }
+  .pnl-m .lab { font-size:12px; color:#888; margin-bottom:3px; }
+  .pnl-m .val { font-size:20px; font-weight:800; color:#1B4332; }
+  .pnl-m .val.up { color:#d23b3b; }      /* 賺＝紅 */
+  .pnl-m .val.down { color:#1e9e54; }    /* 賠＝綠 */
+  .pnl-vs { margin-top:14px; padding-top:14px; border-top:1px dashed #e2ded4; font-size:14px; color:#444; line-height:1.8; }
+  .pnl-vs b.up { color:#d23b3b; } .pnl-vs b.down { color:#1e9e54; }
+  /* 持股明細列（可輸入股數/成本） */
+  #phStockList .ph-stock-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; padding:11px 14px; border-bottom:1px solid #eef0f3; }
+  #phStockList .ph-stock-row:hover { background:#f8fafd; }
+  .phs-name { color:inherit; text-decoration:none; min-width:180px; flex:1; }
+  .phs-name b { color:#1B4332; }
+  .phs-price { font-size:13px; margin-left:6px; }
+  .phs-price.up { color:#d23b3b; } .phs-price.down { color:#1e9e54; } .phs-price.flat { color:#888; }
+  .phs-inputs { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .phs-inputs label { font-size:12px; color:#888; display:inline-flex; align-items:center; gap:4px; }
+  .phs-inputs input { width:78px; padding:5px 7px; border:1px solid #d0d5dc; border-radius:6px; font-size:13px; text-align:right; }
+  .phs-pnl { font-size:13px; font-weight:700; min-width:96px; text-align:right; }
+  .phs-pnl.up { color:#d23b3b; } .phs-pnl.down { color:#1e9e54; } .phs-pnl.none { color:#bbb; font-weight:400; }
+</style>
 <script src="../js/main.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
@@ -222,24 +257,134 @@ document.addEventListener("DOMContentLoaded", async () => {
   else { riskLabel = "低"; riskColor = "#16A34A"; }
   document.getElementById("phRisk").innerHTML = `<span style="color:${riskColor}">${riskLabel}</span><div style="font-size:12px;color:#666;margin-top:2px;">前 3 大產業占 ${concentration}%</div>`;
 
-  // === 4. 持股明細列表 ===
-  document.getElementById("phStockCount").textContent = stocks.length + " 檔";
-  document.getElementById("phStockList").innerHTML = stocks.map(s => {
-    const pct = L.pctChange(s.price, s.change);
-    const cls = L.changeClass(s.change);
-    const m = s.market === "listed" ? "上市" : s.market === "otc" ? "上櫃" : s.market === "emerging" ? "興櫃" : "";
-    const val = valuation[s.code] || {};
-    const peStr = val.pe_ratio ? `P/E ${val.pe_ratio}` : "P/E —";
-    const yStr = val.yield_pct !== null && val.yield_pct !== undefined ? `殖利率 ${val.yield_pct.toFixed(2)}%` : "殖利率 —";
-    return `<a class="ph-stock-row" href="stock-detail.html?code=${s.code}">
-      <span class="ph-stock-code">${s.code}</span>
-      <span class="ph-stock-name">${s.name}</span>
-      <span class="status-pill status-${m}" style="font-size:10px;">${m}</span>
-      <span class="ph-stock-cat">${s.category || ""}</span>
-      <span class="ph-stock-price ${cls}">${L.fmtPrice(s.price)} ${L.arrow(s.change)} ${L.fmtPct(pct)}</span>
-      <span class="ph-stock-val">${peStr} ・ ${yStr}</span>
-    </a>`;
-  }).join("");
+  // === 4. 持股明細列表（可填股數/成本 → 算單檔損益）===
+  function renderStockList() {
+    const holdings = L.getHoldings ? L.getHoldings() : {};
+    document.getElementById("phStockCount").textContent = stocks.length + " 檔";
+    document.getElementById("phStockList").innerHTML = stocks.map(s => {
+      const pct = L.pctChange(s.price, s.change);
+      const cls = L.changeClass(s.change);
+      const h = holdings[s.code] || {};
+      const shares = h.shares > 0 ? h.shares : "";
+      const cost = h.cost > 0 ? h.cost : "";
+      let pnlHtml = '<span class="phs-pnl none">填股數/成本</span>';
+      if (h.shares > 0 && h.cost > 0) {
+        const pnl = h.shares * (s.price - h.cost);
+        const pnlPct = (s.price - h.cost) / h.cost * 100;
+        const c = pnl > 0 ? "up" : pnl < 0 ? "down" : "flat";
+        pnlHtml = `<span class="phs-pnl ${c}">${pnl >= 0 ? "+" : ""}${Math.round(pnl).toLocaleString("zh-TW")} <span style="font-size:11px;">(${pnlPct >= 0 ? "+" : ""}${pnlPct.toFixed(1)}%)</span></span>`;
+      }
+      return `<div class="ph-stock-row" data-code="${s.code}">
+        <a class="phs-name" href="stock-detail.html?code=${s.code}">
+          <b>${s.code}</b> ${s.name}
+          <span class="phs-price ${cls}">${L.fmtPrice(s.price)} ${L.arrow(s.change)}${L.fmtPct(pct)}</span>
+        </a>
+        <div class="phs-inputs">
+          <label>股數 <input type="number" class="phs-shares" data-code="${s.code}" value="${shares}" min="0" step="1000" placeholder="0"></label>
+          <label>成本 <input type="number" class="phs-cost" data-code="${s.code}" value="${cost}" min="0" step="0.01" placeholder="—"></label>
+          ${pnlHtml}
+        </div>
+      </div>`;
+    }).join("");
+  }
+  renderStockList();
+
+  // === 4b. 持股損益 + 對標大盤 ===
+  let marketTwPct = null;   // 加權指數今日漲跌%
+
+  function computePnl() {
+    const holdings = L.getHoldings ? L.getHoldings() : {};
+    let totalCost = 0, totalValue = 0, todayGain = 0, yesterdayValue = 0, annualDiv = 0, n = 0;
+    stocks.forEach(s => {
+      const h = holdings[s.code];
+      if (!h || !(h.shares > 0)) return;
+      n++;
+      const value = h.shares * s.price;
+      totalValue += value;
+      if (h.cost > 0) totalCost += h.shares * h.cost;
+      todayGain += h.shares * (s.change || 0);
+      yesterdayValue += h.shares * (s.price - (s.change || 0));
+      const y = (valuation[s.code] || {}).yield_pct;
+      if (y) annualDiv += value * y / 100;
+    });
+    const unreal = totalCost > 0 ? (totalValue - totalCost) : null;
+    const unrealPct = (unreal !== null && totalCost > 0) ? (unreal / totalCost * 100) : null;
+    const todayPct = yesterdayValue > 0 ? (todayGain / yesterdayValue * 100) : null;
+    return { n, totalCost, totalValue, unreal, unrealPct, todayGain, todayPct, annualDiv };
+  }
+
+  const ud = v => v > 0 ? "up" : v < 0 ? "down" : "flat";
+  const money = v => (v < 0 ? "-" : "") + Math.abs(Math.round(v)).toLocaleString("zh-TW");
+
+  function renderPnl() {
+    const p = computePnl();
+    const panel = document.getElementById("phPnlPanel");
+    const hint = document.getElementById("phPnlHint");
+    if (p.n === 0) { panel.style.display = "none"; hint.style.display = "block"; return; }
+    hint.style.display = "none"; panel.style.display = "block";
+
+    const cards = [];
+    cards.push(`<div class="pnl-m"><div class="lab">總市值</div><div class="val">${money(p.totalValue)}</div></div>`);
+    if (p.totalCost > 0) cards.push(`<div class="pnl-m"><div class="lab">總成本</div><div class="val">${money(p.totalCost)}</div></div>`);
+    if (p.unreal !== null) cards.push(`<div class="pnl-m"><div class="lab">未實現損益</div><div class="val ${ud(p.unreal)}">${p.unreal >= 0 ? "+" : ""}${money(p.unreal)} <span style="font-size:13px;">(${p.unrealPct >= 0 ? "+" : ""}${p.unrealPct.toFixed(1)}%)</span></div></div>`);
+    if (p.todayGain !== 0) cards.push(`<div class="pnl-m"><div class="lab">今日損益</div><div class="val ${ud(p.todayGain)}">${p.todayGain >= 0 ? "+" : ""}${money(p.todayGain)}</div></div>`);
+    if (p.annualDiv > 0) cards.push(`<div class="pnl-m"><div class="lab">預估年股息</div><div class="val">${money(p.annualDiv)}</div></div>`);
+
+    let vsHtml = "";
+    if (p.todayPct !== null) {
+      let line = `今日你的組合 <b class="${ud(p.todayPct)}">${p.todayPct >= 0 ? "+" : ""}${p.todayPct.toFixed(2)}%</b>`;
+      if (marketTwPct !== null) {
+        const diff = p.todayPct - marketTwPct;
+        line += `　vs　加權指數 ${marketTwPct >= 0 ? "+" : ""}${marketTwPct.toFixed(2)}%　→　`
+          + `<b class="${ud(diff)}">${diff >= 0 ? "贏大盤 +" : "輸大盤 "}${diff.toFixed(2)}%</b>`;
+      }
+      vsHtml = `<div class="pnl-vs">📊 ${line}</div>`;
+    }
+
+    document.getElementById("phPnlBody").innerHTML =
+      `<div class="pnl-metrics">${cards.join("")}</div>${vsHtml}`
+      + `<div style="margin-top:12px;font-size:11px;color:#aaa;">※ 依目前股價試算，僅供參考，不含手續費/稅；非投資建議。</div>`;
+  }
+
+  async function fetchMarketIndex() {
+    try {
+      const r = await fetch("/api/quote?ex_ch=tse_t00.tw");
+      const d = await r.json();
+      const q = (d.msgArray || []).find(x => x.c === "t00");
+      if (q) {
+        let z = parseFloat(q.z); if (isNaN(z) || z <= 0) z = parseFloat(q.pz);
+        const y = parseFloat(q.y);
+        if (!isNaN(z) && !isNaN(y) && y > 0) { marketTwPct = (z - y) / y * 100; renderPnl(); }
+      }
+    } catch (e) { /* 取不到大盤就只是不顯示對標，不影響損益 */ }
+  }
+
+  // 輸入股數/成本 → 存 + 就地更新該列損益 + 重算總損益（不整列重繪，保住輸入焦點）
+  document.getElementById("phStockList").addEventListener("change", (e) => {
+    const el = e.target;
+    if (!el.classList || (!el.classList.contains("phs-shares") && !el.classList.contains("phs-cost"))) return;
+    const code = el.dataset.code;
+    const row = el.closest(".ph-stock-row");
+    if (!row) return;
+    if (L.setHolding) L.setHolding(code, row.querySelector(".phs-shares").value, row.querySelector(".phs-cost").value);
+    const s = stocks.find(x => x.code === code);
+    const h = (L.getHoldings ? L.getHoldings() : {})[code];
+    const pnlEl = row.querySelector(".phs-pnl");
+    if (pnlEl && s) {
+      if (h && h.shares > 0 && h.cost > 0) {
+        const pnl = h.shares * (s.price - h.cost), pct = (s.price - h.cost) / h.cost * 100;
+        pnlEl.className = "phs-pnl " + ud(pnl);
+        pnlEl.innerHTML = `${pnl >= 0 ? "+" : ""}${Math.round(pnl).toLocaleString("zh-TW")} <span style="font-size:11px;">(${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%)</span>`;
+      } else { pnlEl.className = "phs-pnl none"; pnlEl.textContent = "填股數/成本"; }
+    }
+    renderPnl();
+  });
+
+  // 雲端持股同步回來（登入者跨裝置）→ 整列重繪
+  document.addEventListener("leadfu:holdings-synced", () => { renderStockList(); renderPnl(); });
+
+  renderPnl();
+  fetchMarketIndex();
 
   // === 5. AI 健診報告（streaming）===
   const aiResult = document.getElementById("phAiResult");

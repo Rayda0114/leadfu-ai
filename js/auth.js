@@ -139,6 +139,21 @@ window.LeadFuAuth = {
     if (error) console.warn("[領富 AI] 寫雲端自選失敗:", error.message);
   },
 
+  /* ── 持股雲端同步（profiles.holdings 欄位，jsonb；格式 {code:{shares,cost}}）── */
+  async getCloudHoldings() {
+    const user = await this.getUser();
+    if (!user) return null;
+    const { data, error } = await _sb.from("profiles").select("holdings").eq("id", user.id).single();
+    if (error) { console.warn("[領富 AI] 讀雲端持股失敗:", error.message); return null; }
+    return (data && data.holdings && typeof data.holdings === "object") ? data.holdings : {};
+  },
+  async setCloudHoldings(holdings) {
+    const user = await this.getUser();
+    if (!user) return;
+    const { error } = await _sb.from("profiles").update({ holdings }).eq("id", user.id);
+    if (error) console.warn("[領富 AI] 寫雲端持股失敗:", error.message);
+  },
+
   /* 把 Supabase 錯誤碼轉成中文（給 45-75 歲族群看得懂）*/
   zhError(error) {
     const msg = (error && error.message) || String(error);

@@ -378,6 +378,52 @@ function _pushWatchlistToCloud() {
   }, 800);
 }
 
+/* ── 持股（localStorage + 雲端同步，登入者）──
+   holdings 格式：{ "2330": { shares: 1000, cost: 580 }, ... } */
+const HOLDINGS_KEY = "leadfu_holdings";
+function getHoldings() {
+  try {
+    const o = JSON.parse(localStorage.getItem(HOLDINGS_KEY) || "{}");
+    return (o && typeof o === "object" && !Array.isArray(o)) ? o : {};
+  } catch { return {}; }
+}
+function setHolding(code, shares, cost) {
+  const h = getHoldings();
+  shares = Number(shares) || 0;
+  cost = Number(cost) || 0;
+  if (shares > 0) h[code] = { shares, cost };
+  else delete h[code];                 // 股數 0 視為移除
+  localStorage.setItem(HOLDINGS_KEY, JSON.stringify(h));
+  _pushHoldingsToCloud();
+}
+function removeHolding(code) {
+  const h = getHoldings();
+  delete h[code];
+  localStorage.setItem(HOLDINGS_KEY, JSON.stringify(h));
+  _pushHoldingsToCloud();
+}
+// 載入時：雲端為主、本地獨有的補上（登入者）
+async function syncHoldingsFromCloud() {
+  const auth = await _ensureAuth();
+  if (!auth) return;
+  const cloud = await auth.getCloudHoldings();
+  if (cloud == null) return;
+  const local = getHoldings();
+  const merged = { ...local, ...cloud };
+  localStorage.setItem(HOLDINGS_KEY, JSON.stringify(merged));
+  if (Object.keys(merged).length !== Object.keys(cloud).length) await auth.setCloudHoldings(merged);
+  document.dispatchEvent(new CustomEvent("leadfu:holdings-synced"));
+}
+let _hdPushTimer = null;
+function _pushHoldingsToCloud() {
+  if (!_hasSupabaseSession()) return;   // 匿名：no-op
+  clearTimeout(_hdPushTimer);
+  _hdPushTimer = setTimeout(async () => {
+    const auth = await _ensureAuth();
+    if (auth) await auth.setCloudHoldings(getHoldings());
+  }, 800);
+}
+
 /* ============================================================
  * 今日日期 (top bar)
  * ============================================================ */
@@ -2631,6 +2677,7 @@ window.LeadFu = {
   fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow,
   findStock, pageHref, homeHref,
   getWatchlist, addToWatchlist, removeFromWatchlist, clearWatchlist, isInWatchlist,
+  getHoldings, setHolding, removeHolding,
   mockAiResponse, startLivePriceSimulation, showToast,
   // 第 1 層 AI 問答工具（ai.html 用）
   parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
@@ -3315,6 +3362,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 自選股雲端同步（登入者才動作，匿名 no-op）；同步完成「只刷新視覺狀態」，不可重綁 bindAddFavBtns（會疊加 document click 委派 → 一次點擊觸發兩次）
   document.addEventListener("leadfu:watchlist-synced", () => { try { refreshFavBtnStates(); } catch (e) {} });
   syncWatchlistFromCloud();
+  syncHoldingsFromCloud();
   bindSearch();
   setupVoiceSearch();   // 🎤 語音搜尋（每頁 search-box 自動注入麥克風按鈕）
   bindAiPlaceholders();
