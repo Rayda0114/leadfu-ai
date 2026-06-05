@@ -79,41 +79,6 @@
       <div id="aiNewsResult" style="margin-top:12px;"></div>
     </div>
 
-    <div class="panel">
-      <div class="panel-head"><h2>讀者留言（<span id="cmtCount">3</span>）</h2></div>
-      <div style="padding:16px 20px;">
-        <div id="commentList">
-          <div style="padding:12px 0;border-bottom:1px solid #eef0f3;">
-            <div style="display:flex;gap:10px;align-items:center;font-size:13px;margin-bottom:4px;">
-              <strong style="color:#163A2E;">投資老手_88</strong>
-              <span style="color:#888;font-size:12px;">2 小時前</span>
-            </div>
-            <p style="color:#444;font-size:14px;line-height:1.7;">這檔我關注一陣子了，公司基本面我自己覺得還可以，大家可以多查證再決定。</p>
-          </div>
-          <div style="padding:12px 0;border-bottom:1px solid #eef0f3;">
-            <div style="display:flex;gap:10px;align-items:center;font-size:13px;margin-bottom:4px;">
-              <strong style="color:#163A2E;">新手請教</strong>
-              <span style="color:#888;font-size:12px;">5 小時前</span>
-            </div>
-            <p style="color:#444;font-size:14px;line-height:1.7;">請問現在進場會不會太晚？本益比是不是偏高了？</p>
-          </div>
-          <div style="padding:12px 0;">
-            <div style="display:flex;gap:10px;align-items:center;font-size:13px;margin-bottom:4px;">
-              <strong style="color:#163A2E;">stock_god</strong>
-              <span style="color:#888;font-size:12px;">昨日</span>
-            </div>
-            <p style="color:#444;font-size:14px;line-height:1.7;">外資加碼是真的，可以看籌碼面數據佐證。</p>
-          </div>
-        </div>
-
-        <div style="margin-top:20px;padding-top:16px;border-top:1px solid #eef0f3;">
-          <textarea id="newCmt" placeholder="寫下您的看法..." rows="3" style="width:100%;padding:10px;border:1px solid #d0d5dc;border-radius:3px;font-family:inherit;font-size:14px;"></textarea>
-          <div style="text-align:right;margin-top:8px;">
-            <button class="btn-primary" id="postCmt" style="width:auto;padding:8px 22px;">送出留言</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
   </section>
 
@@ -207,24 +172,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 熱門題材
   document.getElementById("topicList").innerHTML = data.hotTopics.map(t => `<li># ${t}</li>`).join("");
-
-  // 留言
-  document.getElementById("postCmt").addEventListener("click", () => {
-    const v = document.getElementById("newCmt").value.trim();
-    if (!v) return;
-    const div = document.createElement("div");
-    div.style.cssText = "padding:12px 0;border-bottom:1px solid #eef0f3;background:#fff8e1;";
-    div.innerHTML = `
-      <div style="display:flex;gap:10px;align-items:center;font-size:13px;margin-bottom:4px;">
-        <strong style="color:#163A2E;">您 (訪客)</strong>
-        <span style="color:#888;font-size:12px;">剛剛</span>
-      </div>
-      <p style="color:#444;font-size:14px;line-height:1.7;">${v}</p>
-    `;
-    document.getElementById("commentList").prepend(div);
-    document.getElementById("newCmt").value = "";
-    document.getElementById("cmtCount").textContent = parseInt(document.getElementById("cmtCount").textContent) + 1;
-  });
 });
 </script>
 </body>

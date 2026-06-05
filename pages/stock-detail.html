@@ -269,7 +269,6 @@
     <button data-section="sec-tech">技術／籌碼</button>
     <button data-section="sec-news">個股新聞</button>
     <button data-section="sec-ann">公司公告</button>
-    <button data-section="sec-talk">個股討論</button>
     <button data-section="sec-ai">AI 智能分析</button>
   </div>
 
@@ -297,14 +296,6 @@
   <!-- 公司公告 -->
   <div class="detail-section" id="sec-ann">
     <ul class="news-list" id="stockAnnList"></ul>
-  </div>
-
-  <!-- 個股討論 -->
-  <div class="detail-section" id="sec-talk">
-    <ul class="thread-list" id="stockThreadList"></ul>
-    <div style="padding:16px;text-align:center;background:#fafbfc;border-top:1px solid #eee;">
-      <button class="btn-primary" style="width:auto;padding:8px 28px;">＋ 我要發文</button>
-    </div>
   </div>
 
   <!-- AI 個股摘要（自動載入，sessionStorage 快取） -->
@@ -629,22 +620,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         <a class="news-title" href="#">${a.title}</a>
       </li>`).join("")
     : `<li style="display:block;text-align:center;padding:30px;color:#999;">尚無此個股公告</li>`;
-
-  // 個股討論（佔位 - 連到 thread-detail）
-  const sampleThreads = [
-    { tid: 1, cat: "個股", title: `[請益] ${s.name} ${s.code} 現在進場會不會太晚？`, author: "stock_god", replies: 128, time: "5 分鐘前" },
-    { tid: 2, cat: "個股", title: `[心得] ${s.name} 持有半年的心得分享`, author: "long_term", replies: 42, time: "2 小時前" },
-    { tid: 3, cat: "個股", title: `[討論] ${s.name} 法說會重點整理`, author: "ai_fan", replies: 87, time: "昨日" }
-  ];
-  document.getElementById("stockThreadList").innerHTML = sampleThreads.map(t => `
-    <li>
-      <span class="thread-cat">${t.cat}</span>
-      <a href="thread-detail.html?id=${t.tid}" class="thread-title">${t.title}</a>
-      <span class="thread-author">${t.author}</span>
-      <span class="thread-replies">${t.replies} 回</span>
-      <span class="thread-time">${t.time}</span>
-    </li>
-  `).join("");
 
   // ★ 領富 AI 合理區間（LeadFu Fair Value Range™）
   renderFairValue(code, s);

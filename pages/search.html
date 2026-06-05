@@ -38,7 +38,7 @@
       <span class="logo-sub">LeadFu · 領先市場兩步</span>
     </a>
     <div class="search-box">
-      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱 / 新聞 / 討論">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱 / 新聞">
       <button id="searchBtn">查詢</button>
     </div>
   </div>
@@ -76,7 +76,6 @@
           <button class="tab active" data-cat="all">全部 (<span id="cAll">0</span>)</button>
           <button class="tab" data-cat="stock">個股 (<span id="cStock">0</span>)</button>
           <button class="tab" data-cat="news">新聞 (<span id="cNews">0</span>)</button>
-          <button class="tab" data-cat="thread">討論 (<span id="cThread">0</span>)</button>
           <button class="tab" data-cat="ann">公告 (<span id="cAnn">0</span>)</button>
         </div>
       </div>
@@ -114,7 +113,7 @@
       <div style="padding: 14px; font-size: 12px; color: #555; line-height: 1.9;">
         <p>輸入股票代號可直接跳轉個股</p>
         <p>輸入公司名稱可模糊搜尋</p>
-        <p>支援搜尋新聞、討論、公告</p>
+        <p>支援搜尋新聞、公告</p>
         <p>關鍵字可搜尋產業類別</p>
       </div>
     </div>
@@ -156,20 +155,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         return s && s.name.includes(q);
       }))
     ),
-    thread: [
-      { id: 1, cat: "個股", title: "[請益] 環球晶 6488 現在進場會不會太晚？", author: "stock_god", replies: 128 },
-      { id: 2, cat: "興櫃", title: "穎崴 6515 法說會重點整理", author: "ai_fan", replies: 87 },
-      { id: 3, cat: "新股", title: "[抽籤] 浩鼎 4174 下週開放，承銷價 305 元", author: "ipo_hunter", replies: 56 }
-    ].filter(t => t.title.includes(q)),
     ann: data.announcements.filter(a =>
       a.title.includes(q) || a.name.includes(q) || a.code.includes(q) || a.type.includes(q)
     )
   };
 
-  document.getElementById("cAll").textContent = matches.stock.length + matches.news.length + matches.thread.length + matches.ann.length;
+  document.getElementById("cAll").textContent = matches.stock.length + matches.news.length + matches.ann.length;
   document.getElementById("cStock").textContent = matches.stock.length;
   document.getElementById("cNews").textContent = matches.news.length;
-  document.getElementById("cThread").textContent = matches.thread.length;
   document.getElementById("cAnn").textContent = matches.ann.length;
 
   function highlight(text, kw) {
@@ -214,18 +207,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       </a>`).join("");
   }
 
-  function renderThreads() {
-    if (matches.thread.length === 0) return "";
-    return matches.thread.map(t => `
-      <a href="${pageHref('thread-detail.html?id=' + t.id)}" style="display:flex;gap:14px;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
-        <span class="thread-cat">${t.cat}</span>
-        <div style="flex:1;">
-          <div style="font-size:14px;color:#222;">${highlight(t.title, q)}</div>
-          <div style="font-size:12px;color:#888;margin-top:2px;">${t.author} ・ ${t.replies} 回覆</div>
-        </div>
-      </a>`).join("");
-  }
-
   function renderAnns() {
     if (matches.ann.length === 0) return "";
     return matches.ann.map(a => `
@@ -241,7 +222,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     let html = "";
     if (cat === "all" || cat === "stock") html += renderSection("📊 個股", matches.stock.length, renderStocks());
     if (cat === "all" || cat === "news")  html += renderSection("📰 新聞", matches.news.length, renderNews());
-    if (cat === "all" || cat === "thread") html += renderSection("💬 討論", matches.thread.length, renderThreads());
     if (cat === "all" || cat === "ann")   html += renderSection("📢 公告", matches.ann.length, renderAnns());
 
     if (!html) {
