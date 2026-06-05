@@ -320,6 +320,7 @@
     <button data-section="sec-tech">技術／籌碼</button>
     <button data-section="sec-news">個股新聞</button>
     <button data-section="sec-ann">公司公告</button>
+    <button data-section="sec-peers">🏭 同業比較</button>
     <button data-section="sec-ai">AI 智能分析</button>
   </div>
 
@@ -347,6 +348,29 @@
   <!-- 公司公告 -->
   <div class="detail-section" id="sec-ann">
     <ul class="news-list" id="stockAnnList"></ul>
+  </div>
+
+  <!-- 🏭 同業比較 -->
+  <style>
+    #peersPanel { padding: 14px 16px; }
+    .peers-sum { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; }
+    .peers-sum-card { flex:1; min-width:150px; background:#f7f9f8; border:1px solid #e6ebe8; border-radius:8px; padding:10px 12px; }
+    .peers-sum-card .ttl { font-size:12px; color:#888; margin-bottom:4px; }
+    .peers-sum-card .who { font-size:14px; font-weight:700; color:#1B4332; }
+    .peers-sum-card .who b { color:#d23b3b; }
+    .peers-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .peers-table th, .peers-table td { padding:8px 6px; border-bottom:1px solid #eef0f3; text-align:right; white-space:nowrap; }
+    .peers-table th { color:#888; font-weight:600; font-size:12px; }
+    .peers-table td.name, .peers-table th.name { text-align:left; }
+    .peers-table a { color:#1B4332; text-decoration:none; }
+    .peers-table tr.self { background:#fff8e1; }
+    .peers-table tr.self td.name b { color:#B08D57; }
+    .peers-up { color:#d23b3b; } .peers-down { color:#1e9e54; }
+    .peers-rank { color:#888; font-size:12px; margin:6px 2px 14px; }
+    .peers-empty { color:#999; text-align:center; padding:30px; }
+  </style>
+  <div class="detail-section" id="sec-peers">
+    <div id="peersPanel"></div>
   </div>
 
   <!-- AI 個股摘要（自動載入，sessionStorage 快取） -->
@@ -675,6 +699,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ★ 個股判斷卡（規則化整理現有資料）
   renderJudgeCard(code, s);
 
+  // ★ 同業比較
+  renderPeers(code, s);
+
   // ★ 領富 AI 合理區間（LeadFu Fair Value Range™）
   renderFairValue(code, s);
 
@@ -687,6 +714,71 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ★ AI 個股摘要自動載入（sessionStorage 快取，同 session 不重複呼叫）
   setupStockAiSummary(code, s);
 });
+
+function renderPeers(code, stock) {
+  const L = window.LeadFu;
+  const panel = document.getElementById("peersPanel");
+  if (!panel || !stock) return;
+  const cat = stock.category;
+  const all = L.data.stocks || [];
+  const rev = L.data.revenue || {}, val = L.data.valuation || {}, inst = L.data.institutional || {};
+  if (!cat) { panel.innerHTML = `<div class="peers-empty">此股無產業分類，無法比較。</div>`; return; }
+
+  let peers = all.filter(s => s.category === cat).map(s => ({
+    code: s.code, name: s.name, price: s.price, change: s.change, volume: s.volume || 0,
+    yoy: (rev[s.code] && typeof rev[s.code].yoy === "number") ? rev[s.code].yoy : null,
+    pe: (val[s.code] && val[s.code].pe_ratio > 0) ? val[s.code].pe_ratio : null,
+    yld: (val[s.code] && typeof val[s.code].yield_pct === "number") ? val[s.code].yield_pct : null,
+    foreign: (inst[s.code] && typeof inst[s.code].foreign_net_lots === "number") ? inst[s.code].foreign_net_lots : null
+  }));
+  if (peers.length < 2) { panel.innerHTML = `<div class="peers-empty">「${cat}」同業資料不足，無法比較。</div>`; return; }
+
+  // 營收成長：排除「基期過低」失真值（去年近 0 → 動輒上萬 %），只取合理區間
+  const saneGrow = peers.filter(p => p.yoy != null && p.yoy >= -100 && p.yoy <= 500);
+  // 同業之最
+  const best = (key, dir, pool) => { const a = (pool || peers).filter(p => p[key] != null).sort((x, y) => (y[key] - x[key]) * (dir || 1)); return a[0] || null; };
+  const sumCard = (ttl, p, fmt) => p ? `<div class="peers-sum-card"><div class="ttl">${ttl}</div><div class="who">${p.code === code ? "<b>" : ""}${p.name}${p.code === code ? "</b>" : ""} <span style="color:#888;font-weight:400;">${fmt(p)}</span></div></div>` : "";
+  const sumHtml = `<div class="peers-sum">
+    ${sumCard("📈 營收成長王", best("yoy", 1, saneGrow), p => `+${p.yoy.toFixed(1)}%`)}
+    ${sumCard("💰 最低本益比", best("pe", -1), p => `PE ${p.pe.toFixed(1)}`)}
+    ${sumCard("🏦 殖利率最高", best("yld", 1), p => `${p.yld.toFixed(2)}%`)}
+    ${sumCard("🐂 法人最愛", best("foreign", 1), p => `外資 ${p.foreign >= 0 ? "+" : ""}${p.foreign.toLocaleString("zh-TW")}張`)}
+  </div>`;
+
+  // 本檔營收成長排名（用合理區間，排除基期失真）
+  const ranked = saneGrow.slice().sort((a, b) => b.yoy - a.yoy);
+  const myRank = ranked.findIndex(p => p.code === code);
+  const rankHtml = (myRank >= 0) ? `<div class="peers-rank">📊 ${stock.name} 的<b>月營收年增</b>在「${cat}」${ranked.length} 檔同業中排第 <b style="color:#1B4332;">${myRank + 1}</b> 名</div>` : "";
+
+  // 表格：成交量前 12（必含本檔），依營收成長排序
+  let show = peers.slice().sort((a, b) => b.volume - a.volume).slice(0, 12);
+  if (!show.find(p => p.code === code)) { const me = peers.find(p => p.code === code); if (me) show.push(me); }
+  show.sort((a, b) => (b.yoy == null ? -999 : b.yoy) - (a.yoy == null ? -999 : a.yoy));
+
+  const rows = show.map(p => {
+    const cls = p.change > 0 ? "peers-up" : p.change < 0 ? "peers-down" : "";
+    const chg = (p.price != null) ? `<span class="${cls}">${p.change > 0 ? "▲" : p.change < 0 ? "▼" : ""}${p.price.toFixed(2)}</span>` : "—";
+    const yoyStr = p.yoy == null ? "—" : `${p.yoy >= 0 ? "+" : ""}${p.yoy.toFixed(1)}%`;
+    return `<tr class="${p.code === code ? "self" : ""}">
+      <td class="name"><a href="stock-detail.html?code=${p.code}">${p.code === code ? "<b>" : ""}${p.code} ${p.name}${p.code === code ? "</b>" : ""}</a></td>
+      <td>${chg}</td>
+      <td class="${p.yoy > 0 ? "peers-up" : p.yoy < 0 ? "peers-down" : ""}">${yoyStr}</td>
+      <td>${p.pe != null ? p.pe.toFixed(1) : "—"}</td>
+      <td>${p.yld != null ? p.yld.toFixed(2) + "%" : "—"}</td>
+      <td class="${p.foreign > 0 ? "peers-up" : p.foreign < 0 ? "peers-down" : ""}">${p.foreign != null ? (p.foreign >= 0 ? "+" : "") + p.foreign.toLocaleString("zh-TW") : "—"}</td>
+    </tr>`;
+  }).join("");
+
+  panel.innerHTML = `
+    <div style="font-size:13px;color:#666;margin-bottom:10px;">「<b>${cat}</b>」同業比較（共 ${peers.length} 檔，下表列成交量前 ${show.length} 檔）</div>
+    ${sumHtml}${rankHtml}
+    <div style="overflow-x:auto;">
+    <table class="peers-table">
+      <thead><tr><th class="name">代號 名稱</th><th>現價</th><th>月營收年增</th><th>本益比</th><th>殖利率</th><th>外資買賣超</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+    <div style="font-size:11px;color:#aaa;margin-top:10px;">※ 同業公開資料整理，非投資建議；毛利率等完整財報指標待後續補上。</div>`;
+}
 
 function renderJudgeCard(code, stock) {
   const L = window.LeadFu;
