@@ -31,6 +31,10 @@ import urllib.request
 import urllib.error
 from pathlib import Path
 
+# 同目錄模組：自選股「今日異動」警示偵測（直接執行 python scripts/xxx.py 時
+# scripts/ 會在 sys.path[0]，故可直接 import）
+from watchlist_alerts import load_alert_data, alerts_for_codes
+
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://lhwxpnyzplylajxunlua.supabase.co").rstrip("/")
 SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
@@ -94,8 +98,9 @@ def push_message(to, text):
         return False
 
 
-def build_digest(codes, code2name, anns_today, news):
-    """為單一會員組出推播文字；沒有相關內容回 None。"""
+def build_digest(codes, code2name, anns_today, news, alerts):
+    """為單一會員組出推播文字；沒有相關內容回 None。
+    alerts: {code: [警示字串,...]}，只含該會員自選股中有今日異動的股。"""
     codeset = set(codes)
     names = [code2name.get(c, "") for c in codes if code2name.get(c)]
 
@@ -103,10 +108,18 @@ def build_digest(codes, code2name, anns_today, news):
     my_news = [n for n in news
                if any(nm and nm in n.get("title", "") for nm in names)][:MAX_NEWS]
 
-    if not my_ann and not my_news:
+    if not alerts and not my_ann and not my_news:
         return None
 
     lines = ["📊 領富 AI ・ 今日自選股快訊", ""]
+    if alerts:
+        lines.append("⚠️ 今日異動")
+        for c in codes:  # 依會員自選股原順序列出
+            if c in alerts:
+                nm = code2name.get(c, "")
+                for a in alerts[c]:
+                    lines.append(f"・{c} {nm}｜{a}")
+        lines.append("")
     if my_ann:
         lines.append("📢 公司公告")
         for a in my_ann:
@@ -138,6 +151,10 @@ def main():
     anns_today = [a for a in anns if a.get("date") == latest] if latest else anns
     print(f"[info] 公告基準日 {latest}，當日公告 {len(anns_today)} 筆；新聞 {len(news)} 則")
 
+    # 自選股「今日異動」警示資料（klines/指標/法人），整批只載一次
+    alert_data = load_alert_data()
+    print(f"[info] 警示資料：klines {len(alert_data['kl'])}、指標 {len(alert_data['ind'])}、法人 {len(alert_data['inst'])}")
+
     members = fetch_members()
     print(f"[info] 可推播會員 {len(members)} 位（已登入 LINE + 未退訂）")
 
@@ -147,7 +164,8 @@ def main():
         if not codes:
             skipped += 1
             continue
-        text = build_digest(codes, code2name, anns_today, news)
+        alerts = alerts_for_codes(codes, alert_data)
+        text = build_digest(codes, code2name, anns_today, news, alerts)
         if not text:
             skipped += 1
             continue
