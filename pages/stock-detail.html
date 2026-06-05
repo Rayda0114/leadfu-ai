@@ -319,6 +319,9 @@
         </div>
       </div>
 
+      <!-- 💰 估值提醒：同業 PE 比較 + 安全邊際價位 -->
+      <div id="fvExtra"></div>
+
       <p class="fv-disclaimer">
         💡 依公開財報、技術指標、籌碼面、產業比較等公開資料，
         經領富 AI 專有演算法整理之合理區間參考。<strong>不構成個股推薦或目標價建議</strong>，
@@ -1077,6 +1080,39 @@ function renderFairValue(code, stock) {
   else if (pos < 1.0) labelColor = "#B45309";   // 合理偏高
   else labelColor = "#dc2626";                  // 超出上限 = 紅（昂貴）
   document.getElementById("fvPositionLabel").style.color = labelColor;
+
+  // 💰 估值提醒：同業 PE 比較 + 安全邊際價位
+  const fvExtraEl = document.getElementById("fvExtra");
+  if (fvExtraEl) {
+    const val = (L.data.valuation && L.data.valuation[code]) || null;
+    const lines = [];
+    // 同業 PE 中位數比較
+    if (val && val.pe_ratio > 0 && stock.category) {
+      const peerPes = (L.data.stocks || []).filter(s => s.category === stock.category)
+        .map(s => (L.data.valuation && L.data.valuation[s.code] && L.data.valuation[s.code].pe_ratio))
+        .filter(p => p > 0).sort((a, b) => a - b);
+      if (peerPes.length >= 5) {
+        const med = peerPes[Math.floor(peerPes.length / 2)];
+        const myPe = val.pe_ratio;
+        const verdict = myPe > med * 1.2 ? `<b style="color:#ffb3b3;">高於同業（偏貴）</b>`
+          : myPe < med * 0.8 ? `<b style="color:#9be8b8;">低於同業（相對便宜）</b>`
+            : `與同業相近`;
+        lines.push(`本益比 <b>${myPe.toFixed(1)}</b> vs 同業中位 ${med.toFixed(1)} → ${verdict}`);
+      }
+    }
+    // 安全邊際價位（合理區間下限）
+    if (price > low) {
+      const ds = (price - low) / price * 100;
+      lines.push(`安全邊際價位約 <b>NT$ ${low.toLocaleString()}</b>（合理區間下限），現價距此約 <b>${ds.toFixed(0)}%</b> 下檔空間`);
+    } else {
+      lines.push(`現價已接近／低於合理區間下限 <b>NT$ ${low.toLocaleString()}</b>，相對較有安全邊際`);
+    }
+    fvExtraEl.innerHTML = lines.length
+      ? `<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18);">`
+        + lines.map(l => `<div style="color:rgba(255,255,255,.92);font-size:13px;line-height:1.85;">💰 ${l}</div>`).join("")
+        + `</div>`
+      : "";
+  }
 
   // 訊號強度（星級）
   const confInt = Math.round(fv.confidence);
