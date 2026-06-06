@@ -6,4 +6,3 @@ compatibility_flags = ["nodejs_compat"]
 [assets]
 directory = "."
 binding = "ASSETS"
-run_worker_first = true   # Worker 先跑（才能做 www→非www / http→https 的 301 正規化），其餘交回 ASSETS
