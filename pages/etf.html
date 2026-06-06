@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETF 專區 - 高股息 ETF 排行 / 台股 ETF 一覽 - 領富 AI</title>
+<meta name="description" content="領富 AI ETF 專區：台股 200+ 檔 ETF 一覽，依高股息／市值型／債券／主題／海外／槓桿反向分類，附即時報價、近期報酬、殖利率（依已揭露配息估算）、即將除息日。0050、0056、00878、00919、00929、00940 等熱門 ETF 比較。">
+<link rel="canonical" href="https://leadfuai.com/pages/etf.html">
+<meta property="og:title" content="ETF 專區 - 高股息 ETF 排行 / 台股 ETF 一覽 - 領富 AI">
+<meta property="og:description" content="台股 200+ 檔 ETF 一覽：高股息／市值／債券／主題分類 + 即時報價、近期報酬、殖利率、即將除息。0050/0056/00878/00919/00929/00940 比較。">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leadfuai.com/pages/etf.html">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ETF 專區 - 高股息 ETF 排行 - 領富 AI">
+<meta name="twitter:description" content="台股 200+ 檔 ETF 一覽，高股息/市值/債券/主題分類 + 報價、報酬、殖利率。">
+<meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta name="theme-color" content="#1B4332">
+<link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  #etfTabs { display:flex; flex-wrap:wrap; gap:6px; }
+  #etfTabs .tab { cursor:pointer; }
+  .etf-yld { color:#c0392b; font-weight:700; }
+  .etf-cat-pill { font-size:11px; padding:1px 8px; border-radius:10px; background:#eef2f7; color:#556; }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 名稱，例如 00878">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="check.html">🔍 買前檢查</a></li>
+      <li><a href="portfolio-health.html">📊 投資儀表板</a></li>
+      <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
+      <li><a href="screener.html">進階選股</a></li>
+      <li><a href="stocks.html">股價總覽</a></li><li><a href="etf.html">📊 ETF 專區</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="ai.html">🤖 AI 對話</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+      <li><a href="vip.html">💎 VIP</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>📊 ETF 專區（高股息 / 市值型 / 債券 / 主題）</h1>
+    <div class="breadcrumb">首頁 ▸ ETF 專區</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 18px 12px 40px;">
+
+  <div class="panel" style="margin-bottom:14px;">
+    <div style="padding:14px 22px;font-size:13px;color:#555;line-height:1.7;">
+      台股全部 <strong id="etfTotal">--</strong> 檔 ETF 一覽，依類型分類，附即時報價、近期報酬與殖利率，方便比較 0050、0056、00878、00919、00929、00940 等熱門 ETF。<br>
+      <strong style="color:#888;">⚠ 提醒</strong>：ETF 為一籃子標的，<strong>不適用個股的合理區間/財報指標</strong>；高股息不代表總報酬高、配息可能來自本金（平準金），請留意。本頁僅為公開資料整理，非買賣建議。
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2 id="etfTitle">📊 台股 ETF 一覽</h2>
+      <div class="panel-tabs" id="etfTabs">
+        <button class="tab active" data-cat="all">全部</button>
+        <button class="tab" data-cat="高股息">高股息</button>
+        <button class="tab" data-cat="市值型">市值型</button>
+        <button class="tab" data-cat="債券">債券</button>
+        <button class="tab" data-cat="主題">主題</button>
+        <button class="tab" data-cat="海外">海外</button>
+        <button class="tab" data-cat="槓桿反向">槓桿/反向</button>
+      </div>
+    </div>
+    <div style="padding:8px 18px;background:#fafbfc;font-size:12px;color:#666;border-bottom:1px solid #eef0f3;">
+      <span>📅 <strong id="etfDate">每日盤後更新</strong></span>
+      <span style="margin-left:16px;">顯示 <strong id="etfCount">--</strong> 檔</span>
+      <span style="float:right;">排序：
+        <select id="etfSort" style="padding:3px 6px;border:1px solid #d0d5dc;border-radius:3px;font-size:12px;">
+          <option value="vol">成交量（熱門）</option>
+          <option value="yield">殖利率高→低</option>
+          <option value="r3m">近3月報酬</option>
+          <option value="code">代號</option>
+        </select>
+      </span>
+    </div>
+    <div class="data-row-list" id="etfList"></div>
+  </div>
+
+  <p style="text-align:center;color:#888;font-size:12px;margin-top:18px;line-height:1.7;">
+    ※ 殖利率 =「近一年已揭露配息合計 ÷ 現價」估算，<strong>資料累積中</strong>，部分 ETF 暫無或偏低，會逐步補齊。<br>
+    ※ 分類為依名稱自動歸類之參考；配息頻率、規模、折溢價、成分股等完整 ETF 資料<strong>陸續推出</strong>。<br>
+    ※ 本頁為公開資料整理，非投資建議。
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div><div class="footer-logo">領富 AI</div><p>台股全市場財經資訊網<br>客服 LINE：<a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="color:#06C755;font-weight:600;">@041exgtv</a></p></div>
+    <div><h4>分析工具</h4><ul><li><a href="check.html">🔍 買前檢查</a></li><li><a href="portfolio-health.html">📊 投資儀表板</a></li><li><a href="risk-radar.html">⚠ 防錯雷達</a></li><li><a href="screener.html">進階選股</a></li><li><a href="samples.html">範例報告</a></li></ul></div>
+    <div><h4>市場資料</h4><ul><li><a href="stocks.html">股價總覽</a></li><li><a href="etf.html">📊 ETF 專區</a></li><li><a href="dividends.html">高殖利率排行</a></li><li><a href="value-stocks.html">便宜股排行</a></li><li><a href="institutional.html">三大法人</a></li><li><a href="margin.html">融資融券</a></li><li><a href="industries.html">產業分類</a></li><li><a href="weekly.html">產業週報</a></li></ul></div>
+    <div><h4>資訊・會員</h4><ul><li><a href="news.html">財經新聞</a></li><li><a href="discussion.html">🔥 AI 熱議</a></li><li><a href="ai.html">🤖 AI 對話</a></li><li><a href="vip.html">💎 VIP 訂閱</a></li><li><a href="watchlist.html">自選股</a></li><li><a href="about.html">關於我們</a></li><li><a href="terms.html">服務條款</a></li><li><a href="privacy.html">隱私權政策</a></li><li><a href="fraud-alert.html">投資人防詐</a></li><li><a href="contact.html">聯絡客服</a></li></ul></div>
+  </div>
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const inPages = location.pathname.includes("/pages/");
+  const base = inPages ? "../" : "";
+
+  // ETF 名稱 → 分類（依名稱關鍵字自動歸類）
+  function etfCat(code, name) {
+    const n = name || "";
+    if (/正2|反1|正向|反向|槓桿/.test(n)) return "槓桿反向";
+    if (/債|Bond/i.test(n) || /B$/.test(code)) return "債券";
+    if (/美國|美股|標普|S&P|那斯達克|NASDAQ|費城|費半|日本|印度|越南|韓國|中國|滬深|上證|深100|深證|FANG|全球|歐洲|新興|越南/.test(n)) return "海外";
+    if (/高股息|高息|優息|存股|高配息/.test(n)) return "高股息";
+    if (/半導體|科技|電子|資訊|5G|AI|人工智慧|資安|電動車|電池|生技|醫療|REIT|不動產|綠能|潔淨|金融|消費/.test(n)) return "主題";
+    if (/台灣50|臺灣50|台50|中型100|公司治理|市值|ESG|永續|MSCI|加權|價值|精選|龍頭|台股增長/.test(n)) return "市值型";
+    return "其他";
+  }
+
+  // 額外資料：殖利率（配息累積）、近期報酬
+  let etfDiv = {}, returns = {};
+  try { etfDiv = (await (await fetch(base + "data/etf_div_live.json", { cache: "no-cache" })).json()).data || {}; } catch (e) {}
+  try { returns = (await (await fetch(base + "data/returns_live.json", { cache: "no-cache" })).json()).data || {}; } catch (e) {}
+
+  const etfs = (L.data.stocks || []).filter(s => s.category === "ETF").map(s => {
+    const d = etfDiv[s.code], r = returns[s.code];
+    const yld = (d && d.ttmCash > 0 && s.price > 0) ? (d.ttmCash / s.price * 100) : null;
+    return { ...s, cat: etfCat(s.code, s.name), yield: yld, exDate: d ? d.lastExDate : null, r3m: r ? r.r3m : null };
+  });
+  document.getElementById("etfTotal").textContent = etfs.length;
+
+  let cat = "all", sort = "vol";
+  const listEl = document.getElementById("etfList");
+
+  function render() {
+    let rows = cat === "all" ? etfs.slice() : etfs.filter(x => x.cat === cat);
+    const numOr = (v, lo) => (typeof v === "number" ? v : (lo ? -1e12 : 1e12));
+    if (sort === "yield") rows.sort((a, b) => numOr(b.yield, true) - numOr(a.yield, true));
+    else if (sort === "r3m") rows.sort((a, b) => numOr(b.r3m, true) - numOr(a.r3m, true));
+    else if (sort === "code") rows.sort((a, b) => a.code.localeCompare(b.code));
+    else rows.sort((a, b) => (b.volume || 0) - (a.volume || 0));
+
+    document.getElementById("etfCount").textContent = rows.length;
+    document.getElementById("etfTitle").textContent = cat === "all" ? "📊 台股 ETF 一覽" : `📊 ${cat} ETF`;
+    if (!rows.length) { listEl.innerHTML = `<div style="padding:40px;text-align:center;color:#888;">此分類暫無資料</div>`; return; }
+
+    listEl.innerHTML = rows.slice(0, 120).map((x, i) => {
+      const cls = L.changeClass(x.change);
+      const pct = L.pctChange(x.price, x.change);
+      const yld = (x.yield != null) ? `<span class="etf-yld">殖利 ${x.yield.toFixed(1)}%</span>` : `<span style="color:#bbb;">殖利 —</span>`;
+      const r3 = (x.r3m != null) ? `<span class="${x.r3m >= 0 ? 'up' : 'down'}">近3月 ${x.r3m >= 0 ? '+' : ''}${x.r3m.toFixed(1)}%</span>` : `<span style="color:#bbb;">近3月 —</span>`;
+      return `<a class="data-row" href="stock-detail.html?code=${x.code}">
+        <span class="data-rank">${(i + 1).toString().padStart(2, '0')}</span>
+        <span class="data-code"><strong>${x.code}</strong> ${x.name}</span>
+        <span class="data-cat"><span class="etf-cat-pill">${x.cat}</span></span>
+        <span class="data-num">${yld}</span>
+        <span class="data-num">${r3}</span>
+        <span class="data-num" style="color:#888;">量 ${(x.volume || 0).toLocaleString()}</span>
+        <span class="data-num data-price ${cls}">${L.fmtPrice(x.price)} <small>${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%</small></span>
+      </a>`;
+    }).join("");
+
+    // ItemList JSON-LD（前 20）
+    try {
+      const items = rows.slice(0, 20).map((x, i) => ({ "@type": "ListItem", position: i + 1, name: `${x.code} ${x.name}`, url: `https://leadfuai.com/pages/stock-detail.html?code=${x.code}` }));
+      let ld = document.getElementById("etfLd");
+      if (!ld) { ld = document.createElement("script"); ld.type = "application/ld+json"; ld.id = "etfLd"; document.head.appendChild(ld); }
+      ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "ItemList", name: document.getElementById("etfTitle").textContent, itemListElement: items });
+    } catch (e) {}
+  }
+
+  document.querySelectorAll("#etfTabs .tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#etfTabs .tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      cat = btn.dataset.cat; render();
+    });
+  });
+  document.getElementById("etfSort").addEventListener("change", e => { sort = e.target.value; render(); });
+  render();
+});
+</script>
+</body>
+</html>
