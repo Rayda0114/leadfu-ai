@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitle">個股詳情 - 領富 AI</title>
 <meta name="description" id="metaDesc" content="領富 AI 提供台股個股完整公開資料整理：即時報價、合理區間、月營收、本益比、ROE、三大法人、籌碼分析。不推薦、不代操、純資料整理。資料來源 TWSE/TPEx/MOPS。">
-<link rel="canonical" id="canonicalLink" href="https://leadfuai.com/pages/stock-detail.html">
+<link rel="canonical" id="canonicalLink" href="https://leadfuai.com/pages/stock-detail">
 
 <!-- Open Graph -->
 <meta property="og:title" id="ogTitle" content="個股完整資訊 - 領富 AI">
 <meta property="og:description" id="ogDesc" content="即時報價 + 合理區間 + AI 分析 + 14 項公開資料源整合。看清楚再決定。">
 <meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta property="og:type" content="article">
-<meta property="og:url" id="ogUrl" content="https://leadfuai.com/pages/stock-detail.html">
+<meta property="og:url" id="ogUrl" content="https://leadfuai.com/pages/stock-detail">
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" id="twTitle" content="個股完整資訊 - 領富 AI">
@@ -37,10 +37,10 @@
     setMeta("metaDesc", `領富 AI 整理 ${code} 完整公開資料：即時報價、合理區間、月營收、本益比、ROE、三大法人、籌碼分析。資料來源 TWSE/TPEx/MOPS。`);
     setMeta("ogTitle", `${code} - 領富 AI 個股完整資訊`);
     setMeta("ogDesc", `${code} 完整公開資料整理：即時報價、合理區間、月營收、籌碼。`);
-    setMeta("ogUrl", `https://leadfuai.com/pages/stock-detail.html?code=${code}`);
+    setMeta("ogUrl", `https://leadfuai.com/pages/stock-detail?code=${code}`);
     setMeta("twTitle", `${code} - 領富 AI`);
     setMeta("twDesc", `${code} 即時報價 + 合理區間 + AI 分析`);
-    setMeta("canonicalLink", `https://leadfuai.com/pages/stock-detail.html?code=${code}`);
+    setMeta("canonicalLink", `https://leadfuai.com/pages/stock-detail?code=${code}`);
 
     // 同步把 code 填到可見 DOM（會在 body 載入後執行）
     document.addEventListener("DOMContentLoaded", () => {
@@ -123,7 +123,7 @@
                   const maxW = Math.max(...hd.top.map(t => t.weight || 0), 1);
                   const rows = hd.top.slice(0, 10).map(t => `
                     <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;margin:3px 0;">
-                      <a href="stock-detail.html?code=${t.code}" style="width:96px;color:#1B4332;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.code} ${t.name}</a>
+                      <a href="stock-detail?code=${t.code}" style="width:96px;color:#1B4332;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.code} ${t.name}</a>
                       <div style="flex:1;background:#eef2f7;border-radius:3px;height:12px;overflow:hidden;"><div style="width:${((t.weight || 0) / maxW * 100).toFixed(0)}%;background:#1B4332;height:100%;"></div></div>
                       <span style="width:46px;text-align:right;color:#555;">${t.weight != null ? t.weight.toFixed(1) + "%" : "—"}</span>
                     </div>`).join("");
@@ -151,7 +151,7 @@
           "alternateName": [s.name, code],
           "identifier": code,
           "category": s.category || "股票",
-          "url": `https://leadfuai.com/pages/stock-detail.html?code=${code}`,
+          "url": `https://leadfuai.com/pages/stock-detail?code=${code}`,
           "provider": {
             "@type": "Organization",
             "name": "領富 AI",
@@ -1017,7 +1017,7 @@ function renderPeers(code, stock) {
     const chg = (p.price != null) ? `<span class="${cls}">${p.change > 0 ? "▲" : p.change < 0 ? "▼" : ""}${p.price.toFixed(2)}</span>` : "—";
     const yoyStr = p.yoy == null ? "—" : `${p.yoy >= 0 ? "+" : ""}${p.yoy.toFixed(1)}%`;
     return `<tr class="${p.code === code ? "self" : ""}">
-      <td class="name"><a href="stock-detail.html?code=${p.code}">${p.code === code ? "<b>" : ""}${p.code} ${p.name}${p.code === code ? "</b>" : ""}</a></td>
+      <td class="name"><a href="stock-detail?code=${p.code}">${p.code === code ? "<b>" : ""}${p.code} ${p.name}${p.code === code ? "</b>" : ""}</a></td>
       <td>${chg}</td>
       <td class="${p.yoy > 0 ? "peers-up" : p.yoy < 0 ? "peers-down" : ""}">${yoyStr}</td>
       <td>${p.gm != null ? p.gm.toFixed(1) + "%" : "—"}</td>

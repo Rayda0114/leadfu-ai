@@ -29,6 +29,7 @@ STATIC_PAGES = [
     ("/pages/check.html",              "daily",   0.9),
     ("/pages/samples.html",            "weekly",  0.7),
     ("/pages/value-stocks.html",       "daily",   0.85),
+    ("/pages/etf.html",                "daily",   0.9),
     ("/pages/stocks.html",             "daily",   0.9),
     ("/pages/screener.html",           "daily",   0.9),
     ("/pages/news.html",               "daily",   0.9),
@@ -82,7 +83,7 @@ def load_json(path):
 def url_entry(path, changefreq, priority, lastmod=None):
     parts = [
         "  <url>",
-        f"    <loc>{BASE_URL}{path}</loc>",
+        f"    <loc>{BASE_URL}{path.replace('.html', '')}</loc>",  # 無 .html 為正規網址（對齊 canonical）
     ]
     if lastmod:
         parts.append(f"    <lastmod>{lastmod}</lastmod>")

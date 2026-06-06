@@ -1207,6 +1207,14 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
+    // ── SEO 正規化：www→非 www、http→https（301 永久導向，消除重複網址稀釋排名）──
+    if (url.hostname.startsWith("www.") || url.protocol === "http:") {
+      url.protocol = "https:";
+      url.hostname = url.hostname.replace(/^www\./, "");
+      url.port = "";
+      return Response.redirect(url.toString(), 301);
+    }
+
     if (url.pathname === "/api/ask")            return handleAsk(request, env);
     if (url.pathname === "/api/health")         return handleHealth(env);
     if (url.pathname === "/api/quote")          return handleQuote(request);
