@@ -57,7 +57,9 @@ SCRIPTS = [
     "snapshot_fundamentals.py", # 每週存基本面快照（為未來真回測鋪路）
     "calc_returns.py",          # 各股近 1/3/6 月報酬 + 回撤（回測簡單版）；腳本自身週頻 gate，僅 7 天才重算
     "snapshot_fairvalue.py",    # 每日存合理區間 low/high → fv_history.json（VIP 歷史合理區間走勢圖累積用）
-    "fetch_etf_dividend.py",    # ETF 配息累積（TWT48U_ALL → etf_div_history/live.json，為 ETF 殖利率鋪路）
+    "fetch_etf_dividend.py",    # ETF 配息累積
+    "fetch_etf_nav.py",         # ETF 淨值/折溢價/規模（TWSE 基本市況 all_etf.txt 官方源）
+    "fetch_etf_basic.py",       # ETF 基本資料：追蹤指數/類型/上市日（TWSE OpenAPI t187ap47_L）
     "fetch_ipo.py",             # 新股 IPO 行事曆（TWSE 上市申請）
     "generate_sitemap.py",
 ]

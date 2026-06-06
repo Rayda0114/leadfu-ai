@@ -94,21 +94,27 @@
               d.id = "etfNote";
               d.style.cssText = "margin-top:12px;padding:12px 16px;background:#eef5ff;border:1px solid #cfe0fb;border-radius:8px;font-size:13px;color:#2c5282;line-height:1.8;";
               d.innerHTML = `📊 <strong>本檔為 ETF</strong> · <span style="background:#dbeafe;padding:1px 8px;border-radius:10px;">${cat}</span>${freq ? ` · 配息 <strong>${freq}</strong>` : ""}　<span id="etfStats" style="color:#555;">載入 ETF 資料中…</span>`
-                + `<br><span style="font-size:12px;color:#6b7280;">ETF 為一籃子標的，個股的<strong>合理區間／財報指標不適用</strong>；高股息≠總報酬高、配息可能含本金（平準金）。規模／折溢價／成分股資料另行整理中。</span>`;
+                + `<br><span style="font-size:12px;color:#6b7280;">ETF 為一籃子標的，個股的<strong>合理區間／財報指標不適用</strong>；高股息≠總報酬高、配息可能含本金（平準金）。成分股清單另行整理中。</span>`;
               hero.appendChild(d);
               // 非同步填：殖利率（配息累積）+ 近期報酬 + 最近除息
               (async () => {
                 const b = location.pathname.includes("/pages/") ? "../" : "";
-                let dv = {}, rt = {};
+                let dv = {}, rt = {}, nvAll = {}, baAll = {};
                 try { dv = (await (await fetch(b + "data/etf_div_live.json", { cache: "no-cache" })).json()).data || {}; } catch (e) {}
                 try { rt = (await (await fetch(b + "data/returns_live.json", { cache: "no-cache" })).json()).data || {}; } catch (e) {}
-                const di = dv[code], ri = rt[code], parts = [];
+                try { nvAll = (await (await fetch(b + "data/etf_nav_live.json", { cache: "no-cache" })).json()).data || {}; } catch (e) {}
+                try { baAll = (await (await fetch(b + "data/etf_basic_live.json", { cache: "no-cache" })).json()).data || {}; } catch (e) {}
+                const di = dv[code], ri = rt[code], nv = nvAll[code] || {}, ba = baAll[code] || {}, parts = [];
+                if (ba.index) parts.push(`追蹤 ${ba.index}`);
+                if (typeof nv.aumYi === "number") parts.push(`規模 <strong>${nv.aumYi >= 10000 ? (nv.aumYi / 10000).toFixed(2) + " 兆" : Math.round(nv.aumYi).toLocaleString() + " 億"}</strong>`);
+                if (typeof nv.nav === "number") parts.push(`淨值 ${nv.nav}`);
+                if (typeof nv.premium === "number") parts.push(`折溢價 <strong>${nv.premium > 0 ? "+" : ""}${nv.premium.toFixed(2)}%</strong>`);
                 const ymature = di && di.firstDate && (Date.now() - new Date(di.firstDate).getTime()) >= 330 * 864e5;
                 if (di && ymature && di.ttmCash > 0 && s.price > 0) parts.push(`殖利率約 <strong>${(di.ttmCash / s.price * 100).toFixed(1)}%</strong>（近一年）`);
                 if (ri && typeof ri.r3m === "number") parts.push(`近3月 <strong>${ri.r3m >= 0 ? "+" : ""}${ri.r3m.toFixed(1)}%</strong>`);
                 if (di && di.lastExDate) parts.push(`最近除息 ${di.lastExDate} 配 ${di.lastCash} 元`);
                 const el = document.getElementById("etfStats");
-                if (el) el.innerHTML = parts.length ? parts.join("　·　") : "<span style='color:#999;'>配息／報酬資料累積中</span>";
+                if (el) el.innerHTML = parts.length ? parts.join("　·　") : "<span style='color:#999;'>資料載入中…</span>";
               })();
             }
           }

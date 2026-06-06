@@ -99,9 +99,11 @@
       <span style="margin-left:16px;">顯示 <strong id="etfCount">--</strong> 檔</span>
       <span style="float:right;">排序：
         <select id="etfSort" style="padding:3px 6px;border:1px solid #d0d5dc;border-radius:3px;font-size:12px;">
-          <option value="vol">成交量（熱門）</option>
+          <option value="aum">規模大→小</option>
           <option value="yield">殖利率高→低</option>
+          <option value="prem">折溢價高→低</option>
           <option value="r3m">近3月報酬</option>
+          <option value="vol">成交量</option>
           <option value="code">代號</option>
         </select>
       </span>
@@ -111,7 +113,7 @@
 
   <p style="text-align:center;color:#888;font-size:12px;margin-top:18px;line-height:1.7;">
     ※ 殖利率 =「近一年已揭露配息合計 ÷ 現價」估算，<strong>資料累積中</strong>，部分 ETF 暫無或偏低，會逐步補齊。<br>
-    ※ 分類為依名稱自動歸類之參考；配息頻率、規模、折溢價、成分股等完整 ETF 資料<strong>陸續推出</strong>。<br>
+    ※ 規模 ＝ 受益單位數 × 淨值；折溢價為投信揭露之預估值（資料來源：TWSE 基本市況）。分類為依名稱自動歸類之參考；配息頻率、成分股等資料<strong>陸續補上</strong>。<br>
     ※ 本頁為公開資料整理，非投資建議。
   </p>
 
@@ -147,20 +149,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     return "其他";
   }
 
-  // 額外資料：殖利率（配息累積）、近期報酬
-  let etfDiv = {}, returns = {};
+  // 額外資料：殖利率（配息累積）、近期報酬、淨值/折溢價/規模（官方 all_etf.txt）
+  let etfDiv = {}, returns = {}, etfNav = {};
   try { etfDiv = (await (await fetch(base + "data/etf_div_live.json", { cache: "no-cache" })).json()).data || {}; } catch (e) {}
   try { returns = (await (await fetch(base + "data/returns_live.json", { cache: "no-cache" })).json()).data || {}; } catch (e) {}
+  try { etfNav = (await (await fetch(base + "data/etf_nav_live.json", { cache: "no-cache" })).json()).data || {}; } catch (e) {}
 
   const etfs = (L.data.stocks || []).filter(s => s.category === "ETF").map(s => {
-    const d = etfDiv[s.code], r = returns[s.code];
+    const d = etfDiv[s.code], r = returns[s.code], nv = etfNav[s.code] || {};
     const ymature = d && d.firstDate && (Date.now() - new Date(d.firstDate).getTime()) >= 330 * 864e5;
     const yld = (d && ymature && d.ttmCash > 0 && s.price > 0) ? (d.ttmCash / s.price * 100) : null;
-    return { ...s, cat: etfCat(s.code, s.name), yield: yld, exDate: d ? d.lastExDate : null, r3m: r ? r.r3m : null };
+    return { ...s, cat: etfCat(s.code, s.name), yield: yld, exDate: d ? d.lastExDate : null, r3m: r ? r.r3m : null,
+             premium: (typeof nv.premium === "number" ? nv.premium : null),
+             aumYi: (typeof nv.aumYi === "number" ? nv.aumYi : null),
+             nav: (typeof nv.nav === "number" ? nv.nav : null) };
   });
   document.getElementById("etfTotal").textContent = etfs.length;
 
-  let cat = "all", sort = "vol";
+  let cat = "all", sort = "aum";
   const listEl = document.getElementById("etfList");
 
   function render() {
@@ -168,8 +174,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const numOr = (v, lo) => (typeof v === "number" ? v : (lo ? -1e12 : 1e12));
     if (sort === "yield") rows.sort((a, b) => numOr(b.yield, true) - numOr(a.yield, true));
     else if (sort === "r3m") rows.sort((a, b) => numOr(b.r3m, true) - numOr(a.r3m, true));
+    else if (sort === "prem") rows.sort((a, b) => numOr(b.premium, true) - numOr(a.premium, true));
+    else if (sort === "vol") rows.sort((a, b) => (b.volume || 0) - (a.volume || 0));
     else if (sort === "code") rows.sort((a, b) => a.code.localeCompare(b.code));
-    else rows.sort((a, b) => (b.volume || 0) - (a.volume || 0));
+    else rows.sort((a, b) => numOr(b.aumYi, true) - numOr(a.aumYi, true));   // 預設：規模大→小
 
     document.getElementById("etfCount").textContent = rows.length;
     document.getElementById("etfTitle").textContent = cat === "all" ? "📊 台股 ETF 一覽" : `📊 ${cat} ETF`;
@@ -180,13 +188,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       const pct = L.pctChange(x.price, x.change);
       const yld = (x.yield != null) ? `<span class="etf-yld">殖利 ${x.yield.toFixed(1)}%</span>` : `<span style="color:#bbb;">殖利 —</span>`;
       const r3 = (x.r3m != null) ? `<span class="${x.r3m >= 0 ? 'up' : 'down'}">近3月 ${x.r3m >= 0 ? '+' : ''}${x.r3m.toFixed(1)}%</span>` : `<span style="color:#bbb;">近3月 —</span>`;
+      const aum = (x.aumYi != null) ? (x.aumYi >= 10000 ? (x.aumYi / 10000).toFixed(2) + ' 兆' : Math.round(x.aumYi).toLocaleString() + ' 億') : '—';
+      const prem = (x.premium != null) ? `<span class="${x.premium > 0 ? 'up' : (x.premium < 0 ? 'down' : '')}">折溢 ${x.premium > 0 ? '+' : ''}${x.premium.toFixed(2)}%</span>` : `<span style="color:#bbb;">折溢 —</span>`;
       return `<a class="data-row" href="stock-detail.html?code=${x.code}">
         <span class="data-rank">${(i + 1).toString().padStart(2, '0')}</span>
-        <span class="data-code"><strong>${x.code}</strong> ${x.name}</span>
-        <span class="data-cat"><span class="etf-cat-pill">${x.cat}</span></span>
+        <span class="data-code"><strong>${x.code}</strong> ${x.name} <span class="etf-cat-pill">${x.cat}</span></span>
+        <span class="data-num" style="color:#555;">規模 ${aum}</span>
         <span class="data-num">${yld}</span>
+        <span class="data-num">${prem}</span>
         <span class="data-num">${r3}</span>
-        <span class="data-num" style="color:#888;">量 ${(x.volume || 0).toLocaleString()}</span>
         <span class="data-num data-price ${cls}">${L.fmtPrice(x.price)} <small>${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%</small></span>
       </a>`;
     }).join("");
