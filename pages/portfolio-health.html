@@ -166,6 +166,31 @@
       <div id="alertBody" style="padding:8px 0;"></div>
     </div>
 
+    <!-- 🛡️ 每日持股風險守門員（買進理由追蹤） -->
+    <style>
+      #guardBody .gd-card { border:1px solid #e6e9ee; border-radius:8px; padding:12px 14px; margin-bottom:10px; }
+      #guardBody .gd-head { font-size:14px; font-weight:700; color:#1B4332; margin-bottom:8px; }
+      #guardBody .gd-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+      #guardBody .gd-chip { font-size:12.5px; padding:5px 11px; border:1px solid #d0d5dc; border-radius:14px; cursor:pointer; background:#fff; user-select:none; }
+      #guardBody .gd-chip.on { background:#e9f5ee; border-color:#1B4332; color:#1B4332; font-weight:600; }
+      #guardBody .gd-chip input { display:none; }
+      #guardBody .gd-verdicts { display:flex; flex-direction:column; gap:6px; }
+      #guardBody .gd-v { font-size:12.5px; line-height:1.6; padding:7px 10px; border-radius:6px; background:#fafbfc; }
+      #guardBody .gd-v b { color:#163A2E; }
+      #guardBody .gd-vt { display:block; color:#555; margin-top:2px; }
+      #guardBody .gd-ok { border-left:3px solid #16a34a; }
+      #guardBody .gd-watch { border-left:3px solid #d99100; background:#fffdf5; }
+      #guardBody .gd-weak { border-left:3px solid #dc2626; background:#fff5f5; }
+      #guardBody .gd-empty { font-size:12px; color:#999; padding:2px 2px 0; }
+    </style>
+    <div class="panel" style="margin-bottom:14px;">
+      <div class="panel-head"><h2>🛡️ 每日持股風險守門員</h2></div>
+      <div style="padding:10px 18px 2px;font-size:12.5px;color:#666;line-height:1.6;">
+        記錄你「當初為什麼買」，系統每天盤後幫你複查每個理由是否仍成立——把「查資料」變成「<strong>幫你盯</strong>」。
+      </div>
+      <div id="guardBody" style="padding:8px 18px 16px;"></div>
+    </div>
+
     <!-- 本週風險變化 -->
     <div class="panel" style="margin-bottom:14px;">
       <div class="panel-head"><h2>📅 本週風險變化</h2></div>
@@ -466,6 +491,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   const SNAP_KEY = "leadfu_pf_snap";
   function todayStr(){ const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
   function loadSnaps(){ try { const a = JSON.parse(localStorage.getItem(SNAP_KEY) || "[]"); return Array.isArray(a) ? a : []; } catch { return []; } }
+  /* ===== 🛡️ 買進理由守門員 ===== */
+  function renderGuard(m){
+    const body = document.getElementById("guardBody");
+    if (!body) return;
+    const L2 = window.LeadFu;
+    const REASONS = L2.BUY_REASONS || ["穩定配息", "營收成長", "估值偏低", "產業長期看好"];
+    if (!m.valid.length){
+      body.innerHTML = `<div style="color:#888;font-size:13px;padding:6px 2px;">先在上方「新增持股」建立清單，就能為每檔記錄買進理由、每天自動複查。</div>`;
+      return;
+    }
+    const ICON = { ok:"✅", watch:"🟡", weak:"🔴" }, LV = { ok:"理由仍成立", watch:"留意", weak:"理由轉弱" };
+    body.innerHTML = m.valid.map(it => {
+      const chosen = it.h.reasons || [];
+      const chips = REASONS.map(rn =>
+        `<label class="gd-chip${chosen.includes(rn) ? " on" : ""}"><input type="checkbox" data-code="${it.code}" value="${rn}"${chosen.includes(rn) ? " checked" : ""}> ${rn}</label>`).join("");
+      let verdicts;
+      if (chosen.length){
+        verdicts = `<div class="gd-verdicts">` + chosen.map(rn => {
+          const e = L2.evalBuyReason(it.code, rn);
+          return `<div class="gd-v gd-${e.status}"><span>${ICON[e.status]} <b>${rn}</b>（${LV[e.status]}）</span><span class="gd-vt">${e.text}</span></div>`;
+        }).join("") + `</div>`;
+      } else {
+        verdicts = `<div class="gd-empty">尚未設定買進理由——勾選上方理由，系統每天幫你複查。</div>`;
+      }
+      return `<div class="gd-card"><div class="gd-head">${it.code} ${it.s.name}</div><div class="gd-chips">${chips}</div>${verdicts}</div>`;
+    }).join("");
+  }
+  // 勾選買進理由 → 儲存並即時複查（一次性綁定）
+  document.addEventListener("change", e => {
+    const cb = e.target && e.target.closest && e.target.closest('#guardBody input[type="checkbox"]');
+    if (!cb) return;
+    const code = cb.dataset.code;
+    const chosen = [...document.querySelectorAll(`#guardBody input[data-code="${code}"]:checked`)].map(x => x.value);
+    window.LeadFu.setHoldingReasons(code, chosen);
+    renderGuard(model());
+  });
+
   function renderSnap(m, risk){
     const today = todayStr();
     const snap = { date: today, value: Math.round(m.totalValue), top3: Math.round(risk.top3), maxPct: Math.round(risk.maxPct), hiVol: Math.round(risk.hiVolPct), emerging: Math.round(risk.emergingPct), alerts: m.valid.filter(it => alertsFor(it).length).length };
@@ -649,6 +711,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const risk = renderRisk(m);
     renderDividend(m);
     renderAlerts(m);
+    renderGuard(m);
     renderSnap(m, risk);
     renderTable(m);
     renderPerf(m);

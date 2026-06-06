@@ -391,7 +391,7 @@ function setHolding(code, shares, cost) {
   const h = getHoldings();
   shares = Number(shares) || 0;
   cost = Number(cost) || 0;
-  if (shares > 0) h[code] = { shares, cost };
+  if (shares > 0) h[code] = { ...(h[code] || {}), shares, cost };   // 保留 reasons/since 等附加欄位
   else delete h[code];                 // 股數 0 視為移除
   localStorage.setItem(HOLDINGS_KEY, JSON.stringify(h));
   _pushHoldingsToCloud();
@@ -401,6 +401,59 @@ function removeHolding(code) {
   delete h[code];
   localStorage.setItem(HOLDINGS_KEY, JSON.stringify(h));
   _pushHoldingsToCloud();
+}
+
+/* ── 買進理由追蹤（持股守門員）──
+   每檔持股可記錄「當初為什麼買」，evalBuyReason() 用今日資料逐條複查理由是否仍成立。
+   reasons 存在 holdings[code].reasons（隨 holdings jsonb 一起雲端同步，免新欄位）。*/
+const BUY_REASONS = ["穩定配息", "營收成長", "估值偏低", "產業長期看好"];
+function setHoldingReasons(code, reasons) {
+  const h = getHoldings();
+  if (!h[code]) return;
+  h[code].reasons = Array.isArray(reasons) ? reasons.filter(x => BUY_REASONS.includes(x)) : [];
+  if (!h[code].since && h[code].reasons.length) h[code].since = new Date().toISOString().slice(0, 10);
+  localStorage.setItem(HOLDINGS_KEY, JSON.stringify(h));
+  _pushHoldingsToCloud();
+}
+// 回傳 { status:"ok"|"watch"|"weak", text } —— 該買進理由今日是否仍成立
+function evalBuyReason(code, reason) {
+  const D = STOCK_DATA;
+  const num = x => (typeof x === "number" && !isNaN(x)) ? x : null;
+  const v = (D.valuation || {})[code] || {};
+  const r = (D.revenue || {})[code] || {};
+  const fv = (D.fairValue || {})[code] || {};
+  const att = (D.attention || {})[code];
+  const rk = (D.riskScore || {})[code];
+  switch (reason) {
+    case "穩定配息": {
+      const y = num(v.yield_pct);
+      if (y == null) return { status: "watch", text: "查無殖利率資料，建議自行確認最新配息政策。" };
+      if (y >= 3) return { status: "ok", text: `目前殖利率約 ${y.toFixed(1)}%，存股／配息理由維持。` };
+      if (y >= 2) return { status: "watch", text: `殖利率降至約 ${y.toFixed(1)}%，略低於常見存股門檻，留意配息是否縮水。` };
+      return { status: "weak", text: `殖利率僅約 ${y.toFixed(1)}%，「穩定配息」理由明顯減弱，建議重新檢視。` };
+    }
+    case "營收成長": {
+      const yoy = num(r.yoy);
+      if (yoy == null) return { status: "watch", text: "查無最新月營收資料，建議自行確認。" };
+      if (yoy >= 0) return { status: "ok", text: `最新月營收年增 +${yoy.toFixed(1)}%，成長動能維持。` };
+      if (yoy > -10) return { status: "watch", text: `最新月營收年增 ${yoy.toFixed(1)}%，成長轉弱，建議留意後續幾個月。` };
+      return { status: "weak", text: `最新月營收年增 ${yoy.toFixed(1)}%，年增明顯轉負，建議重新檢查「營收成長」理由。` };
+    }
+    case "估值偏低": {
+      const p = num(fv.position);
+      if (p == null) return { status: "watch", text: "查無合理區間資料。" };
+      if (p <= 0.4) return { status: "ok", text: `現價仍接近合理區間下緣（位置 ${p.toFixed(2)}），「估值偏低」理由維持。` };
+      if (p < 0.8) return { status: "watch", text: `現價已回到合理區間中段（位置 ${p.toFixed(2)}），便宜程度下降。` };
+      return { status: "weak", text: `現價已達／超過合理區間上緣（位置 ${p.toFixed(2)}），「估值偏低」理由已不成立。` };
+    }
+    case "產業長期看好": {
+      if (att) return { status: "weak", text: `出現主管機關警示（${att.type || "注意/處置"}），建議重新檢視長期持有理由。` };
+      if (rk && num(rk.score) != null && rk.score >= 60) return { status: "watch", text: `風險分數偏高（${rk.score}），長期持有仍建議定期複查產業趨勢。` };
+      return { status: "ok", text: "未出現重大警示，維持長期觀點（產業趨勢建議每季人工複查）。" };
+    }
+    default:
+      return { status: "watch", text: "" };
+  }
 }
 // 載入時：雲端為主、本地獨有的補上（登入者）
 async function syncHoldingsFromCloud() {
@@ -2813,7 +2866,7 @@ window.LeadFu = {
   fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow,
   findStock, pageHref, homeHref,
   getWatchlist, addToWatchlist, removeFromWatchlist, clearWatchlist, isInWatchlist,
-  getHoldings, setHolding, removeHolding,
+  getHoldings, setHolding, removeHolding, setHoldingReasons, evalBuyReason, BUY_REASONS,
   getStrategies, saveStrategies, getNewsSubs, saveNewsSubs, hasSession: _hasSupabaseSession,
   mockAiResponse, startLivePriceSimulation, showToast,
   // 第 1 層 AI 問答工具（ai.html 用）
