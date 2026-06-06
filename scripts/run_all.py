@@ -39,6 +39,7 @@ SCRIPTS = [
     "fetch_revenue.py",
     "fetch_news.py",
     "fetch_announcements.py",
+    "fetch_conference.py",      # 法人說明會行事曆累積（從重大訊息抽法說會）
     "fetch_attention.py",       # 注意股/處置股名單（TWSE+TPEx）→ 進階選股「注意股排除」
     "fetch_institutional.py",   # 三大法人買賣超（上市，TWSE T86）
     "calc_inst_streak.py",      # 外資連買/連賣天數（每日累積，需逐日執行）

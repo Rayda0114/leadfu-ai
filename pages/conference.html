@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>法人說明會行事曆｜上市櫃法說會公告 - 領富 AI</title>
+<meta name="description" content="台股上市櫃公司法人說明會（法說會）行事曆：整理各公司受邀／自辦法說會之重大訊息公告，含公司代號、名稱、舉辦券商與公告日，每日盤後更新。領富 AI 整理 TWSE／TPEx 公開資料，非投資建議。">
+<link rel="canonical" href="https://leadfuai.com/pages/conference">
+<meta property="og:title" content="法人說明會行事曆 - 上市櫃法說會公告 - 領富 AI">
+<meta property="og:description" content="台股上市櫃法人說明會（法說會）公告整理：公司、券商、公告日，每日更新。領富 AI 公開資料整理。">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leadfuai.com/pages/conference">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="法人說明會行事曆 - 領富 AI">
+<meta name="twitter:description" content="台股上市櫃法說會公告整理，每日更新。">
+<meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta name="theme-color" content="#1B4332">
+<link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .conf-row { display:grid; grid-template-columns:96px 1fr; gap:12px; padding:12px 16px; border-bottom:1px solid #eef0f3; align-items:start; }
+  .conf-row:nth-child(even) { background:#fafbfc; }
+  .conf-date { font-size:12px; color:#888; white-space:nowrap; }
+  .conf-date strong { display:block; color:#1B4332; font-size:14px; }
+  .conf-co a { color:#1B4332; font-weight:700; font-size:15px; }
+  .conf-title { font-size:13px; color:#444; line-height:1.6; margin-top:2px; }
+  .conf-mk { font-size:11px; padding:1px 7px; border-radius:9px; background:#eef2f7; color:#556; margin-left:6px; }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="login.html">會員登入</a><a href="register.html">免費註冊</a><a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入股票代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="check.html">🔍 買前檢查</a></li>
+      <li><a href="portfolio-health.html">📊 投資儀表板</a></li>
+      <li><a href="risk-radar.html">⚠ 防錯雷達</a></li>
+      <li><a href="screener.html">進階選股</a></li>
+      <li><a href="stocks.html">股價總覽</a></li><li><a href="etf.html">📊 ETF 專區</a></li>
+      <li><a href="news.html">財經新聞</a></li>
+      <li><a href="ai.html">🤖 AI 對話</a></li>
+      <li><a href="watchlist.html">自選股</a></li>
+      <li><a href="vip.html">💎 VIP</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="container">
+    <h1>📢 法人說明會行事曆</h1>
+    <div class="breadcrumb">首頁 ▸ 法人說明會</div>
+  </div>
+</div>
+
+<main class="container" style="padding: 18px 12px 40px;">
+
+  <div class="panel" style="margin-bottom:14px;">
+    <div style="padding:14px 22px;font-size:13px;color:#555;line-height:1.7;">
+      整理台股上市櫃公司的<strong>法人說明會（法說會）</strong>重大訊息公告 —— 哪家公司受邀／自辦法說會、由哪間券商主辦。法說會是公司向法人說明營運與展望的場合，常為市場關注焦點。<br>
+      <strong style="color:#888;">📅 資料每日盤後更新、逐日累積</strong>；確切時間地點請以公司公告與 <a href="https://mops.twse.com.tw" target="_blank" rel="noopener" style="color:#1B4332;">公開資訊觀測站</a>為準。本頁為公開資料整理，非投資建議。
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>近期法說會公告（<span id="confCount">--</span> 場）</h2>
+    </div>
+    <div id="confList"><div style="padding:40px;text-align:center;color:#888;">載入中…</div></div>
+  </div>
+
+  <p style="text-align:center;color:#888;font-size:12px;margin-top:16px;line-height:1.7;">
+    ※ 來源：上市櫃公司「重大訊息」中之法人說明會公告（TWSE／TPEx／MOPS）。本行事曆逐日累積，新公告會自動補上。<br>
+    ※ 本頁僅為公開資料整理，不構成投資建議。
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div><div class="footer-logo">領富 AI</div><p>台股全市場財經資訊網<br>客服 LINE：<a href="https://line.me/R/ti/p/@041exgtv" class="line-cta" target="_blank" rel="noopener" style="color:#06C755;font-weight:600;">@041exgtv</a></p></div>
+    <div><h4>分析工具</h4><ul><li><a href="check.html">🔍 買前檢查</a></li><li><a href="portfolio-health.html">📊 投資儀表板</a></li><li><a href="risk-radar.html">⚠ 防錯雷達</a></li><li><a href="screener.html">進階選股</a></li><li><a href="samples.html">範例報告</a></li></ul></div>
+    <div><h4>市場資料</h4><ul><li><a href="stocks.html">股價總覽</a></li><li><a href="etf.html">📊 ETF 專區</a></li><li><a href="etf-compare.html">高股息 ETF 比較</a></li><li><a href="conference.html">📢 法人說明會</a></li><li><a href="announcements.html">重大訊息</a></li><li><a href="news.html">財經新聞</a></li></ul></div>
+    <div><h4>資訊・會員</h4><ul><li><a href="discussion.html">🔥 AI 熱議</a></li><li><a href="ai.html">🤖 AI 對話</a></li><li><a href="vip.html">💎 VIP 訂閱</a></li><li><a href="about.html">關於我們</a></li><li><a href="fraud-alert.html">投資人防詐</a></li><li><a href="contact.html">聯絡客服</a></li></ul></div>
+  </div>
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const base = location.pathname.includes("/pages/") ? "../" : "";
+  let data = [];
+  try { data = (await (await fetch(base + "data/conference_live.json", { cache: "no-cache" })).json()).data || []; } catch (e) {}
+
+  const el = document.getElementById("confList");
+  document.getElementById("confCount").textContent = data.length;
+  if (!data.length) { el.innerHTML = `<div style="padding:40px;text-align:center;color:#888;">近期暫無法說會公告，資料每日更新中。</div>`; return; }
+
+  const mkLbl = { twse: "上市", otc: "上櫃", esb: "興櫃", tpex: "上櫃" };
+  el.innerHTML = data.slice(0, 200).map(x => {
+    const d = x.confDate || x.annDate || "";
+    const dtop = x.confDate ? "法說" : "公告";
+    return `<div class="conf-row">
+      <div class="conf-date">${dtop}<strong>${d || "—"}</strong></div>
+      <div class="conf-co">
+        ${x.code ? `<a href="stock-detail?code=${x.code}">${x.code} ${x.name || ""}</a>` : (x.name || "")}
+        ${x.market && mkLbl[x.market] ? `<span class="conf-mk">${mkLbl[x.market]}</span>` : ""}
+        <div class="conf-title">${x.title || ""}</div>
+      </div>
+    </div>`;
+  }).join("");
+
+  // ItemList JSON-LD
+  try {
+    const items = data.slice(0, 20).map((x, i) => ({ "@type": "ListItem", position: i + 1, name: `${x.code} ${x.name} 法人說明會` }));
+    const ld = document.createElement("script"); ld.type = "application/ld+json";
+    ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "ItemList", name: "法人說明會行事曆", itemListElement: items });
+    document.head.appendChild(ld);
+  } catch (e) {}
+});
+</script>
+</body>
+</html>
