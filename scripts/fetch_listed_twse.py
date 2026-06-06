@@ -100,8 +100,10 @@ def transform(raw_list):
         if not code or not name:
             skipped += 1
             continue
-        # 跳過權證、ETF、特別股等非普通股（代號通常 5-6 碼以上）
-        if len(code) != 4 or not code.isdigit():
+        # 放行：普通股(4 碼純數字) + ETF(代號以 00 開頭，含 5-6 碼、正2/反1、債券/期信 ETF)
+        # 跳過：權證、特別股等其餘非普通股（STOCK_DAY_ALL 不含權證，主要是濾掉特別股 2887A 之類）
+        is_etf = code.startswith("00")
+        if not (is_etf or (len(code) == 4 and code.isdigit())):
             skipped += 1
             continue
 
@@ -120,7 +122,7 @@ def transform(raw_list):
             "price": round(close, 2),
             "change": round(change, 2),
             "volume": volume_shares // 1000,   # 股 → 張
-            "category": guess_industry(code),
+            "category": "ETF" if is_etf else guess_industry(code),
             "status": "上市",
             "market": "listed"
         })

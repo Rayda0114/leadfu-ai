@@ -75,6 +75,18 @@
           setText("qsVol", (s.volume || 0).toLocaleString() + " 張");
           const status = document.getElementById("stockStatus");
           if (status && !status.textContent.trim()) status.textContent = s.status || "";
+          // ETF：標記 + 橫幅。個股專屬指標不適用 → 隱藏判斷卡（合理區間本就無資料自動隱藏）
+          if (s.category === "ETF") {
+            document.body.classList.add("is-etf");
+            const hero = document.querySelector(".stock-hero .container");
+            if (hero && !document.getElementById("etfNote")) {
+              const d = document.createElement("div");
+              d.id = "etfNote";
+              d.style.cssText = "margin-top:12px;padding:12px 16px;background:#eef5ff;border:1px solid #cfe0fb;border-radius:8px;font-size:13px;color:#2c5282;line-height:1.7;";
+              d.innerHTML = "📊 <strong>本檔為 ETF（指數股票型基金）</strong>。ETF 是一籃子標的，<strong>個股專屬指標（合理區間、月營收、財報、判斷卡）不適用</strong>；ETF 配息、折溢價、追蹤指數、成分股等專屬資料<strong>即將推出</strong>，目前可看即時報價與走勢圖。";
+              hero.appendChild(d);
+            }
+          }
         };
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", ready);
@@ -218,6 +230,7 @@
 <!-- 🧭 個股判斷卡（規則化整理現有資料，非投資建議）-->
 <style>
   #judgeSection { margin-top: 20px; }
+  body.is-etf #judgeSection, body.is-etf #fairValueSection { display: none !important; }
   .judge-card { background:#fff; border:1px solid #e0e3e8; border-radius:10px; padding:18px 22px; box-shadow:0 2px 10px rgba(27,67,50,.05); }
   .judge-head { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
   .judge-status { font-size:15px; font-weight:800; padding:5px 16px; border-radius:8px; white-space:nowrap; }

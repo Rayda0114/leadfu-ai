@@ -350,6 +350,8 @@ def main():
     label_counts = {}
     conf_total = 0
     for s in stocks:
+        if s.get("category") == "ETF":
+            continue   # ETF 非個股，合理區間用個股邏輯算沒意義，跳過（避免污染便宜股排行/個股頁）
         result = calc_fair_value_for_stock(s, ctx)
         if result:
             out_data[s["code"]] = result

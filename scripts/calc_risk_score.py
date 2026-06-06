@@ -189,8 +189,8 @@ def main():
     out = {}
     for s in stocks:
         code = s.get("code")
-        if not code:
-            continue
+        if not code or s.get("category") == "ETF":
+            continue   # ETF 跳過：個股風險邏輯(財報/月營收/法人)不適用
         score, reasons = score_stock(s, D)
         # 更新歷史（只記有一定風險的，控制檔案大小）
         if score >= 10:
