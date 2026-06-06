@@ -115,6 +115,24 @@
                 if (di && di.lastExDate) parts.push(`最近除息 ${di.lastExDate} 配 ${di.lastCash} 元`);
                 const el = document.getElementById("etfStats");
                 if (el) el.innerHTML = parts.length ? parts.join("　·　") : "<span style='color:#999;'>資料載入中…</span>";
+                // 成分股（前 10 大，發行投信 PCF）
+                let hAll = {};
+                try { hAll = (await (await fetch(b + "data/etf_holdings_live.json", { cache: "no-cache" })).json()).data || {}; } catch (e) {}
+                const hd = hAll[code];
+                if (hd && hd.top && hd.top.length && hero && !document.getElementById("etfHoldings")) {
+                  const maxW = Math.max(...hd.top.map(t => t.weight || 0), 1);
+                  const rows = hd.top.slice(0, 10).map(t => `
+                    <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;margin:3px 0;">
+                      <a href="stock-detail.html?code=${t.code}" style="width:96px;color:#1B4332;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.code} ${t.name}</a>
+                      <div style="flex:1;background:#eef2f7;border-radius:3px;height:12px;overflow:hidden;"><div style="width:${((t.weight || 0) / maxW * 100).toFixed(0)}%;background:#1B4332;height:100%;"></div></div>
+                      <span style="width:46px;text-align:right;color:#555;">${t.weight != null ? t.weight.toFixed(1) + "%" : "—"}</span>
+                    </div>`).join("");
+                  const box = document.createElement("div");
+                  box.id = "etfHoldings";
+                  box.style.cssText = "margin-top:12px;padding:12px 16px;background:#fff;border:1px solid #e6e9ee;border-radius:8px;";
+                  box.innerHTML = `<div style="font-weight:700;color:#163A2E;margin-bottom:8px;font-size:13.5px;">🧺 前 10 大成分股 <span style="font-weight:400;color:#999;font-size:11px;">（共 ${hd.count} 檔・${hd.asof}・資料源：發行投信 PCF）</span></div>${rows}`;
+                  hero.appendChild(box);
+                }
               })();
             }
           }

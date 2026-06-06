@@ -60,6 +60,7 @@ SCRIPTS = [
     "fetch_etf_dividend.py",    # ETF 配息累積
     "fetch_etf_nav.py",         # ETF 淨值/折溢價/規模（TWSE 基本市況 all_etf.txt 官方源）
     "fetch_etf_basic.py",       # ETF 基本資料：追蹤指數/類型/上市日（TWSE OpenAPI t187ap47_L）
+    "fetch_etf_holdings.py",    # ETF 成分股（各投信 PCF API，v1：元大）
     "fetch_ipo.py",             # 新股 IPO 行事曆（TWSE 上市申請）
     "generate_sitemap.py",
 ]
