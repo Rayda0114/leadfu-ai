@@ -30,6 +30,7 @@ STATIC_PAGES = [
     ("/pages/samples.html",            "weekly",  0.7),
     ("/pages/value-stocks.html",       "daily",   0.85),
     ("/pages/etf.html",                "daily",   0.9),
+    ("/pages/etf-compare.html",        "daily",   0.85),
     ("/pages/stocks.html",             "daily",   0.9),
     ("/pages/screener.html",           "daily",   0.9),
     ("/pages/news.html",               "daily",   0.9),

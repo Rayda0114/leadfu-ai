@@ -58,12 +58,19 @@
         const s = data.stocks.find(x => x.code === code);
         if (!s) return;
 
-        // 動態 title + meta 帶上股名
-        document.title = `${code} ${s.name} 股價、合理區間 - 領富 AI`;
-        setMeta("metaDesc", `${code} ${s.name}（${s.status || ""}）即時股價 NT$${s.price}，今日漲跌 ${s.change > 0 ? "+" : ""}${s.change}。產業：${s.category || ""}。領富 AI 提供合理區間、月營收、本益比、籌碼分析、AI 對話。資料源 TWSE+TPEx+MOPS。`);
-        setMeta("ogTitle", `${code} ${s.name} 股價 NT$${s.price} - 領富 AI`);
-        setMeta("ogDesc", `${code} ${s.name} | ${s.category || ""} | 即時 NT$${s.price} (${s.change > 0 ? "+" : ""}${s.change}) | 領富 AI 合理區間 + AI 分析`);
-        setMeta("twTitle", `${code} ${s.name} - 領富 AI`);
+        // 動態 title + meta（含市場別/ETF，貼近搜尋意圖以提升點擊率）
+        const mkt = s.status || "";
+        const isETF = s.category === "ETF";
+        if (isETF) {
+          document.title = `${code} ${s.name} ETF 股價・成分股・折溢價 - 領富 AI`;
+          setMeta("metaDesc", `${code} ${s.name} ETF｜即時淨值、折溢價、規模、前十大成分股、殖利率與配息一次看。領富 AI 整理 TWSE 官方資料，不推薦、不代操。`);
+        } else {
+          document.title = `${code} ${s.name} 股價${mkt ? "・" + mkt : ""}｜月營收·法人·合理區間 - 領富 AI`;
+          setMeta("metaDesc", `${code} ${s.name}${mkt ? "（" + mkt + "）" : ""}即時股價 NT$${s.price}，今日 ${s.change > 0 ? "+" : ""}${s.change}。產業：${s.category || ""}。領富 AI 整理月營收、本益比、三大法人、合理區間與防錯雷達。資料源 TWSE+TPEx+MOPS。`);
+        }
+        setMeta("ogTitle", `${code} ${s.name}${isETF ? " ETF" : ""} 股價${mkt ? " " + mkt : ""} - 領富 AI`);
+        setMeta("ogDesc", `${code} ${s.name} | ${mkt || s.category || ""} | 即時 NT$${s.price} (${s.change > 0 ? "+" : ""}${s.change}) | 領富 AI ${isETF ? "成分股·折溢價·殖利率" : "合理區間·月營收·籌碼"}`);
+        setMeta("twTitle", `${code} ${s.name}${isETF ? " ETF" : ""} - 領富 AI`);
         setMeta("twDesc", `${code} ${s.name} 即時 NT$${s.price} (${s.change > 0 ? "+" : ""}${s.change})`);
 
         // 把可見 DOM 也填上 — 用戶等不到 main.js 就先看到名字／價格
