@@ -109,6 +109,7 @@ def main():
             "lastCash": last["cash"],
             "lastExDate": last["d"],
             "ttmCash": ttm,            # 近一年配息合計（資料累積中，初期可能偏低）
+            "firstDate": dists[0]["d"],  # 最早累積到的配息日 → 前端判斷是否已涵蓋滿一年（成熟才顯示殖利率）
             "distCount": len(dists),
         }
     OUT.write_text(json.dumps({"updatedAt": today.isoformat(), "count": len(live), "data": live},

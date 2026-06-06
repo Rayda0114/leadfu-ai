@@ -154,7 +154,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const etfs = (L.data.stocks || []).filter(s => s.category === "ETF").map(s => {
     const d = etfDiv[s.code], r = returns[s.code];
-    const yld = (d && d.ttmCash > 0 && s.price > 0) ? (d.ttmCash / s.price * 100) : null;
+    const ymature = d && d.firstDate && (Date.now() - new Date(d.firstDate).getTime()) >= 330 * 864e5;
+    const yld = (d && ymature && d.ttmCash > 0 && s.price > 0) ? (d.ttmCash / s.price * 100) : null;
     return { ...s, cat: etfCat(s.code, s.name), yield: yld, exDate: d ? d.lastExDate : null, r3m: r ? r.r3m : null };
   });
   document.getElementById("etfTotal").textContent = etfs.length;
