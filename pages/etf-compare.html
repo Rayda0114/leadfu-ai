@@ -111,12 +111,12 @@
       <h3>殖利率越高越好嗎？</h3>
       <p>不一定。殖利率高有時是因為股價下跌（分母變小），或配息含本金（平準金）。建議「殖利率 + 近半年報酬 + 規模」一起看；規模太小（如低於 50 億）可能有流動性與下市風險。</p>
       <h3>這裡的殖利率怎麼算？</h3>
-      <p>本頁殖利率為「<strong>最近一次配息 × 年配次數 ÷ 現價</strong>」的<strong>年化估算</strong>，方便快速比較；實際當年殖利率依該年總配息而定，且不含平準金佔比資訊，僅供參考。</p>
+      <p>本頁殖利率主要採「<strong>近一年實際配息合計 ÷ 現價</strong>」（TTM，資料取自各發行投信配息公告）；上市未滿一年者，改以「最近一次配息 × 年配次數」年化估算。皆不含平準金佔比，僅供參考，實際依投信公告為準。</p>
     </div>
   </div>
 
   <p style="text-align:center;color:#888;font-size:12px;margin-top:6px;line-height:1.7;">
-    ※ 規模 ＝ 受益單位數 × 淨值（TWSE 基本市況）；折溢價為投信揭露之預估值；殖利率為年化估算（見上）；成分股來自發行投信每日 PCF。<br>
+    ※ 規模 ＝ 受益單位數 × 淨值（TWSE 基本市況）；折溢價為投信揭露之預估值；殖利率為近一年實際配息合計 ÷ 現價（見上）；成分股來自發行投信每日 PCF。<br>
     ※ 配息頻率為人工標註之常態頻率，實際以投信公告為準。本頁為公開資料整理，非投資建議。
   </p>
 
@@ -164,9 +164,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const fmtAum = v => (typeof v === "number") ? (v >= 10000 ? (v/10000).toFixed(2)+" 兆" : Math.round(v).toLocaleString()+" 億") : "—";
   const fmtPct = (v, sign) => (typeof v === "number") ? `<span class="${v>=0?'up':'down'}">${sign&&v>=0?'+':''}${v.toFixed(2)}%</span>` : "—";
   const annYield = (code, price) => {
-    const d = div[code], f = FREQ[code];
-    if (!d || !d.lastCash || !f || !(price > 0)) return null;
-    return d.lastCash * f / price * 100;
+    const d = div[code]; if (!d || !(price > 0)) return null;
+    const mature = d.firstDate && (Date.now() - new Date(d.firstDate).getTime()) >= 330 * 864e5;
+    if (mature && d.ttmCash > 0) return d.ttmCash / price * 100;          // 成熟：真實近一年配息合計
+    if (d.lastCash > 0 && FREQ[code]) return d.lastCash * FREQ[code] / price * 100;  // 新 ETF：年化估算
+    return null;
   };
 
   function buildTable(list, withYield) {
@@ -184,7 +186,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     rows.sort((a, b) => (b.aumYi || 0) - (a.aumYi || 0));
 
     const head = `<thead><tr>
-      <th class="etf">ETF</th><th>規模</th>${withYield ? '<th>年化殖利率*</th><th>配息</th>' : ''}
+      <th class="etf">ETF</th><th>規模</th>${withYield ? '<th>殖利率*</th><th>配息</th>' : ''}
       <th>折溢價</th><th>近3月</th><th>近6月</th><th style="text-align:left;">追蹤指數</th>${withYield ? '<th style="text-align:left;">前3大成分</th>' : ''}
     </tr></thead>`;
     const body = "<tbody>" + rows.map(x => `<tr>
