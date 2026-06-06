@@ -100,7 +100,7 @@ def _names(codes, c2n, k=3):
     return show + (f" 等{len(codes)}檔" if len(codes) > k else "")
 
 
-def build_digest(codes, code2name, cat_of, anns_today, news, alerts, risk, attention, streak, revenue):
+def build_digest(codes, code2name, cat_of, anns_today, news, alerts, risk, attention, streak, revenue, fairvalue):
     """為單一會員組「每日我的風險摘要」；沒風險也沒公告/新聞回 None（不擾民）。
     codes: 該會員 自選∪持股 代碼；cat_of: code→產業；risk/attention/streak/revenue: 各風險資料。"""
     if not codes:
@@ -115,7 +115,12 @@ def build_digest(codes, code2name, cat_of, anns_today, news, alerts, risk, atten
     revdrop = [c for c in codes if isinstance((revenue.get(c) or {}).get("yoy"), (int, float)) and revenue[c]["yoy"] <= -50]
     risky = sorted([(c, risk[c]) for c in codes if c in risk], key=lambda x: -x[1].get("score", 0))
     high = [c for c, r in risky if r.get("score", 0) >= 50]
-    flagged = set(notice) | set(sell) | set(revdrop) | set(high)
+    fairvalue = fairvalue or {}
+    fvbreak = [c for c in codes
+               if isinstance((fairvalue.get(c) or {}).get("low"), (int, float))
+               and isinstance((fairvalue.get(c) or {}).get("price"), (int, float))
+               and fairvalue[c]["price"] < fairvalue[c]["low"]]
+    flagged = set(notice) | set(sell) | set(revdrop) | set(high) | set(fvbreak)
 
     # 產業集中度（以檔數計）
     cats = {}
@@ -135,6 +140,8 @@ def build_digest(codes, code2name, cat_of, anns_today, news, alerts, risk, atten
 
     lines = ["📋 領富 AI ・ 你的每日風險摘要", ""]
     lines.append(f"你追蹤的 {len(codes)} 檔，今天有 {len(flagged)} 檔出現風險訊號：")
+    if fvbreak:
+        lines.append(f"🔴 {len(fvbreak)} 檔跌破合理區間下緣：{_names(fvbreak, code2name)}")
     if notice:
         lines.append(f"⚠️ {len(notice)} 檔列注意/處置股：{_names(notice, code2name)}")
     if sell:
@@ -179,6 +186,7 @@ def main():
     attention = load_json("attention_live.json").get("data", {})
     streak = load_json("inst_streak_live.json").get("data", {})
     revenue = load_json("revenue_live.json").get("revenue", {})
+    fairvalue = load_json("fair_value_live.json").get("data", {})
     code2name = {s["code"]: s.get("name", "") for s in stocks if s.get("code")}
     cat_of = {s["code"]: s.get("category", "") for s in stocks if s.get("code")}
 
@@ -199,7 +207,7 @@ def main():
         if not codes:
             skipped += 1
             continue
-        text = build_digest(codes, code2name, cat_of, anns_today, news, None, risk, attention, streak, revenue)
+        text = build_digest(codes, code2name, cat_of, anns_today, news, None, risk, attention, streak, revenue, fairvalue)
         if not text:
             skipped += 1
             continue
