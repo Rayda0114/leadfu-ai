@@ -2368,10 +2368,10 @@ function setupDisclaimer() {
     <div class="container">
       <span class="disc-icon">⚠</span>
       <span>
-        <strong>領富 AI 為興櫃／興櫃股票公開資訊整理平台。</strong>
+        <strong>領富 AI 為上市、上櫃、興櫃股票公開資訊整理平台。</strong>
         本站<strong>不介入任何股票買賣、不撮合交易、不代為下單或過戶、不收受投資款項</strong>，
         亦非證券投資顧問事業。所有內容（含 AI 功能）僅為公開資料之整理與摘要，不構成投資建議。
-        興櫃股票買賣應透過合法券商辦理，謹防詐騙 — 請參閱
+        股票買賣應透過合法券商辦理，謹防詐騙 — 請參閱
         <a href="${fraudHref}">投資人防詐須知</a>。
       </span>
     </div>`;
