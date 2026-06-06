@@ -1,0 +1,33 @@
+name: 領富 AI · 每日持股守門員提醒
+
+# 台灣時間 15:52（UTC 07:52）—— 排在「每日資料更新」(15:00) 之後、與其他推播同批。
+# 讀會員 holdings 的買進理由 → 用今日資料逐條複查 → 理由「新轉弱」才推 LINE。
+on:
+  schedule:
+    - cron: "52 7 * * 1-5"   # 週一到週五，資料更新後
+  workflow_dispatch:           # 允許手動觸發（測試用）
+    inputs:
+      dry_run:
+        description: "只測試、不實際推播/不回寫（true = 只印訊息）"
+        required: false
+        default: "true"
+
+jobs:
+  push-holdings-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check buy-reasons and push LINE alerts on newly-weakened reasons
+        run: python scripts/push_holdings_guard.py
+        env:
+          PYTHONIOENCODING: utf-8
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
