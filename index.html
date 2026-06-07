@@ -109,10 +109,11 @@
   <div class="container afb-inner">
     <div class="afb-icon">📢</div>
     <div class="afb-text">
-      <strong>本站唯一官方資訊：</strong>網址 <code>leadfuai.com</code> · LINE
+      <span class="afb-full"><strong>本站唯一官方資訊：</strong>網址 <code>leadfuai.com</code> · LINE
       <a href="https://line.me/R/ti/p/@130tqckv" target="_blank" rel="noopener" class="afb-line">@130tqckv</a>
-      ｜<span class="afb-warn">⚠ 我們沒有 APP、不開飆股群組、不保證獲利</span>｜冒用請報 <a href="https://165.npa.gov.tw/" target="_blank" rel="noopener" class="afb-165">165</a>
-      <a href="pages/fraud-alert.html" class="afb-more">了解更多 →</a>
+      ｜<span class="afb-warn">⚠ 我們沒有 APP、不開飆股群組、不保證獲利</span>｜冒用請報 <a href="https://165.npa.gov.tw/" target="_blank" rel="noopener" class="afb-165">165</a></span>
+      <span class="afb-short">官方網站 <code>leadfuai.com</code>｜不報明牌、不開群組、不保證獲利</span>
+      <a href="pages/fraud-alert.html" class="afb-more">了解防詐 →</a>
     </div>
     <button type="button" class="afb-close" aria-label="關閉" data-action="close">✕</button>
   </div>
@@ -185,6 +186,14 @@
   .ai-second-head p { font-size:13.5px; color:#666; }
   .ai-second-grid { display:grid; grid-template-columns:1.15fr 0.85fr; gap:24px; align-items:start; }
   @media(max-width:880px){ .ai-second-grid{ grid-template-columns:1fr; } }
+  /* 防詐橫幅：手機縮成一行 */
+  .afb-short { display:none; }
+  @media(max-width:768px){
+    .afb-full { display:none; }
+    .afb-short { display:inline; }
+    .anti-fraud-banner .afb-inner { font-size:11.5px; padding-top:4px; padding-bottom:4px; }
+    .anti-fraud-banner .afb-icon { display:none; }
+  }
 </style>
 
 <!-- 🔍 首頁第一屏：輸入股票 → 免費買前檢查 -->
@@ -207,7 +216,12 @@
       <div class="check-hero-right">
         <div class="example-card" id="exampleCard">
           <div class="ex-label">範例結果</div>
-          <div style="padding:24px 0;text-align:center;color:#aaa;font-size:13px;">載入範例中…</div>
+          <div class="ex-top"><div><span class="ex-code">2330</span> <span class="ex-name">台積電</span></div><div class="ex-status ex-low">低風險</div></div>
+          <div class="ex-score">風險分數 <strong>14</strong> / 100</div>
+          <div class="ex-bar"><div class="ex-bar-fill" style="width:14%"></div></div>
+          <div class="ex-notes-h">今日需注意</div>
+          <ul class="ex-notes"><li>外資賣超</li><li>借券餘額增加</li><li>股價仍在合理區間內</li></ul>
+          <a class="ex-next" href="pages/check.html?code=2330" style="display:block;text-decoration:none;">下一步：查看完整買前檢查 →</a>
         </div>
       </div>
     </div>
@@ -870,7 +884,7 @@
 }
 </script>
 
-<script src="js/main.js?v=3.22.0"></script>
+<script src="js/main.js?v=3.23.0"></script>
 <script>
 // 📊 今日 AI 盤後摘要（每日生成，6 小時內快取）
 document.addEventListener("DOMContentLoaded", async () => {

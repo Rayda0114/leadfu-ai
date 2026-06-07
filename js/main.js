@@ -1722,6 +1722,7 @@ function injectFooterFraudReminder() {
  * 3 個步驟介紹核心差異化價值
  * ============================================================ */
 function setupOnboarding() {
+  return;   // ⛔ 首頁不再自動跳導覽浮層（會擋住「免費檢查股票」主 CTA）；首頁已夠清楚
   // 只在首頁跳
   const isHome = location.pathname === "/" || location.pathname.endsWith("/index.html");
   if (!isHome) return;
@@ -2674,6 +2675,7 @@ function setupMobileNav() {
  * 進站 1.5 秒後跳出，當日已關閉就不再跳，localStorage 按日記憶
  * ============================================================ */
 function setupAiAlert() {
+  return;   // ⛔ 不再自動彈「今日盤勢警報」（擋畫面、易把新客帶去加 LINE）；盤勢內容首頁已有區塊
   const overlay = document.getElementById("aiAlertOverlay");
   if (!overlay) return;
 
