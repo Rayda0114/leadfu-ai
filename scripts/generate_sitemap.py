@@ -53,6 +53,7 @@ STATIC_PAGES = [
     ("/pages/privacy.html",            "yearly",  0.3),
     ("/pages/fraud-alert.html",        "monthly", 0.5),
     ("/pages/risk-radar.html",         "daily",   0.85),
+    ("/pages/market-risk.html",        "daily",   0.85),
     ("/pages/institutional.html",      "daily",   0.85),
     ("/pages/portfolio-health.html",   "weekly",  0.7),
     ("/pages/dividends.html",          "daily",   0.85),
