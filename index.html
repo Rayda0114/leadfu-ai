@@ -188,7 +188,28 @@
   .ex-notes { list-style:none; padding:0; margin:0 0 12px; }
   .ex-notes li { font-size:13.5px; color:#444; padding:4px 0 4px 18px; position:relative; line-height:1.5; }
   .ex-notes li:before { content:"•"; position:absolute; left:4px; color:#c0392b; font-weight:700; }
-  .ex-next { font-size:13px; font-weight:600; color:#1B4332; border-top:1px dashed #e3e8ee; padding-top:11px; }
+  .ex-next { font-size:12.5px; color:#7a6f55; background:#faf7ef; border:1px solid #efe7d3; border-radius:8px; padding:8px 11px; margin-top:11px; line-height:1.55; }
+  .ex-cta { display:block; margin-top:9px; font-size:13.5px; font-weight:700; color:#1B4332; text-decoration:none; }
+  .ex-cta:hover { text-decoration:underline; }
+  /* 🛡️ 第二屏：每日持股風險守門員 */
+  .guardian-sec { background:#f3f9f5; padding:38px 0; border-bottom:1px solid #eef0f3; }
+  .guardian-grid { display:grid; grid-template-columns:1.05fr 0.95fr; gap:32px; align-items:center; }
+  @media(max-width:880px){ .guardian-grid{ grid-template-columns:1fr; gap:22px; } .guardian-sec{ padding:26px 0; } }
+  .guardian-badge { display:inline-block; font-size:12.5px; font-weight:600; color:#1B4332; background:#dcf0e4; padding:5px 13px; border-radius:20px; }
+  .guardian-text h2 { font-size:27px; font-weight:800; color:#13241c; margin:13px 0 8px; }
+  @media(max-width:880px){ .guardian-text h2{ font-size:22px; } }
+  .guardian-text > p { font-size:14.5px; color:#4b5563; line-height:1.75; margin-bottom:16px; }
+  .guardian-checks { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+  .guardian-checks span { background:#fff; border:1px solid #d8e5dc; border-radius:18px; padding:7px 14px; font-size:13.5px; color:#1B4332; font-weight:600; }
+  .guardian-cta-row { display:flex; gap:10px; flex-wrap:wrap; }
+  .guardian-card { background:#fff; border:1px solid #e3e8ee; border-radius:14px; box-shadow:0 8px 28px rgba(20,40,30,.09); padding:18px 20px; }
+  .gc-head { font-size:12px; color:#9fb0a6; letter-spacing:.5px; }
+  .gc-stock { font-size:18px; font-weight:800; color:#13241c; margin:7px 0 12px; display:flex; align-items:center; gap:8px; }
+  .gc-tag { font-size:12px; font-weight:700; background:#dcf3e3; color:#178a4c; padding:3px 10px; border-radius:14px; }
+  .gc-items { list-style:none; padding:0; margin:0 0 12px; }
+  .gc-items li { font-size:14px; color:#374151; padding:6px 0; border-bottom:1px solid #f3f4f6; }
+  .gc-items li:last-child { border-bottom:0; }
+  .gc-foot { font-size:12px; color:#888; border-top:1px dashed #e3e8ee; padding-top:10px; }
   .ai-second { padding:30px 0; background:#fafbfc; border-bottom:1px solid #eef0f3; }
   .ai-second-head { text-align:center; margin-bottom:16px; }
   .ai-second-head h2 { font-size:21px; color:#163A2E; margin-bottom:4px; }
@@ -249,14 +270,48 @@
           <div class="ex-bar"><div class="ex-bar-fill" style="width:14%"></div></div>
           <div class="ex-notes-h">今日需注意</div>
           <ul class="ex-notes"><li>外資賣超</li><li>借券餘額增加</li><li>股價仍在合理區間內</li></ul>
-          <a class="ex-next" href="pages/check.html?code=2330" style="display:block;text-decoration:none;">下一步：查看完整買前檢查 →</a>
+          <div class="ex-next">💡 建議加入持股追蹤 3 天，觀察外資與借券是否持續惡化。</div>
+          <a class="ex-cta" href="pages/portfolio-health.html">加入持股，每天盤後幫你複查 →</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ✨ 第二區：AI 對話（原首頁主舞台移到這，保留所有 id 給 main.js） -->
+<!-- 🛡️ 第二屏：每日持股風險守門員（守住定位，不讓 AI 搶第二屏） -->
+<section class="guardian-sec">
+  <div class="container">
+    <div class="guardian-grid">
+      <div class="guardian-text">
+        <span class="guardian-badge">🛡️ 加入持股 · 每天盤後自動複查</span>
+        <h2>每日持股風險守門員</h2>
+        <p>加入持股後，每天盤後自動幫你檢查這 6 件事，一有風險第一時間提醒 —— 不用自己天天盯盤。</p>
+        <div class="guardian-checks">
+          <span>📊 估值</span><span>📈 營收</span><span>🏦 籌碼</span>
+          <span>📰 新聞</span><span>⚠ 注意股</span><span>🎯 集中度</span>
+        </div>
+        <div class="guardian-cta-row">
+          <a href="pages/portfolio-health.html" class="check-btn-primary">建立我的持股清單</a>
+          <a href="pages/risk-radar.html" class="check-btn-secondary">看防錯雷達</a>
+        </div>
+      </div>
+      <div class="guardian-visual">
+        <div class="guardian-card">
+          <div class="gc-head">🔔 今日盤後複查 · 範例</div>
+          <div class="gc-stock">2330 台積電 <span class="gc-tag">低風險 14</span></div>
+          <ul class="gc-items">
+            <li>🏦 外資連 2 日賣超</li>
+            <li>📉 借券餘額增加</li>
+            <li>✅ 股價仍在合理區間</li>
+          </ul>
+          <div class="gc-foot">每天盤後自動複查，有風險主動 LINE 提醒</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ✨ 第三區：AI 對話（保留所有 id 給 main.js） -->
 <section class="ai-second">
   <div class="container">
     <div class="ai-second-head">
@@ -1788,7 +1843,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           + `<div class="ex-bar"><div class="ex-bar-fill" style="width:${Math.min(100, Math.max(3, rs.score))}%"></div></div>`
           + `<div class="ex-notes-h">今日需注意</div>`
           + `<ul class="ex-notes">${notes.slice(0, 4).map(n => `<li>${n}</li>`).join("")}</ul>`
-          + `<a class="ex-next" href="pages/check.html?code=${s.code}" style="display:block;text-decoration:none;">下一步：看 ${s.code} 完整買前檢查 →</a>`;
+          + `<div class="ex-next">💡 建議加入持股追蹤 3 天，觀察外資與借券是否持續惡化。</div>`
+          + `<a class="ex-cta" href="pages/portfolio-health.html">加入 ${s.code} 持股，每天盤後幫你複查 →</a>`;
       }
     } catch (e) {}
     // 檢查框：輸入 → 買前檢查
