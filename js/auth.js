@@ -61,18 +61,31 @@ window.LeadFuAuth = {
        導去 LINE authorize → 回 /pages/line-callback.html（帶 code）
        → callback 把 code 丟給 Worker /api/line-auth 換 session。
      參見 worker.js handleLineAuth。 */
+  /* 是否在已安裝的 PWA(App, standalone)中執行 */
+  _isPWA() {
+    try {
+      return window.matchMedia("(display-mode: standalone)").matches
+        || window.navigator.standalone === true;
+    } catch (e) { return false; }
+  },
+  _rndHex(n) {
+    const rnd = new Uint8Array(n);
+    (window.crypto || {}).getRandomValues && window.crypto.getRandomValues(rnd);
+    return Array.from(rnd, b => b.toString(16).padStart(2, "0")).join("");
+  },
+
   async signInWithLine() {
     const CHANNEL_ID = "2010279883";
     const REDIRECT_URI = "https://leadfuai.com/pages/line-callback.html";
-    // CSRF state
-    const rnd = new Uint8Array(16);
-    (window.crypto || {}).getRandomValues && window.crypto.getRandomValues(rnd);
-    const state = Array.from(rnd, b => b.toString(16).padStart(2, "0")).join("");
+    const csrf = this._rndHex(16);
+    // PWA(App) → 啟用「登入接力」：授權頁在外部瀏覽器開，session 用一次性 token 接回 App
+    const handoff = this._isPWA() ? this._rndHex(24) : "";
+    const state = handoff ? (csrf + "~" + handoff) : csrf;
     try {
-      sessionStorage.setItem("line_login_state", state);
-      // 登入後要回哪頁（預設會員中心；登入/註冊頁也都導去會員中心）
+      sessionStorage.setItem("line_login_state", csrf);
       sessionStorage.setItem("line_login_next", "/pages/member.html");
-    } catch (e) { /* 隱私模式可能擋 sessionStorage，state 驗證會略過 */ }
+      if (handoff) localStorage.setItem("leadfu_handoff_pending", handoff);
+    } catch (e) { /* 隱私模式可能擋；接力情境會略過 CSRF 比對 */ }
     const authUrl = "https://access.line.me/oauth2/v2.1/authorize?" +
       new URLSearchParams({
         response_type: "code",
@@ -81,7 +94,68 @@ window.LeadFuAuth = {
         state,
         scope: "profile openid"
       }).toString();
-    window.location.href = authUrl;
+    if (handoff) {
+      // 保持 App 存活：外部瀏覽器開授權頁，App 留在原頁輪詢接力
+      window.open(authUrl, "_blank");
+      this._startHandoffPolling();
+    } else {
+      window.location.href = authUrl;
+    }
+  },
+
+  /* ===== PWA 登入接力輪詢 ===== */
+  _handoffTimer: null,
+  _visHandler: null,
+  async _checkHandoffOnce() {
+    let token = "";
+    try { token = localStorage.getItem("leadfu_handoff_pending") || ""; } catch (e) {}
+    if (!token) { this._stopHandoffPolling(); return true; }
+    let data = {};
+    try {
+      const r = await fetch("/api/line-handoff?token=" + encodeURIComponent(token), { cache: "no-store" });
+      data = await r.json().catch(() => ({}));
+    } catch (e) { return false; }
+    if (data.expired) {
+      try { localStorage.removeItem("leadfu_handoff_pending"); } catch (e) {}
+      this._stopHandoffPolling();
+      return true;
+    }
+    if (!data.token_hash) return false;   // 還沒登入完成，繼續等
+    try { localStorage.removeItem("leadfu_handoff_pending"); } catch (e) {}
+    try {
+      const { error } = await _sb.auth.verifyOtp({ token_hash: data.token_hash, type: "magiclink" });
+      if (!error) {
+        this._stopHandoffPolling();
+        window.location.replace("/pages/member.html");
+        return true;
+      }
+    } catch (e) {}
+    return false;
+  },
+  _startHandoffPolling() {
+    this._stopHandoffPolling();
+    let tries = 0;
+    const tick = async () => {
+      tries++;
+      const done = await this._checkHandoffOnce();
+      if (done || tries > 120) {              // ~5 分鐘上限
+        this._stopHandoffPolling();
+        if (tries > 120) { try { localStorage.removeItem("leadfu_handoff_pending"); } catch (e) {} }
+      }
+    };
+    // App 回到前景立即查一次（最常見觸發點：使用者授權完切回 App）
+    this._visHandler = () => { if (!document.hidden) this._checkHandoffOnce(); };
+    document.addEventListener("visibilitychange", this._visHandler);
+    window.addEventListener("focus", this._visHandler);
+    this._handoffTimer = setInterval(tick, 2500);
+  },
+  _stopHandoffPolling() {
+    if (this._handoffTimer) { clearInterval(this._handoffTimer); this._handoffTimer = null; }
+    if (this._visHandler) {
+      document.removeEventListener("visibilitychange", this._visHandler);
+      window.removeEventListener("focus", this._visHandler);
+      this._visHandler = null;
+    }
   },
 
   /* 登出 */
@@ -209,3 +283,10 @@ window.LeadFuAuth = {
     return "發生錯誤：" + msg;
   }
 };
+
+// PWA 登入接力：頁面載入時若有未完成的接力（App 被系統重啟/重整），恢復輪詢
+try {
+  if (window.LeadFuAuth._isPWA() && localStorage.getItem("leadfu_handoff_pending")) {
+    window.LeadFuAuth._startHandoffPolling();
+  }
+} catch (e) {}

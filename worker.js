@@ -1127,6 +1127,64 @@ async function handleLineAuth(request, env) {
 
 
 /* ============================================================
+ * /api/line-handoff — PWA 登入接力
+ *
+ * 問題：iOS/Android 把「App(PWA)」和「外部瀏覽器」的登入狀態隔離。
+ *   PWA 點 LINE 登入 → 在外部瀏覽器完成 → session 回不到 App。
+ * 解法：外部瀏覽器端把 token_hash 暫存進接力站(keyed by 一次性 handoff token H)，
+ *   PWA 切回後用 H 取回 token_hash → 自己 verifyOtp → session 建在 PWA。
+ *
+ *   POST {token,token_hash}  → 存(外部瀏覽器 line-callback 呼叫)
+ *   GET  ?token=H            → 取走即刪、僅一次、10 分鐘 TTL(PWA 輪詢)
+ *
+ * 需 Supabase 建表 auth_handoff(token text pk, token_hash text, created_at timestamptz)。
+ * 安全：H 為 128-bit 隨機、僅 PWA 知道；token_hash 本身一次性(verifyOtp 即失效)。
+ * ============================================================ */
+async function handleLineHandoff(request, env) {
+  const adminHeaders = {
+    "apikey": env.SUPABASE_SERVICE_ROLE_KEY,
+    "Authorization": `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+    "Content-Type": "application/json"
+  };
+  const TABLE = `${SUPABASE_PROJECT_URL}/rest/v1/auth_handoff`;
+
+  if (request.method === "POST") {
+    let body;
+    try { body = await request.json(); } catch { return lineAuthError("invalid json", 400); }
+    const token = String((body && body.token) || "").trim();
+    const tokenHash = String((body && body.token_hash) || "").trim();
+    if (!/^[a-f0-9]{24,128}$/i.test(token) || !tokenHash) return lineAuthError("bad handoff params", 400);
+    const res = await fetch(TABLE, {
+      method: "POST",
+      headers: { ...adminHeaders, "Prefer": "resolution=merge-duplicates,return=minimal" },
+      body: JSON.stringify({ token, token_hash: tokenHash, created_at: new Date().toISOString() })
+    });
+    if (!res.ok) return lineAuthError("handoff store failed: " + res.status + " " + (await res.text()).slice(0, 150), 500);
+    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders() } });
+  }
+
+  if (request.method === "GET") {
+    const token = String(new URL(request.url).searchParams.get("token") || "").trim();
+    if (!/^[a-f0-9]{24,128}$/i.test(token)) return lineAuthError("bad token", 400);
+    const res = await fetch(`${TABLE}?token=eq.${encodeURIComponent(token)}&select=token_hash,created_at`, { headers: adminHeaders });
+    const rows = await res.json().catch(() => []);
+    if (!Array.isArray(rows) || !rows.length) {
+      return new Response(JSON.stringify({ pending: true }), { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders() } });
+    }
+    // 取走即刪（一次性）
+    await fetch(`${TABLE}?token=eq.${encodeURIComponent(token)}`, { method: "DELETE", headers: adminHeaders });
+    const age = Date.now() - new Date(rows[0].created_at).getTime();
+    if (age > 10 * 60 * 1000) {
+      return new Response(JSON.stringify({ expired: true }), { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders() } });
+    }
+    return new Response(JSON.stringify({ token_hash: rows[0].token_hash }), { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders() } });
+  }
+
+  return lineAuthError("method not allowed", 405);
+}
+
+
+/* ============================================================
  * 站長後台：意見回饋清單（owner-only）
  *
  * 安全：含用戶 email，絕不可公開。
@@ -1339,6 +1397,7 @@ export default {
     if (url.pathname === "/api/health")         return handleHealth(env);
     if (url.pathname === "/api/quote")          return handleQuote(request);
     if (url.pathname === "/api/line-auth")      return handleLineAuth(request, env);
+    if (url.pathname === "/api/line-handoff")   return handleLineHandoff(request, env);
     if (url.pathname === "/api/admin-feedback") return handleAdminFeedback(request, env);
     if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
 

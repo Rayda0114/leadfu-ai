@@ -31,7 +31,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/auth.js"></script>
+<script src="../js/auth.js?v=3.23.0"></script>
 <script>
 (async () => {
   const bodyEl = document.getElementById("lcBody");
@@ -52,17 +52,22 @@
     }
 
     const code = params.get("code");
-    const state = params.get("state");
+    const state = params.get("state") || "";
     if (!code) return fail("沒有收到授權碼，請重新登入。");
 
-    // CSRF：比對先前存的 state（隱私模式可能沒存，沒存就略過比對）
+    // state 格式：csrf  或  csrf~handoffToken（PWA 登入接力）
+    const tilde = state.indexOf("~");
+    const csrf = tilde >= 0 ? state.slice(0, tilde) : state;
+    const handoff = tilde >= 0 ? state.slice(tilde + 1) : "";
+
+    // CSRF：比對先前存的 state（隱私模式或接力情境本瀏覽器沒存，沒存就略過）
     let expected = null;
     try { expected = sessionStorage.getItem("line_login_state"); } catch (e) {}
-    if (expected && state && expected !== state) {
+    if (expected && csrf && expected !== csrf) {
       return fail("登入驗證碼不符，為安全起見已中止，請重新登入。");
     }
 
-    // 把 code 交給 Worker 換 Supabase session token（同源 /api/line-auth）
+    // 把 code 交給 Worker 換 token_hash（同源 /api/line-auth）
     const res = await fetch("/api/line-auth", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -73,7 +78,24 @@
       return fail("登入處理失敗" + (data.error ? "：" + data.error : "") + "，請稍後再試。");
     }
 
-    // 用 token_hash 建立正式 Supabase session
+    // === PWA 登入接力：不在這個瀏覽器登入，把 token_hash 交回 App ===
+    if (handoff) {
+      const hr = await fetch("/api/line-handoff", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: handoff, token_hash: data.token_hash })
+      });
+      if (!hr.ok) {
+        return fail("登入接力暫存失敗，請改用網頁版登入或稍後再試。");
+      }
+      bodyEl.innerHTML =
+        '<div style="font-size:46px;margin-bottom:10px;">✅</div>' +
+        '<div class="lc-msg"><strong>登入成功！</strong><br>請回到「領富 AI」App，<br>畫面會自動完成登入。</div>' +
+        '<div class="lc-msg" style="color:#999;font-size:13px;margin-top:14px;">可直接關閉此頁，或點左上「完成 / 關閉」回到 App。</div>';
+      return;
+    }
+
+    // === 一般瀏覽器：直接在本頁建立 Supabase session ===
     const sb = window.LeadFuAuth.client;
     const { error: voErr } = await sb.auth.verifyOtp({
       token_hash: data.token_hash,
