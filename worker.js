@@ -1205,7 +1205,7 @@ async function handleAdminFeedback(request, env) {
 
 // ════════════════════════════════════════════════════════════
 // LINE 官方帳號 AI 客服 webhook
-//   用戶在 LINE @041exgtv 問股票 → AI 用網站官方資料回答（沿用 SYSTEM_PROMPT 合規護欄）
+//   用戶在 LINE @130tqckv 問股票 → AI 用網站官方資料回答（沿用 SYSTEM_PROMPT 合規護欄）
 //   env：LINE_CHANNEL_ACCESS_TOKEN（回覆，與推播共用，已設）
 //        LINE_MESSAGING_CHANNEL_SECRET（X-Line-Signature 驗章，可選但強烈建議）
 //   LINE 後台 Webhook URL 設為：https://leadfuai.com/api/line-webhook

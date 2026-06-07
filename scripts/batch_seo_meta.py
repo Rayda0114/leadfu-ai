@@ -94,8 +94,8 @@ PAGE_META = {
     "privacy.html": None,
     "fraud-alert.html": None,  # 已有完整 head 含 JSON-LD
     "contact.html": {
-        "title": "聯絡我們 - 領富 AI 客服 LINE @041exgtv - 領富 AI",
-        "desc": "領富 AI 唯一官方客服 LINE：@041exgtv。⚠ 我們沒有 APP，不主動加 LINE 群組，不保證獲利。冒用請報 165 反詐騙專線。",
+        "title": "聯絡我們 - 領富 AI 客服 LINE @130tqckv - 領富 AI",
+        "desc": "領富 AI 唯一官方客服 LINE：@130tqckv。⚠ 我們沒有 APP，不主動加 LINE 群組，不保證獲利。冒用請報 165 反詐騙專線。",
     },
     "stock-detail.html": None,  # 已在 P1-A 處理
     "ai.html": {
