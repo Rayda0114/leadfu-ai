@@ -141,26 +141,88 @@
       <li class="active"><a href="index.html">首頁</a></li>
       <li><a href="pages/check.html">🔍 買前檢查</a></li>
       <li><a href="pages/portfolio-health.html">📊 投資儀表板</a></li>
-      <li><a href="pages/risk-radar.html">⚠ 防錯雷達</a></li><li><a href="pages/market-risk.html">🌡️ 大盤溫度</a></li>
-      <li><a href="pages/screener.html">進階選股</a></li>
-      <li><a href="pages/stocks.html">股價總覽</a></li><li><a href="pages/etf.html">📊 ETF 專區</a></li>
-      <li><a href="pages/news.html">財經新聞</a></li>
+      <li><a href="pages/risk-radar.html">⚠ 防錯雷達</a></li>
       <li><a href="pages/ai.html">🤖 AI 對話</a></li>
-      <li><a href="pages/watchlist.html">自選股</a></li>
       <li><a href="pages/vip.html">💎 VIP</a></li>
     </ul>
   </div>
 </nav>
 
-<section class="hero hero-with-chat">
-  <div class="container hero-inner">
-    <div class="hero-text">
-      <span class="hero-badge">✨ AI 台股研究助理 · 全市場 <span data-stat="stockCount">2,300+</span> 檔</span>
-      <h1 class="hero-mini-title">看清楚<span class="accent">再決定</span></h1>
-      <p class="hero-mini-sub">問股票、找合理區間、看產業 — <strong>一個對話框搞定</strong></p>
+<style>
+  /* === 首頁第一屏：輸入股票 → 免費買前檢查 === */
+  .check-hero { background:linear-gradient(180deg,#f3f9f5 0%,#ffffff 100%); padding:40px 0 34px; border-bottom:1px solid #eef0f3; }
+  .check-hero-grid { display:grid; grid-template-columns:1.08fr 0.92fr; gap:34px; align-items:center; }
+  @media(max-width:880px){ .check-hero-grid{ grid-template-columns:1fr; gap:24px; } .check-hero{ padding:26px 0 24px; } }
+  .check-badge { display:inline-block; font-size:12.5px; font-weight:600; color:#1B4332; background:#dcf0e4; padding:5px 13px; border-radius:20px; }
+  .check-h1 { font-size:33px; font-weight:800; color:#13241c; line-height:1.25; margin:14px 0 9px; }
+  .check-h1 .accent { color:#1B4332; }
+  @media(max-width:880px){ .check-h1{ font-size:25px; } }
+  .check-sub { font-size:15px; color:#4b5563; line-height:1.7; margin-bottom:18px; }
+  #checkHeroInput { width:100%; padding:16px 18px; font-size:16px; border:2px solid #1B4332; border-radius:12px; outline:none; box-sizing:border-box; }
+  #checkHeroInput:focus { box-shadow:0 0 0 3px rgba(27,67,50,.15); }
+  .check-cta-row { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+  .check-btn-primary { background:#1B4332; color:#fff; border:none; font-size:16px; font-weight:700; padding:14px 30px; border-radius:10px; cursor:pointer; }
+  .check-btn-primary:hover { background:#163a2b; }
+  .check-btn-secondary { display:inline-flex; align-items:center; background:#fff; color:#1B4332; border:1.5px solid #1B4332; font-size:15px; font-weight:600; padding:13px 22px; border-radius:10px; text-decoration:none; }
+  .check-guarantees { display:flex; gap:18px; margin-top:16px; font-size:13px; color:#555; flex-wrap:wrap; }
+  .example-card { background:#fff; border:1px solid #e3e8ee; border-radius:14px; box-shadow:0 8px 28px rgba(20,40,30,.09); padding:18px 20px; }
+  .ex-label { font-size:11px; color:#9fb0a6; letter-spacing:1.5px; }
+  .ex-top { display:flex; justify-content:space-between; align-items:center; margin:6px 0 12px; }
+  .ex-code { font-size:21px; font-weight:800; color:#13241c; } .ex-name { color:#555; font-size:15px; }
+  .ex-status { font-size:13px; font-weight:700; padding:4px 13px; border-radius:20px; white-space:nowrap; }
+  .ex-low { background:#dcf3e3; color:#178a4c; } .ex-mid { background:#fdecc8; color:#b45309; } .ex-high { background:#fde2e2; color:#c0392b; }
+  .ex-score { font-size:14px; color:#555; } .ex-score strong { font-size:30px; color:#1B4332; line-height:1; }
+  .ex-bar { height:8px; background:#eef2f5; border-radius:5px; overflow:hidden; margin:9px 0 15px; }
+  .ex-bar-fill { height:100%; background:linear-gradient(90deg,#178a4c,#e6900a,#c0392b); }
+  .ex-notes-h { font-size:13px; font-weight:700; color:#163A2E; margin-bottom:5px; }
+  .ex-notes { list-style:none; padding:0; margin:0 0 12px; }
+  .ex-notes li { font-size:13.5px; color:#444; padding:4px 0 4px 18px; position:relative; line-height:1.5; }
+  .ex-notes li:before { content:"•"; position:absolute; left:4px; color:#c0392b; font-weight:700; }
+  .ex-next { font-size:13px; font-weight:600; color:#1B4332; border-top:1px dashed #e3e8ee; padding-top:11px; }
+  .ai-second { padding:30px 0; background:#fafbfc; border-bottom:1px solid #eef0f3; }
+  .ai-second-head { text-align:center; margin-bottom:16px; }
+  .ai-second-head h2 { font-size:21px; color:#163A2E; margin-bottom:4px; }
+  .ai-second-head p { font-size:13.5px; color:#666; }
+  .ai-second-grid { display:grid; grid-template-columns:1.15fr 0.85fr; gap:24px; align-items:start; }
+  @media(max-width:880px){ .ai-second-grid{ grid-template-columns:1fr; } }
+</style>
 
-      <!-- ✨ 領富 AI 對話框（首頁主舞台） -->
-      <div class="ai-chat-embed hero-chat" id="aiChatEmbed">
+<!-- 🔍 首頁第一屏：輸入股票 → 免費買前檢查 -->
+<section class="check-hero">
+  <div class="container">
+    <div class="check-hero-grid">
+      <div class="check-hero-left">
+        <span class="check-badge">台股買前檢查 · 持股風險守門員</span>
+        <h1 class="check-h1">買股票前，先檢查<span class="accent">有沒有風險</span></h1>
+        <p class="check-sub">輸入股票代號，領富 AI 幫你整理<strong>估值、營收、籌碼、新聞與注意股風險</strong>。</p>
+        <form id="checkHeroForm" autocomplete="off">
+          <input type="text" id="checkHeroInput" placeholder="輸入股票代號 / 公司名稱，例如 2330 台積電" autocomplete="off" inputmode="search">
+        </form>
+        <div class="check-cta-row">
+          <button type="button" class="check-btn-primary" id="checkHeroBtn">免費檢查股票</button>
+          <a href="pages/portfolio-health.html" class="check-btn-secondary">建立我的持股清單</a>
+        </div>
+        <div class="check-guarantees"><span>✅ 公開資料整理</span><span>🚫 不提供明牌</span><span>💰 0 元先試用</span></div>
+      </div>
+      <div class="check-hero-right">
+        <div class="example-card" id="exampleCard">
+          <div class="ex-label">範例結果</div>
+          <div style="padding:24px 0;text-align:center;color:#aaa;font-size:13px;">載入範例中…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ✨ 第二區：AI 對話（原首頁主舞台移到這，保留所有 id 給 main.js） -->
+<section class="ai-second">
+  <div class="container">
+    <div class="ai-second-head">
+      <h2>或者，直接問 AI</h2>
+      <p>不想逐項看？用口語問領富 AI：「2330 現在貴嗎」「高股息 ETF 推薦」「半導體今天怎樣」</p>
+    </div>
+    <div class="ai-second-grid">
+      <div class="ai-chat-embed" id="aiChatEmbed">
         <div class="ai-chat-embed-head">
           <h2><span class="ai-sparkle">✨</span> 領富 AI · 直接問我</h2>
           <div class="ai-chat-embed-sub">即時報價 · 合理區間 · 引用來源</div>
@@ -180,17 +242,13 @@
           <p class="ai-chat-embed-disclaimer">✅ 即時報價　✅ 合理區間　✅ 引用來源　✅ 0 元免費</p>
         </div>
       </div>
-    </div>
-    <div class="hero-side">
-      <div class="hero-side-head">
-        <span class="hero-side-spark">💬</span>
-        <span>點我問 AI · 今日值得關注</span>
-      </div>
-      <div class="hero-visual" id="heroCards">
-        <!-- 由 main.js 動態填入：爆量／合理區間偏低／漲幅冠軍三張卡 -->
-        <div class="hero-card hero-card-v2 hero-card-skel"><div class="hc-cat-tag">載入中...</div><div class="hc-stock-name">&nbsp;</div><div class="hc-price-row"><span class="hc-price-v2">&nbsp;</span></div></div>
-        <div class="hero-card hero-card-v2 hero-card-skel"><div class="hc-cat-tag">載入中...</div><div class="hc-stock-name">&nbsp;</div><div class="hc-price-row"><span class="hc-price-v2">&nbsp;</span></div></div>
-        <div class="hero-card hero-card-v2 hero-card-skel"><div class="hc-cat-tag">載入中...</div><div class="hc-stock-name">&nbsp;</div><div class="hc-price-row"><span class="hc-price-v2">&nbsp;</span></div></div>
+      <div class="ai-second-side">
+        <div class="hero-side-head"><span class="hero-side-spark">💬</span><span>今日值得關注（點我問 AI）</span></div>
+        <div class="hero-visual" id="heroCards">
+          <div class="hero-card hero-card-v2 hero-card-skel"><div class="hc-cat-tag">載入中...</div><div class="hc-stock-name">&nbsp;</div><div class="hc-price-row"><span class="hc-price-v2">&nbsp;</span></div></div>
+          <div class="hero-card hero-card-v2 hero-card-skel"><div class="hc-cat-tag">載入中...</div><div class="hc-stock-name">&nbsp;</div><div class="hc-price-row"><span class="hc-price-v2">&nbsp;</span></div></div>
+          <div class="hero-card hero-card-v2 hero-card-skel"><div class="hc-cat-tag">載入中...</div><div class="hc-stock-name">&nbsp;</div><div class="hc-price-row"><span class="hc-price-v2">&nbsp;</span></div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1663,6 +1721,52 @@ document.addEventListener("DOMContentLoaded", async () => {
       $("fvDemoNote").textContent = `目前股價 ${fv.price.toLocaleString()} 元，${desc}。`;
     }
   } catch (e) { /* 失敗就保留 HTML fallback */ }
+})();
+</script>
+
+<script>
+/* 首頁第一屏：範例風險卡(載入真實 2330) + 檢查框 → 買前檢查 */
+(async () => {
+  try {
+    if (!window.LeadFu || !window.LeadFu.ready) return;
+    await window.LeadFu.ready;
+    const L = window.LeadFu;
+    // 範例卡：真實 2330 風險
+    try {
+      let rs = (L.data.riskScore || {})["2330"];
+      if (!rs) { try { rs = ((await (await fetch("data/risk_score_live.json", { cache: "no-cache" })).json()).data || {})["2330"]; } catch (e) {} }
+      const s = (L.findStock && L.findStock("2330")) || { code: "2330", name: "台積電" };
+      const el = document.getElementById("exampleCard");
+      if (el && rs) {
+        const lv = rs.level || "低", cls = lv === "高" ? "ex-high" : (lv === "中" ? "ex-mid" : "ex-low");
+        const notes = (rs.reasons && rs.reasons.length) ? rs.reasons : ["近期無明顯風險訊號"];
+        el.innerHTML = `<div class="ex-label">範例結果（即時資料）</div>`
+          + `<div class="ex-top"><div><span class="ex-code">${s.code}</span> <span class="ex-name">${s.name || ""}</span></div><div class="ex-status ${cls}">${lv}風險</div></div>`
+          + `<div class="ex-score">風險分數 <strong>${rs.score}</strong> / 100</div>`
+          + `<div class="ex-bar"><div class="ex-bar-fill" style="width:${Math.min(100, Math.max(3, rs.score))}%"></div></div>`
+          + `<div class="ex-notes-h">今日需注意</div>`
+          + `<ul class="ex-notes">${notes.slice(0, 4).map(n => `<li>${n}</li>`).join("")}</ul>`
+          + `<a class="ex-next" href="pages/check.html?code=${s.code}" style="display:block;text-decoration:none;">下一步：看 ${s.code} 完整買前檢查 →</a>`;
+      }
+    } catch (e) {}
+    // 檢查框：輸入 → 買前檢查
+    const input = document.getElementById("checkHeroInput");
+    const resolve = (v) => {
+      v = (v || "").trim(); if (!v) return null;
+      const m = v.match(/\b(00\d{2,4}[A-Z]?|\d{4})\b/); if (m) return m[1];
+      const st = (L.data.stocks || []).find(x => x.name && (v.includes(x.name) || x.name.includes(v)));
+      return st ? st.code : null;
+    };
+    const go = () => {
+      const code = resolve(input && input.value);
+      if (code) location.href = "pages/check.html?code=" + code;
+      else if (input) { input.style.borderColor = "#c0392b"; input.value = ""; input.placeholder = "找不到，請輸入代號（例如 2330）"; }
+    };
+    const btn = document.getElementById("checkHeroBtn");
+    if (btn) btn.addEventListener("click", go);
+    const form = document.getElementById("checkHeroForm");
+    if (form) form.addEventListener("submit", (e) => { e.preventDefault(); go(); });
+  } catch (e) {}
 })();
 </script>
 </body>
