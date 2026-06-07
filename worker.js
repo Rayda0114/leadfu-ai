@@ -1203,6 +1203,126 @@ async function handleAdminFeedback(request, env) {
 }
 
 
+// ════════════════════════════════════════════════════════════
+// LINE 官方帳號 AI 客服 webhook
+//   用戶在 LINE @041exgtv 問股票 → AI 用網站官方資料回答（沿用 SYSTEM_PROMPT 合規護欄）
+//   env：LINE_CHANNEL_ACCESS_TOKEN（回覆，與推播共用，已設）
+//        LINE_MESSAGING_CHANNEL_SECRET（X-Line-Signature 驗章，可選但強烈建議）
+//   LINE 後台 Webhook URL 設為：https://leadfuai.com/api/line-webhook
+// ════════════════════════════════════════════════════════════
+const LINE_REPLY_URL = "https://api.line.me/v2/bot/message/reply";
+
+async function verifyLineSignature(bodyText, signature, secret) {
+  if (!signature || !secret) return false;
+  try {
+    const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret),
+      { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+    const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(bodyText));
+    return btoa(String.fromCharCode(...new Uint8Array(mac))) === signature;
+  } catch (e) { return false; }
+}
+
+async function lineReply(env, replyToken, text) {
+  if (!env.LINE_CHANNEL_ACCESS_TOKEN || !replyToken) return;
+  const msg = String(text || "").slice(0, 4900) || "（暫時無法回覆，請稍後再試）";
+  try {
+    await fetch(LINE_REPLY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${env.LINE_CHANNEL_ACCESS_TOKEN}` },
+      body: JSON.stringify({ replyToken, messages: [{ type: "text", text: msg }] })
+    });
+  } catch (e) {}
+}
+
+// 非串流 AI（NVIDIA → Gemini 備援）
+async function aiAnswerSync(env, messages, maxTokens = 700) {
+  if (env.NVIDIA_API_KEY) {
+    try {
+      const r = await fetch(NVIDIA_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${env.NVIDIA_API_KEY}` },
+        body: JSON.stringify({ model: env.NVIDIA_MODEL || DEFAULT_MODEL, messages, temperature: 0.4, max_tokens: maxTokens, stream: false })
+      });
+      if (r.ok) {
+        const j = await r.json();
+        const a = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+        if (a && a.trim()) return a.trim();
+      }
+    } catch (e) {}
+  }
+  const gem = await callGemini(env, messages, maxTokens);
+  return (gem.ok && gem.answer) ? gem.answer.trim() : null;
+}
+
+// 從問題抓代號/股名 → 用 ASSETS 撈官方資料，組精簡 context（個股給合理區間/估值，ETF 給殖利率/規模/折溢價/成分）
+async function getLineStockContext(env, q) {
+  if (!env.ASSETS) return "";
+  let stocks = [];
+  try { stocks = (await (await env.ASSETS.fetch(new Request("https://placeholder/data/stocks_live.json"))).json()).stocks || []; }
+  catch (e) { return ""; }
+  const codes = (q.match(/\b(00\d{2,4}[A-Z]?|\d{4})\b/g) || []).slice(0, 2);
+  let matched = codes.length ? stocks.filter(s => codes.includes(s.code)) : [];
+  if (!matched.length && q.length <= 30) {
+    matched = stocks.filter(s => s.name && s.name.length >= 2 && q.includes(s.name)).slice(0, 2);
+  }
+  if (!matched.length) return "";
+  const grab = async (f) => { try { return (await (await env.ASSETS.fetch(new Request("https://placeholder/data/" + f))).json()).data || {}; } catch (e) { return {}; } };
+  const [fv, val, nav, div, hold, basic] = await Promise.all([
+    grab("fair_value_live.json"), grab("valuation_live.json"), grab("etf_nav_live.json"),
+    grab("etf_div_live.json"), grab("etf_holdings_live.json"), grab("etf_basic_live.json")
+  ]);
+  const out = matched.map(s => {
+    const o = { code: s.code, name: s.name, price: s.price, change: s.change, category: s.category, market: s.status };
+    if (s.category === "ETF") {
+      const nv = nav[s.code], dv = div[s.code], h = hold[s.code], b = basic[s.code];
+      if (nv) { o.etf_淨值 = nv.nav; o.etf_折溢價百分比 = nv.premium; o.etf_規模億元 = nv.aumYi; }
+      if (dv && dv.ttmCash && s.price) o.etf_殖利率百分比 = +(dv.ttmCash / s.price * 100).toFixed(1);
+      if (b && b.index) o.etf_追蹤指數 = b.index;
+      if (h && h.top) o.etf_前5大成分 = h.top.slice(0, 5).map(t => `${t.name}${t.weight}%`);
+    } else {
+      if (fv[s.code]) o.合理區間 = fv[s.code];
+      if (val[s.code]) o.估值 = val[s.code];
+    }
+    return o;
+  });
+  return "\n\n---\n以下是領富 AI 提供的官方公開資料（請優先依此回答，**禁止編造數字**；ETF 殖利率為近一年實際配息估算）：\n```json\n" + JSON.stringify(out).slice(0, 4000) + "\n```";
+}
+
+async function lineAnswer(env, q) {
+  const ctxData = await getLineStockContext(env, q);
+  const sys = SYSTEM_PROMPT + "\n\n【LINE 客服情境】你正在領富 AI 官方 LINE 回覆用戶，回答請**簡潔**、適合手機閱讀、善用換行、不要太長。資料不足就引導用戶到 leadfuai.com 查詢。嚴守合規：不推薦個股、不代操、不保證獲利。";
+  const messages = [{ role: "system", content: sys }, { role: "user", content: q + ctxData }];
+  const a = await aiAnswerSync(env, messages, 700);
+  return a || "不好意思，剛剛忙線了 😅 再問我一次，或上 leadfuai.com 查台股／ETF 資料。";
+}
+
+async function handleLineWebhook(request, env, ctx) {
+  const bodyText = await request.text();
+  if (env.LINE_MESSAGING_CHANNEL_SECRET) {
+    const ok = await verifyLineSignature(bodyText, request.headers.get("X-Line-Signature"), env.LINE_MESSAGING_CHANNEL_SECRET);
+    if (!ok) return new Response("bad signature", { status: 403 });
+  }
+  let data;
+  try { data = JSON.parse(bodyText); } catch (e) { return new Response("OK", { status: 200 }); }
+  const events = (data && data.events) || [];
+  const work = (async () => {
+    for (const ev of events) {
+      try {
+        if (ev.type === "follow") {
+          await lineReply(env, ev.replyToken, "歡迎加入領富 AI 🌱\n我可以幫你查台股（上市／上櫃／興櫃）＋ ETF 的公開資料 —— 合理區間、月營收、ETF 殖利率／規模／成分股。\n\n直接打代號或公司名問我，例如：\n・「0056 殖利率」\n・「2330 合理價」\n・「00878 是什麼」\n\n⚠ 我們只整理公開資料，不推薦個股、不代操。");
+        } else if (ev.type === "message" && ev.message && ev.message.type === "text") {
+          await lineReply(env, ev.replyToken, await lineAnswer(env, ev.message.text));
+        } else if (ev.type === "message") {
+          await lineReply(env, ev.replyToken, "收到 🙌 想查台股／ETF 直接打代號或公司名問我，例如「0050 殖利率」「台積電 合理價」。");
+        }
+      } catch (e) {}
+    }
+  })();
+  if (ctx && ctx.waitUntil) ctx.waitUntil(work); else await work;
+  return new Response("OK", { status: 200 });
+}
+
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -1220,6 +1340,7 @@ export default {
     if (url.pathname === "/api/quote")          return handleQuote(request);
     if (url.pathname === "/api/line-auth")      return handleLineAuth(request, env);
     if (url.pathname === "/api/admin-feedback") return handleAdminFeedback(request, env);
+    if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
 
     // 其他 path → 交給 ASSETS binding 處理（保留所有原本的靜態行為）
     return env.ASSETS.fetch(request);
