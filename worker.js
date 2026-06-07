@@ -1297,6 +1297,15 @@ async function lineAnswer(env, q) {
 }
 
 async function handleLineWebhook(request, env, ctx) {
+  // 臨時診斷：GET ?diag=1 → 問 LINE 這個 token 屬於哪個帳號、是否有效（測完移除）
+  if (request.method === "GET" && new URL(request.url).searchParams.get("diag") === "1") {
+    try {
+      const r = await fetch("https://api.line.me/v2/bot/info", { headers: { Authorization: `Bearer ${env.LINE_CHANNEL_ACCESS_TOKEN || ""}` } });
+      return new Response(JSON.stringify({ botInfoStatus: r.status, hasToken: !!env.LINE_CHANNEL_ACCESS_TOKEN, hasSecret: !!env.LINE_MESSAGING_CHANNEL_SECRET, hasNvidia: !!env.NVIDIA_API_KEY, hasGemini: !!env.GEMINI_API_KEY, botInfo: await r.text() }, null, 2), { headers: { "Content-Type": "application/json" } });
+    } catch (e) {
+      return new Response(JSON.stringify({ error: String(e) }), { status: 500, headers: { "Content-Type": "application/json" } });
+    }
+  }
   const bodyText = await request.text();
   if (env.LINE_MESSAGING_CHANNEL_SECRET) {
     const ok = await verifyLineSignature(bodyText, request.headers.get("X-Line-Signature"), env.LINE_MESSAGING_CHANNEL_SECRET);
