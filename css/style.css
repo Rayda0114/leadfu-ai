@@ -3410,6 +3410,48 @@ body.theme-red .daily-brief-ai {
   }
 }
 
+/* 📱 LINE 客服浮動鈕（疊在「回饋」鈕上方，右下角） */
+.line-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 72px;                 /* 回饋鈕 bottom:18 + 鈕高 + 間距 */
+  background: #06C755;
+  color: #fff;
+  border-radius: 28px;
+  padding: 12px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(6, 199, 85, 0.38);
+  z-index: 9000;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.line-fab:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(6, 199, 85, 0.5); }
+.line-fab:active { transform: translateY(0); }
+.line-fab-icon { display: flex; }
+@media (max-width: 768px) {
+  .line-fab {
+    bottom: 124px;              /* 回饋鈕 mobile bottom:70 + 鈕高 + 間距 */
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(6, 199, 85, 0.32);
+  }
+  .line-fab .line-fab-label { display: none; }
+}
+
+/* 上方列的 LINE 客服改成浮動鈕後，隱藏 header 內的舊連結（行內 style 用 !important 蓋過） */
+.top-bar .line-cta { display: none !important; }
+
+/* 喜氣紅切換鈕移到頁尾版權列：置中、與版權文字分行 */
+.copyright .theme-toggle-btn { display: block; width: fit-content; margin: 12px auto 0; }
+
 .feedback-modal-overlay {
   position: fixed;
   inset: 0;
