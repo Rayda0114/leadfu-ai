@@ -13,19 +13,19 @@
   "categories": ["finance", "business", "news"],
   "icons": [
     {
-      "src": "/icons/icon-192.png?v=3",
+      "src": "/icons/icon-192.png?v=4",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512.png?v=3",
+      "src": "/icons/icon-512.png?v=4",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-maskable-512.png?v=3",
+      "src": "/icons/icon-maskable-512.png?v=4",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -37,19 +37,19 @@
       "short_name": "今日盤勢",
       "description": "AI 自動篩出今日重點",
       "url": "/index.html?source=pwa-shortcut-ai",
-      "icons": [{ "src": "/icons/icon-192.png?v=3", "sizes": "192x192" }]
+      "icons": [{ "src": "/icons/icon-192.png?v=4", "sizes": "192x192" }]
     },
     {
       "name": "進階選股",
       "short_name": "選股",
       "url": "/pages/screener.html?source=pwa-shortcut-screener",
-      "icons": [{ "src": "/icons/icon-192.png?v=3", "sizes": "192x192" }]
+      "icons": [{ "src": "/icons/icon-192.png?v=4", "sizes": "192x192" }]
     },
     {
       "name": "我的自選",
       "short_name": "自選",
       "url": "/pages/watchlist.html?source=pwa-shortcut-watchlist",
-      "icons": [{ "src": "/icons/icon-192.png?v=3", "sizes": "192x192" }]
+      "icons": [{ "src": "/icons/icon-192.png?v=4", "sizes": "192x192" }]
     }
   ]
 }
