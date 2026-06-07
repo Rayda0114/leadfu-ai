@@ -301,7 +301,23 @@
   .pt-del { background:none; border:none; cursor:pointer; color:#c9ccd1; font-size:16px; padding:2px 6px; }
   .pt-del:hover { color:#c0392b; }
   .pt-w-bar { display:inline-block; height:6px; border-radius:3px; background:#1B4332; vertical-align:middle; margin-left:6px; }
-  @media (max-width:600px){ .pf-add .fld.pf-add-search { min-width:100%; } }
+  @media (max-width:600px){
+    .pf-add .fld.pf-add-search { min-width:100%; }
+    /* 持股明細表 → 手機直式卡片（每檔一張卡，不用左右捲） */
+    .pf-table { min-width:0; }
+    .pf-table thead { display:none; }
+    .pf-table, .pf-table tbody, .pf-table tr, .pf-table td { display:block; width:auto; }
+    .pf-table tr { border:1px solid #e6e9ee; border-radius:10px; padding:10px 12px; margin-bottom:10px; position:relative; background:#fff; }
+    .pf-table td { display:flex; justify-content:space-between; align-items:center; gap:10px; text-align:right; white-space:normal; padding:6px 0; border-bottom:1px solid #f4f5f7; }
+    .pf-table td:last-child { border-bottom:0; }
+    .pf-table td[data-label]:not([data-label=""]):before { content:attr(data-label); color:#888; font-size:12px; font-weight:600; text-align:left; white-space:nowrap; }
+    .pf-table td.pt-name { text-align:left; border-bottom:1.5px solid #eef0f3; padding:0 0 8px; margin-bottom:4px; }
+    .pf-table td.pt-name:before { content:none; }
+    .pf-table .pt-delcell { position:absolute; top:7px; right:8px; padding:0; border:0; }
+    .pf-table .pt-delcell:before { content:none; }
+    .pf-table input { width:96px; }
+    .pf-table .pt-w-bar { display:none; }
+  }
 </style>
 <script src="../js/main.js?v=3.23.3"></script>
 <script>
@@ -627,14 +643,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         : `<small style="color:#16A34A;font-weight:700;">低</small>`;
       return `<tr data-code="${it.code}">
         <td class="pt-name"><a href="stock-detail.html?code=${it.code}"><b>${it.code}</b> ${s.name}</a><br><small>${marketLabel[s.market] || ""} ${s.category || ""}</small></td>
-        <td class="pt-${cls}">${L.fmtPrice(s.price)}<br><small>${L.arrow(s.change)}${L.fmtPct(pct)}</small></td>
-        <td><input type="number" class="pt-shares" min="0" step="1000" value="${it.h.shares}"></td>
-        <td><input type="number" class="pt-cost" min="0" step="0.01" value="${it.h.cost > 0 ? it.h.cost : ""}" placeholder="—"></td>
-        <td>${money(it.value)}</td>
-        <td>${w.toFixed(0)}%<span class="pt-w-bar" style="width:${Math.max(4, Math.min(w,100)*0.5)}px;"></span></td>
-        <td>${rkCell}</td>
-        <td>${pnlCell}</td>
-        <td><button class="pt-del" title="刪除">✕</button></td>
+        <td class="pt-${cls}" data-label="現價／漲跌">${L.fmtPrice(s.price)}<br><small>${L.arrow(s.change)}${L.fmtPct(pct)}</small></td>
+        <td data-label="股數"><input type="number" class="pt-shares" min="0" step="1000" value="${it.h.shares}"></td>
+        <td data-label="成本"><input type="number" class="pt-cost" min="0" step="0.01" value="${it.h.cost > 0 ? it.h.cost : ""}" placeholder="—"></td>
+        <td data-label="市值">${money(it.value)}</td>
+        <td data-label="佔比">${w.toFixed(0)}%<span class="pt-w-bar" style="width:${Math.max(4, Math.min(w,100)*0.5)}px;"></span></td>
+        <td data-label="風險">${rkCell}</td>
+        <td data-label="損益">${pnlCell}</td>
+        <td class="pt-delcell"><button class="pt-del" title="刪除">✕</button></td>
       </tr>`;
     }).join("");
     document.getElementById("holdTable").innerHTML = head + `<tbody>${rows}</tbody>`;
