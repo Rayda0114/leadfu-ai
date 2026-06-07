@@ -92,6 +92,30 @@ def fetch_taiex():
     return None, None
 
 
+def fetch_large_trader(asof_ymd):
+    """大額交易人 臺股期貨 前十大淨部位（所有契約合計、口數）— TAIFEX CSV(Big5)。
+    到期月份代碼：999999=所有契約合計(口數)、202606=近月、666666=百分比列(不取)；交易人類別 0=所有交易人。"""
+    if not asof_ymd or len(asof_ymd) != 8 or not asof_ymd.isdigit():
+        return None
+    d = f"{asof_ymd[:4]}/{asof_ymd[4:6]}/{asof_ymd[6:]}"
+    body = f"queryStartDate={d}&queryEndDate={d}".encode()
+    req = urllib.request.Request("https://www.taifex.com.tw/cht/3/largeTraderFutDown", data=body,
+                                 headers={"User-Agent": "Mozilla/5.0 (LeadFu-AI)", "Content-Type": "application/x-www-form-urlencoded"}, method="POST")
+    try:
+        raw = urllib.request.urlopen(req, timeout=25).read()
+    except Exception:
+        raw = urllib.request.urlopen(req, timeout=25, context=_CTX).read()
+    for l in raw.decode("big5", "ignore").split("\n"):
+        c = l.split(",")
+        if len(c) >= 10 and c[1].strip() == "TX" and c[3].strip() == "999999" and c[4].strip() == "0":
+            buy10, sell10, oi = fnum(c[7]), fnum(c[8]), fnum(c[9])
+            if buy10 is not None and sell10 is not None:
+                net = round(buy10 - sell10)
+                return {"top10Net": net, "oi": int(oi) if oi else None,
+                        "netPct": round(net / oi * 100, 1) if oi else None}
+    return None
+
+
 def third_wednesday(year, month):
     d = datetime.date(year, month, 1)
     # 第一個週三
@@ -163,6 +187,13 @@ def main():
     except Exception as e:
         print(f"[warn] 加權指數: {e}")
 
+    # ── 2.7 大額交易人（前十大淨部位，所有契約合計） ──
+    lt = None
+    try:
+        lt = fetch_large_trader(asof)
+    except Exception as e:
+        print(f"[warn] 大額交易人: {e}")
+
     # ── 3. 結算日 ──
     settle = next_settlement(today)
     days_to_settle = (settle - today).days
@@ -195,6 +226,11 @@ def main():
         pts += 1; reasons.append(f"台指期逆價差 {basis} 點（期貨大幅貼水，偏空）")
     if tx_day and tx_day.get("rangePct") is not None and tx_day["rangePct"] >= 3.0:
         pts += 1; reasons.append(f"台指期今日振幅 {tx_day['rangePct']:.1f}%（波動明顯加大）")
+    if lt and lt.get("netPct") is not None:
+        if lt["netPct"] <= -15:
+            pts += 1; reasons.append(f"大額交易人前十大淨空 {abs(lt['top10Net']):,} 口（佔OI {abs(lt['netPct'])}%，偏空）")
+        elif lt["netPct"] >= 15:
+            pts -= 1; reasons.append(f"大額交易人前十大淨多 {lt['top10Net']:,} 口（佔OI {lt['netPct']}%，偏多）")
     if days_to_settle <= 3:
         pts += 1; reasons.append(f"距結算日僅 {days_to_settle} 天，波動易放大")
 
@@ -206,7 +242,7 @@ def main():
         "updatedAt": today.isoformat(),
         "asof": f"{asof[:4]}-{asof[4:6]}-{asof[6:]}" if len(asof) == 8 else asof,
         "txDay": tx_day, "txNight": tx_night, "putCall": pc, "inst": inst,
-        "taiex": taiex, "basis": basis,
+        "taiex": taiex, "basis": basis, "largeTrader": lt,
         "settlementDate": settle.isoformat(), "daysToSettle": days_to_settle,
         "risk": {"level": level, "points": pts, "reasons": reasons},
         "source": "台灣期貨交易所 TAIFEX OpenAPI",
