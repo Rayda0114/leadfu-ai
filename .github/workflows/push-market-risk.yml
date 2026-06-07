@@ -35,7 +35,8 @@ jobs:
         run: |
           git config user.name "leadfu-ai-bot"
           git config user.email "bot@leadfu.ai"
-          git add data/taifex_live.json data/_taifex_alert.json
+          git add data/taifex_live.json
+          [ -f data/_taifex_alert.json ] && git add data/_taifex_alert.json || true
           if ! git diff --staged --quiet; then
             git commit -m "data: 晨間大盤風險更新 ($(date -u +%Y-%m-%d))"
             git push
