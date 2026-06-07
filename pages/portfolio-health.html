@@ -20,7 +20,7 @@
 <meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
-<link rel="stylesheet" href="../css/style.css?v=3.23.3">
+<link rel="stylesheet" href="../css/style.css?v=3.23.4">
 </head>
 <body>
 
@@ -244,7 +244,7 @@
   .pf-add .fld { display:flex; flex-direction:column; gap:4px; }
   .pf-add .fld.pf-add-search { position:relative; flex:1; min-width:200px; }
   .pf-add label { font-size:12px; color:#888; }
-  .pf-add input { padding:9px 11px; border:1px solid #d0d5dc; border-radius:8px; font-size:14px; width:100%; }
+  .pf-add input { padding:9px 11px; border:1px solid #d0d5dc; border-radius:8px; font-size:16px; width:100%; }  /* 16px：iOS 字級<16 會自動放大且不縮回 */
   .pf-add input:focus { outline:none; border-color:#1B4332; }
   .ta-box { position:absolute; top:100%; left:0; right:0; z-index:30; background:#fff; border:1px solid #e0e3e8; border-radius:0 0 8px 8px; box-shadow:0 8px 20px rgba(0,0,0,.1); max-height:280px; overflow-y:auto; }
   .ta-item { padding:9px 12px; font-size:14px; cursor:pointer; border-bottom:1px solid #f1f3f5; }
@@ -315,11 +315,11 @@
     .pf-table td.pt-name:before { content:none; }
     .pf-table .pt-delcell { position:absolute; top:7px; right:8px; padding:0; border:0; }
     .pf-table .pt-delcell:before { content:none; }
-    .pf-table input { width:96px; }
+    .pf-table input { width:96px; font-size:16px; }   /* 16px 防 iOS 自動放大 */
     .pf-table .pt-w-bar { display:none; }
   }
 </style>
-<script src="../js/main.js?v=3.23.3"></script>
+<script src="../js/main.js?v=3.23.4"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
