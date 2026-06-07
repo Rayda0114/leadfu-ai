@@ -3,8 +3,8 @@
  * ============================================================ */
 
 /* LINE 官方帳號（單一來源，要改 ID 只改這裡） */
-const LINE_ID  = "@041exgtv";
-const LINE_URL = "https://line.me/R/ti/p/@041exgtv";
+const LINE_ID  = "@130tqckv";
+const LINE_URL = "https://line.me/R/ti/p/@130tqckv";
 
 /* Google Analytics 4 Measurement ID */
 const GA_MEASUREMENT_ID = "G-FM7DSZ7V2R";
@@ -1708,7 +1708,7 @@ function injectFooterFraudReminder() {
     <div class="container">
       <strong>📢 領富 AI 官方聲明：</strong>本站<strong>不提供個股推薦</strong>、<strong>不收任何投資款項</strong>、<strong>不主動加 LINE 群組</strong>、<strong>未發行 APP</strong>。
       唯一官方網址 <code style="background:rgba(197,165,114,0.15);padding:1px 5px;border-radius:3px;color:#C5A572;">leadfuai.com</code>
-      ／唯一客服 LINE <a href="https://line.me/R/ti/p/@041exgtv" target="_blank" rel="noopener">@041exgtv</a>。
+      ／唯一客服 LINE <a href="https://line.me/R/ti/p/@130tqckv" target="_blank" rel="noopener">@130tqckv</a>。
       看到任何冒用本品牌之投資邀約，請撥 <a href="https://165.npa.gov.tw/" target="_blank" rel="noopener">165</a> 反詐騙專線。
       <a href="${pageHref('fraud-alert.html')}">了解更多防詐須知 →</a>
     </div>

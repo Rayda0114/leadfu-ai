@@ -53,7 +53,7 @@ python -m http.server 8080
 
 ## LINE 官方帳號
 
-[@041exgtv](https://line.me/R/ti/p/@041exgtv) ・ 每日 AI 台股盤後資料整理摘要
+[@130tqckv](https://line.me/R/ti/p/@130tqckv) ・ 每日 AI 台股盤後資料整理摘要
 
 ---
 
