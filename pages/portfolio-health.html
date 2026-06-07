@@ -70,6 +70,9 @@
 
 <main class="container" style="padding: 18px 12px 40px;">
 
+  <!-- 🌡️ 大盤系統性風險標示（中/高時顯示） -->
+  <div id="sysRiskBanner"></div>
+
   <!-- ➕ 新增 / 管理持股 -->
   <div class="panel" id="addPanel" style="margin-bottom:14px;">
     <div class="panel-head"><h2>➕ 新增持股</h2><span style="font-size:12px;color:#888;" id="addSyncNote">資料只存在你的帳號・登入後跨裝置同步</span></div>
@@ -878,6 +881,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   await fetchBenchmarks();
   if (m0 && m0.valid.length) { renderPerf(model()); loadAi(); }
 });
+</script>
+<script>
+// 🌡️ 大盤系統性風險標示：當大盤風險中/高，在儀表板頂部提醒持股族
+(async () => {
+  try {
+    const base = location.pathname.includes("/pages/") ? "../" : "";
+    const d = await (await fetch(base + "data/taifex_live.json", { cache: "no-cache" })).json();
+    const lv = d && d.risk && d.risk.level;
+    const el = document.getElementById("sysRiskBanner");
+    if (!el || (lv !== "中" && lv !== "高")) return;
+    const hi = lv === "高";
+    const reasons = (d.risk.reasons || []).slice(0, 3).map(r => "・" + r).join("　");
+    el.innerHTML = `<div style="margin-bottom:14px;padding:13px 18px;border-radius:8px;border:1px solid ${hi ? "#fca5a5" : "#fed7aa"};background:${hi ? "#fef2f2" : "#fff7ed"};color:${hi ? "#991b1b" : "#9a3412"};font-size:13.5px;line-height:1.7;">`
+      + `<strong>${hi ? "⚠ 系統性風險上升" : "🌡️ 大盤波動風險偏中"}</strong>：系統判讀明日大盤波動風險偏【${lv}】，你的持股（尤其<strong>高波動個股、槓桿／反向 ETF</strong>）今日可能隨大盤擺盪加大，請留意部位與風險承受度。`
+      + `<span style="display:block;margin-top:5px;color:#9b8f86;font-size:12px;">${reasons}</span>`
+      + `<a href="market-risk.html" style="display:inline-block;margin-top:7px;color:${hi ? "#991b1b" : "#9a3412"};font-weight:600;">看大盤風險溫度計 →</a></div>`;
+  } catch (e) {}
+})();
 </script>
 </body>
 </html>

@@ -81,6 +81,17 @@ def fetch_inst(asof_ymd):
     return out
 
 
+def fetch_taiex():
+    """加權指數(TAIEX)收盤 — TWSE FMTQIK；用來算期現背離(基差=台指期-加權)。"""
+    try:
+        d = gj("https://openapi.twse.com.tw/v1/exchangeReport/FMTQIK")
+        if d:
+            return fnum(d[-1].get("TAIEX")), d[-1].get("Date")
+    except Exception:
+        pass
+    return None, None
+
+
 def third_wednesday(year, month):
     d = datetime.date(year, month, 1)
     # 第一個週三
@@ -112,7 +123,9 @@ def main():
             cm = front.get("ContractMonth(Week)")
             asof = front.get("Date", "")
             d_last, d_chg = fnum(front.get("Last")), fnum(front.get("Change"))
-            tx_day = {"last": d_last, "change": d_chg, "pct": pct_from(d_last, d_chg), "month": cm}
+            d_hi, d_lo = fnum(front.get("High")), fnum(front.get("Low"))
+            rng = round((d_hi - d_lo) / d_last * 100, 2) if (d_hi and d_lo and d_last) else None
+            tx_day = {"last": d_last, "change": d_chg, "pct": pct_from(d_last, d_chg), "rangePct": rng, "month": cm}
             night = next((r for r in tx if r.get("TradingSession") == "盤後" and r.get("ContractMonth(Week)") == cm), None)
             if night:
                 n_last = fnum(night.get("Last"))
@@ -140,6 +153,15 @@ def main():
         inst = fetch_inst(asof)
     except Exception as e:
         print(f"[warn] 三大法人: {e}")
+
+    # ── 2.6 期現背離（基差 = 台指期日盤 − 加權指數） ──
+    taiex, basis = None, None
+    try:
+        taiex, _ = fetch_taiex()
+        if taiex and tx_day and tx_day.get("last"):
+            basis = round(tx_day["last"] - taiex)
+    except Exception as e:
+        print(f"[warn] 加權指數: {e}")
 
     # ── 3. 結算日 ──
     settle = next_settlement(today)
@@ -169,6 +191,10 @@ def main():
         pts += 1; reasons.append(f"外資台指期淨空 {abs(int(inst['foreign'])):,} 口（法人偏空）")
     elif inst and inst.get("foreign") is not None and inst["foreign"] >= 30000:
         pts -= 1; reasons.append(f"外資台指期淨多 {int(inst['foreign']):,} 口（法人偏多，風險偏低）")
+    if basis is not None and basis <= -150:
+        pts += 1; reasons.append(f"台指期逆價差 {basis} 點（期貨大幅貼水，偏空）")
+    if tx_day and tx_day.get("rangePct") is not None and tx_day["rangePct"] >= 3.0:
+        pts += 1; reasons.append(f"台指期今日振幅 {tx_day['rangePct']:.1f}%（波動明顯加大）")
     if days_to_settle <= 3:
         pts += 1; reasons.append(f"距結算日僅 {days_to_settle} 天，波動易放大")
 
@@ -180,6 +206,7 @@ def main():
         "updatedAt": today.isoformat(),
         "asof": f"{asof[:4]}-{asof[4:6]}-{asof[6:]}" if len(asof) == 8 else asof,
         "txDay": tx_day, "txNight": tx_night, "putCall": pc, "inst": inst,
+        "taiex": taiex, "basis": basis,
         "settlementDate": settle.isoformat(), "daysToSettle": days_to_settle,
         "risk": {"level": level, "points": pts, "reasons": reasons},
         "source": "台灣期貨交易所 TAIFEX OpenAPI",
