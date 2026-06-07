@@ -161,8 +161,15 @@
   .check-h1 .accent { color:#1B4332; }
   @media(max-width:880px){ .check-h1{ font-size:25px; } }
   .check-sub { font-size:15px; color:#4b5563; line-height:1.7; margin-bottom:18px; }
-  #checkHeroInput { width:100%; padding:16px 18px; font-size:16px; border:2px solid #1B4332; border-radius:12px; outline:none; box-sizing:border-box; }
-  #checkHeroInput:focus { box-shadow:0 0 0 3px rgba(27,67,50,.15); }
+  .check-search { display:flex; align-items:stretch; border:2px solid #1B4332; border-radius:12px; background:#fff; overflow:hidden; }
+  .check-search:focus-within { box-shadow:0 0 0 3px rgba(27,67,50,.15); }
+  #checkHeroInput { flex:1; min-width:0; padding:16px 16px; font-size:16px; border:none; outline:none; background:transparent; }
+  .ch-mic { background:none; border:none; cursor:pointer; color:#1B4332; padding:0 14px; display:flex; align-items:center; }
+  .ch-mic:hover { color:#163a2b; background:#f3f9f5; }
+  .ch-mic.voice-mic-pulse-hint { animation:chmic 1s ease-in-out infinite; }
+  @keyframes chmic { 0%,100%{ color:#1B4332; } 50%{ color:#e6900a; } }
+  .ch-go { background:#1B4332; border:none; cursor:pointer; color:#fff; padding:0 22px; display:flex; align-items:center; }
+  .ch-go:hover { background:#163a2b; }
   .check-cta-row { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
   .check-btn-primary { background:#1B4332; color:#fff; border:none; font-size:16px; font-weight:700; padding:14px 30px; border-radius:10px; cursor:pointer; }
   .check-btn-primary:hover { background:#163a2b; }
@@ -219,8 +226,14 @@
         <span class="check-badge">台股買前檢查 · 持股風險守門員</span>
         <h1 class="check-h1">買股票前，先檢查<span class="accent">有沒有風險</span></h1>
         <p class="check-sub">輸入股票代號，領富 AI 幫你整理<strong>估值、營收、籌碼、新聞與注意股風險</strong>。</p>
-        <form id="checkHeroForm" autocomplete="off">
+        <form id="checkHeroForm" class="check-search" autocomplete="off">
           <input type="text" id="checkHeroInput" placeholder="輸入股票代號 / 公司名稱，例如 2330 台積電" autocomplete="off" inputmode="search">
+          <button type="button" id="checkHeroMic" class="ch-mic" aria-label="語音搜尋" title="語音搜尋（點麥克風開始）">
+            <svg viewBox="0 0 24 24" width="23" height="23" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5.91-3a.91.91 0 0 0-.91.91A4.99 4.99 0 0 1 12 17a4.99 4.99 0 0 1-5-5.09.91.91 0 1 0-1.82 0A6.81 6.81 0 0 0 11 18.91V21a1 1 0 1 0 2 0v-2.09a6.81 6.81 0 0 0 5.82-6.91.91.91 0 0 0-.91-.91z"/></svg>
+          </button>
+          <button type="submit" id="checkHeroSearchBtn" class="ch-go" aria-label="搜尋">
+            <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          </button>
         </form>
         <div class="check-cta-row">
           <button type="button" class="check-btn-primary" id="checkHeroBtn">免費檢查股票</button>
@@ -1795,6 +1808,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (btn) btn.addEventListener("click", go);
     const form = document.getElementById("checkHeroForm");
     if (form) form.addEventListener("submit", (e) => { e.preventDefault(); go(); });
+    // 麥克風：重用全站語音搜尋引擎；瀏覽器不支援語音則隱藏麥克風鍵
+    const mic = document.getElementById("checkHeroMic");
+    const searchBtn = document.getElementById("checkHeroSearchBtn");
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (mic && SR && typeof window.startVoiceRecognition === "function") {
+      mic.addEventListener("click", () => window.startVoiceRecognition(input, searchBtn));
+    } else if (mic) {
+      mic.style.display = "none";
+    }
   } catch (e) {}
 })();
 </script>
