@@ -97,8 +97,6 @@
       <span>台股全市場財經資訊網</span>
     </div>
     <div class="top-right">
-      <a href="pages/login.html">會員登入</a>
-      <a href="pages/register.html">免費註冊</a>
       <a href="https://line.me/R/ti/p/@130tqckv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a>
     </div>
   </div>
@@ -125,13 +123,11 @@
       <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
       <span class="logo-sub">LeadFu · 領先市場兩步</span>
     </a>
-    <div class="search-box">
-      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱（如 2330 台積電）">
-      <button id="searchBtn">查詢</button>
-    </div>
-    <div class="quick-links">
-      <a href="pages/app.html" class="qlink">📱 手機使用</a>
-      <a href="pages/software.html" class="qlink">💻 桌機使用</a>
+    <div class="logo-actions">
+      <a href="pages/app.html" class="qlink">📱 手機</a>
+      <a href="pages/software.html" class="qlink">💻 桌機</a>
+      <a href="pages/login.html" class="lb-login">會員登入</a>
+      <a href="pages/register.html" class="lb-register">免費註冊</a>
     </div>
   </div>
 </div>
@@ -192,6 +188,19 @@
   .ai-second-head p { font-size:13.5px; color:#666; }
   .ai-second-grid { display:grid; grid-template-columns:1.15fr 0.85fr; gap:24px; align-items:start; }
   @media(max-width:880px){ .ai-second-grid{ grid-template-columns:1fr; } }
+  /* 首頁上方：拿掉搜尋框，改為登入/免費註冊 CTA */
+  .logo-bar-inner .logo-actions { display:flex; align-items:center; gap:14px; margin-left:auto; }
+  .logo-actions .qlink { font-size:13px; color:#555; text-decoration:none; white-space:nowrap; }
+  .logo-actions .qlink:hover { color:#1B4332; }
+  .lb-login { font-size:14px; font-weight:600; color:#1B4332; text-decoration:none; padding:8px 15px; border:1.5px solid #1B4332; border-radius:8px; white-space:nowrap; }
+  .lb-login:hover { background:#eef5f1; }
+  .lb-register { font-size:14px; font-weight:700; color:#fff; background:#1B4332; text-decoration:none; padding:9px 18px; border-radius:8px; white-space:nowrap; }
+  .lb-register:hover { background:#163a2b; }
+  @media(max-width:768px){
+    .logo-actions .qlink { display:none; }          /* 手機隱藏 app 連結，保留登入/註冊 */
+    .logo-actions { gap:9px; }
+    .lb-login, .lb-register { font-size:13px; padding:7px 12px; }
+  }
   /* 防詐橫幅：手機縮成一行 */
   .afb-short { display:none; }
   @media(max-width:768px){
