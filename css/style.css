@@ -1499,7 +1499,7 @@ img { max-width: 100%; }
 @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
 .info-row {
   display: grid;
-  grid-template-columns: 110px 1fr;
+  grid-template-columns: 110px minmax(0, 1fr);   /* minmax(0,..) 讓值欄可收縮，長 email 才會換行不撐爆 */
   border-bottom: 1px solid #eef0f3;
 }
 .info-label {
@@ -1509,7 +1509,7 @@ img { max-width: 100%; }
   font-weight: 500;
   border-right: 1px solid #eef0f3;
 }
-.info-value { padding: 10px 12px; color: #333; }
+.info-value { padding: 10px 12px; color: #333; min-width: 0; word-break: break-word; overflow-wrap: anywhere; }
 
 .fin-table {
   width: 100%;
