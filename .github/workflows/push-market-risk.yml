@@ -1,0 +1,44 @@
+name: 領富 AI · 大盤風險晨間提醒
+
+# 每交易日早上約 07:00（台灣時間）— 夜盤結束(05:00)後、開盤(09:00)前。
+# UTC 23:00 = 台灣 07:00；UTC 週日~週四 = 台灣 週一~週五。
+on:
+  schedule:
+    - cron: "0 23 * * 0-4"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  market-risk-alert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 更新期交所資料（含夜盤、三大法人）
+        run: python scripts/fetch_taifex.py
+        env:
+          PYTHONIOENCODING: utf-8
+
+      - name: 推播大盤風險提醒（夜盤大跌 / 風險高才推；同日去重）
+        run: python scripts/push_market_risk.py
+        env:
+          PYTHONIOENCODING: utf-8
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+
+      - name: Commit 資料 + 提醒狀態
+        run: |
+          git config user.name "leadfu-ai-bot"
+          git config user.email "bot@leadfu.ai"
+          git add data/taifex_live.json data/_taifex_alert.json
+          if ! git diff --staged --quiet; then
+            git commit -m "data: 晨間大盤風險更新 ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "ℹ️ 無變動"
+          fi

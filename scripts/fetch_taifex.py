@@ -49,6 +49,38 @@ def pct_from(last, change):
     return round(change / base * 100, 2) if base else None
 
 
+def fetch_inst(asof_ymd):
+    """三大法人 臺股期貨 多空淨額未平倉口數（外資/投信/自營）— TAIFEX CSV（Big5）。
+    asof_ymd: 期貨資料的交易日 'YYYYMMDD'，用單日查詢（區間查詢跨非交易日會回 HTML 錯誤頁）。"""
+    if not asof_ymd or len(asof_ymd) != 8 or not asof_ymd.isdigit():
+        return None
+    d = f"{asof_ymd[:4]}/{asof_ymd[4:6]}/{asof_ymd[6:]}"
+    body = f"queryStartDate={d}&queryEndDate={d}&commodityId=".encode()
+    req = urllib.request.Request("https://www.taifex.com.tw/cht/3/futContractsDateDown", data=body,
+                                 headers={"User-Agent": "Mozilla/5.0 (LeadFu-AI)", "Content-Type": "application/x-www-form-urlencoded"}, method="POST")
+    try:
+        raw = urllib.request.urlopen(req, timeout=25).read()
+    except Exception:
+        raw = urllib.request.urlopen(req, timeout=25, context=_CTX).read()
+    rows = [l.split(",") for l in raw.decode("big5", "ignore").split("\n") if l.strip()]
+    tx = [r for r in rows[1:] if len(r) >= 14 and "臺股期貨" in r[1]]
+    if not tx:
+        return None
+    latest = max(r[0] for r in tx)
+    out = {"date": latest.replace("/", "-")}
+    for r in tx:
+        if r[0] != latest:
+            continue
+        net = fnum(r[13])
+        if "外資" in r[2]:
+            out["foreign"] = net
+        elif "投信" in r[2]:
+            out["trust"] = net
+        elif "自營" in r[2]:
+            out["dealer"] = net
+    return out
+
+
 def third_wednesday(year, month):
     d = datetime.date(year, month, 1)
     # 第一個週三
@@ -102,6 +134,13 @@ def main():
     except Exception as e:
         print(f"[warn] P/C: {e}")
 
+    # ── 2.5 三大法人期貨多空（外資台指期淨部位） ──
+    inst = None
+    try:
+        inst = fetch_inst(asof)
+    except Exception as e:
+        print(f"[warn] 三大法人: {e}")
+
     # ── 3. 結算日 ──
     settle = next_settlement(today)
     days_to_settle = (settle - today).days
@@ -126,6 +165,10 @@ def main():
             pts += 1; reasons.append(f"選擇權 Put/Call 未平倉比偏高（{pc['oiRatio']:.0f}%，避險升溫）")
         elif pc["oiRatio"] <= 70:
             pts += 1; reasons.append(f"選擇權 Put/Call 未平倉比偏低（{pc['oiRatio']:.0f}%，多頭過熱）")
+    if inst and inst.get("foreign") is not None and inst["foreign"] <= -50000:
+        pts += 1; reasons.append(f"外資台指期淨空 {abs(int(inst['foreign'])):,} 口（法人偏空）")
+    elif inst and inst.get("foreign") is not None and inst["foreign"] >= 30000:
+        pts -= 1; reasons.append(f"外資台指期淨多 {int(inst['foreign']):,} 口（法人偏多，風險偏低）")
     if days_to_settle <= 3:
         pts += 1; reasons.append(f"距結算日僅 {days_to_settle} 天，波動易放大")
 
@@ -136,7 +179,7 @@ def main():
     out = {
         "updatedAt": today.isoformat(),
         "asof": f"{asof[:4]}-{asof[4:6]}-{asof[6:]}" if len(asof) == 8 else asof,
-        "txDay": tx_day, "txNight": tx_night, "putCall": pc,
+        "txDay": tx_day, "txNight": tx_night, "putCall": pc, "inst": inst,
         "settlementDate": settle.isoformat(), "daysToSettle": days_to_settle,
         "risk": {"level": level, "points": pts, "reasons": reasons},
         "source": "台灣期貨交易所 TAIFEX OpenAPI",

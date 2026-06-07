@@ -24,7 +24,7 @@
   .thermo .seg { flex:1; padding:18px 8px; text-align:center; font-weight:700; color:#fff; opacity:0.32; transition:opacity .2s; }
   .thermo .seg.on { opacity:1; }
   .seg-low { background:#178a4c; } .seg-mid { background:#e6900a; } .seg-high { background:#c0392b; }
-  .risk-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0; }
+  .risk-cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px; margin:14px 0; }
   @media(max-width:640px){ .risk-cards{ grid-template-columns:repeat(2,1fr);} }
   .rc { background:#fff; border:1px solid #e6e9ee; border-radius:8px; padding:12px 14px; }
   .rc .lab { font-size:12px; color:#888; } .rc .val { font-size:20px; font-weight:700; color:#163A2E; margin-top:2px; }
@@ -139,10 +139,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     `系統判讀：明日大盤波動風險 <strong style="color:${lvColor[lv]};font-size:18px;">【${lv}】</strong>`;
 
   // 資料卡
-  const day = d.txDay || {}, night = d.txNight || {}, pc = d.putCall || {};
+  const day = d.txDay || {}, night = d.txNight || {}, pc = d.putCall || {}, inst = d.inst || {};
+  const fv = inst.foreign;
+  const instTxt = (typeof fv === "number")
+    ? `<span class="${fv < 0 ? 'up' : 'down'}">${fv < 0 ? '淨空 ' + Math.abs(fv).toLocaleString() : '淨多 ' + fv.toLocaleString()}</span>`
+    : "—";
   const cards = [
     { lab: "台指期 日盤", val: pctTxt(day.pct), sub: day.last ? `收 ${day.last.toLocaleString()}` : "" },
     { lab: "台指期 夜盤", val: pctTxt(night.pct), sub: "較日盤收盤（隔夜）" },
+    { lab: "外資台指期淨部位", val: instTxt, sub: "未平倉口數（法人方向）" },
     { lab: "選擇權 P/C（未平倉比）", val: (typeof pc.oiRatio === "number" ? pc.oiRatio.toFixed(0) + "%" : "—"), sub: "避險情緒參考" },
     { lab: "本月結算日", val: (d.settlementDate || "").slice(5), sub: (typeof d.daysToSettle === "number" ? d.daysToSettle + " 天後" : "") },
   ];
