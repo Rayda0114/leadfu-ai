@@ -811,7 +811,8 @@ function renderFairValueLow() {
     if (!grid.classList.contains("h-scroll")) grid.classList.add("h-scroll");
     grid.innerHTML = top5.map(fv => {
       const s = stocks.find(x => x.code === fv.code);
-      const pct = (fv.position * 100).toFixed(0);
+      // 位置標籤：避免顯示難懂的負百分比、也不暗示「便宜可買」
+      const posLabel = fv.position <= 0 ? "低於區間下緣" : "合理區間下緣";
       const price = s ? fmtPrice(s.price) : "—";
       const chg = s ? pctChange(s.price, s.change) : 0;
       const chgCls = chg > 0 ? "up" : (chg < 0 ? "down" : "flat");
@@ -832,7 +833,7 @@ function renderFairValueLow() {
             合理區間 NT$${Math.round(fv.low).toLocaleString()} ~ ${Math.round(fv.high).toLocaleString()}
           </div>
           <div class="fv-low-card-pos">
-            <span class="fv-low-pill">${pct}% 偏低</span>
+            <span class="fv-low-pill">${posLabel}</span>
             <span class="fv-low-stars">${"⭐".repeat(Math.round(fv.confidence || 0))}</span>
           </div>
           <div class="fv-low-vip-tag">💎 VIP 解鎖</div>
@@ -853,7 +854,7 @@ function renderFairValueLow() {
           合理區間 NT$${Math.round(fv.low).toLocaleString()} ~ ${Math.round(fv.high).toLocaleString()}
         </div>
         <div class="fv-low-card-pos">
-          <span class="fv-low-pill">${pct}% 偏低</span>
+          <span class="fv-low-pill">${posLabel}</span>
           <span class="fv-low-stars">${"⭐".repeat(Math.round(fv.confidence || 0))}</span>
         </div>
       </a>`;
@@ -872,13 +873,14 @@ function renderFairValueLow() {
   if (sideUl) {
     sideUl.innerHTML = top5.map(fv => {
       const s = stocks.find(x => x.code === fv.code);
-      const pct = (fv.position * 100).toFixed(0);
+      // 位置標籤：避免顯示難懂的負百分比、也不暗示「便宜可買」
+      const posLabel = fv.position <= 0 ? "低於區間下緣" : "合理區間下緣";
       const price = s ? fmtPrice(s.price) : "—";
       return `<li style="cursor:pointer;" onclick="location.href='${pageHref('stock-detail.html?code=' + fv.code)}'">
         <div class="ipo-name">${fv.code} ${fv.name} <span style="float:right;font-weight:600;color:#1B4332;">${price}</span></div>
         <div class="ipo-info">
           合理區間 NT$${Math.round(fv.low).toLocaleString()} ~ NT$${Math.round(fv.high).toLocaleString()}
-          ・ <span style="color:#16a34a;font-weight:600;">${pct}% 偏低</span>
+          ・ <span style="color:#1B4332;font-weight:600;">${posLabel}</span>
         </div>
       </li>`;
     }).join("");

@@ -31,7 +31,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="css/style.css?v=3.23.4">
+<link rel="stylesheet" href="css/style.css?v=3.23.5">
 
 <!-- Schema.org Organization：讓 Google / AI 認識「合法企業 + 提醒冒用」 -->
 <script type="application/ld+json">
@@ -201,6 +201,8 @@
   .guardian-text > p { font-size:14.5px; color:#4b5563; line-height:1.75; margin-bottom:16px; }
   .guardian-checks { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
   .guardian-checks span { background:#fff; border:1px solid #d8e5dc; border-radius:18px; padding:7px 14px; font-size:13.5px; color:#1B4332; font-weight:600; }
+  .guardian-vip { font-size:13.5px; color:#4b5563; margin:-4px 0 14px; line-height:1.6; }
+  .guardian-vip strong { color:#1B4332; }
   .guardian-cta-row { display:flex; gap:10px; flex-wrap:wrap; }
   .guardian-card { background:#fff; border:1px solid #e3e8ee; border-radius:14px; box-shadow:0 8px 28px rgba(20,40,30,.09); padding:18px 20px; }
   .gc-head { font-size:12px; color:#9fb0a6; letter-spacing:.5px; }
@@ -269,7 +271,7 @@
           <div class="ex-score">風險分數 <strong>14</strong> / 100</div>
           <div class="ex-bar"><div class="ex-bar-fill" style="width:14%"></div></div>
           <div class="ex-notes-h">今日需注意</div>
-          <ul class="ex-notes"><li>外資賣超</li><li>借券餘額增加</li><li>股價仍在合理區間內</li></ul>
+          <ul class="ex-notes"><li>外資今日賣超 17,840 張</li><li><b>是否連續賣超：</b>是，近 2 日持續調節</li><li>借券餘額增加</li><li>股價位於合理區間下緣</li></ul>
           <div class="ex-next">💡 建議加入持股追蹤 3 天，觀察外資與借券是否持續惡化。</div>
           <a class="ex-cta" href="pages/portfolio-health.html">加入持股，每天盤後幫你複查 →</a>
         </div>
@@ -290,6 +292,7 @@
           <span>📊 估值</span><span>📈 營收</span><span>🏦 籌碼</span>
           <span>📰 新聞</span><span>⚠ 注意股</span><span>🎯 集中度</span>
         </div>
+        <p class="guardian-vip">免費可看範例；<strong>VIP 可每日自動複查、有風險主動 LINE 提醒</strong>。</p>
         <div class="guardian-cta-row">
           <a href="pages/portfolio-health.html" class="check-btn-primary">建立我的持股清單</a>
           <a href="pages/risk-radar.html" class="check-btn-secondary">看防錯雷達</a>
@@ -392,7 +395,7 @@
   <div class="container">
     <div class="fv-low-eyebrow">💎 LeadFu Fair Value Range™</div>
     <h2 class="fv-low-h2">今日合理區間偏低 TOP 5</h2>
-    <p class="fv-low-sub">領富 AI 專有演算法每日篩出股價落在合理區間下緣的個股，給您看「現在哪些被低估了」。</p>
+    <p class="fv-low-sub">領富 AI 演算法每日篩出股價落在合理區間下緣的個股。<strong>位置低 ≠ 便宜可買</strong> —— 仍需檢查基本面與流動性；本清單僅供研究、非買進建議。</p>
     <div class="fv-low-grid" id="fvLowHeroList">
       <div class="fv-low-card-skel">資料載入中...</div>
     </div>
@@ -967,7 +970,7 @@
 }
 </script>
 
-<script src="js/main.js?v=3.23.4"></script>
+<script src="js/main.js?v=3.23.5"></script>
 <script>
 // 📊 今日 AI 盤後摘要（每日生成，6 小時內快取）
 document.addEventListener("DOMContentLoaded", async () => {
@@ -1807,8 +1810,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if ($("fvDemoNote")) {
       const noteMap = {
         "低於合理區間":  "位置已跌破合理區間下緣",
-        "合理區間下緣":  "位於合理區間下緣，相對偏便宜",
-        "合理偏低":      "位於合理區間偏低位置，相對便宜",
+        "合理區間下緣":  "位於合理區間下緣，仍需檢查基本面與流動性",
+        "合理偏低":      "位於合理區間偏低位置，仍需檢查基本面",
         "合理區間中":    "落在中性配置區間，非偏低也非偏高",
         "合理偏高":      "位於合理區間偏高位置，相對偏貴",
         "合理區間上緣":  "位於合理區間上緣，相對偏貴",
@@ -1828,25 +1831,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!window.LeadFu || !window.LeadFu.ready) return;
     await window.LeadFu.ready;
     const L = window.LeadFu;
-    // 範例卡：真實 2330 風險
-    try {
-      let rs = (L.data.riskScore || {})["2330"];
-      if (!rs) { try { rs = ((await (await fetch("data/risk_score_live.json", { cache: "no-cache" })).json()).data || {})["2330"]; } catch (e) {} }
-      const s = (L.findStock && L.findStock("2330")) || { code: "2330", name: "台積電" };
-      const el = document.getElementById("exampleCard");
-      if (el && rs) {
-        const lv = rs.level || "低", cls = lv === "高" ? "ex-high" : (lv === "中" ? "ex-mid" : "ex-low");
-        const notes = (rs.reasons && rs.reasons.length) ? rs.reasons : ["近期無明顯風險訊號"];
-        el.innerHTML = `<div class="ex-label">範例結果（即時資料）</div>`
-          + `<div class="ex-top"><div><span class="ex-code">${s.code}</span> <span class="ex-name">${s.name || ""}</span></div><div class="ex-status ${cls}">${lv}風險</div></div>`
-          + `<div class="ex-score">風險分數 <strong>${rs.score}</strong> / 100</div>`
-          + `<div class="ex-bar"><div class="ex-bar-fill" style="width:${Math.min(100, Math.max(3, rs.score))}%"></div></div>`
-          + `<div class="ex-notes-h">今日需注意</div>`
-          + `<ul class="ex-notes">${notes.slice(0, 4).map(n => `<li>${n}</li>`).join("")}</ul>`
-          + `<div class="ex-next">💡 建議加入持股追蹤 3 天，觀察外資與借券是否持續惡化。</div>`
-          + `<a class="ex-cta" href="pages/portfolio-health.html">加入 ${s.code} 持股，每天盤後幫你複查 →</a>`;
-      }
-    } catch (e) {}
+    // 範例卡：用 index.html 內的靜態範例（含「連續賣超」脈絡＋合規措辭），不被即時資料覆蓋
     // 檢查框：輸入 → 買前檢查
     const input = document.getElementById("checkHeroInput");
     const resolve = (v) => {
