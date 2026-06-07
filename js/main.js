@@ -2498,14 +2498,13 @@ function setupPWA() {
     showToast("✓ 已加到主畫面，下次直接從手機桌面開", "success");
   });
 
-  // === iOS Safari：永遠不會 fire beforeinstallprompt，直接跳手動教學 ===
-  if (isIOSSafari) {
+  // === iOS（Safari / Chrome / 其他）：Apple 不允許程式安裝，一律跳「看教學」橫幅 ===
+  if (isIOS) {
     setTimeout(() => showInstallBanner("ios"), 4000);
   }
 
-  // === Fallback：手機但非 iOS/Android（很少），給通用提示 ===
-  // 或 Android Chrome 沒 fire beforeinstallprompt 時（例如已多次拒絕）
-  if (!isIOSSafari && /Mobi|Android/i.test(ua)) {
+  // === Fallback：非 iOS 的手機（Android 沒 fire beforeinstallprompt 等）給通用提示 ===
+  if (!isIOS && /Mobi|Android/i.test(ua)) {
     // 等 8 秒看有沒 fire，沒就跳通用版
     setTimeout(() => {
       if (!deferredPrompt && !document.getElementById("pwaInstallBanner")) {
@@ -2534,10 +2533,10 @@ function setupPWA() {
       inner = `
         <div class="pwa-icon">📱</div>
         <div class="pwa-text">
-          <strong>把領富 AI 加到 iPhone 桌面</strong>
-          <small>① 點下方 <svg width="14" height="14" viewBox="0 0 24 24" fill="#C5A572" style="vertical-align:-2px;"><path d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zm4 5v11c0 1.1-.9 2-2 2H6c-1.11 0-2-.9-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3c1.1 0 2 .89 2 2z"/></svg> 分享圖示　② 選「加到主畫面」</small>
+          <strong>把領富 AI 加到桌面</strong>
+          <small>當 App 用，下次點圖示直接開</small>
         </div>
-        <button class="pwa-action" id="pwaIosOkBtn">知道了</button>
+        <button class="pwa-action" id="pwaIosGuideBtn">看怎麼加</button>
         <button class="pwa-dismiss" id="pwaDismissBtn" aria-label="關閉">✕</button>`;
     } else {
       inner = `
@@ -2565,13 +2564,10 @@ function setupPWA() {
         }
       });
     }
-    // iOS 「知道了」按鈕 → 壓 3 天不再跳
-    const iosOkBtn = banner.querySelector("#pwaIosOkBtn");
-    if (iosOkBtn) {
-      iosOkBtn.addEventListener("click", () => {
-        localStorage.setItem(DISMISS_KEY, (Date.now() + 3 * 86400000).toString());
-        hideInstallBanner();
-      });
+    // iOS 「看怎麼加」按鈕 → 跳圖文步驟教學
+    const iosGuideBtn = banner.querySelector("#pwaIosGuideBtn");
+    if (iosGuideBtn) {
+      iosGuideBtn.addEventListener("click", () => showIosInstallGuide());
     }
     banner.querySelector("#pwaDismissBtn").addEventListener("click", () => {
       // 主動關 → 暫停 3 天（之前 7 天太久，3 天剛好）
@@ -2585,6 +2581,39 @@ function setupPWA() {
     if (!el) return;
     el.classList.remove("show");
     setTimeout(() => el.remove(), 400);
+  }
+
+  // iOS 圖文步驟教學（Apple 不允許程式安裝，只能引導手動加）
+  function showIosInstallGuide() {
+    if (document.getElementById("pwaGuideOverlay")) return;
+    const shareIcon = `<svg width="19" height="19" viewBox="0 0 24 24" fill="#1B4332" style="vertical-align:-4px;"><path d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zm4 5v11c0 1.1-.9 2-2 2H6c-1.11 0-2-.9-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3c1.1 0 2 .89 2 2z"/></svg>`;
+    const ov = document.createElement("div");
+    ov.id = "pwaGuideOverlay";
+    ov.className = "pwa-guide-overlay";
+    ov.innerHTML = `
+      <div class="pwa-guide-modal" role="dialog" aria-modal="true">
+        <button class="pwa-guide-x" aria-label="關閉">✕</button>
+        <div class="pwa-guide-emoji">📱</div>
+        <h3>把領富 AI 加到桌面</h3>
+        <p>像 App 一樣，下次點桌面圖示直接開、免再搜尋。3 步驟：</p>
+        <ol class="pwa-guide-steps">
+          <li><span class="gn">1</span><span>點瀏覽器的「分享」${shareIcon} 圖示（通常在最下方工具列或網址列旁）</span></li>
+          <li><span class="gn">2</span><span>選單往下滑，點「<strong>加入主畫面</strong>」（Add to Home Screen）</span></li>
+          <li><span class="gn">3</span><span>右上角按「<strong>加入</strong>」→ 完成 🎉 桌面就有領富 AI 圖示</span></li>
+        </ol>
+        <button class="pwa-guide-ok">知道了</button>
+      </div>`;
+    document.body.appendChild(ov);
+    requestAnimationFrame(() => ov.classList.add("show"));
+    const close = () => {
+      localStorage.setItem(DISMISS_KEY, (Date.now() + 3 * 86400000).toString());
+      ov.classList.remove("show");
+      setTimeout(() => ov.remove(), 300);
+      hideInstallBanner();
+    };
+    ov.querySelector(".pwa-guide-x").addEventListener("click", close);
+    ov.querySelector(".pwa-guide-ok").addEventListener("click", close);
+    ov.addEventListener("click", (e) => { if (e.target === ov) close(); });
   }
 }
 
