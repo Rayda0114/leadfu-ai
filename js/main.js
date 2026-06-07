@@ -2443,6 +2443,17 @@ function setupPWA() {
       .catch(e => console.log("[領富 AI] SW 註冊失敗:", e.message));
   }
 
+  // PWA 登入接力安全網：App(standalone) 內若有未完成的 LINE 登入接力，
+  // 而本頁沒載 auth.js（如首頁），導去 login.html 由 auth.js 自動把 session 接回。
+  try {
+    const standalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    const t = localStorage.getItem("leadfu_handoff_pending");
+    const at = parseInt(localStorage.getItem("leadfu_handoff_at") || "0", 10);
+    const fresh = t && (Date.now() - at < 9 * 60 * 1000);
+    const onAuthPage = /login|member|line-callback|register/.test(location.pathname);
+    if (standalone && fresh && !onAuthPage) { location.replace("/pages/login.html"); return; }
+  } catch (e) {}
+
   // 已在 PWA standalone 模式 → 已安裝，不顯示
   const isStandalone =
     window.matchMedia("(display-mode: standalone)").matches ||

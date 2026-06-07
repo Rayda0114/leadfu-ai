@@ -73,6 +73,19 @@ window.LeadFuAuth = {
     (window.crypto || {}).getRandomValues && window.crypto.getRandomValues(rnd);
     return Array.from(rnd, b => b.toString(16).padStart(2, "0")).join("");
   },
+  _clearHandoff() {
+    try { localStorage.removeItem("leadfu_handoff_pending"); localStorage.removeItem("leadfu_handoff_at"); } catch (e) {}
+  },
+  /* 回傳仍有效(<9 分鐘)的接力 token；過期則清掉回 "" */
+  _pendingHandoff() {
+    try {
+      const t = localStorage.getItem("leadfu_handoff_pending") || "";
+      const at = parseInt(localStorage.getItem("leadfu_handoff_at") || "0", 10);
+      if (!t) return "";
+      if (Date.now() - at > 9 * 60 * 1000) { this._clearHandoff(); return ""; }
+      return t;
+    } catch (e) { return ""; }
+  },
 
   async signInWithLine() {
     const CHANNEL_ID = "2010279883";
@@ -84,7 +97,10 @@ window.LeadFuAuth = {
     try {
       sessionStorage.setItem("line_login_state", csrf);
       sessionStorage.setItem("line_login_next", "/pages/member.html");
-      if (handoff) localStorage.setItem("leadfu_handoff_pending", handoff);
+      if (handoff) {
+        localStorage.setItem("leadfu_handoff_pending", handoff);
+        localStorage.setItem("leadfu_handoff_at", String(Date.now()));
+      }
     } catch (e) { /* 隱私模式可能擋；接力情境會略過 CSRF 比對 */ }
     const authUrl = "https://access.line.me/oauth2/v2.1/authorize?" +
       new URLSearchParams({
@@ -94,34 +110,27 @@ window.LeadFuAuth = {
         state,
         scope: "profile openid"
       }).toString();
-    if (handoff) {
-      // 保持 App 存活：外部瀏覽器開授權頁，App 留在原頁輪詢接力
-      window.open(authUrl, "_blank");
-      this._startHandoffPolling();
-    } else {
-      window.location.href = authUrl;
-    }
+    // ⚠ 一律用「同視窗導向」。window.open 在 iOS PWA 會開一個無分頁 UI 的新視窗，
+    //   使用者回 App 會看到反白且回不去原頁。改用 location 後：外部瀏覽器完成授權，
+    //   App 仍停在本頁（或回前景重載），由 _startHandoffPolling / 載入時的恢復把 session 接回。
+    if (handoff) this._startHandoffPolling();
+    window.location.href = authUrl;
   },
 
   /* ===== PWA 登入接力輪詢 ===== */
   _handoffTimer: null,
   _visHandler: null,
   async _checkHandoffOnce() {
-    let token = "";
-    try { token = localStorage.getItem("leadfu_handoff_pending") || ""; } catch (e) {}
+    const token = this._pendingHandoff();
     if (!token) { this._stopHandoffPolling(); return true; }
     let data = {};
     try {
       const r = await fetch("/api/line-handoff?token=" + encodeURIComponent(token), { cache: "no-store" });
       data = await r.json().catch(() => ({}));
     } catch (e) { return false; }
-    if (data.expired) {
-      try { localStorage.removeItem("leadfu_handoff_pending"); } catch (e) {}
-      this._stopHandoffPolling();
-      return true;
-    }
+    if (data.expired) { this._clearHandoff(); this._stopHandoffPolling(); return true; }
     if (!data.token_hash) return false;   // 還沒登入完成，繼續等
-    try { localStorage.removeItem("leadfu_handoff_pending"); } catch (e) {}
+    this._clearHandoff();
     try {
       const { error } = await _sb.auth.verifyOtp({ token_hash: data.token_hash, type: "magiclink" });
       if (!error) {
@@ -140,7 +149,7 @@ window.LeadFuAuth = {
       const done = await this._checkHandoffOnce();
       if (done || tries > 120) {              // ~5 分鐘上限
         this._stopHandoffPolling();
-        if (tries > 120) { try { localStorage.removeItem("leadfu_handoff_pending"); } catch (e) {} }
+        if (tries > 120) this._clearHandoff();
       }
     };
     // App 回到前景立即查一次（最常見觸發點：使用者授權完切回 App）
@@ -286,7 +295,7 @@ window.LeadFuAuth = {
 
 // PWA 登入接力：頁面載入時若有未完成的接力（App 被系統重啟/重整），恢復輪詢
 try {
-  if (window.LeadFuAuth._isPWA() && localStorage.getItem("leadfu_handoff_pending")) {
+  if (window.LeadFuAuth._isPWA() && window.LeadFuAuth._pendingHandoff()) {
     window.LeadFuAuth._startHandoffPolling();
   }
 } catch (e) {}
