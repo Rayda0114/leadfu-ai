@@ -1274,6 +1274,7 @@ async function handleEcpayCreate(request, env) {
     ItemName: plan.item,
     ReturnURL: "https://leadfuai.com/api/ecpay-return",
     ClientBackURL: "https://leadfuai.com/pages/member.html?vip=ok",
+    OrderResultURL: "https://leadfuai.com/pages/member.html?vip=ok",
     ChoosePayment: "Credit",
     EncryptType: 1,
     PeriodAmount: plan.amount,
