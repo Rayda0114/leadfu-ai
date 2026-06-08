@@ -1460,7 +1460,8 @@ function buildNewsDigest(topics, news, opts) {
   const d = new Date(Date.now() + 8 * 3600 * 1000);
   const md = `${d.getUTCMonth() + 1}/${d.getUTCDate()}`;
   const head = slot === "pre" ? `🌅 領富 AI ・ 開盤前新聞（${md}）\n` : `📰 領富 AI ・ 今日收盤新聞（${md}）\n`;
-  const foot = "\n\n※ 公開新聞整理，非投資建議。\n🔗 更多：https://leadfuai.com/pages/news?openExternalBrowser=1\n如需調整或關閉，請至網站會員中心。";
+  const more = o.loginUrl || "https://leadfuai.com/pages/news?openExternalBrowser=1";
+  const foot = `\n\n※ 公開新聞整理，非投資建議。\n🔗 更多：${more}\n如需調整或關閉，請至網站會員中心。`;
   return (head + "\n" + blocks.join("\n\n") + foot).slice(0, 4900);
 }
 async function runNewsPush(env, slot) {
@@ -1489,7 +1490,9 @@ async function runNewsPush(env, slot) {
     const wantWl = !!subs.watchlist;
     if (!topics.length && !wantWl) continue;
     if (subs[lpKey] === today || (slot === "post" && subs.last_pushed === today)) continue;
-    const text = buildNewsDigest(topics, news, { slot, wlCodes: wantWl ? (m.watchlist || []) : [], nameMap, maxItems: subs.max_items || 10, importantOnly: !!subs.important_only });
+    const lt = await makeLoginToken(env, m.id);
+    const loginUrl = lt ? `https://leadfuai.com/pages/news?lt=${lt}&openExternalBrowser=1` : null;
+    const text = buildNewsDigest(topics, news, { slot, wlCodes: wantWl ? (m.watchlist || []) : [], nameMap, maxItems: subs.max_items || 10, importantOnly: !!subs.important_only, loginUrl });
     if (!text) continue;
     if (await _linePush(env, m.line_user_id, text)) {
       sent++;
@@ -1508,6 +1511,56 @@ async function handleManualNewsPush(request, env) {
   const slot = url.searchParams.get("slot") === "pre" ? "pre" : "post";
   const res = await runNewsPush(env, slot);
   return new Response(JSON.stringify({ ok: true, slot, ...res }), { headers: { "Content-Type": "application/json", ...corsHeaders() } });
+}
+
+/* ── 推播自動登入：產一次性 token（推播時）+ 兌換成 session（點進來時）──
+   推播發給已驗證的 line_user_id，token 只會到本人手機。一次性、7 天效期。
+   兌換時才即時產 Supabase magiclink token_hash（避免預產的 1 小時就過期）。 */
+async function makeLoginToken(env, userId) {
+  try {
+    const buf = new Uint8Array(24); crypto.getRandomValues(buf);
+    const token = [...buf].map(b => b.toString(16).padStart(2, "0")).join("");
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/login_links`, {
+      method: "POST", headers: { ...ecpayAdmin(env), "Prefer": "return=minimal" },
+      body: JSON.stringify({ token, user_id: userId })
+    });
+    return r.ok ? token : null;
+  } catch (e) { return null; }
+}
+async function handleLoginToken(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders() });
+  const jerr = (m, s) => new Response(JSON.stringify({ error: m }), { status: s || 400, headers: { "Content-Type": "application/json", ...corsHeaders() } });
+  if (request.method !== "POST") return jerr("method", 405);
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return jerr("server not configured", 500);
+  let body; try { body = await request.json(); } catch { body = {}; }
+  const token = String(body.token || "");
+  if (!/^[a-f0-9]{32,80}$/i.test(token)) return jerr("bad token");
+  let row;
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/login_links?token=eq.${token}&select=user_id,created_at`, { headers: ecpayAdmin(env) });
+    const rows = await r.json();
+    row = Array.isArray(rows) ? rows[0] : null;
+  } catch (e) { return jerr("lookup failed", 500); }
+  if (!row) return jerr("連結已使用或無效", 401);
+  try { await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/login_links?token=eq.${token}`, { method: "DELETE", headers: ecpayAdmin(env) }); } catch (e) {}
+  if (Date.now() - Date.parse(row.created_at) > 7 * 86400 * 1000) return jerr("連結已過期", 401);
+  let email;
+  try {
+    const ur = await fetch(`${SUPABASE_PROJECT_URL}/auth/v1/admin/users/${row.user_id}`, { headers: ecpayAdmin(env) });
+    const u = await ur.json();
+    email = u && u.email;
+  } catch (e) {}
+  if (!email) return jerr("no email", 400);
+  try {
+    const gr = await fetch(`${SUPABASE_PROJECT_URL}/auth/v1/admin/generate_link`, {
+      method: "POST", headers: { ...ecpayAdmin(env), "Content-Type": "application/json" },
+      body: JSON.stringify({ type: "magiclink", email })
+    });
+    const g = await gr.json();
+    const token_hash = g.hashed_token || (g.properties && g.properties.hashed_token);
+    if (!token_hash) return jerr("gen failed", 500);
+    return new Response(JSON.stringify({ token_hash }), { headers: { "Content-Type": "application/json", ...corsHeaders() } });
+  } catch (e) { return jerr("gen error", 500); }
 }
 
 
@@ -1749,6 +1802,7 @@ export default {
     if (url.pathname === "/api/admin-feedback") return handleAdminFeedback(request, env);
     if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
     if (url.pathname === "/api/cron-news")      return handleManualNewsPush(request, env);
+    if (url.pathname === "/api/login-token")    return handleLoginToken(request, env);
 
     // 其他 path → 交給 ASSETS binding 處理（保留所有原本的靜態行為）
     return env.ASSETS.fetch(request);

@@ -26,6 +26,7 @@ push_news_digest.py — 領富 AI 每日新聞推播（第一期，LINE Messagin
 import json
 import os
 import re
+import secrets
 import sys
 import time
 import datetime
@@ -147,7 +148,7 @@ def watchlist_hits(news, codes, name_map):
 
 
 def build_digest(name, topics, news, *, slot="post", wl_codes=None, name_map=None,
-                 max_items=10, important_only=False):
+                 max_items=10, important_only=False, login_url=None):
     """回傳 (訊息文字 or None)。自選股相關新聞優先，再依勾選主題挑今日相符新聞。"""
     cap = max(1, min(int(max_items or 10), MAX_TOTAL))
     pool = [n for n in news if is_important(n)] if important_only else list(news)
@@ -202,8 +203,9 @@ def build_digest(name, topics, news, *, slot="post", wl_codes=None, name_map=Non
     md = datetime.date.today().strftime("%-m/%-d")
     head = (f"🌅 領富 AI ・ 開盤前新聞（{md}）\n" if slot == "pre"
             else f"📰 領富 AI ・ 今日收盤新聞（{md}）\n")
+    more = login_url or f"{SITE}/pages/news?openExternalBrowser=1"
     foot = ("\n\n※ 公開新聞整理，非投資建議。"
-            f"\n🔗 更多：{SITE}/pages/news?openExternalBrowser=1"
+            f"\n🔗 更多：{more}"
             "\n如需調整或關閉，請至網站會員中心。")
     return (head + "\n" + "\n\n".join(blocks) + foot)[:4900]
 
@@ -267,6 +269,24 @@ def push_message(to, text):
         return False
 
 
+def make_login_token(uid):
+    """產一次性登入 token 存進 login_links，給推播網址帶（點進來自動登入）。失敗回 None。"""
+    if DRY_RUN or FAKE_SUBS or not (SUPABASE_URL and SERVICE_KEY) or not uid:
+        return None
+    token = secrets.token_hex(24)
+    try:
+        body = json.dumps({"token": token, "user_id": uid}).encode("utf-8")
+        req = urllib.request.Request(f"{SUPABASE_URL}/rest/v1/login_links", data=body, method="POST", headers={
+            "apikey": SERVICE_KEY, "Authorization": f"Bearer {SERVICE_KEY}",
+            "Content-Type": "application/json", "Prefer": "return=minimal",
+        })
+        with urllib.request.urlopen(req, timeout=15) as r:
+            return token if 200 <= r.status < 300 else None
+    except Exception as e:
+        print(f"[warn] 產登入 token 失敗 {uid}: {e}")
+        return None
+
+
 def main():
     print(f"[info] 時段：{PUSH_SLOT}（pre=盤前 / post=盤後）")
     news = load_news()
@@ -298,10 +318,13 @@ def main():
         if already:
             continue
         wl_codes = (m.get("watchlist") or []) if want_wl else []
+        lt = make_login_token(m["id"])
+        login_url = f"{SITE}/pages/news?lt={lt}&openExternalBrowser=1" if lt else None
         text = build_digest(
             m.get("name", ""), topics, news,
             slot=PUSH_SLOT, wl_codes=wl_codes, name_map=name_map,
             max_items=subs.get("max_items", 10), important_only=bool(subs.get("important_only")),
+            login_url=login_url,
         )
         if not text:
             continue  # 今日無相符新聞，不打擾

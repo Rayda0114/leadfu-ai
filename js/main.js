@@ -3719,6 +3719,29 @@ function injectPriceFreshnessNote() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // 推播自動登入：LINE 推播網址帶 ?lt=token → 換 session → 重整成乾淨網址（保持登入）
+  {
+    const _p = new URLSearchParams(location.search);
+    const _lt = _p.get("lt");
+    if (_lt && /^[a-f0-9]{32,80}$/i.test(_lt)) {
+      const _strip = () => { try { _p.delete("lt"); const q = _p.toString(); history.replaceState(null, "", location.pathname + (q ? "?" + q : "")); } catch (e) {} };
+      if (_hasSupabaseSession()) { _strip(); }
+      else {
+        try {
+          const r = await fetch("/api/login-token", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: _lt }) });
+          const d = await r.json().catch(() => ({}));
+          if (r.ok && d.token_hash) {
+            const auth = await _ensureAuth();
+            if (auth && auth.client) {
+              const { error } = await auth.client.auth.verifyOtp({ token_hash: d.token_hash, type: "magiclink" });
+              if (!error) { _strip(); location.reload(); return; }
+            }
+          }
+        } catch (e) {}
+        _strip();
+      }
+    }
+  }
   setupSEO();
   loadGA();
   loadLineTag();
