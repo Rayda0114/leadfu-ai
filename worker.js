@@ -1402,6 +1402,114 @@ async function handleTestPushNews(request, env) {
   return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json", ...corsHeaders() } });
 }
 
+/* ════════ 每日新聞推播（Cloudflare Cron 定時，準時、不受 GitHub Actions 排程延遲）════════ */
+async function _linePush(env, to, text) {
+  try {
+    const r = await fetch("https://api.line.me/v2/bot/message/push", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${env.LINE_CHANNEL_ACCESS_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ to, messages: [{ type: "text", text }] })
+    });
+    return r.ok;
+  } catch (e) { return false; }
+}
+async function _assetJson(env, file) {
+  try { return await (await env.ASSETS.fetch(new Request("https://placeholder/data/" + file))).json(); }
+  catch (e) { return null; }
+}
+function _newsTopicMatch(item, topic) {
+  const kws = NEWS_TOPIC_KW[topic] || [];
+  if (!kws.length) return false;
+  const hay = [item.title || "", item.summary || "", item.tag || "", item.ai_note || "", _newsRelated(item).join(" ")].join(" ");
+  return kws.some(k => hay.includes(k));
+}
+function buildNewsDigest(topics, news, opts) {
+  const o = opts || {};
+  const slot = o.slot || "post";
+  const cap = Math.max(1, Math.min(o.maxItems || 10, 15));
+  const pool = o.importantOnly ? news.filter(n => ["利多", "利空"].includes(String(n.ai_sentiment || "").trim())) : news;
+  const blocks = []; let total = 0; const used = new Set();
+  const key = n => n.id || n.link || n.title;
+  const line = n => `・${(n.title || "").trim()}` + (n.source ? `（${n.source}）` : "");
+  const wlCodes = o.wlCodes || []; const nameMap = o.nameMap || {};
+  if (wlCodes.length) {
+    const terms = new Set();
+    for (const c of wlCodes) { if (c) { terms.add(String(c)); if (nameMap[c]) terms.add(nameMap[c]); } }
+    const ls = ["⭐ 你的自選股相關"];
+    for (const n of pool) {
+      if (total >= cap) break;
+      const k = key(n); if (used.has(k)) continue;
+      const hay = [n.title || "", n.summary || "", n.ai_note || "", _newsRelated(n).join(" ")].join(" ");
+      if ([...terms].some(t => hay.includes(t))) { used.add(k); ls.push(line(n)); total++; }
+    }
+    if (ls.length > 1) blocks.push(ls.join("\n"));
+  }
+  for (const topic of (topics || [])) {
+    if (!NEWS_TOPIC_KW[topic] || total >= cap) continue;
+    const hits = pool.filter(n => _newsTopicMatch(n, topic));
+    if (!hits.length) continue;
+    const ls = [`【${topic}】`];
+    for (const n of hits.slice(0, 5)) {
+      if (total >= cap) break;
+      const k = key(n); if (used.has(k)) continue;
+      used.add(k); ls.push(line(n)); total++;
+    }
+    if (ls.length > 1) blocks.push(ls.join("\n"));
+  }
+  if (!blocks.length) return null;
+  const d = new Date(Date.now() + 8 * 3600 * 1000);
+  const md = `${d.getUTCMonth() + 1}/${d.getUTCDate()}`;
+  const head = slot === "pre" ? `🌅 領富 AI ・ 開盤前新聞（${md}）\n` : `📰 領富 AI ・ 今日收盤新聞（${md}）\n`;
+  const foot = "\n\n※ 公開新聞整理，非投資建議。\n🔗 更多：https://leadfuai.com/pages/news?openExternalBrowser=1\n如需調整或關閉，請至網站會員中心。";
+  return (head + "\n" + blocks.join("\n\n") + foot).slice(0, 4900);
+}
+async function runNewsPush(env, slot) {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY || !env.LINE_CHANNEL_ACCESS_TOKEN) return { sent: 0, error: "not configured" };
+  const d = new Date(Date.now() + 8 * 3600 * 1000);
+  const today = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+  const nj = await _assetJson(env, "news_live.json");
+  const allNews = (nj && (nj.news || nj.data || nj.articles)) || [];
+  const news = allNews.filter(n => String(n.date || "").trim() === today);
+  if (!news.length) return { sent: 0, note: "今日無新聞" };
+  const sj = await _assetJson(env, "stocks_live.json");
+  const nameMap = {}; for (const s of ((sj && sj.stocks) || [])) nameMap[s.code] = s.name || "";
+  let members = [];
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?select=id,line_user_id,news_subs,watchlist&line_user_id=not.is.null`, { headers: ecpayAdmin(env) });
+    members = await r.json();
+  } catch (e) { return { sent: 0, error: "supabase" }; }
+  const lpKey = "last_pushed_" + slot;
+  let sent = 0;
+  for (const m of (Array.isArray(members) ? members : [])) {
+    const subs = m.news_subs;
+    if (!subs || typeof subs !== "object" || !subs.active) continue;
+    const times = subs.times || ["post"];
+    if (!times.includes(slot)) continue;
+    const topics = (subs.topics || []).filter(t => NEWS_TOPIC_KW[t]);
+    const wantWl = !!subs.watchlist;
+    if (!topics.length && !wantWl) continue;
+    if (subs[lpKey] === today || (slot === "post" && subs.last_pushed === today)) continue;
+    const text = buildNewsDigest(topics, news, { slot, wlCodes: wantWl ? (m.watchlist || []) : [], nameMap, maxItems: subs.max_items || 10, importantOnly: !!subs.important_only });
+    if (!text) continue;
+    if (await _linePush(env, m.line_user_id, text)) {
+      sent++;
+      subs[lpKey] = today;
+      try { await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?id=eq.${m.id}`, { method: "PATCH", headers: { ...ecpayAdmin(env), "Prefer": "return=minimal" }, body: JSON.stringify({ news_subs: subs }) }); } catch (e) {}
+    }
+  }
+  return { sent };
+}
+async function handleManualNewsPush(request, env) {
+  const url = new URL(request.url);
+  const jerr = (m, s) => new Response(JSON.stringify({ error: m }), { status: s || 400, headers: { "Content-Type": "application/json", ...corsHeaders() } });
+  const token = (request.headers.get("Authorization") || "").replace(/^Bearer /, "") || url.searchParams.get("access_token") || "";
+  const user = await ecpayUser(token);
+  if (!user || !OWNER_UIDS.includes(user.id)) return jerr("owner only", 403);
+  const slot = url.searchParams.get("slot") === "pre" ? "pre" : "post";
+  const res = await runNewsPush(env, slot);
+  return new Response(JSON.stringify({ ok: true, slot, ...res }), { headers: { "Content-Type": "application/json", ...corsHeaders() } });
+}
+
 
 /* ============================================================
  * 站長後台：意見回饋清單（owner-only）
@@ -1640,8 +1748,14 @@ export default {
     if (url.pathname === "/api/test-push-news") return handleTestPushNews(request, env);
     if (url.pathname === "/api/admin-feedback") return handleAdminFeedback(request, env);
     if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
+    if (url.pathname === "/api/cron-news")      return handleManualNewsPush(request, env);
 
     // 其他 path → 交給 ASSETS binding 處理（保留所有原本的靜態行為）
     return env.ASSETS.fetch(request);
+  },
+  // Cloudflare Cron Triggers：準時跑每日新聞推播（不受 GitHub Actions 排程延遲）
+  async scheduled(event, env, ctx) {
+    const cron = (event && event.cron) || "";
+    ctx.waitUntil(runNewsPush(env, cron.startsWith("40 23") ? "pre" : "post"));
   }
 };

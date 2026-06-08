@@ -11,3 +11,8 @@ ECPAY_MERCHANT_ID = "3501534"
 [assets]
 directory = "."
 binding = "ASSETS"
+
+# Cloudflare 定時觸發：每日盤後新聞推播（準時 15:50 台北 = 07:50 UTC，不受 GitHub Actions 排程延遲）
+# 盤前(07:40)仍走 GitHub workflow（需先抓當日最新新聞）。
+[triggers]
+crons = ["50 7 * * 1-5"]

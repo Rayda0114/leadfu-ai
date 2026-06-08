@@ -2,10 +2,10 @@ name: 領富 AI · 每日新聞推播
 
 # 台灣時間 15:50（UTC 07:50）—— 排在「每日資料更新」(15:00，含 fetch_news) 之後、與其他推播同批。
 # 讀會員 news_subs（勾選的主題、active=true）→ 比對今日新聞 → 把相符主題透過 LINE 推播。
+# ⚠ 盤後排程已改由 Cloudflare Cron（worker scheduled，準時 15:50）負責，這裡的 schedule 停用避免重複推播。
+# 保留 workflow_dispatch 作為手動備援/測試。
 on:
-  schedule:
-    - cron: "50 7 * * 1-5"   # 週一到週五，資料更新後
-  workflow_dispatch:           # 允許手動觸發（測試用）
+  workflow_dispatch:           # 允許手動觸發（備援/測試用）
     inputs:
       dry_run:
         description: "只測試、不實際推播/不回寫（true = 只印訊息）"
