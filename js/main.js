@@ -689,8 +689,10 @@ function updateHeaderAuthState() {
   if (!_hasSupabaseSession()) return;   // 未登入：維持原本登入/註冊
   const inPages = location.pathname.includes("/pages/");
   document.querySelectorAll(".top-right").forEach(tr => {
-    const loginLink = tr.querySelector('a[href*="login"]');
-    const regLink = tr.querySelector('a[href*="register"]');
+    // 用「href 含 login/register」或「文字含 登入/註冊」雙重比對，避免某些頁把連結寫成 href="#" 而換不到
+    const _as = [...tr.querySelectorAll("a")];
+    const loginLink = _as.find(a => /login/i.test(a.getAttribute("href") || "") || /登入/.test(a.textContent));
+    const regLink = _as.find(a => /register/i.test(a.getAttribute("href") || "") || /註冊/.test(a.textContent));
     if (loginLink) {
       loginLink.textContent = "👤 會員中心";
       loginLink.setAttribute("href", (inPages ? "" : "pages/") + "member.html");
