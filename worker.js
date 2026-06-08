@@ -1273,8 +1273,8 @@ async function handleEcpayCreate(request, env) {
     TradeDesc: "LeadFu AI VIP",
     ItemName: plan.item,
     ReturnURL: "https://leadfuai.com/api/ecpay-return",
-    ClientBackURL: "https://leadfuai.com/pages/member.html?vip=ok",
-    OrderResultURL: "https://leadfuai.com/pages/member.html?vip=ok",
+    ClientBackURL: "https://leadfuai.com/pages/member?vip=ok",
+    OrderResultURL: "https://leadfuai.com/api/ecpay-result",
     ChoosePayment: "Credit",
     EncryptType: 1,
     PeriodAmount: plan.amount,
@@ -1320,6 +1320,23 @@ async function handleEcpayPeriod(request, env) {
     } catch (e) {}
   }
   return new Response("1|OK", { status: 200 });
+}
+async function handleEcpayResult(request, env) {
+  // 綠界 OrderResultURL：信用卡付款後瀏覽器會 POST 回來。
+  // 順手再開通一次（與 ReturnURL 互為備援），再用 303 轉成 GET 導回乾淨會員頁，避免 .html→307+POST 變空白。
+  if (request.method === "POST") {
+    try {
+      const form = await request.formData();
+      const data = {}; for (const [k, v] of form.entries()) data[k] = v;
+      const conf = ecpayConf(env);
+      const mac = await ecpayMac(data, conf.key, conf.iv);
+      if (mac === String(data.CheckMacValue || "").toUpperCase() && String(data.RtnCode) === "1") {
+        const plan = ECPAY_PLANS[data.CustomField2];
+        if (data.CustomField1 && plan) { try { await ecpaySetVip(env, data.CustomField1, data.CustomField2, data.MerchantTradeNo); } catch (e) {} }
+      }
+    } catch (e) {}
+  }
+  return new Response(null, { status: 303, headers: { "Location": "https://leadfuai.com/pages/member?vip=ok" } });
 }
 
 
@@ -1540,6 +1557,7 @@ export default {
     if (url.pathname === "/api/ecpay-create")   return handleEcpayCreate(request, env);
     if (url.pathname === "/api/ecpay-return")   return handleEcpayReturn(request, env);
     if (url.pathname === "/api/ecpay-period")   return handleEcpayPeriod(request, env);
+    if (url.pathname === "/api/ecpay-result")   return handleEcpayResult(request, env);
     if (url.pathname === "/api/admin-feedback") return handleAdminFeedback(request, env);
     if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
 
