@@ -347,6 +347,42 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".subscribe-btn").forEach(btn => {
     btn.addEventListener("click", async (e) => {
       e.preventDefault();
+
+      // ── 綠界定期定額訂閱（信用卡每月/每年自動扣款）──
+      const _planName = btn.dataset.plan || "";
+      const _planKey = (_planName.includes("旗艦") ? "pro" : "adv") + "-" + (btn.dataset.period === "年付" ? "y" : "m");
+      let _token = "";
+      try {
+        const { data } = await window.LeadFuAuth.client.auth.getSession();
+        _token = (data && data.session) ? data.session.access_token : "";
+      } catch (e2) {}
+      if (!_token) {
+        try { sessionStorage.setItem("line_login_next", "/pages/vip.html"); } catch (e2) {}
+        alert("訂閱 VIP 前請先登入會員 🙏（登入後回到這頁再點訂閱）");
+        location.href = "login.html";
+        return;
+      }
+      const _orig = btn.textContent;
+      btn.disabled = true; btn.textContent = "前往綠界付款中…";
+      try {
+        const r = await fetch("/api/ecpay-create", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ plan: _planKey, access_token: _token })
+        });
+        const d = await r.json();
+        if (!r.ok || !d.action) throw new Error(d.error || "建立付款失敗");
+        const f = document.createElement("form");
+        f.method = "POST"; f.action = d.action;
+        Object.entries(d.fields).forEach(([k, v]) => {
+          const i = document.createElement("input"); i.type = "hidden"; i.name = k; i.value = v; f.appendChild(i);
+        });
+        document.body.appendChild(f); f.submit();
+      } catch (err) {
+        btn.disabled = false; btn.textContent = _orig;
+        alert("訂閱建立失敗：" + (err.message || err) + "\n可改用右下角 LINE 客服協助 🙏");
+      }
+      return;
+      // ↓ 以下為舊的「LINE 客服手動開通」流程，已停用、保留備援（不會執行） ↓
       const plan = btn.dataset.plan;
       const price = btn.dataset.price;
       const period = btn.dataset.period || "月付";

@@ -1185,6 +1185,144 @@ async function handleLineHandoff(request, env) {
 
 
 /* ============================================================
+ * 綠界 ECPay 定期定額 — VIP 訂閱
+ *   /api/ecpay-create  POST {plan, access_token} → {action, fields}（前端組表單送綠界）
+ *   /api/ecpay-return  POST（綠界首期付款結果）→ 開通 VIP，回 "1|OK"
+ *   /api/ecpay-period  POST（綠界每期定期定額扣款）→ 續期 VIP，回 "1|OK"
+ * 未設正式金鑰 → 走綠界公開測試帳號(測試環境)；設 ECPAY_MERCHANT_ID/HASH_KEY/HASH_IV 即切正式。
+ * 需 Supabase profiles 欄位：vip_level, vip_until, ecpay_trade_no, ecpay_plan。
+ * ============================================================ */
+const ECPAY_ANON_KEY = "sb_publishable_hBrtHt8ham91nuXSU_tdmA__BqcfIX1";
+const ECPAY_PLANS = {
+  "adv-m": { item: "領富AI VIP進階(月付)", amount: 199,  pType: "M", freq: 1, exec: 99, level: "進階" },
+  "pro-m": { item: "領富AI VIP旗艦(月付)", amount: 499,  pType: "M", freq: 1, exec: 99, level: "旗艦" },
+  "adv-y": { item: "領富AI VIP進階(年付)", amount: 1990, pType: "Y", freq: 1, exec: 9,  level: "進階" },
+  "pro-y": { item: "領富AI VIP旗艦(年付)", amount: 4990, pType: "Y", freq: 1, exec: 9,  level: "旗艦" }
+};
+function ecpayConf(env) {
+  if (env.ECPAY_MERCHANT_ID && env.ECPAY_HASH_KEY && env.ECPAY_HASH_IV) {
+    return { mid: env.ECPAY_MERCHANT_ID, key: env.ECPAY_HASH_KEY, iv: env.ECPAY_HASH_IV,
+             url: "https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5", live: true };
+  }
+  return { mid: "2000132", key: "5294y06JbISpM5x9", iv: "v77hoKGq4kWxNNIS",
+           url: "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5", live: false };
+}
+async function ecpayMac(params, key, iv) {
+  const ks = Object.keys(params).filter(k => k !== "CheckMacValue" && params[k] != null)
+    .sort((a, b) => { const x = a.toLowerCase(), y = b.toLowerCase(); return x < y ? -1 : x > y ? 1 : 0; });
+  let raw = `HashKey=${key}&` + ks.map(k => `${k}=${params[k]}`).join("&") + `&HashIV=${iv}`;
+  raw = encodeURIComponent(raw).replace(/%20/g, "+").replace(/~/g, "%7e").replace(/'/g, "%27").toLowerCase();
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+}
+function ecpayDate() {
+  const d = new Date(Date.now() + 8 * 3600 * 1000), p = n => String(n).padStart(2, "0");
+  return `${d.getUTCFullYear()}/${p(d.getUTCMonth() + 1)}/${p(d.getUTCDate())} ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:${p(d.getUTCSeconds())}`;
+}
+function ecpayTradeNo() {
+  const r = new Uint8Array(5); crypto.getRandomValues(r);
+  return ("LF" + Date.now().toString(36) + [...r].map(b => b.toString(36)).join("")).replace(/[^0-9a-z]/gi, "").slice(0, 20).toUpperCase();
+}
+function ecpayAdmin(env) {
+  return { "apikey": env.SUPABASE_SERVICE_ROLE_KEY, "Authorization": `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, "Content-Type": "application/json" };
+}
+async function ecpayUser(token) {
+  if (!token) return null;
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/auth/v1/user`, { headers: { "Authorization": `Bearer ${token}`, "apikey": ECPAY_ANON_KEY } });
+    if (!r.ok) return null;
+    const u = await r.json();
+    return (u && u.id) ? u : null;
+  } catch { return null; }
+}
+async function ecpaySetVip(env, userId, planKey, tradeNo) {
+  const plan = ECPAY_PLANS[planKey] || {};
+  let base = Date.now();
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?id=eq.${userId}&select=vip_until`, { headers: ecpayAdmin(env) });
+    const rows = await r.json();
+    if (Array.isArray(rows) && rows[0] && rows[0].vip_until) {
+      const t = Date.parse(rows[0].vip_until); if (t > base) base = t;
+    }
+  } catch {}
+  const d = new Date(base);
+  if (plan.pType === "Y") d.setUTCFullYear(d.getUTCFullYear() + 1); else d.setUTCMonth(d.getUTCMonth() + 1);
+  d.setUTCDate(d.getUTCDate() + 3);   // 寬限 3 天
+  const patch = { vip_level: plan.level || "進階", vip_until: d.toISOString(), ecpay_trade_no: tradeNo, ecpay_plan: planKey };
+  await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?id=eq.${userId}`, {
+    method: "PATCH", headers: { ...ecpayAdmin(env), "Prefer": "return=minimal" }, body: JSON.stringify(patch)
+  });
+}
+async function handleEcpayCreate(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders() });
+  const jerr = (m, s) => new Response(JSON.stringify({ error: m }), { status: s || 400, headers: { "Content-Type": "application/json", ...corsHeaders() } });
+  if (request.method !== "POST") return jerr("method", 405);
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return jerr("server not configured", 500);
+  let body; try { body = await request.json(); } catch { body = {}; }
+  const plan = ECPAY_PLANS[body.plan];
+  if (!plan) return jerr("unknown plan");
+  const user = await ecpayUser(body.access_token);
+  if (!user) return jerr("請先登入再訂閱", 401);
+  const conf = ecpayConf(env);
+  const params = {
+    MerchantID: conf.mid,
+    MerchantTradeNo: ecpayTradeNo(),
+    MerchantTradeDate: ecpayDate(),
+    PaymentType: "aio",
+    TotalAmount: plan.amount,
+    TradeDesc: "LeadFu AI VIP",
+    ItemName: plan.item,
+    ReturnURL: "https://leadfuai.com/api/ecpay-return",
+    ClientBackURL: "https://leadfuai.com/pages/member.html?vip=ok",
+    ChoosePayment: "Credit",
+    EncryptType: 1,
+    PeriodAmount: plan.amount,
+    PeriodType: plan.pType,
+    Frequency: plan.freq,
+    ExecTimes: plan.exec,
+    PeriodReturnURL: "https://leadfuai.com/api/ecpay-period",
+    CustomField1: user.id,
+    CustomField2: body.plan
+  };
+  params.CheckMacValue = await ecpayMac(params, conf.key, conf.iv);
+  return new Response(JSON.stringify({ action: conf.url, fields: params, test: !conf.live }), {
+    status: 200, headers: { "Content-Type": "application/json", ...corsHeaders() }
+  });
+}
+async function handleEcpayReturn(request, env) {
+  if (request.method !== "POST") return new Response("0|method", { status: 405 });
+  const form = await request.formData();
+  const data = {}; for (const [k, v] of form.entries()) data[k] = v;
+  const conf = ecpayConf(env);
+  const mac = await ecpayMac(data, conf.key, conf.iv);
+  if (mac !== String(data.CheckMacValue || "").toUpperCase()) return new Response("0|CheckMacValue", { status: 200 });
+  if (String(data.RtnCode) === "1") {
+    const plan = ECPAY_PLANS[data.CustomField2];
+    if (data.CustomField1 && plan) {
+      try { await ecpaySetVip(env, data.CustomField1, data.CustomField2, data.MerchantTradeNo); } catch (e) {}
+    }
+  }
+  return new Response("1|OK", { status: 200 });
+}
+async function handleEcpayPeriod(request, env) {
+  if (request.method !== "POST") return new Response("0|method", { status: 405 });
+  const form = await request.formData();
+  const data = {}; for (const [k, v] of form.entries()) data[k] = v;
+  const conf = ecpayConf(env);
+  const mac = await ecpayMac(data, conf.key, conf.iv);
+  if (mac !== String(data.CheckMacValue || "").toUpperCase()) return new Response("0|CheckMacValue", { status: 200 });
+  if (String(data.RtnCode) === "1") {
+    try {
+      const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?ecpay_trade_no=eq.${encodeURIComponent(data.MerchantTradeNo)}&select=id,ecpay_plan`, { headers: ecpayAdmin(env) });
+      const rows = await r.json();
+      if (Array.isArray(rows) && rows[0]) await ecpaySetVip(env, rows[0].id, rows[0].ecpay_plan, data.MerchantTradeNo);
+    } catch (e) {}
+  }
+  return new Response("1|OK", { status: 200 });
+}
+
+
+/* ============================================================
  * 站長後台：意見回饋清單（owner-only）
  *
  * 安全：含用戶 email，絕不可公開。
@@ -1398,6 +1536,9 @@ export default {
     if (url.pathname === "/api/quote")          return handleQuote(request);
     if (url.pathname === "/api/line-auth")      return handleLineAuth(request, env);
     if (url.pathname === "/api/line-handoff")   return handleLineHandoff(request, env);
+    if (url.pathname === "/api/ecpay-create")   return handleEcpayCreate(request, env);
+    if (url.pathname === "/api/ecpay-return")   return handleEcpayReturn(request, env);
+    if (url.pathname === "/api/ecpay-period")   return handleEcpayPeriod(request, env);
     if (url.pathname === "/api/admin-feedback") return handleAdminFeedback(request, env);
     if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
 
