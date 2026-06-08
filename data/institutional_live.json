@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-05 10:54",
+  "updatedAt": "2026-06-08 07:18",
   "source": "TWSE T86 三大法人買賣超日報",
   "sourceDate": "20260605",
   "title": "115年06月05日 三大法人買賣超日報",
@@ -329,6 +329,15 @@
       "total_net_lots": 2385,
       "market": "listed"
     },
+    "2492": {
+      "code": "2492",
+      "name": "華新科",
+      "foreign_net_lots": 1255,
+      "trust_net_lots": 678,
+      "dealer_net_lots": 264,
+      "total_net_lots": 2197,
+      "market": "listed"
+    },
     "6890": {
       "code": "6890",
       "name": "來億-KY",
@@ -435,15 +444,6 @@
       "trust_net_lots": 0,
       "dealer_net_lots": -401,
       "total_net_lots": 1562,
-      "market": "listed"
-    },
-    "2492": {
-      "code": "2492",
-      "name": "華新科",
-      "foreign_net_lots": 1255,
-      "trust_net_lots": 39,
-      "dealer_net_lots": 264,
-      "total_net_lots": 1558,
       "market": "listed"
     },
     "1319": {
@@ -1769,6 +1769,15 @@
       "total_net_lots": 196,
       "market": "listed"
     },
+    "6831": {
+      "code": "6831",
+      "name": "邁科",
+      "foreign_net_lots": -58,
+      "trust_net_lots": 243,
+      "dealer_net_lots": 10,
+      "total_net_lots": 195,
+      "market": "listed"
+    },
     "6789": {
       "code": "6789",
       "name": "采鈺",
@@ -2138,15 +2147,6 @@
       "total_net_lots": 125,
       "market": "listed"
     },
-    "4551": {
-      "code": "4551",
-      "name": "智伸科",
-      "foreign_net_lots": 120,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 2,
-      "total_net_lots": 122,
-      "market": "listed"
-    },
     "2387": {
       "code": "2387",
       "name": "精元",
@@ -2210,15 +2210,6 @@
       "total_net_lots": 108,
       "market": "listed"
     },
-    "2383": {
-      "code": "2383",
-      "name": "台光電",
-      "foreign_net_lots": 18,
-      "trust_net_lots": 107,
-      "dealer_net_lots": -19,
-      "total_net_lots": 107,
-      "market": "listed"
-    },
     "2390": {
       "code": "2390",
       "name": "云辰",
@@ -2243,6 +2234,15 @@
       "foreign_net_lots": 72,
       "trust_net_lots": 0,
       "dealer_net_lots": 32,
+      "total_net_lots": 105,
+      "market": "listed"
+    },
+    "2383": {
+      "code": "2383",
+      "name": "台光電",
+      "foreign_net_lots": 18,
+      "trust_net_lots": 105,
+      "dealer_net_lots": -19,
       "total_net_lots": 105,
       "market": "listed"
     },
@@ -2984,15 +2984,6 @@
       "total_net_lots": 43,
       "market": "listed"
     },
-    "6831": {
-      "code": "6831",
-      "name": "邁科",
-      "foreign_net_lots": -58,
-      "trust_net_lots": 90,
-      "dealer_net_lots": 10,
-      "total_net_lots": 42,
-      "market": "listed"
-    },
     "7791": {
       "code": "7791",
       "name": "皇家可口",
@@ -3263,21 +3254,21 @@
       "total_net_lots": 30,
       "market": "listed"
     },
-    "1324": {
-      "code": "1324",
-      "name": "地球",
-      "foreign_net_lots": 30,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": 30,
-      "market": "listed"
-    },
     "1506": {
       "code": "1506",
       "name": "正道",
       "foreign_net_lots": 40,
       "trust_net_lots": 0,
       "dealer_net_lots": -10,
+      "total_net_lots": 30,
+      "market": "listed"
+    },
+    "1324": {
+      "code": "1324",
+      "name": "地球",
+      "foreign_net_lots": 30,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
       "total_net_lots": 30,
       "market": "listed"
     },
@@ -3362,15 +3353,6 @@
       "total_net_lots": 25,
       "market": "listed"
     },
-    "2022": {
-      "code": "2022",
-      "name": "聚亨",
-      "foreign_net_lots": 76,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -51,
-      "total_net_lots": 25,
-      "market": "listed"
-    },
     "2613": {
       "code": "2613",
       "name": "中櫃",
@@ -3386,6 +3368,15 @@
       "foreign_net_lots": 34,
       "trust_net_lots": 0,
       "dealer_net_lots": -9,
+      "total_net_lots": 25,
+      "market": "listed"
+    },
+    "2022": {
+      "code": "2022",
+      "name": "聚亨",
+      "foreign_net_lots": 76,
+      "trust_net_lots": 0,
+      "dealer_net_lots": -51,
       "total_net_lots": 25,
       "market": "listed"
     },
@@ -3407,21 +3398,21 @@
       "total_net_lots": 24,
       "market": "listed"
     },
-    "7736": {
-      "code": "7736",
-      "name": "虎山",
-      "foreign_net_lots": 24,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": 24,
-      "market": "listed"
-    },
     "3229": {
       "code": "3229",
       "name": "晟鈦",
       "foreign_net_lots": 19,
       "trust_net_lots": 0,
       "dealer_net_lots": 5,
+      "total_net_lots": 24,
+      "market": "listed"
+    },
+    "7736": {
+      "code": "7736",
+      "name": "虎山",
+      "foreign_net_lots": 24,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
       "total_net_lots": 24,
       "market": "listed"
     },
@@ -3614,21 +3605,21 @@
       "total_net_lots": 15,
       "market": "listed"
     },
-    "4190": {
-      "code": "4190",
-      "name": "佐登-KY",
-      "foreign_net_lots": 22,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -7,
-      "total_net_lots": 15,
-      "market": "listed"
-    },
     "2450": {
       "code": "2450",
       "name": "神腦",
       "foreign_net_lots": 25,
       "trust_net_lots": 0,
       "dealer_net_lots": -10,
+      "total_net_lots": 15,
+      "market": "listed"
+    },
+    "4190": {
+      "code": "4190",
+      "name": "佐登-KY",
+      "foreign_net_lots": 22,
+      "trust_net_lots": 0,
+      "dealer_net_lots": -7,
       "total_net_lots": 15,
       "market": "listed"
     },
@@ -3668,15 +3659,6 @@
       "total_net_lots": 14,
       "market": "listed"
     },
-    "6928": {
-      "code": "6928",
-      "name": "攸泰科技",
-      "foreign_net_lots": 13,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": 13,
-      "market": "listed"
-    },
     "6722": {
       "code": "6722",
       "name": "輝創",
@@ -3686,9 +3668,9 @@
       "total_net_lots": 13,
       "market": "listed"
     },
-    "2424": {
-      "code": "2424",
-      "name": "隴華",
+    "6928": {
+      "code": "6928",
+      "name": "攸泰科技",
       "foreign_net_lots": 13,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
@@ -3701,6 +3683,15 @@
       "foreign_net_lots": 19,
       "trust_net_lots": 0,
       "dealer_net_lots": -6,
+      "total_net_lots": 13,
+      "market": "listed"
+    },
+    "2424": {
+      "code": "2424",
+      "name": "隴華",
+      "foreign_net_lots": 13,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
       "total_net_lots": 13,
       "market": "listed"
     },
@@ -3767,15 +3758,6 @@
       "total_net_lots": 10,
       "market": "listed"
     },
-    "6771": {
-      "code": "6771",
-      "name": "平和環保-創",
-      "foreign_net_lots": 5,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 5,
-      "total_net_lots": 10,
-      "market": "listed"
-    },
     "6918": {
       "code": "6918",
       "name": "愛派司",
@@ -3785,13 +3767,13 @@
       "total_net_lots": 10,
       "market": "listed"
     },
-    "1465": {
-      "code": "1465",
-      "name": "偉全",
-      "foreign_net_lots": 6,
+    "6771": {
+      "code": "6771",
+      "name": "平和環保-創",
+      "foreign_net_lots": 5,
       "trust_net_lots": 0,
-      "dealer_net_lots": 3,
-      "total_net_lots": 9,
+      "dealer_net_lots": 5,
+      "total_net_lots": 10,
       "market": "listed"
     },
     "2849": {
@@ -3800,6 +3782,15 @@
       "foreign_net_lots": 11,
       "trust_net_lots": 0,
       "dealer_net_lots": -2,
+      "total_net_lots": 9,
+      "market": "listed"
+    },
+    "1465": {
+      "code": "1465",
+      "name": "偉全",
+      "foreign_net_lots": 6,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 3,
       "total_net_lots": 9,
       "market": "listed"
     },
@@ -3830,18 +3821,9 @@
       "total_net_lots": 8,
       "market": "listed"
     },
-    "9944": {
-      "code": "9944",
-      "name": "新麗",
-      "foreign_net_lots": 8,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": 8,
-      "market": "listed"
-    },
-    "8940": {
-      "code": "8940",
-      "name": "新天地",
+    "6668": {
+      "code": "6668",
+      "name": "中揚光",
       "foreign_net_lots": 9,
       "trust_net_lots": 0,
       "dealer_net_lots": -1,
@@ -3857,9 +3839,18 @@
       "total_net_lots": 8,
       "market": "listed"
     },
-    "6668": {
-      "code": "6668",
-      "name": "中揚光",
+    "9944": {
+      "code": "9944",
+      "name": "新麗",
+      "foreign_net_lots": 8,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
+      "total_net_lots": 8,
+      "market": "listed"
+    },
+    "8940": {
+      "code": "8940",
+      "name": "新天地",
       "foreign_net_lots": 9,
       "trust_net_lots": 0,
       "dealer_net_lots": -1,
@@ -3884,21 +3875,21 @@
       "total_net_lots": 8,
       "market": "listed"
     },
-    "3021": {
-      "code": "3021",
-      "name": "鴻名",
-      "foreign_net_lots": 8,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": 8,
-      "market": "listed"
-    },
     "2524": {
       "code": "2524",
       "name": "京城",
       "foreign_net_lots": 13,
       "trust_net_lots": 0,
       "dealer_net_lots": -5,
+      "total_net_lots": 8,
+      "market": "listed"
+    },
+    "3021": {
+      "code": "3021",
+      "name": "鴻名",
+      "foreign_net_lots": 8,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
       "total_net_lots": 8,
       "market": "listed"
     },
@@ -4028,12 +4019,12 @@
       "total_net_lots": 5,
       "market": "listed"
     },
-    "1236": {
-      "code": "1236",
-      "name": "宏亞",
-      "foreign_net_lots": 2,
+    "1475": {
+      "code": "1475",
+      "name": "業旺",
+      "foreign_net_lots": 5,
       "trust_net_lots": 0,
-      "dealer_net_lots": 3,
+      "dealer_net_lots": 0,
       "total_net_lots": 5,
       "market": "listed"
     },
@@ -4046,12 +4037,12 @@
       "total_net_lots": 5,
       "market": "listed"
     },
-    "1475": {
-      "code": "1475",
-      "name": "業旺",
-      "foreign_net_lots": 5,
+    "1236": {
+      "code": "1236",
+      "name": "宏亞",
+      "foreign_net_lots": 2,
       "trust_net_lots": 0,
-      "dealer_net_lots": 0,
+      "dealer_net_lots": 3,
       "total_net_lots": 5,
       "market": "listed"
     },
@@ -4091,21 +4082,21 @@
       "total_net_lots": 4,
       "market": "listed"
     },
-    "4552": {
-      "code": "4552",
-      "name": "力達-KY",
-      "foreign_net_lots": 4,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": 4,
-      "market": "listed"
-    },
     "1776": {
       "code": "1776",
       "name": "展宇",
       "foreign_net_lots": 8,
       "trust_net_lots": 0,
       "dealer_net_lots": -4,
+      "total_net_lots": 4,
+      "market": "listed"
+    },
+    "4552": {
+      "code": "4552",
+      "name": "力達-KY",
+      "foreign_net_lots": 4,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
       "total_net_lots": 4,
       "market": "listed"
     },
@@ -4118,12 +4109,12 @@
       "total_net_lots": 3,
       "market": "listed"
     },
-    "2008": {
-      "code": "2008",
-      "name": "高興昌",
-      "foreign_net_lots": 3,
+    "1521": {
+      "code": "1521",
+      "name": "大億",
+      "foreign_net_lots": 7,
       "trust_net_lots": 0,
-      "dealer_net_lots": 0,
+      "dealer_net_lots": -4,
       "total_net_lots": 3,
       "market": "listed"
     },
@@ -4136,12 +4127,12 @@
       "total_net_lots": 3,
       "market": "listed"
     },
-    "1521": {
-      "code": "1521",
-      "name": "大億",
-      "foreign_net_lots": 7,
+    "2008": {
+      "code": "2008",
+      "name": "高興昌",
+      "foreign_net_lots": 3,
       "trust_net_lots": 0,
-      "dealer_net_lots": -4,
+      "dealer_net_lots": 0,
       "total_net_lots": 3,
       "market": "listed"
     },
@@ -4199,15 +4190,6 @@
       "total_net_lots": 2,
       "market": "listed"
     },
-    "6794": {
-      "code": "6794",
-      "name": "向榮生技",
-      "foreign_net_lots": 3,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -1,
-      "total_net_lots": 2,
-      "market": "listed"
-    },
     "6674": {
       "code": "6674",
       "name": "鋐寶科技",
@@ -4217,12 +4199,12 @@
       "total_net_lots": 2,
       "market": "listed"
     },
-    "3557": {
-      "code": "3557",
-      "name": "嘉威",
-      "foreign_net_lots": -1,
+    "6794": {
+      "code": "6794",
+      "name": "向榮生技",
+      "foreign_net_lots": 3,
       "trust_net_lots": 0,
-      "dealer_net_lots": 3,
+      "dealer_net_lots": -1,
       "total_net_lots": 2,
       "market": "listed"
     },
@@ -4250,6 +4232,15 @@
       "foreign_net_lots": 1,
       "trust_net_lots": 0,
       "dealer_net_lots": 1,
+      "total_net_lots": 2,
+      "market": "listed"
+    },
+    "3557": {
+      "code": "3557",
+      "name": "嘉威",
+      "foreign_net_lots": -1,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 3,
       "total_net_lots": 2,
       "market": "listed"
     },
@@ -4334,12 +4325,12 @@
       "total_net_lots": 1,
       "market": "listed"
     },
-    "6887": {
-      "code": "6887",
-      "name": "寶綠特-KY",
-      "foreign_net_lots": 0,
+    "8443": {
+      "code": "8443",
+      "name": "阿瘦",
+      "foreign_net_lots": 1,
       "trust_net_lots": 0,
-      "dealer_net_lots": 1,
+      "dealer_net_lots": 0,
       "total_net_lots": 1,
       "market": "listed"
     },
@@ -4352,21 +4343,21 @@
       "total_net_lots": 1,
       "market": "listed"
     },
-    "8443": {
-      "code": "8443",
-      "name": "阿瘦",
-      "foreign_net_lots": 1,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": 1,
-      "market": "listed"
-    },
     "7631": {
       "code": "7631",
       "name": "聚賢研發-創",
       "foreign_net_lots": 1,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
+      "total_net_lots": 1,
+      "market": "listed"
+    },
+    "6887": {
+      "code": "6887",
+      "name": "寶綠特-KY",
+      "foreign_net_lots": 0,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 1,
       "total_net_lots": 1,
       "market": "listed"
     },
@@ -4424,36 +4415,18 @@
       "total_net_lots": 0,
       "market": "listed"
     },
-    "6807": {
-      "code": "6807",
-      "name": "峰源-KY",
-      "foreign_net_lots": -1,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 1,
-      "total_net_lots": 0,
-      "market": "listed"
-    },
-    "6666": {
-      "code": "6666",
-      "name": "羅麗芬-KY",
+    "2704": {
+      "code": "2704",
+      "name": "國賓",
       "foreign_net_lots": 0,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
       "total_net_lots": 0,
       "market": "listed"
     },
-    "8463": {
-      "code": "8463",
-      "name": "潤泰材",
-      "foreign_net_lots": 0,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": 0,
-      "market": "listed"
-    },
-    "1470": {
-      "code": "1470",
-      "name": "大統新創",
+    "2904": {
+      "code": "2904",
+      "name": "匯僑",
       "foreign_net_lots": 0,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
@@ -4469,18 +4442,9 @@
       "total_net_lots": 0,
       "market": "listed"
     },
-    "2704": {
-      "code": "2704",
-      "name": "國賓",
-      "foreign_net_lots": 0,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": 0,
-      "market": "listed"
-    },
-    "2904": {
-      "code": "2904",
-      "name": "匯僑",
+    "1470": {
+      "code": "1470",
+      "name": "大統新創",
       "foreign_net_lots": 0,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
@@ -4508,6 +4472,33 @@
     "2248": {
       "code": "2248",
       "name": "華勝-KY",
+      "foreign_net_lots": 0,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
+      "total_net_lots": 0,
+      "market": "listed"
+    },
+    "6807": {
+      "code": "6807",
+      "name": "峰源-KY",
+      "foreign_net_lots": -1,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 1,
+      "total_net_lots": 0,
+      "market": "listed"
+    },
+    "6666": {
+      "code": "6666",
+      "name": "羅麗芬-KY",
+      "foreign_net_lots": 0,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
+      "total_net_lots": 0,
+      "market": "listed"
+    },
+    "8463": {
+      "code": "8463",
+      "name": "潤泰材",
       "foreign_net_lots": 0,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
@@ -4595,12 +4586,12 @@
       "total_net_lots": -1,
       "market": "listed"
     },
-    "1233": {
-      "code": "1233",
-      "name": "天仁",
-      "foreign_net_lots": 2,
+    "1413": {
+      "code": "1413",
+      "name": "宏洲",
+      "foreign_net_lots": -1,
       "trust_net_lots": 0,
-      "dealer_net_lots": -3,
+      "dealer_net_lots": 0,
       "total_net_lots": -1,
       "market": "listed"
     },
@@ -4613,39 +4604,21 @@
       "total_net_lots": -1,
       "market": "listed"
     },
-    "1413": {
-      "code": "1413",
-      "name": "宏洲",
-      "foreign_net_lots": -1,
+    "1233": {
+      "code": "1233",
+      "name": "天仁",
+      "foreign_net_lots": 2,
       "trust_net_lots": 0,
-      "dealer_net_lots": 0,
+      "dealer_net_lots": -3,
       "total_net_lots": -1,
       "market": "listed"
     },
-    "8411": {
-      "code": "8411",
-      "name": "福貞-KY",
+    "4439": {
+      "code": "4439",
+      "name": "冠星-KY",
       "foreign_net_lots": -1,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
-      "total_net_lots": -1,
-      "market": "listed"
-    },
-    "9912": {
-      "code": "9912",
-      "name": "偉聯",
-      "foreign_net_lots": -1,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": -1,
-      "market": "listed"
-    },
-    "6464": {
-      "code": "6464",
-      "name": "台數科",
-      "foreign_net_lots": -3,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 2,
       "total_net_lots": -1,
       "market": "listed"
     },
@@ -4658,9 +4631,9 @@
       "total_net_lots": -1,
       "market": "listed"
     },
-    "4439": {
-      "code": "4439",
-      "name": "冠星-KY",
+    "5007": {
+      "code": "5007",
+      "name": "三星",
       "foreign_net_lots": -1,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
@@ -4685,12 +4658,30 @@
       "total_net_lots": -1,
       "market": "listed"
     },
-    "5007": {
-      "code": "5007",
-      "name": "三星",
+    "9912": {
+      "code": "9912",
+      "name": "偉聯",
       "foreign_net_lots": -1,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
+      "total_net_lots": -1,
+      "market": "listed"
+    },
+    "8411": {
+      "code": "8411",
+      "name": "福貞-KY",
+      "foreign_net_lots": -1,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
+      "total_net_lots": -1,
+      "market": "listed"
+    },
+    "6464": {
+      "code": "6464",
+      "name": "台數科",
+      "foreign_net_lots": -3,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 2,
       "total_net_lots": -1,
       "market": "listed"
     },
@@ -4838,33 +4829,6 @@
       "total_net_lots": -3,
       "market": "listed"
     },
-    "4994": {
-      "code": "4994",
-      "name": "傳奇",
-      "foreign_net_lots": -2,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -1,
-      "total_net_lots": -3,
-      "market": "listed"
-    },
-    "2739": {
-      "code": "2739",
-      "name": "寒舍",
-      "foreign_net_lots": -3,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": -3,
-      "market": "listed"
-    },
-    "2939": {
-      "code": "2939",
-      "name": "永邑-KY",
-      "foreign_net_lots": -3,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": -3,
-      "market": "listed"
-    },
     "1235": {
       "code": "1235",
       "name": "興泰",
@@ -4880,6 +4844,33 @@
       "foreign_net_lots": -3,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
+      "total_net_lots": -3,
+      "market": "listed"
+    },
+    "2939": {
+      "code": "2939",
+      "name": "永邑-KY",
+      "foreign_net_lots": -3,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
+      "total_net_lots": -3,
+      "market": "listed"
+    },
+    "2739": {
+      "code": "2739",
+      "name": "寒舍",
+      "foreign_net_lots": -3,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
+      "total_net_lots": -3,
+      "market": "listed"
+    },
+    "4994": {
+      "code": "4994",
+      "name": "傳奇",
+      "foreign_net_lots": -2,
+      "trust_net_lots": 0,
+      "dealer_net_lots": -1,
       "total_net_lots": -3,
       "market": "listed"
     },
@@ -4901,21 +4892,21 @@
       "total_net_lots": -4,
       "market": "listed"
     },
-    "6128": {
-      "code": "6128",
-      "name": "上福",
-      "foreign_net_lots": -2,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -2,
-      "total_net_lots": -4,
-      "market": "listed"
-    },
     "1468": {
       "code": "1468",
       "name": "昶和",
       "foreign_net_lots": 0,
       "trust_net_lots": 0,
       "dealer_net_lots": -4,
+      "total_net_lots": -4,
+      "market": "listed"
+    },
+    "6128": {
+      "code": "6128",
+      "name": "上福",
+      "foreign_net_lots": -2,
+      "trust_net_lots": 0,
+      "dealer_net_lots": -2,
       "total_net_lots": -4,
       "market": "listed"
     },
@@ -4937,6 +4928,15 @@
       "total_net_lots": -5,
       "market": "listed"
     },
+    "4148": {
+      "code": "4148",
+      "name": "全宇生技-KY",
+      "foreign_net_lots": -2,
+      "trust_net_lots": 0,
+      "dealer_net_lots": -3,
+      "total_net_lots": -5,
+      "market": "listed"
+    },
     "3168": {
       "code": "3168",
       "name": "眾福科",
@@ -4946,12 +4946,30 @@
       "total_net_lots": -5,
       "market": "listed"
     },
-    "4148": {
-      "code": "4148",
-      "name": "全宇生技-KY",
-      "foreign_net_lots": -2,
+    "2705": {
+      "code": "2705",
+      "name": "六福",
+      "foreign_net_lots": -5,
       "trust_net_lots": 0,
-      "dealer_net_lots": -3,
+      "dealer_net_lots": 0,
+      "total_net_lots": -5,
+      "market": "listed"
+    },
+    "2433": {
+      "code": "2433",
+      "name": "互盛電",
+      "foreign_net_lots": -3,
+      "trust_net_lots": 0,
+      "dealer_net_lots": -2,
+      "total_net_lots": -5,
+      "market": "listed"
+    },
+    "1526": {
+      "code": "1526",
+      "name": "日馳",
+      "foreign_net_lots": -5,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
       "total_net_lots": -5,
       "market": "listed"
     },
@@ -4970,33 +4988,6 @@
       "foreign_net_lots": 0,
       "trust_net_lots": 0,
       "dealer_net_lots": -5,
-      "total_net_lots": -5,
-      "market": "listed"
-    },
-    "2433": {
-      "code": "2433",
-      "name": "互盛電",
-      "foreign_net_lots": -3,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -2,
-      "total_net_lots": -5,
-      "market": "listed"
-    },
-    "2705": {
-      "code": "2705",
-      "name": "六福",
-      "foreign_net_lots": -5,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": -5,
-      "market": "listed"
-    },
-    "1526": {
-      "code": "1526",
-      "name": "日馳",
-      "foreign_net_lots": -5,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
       "total_net_lots": -5,
       "market": "listed"
     },
@@ -5036,6 +5027,15 @@
       "total_net_lots": -6,
       "market": "listed"
     },
+    "6671": {
+      "code": "6671",
+      "name": "三能-KY",
+      "foreign_net_lots": -10,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 4,
+      "total_net_lots": -6,
+      "market": "listed"
+    },
     "7732": {
       "code": "7732",
       "name": "金興精密",
@@ -5051,15 +5051,6 @@
       "foreign_net_lots": -7,
       "trust_net_lots": 0,
       "dealer_net_lots": 1,
-      "total_net_lots": -6,
-      "market": "listed"
-    },
-    "6671": {
-      "code": "6671",
-      "name": "三能-KY",
-      "foreign_net_lots": -10,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 4,
       "total_net_lots": -6,
       "market": "listed"
     },
@@ -5225,6 +5216,15 @@
       "total_net_lots": -10,
       "market": "listed"
     },
+    "6184": {
+      "code": "6184",
+      "name": "大豐電",
+      "foreign_net_lots": -10,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
+      "total_net_lots": -10,
+      "market": "listed"
+    },
     "2642": {
       "code": "2642",
       "name": "宅配通",
@@ -5237,15 +5237,6 @@
     "6916": {
       "code": "6916",
       "name": "華凌",
-      "foreign_net_lots": -10,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": -10,
-      "market": "listed"
-    },
-    "6184": {
-      "code": "6184",
-      "name": "大豐電",
       "foreign_net_lots": -10,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
@@ -5288,6 +5279,15 @@
       "total_net_lots": -11,
       "market": "listed"
     },
+    "6552": {
+      "code": "6552",
+      "name": "易華電",
+      "foreign_net_lots": -5,
+      "trust_net_lots": 0,
+      "dealer_net_lots": -6,
+      "total_net_lots": -11,
+      "market": "listed"
+    },
     "3257": {
       "code": "3257",
       "name": "虹冠電",
@@ -5303,15 +5303,6 @@
       "foreign_net_lots": -11,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
-      "total_net_lots": -11,
-      "market": "listed"
-    },
-    "6552": {
-      "code": "6552",
-      "name": "易華電",
-      "foreign_net_lots": -5,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -6,
       "total_net_lots": -11,
       "market": "listed"
     },
@@ -5351,21 +5342,21 @@
       "total_net_lots": -12,
       "market": "listed"
     },
-    "2616": {
-      "code": "2616",
-      "name": "山隆",
-      "foreign_net_lots": -3,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -9,
-      "total_net_lots": -12,
-      "market": "listed"
-    },
     "1437": {
       "code": "1437",
       "name": "勤益控",
       "foreign_net_lots": -12,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
+      "total_net_lots": -12,
+      "market": "listed"
+    },
+    "2616": {
+      "code": "2616",
+      "name": "山隆",
+      "foreign_net_lots": -3,
+      "trust_net_lots": 0,
+      "dealer_net_lots": -9,
       "total_net_lots": -12,
       "market": "listed"
     },
@@ -5414,21 +5405,21 @@
       "total_net_lots": -14,
       "market": "listed"
     },
-    "8462": {
-      "code": "8462",
-      "name": "柏文",
-      "foreign_net_lots": -13,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -1,
-      "total_net_lots": -14,
-      "market": "listed"
-    },
     "8367": {
       "code": "8367",
       "name": "建新國際",
       "foreign_net_lots": -14,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
+      "total_net_lots": -14,
+      "market": "listed"
+    },
+    "8462": {
+      "code": "8462",
+      "name": "柏文",
+      "foreign_net_lots": -13,
+      "trust_net_lots": 0,
+      "dealer_net_lots": -1,
       "total_net_lots": -14,
       "market": "listed"
     },
@@ -5783,21 +5774,21 @@
       "total_net_lots": -24,
       "market": "listed"
     },
-    "2832": {
-      "code": "2832",
-      "name": "台產",
-      "foreign_net_lots": -26,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 2,
-      "total_net_lots": -24,
-      "market": "listed"
-    },
     "1452": {
       "code": "1452",
       "name": "宏益",
       "foreign_net_lots": -24,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
+      "total_net_lots": -24,
+      "market": "listed"
+    },
+    "2832": {
+      "code": "2832",
+      "name": "台產",
+      "foreign_net_lots": -26,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 2,
       "total_net_lots": -24,
       "market": "listed"
     },
@@ -6152,21 +6143,21 @@
       "total_net_lots": -43,
       "market": "listed"
     },
-    "2109": {
-      "code": "2109",
-      "name": "華豐",
-      "foreign_net_lots": -43,
-      "trust_net_lots": 0,
-      "dealer_net_lots": 0,
-      "total_net_lots": -43,
-      "market": "listed"
-    },
     "1466": {
       "code": "1466",
       "name": "聚隆",
       "foreign_net_lots": -42,
       "trust_net_lots": 0,
       "dealer_net_lots": -1,
+      "total_net_lots": -43,
+      "market": "listed"
+    },
+    "2109": {
+      "code": "2109",
+      "name": "華豐",
+      "foreign_net_lots": -43,
+      "trust_net_lots": 0,
+      "dealer_net_lots": 0,
       "total_net_lots": -43,
       "market": "listed"
     },
@@ -6188,15 +6179,6 @@
       "total_net_lots": -45,
       "market": "listed"
     },
-    "1225": {
-      "code": "1225",
-      "name": "福懋油",
-      "foreign_net_lots": -41,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -5,
-      "total_net_lots": -46,
-      "market": "listed"
-    },
     "2748": {
       "code": "2748",
       "name": "雲品",
@@ -6212,6 +6194,15 @@
       "foreign_net_lots": -46,
       "trust_net_lots": 0,
       "dealer_net_lots": 0,
+      "total_net_lots": -46,
+      "market": "listed"
+    },
+    "1225": {
+      "code": "1225",
+      "name": "福懋油",
+      "foreign_net_lots": -41,
+      "trust_net_lots": 0,
+      "dealer_net_lots": -5,
       "total_net_lots": -46,
       "market": "listed"
     },
@@ -6672,6 +6663,15 @@
       "trust_net_lots": 0,
       "dealer_net_lots": -10,
       "total_net_lots": -68,
+      "market": "listed"
+    },
+    "4551": {
+      "code": "4551",
+      "name": "智伸科",
+      "foreign_net_lots": 120,
+      "trust_net_lots": -192,
+      "dealer_net_lots": 2,
+      "total_net_lots": -70,
       "market": "listed"
     },
     "2504": {
@@ -8816,6 +8816,15 @@
       "total_net_lots": -1019,
       "market": "listed"
     },
+    "2327": {
+      "code": "2327",
+      "name": "國巨*",
+      "foreign_net_lots": -1819,
+      "trust_net_lots": 797,
+      "dealer_net_lots": -2,
+      "total_net_lots": -1023,
+      "market": "listed"
+    },
     "4927": {
       "code": "4927",
       "name": "泰鼎-KY",
@@ -8973,18 +8982,9 @@
       "code": "2382",
       "name": "廣達",
       "foreign_net_lots": -21412,
-      "trust_net_lots": 19844,
+      "trust_net_lots": 19824,
       "dealer_net_lots": 90,
-      "total_net_lots": -1476,
-      "market": "listed"
-    },
-    "2327": {
-      "code": "2327",
-      "name": "國巨*",
-      "foreign_net_lots": -1819,
-      "trust_net_lots": 336,
-      "dealer_net_lots": -2,
-      "total_net_lots": -1484,
+      "total_net_lots": -1496,
       "market": "listed"
     },
     "4763": {
@@ -9522,9 +9522,9 @@
       "code": "2449",
       "name": "京元電子",
       "foreign_net_lots": -6619,
-      "trust_net_lots": -423,
+      "trust_net_lots": -413,
       "dealer_net_lots": -507,
-      "total_net_lots": -7548,
+      "total_net_lots": -7538,
       "market": "listed"
     },
     "1101": {
@@ -9630,9 +9630,9 @@
       "code": "2330",
       "name": "台積電",
       "foreign_net_lots": -17840,
-      "trust_net_lots": 2911,
+      "trust_net_lots": 2900,
       "dealer_net_lots": 516,
-      "total_net_lots": -14412,
+      "total_net_lots": -14423,
       "market": "listed"
     },
     "2618": {
