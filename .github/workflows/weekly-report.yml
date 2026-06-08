@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  actions: write            # commit 後觸發 deploy-worker（不然新資料進不了 worker）
 
 jobs:
   generate:
@@ -30,6 +31,8 @@ jobs:
           ASK_URL: https://leadfuai.com/api/ask
 
       - name: Commit if changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "leadfu-ai-bot"
           git config user.email "bot@leadfu.ai"
@@ -38,7 +41,8 @@ jobs:
             WEEK=$(date -u +"第 %V 週")
             git commit -m "data: 產業週報自動生成 ($WEEK)"
             git push
-            echo "✅ 週報已 commit 並 push"
+            gh workflow run deploy-worker.yml || true   # 觸發部署，讓週報進 worker
+            echo "✅ 週報已 commit 並 push（已觸發部署）"
           else
             echo "ℹ️ 週報無變動，跳過"
           fi
