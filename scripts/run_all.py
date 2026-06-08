@@ -106,11 +106,21 @@ def main():
         if not success:
             failed.append(s)
 
+    # 核心價格鏈：失敗才中止部署（不上架壞掉/過舊的股價）。
+    # 其餘（insider/news/etf/法人…）多為外部來源，偶發 404/timeout 不該拖垮整天更新 —— 警告但照常部署，該資料維持前一日值。
+    CRITICAL = {"fetch_listed_twse.py", "fetch_listed_tpex.py", "merge_stocks.py"}
+    critical_failed = [s for s in failed if s in CRITICAL]
+
     print(f"\n{'=' * 60}")
     if failed:
-        print(f"⚠ 完成但有 {len(failed)} 個腳本失敗：{failed}")
+        print(f"⚠ 有 {len(failed)} 個腳本失敗：{failed}")
+    if critical_failed:
+        print(f"❌ 核心價格腳本失敗，中止部署：{critical_failed}")
         sys.exit(1)
-    print(f"✅ 全部完成 ・ {datetime.now():%H:%M:%S}")
+    if failed:
+        print(f"✅ 核心股價 OK → 照常 commit 部署；非核心失敗（{failed}）維持前一日值，明天自動補。")
+    else:
+        print(f"✅ 全部完成 ・ {datetime.now():%H:%M:%S}")
 
 
 if __name__ == "__main__":
