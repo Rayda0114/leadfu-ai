@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write            # 讓 Action 可以 commit 回 main
+  actions: write             # 讓 Action 可主動觸發 deploy-worker（資料更新後重新部署 worker，AI/網站才讀得到新資料）
 
 jobs:
   fetch-and-commit:
@@ -44,6 +45,8 @@ jobs:
           python -c "import json; d=json.load(open('data/stocks_live.json')); print(f\"updatedAt: {d.get('updatedAt')}\"); print(f\"stockCount: {d.get('stockCount')}\")"
 
       - name: Commit if changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "leadfu-ai-bot"
           git config user.email "bot@leadfu.ai"
@@ -54,6 +57,9 @@ jobs:
             git commit -m "data: 每日更新 ($DATE)"
             git push
             echo "✅ 已 commit 並 push"
+            # ⚠ GITHUB_TOKEN 推的 commit 不會自動觸發 deploy-worker（GitHub 防遞迴）。
+            #    這裡主動觸發一次部署，讓 worker 的 ASSETS（LINE AI 客服 + 網站讀的 stocks_live 等）更新到最新資料。
+            gh workflow run deploy-worker.yml && echo "🚀 已觸發 worker 部署" || echo "⚠ 觸發 worker 部署失敗（資料已 commit，但 worker 未自動重部署）"
           else
             echo "ℹ️ 無變動，跳過 commit"
           fi

@@ -15,6 +15,9 @@ on:
 jobs:
   premarket-news:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -51,6 +54,8 @@ jobs:
       # 4) 順手把早上抓的新聞 commit（網站早上也是新的）；非排程或無變動就略過
       - name: Commit fresh morning news
         if: ${{ github.event_name == 'schedule' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -61,4 +66,6 @@ jobs:
             git commit -m "data: 盤前新聞更新 ($(date -u +%Y-%m-%d))"
             git pull --rebase --autostash origin main || true
             git push || true
+            # 主動觸發部署，讓 worker ASSETS（網站/AI 讀的新聞）更新到早上的最新
+            gh workflow run deploy-worker.yml && echo "🚀 已觸發 worker 部署" || echo "⚠ 觸發部署失敗"
           fi
