@@ -12,7 +12,7 @@ const GA_MEASUREMENT_ID = "G-FM7DSZ7V2R";
 /* LINE 廣告（LAP）Tag ID — 廣告轉換追蹤
    去 LINE Ads 後台「共享資料庫 → LINE Tag」複製 Tag ID 貼到這裡即生效。
    留空（""）= 完全不載入、零影響，可安全部署。格式像 "xxxxxxxx-xxxx-...." */
-const LINE_TAG_ID = "";
+const LINE_TAG_ID = "bbdd1c03-bed7-435f-a491-275da04e0bc8";
 
 /* 網站主網域（之後綁自有網域時改這裡） */
 const SITE_ORIGIN = "https://leadfuai.com";
