@@ -26,6 +26,8 @@ window.LeadFuAuth = {
       }
     });
     if (error) throw error;
+    // 廣告轉換：email 註冊成功即記一筆（每瀏覽器只送一次，由 main.js trackLineConversion 控管）
+    try { window.LeadFu && window.LeadFu.trackLineConversion && window.LeadFu.trackLineConversion(); } catch (e) {}
     // data.session 有值 = 已自動登入（Confirm email 關閉時）
     // data.session 為 null = 需收信確認
     return {

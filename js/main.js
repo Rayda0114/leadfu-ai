@@ -9,6 +9,11 @@ const LINE_URL = "https://line.me/R/ti/p/@130tqckv";
 /* Google Analytics 4 Measurement ID */
 const GA_MEASUREMENT_ID = "G-FM7DSZ7V2R";
 
+/* LINE 廣告（LAP）Tag ID — 廣告轉換追蹤
+   去 LINE Ads 後台「共享資料庫 → LINE Tag」複製 Tag ID 貼到這裡即生效。
+   留空（""）= 完全不載入、零影響，可安全部署。格式像 "xxxxxxxx-xxxx-...." */
+const LINE_TAG_ID = "";
+
 /* 網站主網域（之後綁自有網域時改這裡） */
 const SITE_ORIGIN = "https://leadfuai.com";
 
@@ -2422,6 +2427,31 @@ function loadGA() {
 }
 
 /* ============================================================
+ * LINE 廣告轉換追蹤（LINE Tag / LAP）
+ * 拿到 Tag ID 後填到頂部 LINE_TAG_ID 即生效；留空則完全不載入。
+ * 後台路徑：LINE Ads → 共享資料庫 → LINE Tag → 複製 Tag ID
+ * ============================================================ */
+function loadLineTag() {
+  if (!LINE_TAG_ID) return;   // 未設 Tag ID：不載入、零影響
+
+  // LINE 官方基底碼 lt.js loader（同步建立 _lt 佇列 stub，之後的事件會排隊補送）
+  (function (g, d, o) {
+    g._ltq = g._ltq || [];
+    g._lt = g._lt || function () { g._ltq.push(arguments); };
+    const s = d.createElement("script");
+    s.async = true;
+    s.src = o || "https://d.line-scdn.net/n/line_tag/public/release/v1/lt.js";
+    const t = d.getElementsByTagName("script")[0];
+    t.parentNode.insertBefore(s, t);
+  })(window, document);
+
+  window._lt("init", { customerType: "lap", tagId: LINE_TAG_ID });
+  window._lt("send", "pv", [LINE_TAG_ID]);   // 每頁瀏覽（建受眾 + 衡量流量）
+
+  console.log("[領富 AI] ✅ LINE Tag 已載入");
+}
+
+/* ============================================================
  * 全站切割聲明（合規）— 注入到 footer 上方，每頁都有
  * 明示「純資訊平台、不介入交易」，符合興櫃股票資訊網的法律定位
  * ============================================================ */
@@ -2918,6 +2948,21 @@ function trackEvent(name, params) {
   catch (e) { /* 追蹤失敗不影響功能 */ }
 }
 
+/* LINE 廣告「註冊完成」轉換 — 每瀏覽器只送一次（避免回訪／重複登入被重算）
+   email 註冊：auth.js signUp 成功時呼叫
+   Google／LINE 一鍵：init 偵測到已登入 session 時補送
+   未設 LINE_TAG_ID 時完全不動作（連 GA4 都不送，確保部署零影響） */
+function trackLineConversion() {
+  if (!LINE_TAG_ID) return;
+  try {
+    if (localStorage.getItem("leadfu_lt_reg") === "1") return;
+    localStorage.setItem("leadfu_lt_reg", "1");
+    if (typeof window._lt === "function") window._lt("send", "cv", { type: "Conversion" }, [LINE_TAG_ID]);
+    trackEvent("sign_up");   // 順手送 GA4 標準註冊事件，同一漏斗兩邊都量得到
+    console.log("[領富 AI] ✅ 註冊轉換已記錄");
+  } catch (e) { /* 不影響功能 */ }
+}
+
 window.LeadFu = {
   data: STOCK_DATA,
   fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow,
@@ -2931,6 +2976,7 @@ window.LeadFu = {
   startStockLive,  // 個股詳情頁即時報價 polling
   loadKlines,      // 個股詳情頁延後載入 9.8MB K 線（不再全站每頁載）
   trackEvent,      // GA4 自訂事件（ai_chat / ai_summary 等）
+  trackLineConversion,   // LINE 廣告「註冊完成」轉換（email / Google / LINE 都會觸發）
   lineUrl: LINE_URL, lineId: LINE_ID,
   ready: _readyPromise
 };
@@ -3633,6 +3679,8 @@ async function loadLiveData() {
 document.addEventListener("DOMContentLoaded", async () => {
   setupSEO();
   loadGA();
+  loadLineTag();
+  if (_hasSupabaseSession()) trackLineConversion();   // Google／LINE 一鍵註冊回站後補記轉換（每瀏覽器一次）
   setupMobileNav();
   setupBottomTabBar();
   setupHideableHeader();
