@@ -271,7 +271,14 @@ window.LeadFuAuth = {
   async setCloudNewsSubs(subs) {
     const user = await this.getUser();
     if (!user) return;
-    const { error } = await _sb.from("profiles").update({ news_subs: subs }).eq("id", user.id);
+    // 先讀現有再合併，保留 push 腳本寫的 last_pushed_post/pre（避免存設定後當天重複推播）
+    let existing = {};
+    try {
+      const { data } = await _sb.from("profiles").select("news_subs").eq("id", user.id).single();
+      if (data && data.news_subs && typeof data.news_subs === "object") existing = data.news_subs;
+    } catch (e) {}
+    const merged = { ...existing, ...subs };
+    const { error } = await _sb.from("profiles").update({ news_subs: merged }).eq("id", user.id);
     if (error) console.warn("[領富 AI] 寫雲端新聞訂閱失敗:", error.message);
   },
 

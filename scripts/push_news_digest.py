@@ -39,6 +39,7 @@ SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 LINE_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN", "")
 DRY_RUN = os.environ.get("DRY_RUN") == "1"
 FAKE_SUBS = os.environ.get("FAKE_SUBS", "")
+PUSH_SLOT = (os.environ.get("PUSH_SLOT") or "post").strip().lower()   # post=盤後（預設）, pre=盤前
 SITE = "https://leadfuai.com"
 LINE_PUSH_URL = "https://api.line.me/v2/bot/message/push"
 TODAY = datetime.date.today().isoformat()
@@ -98,29 +99,109 @@ def load_news():
     return today_items
 
 
-def build_digest(name, topics, news):
-    """回傳 (訊息文字 or None)。為該會員勾選的主題挑今日相符新聞。"""
-    blocks, total = [], 0
-    for topic in topics:
-        if topic not in TOPICS or total >= MAX_TOTAL:
+def _related_of(item):
+    related = item.get("ai_related") or "[]"
+    if isinstance(related, str):
+        try:
+            related = json.loads(related)
+        except Exception:
+            related = []
+    return related or []
+
+
+def load_stock_names():
+    """code → 名稱 對照（給自選股新聞配對用，因新聞多以公司名出現）。"""
+    try:
+        sj = json.loads((DATA_DIR / "stocks_live.json").read_text(encoding="utf-8"))
+        return {s.get("code"): (s.get("name") or "") for s in (sj.get("stocks") or [])}
+    except Exception:
+        return {}
+
+
+def is_important(item):
+    return str(item.get("ai_sentiment") or "").strip() in ("利多", "利空")
+
+
+def watchlist_hits(news, codes, name_map):
+    """挑出提到「使用者自選股（代號或公司名）」的新聞。"""
+    terms = set()
+    for c in (codes or []):
+        c = str(c).strip()
+        if not c:
             continue
-        hits = [n for n in news if topic_match(n, topic)]
+        terms.add(c)
+        nm = (name_map.get(c) or "").strip()
+        if nm:
+            terms.add(nm)
+    if not terms:
+        return []
+    out = []
+    for n in news:
+        hay = " ".join(str(x) for x in [
+            n.get("title", ""), n.get("summary", ""), n.get("ai_note", ""),
+            " ".join(str(r) for r in _related_of(n)),
+        ])
+        if any(t in hay for t in terms):
+            out.append(n)
+    return out
+
+
+def build_digest(name, topics, news, *, slot="post", wl_codes=None, name_map=None,
+                 max_items=10, important_only=False):
+    """回傳 (訊息文字 or None)。自選股相關新聞優先，再依勾選主題挑今日相符新聞。"""
+    cap = max(1, min(int(max_items or 10), MAX_TOTAL))
+    pool = [n for n in news if is_important(n)] if important_only else list(news)
+    blocks, total, used = [], 0, set()
+
+    def _key(n):
+        return n.get("id") or n.get("link") or n.get("title")
+
+    def _line(n):
+        t = (n.get("title") or "").strip()
+        src = (n.get("source") or "").strip()
+        return f"・{t}" + (f"（{src}）" if src else "")
+
+    # 1) 自選股相關新聞（最個人化，排最前）
+    wl = watchlist_hits(pool, wl_codes or [], name_map or {})
+    if wl:
+        lines = ["⭐ 你的自選股相關"]
+        for n in wl:
+            if total >= cap:
+                break
+            k = _key(n)
+            if k in used:
+                continue
+            used.add(k)
+            lines.append(_line(n))
+            total += 1
+        if len(lines) > 1:
+            blocks.append("\n".join(lines))
+
+    # 2) 勾選主題
+    for topic in topics:
+        if topic not in TOPICS or total >= cap:
+            continue
+        hits = [n for n in pool if topic_match(n, topic)]
         if not hits:
             continue
         lines = [f"【{topic}】"]
         for n in hits[:MAX_PER_TOPIC]:
-            if total >= MAX_TOTAL:
+            if total >= cap:
                 break
-            t = (n.get("title") or "").strip()
-            src = (n.get("source") or "").strip()
-            tail = f"（{src}）" if src else ""
-            lines.append(f"・{t}{tail}")  # 不放原始長連結（Google News RSS 網址過長且醜），改由底部站內連結帶出
+            k = _key(n)
+            if k in used:
+                continue
+            used.add(k)
+            lines.append(_line(n))   # 不放原始長連結（Google News RSS 網址過長），由底部站內連結帶出
             total += 1
-        blocks.append("\n".join(lines))
+        if len(lines) > 1:
+            blocks.append("\n".join(lines))
+
     if not blocks:
         return None
-    md = (datetime.date.today().strftime("%-m/%-d") if hasattr(datetime.date.today(), "strftime") else TODAY)
-    head = f"📰 領富 AI ・ 你的每日新聞（{md}）\n"
+    md = datetime.date.today().strftime("%-m/%-d")
+    head = (f"🌅 領富 AI ・ 開盤前新聞（{md}）\n" if slot == "pre"
+            else f"📰 領富 AI ・ 今日收盤新聞（{md}）\n")
     foot = ("\n\n※ 公開新聞整理，非投資建議。"
             f"\n🔗 更多：{SITE}/pages/news?openExternalBrowser=1"
             "\n如需調整或關閉，請至網站會員中心。")
@@ -134,7 +215,7 @@ def fetch_members():
         print("[error] 缺 SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY，無法讀會員")
         sys.exit(1)
     url = (f"{SUPABASE_URL}/rest/v1/profiles"
-           "?select=id,name,line_user_id,news_subs&line_user_id=not.is.null")
+           "?select=id,name,line_user_id,news_subs,watchlist&line_user_id=not.is.null")
     req = urllib.request.Request(url, headers={
         "apikey": SERVICE_KEY,
         "Authorization": f"Bearer {SERVICE_KEY}",
@@ -187,35 +268,50 @@ def push_message(to, text):
 
 
 def main():
+    print(f"[info] 時段：{PUSH_SLOT}（pre=盤前 / post=盤後）")
     news = load_news()
     print(f"[info] 今日({TODAY})新聞 {len(news)} 則")
     if not news:
         print("[done] 今日無新聞，跳過。")
         return
 
+    name_map = load_stock_names()
     members = fetch_members()
     print(f"[info] 有 LINE 的會員 {len(members)} 位")
 
+    lp_key = f"last_pushed_{PUSH_SLOT}"   # 分時段防重複
     sent = 0
     for m in members:
         subs = m.get("news_subs") or {}
         if not isinstance(subs, dict) or not subs.get("active"):
             continue
-        topics = [t for t in (subs.get("topics") or []) if t in TOPICS]
-        if not topics:
+        # 時段過濾：未設 times 視為只訂「盤後」（沿用舊行為）
+        times = subs.get("times") or ["post"]
+        if PUSH_SLOT not in times:
             continue
-        if subs.get("last_pushed") == TODAY:
-            continue  # 今天已推過
-        text = build_digest(m.get("name", ""), topics, news)
+        topics = [t for t in (subs.get("topics") or []) if t in TOPICS]
+        want_wl = bool(subs.get("watchlist"))
+        if not topics and not want_wl:
+            continue
+        # 今天此時段已推過就跳過（相容舊的 last_pushed=盤後）
+        already = subs.get(lp_key) == TODAY or (PUSH_SLOT == "post" and subs.get("last_pushed") == TODAY)
+        if already:
+            continue
+        wl_codes = (m.get("watchlist") or []) if want_wl else []
+        text = build_digest(
+            m.get("name", ""), topics, news,
+            slot=PUSH_SLOT, wl_codes=wl_codes, name_map=name_map,
+            max_items=subs.get("max_items", 10), important_only=bool(subs.get("important_only")),
+        )
         if not text:
             continue  # 今日無相符新聞，不打擾
         if push_message(m["line_user_id"], text):
             sent += 1
-            subs["last_pushed"] = TODAY
+            subs[lp_key] = TODAY
             save_subs(m["id"], subs)
         time.sleep(0.1)
 
-    print(f"[done] 推播 {sent} 位會員")
+    print(f"[done] [{PUSH_SLOT}] 推播 {sent} 位會員")
 
 
 if __name__ == "__main__":

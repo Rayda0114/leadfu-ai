@@ -200,23 +200,63 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       const chosen = new Set((subs && subs.topics) || []);
       const active = !!(subs && subs.active);
+      const times = new Set((subs && subs.times) || ["post"]);
+      const wl = !!(subs && subs.watchlist);
+      const maxItems = (subs && subs.max_items) || 10;
+      const impOnly = !!(subs && subs.important_only);
+      const rowS = "display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;margin-top:12px;font-size:13.5px;";
+      const labS = "color:#555;font-weight:600;";
       body.innerHTML =
         `<div class="np-grid">${TOPICS.map(t=>`<label class="np-chk"><input type="checkbox" value="${t}"${chosen.has(t)?" checked":""}> ${t}</label>`).join("")}</div>`+
-        `<label class="np-active"><input type="checkbox" id="npActive"${active?" checked":""}> 啟用每日推播</label>`+
-        ` <button id="npSave" class="btn-primary" style="margin-top:10px;">儲存設定</button>`+
-        `<span id="npStatus" style="margin-left:10px;font-size:12px;"></span>`;
+        `<label class="np-active" style="margin-top:12px;"><input type="checkbox" id="npWatch"${wl?" checked":""}> ⭐ 也推「我的自選股」相關新聞</label>`+
+        `<div style="${rowS}"><span style="${labS}">推送時段</span>`+
+          `<label><input type="checkbox" id="npPre"${times.has("pre")?" checked":""}> 🌅 盤前（約 07:40）</label>`+
+          `<label><input type="checkbox" id="npPost"${times.has("post")?" checked":""}> 📰 盤後（約 15:50）</label></div>`+
+        `<div style="${rowS}"><span style="${labS}">每天最多</span>`+
+          `<select id="npMax" style="padding:4px 8px;border:1px solid #d0d5dc;border-radius:6px;">${[5,10,15].map(v=>`<option value="${v}"${maxItems==v?" selected":""}>${v} 則</option>`).join("")}</select>`+
+          `<label><input type="checkbox" id="npImp"${impOnly?" checked":""}> 只推利多/利空（過濾中性）</label></div>`+
+        `<label class="np-active" style="margin-top:14px;"><input type="checkbox" id="npActive"${active?" checked":""}> 啟用每日推播</label>`+
+        `<div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">`+
+          `<button id="npSave" class="btn-primary">儲存設定</button>`+
+          `<button id="npTest" type="button" style="padding:9px 18px;border:1px solid #1B4332;background:#fff;color:#1B4332;border-radius:6px;font-weight:600;cursor:pointer;">📲 立即試推一則</button>`+
+          `<span id="npStatus" style="font-size:12px;"></span></div>`;
       document.getElementById("npSave").addEventListener("click", save);
+      document.getElementById("npTest").addEventListener("click", testPush);
+    }
+    function _collect(){
+      return {
+        topics: [...body.querySelectorAll(".np-grid input:checked")].map(x=>x.value),
+        active: document.getElementById("npActive").checked,
+        watchlist: document.getElementById("npWatch").checked,
+        times: [...(document.getElementById("npPre").checked?["pre"]:[]), ...(document.getElementById("npPost").checked?["post"]:[])],
+        max_items: parseInt(document.getElementById("npMax").value,10)||10,
+        important_only: document.getElementById("npImp").checked,
+      };
     }
     async function save(){
-      const topics=[...body.querySelectorAll(".np-grid input:checked")].map(x=>x.value);
-      const active=document.getElementById("npActive").checked;
+      const v=_collect();
       const btn=document.getElementById("npSave"), st=document.getElementById("npStatus");
-      if (active && !topics.length){ st.style.color="#dc2626"; st.textContent="請至少勾一個主題"; return; }
+      if (v.active && !v.topics.length && !v.watchlist){ st.style.color="#dc2626"; st.textContent="請至少勾一個主題，或開啟自選股新聞"; return; }
+      if (v.active && !v.times.length){ st.style.color="#dc2626"; st.textContent="請至少選一個推送時段（盤前/盤後）"; return; }
       btn.disabled=true; st.style.color="#999"; st.textContent="儲存中…";
-      const ok = await L.saveNewsSubs({ topics, active, last_pushed:lastPushed });
+      const ok = await L.saveNewsSubs({ ...v, last_pushed:lastPushed });
       btn.disabled=false;
-      if (ok){ st.style.color="#16a34a"; st.textContent = active?"✅ 已啟用，明天起每天盤後推播":"已儲存（推播未啟用）"; }
+      if (ok){ st.style.color="#16a34a"; const w=v.times.map(t=>t==="pre"?"盤前":"盤後").join("、")||"盤後"; st.textContent = v.active?`✅ 已啟用，明天起${w}推播`:"已儲存（推播未啟用）"; }
       else { st.style.color="#dc2626"; st.textContent="儲存失敗，請稍後再試"; }
+    }
+    async function testPush(){
+      const st=document.getElementById("npStatus"), btn=document.getElementById("npTest");
+      btn.disabled=true; st.style.color="#999"; st.textContent="試推中…";
+      try {
+        const sess = await window.LeadFuAuth.client.auth.getSession();
+        const token = (sess && sess.data && sess.data.session) ? sess.data.session.access_token : "";
+        const v=_collect();
+        const r = await fetch("/api/test-push-news", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ access_token:token, topics:v.topics, watchlist:v.watchlist }) });
+        const d = await r.json().catch(()=>({}));
+        if (r.ok && d.ok){ st.style.color="#16a34a"; st.textContent="✅ 已試推一則到你的 LINE，去看看！"; }
+        else { st.style.color="#dc2626"; st.textContent="試推失敗：" + (d.error||"請確認已用 LINE 登入"); }
+      } catch(e){ st.style.color="#dc2626"; st.textContent="試推失敗，請稍後再試"; }
+      btn.disabled=false;
     }
     render();
   })();

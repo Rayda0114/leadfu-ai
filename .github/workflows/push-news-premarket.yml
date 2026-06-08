@@ -1,0 +1,64 @@
+name: 領富 AI · 盤前新聞推播
+
+# 台灣時間 07:40（UTC 前一日 23:40）—— 開盤(09:00)前，先抓最新（含隔夜）新聞再推給訂「盤前」的會員。
+# 流程：抓最新新聞 → AI 標註(可失敗) → 以 PUSH_SLOT=pre 推播 → 順手 commit 讓網站早上也是新的。
+on:
+  schedule:
+    - cron: "40 23 * * 0-4"   # 週日~週四 23:40 UTC = 週一~週五 07:40 台北
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "只測試、不實際推播/不回寫（true = 只印訊息）"
+        required: false
+        default: "true"
+
+jobs:
+  premarket-news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 1) 抓最新新聞（覆蓋本地 news_live.json）；失敗不擋推播（會用既有新聞）
+      - name: Fetch latest news
+        continue-on-error: true
+        run: python scripts/fetch_news.py
+        env:
+          PYTHONIOENCODING: utf-8
+
+      # 2) AI 標註利多/利空（可失敗，失敗就少了標註）
+      - name: AI tag news
+        continue-on-error: true
+        run: python scripts/analyze_news.py
+        env:
+          PYTHONIOENCODING: utf-8
+
+      # 3) 推播給訂「盤前」的會員
+      - name: Push pre-market news digest
+        run: python scripts/push_news_digest.py
+        env:
+          PYTHONIOENCODING: utf-8
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          PUSH_SLOT: pre
+          DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
+
+      # 4) 順手把早上抓的新聞 commit（網站早上也是新的）；非排程或無變動就略過
+      - name: Commit fresh morning news
+        if: ${{ github.event_name == 'schedule' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/news_live.json data/announcements_live.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "無新聞變動，略過 commit"
+          else
+            git commit -m "data: 盤前新聞更新 ($(date -u +%Y-%m-%d))"
+            git pull --rebase --autostash origin main || true
+            git push || true
+          fi

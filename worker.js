@@ -1339,6 +1339,69 @@ async function handleEcpayResult(request, env) {
   return new Response(null, { status: 303, headers: { "Location": "https://leadfuai.com/pages/member?vip=ok" } });
 }
 
+/* ── 新聞推播「立即試推一則」：驗登入→讀 line_user_id→配今日新聞→LINE 推一則（驗證綁定+看長相）── */
+const NEWS_TOPIC_KW = {
+  "半導體": ["半導體","晶圓","晶片","台積電","聯電","封測","日月光","聯發科","記憶體","IC"],
+  "AI 人工智慧": ["人工智慧","輝達","NVIDIA","算力","伺服器","資料中心","生成式","GPU","AI"],
+  "電動車": ["電動車","特斯拉","Tesla","電池","充電","鋰電","車用","EV"],
+  "蘋果供應鏈": ["蘋果","Apple","iPhone","鴻海","大立光","和碩","可成"],
+  "金融": ["金控","銀行","升息","降息","央行","壽險","利率","金融股","Fed"],
+  "生技醫療": ["生技","醫療","新藥","製藥","疫苗","醫材","臨床"],
+  "航運": ["航運","貨櫃","長榮","陽明","萬海","散裝","運價","海運","空運"],
+  "綠能重電": ["綠能","重電","太陽能","風電","電網","儲能","台電","光電"],
+  "軍工航太": ["軍工","國防","航太","無人機","衛星","低軌"],
+  "台股大盤": ["大盤","台股","加權指數","外資","盤勢","成交量","期貨"]
+};
+function _newsRelated(n) {
+  let r = n.ai_related || [];
+  if (typeof r === "string") { try { r = JSON.parse(r); } catch { r = []; } }
+  return Array.isArray(r) ? r : [];
+}
+async function handleTestPushNews(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders() });
+  const jerr = (m, s) => new Response(JSON.stringify({ ok: false, error: m }), { status: s || 400, headers: { "Content-Type": "application/json", ...corsHeaders() } });
+  if (request.method !== "POST") return jerr("method", 405);
+  let body; try { body = await request.json(); } catch { body = {}; }
+  const user = await ecpayUser(body.access_token);
+  if (!user) return jerr("請先登入", 401);
+  if (!env.LINE_CHANNEL_ACCESS_TOKEN) return jerr("server not configured", 500);
+  let prof = {};
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?id=eq.${user.id}&select=line_user_id,watchlist`, { headers: ecpayAdmin(env) });
+    const rows = await r.json();
+    prof = (Array.isArray(rows) && rows[0]) ? rows[0] : {};
+  } catch (e) {}
+  if (!prof.line_user_id) return jerr("你還沒綁定 LINE —— 請改用「LINE 登入」一次，才收得到推播 🙏", 200);
+  let news = [];
+  try {
+    const nr = await fetch("https://leadfuai.com/data/news_live.json?_=" + Date.now(), { cf: { cacheTtl: 0 } });
+    const nj = await nr.json();
+    news = nj.news || nj.data || nj.articles || [];
+  } catch (e) {}
+  const topics = Array.isArray(body.topics) ? body.topics : [];
+  const wl = body.watchlist ? (prof.watchlist || []) : [];
+  const match = (n) => {
+    const hay = [n.title || "", n.summary || "", n.ai_note || "", _newsRelated(n).join(" ")].join(" ");
+    if (wl.some(c => c && hay.includes(String(c)))) return true;
+    return topics.some(t => (NEWS_TOPIC_KW[t] || []).some(k => hay.includes(k)));
+  };
+  let picks = news.filter(match).slice(0, 5);
+  if (!picks.length) picks = news.slice(0, 3);   // 無相符就送最新幾則當範例
+  const lines = picks.length
+    ? picks.map(n => `・${(n.title || "").trim()}` + (n.source ? `（${n.source}）` : "")).join("\n")
+    : "（今天暫無新聞，這是一則測試訊息）";
+  const text = `📲 領富 AI ・ 推播試送\n\n${lines}\n\n※ 這是你按「立即試推」的測試訊息，正式推播會依你的設定每日自動送。公開新聞整理、非投資建議。`;
+  try {
+    const pr = await fetch("https://api.line.me/v2/bot/message/push", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${env.LINE_CHANNEL_ACCESS_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ to: prof.line_user_id, messages: [{ type: "text", text }] })
+    });
+    if (!pr.ok) { const et = await pr.text(); return jerr("LINE 推播失敗：" + et.slice(0, 120), 200); }
+  } catch (e) { return jerr("LINE 推播發生錯誤", 200); }
+  return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json", ...corsHeaders() } });
+}
+
 
 /* ============================================================
  * 站長後台：意見回饋清單（owner-only）
@@ -1558,6 +1621,7 @@ export default {
     if (url.pathname === "/api/ecpay-return")   return handleEcpayReturn(request, env);
     if (url.pathname === "/api/ecpay-period")   return handleEcpayPeriod(request, env);
     if (url.pathname === "/api/ecpay-result")   return handleEcpayResult(request, env);
+    if (url.pathname === "/api/test-push-news") return handleTestPushNews(request, env);
     if (url.pathname === "/api/admin-feedback") return handleAdminFeedback(request, env);
     if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
 
