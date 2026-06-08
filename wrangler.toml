@@ -3,6 +3,11 @@ compatibility_date = "2024-09-23"
 main = "worker.js"
 compatibility_flags = ["nodejs_compat"]
 
+# 綠界商店代號（非密鑰，可公開）— 寫進設定檔，避免 wrangler deploy 洗掉「文字」型變數
+# HashKey / HashIV 仍為 Cloudflare 機密（不放這），部署不會清掉
+[vars]
+ECPAY_MERCHANT_ID = "3501534"
+
 [assets]
 directory = "."
 binding = "ASSETS"
