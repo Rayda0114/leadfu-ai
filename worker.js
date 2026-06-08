@@ -1539,6 +1539,10 @@ export default {
     if (url.pathname === "/api/ecpay-create")   return handleEcpayCreate(request, env);
     if (url.pathname === "/api/ecpay-return")   return handleEcpayReturn(request, env);
     if (url.pathname === "/api/ecpay-period")   return handleEcpayPeriod(request, env);
+    if (url.pathname === "/api/ecpay-status") {
+      const _c = ecpayConf(env);
+      return new Response(JSON.stringify({ mode: _c.live ? "production" : "test", hasMid: !!env.ECPAY_MERCHANT_ID, hasKey: !!env.ECPAY_HASH_KEY, hasIV: !!env.ECPAY_HASH_IV }), { headers: { "Content-Type": "application/json", ...corsHeaders() } });
+    }
     if (url.pathname === "/api/admin-feedback") return handleAdminFeedback(request, env);
     if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
 
