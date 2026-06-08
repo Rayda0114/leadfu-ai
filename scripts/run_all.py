@@ -35,6 +35,8 @@ SCRIPTS = [
     "fetch_emerging.py",      # 興櫃 ~350 檔
     # 3. 合併並用 companies 真實產業覆蓋 category
     "merge_stocks.py",
+    # 3.5 用即時報價(MIS)把收盤價更新成「今日」——官方日檔(STOCK_DAY_ALL)出太慢，否則整站落後一天
+    "refresh_prices_mis.py",
     # 4. 其他補充資料
     "fetch_revenue.py",
     "fetch_news.py",
