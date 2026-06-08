@@ -708,6 +708,24 @@ function updateHeaderAuthState() {
       });
     }
   });
+
+  // 首頁 logo 區的 CTA（lb-login / lb-register）—— 不在 .top-right 裡，另外處理
+  const lbLogin = document.querySelector(".lb-login");
+  const lbReg = document.querySelector(".lb-register");
+  if (lbLogin) {
+    lbLogin.textContent = "👤 會員中心";
+    lbLogin.setAttribute("href", (inPages ? "" : "pages/") + "member.html");
+  }
+  if (lbReg) {
+    lbReg.textContent = "登出";
+    lbReg.setAttribute("href", "#");
+    lbReg.addEventListener("click", async (e) => {
+      e.preventDefault();
+      try { const a = await _ensureAuth(); if (a) await a.signOut(); } catch (e2) {}
+      Object.keys(localStorage).filter(k => /^sb-.*-auth-token$/.test(k)).forEach(k => localStorage.removeItem(k));
+      location.href = inPages ? "../index.html" : "index.html";
+    });
+  }
 }
 
 function bindAddFavBtns() {
