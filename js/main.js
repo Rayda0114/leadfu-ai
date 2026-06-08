@@ -3707,7 +3707,7 @@ function injectPriceFreshnessNote() {
     const head = document.querySelector(".page-head .container");
     if (!head || document.getElementById("priceFreshNote")) return;
     const upd = (typeof STOCK_DATA !== "undefined" && STOCK_DATA.updatedAt) ? String(STOCK_DATA.updatedAt) : "";
-    const when = upd ? upd.slice(5).trim() : "近期";   // MM-DD HH:MM
+    const when = upd ? upd.slice(5).split(/[·|]/)[0].trim() : "近期";   // 只留 MM-DD HH:MM，去掉後面的資料來源字串
     const note = document.createElement("div");
     note.id = "priceFreshNote";
     note.style.cssText = "margin-top:9px;font-size:12.5px;line-height:1.6;color:#6f7b84;background:#eef3f0;border:1px solid #dde7e1;border-radius:8px;padding:7px 12px;";
