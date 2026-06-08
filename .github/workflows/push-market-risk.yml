@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  actions: write             # 重抓 taifex 後主動觸發 deploy（不然新資料進不了 worker）
 
 jobs:
   market-risk-alert:
@@ -32,6 +33,8 @@ jobs:
           LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
 
       - name: Commit 資料 + 提醒狀態
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "leadfu-ai-bot"
           git config user.email "bot@leadfu.ai"
@@ -40,6 +43,8 @@ jobs:
           if ! git diff --staged --quiet; then
             git commit -m "data: 晨間大盤風險更新 ($(date -u +%Y-%m-%d))"
             git push
+            # 主動觸發部署，讓重抓到的最新期交所資料進到 worker（GITHUB_TOKEN 推的 commit 不會自動觸發）
+            gh workflow run deploy-worker.yml && echo "🚀 已觸發 worker 部署" || echo "⚠ 觸發部署失敗"
           else
             echo "ℹ️ 無變動"
           fi
