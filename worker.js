@@ -1543,6 +1543,22 @@ async function getLineStockContext(env, q) {
     matched = stocks.filter(s => s.name && s.name.length >= 2 && q.includes(s.name)).slice(0, 2);
   }
   if (!matched.length) return "";
+  // 用即時報價(MIS，13:30 就有今日收盤)覆蓋落後的靜態價 —— TWSE 官方日檔(STOCK_DAY_ALL)出得慢，stocks_live 常落後一個交易日。
+  try {
+    const exch = matched.filter(s => s.status !== "興櫃").map(s => (s.status === "上櫃" ? "otc_" : "tse_") + s.code + ".tw").join("|");
+    if (exch) {
+      const mr = await fetch(`https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=${encodeURIComponent(exch)}&json=1&delay=0&_=${Math.floor(Date.now() / 5000)}`,
+        { headers: { "User-Agent": "Mozilla/5.0 LeadFuAI/1.0", "Accept": "application/json" } });
+      const md = await mr.json();
+      const qmap = {};
+      for (const q of (md.msgArray || [])) {
+        let z = parseFloat(q.z); if (isNaN(z) || z <= 0) z = parseFloat(q.pz);
+        const y = parseFloat(q.y);
+        if (!isNaN(z) && z > 0 && !isNaN(y) && y > 0) qmap[q.c] = { price: z, change: Math.round((z - y) * 100) / 100 };
+      }
+      matched = matched.map(s => qmap[s.code] ? { ...s, price: qmap[s.code].price, change: qmap[s.code].change } : s);
+    }
+  } catch (e) {}
   const grab = async (f) => { try { return (await (await env.ASSETS.fetch(new Request("https://placeholder/data/" + f))).json()).data || {}; } catch (e) { return {}; } };
   const [fv, val, nav, div, hold, basic] = await Promise.all([
     grab("fair_value_live.json"), grab("valuation_live.json"), grab("etf_nav_live.json"),
