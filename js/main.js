@@ -2974,6 +2974,7 @@ window.LeadFu = {
   // 第 1 層 AI 問答工具（ai.html 用）
   parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
   startStockLive,  // 個股詳情頁即時報價 polling
+  liveQuote: leadFuLiveQuote,  // 通用單檔即時報價（買前檢查等頁面用）
   loadKlines,      // 個股詳情頁延後載入 9.8MB K 線（不再全站每頁載）
   trackEvent,      // GA4 自訂事件（ai_chat / ai_summary 等）
   trackLineConversion,   // LINE 廣告「註冊完成」轉換（email / Google / LINE 都會觸發）
@@ -3150,6 +3151,27 @@ async function lqFetchQuotes(exChList) {
   } finally {
     clearTimeout(t);
   }
+}
+
+/* 通用單檔即時報價：給買前檢查等頁面用。回 {price,change,prevClose,time,isOpen} 或 null */
+async function leadFuLiveQuote(code, market) {
+  if (!code || market === "emerging") return null;
+  const prefix = market === "otc" ? "otc_" : "tse_";
+  try {
+    const ctrl = new AbortController();
+    const tm = setTimeout(() => ctrl.abort(), 2800);
+    const resp = await fetch("/api/quote?ex_ch=" + encodeURIComponent(prefix + code + ".tw"), { cache: "no-store", signal: ctrl.signal });
+    clearTimeout(tm);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    const q = data && data.msgArray && data.msgArray[0];
+    if (!q) return null;
+    let z = parseFloat(q.z);
+    if (isNaN(z) || z <= 0) z = parseFloat(q.pz);   // 無當盤成交用上一筆成交
+    const y = parseFloat(q.y);                       // 昨收
+    if (isNaN(z) || z <= 0 || isNaN(y) || y <= 0) return null;
+    return { price: z, change: Math.round((z - y) * 100) / 100, prevClose: y, time: q.t || q["%"] || "", isOpen: isMarketOpen() };
+  } catch (e) { return null; }
 }
 
 async function lqTick(watchlistItems) {

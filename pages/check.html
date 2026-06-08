@@ -144,7 +144,7 @@
     a[href]:after { content:""; }
   }
 </style>
-<script src="../js/main.js?v=3.23.5"></script>
+<script src="../js/main.js?v=3.24.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -250,7 +250,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ===== 渲染 =====
-  function render(code) {
+  let _curCode = null;
+  function freshLabel(s) {
+    const base = "font-size:11px;padding:1px 7px;border-radius:10px;margin-left:6px;vertical-align:middle;white-space:nowrap;display:inline-block;";
+    if (s._live) return s._live.isOpen
+      ? `<span style="${base}background:#e8f7ee;color:#1a7a45;font-weight:600;">● 即時 ${s._live.time || ""}</span>`
+      : `<span style="${base}background:#eef0f3;color:#8a8f99;">收盤 ${s._live.time || ""}</span>`;
+    return `<span style="${base}background:#eef0f3;color:#8a8f99;">盤後收盤${D.updatedAt ? " · " + String(D.updatedAt).slice(5, 10) : ""}</span>`;
+  }
+  async function render(code) {
+    _curCode = code;
     const s = byCode[code];
     const wrap = document.getElementById("chkResult");
     const welcome = document.getElementById("chkWelcome");
@@ -258,6 +267,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     showHint("");
     welcome.style.display = "none";
     wrap.style.display = "block";
+
+    // 先抓即時報價覆蓋成「現價」（風險評估也吃 s.price）；興櫃 MIS 沒有、30 秒內有快取就略過
+    if (s.market !== "emerging" && (!s._live || Date.now() - (s._liveAt || 0) > 30000)) {
+      if (!s._live) wrap.innerHTML = `<div class="panel" style="text-align:center;padding:46px 20px;color:#8a9aa0;font-size:15px;">⏳ 查詢即時報價、評估風險中…</div>`;
+      try {
+        const lq = await window.LeadFu.liveQuote(code, s.market);
+        if (lq && _curCode === code) { s.price = lq.price; s.change = lq.change; s._live = lq; s._liveAt = Date.now(); }
+      } catch (e) {}
+      if (_curCode !== code) return;   // 用戶已切換到別檔，放棄這次渲染
+    }
 
     const rk = D.risk[code];
     const score = rk ? rk.score : null;
@@ -286,7 +305,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <span class="chk-h-level" style="background:${col}22;color:${col};">${level}風險</span>
             ${inWl ? `<span class="chk-h-level" style="background:#163A2E;color:#fff;">⭐ 自選中</span>` : ""}
           </div>
-          <div class="chk-h-sub">${mk} ${s.category || ""} · ${L.fmtPrice(s.price)} <span class="${cls}">${L.arrow(s.change)} ${L.fmtPct(pct)}</span></div>
+          <div class="chk-h-sub">${mk} ${s.category || ""} · ${L.fmtPrice(s.price)} <span class="${cls}">${L.arrow(s.change)} ${L.fmtPct(pct)}</span>${freshLabel(s)}</div>
         </div>
       </div>
       <div class="chk-verdict">📋 一句話：${tv.verdict}</div>
