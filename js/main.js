@@ -3698,6 +3698,24 @@ async function loadLiveData() {
   }
 }
 
+/* 清單頁頂端注入「股價為盤後收盤」說明（個股／自選為即時）。一次涵蓋所有清單頁，免改幾十個檔 */
+function injectPriceFreshnessNote() {
+  try {
+    const listPages = ["stocks", "dividends", "value-stocks", "screener", "institutional", "margin", "sbl", "industries", "etf"];
+    const path = (location.pathname.replace(/\.html$/, "").split("/").pop() || "");
+    if (!listPages.includes(path)) return;
+    const head = document.querySelector(".page-head .container");
+    if (!head || document.getElementById("priceFreshNote")) return;
+    const upd = (typeof STOCK_DATA !== "undefined" && STOCK_DATA.updatedAt) ? String(STOCK_DATA.updatedAt) : "";
+    const when = upd ? upd.slice(5).trim() : "近期";   // MM-DD HH:MM
+    const note = document.createElement("div");
+    note.id = "priceFreshNote";
+    note.style.cssText = "margin-top:9px;font-size:12.5px;line-height:1.6;color:#6f7b84;background:#eef3f0;border:1px solid #dde7e1;border-radius:8px;padding:7px 12px;";
+    note.innerHTML = `📅 本頁股價為<b>盤後收盤</b>資料（更新 ${when}）、非盤中即時；<a href="check.html" style="color:#1B4332;font-weight:700;">買前檢查</a>與<a href="watchlist.html" style="color:#1B4332;font-weight:700;">自選股</a>為<b>即時報價</b>。`;
+    head.appendChild(note);
+  } catch (e) {}
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   setupSEO();
   loadGA();
@@ -3723,6 +3741,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   _resolveReady();   // 通知所有 inline script 資料就緒，可以開始 render
 
   injectStockJsonLd();  // GEO：個股詳情頁注入 JSON-LD（FinancialProduct + Organization + BreadcrumbList）
+  injectPriceFreshnessNote();  // 清單頁頂端標「盤後收盤・個股/自選為即時」
   renderTicker();
   lqStart();           // 即時行情列（首頁才有 #liveQuoteBar，其他頁自動跳過）
   renderHeroCards();   // 首頁三張卡片（其他頁沒有 #heroCards 會自動跳過）
