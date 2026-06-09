@@ -1721,12 +1721,16 @@ async function getLineStockContext(env, q) {
       const md = await mr.json();
       const qmap = {};
       for (const qq of (md.msgArray || [])) {
-        let z = parseFloat(qq.z); if (isNaN(z) || z <= 0) z = parseFloat(qq.pz);
-        if (isNaN(z) || z <= 0) { const h = parseFloat(qq.h), l = parseFloat(qq.l); if (!isNaN(h) && !isNaN(l) && h > 0 && l > 0) z = Math.round((h + l) / 2 * 100) / 100; }
+        let z = parseFloat(qq.z), approx = false; if (isNaN(z) || z <= 0) z = parseFloat(qq.pz);
+        if (isNaN(z) || z <= 0) { const h = parseFloat(qq.h), l = parseFloat(qq.l); if (!isNaN(h) && !isNaN(l) && h > 0 && l > 0) { z = Math.round((h + l) / 2 * 100) / 100; approx = true; } }
         const y = parseFloat(qq.y);
-        if (!isNaN(z) && z > 0) qmap[qq.c] = { price: Math.round(z * 100) / 100, change: (!isNaN(y) && y > 0) ? Math.round((z - y) * 100) / 100 : null };
+        if (!isNaN(z) && z > 0) qmap[qq.c] = {
+          price: Math.round(z * 100) / 100,
+          change: (!isNaN(y) && y > 0) ? Math.round((z - y) * 100) / 100 : null,
+          note: (approx && _mState === "open") ? "盤中參考（暫無最新成交價，為今日高低中值）" : _liveNote
+        };
       }
-      matched = matched.map(s => qmap[s.code] ? { ...s, price: qmap[s.code].price, change: qmap[s.code].change, _note: _liveNote } : s);
+      matched = matched.map(s => qmap[s.code] ? { ...s, price: qmap[s.code].price, change: qmap[s.code].change, _note: qmap[s.code].note } : s);
     }
   } catch (e) {}
   const grab = async (f) => { try { return (await (await env.ASSETS.fetch(new Request("https://placeholder/data/" + f))).json()).data || {}; } catch (e) { return {}; } };
