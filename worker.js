@@ -1806,9 +1806,10 @@ export default {
     if ((url.pathname === "/" || url.pathname === "/index.html") && request.method === "GET") {
       const ua = (request.headers.get("user-agent") || "").toLowerCase();
       if (/iphone|ipod|android.*mobile|windows phone|blackberry|bb10|iemobile|opera mini/.test(ua)) {
-        const mres = await env.ASSETS.fetch(new Request(new URL("/index-mobile.html", url).toString(), request));
+        const mres = await env.ASSETS.fetch(new Request(new URL("/index-mobile", url).toString(), request));
         const out = new Response(mres.body, mres);
         out.headers.set("Vary", "User-Agent");
+        out.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
         return out;
       }
     }
