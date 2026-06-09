@@ -118,6 +118,12 @@ def main():
         else:
             page_urls.append(entry)
 
+    # 1b. 產業頁（pages/industries/*.html，由 generate_industry_pages.py 產生）→ 首頁/工具子 sitemap
+    ind_dir = ROOT / "pages" / "industries"
+    if ind_dir.exists():
+        for f in sorted(ind_dir.glob("*.html")):
+            page_urls.append(url_entry(f"/pages/industries/{f.stem}.html", "weekly", 0.75, today))
+
     # 2. 個股詳情頁
     stocks_data = load_json(DATA_DIR / "stocks_live.json")
     if stocks_data and stocks_data.get("stocks"):

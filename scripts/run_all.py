@@ -66,6 +66,7 @@ SCRIPTS = [
     "fetch_etf_holdings.py",    # ETF 成分股（各投信 PCF API，v1：元大）
     "fetch_taifex.py",        # 大盤風險溫度計（台指期日夜盤+P/C+結算日 → 明日波動風險）
     "fetch_ipo.py",             # 新股 IPO 行事曆（TWSE 上市申請）
+    "generate_industry_pages.py",  # 🏭 產業頁 pages/industries/*.html + 更新 industries.html 連結（需 stocks + risk）
     "generate_sitemap.py",
 ]
 

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETF類股一覽：成分股 + 風險檢查（224 檔）- 領富 AI</title>
+<meta name="description" content="領富 AI 整理台股「ETF」類股共 224 檔（上市 224、上櫃 0、興櫃 0），含成分股清單、風險等級與注意股檢查。資料來源 TWSE 證交所、TPEx 櫃買中心，每日更新。">
+<meta name="keywords" content="ETF,ETF類股,ETF個股,ETF成分股,台股ETF,ETF風險,ETF注意股">
+<link rel="canonical" href="https://leadfuai.com/pages/industries/etf">
+<meta property="og:title" content="ETF類股一覽：成分股 + 風險檢查">
+<meta property="og:description" content="領富 AI 整理台股「ETF」類股共 224 檔（上市 224、上櫃 0、興櫃 0），含成分股清單、風險等級與注意股檢查。資料來源 TWSE 證交所、TPEx 櫃買中心，每日更新。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leadfuai.com/pages/industries/etf">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta name="theme-color" content="#1B4332">
+<link rel="icon" type="image/svg+xml" href="../../icons/icon.svg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://leadfuai.com/pages/industries/etf#page",
+      "name": "ETF類股一覽",
+      "description": "領富 AI 整理台股「ETF」類股共 224 檔（上市 224、上櫃 0、興櫃 0），含成分股清單、風險等級與注意股檢查。資料來源 TWSE 證交所、TPEx 櫃買中心，每日更新。",
+      "url": "https://leadfuai.com/pages/industries/etf",
+      "isPartOf": {
+        "@id": "https://leadfuai.com/#website"
+      },
+      "about": "ETF",
+      "dateModified": "2026-06-09",
+      "publisher": {
+        "@id": "https://leadfuai.com/#organization"
+      },
+      "inLanguage": "zh-TW"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首頁",
+          "item": "https://leadfuai.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "產業分類",
+          "item": "https://leadfuai.com/pages/industries"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "ETF類股"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="stylesheet" href="../../css/style.css?v=3.23.7">
+<style>
+  .ind-wrap { max-width: 900px; margin: 0 auto; padding: 18px 12px 50px; }
+  .ind-intro { font-size: 15px; color: #444; line-height: 1.8; margin: 6px 0 18px; }
+  .ind-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 16px 0 22px; }
+  .ind-stat { background: #f7faf8; border: 1px solid #e8ece9; border-radius: 14px; padding: 16px 12px; text-align: center; }
+  .ind-stat b { display: block; font-size: 26px; font-weight: 800; color: #1B4332; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .ind-stat span { display: block; font-size: 13px; color: #555; margin-top: 6px; }
+  .ind-stat.warn b { color: #c0392b; }
+  .ind-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e8ece9; border-radius: 12px; overflow: hidden; font-size: 14px; }
+  .ind-table th { background: #f2f6f3; text-align: left; padding: 11px 12px; font-weight: 700; color: #1B4332; font-size: 13px; }
+  .ind-table td { padding: 10px 12px; border-top: 1px solid #f0f2f1; }
+  .ind-table td.c { text-align: center; color: #666; }
+  .ind-table a { color: #1B4332; font-weight: 600; text-decoration: none; }
+  .ind-table a:hover { text-decoration: underline; }
+  .ind-lv { color: #fff; padding: 2px 9px; border-radius: 10px; font-size: 12px; font-weight: 700; }
+  .ind-lv-low { color: #1a7a45; font-size: 12px; }
+  .ind-na { color: #bbb; font-size: 12px; }
+  .ind-reason { font-size: 11.5px; color: #999; margin-top: 3px; }
+  .ind-src { font-size: 12.5px; color: #888; margin: 16px 0; }
+  .ind-disc { background: #fdf6ec; border: 1px solid #f0e2c8; border-radius: 12px; padding: 14px 16px; font-size: 13px; color: #7a6a4a; line-height: 1.7; margin-top: 22px; }
+  .ind-tools { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+  .ind-tools a { background: #eef7f1; color: #1B4332; padding: 9px 16px; border-radius: 999px; text-decoration: none; font-size: 14px; font-weight: 600; }
+  .ind-tools a:hover { background: #e0efe6; }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+    <div class="top-right"><a href="../login.html">會員登入</a><a href="../register.html">免費註冊</a><a href="https://line.me/R/ti/p/@130tqckv" class="line-cta" target="_blank" rel="noopener">LINE 客服</a></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../../index.html">首頁</a></li>
+      <li><a href="../stocks.html">股價總覽</a></li>
+      <li><a href="../industries.html">產業分類</a></li>
+      <li><a href="../risk-radar.html">防錯雷達</a></li>
+      <li><a href="../learn.html">📚 學習中心</a></li>
+      <li><a href="../ai.html">AI 對話</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="ind-wrap">
+  <div class="article-breadcrumb" style="font-size:13px;color:#888;margin-bottom:10px;">
+    <a href="../../index.html" style="color:#1B4332;">首頁</a> ▸
+    <a href="../industries.html" style="color:#1B4332;">產業分類</a> ▸
+    <span>ETF類股</span>
+  </div>
+
+  <h1 style="font-size:26px;color:#1B4332;margin:0 0 4px;">「ETF」類股一覽</h1>
+  <p class="ind-intro">ETF（指數股票型基金）一籃子持有多檔成分股，分散單一個股風險，適合長期分批布局；仍需留意追蹤標的、費用與槓桿/反向型風險。 領富 AI 整理「ETF」類股共 <strong>224</strong> 檔，提供成分股清單與每日風險檢查，協助你快速掌握這個產業的全貌與需注意的個股。</p>
+
+  <div class="ind-stats">
+    <div class="ind-stat"><b>224</b><span>類股檔數</span></div>
+    <div class="ind-stat"><b style="font-size:18px;line-height:1.5;">上市 224<br>上櫃 0・興櫃 0</b><span>市場別分布</span></div>
+    <div class="ind-stat"><b style="font-size:18px;line-height:1.5;">▲ 153　▼ 62</b><span>當日漲跌家數（持平 9）</span></div>
+    <div class="ind-stat warn"><b>0</b><span>需注意股（中/高風險）</span></div>
+  </div>
+
+  <div class="ind-tools">
+    <a href="../check.html">🔍 個股買前檢查</a>
+    <a href="../risk-radar.html">⚠ 防錯雷達</a>
+    <a href="../learn/warning-stocks.html">📖 注意股是什麼</a>
+  </div>
+
+  <h2 style="font-size:19px;color:#1B4332;margin:24px 0 10px;">ETF成分股清單</h2>
+  <div class="ind-src">📅 更新日期：2026-06-09　·　資料來源：TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站（風險等級為領富 AI 依公開資料整理）</div>
+  <table class="ind-table">
+    <thead><tr><th>代號</th><th>名稱</th><th class="c">市場</th><th>風險等級</th></tr></thead>
+    <tbody>
+<tr><td><a href="../stock-detail?code=00400A">00400A</a></td><td><a href="../stock-detail?code=00400A">主動國泰動能高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00401A">00401A</a></td><td><a href="../stock-detail?code=00401A">主動摩根台灣鑫收</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00403A">00403A</a></td><td><a href="../stock-detail?code=00403A">主動統一升級50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=0050">0050</a></td><td><a href="../stock-detail?code=0050">元大台灣50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=0051">0051</a></td><td><a href="../stock-detail?code=0051">元大中型100</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=0052">0052</a></td><td><a href="../stock-detail?code=0052">富邦科技</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=0053">0053</a></td><td><a href="../stock-detail?code=0053">元大電子</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=0055">0055</a></td><td><a href="../stock-detail?code=0055">元大MSCI金融</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=0056">0056</a></td><td><a href="../stock-detail?code=0056">元大高股息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=0057">0057</a></td><td><a href="../stock-detail?code=0057">富邦摩台</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=0061">0061</a></td><td><a href="../stock-detail?code=0061">元大寶滬深</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=006203">006203</a></td><td><a href="../stock-detail?code=006203">元大MSCI台灣</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=006204">006204</a></td><td><a href="../stock-detail?code=006204">永豐臺灣加權</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=006205">006205</a></td><td><a href="../stock-detail?code=006205">富邦上証</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=006206">006206</a></td><td><a href="../stock-detail?code=006206">元大上證50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=006207">006207</a></td><td><a href="../stock-detail?code=006207">復華滬深</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=006208">006208</a></td><td><a href="../stock-detail?code=006208">富邦台50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00625K">00625K</a></td><td><a href="../stock-detail?code=00625K">富邦上証+R</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00631L">00631L</a></td><td><a href="../stock-detail?code=00631L">元大台灣50正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00632R">00632R</a></td><td><a href="../stock-detail?code=00632R">元大台灣50反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00633L">00633L</a></td><td><a href="../stock-detail?code=00633L">富邦上証正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00634R">00634R</a></td><td><a href="../stock-detail?code=00634R">富邦上証反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00635U">00635U</a></td><td><a href="../stock-detail?code=00635U">期元大S&amp;P黃金</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00636">00636</a></td><td><a href="../stock-detail?code=00636">國泰中國A50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00636K">00636K</a></td><td><a href="../stock-detail?code=00636K">國泰中國A50+U</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00637L">00637L</a></td><td><a href="../stock-detail?code=00637L">元大滬深300正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00638R">00638R</a></td><td><a href="../stock-detail?code=00638R">元大滬深300反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00639">00639</a></td><td><a href="../stock-detail?code=00639">富邦深100</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00640L">00640L</a></td><td><a href="../stock-detail?code=00640L">富邦日本正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00641R">00641R</a></td><td><a href="../stock-detail?code=00641R">富邦日本反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00642U">00642U</a></td><td><a href="../stock-detail?code=00642U">期元大S&amp;P石油</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00643">00643</a></td><td><a href="../stock-detail?code=00643">群益深証中小</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00643K">00643K</a></td><td><a href="../stock-detail?code=00643K">群益深証中小+R</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00645">00645</a></td><td><a href="../stock-detail?code=00645">富邦日本</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00646">00646</a></td><td><a href="../stock-detail?code=00646">元大S&amp;P500</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00647L">00647L</a></td><td><a href="../stock-detail?code=00647L">元大S&amp;P500正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00648R">00648R</a></td><td><a href="../stock-detail?code=00648R">元大S&amp;P500反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00650L">00650L</a></td><td><a href="../stock-detail?code=00650L">復華香港正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00651R">00651R</a></td><td><a href="../stock-detail?code=00651R">復華香港反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00652">00652</a></td><td><a href="../stock-detail?code=00652">富邦印度</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00653L">00653L</a></td><td><a href="../stock-detail?code=00653L">富邦印度正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00654R">00654R</a></td><td><a href="../stock-detail?code=00654R">富邦印度反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00655L">00655L</a></td><td><a href="../stock-detail?code=00655L">國泰中國A50正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00656R">00656R</a></td><td><a href="../stock-detail?code=00656R">國泰中國A50反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00657">00657</a></td><td><a href="../stock-detail?code=00657">國泰日經225</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00657K">00657K</a></td><td><a href="../stock-detail?code=00657K">國泰日經225+U</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00660">00660</a></td><td><a href="../stock-detail?code=00660">元大歐洲50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00661">00661</a></td><td><a href="../stock-detail?code=00661">元大日經225</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00662">00662</a></td><td><a href="../stock-detail?code=00662">富邦NASDAQ</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00663L">00663L</a></td><td><a href="../stock-detail?code=00663L">國泰臺灣加權正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00664R">00664R</a></td><td><a href="../stock-detail?code=00664R">國泰臺灣加權反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00665L">00665L</a></td><td><a href="../stock-detail?code=00665L">富邦恒生國企正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00666R">00666R</a></td><td><a href="../stock-detail?code=00666R">富邦恒生國企反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00668">00668</a></td><td><a href="../stock-detail?code=00668">國泰美國道瓊</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00668K">00668K</a></td><td><a href="../stock-detail?code=00668K">國泰美國道瓊+U</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00669R">00669R</a></td><td><a href="../stock-detail?code=00669R">國泰美國道瓊反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00670L">00670L</a></td><td><a href="../stock-detail?code=00670L">富邦NASDAQ正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00671R">00671R</a></td><td><a href="../stock-detail?code=00671R">富邦NASDAQ反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00673R">00673R</a></td><td><a href="../stock-detail?code=00673R">期元大S&amp;P原油反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00674R">00674R</a></td><td><a href="../stock-detail?code=00674R">期元大S&amp;P黃金反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00675L">00675L</a></td><td><a href="../stock-detail?code=00675L">富邦臺灣加權正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00676R">00676R</a></td><td><a href="../stock-detail?code=00676R">富邦臺灣加權反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00678">00678</a></td><td><a href="../stock-detail?code=00678">群益那斯達克生技</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00680L">00680L</a></td><td><a href="../stock-detail?code=00680L">元大美債20正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00681R">00681R</a></td><td><a href="../stock-detail?code=00681R">元大美債20反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00682U">00682U</a></td><td><a href="../stock-detail?code=00682U">期元大美元指數</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00683L">00683L</a></td><td><a href="../stock-detail?code=00683L">期元大美元指正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00684R">00684R</a></td><td><a href="../stock-detail?code=00684R">期元大美元指反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00685L">00685L</a></td><td><a href="../stock-detail?code=00685L">群益臺灣加權正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00686R">00686R</a></td><td><a href="../stock-detail?code=00686R">群益臺灣加權反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00688L">00688L</a></td><td><a href="../stock-detail?code=00688L">國泰20年美債正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00689R">00689R</a></td><td><a href="../stock-detail?code=00689R">國泰20年美債反1</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00690">00690</a></td><td><a href="../stock-detail?code=00690">兆豐藍籌30</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00692">00692</a></td><td><a href="../stock-detail?code=00692">富邦公司治理</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00693U">00693U</a></td><td><a href="../stock-detail?code=00693U">期街口S&amp;P黃豆</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00700">00700</a></td><td><a href="../stock-detail?code=00700">富邦恒生國企</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00701">00701</a></td><td><a href="../stock-detail?code=00701">國泰股利精選30</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00702">00702</a></td><td><a href="../stock-detail?code=00702">國泰標普低波高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00703">00703</a></td><td><a href="../stock-detail?code=00703">台新MSCI中國</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00706L">00706L</a></td><td><a href="../stock-detail?code=00706L">期元大S&amp;P日圓正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00708L">00708L</a></td><td><a href="../stock-detail?code=00708L">期元大S&amp;P黃金正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00709">00709</a></td><td><a href="../stock-detail?code=00709">富邦歐洲</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00710B">00710B</a></td><td><a href="../stock-detail?code=00710B">復華彭博非投等債</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00711B">00711B</a></td><td><a href="../stock-detail?code=00711B">復華彭博新興債</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00712">00712</a></td><td><a href="../stock-detail?code=00712">復華富時不動產</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00713">00713</a></td><td><a href="../stock-detail?code=00713">元大台灣高息低波</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00714">00714</a></td><td><a href="../stock-detail?code=00714">群益道瓊美國地產</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00715L">00715L</a></td><td><a href="../stock-detail?code=00715L">期街口布蘭特正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00717">00717</a></td><td><a href="../stock-detail?code=00717">富邦美國特別股</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00728">00728</a></td><td><a href="../stock-detail?code=00728">第一金工業30</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00730">00730</a></td><td><a href="../stock-detail?code=00730">富邦臺灣優質高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00731">00731</a></td><td><a href="../stock-detail?code=00731">復華富時高息低波</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00733">00733</a></td><td><a href="../stock-detail?code=00733">富邦臺灣中小</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00735">00735</a></td><td><a href="../stock-detail?code=00735">國泰臺韓科技</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00736">00736</a></td><td><a href="../stock-detail?code=00736">國泰新興市場</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00737">00737</a></td><td><a href="../stock-detail?code=00737">國泰AI機器人</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00738U">00738U</a></td><td><a href="../stock-detail?code=00738U">期元大道瓊白銀</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00739">00739</a></td><td><a href="../stock-detail?code=00739">元大MSCI A股</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00752">00752</a></td><td><a href="../stock-detail?code=00752">中信中國50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00753L">00753L</a></td><td><a href="../stock-detail?code=00753L">中信中國50正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00757">00757</a></td><td><a href="../stock-detail?code=00757">統一FANG+</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00762">00762</a></td><td><a href="../stock-detail?code=00762">元大全球AI</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00763U">00763U</a></td><td><a href="../stock-detail?code=00763U">期街口道瓊銅</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00770">00770</a></td><td><a href="../stock-detail?code=00770">國泰北美科技</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00771">00771</a></td><td><a href="../stock-detail?code=00771">元大US高息特別股</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00775B">00775B</a></td><td><a href="../stock-detail?code=00775B">新光投等債15+</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00783">00783</a></td><td><a href="../stock-detail?code=00783">富邦中証500</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00830">00830</a></td><td><a href="../stock-detail?code=00830">國泰費城半導體</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00850">00850</a></td><td><a href="../stock-detail?code=00850">元大臺灣ESG永續</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00851">00851</a></td><td><a href="../stock-detail?code=00851">台新全球AI</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00852L">00852L</a></td><td><a href="../stock-detail?code=00852L">國泰美國道瓊正2</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00861">00861</a></td><td><a href="../stock-detail?code=00861">元大全球未來通訊</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00865B">00865B</a></td><td><a href="../stock-detail?code=00865B">國泰US短期公債</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00875">00875</a></td><td><a href="../stock-detail?code=00875">國泰網路資安</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00876">00876</a></td><td><a href="../stock-detail?code=00876">元大全球5G</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00878">00878</a></td><td><a href="../stock-detail?code=00878">國泰永續高股息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00881">00881</a></td><td><a href="../stock-detail?code=00881">國泰台灣科技龍頭</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00882">00882</a></td><td><a href="../stock-detail?code=00882">中信中國高股息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00885">00885</a></td><td><a href="../stock-detail?code=00885">富邦越南</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00891">00891</a></td><td><a href="../stock-detail?code=00891">中信關鍵半導體</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00892">00892</a></td><td><a href="../stock-detail?code=00892">富邦台灣半導體</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00893">00893</a></td><td><a href="../stock-detail?code=00893">國泰智能電動車</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00894">00894</a></td><td><a href="../stock-detail?code=00894">中信小資高價30</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00895">00895</a></td><td><a href="../stock-detail?code=00895">富邦未來車</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00896">00896</a></td><td><a href="../stock-detail?code=00896">中信綠能及電動車</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00897">00897</a></td><td><a href="../stock-detail?code=00897">富邦基因免疫生技</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00898">00898</a></td><td><a href="../stock-detail?code=00898">國泰基因免疫革命</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00899">00899</a></td><td><a href="../stock-detail?code=00899">FT潔淨能源</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00900">00900</a></td><td><a href="../stock-detail?code=00900">富邦特選高股息30</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00901">00901</a></td><td><a href="../stock-detail?code=00901">永豐智能車供應鏈</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00902">00902</a></td><td><a href="../stock-detail?code=00902">中信電池及儲能</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00903">00903</a></td><td><a href="../stock-detail?code=00903">富邦元宇宙</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00904">00904</a></td><td><a href="../stock-detail?code=00904">新光臺灣半導體30</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00905">00905</a></td><td><a href="../stock-detail?code=00905">FT臺灣Smart</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00907">00907</a></td><td><a href="../stock-detail?code=00907">永豐優息存股</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00908">00908</a></td><td><a href="../stock-detail?code=00908">富邦入息REITs+</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00909">00909</a></td><td><a href="../stock-detail?code=00909">國泰數位支付服務</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00910">00910</a></td><td><a href="../stock-detail?code=00910">第一金太空衛星</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00911">00911</a></td><td><a href="../stock-detail?code=00911">兆豐洲際半導體</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00912">00912</a></td><td><a href="../stock-detail?code=00912">中信臺灣智慧50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00913">00913</a></td><td><a href="../stock-detail?code=00913">兆豐台灣晶圓製造</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00915">00915</a></td><td><a href="../stock-detail?code=00915">凱基優選高股息30</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00916">00916</a></td><td><a href="../stock-detail?code=00916">國泰全球品牌50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00917">00917</a></td><td><a href="../stock-detail?code=00917">中信特選金融</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00918">00918</a></td><td><a href="../stock-detail?code=00918">大華優利高填息30</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00919">00919</a></td><td><a href="../stock-detail?code=00919">群益台灣精選高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00920">00920</a></td><td><a href="../stock-detail?code=00920">富邦ESG綠色電力</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00921">00921</a></td><td><a href="../stock-detail?code=00921">兆豐龍頭等權重</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00922">00922</a></td><td><a href="../stock-detail?code=00922">國泰台灣領袖50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00923">00923</a></td><td><a href="../stock-detail?code=00923">群益台ESG低碳50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00924">00924</a></td><td><a href="../stock-detail?code=00924">復華S&amp;P500成長</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00926">00926</a></td><td><a href="../stock-detail?code=00926">凱基全球菁英55</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00927">00927</a></td><td><a href="../stock-detail?code=00927">群益半導體收益</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00929">00929</a></td><td><a href="../stock-detail?code=00929">復華台灣科技優息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00930">00930</a></td><td><a href="../stock-detail?code=00930">永豐ESG低碳高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00932">00932</a></td><td><a href="../stock-detail?code=00932">兆豐永續高息等權</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00934">00934</a></td><td><a href="../stock-detail?code=00934">中信成長高股息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00935">00935</a></td><td><a href="../stock-detail?code=00935">野村臺灣新科技50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00936">00936</a></td><td><a href="../stock-detail?code=00936">台新永續高息中小</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00938">00938</a></td><td><a href="../stock-detail?code=00938">凱基優選30</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00939">00939</a></td><td><a href="../stock-detail?code=00939">統一台灣高息動能</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00940">00940</a></td><td><a href="../stock-detail?code=00940">元大台灣價值高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00941">00941</a></td><td><a href="../stock-detail?code=00941">中信上游半導體</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00943">00943</a></td><td><a href="../stock-detail?code=00943">兆豐電子高息等權</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00944">00944</a></td><td><a href="../stock-detail?code=00944">野村趨勢動能高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00945B">00945B</a></td><td><a href="../stock-detail?code=00945B">凱基美國非投等債</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00946">00946</a></td><td><a href="../stock-detail?code=00946">群益科技高息成長</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00947">00947</a></td><td><a href="../stock-detail?code=00947">台新臺灣IC設計</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00949">00949</a></td><td><a href="../stock-detail?code=00949">復華日本龍頭</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00951">00951</a></td><td><a href="../stock-detail?code=00951">台新日本半導體</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00952">00952</a></td><td><a href="../stock-detail?code=00952">凱基台灣AI50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00953B">00953B</a></td><td><a href="../stock-detail?code=00953B">群益優選非投等債</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00954">00954</a></td><td><a href="../stock-detail?code=00954">中信日本半導體</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00956">00956</a></td><td><a href="../stock-detail?code=00956">中信日經高股息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00960">00960</a></td><td><a href="../stock-detail?code=00960">野村全球航運龍頭</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00961">00961</a></td><td><a href="../stock-detail?code=00961">FT臺灣永續高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00962">00962</a></td><td><a href="../stock-detail?code=00962">台新AI優息動能</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00963">00963</a></td><td><a href="../stock-detail?code=00963">中信全球高股息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00964">00964</a></td><td><a href="../stock-detail?code=00964">中信亞太高股息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00965">00965</a></td><td><a href="../stock-detail?code=00965">元大航太防衛科技</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00971">00971</a></td><td><a href="../stock-detail?code=00971">野村美國研發龍頭</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00972">00972</a></td><td><a href="../stock-detail?code=00972">野村日本動能高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009800">009800</a></td><td><a href="../stock-detail?code=009800">中信NASDAQ</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009801">009801</a></td><td><a href="../stock-detail?code=009801">中信美國創新科技</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009802">009802</a></td><td><a href="../stock-detail?code=009802">富邦旗艦50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009803">009803</a></td><td><a href="../stock-detail?code=009803">玉山市值動能50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009804">009804</a></td><td><a href="../stock-detail?code=009804">聯邦台精彩50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009805">009805</a></td><td><a href="../stock-detail?code=009805">新光美國電力基建</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009808">009808</a></td><td><a href="../stock-detail?code=009808">華南永昌優選50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009809">009809</a></td><td><a href="../stock-detail?code=009809">富邦淨零ESG50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00980A">00980A</a></td><td><a href="../stock-detail?code=00980A">主動野村臺灣優選</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009810">009810</a></td><td><a href="../stock-detail?code=009810">玉山全球藍籌100</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009811">009811</a></td><td><a href="../stock-detail?code=009811">統一美國50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009812">009812</a></td><td><a href="../stock-detail?code=009812">野村日本東證</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009813">009813</a></td><td><a href="../stock-detail?code=009813">貝萊德標普卓越50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009816">009816</a></td><td><a href="../stock-detail?code=009816">凱基台灣TOP50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009817">009817</a></td><td><a href="../stock-detail?code=009817">國泰日本不動產</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009818">009818</a></td><td><a href="../stock-detail?code=009818">華南永昌NASDAQxT</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009819">009819</a></td><td><a href="../stock-detail?code=009819">中信數據及電力</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00981A">00981A</a></td><td><a href="../stock-detail?code=00981A">主動統一台股增長</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00981T">00981T</a></td><td><a href="../stock-detail?code=00981T">平衡凱基雙核收息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=009820">009820</a></td><td><a href="../stock-detail?code=009820">元大納斯達克精選</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00982A">00982A</a></td><td><a href="../stock-detail?code=00982A">主動群益台灣強棒</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00982D">00982D</a></td><td><a href="../stock-detail?code=00982D">主動富邦動態入息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00982T">00982T</a></td><td><a href="../stock-detail?code=00982T">平衡兆豐台美動能</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00983A">00983A</a></td><td><a href="../stock-detail?code=00983A">主動中信ARK創新</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00983D">00983D</a></td><td><a href="../stock-detail?code=00983D">主動富邦複合收益</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00984A">00984A</a></td><td><a href="../stock-detail?code=00984A">主動安聯台灣高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00984D">00984D</a></td><td><a href="../stock-detail?code=00984D">主動聯博全球非投</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00985A">00985A</a></td><td><a href="../stock-detail?code=00985A">主動野村台灣50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00985B">00985B</a></td><td><a href="../stock-detail?code=00985B">群益ESG投等債0-5</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00986A">00986A</a></td><td><a href="../stock-detail?code=00986A">主動台新龍頭成長</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00987A">00987A</a></td><td><a href="../stock-detail?code=00987A">主動台新優勢成長</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00988A">00988A</a></td><td><a href="../stock-detail?code=00988A">主動統一全球創新</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00989A">00989A</a></td><td><a href="../stock-detail?code=00989A">主動摩根美國科技</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00990A">00990A</a></td><td><a href="../stock-detail?code=00990A">主動元大AI新經濟</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00991A">00991A</a></td><td><a href="../stock-detail?code=00991A">主動復華未來50</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00992A">00992A</a></td><td><a href="../stock-detail?code=00992A">主動群益科技創新</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00993A">00993A</a></td><td><a href="../stock-detail?code=00993A">主動安聯台灣</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00994A">00994A</a></td><td><a href="../stock-detail?code=00994A">主動第一金台股優</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00995A">00995A</a></td><td><a href="../stock-detail?code=00995A">主動中信台灣卓越</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00996A">00996A</a></td><td><a href="../stock-detail?code=00996A">主動兆豐台灣豐收</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00997A">00997A</a></td><td><a href="../stock-detail?code=00997A">主動群益美國增長</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+<tr><td><a href="../stock-detail?code=00999A">00999A</a></td><td><a href="../stock-detail?code=00999A">主動野村臺灣高息</a></td><td class="c">上市</td><td><span class="ind-na">—</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="ind-disc">
+    <strong>📌 免責聲明</strong><br>
+    本頁為「ETF」類股之公開資料整理，僅供研究參考，<strong>不構成任何個股推薦或買賣建議</strong>。
+    風險等級依公開資料以系統化方式整理，非投資評等；個股實際狀況請以證交所、櫃買中心與公開資訊觀測站之公告為準。
+    投資有風險，決定前請您自行評估或諮詢合法之證券投資顧問。
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. · 本網站所有資訊僅供參考，不構成投資建議。</div></div>
+</footer>
+
+<script src="../../js/main.js?v=3.24.7"></script>
+</body>
+</html>
