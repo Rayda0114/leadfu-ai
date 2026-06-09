@@ -2236,6 +2236,9 @@ function injectStockJsonLd() {
   if (!location.pathname.includes("stock-detail")) return;
   const code = new URLSearchParams(location.search).get("code");
   if (!code) return;
+  // 互動版個股頁 canonical 指向 SEO 版 /stock/{code}（整合重複網址，集中索引信號）
+  const _cl = document.getElementById("canonicalLink");
+  if (_cl) _cl.href = "https://leadfuai.com/stock/" + code;
   const s = findStock(code);
   if (!s) return;
 

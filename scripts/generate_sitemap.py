@@ -131,7 +131,7 @@ def main():
             code = s.get("code")
             if code:
                 stock_urls.append(url_entry(
-                    f"/pages/stock-detail.html?code={code}", "daily", 0.6, today
+                    f"/stock/{code}", "daily", 0.6, today
                 ))
 
     # 3. 新聞詳情頁 → 內容

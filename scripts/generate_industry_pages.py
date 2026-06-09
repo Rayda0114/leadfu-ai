@@ -21,7 +21,7 @@ DATA = ROOT / "data"
 OUT = ROOT / "pages" / "industries"
 BASE = "https://leadfuai.com"
 CSS_V = "3.23.7"
-JS_V = "3.24.7"
+JS_V = "3.24.8"
 TODAY = datetime.now().strftime("%Y-%m-%d")
 
 # 產業（category）→（英文 slug, 一句產業概況）。未列入者（其他/其他電子/存託憑證等模糊分類）不產生獨立頁。
@@ -113,8 +113,8 @@ def render(cat, slug, intro, lst, risk):
             badge = '<span class="ind-na">—</span>'
             rtext = ""
         rows.append(
-            f'<tr><td><a href="../stock-detail?code={code}">{code}</a></td>'
-            f'<td><a href="../stock-detail?code={code}">{name}</a></td>'
+            f'<tr><td><a href="/stock/{code}">{code}</a></td>'
+            f'<td><a href="/stock/{code}">{name}</a></td>'
             f'<td class="c">{mkt}</td>'
             f'<td>{badge}{rtext}</td></tr>'
         )
