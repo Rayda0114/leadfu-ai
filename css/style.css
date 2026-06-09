@@ -1750,22 +1750,8 @@ img { max-width: 100%; }
   }
   .logo-bi, .logo-ai { font-size: 26px; }
   .logo-sub { display: none; }
-  .search-box {
-    order: 3;
-    width: 100%;
-    max-width: none;
-  }
-  /* 🛠 手機板：placeholder 太長會被切，整體縮小一點 + iOS 防縮放 */
-  .search-box input {
-    padding: 9px 12px;
-    font-size: 14px;
-    min-width: 0;            /* 允許 input 在 flex 容器內收縮 */
-  }
-  .search-box button {
-    padding: 9px 14px;
-    font-size: 13px;
-    flex-shrink: 0;
-  }
+  /* 🛠 手機版頁首不放搜尋框：避免與各頁自己的輸入框重複（搜尋改走首頁/底部「選股·行情」）；頁首更乾淨 */
+  .search-box { display: none !important; }
   .quick-links { display: none; }
 
   /* 主選單變漢堡 */
