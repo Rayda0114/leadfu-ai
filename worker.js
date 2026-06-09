@@ -1704,20 +1704,29 @@ async function getLineStockContext(env, q) {
     matched = stocks.filter(s => s.name && s.name.length >= 2 && q.includes(s.name)).slice(0, 2);
   }
   if (!matched.length) return "";
-  // 用即時報價(MIS，13:30 就有今日收盤)覆蓋落後的靜態價 —— TWSE 官方日檔(STOCK_DAY_ALL)出得慢，stocks_live 常落後一個交易日。
+  // 市場狀態（台北 UTC+8）→ 決定股價的「時間標示」，避免把收盤價講成即時。
+  const _tpe = new Date(Date.now() + 8 * 3600 * 1000);
+  const _dow = _tpe.getUTCDay(), _hm = _tpe.getUTCHours() * 60 + _tpe.getUTCMinutes();
+  const _wd = _dow >= 1 && _dow <= 5;
+  const _mState = !_wd ? "holiday" : (_hm < 540 ? "pre" : (_hm <= 810 ? "open" : "closed"));
+  const _liveNote = _mState === "open" ? "即時（盤中·延遲約5秒）" : (_mState === "closed" ? "今日收盤" : "上一交易日收盤");
+  // 預設「非即時參考價」；抓到 MIS 即時的才覆蓋成有時間標示的價。
+  matched = matched.map(s => ({ ...s, _note: "參考價·非即時（請以網站即時報價為準）" }));
+  // 用即時報價(MIS) 覆蓋落後的靜態價 —— TWSE 官方日檔(STOCK_DAY_ALL)出得慢，stocks_live 盤中常落後一個交易日。
   try {
     const exch = matched.filter(s => s.status !== "興櫃").map(s => (s.status === "上櫃" ? "otc_" : "tse_") + s.code + ".tw").join("|");
     if (exch) {
       const mr = await fetch(`https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=${encodeURIComponent(exch)}&json=1&delay=0&_=${Math.floor(Date.now() / 5000)}`,
-        { headers: { "User-Agent": "Mozilla/5.0 LeadFuAI/1.0", "Accept": "application/json" } });
+        { headers: { "User-Agent": "Mozilla/5.0", "Accept": "application/json", "Referer": "https://mis.twse.com.tw/stock/fibest.jsp" } });
       const md = await mr.json();
       const qmap = {};
-      for (const q of (md.msgArray || [])) {
-        let z = parseFloat(q.z); if (isNaN(z) || z <= 0) z = parseFloat(q.pz);
-        const y = parseFloat(q.y);
-        if (!isNaN(z) && z > 0 && !isNaN(y) && y > 0) qmap[q.c] = { price: z, change: Math.round((z - y) * 100) / 100 };
+      for (const qq of (md.msgArray || [])) {
+        let z = parseFloat(qq.z); if (isNaN(z) || z <= 0) z = parseFloat(qq.pz);
+        if (isNaN(z) || z <= 0) { const h = parseFloat(qq.h), l = parseFloat(qq.l); if (!isNaN(h) && !isNaN(l) && h > 0 && l > 0) z = Math.round((h + l) / 2 * 100) / 100; }
+        const y = parseFloat(qq.y);
+        if (!isNaN(z) && z > 0) qmap[qq.c] = { price: Math.round(z * 100) / 100, change: (!isNaN(y) && y > 0) ? Math.round((z - y) * 100) / 100 : null };
       }
-      matched = matched.map(s => qmap[s.code] ? { ...s, price: qmap[s.code].price, change: qmap[s.code].change } : s);
+      matched = matched.map(s => qmap[s.code] ? { ...s, price: qmap[s.code].price, change: qmap[s.code].change, _note: _liveNote } : s);
     }
   } catch (e) {}
   const grab = async (f) => { try { return (await (await env.ASSETS.fetch(new Request("https://placeholder/data/" + f))).json()).data || {}; } catch (e) { return {}; } };
@@ -1726,7 +1735,7 @@ async function getLineStockContext(env, q) {
     grab("etf_div_live.json"), grab("etf_holdings_live.json"), grab("etf_basic_live.json")
   ]);
   const out = matched.map(s => {
-    const o = { code: s.code, name: s.name, price: s.price, change: s.change, category: s.category, market: s.status };
+    const o = { code: s.code, name: s.name, price: s.price, change: s.change, 股價時間: s._note, category: s.category, market: s.status };
     if (s.category === "ETF") {
       const nv = nav[s.code], dv = div[s.code], h = hold[s.code], b = basic[s.code];
       if (nv) { o.etf_淨值 = nv.nav; o.etf_折溢價百分比 = nv.premium; o.etf_規模億元 = nv.aumYi; }
@@ -1739,7 +1748,7 @@ async function getLineStockContext(env, q) {
     }
     return o;
   });
-  return "\n\n---\n以下是領富 AI 提供的官方公開資料（請優先依此回答，**禁止編造數字**；ETF 殖利率為近一年實際配息估算）：\n```json\n" + JSON.stringify(out).slice(0, 4000) + "\n```";
+  return "\n\n---\n以下是領富 AI 提供的官方公開資料（請優先依此回答，**禁止編造數字**；**提到股價時務必照各檔「股價時間」標示是「即時」還是「收盤」，例如「2330 台積電 即時 2315」或「（今日收盤）」；絕對不可把收盤價/參考價講成即時價**；ETF 殖利率為近一年實際配息估算）：\n```json\n" + JSON.stringify(out).slice(0, 4000) + "\n```";
 }
 
 async function lineAnswer(env, q) {
@@ -1810,6 +1819,7 @@ export default {
   // Cloudflare Cron Triggers：準時跑每日新聞推播（不受 GitHub Actions 排程延遲）
   async scheduled(event, env, ctx) {
     const cron = (event && event.cron) || "";
-    ctx.waitUntil(runNewsPush(env, cron.startsWith("40 23") ? "pre" : "post"));
+    // 00:30 UTC = 08:30 台北（盤前，開盤前）；07:50 UTC = 15:50 台北（盤後）。
+    ctx.waitUntil(runNewsPush(env, cron.startsWith("30 0 ") ? "pre" : "post"));
   }
 };

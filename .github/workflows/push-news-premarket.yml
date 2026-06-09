@@ -1,19 +1,16 @@
-name: 領富 AI · 盤前新聞推播
+name: 領富 AI · 盤前新聞抓取（清晨先備好，Cloudflare 負責推播）
 
-# 台灣時間 07:40（UTC 前一日 23:40）—— 開盤(09:00)前，先抓最新（含隔夜）新聞再推給訂「盤前」的會員。
-# 流程：抓最新新聞 → AI 標註(可失敗) → 以 PUSH_SLOT=pre 推播 → 順手 commit 讓網站早上也是新的。
+# 盤前新聞「推播」已改由 Cloudflare Cron（worker scheduled，08:30 台北精準）負責，
+# 不再受 GitHub Actions 排程延遲影響（原本 07:40 排程常拖到 09:30、開盤後才送達）。
+# 這支只負責「清晨把最新（含隔夜）新聞抓好 + 部署到站」，讓 08:30 的 Cloudflare 推播讀到早上的最新新聞。
+# 排 05:00 台北（UTC 前一日 21:00）：即使 GitHub 排程延遲 1-2 小時，也能在 08:30 推播前備妥。
 on:
   schedule:
-    - cron: "40 23 * * 0-4"   # 週日~週四 23:40 UTC = 週一~週五 07:40 台北
+    - cron: "0 21 * * 0-4"   # 週日~週四 21:00 UTC = 週一~週五 05:00 台北
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: "只測試、不實際推播/不回寫（true = 只印訊息）"
-        required: false
-        default: "true"
 
 jobs:
-  premarket-news:
+  premarket-news-fetch:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -27,7 +24,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      # 1) 抓最新新聞（覆蓋本地 news_live.json）；失敗不擋推播（會用既有新聞）
+      # 1) 抓最新新聞（覆蓋 news_live.json）；失敗不擋（會留既有新聞）
       - name: Fetch latest news
         continue-on-error: true
         run: python scripts/fetch_news.py
@@ -41,19 +38,9 @@ jobs:
         env:
           PYTHONIOENCODING: utf-8
 
-      # 3) 推播給訂「盤前」的會員
-      - name: Push pre-market news digest
-        run: python scripts/push_news_digest.py
-        env:
-          PYTHONIOENCODING: utf-8
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
-          PUSH_SLOT: pre
-          DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
-
-      # 4) 順手把早上抓的新聞 commit（網站早上也是新的）；非排程或無變動就略過
-      - name: Commit fresh morning news
-        if: ${{ github.event_name == 'schedule' }}
+      # 3) commit 早上抓的新聞 + 觸發部署，讓 worker ASSETS（網站/AI/盤前推播讀的新聞）更新到最新
+      #    推播本身由 Cloudflare Cron（08:30 台北）讀這份已部署的 news_live.json 來發送。
+      - name: Commit fresh morning news & deploy
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -63,9 +50,8 @@ jobs:
           if git diff --cached --quiet; then
             echo "無新聞變動，略過 commit"
           else
-            git commit -m "data: 盤前新聞更新 ($(date -u +%Y-%m-%d))"
+            git commit -m "data: 盤前新聞清晨更新 ($(date -u +%Y-%m-%d))"
             git pull --rebase --autostash origin main || true
             git push || true
-            # 主動觸發部署，讓 worker ASSETS（網站/AI 讀的新聞）更新到早上的最新
-            gh workflow run deploy-worker.yml && echo "🚀 已觸發 worker 部署" || echo "⚠ 觸發部署失敗"
+            gh workflow run deploy-worker.yml && echo "🚀 已觸發 worker 部署（08:30 Cloudflare 推播前備妥）" || echo "⚠ 觸發部署失敗"
           fi
