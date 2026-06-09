@@ -152,7 +152,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -233,8 +233,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const k = changeClass(s.change);
       const fav = isInWatchlist(s.code);
       return `<tr data-code="${s.code}">
-        <td class="code"><a href="${pageHref('stock-detail.html?code=' + s.code)}">${s.code}</a></td>
-        <td><a href="${pageHref('stock-detail.html?code=' + s.code)}" style="color:inherit;">${s.name}</a></td>
+        <td class="code"><a href="${pageHref('stock-detail?code=' + s.code)}">${s.code}</a></td>
+        <td><a href="${pageHref('stock-detail?code=' + s.code)}" style="color:inherit;">${s.name}</a></td>
         <td class="num ${k}">${fmtPrice(s.price)}</td>
         <td class="num ${k}">${arrow(s.change)} ${fmtChange(s.change)}</td>
         <td class="num ${k}">${fmtPct(pct)}</td>

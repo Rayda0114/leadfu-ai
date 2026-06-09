@@ -130,7 +130,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const r3 = (x.r3m != null) ? `<span class="${x.r3m >= 0 ? 'up' : 'down'}">近3月 ${x.r3m >= 0 ? '+' : ''}${x.r3m.toFixed(1)}%</span>` : `<span style="color:#bbb;">近3月 —</span>`;
       const aum = (x.aumYi != null) ? (x.aumYi >= 10000 ? (x.aumYi / 10000).toFixed(2) + ' 兆' : Math.round(x.aumYi).toLocaleString() + ' 億') : '—';
       const prem = (x.premium != null) ? `<span class="${x.premium > 0 ? 'up' : (x.premium < 0 ? 'down' : '')}">折溢 ${x.premium > 0 ? '+' : ''}${x.premium.toFixed(2)}%</span>` : `<span style="color:#bbb;">折溢 —</span>`;
-      return `<a class="data-row" href="stock-detail.html?code=${x.code}">
+      return `<a class="data-row" href="stock-detail?code=${x.code}">
         <span class="data-rank">${(i + 1).toString().padStart(2, '0')}</span>
         <span class="data-code"><strong>${x.code}</strong> ${x.name} <span class="etf-cat-pill">${x.cat}</span></span>
         <span class="data-num" style="color:#555;">規模 ${aum}</span>
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // ItemList JSON-LD（前 20）
     try {
-      const items = rows.slice(0, 20).map((x, i) => ({ "@type": "ListItem", position: i + 1, name: `${x.code} ${x.name}`, url: `https://leadfuai.com/pages/stock-detail.html?code=${x.code}` }));
+      const items = rows.slice(0, 20).map((x, i) => ({ "@type": "ListItem", position: i + 1, name: `${x.code} ${x.name}`, url: `https://leadfuai.com/pages/stock-detail?code=${x.code}` }));
       let ld = document.getElementById("etfLd");
       if (!ld) { ld = document.createElement("script"); ld.type = "application/ld+json"; ld.id = "etfLd"; document.head.appendChild(ld); }
       ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "ItemList", name: document.getElementById("etfTitle").textContent, itemListElement: items });

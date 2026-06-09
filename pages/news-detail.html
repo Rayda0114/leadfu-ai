@@ -116,7 +116,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const s = findStock(c);
       if (!s) return "";
       const cls = changeClass(s.change);
-      return `<a href="${pageHref('stock-detail.html?code=' + s.code)}" style="display:inline-block;background:#f8fafd;border:1px solid #e0e3e8;padding:10px 14px;border-radius:4px;margin:4px 6px 4px 0;text-decoration:none;color:inherit;">
+      return `<a href="${pageHref('stock-detail?code=' + s.code)}" style="display:inline-block;background:#f8fafd;border:1px solid #e0e3e8;padding:10px 14px;border-radius:4px;margin:4px 6px 4px 0;text-decoration:none;color:inherit;">
         <strong style="color:#163A2E;">${s.code} ${s.name}</strong>
         <span style="margin-left:8px;color:#444;">${fmtPrice(s.price)}</span>
         <span class="${cls}" style="margin-left:6px;">${arrow(s.change)} ${fmtChange(s.change)}</span>
@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     <li>
       <span class="news-time">${n.time}</span>
       <span class="news-tag ${n.tag}">${n.tag}</span>
-      <a class="news-title" href="news-detail.html?id=${n.id}">${n.title}</a>
+      <a class="news-title" href="news-detail?id=${n.id}">${n.title}</a>
     </li>
   `).join("");
 

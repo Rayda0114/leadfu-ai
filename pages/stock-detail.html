@@ -509,7 +509,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -817,7 +817,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     ? relatedNews.map(n => `<li>
         <span class="news-time">${n.time}</span>
         <span class="news-tag ${n.tag}">${n.tag}</span>
-        <a class="news-title" href="news-detail.html?id=${n.id}">${n.title}</a>
+        <a class="news-title" href="news-detail?id=${n.id}">${n.title}</a>
       </li>`).join("")
     : `<li style="display:block;text-align:center;padding:30px;color:#999;">尚無此個股相關新聞</li>`;
 

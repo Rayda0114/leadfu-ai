@@ -132,7 +132,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (matches.stock.length === 0) return "";
     return matches.stock.map(s => {
       const cls = changeClass(s.change);
-      return `<a href="${pageHref('stock-detail.html?code=' + s.code)}" style="display:flex;align-items:center;gap:14px;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
+      return `<a href="${pageHref('stock-detail?code=' + s.code)}" style="display:flex;align-items:center;gap:14px;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
         <div style="flex-shrink:0;">
           <strong style="color:#163A2E;font-size:15px;">${highlight(s.code, q)}</strong>
           <span style="margin-left:6px;font-size:14px;">${highlight(s.name, q)}</span>
@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function renderNews() {
     if (matches.news.length === 0) return "";
     return matches.news.map(n => `
-      <a href="${pageHref('news-detail.html?id=' + n.id)}" style="display:block;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
+      <a href="${pageHref('news-detail?id=' + n.id)}" style="display:block;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
         <div style="display:flex;gap:10px;align-items:center;margin-bottom:4px;">
           <span class="news-tag ${n.tag}" style="font-size:11px;">${n.tag}</span>
           <span style="font-size:12px;color:#888;">${n.date}</span>
@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function renderAnns() {
     if (matches.ann.length === 0) return "";
     return matches.ann.map(a => `
-      <a href="${pageHref('stock-detail.html?code=' + a.code)}" style="display:flex;gap:12px;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
+      <a href="${pageHref('stock-detail?code=' + a.code)}" style="display:flex;gap:12px;padding:10px;border-bottom:1px solid #f3f5f8;text-decoration:none;color:inherit;">
         <span style="font-size:12px;color:#888;">${a.date}</span>
         <span style="color:#163A2E;font-weight:600;">${a.code} ${a.name}</span>
         <span class="status-pill" style="background:#e6efff;color:#163A2E;font-size:11px;">${a.type}</span>

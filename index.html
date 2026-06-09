@@ -910,7 +910,7 @@
 }
 </script>
 
-<script src="js/main.js?v=3.24.6"></script>
+<script src="js/main.js?v=3.24.7"></script>
 <script>
 // 📊 今日 AI 盤後摘要（每日生成，6 小時內快取）
 document.addEventListener("DOMContentLoaded", async () => {
@@ -1143,12 +1143,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     esc = esc.replace(/(^|[\s（(「『\[、，,])(\d{4})(\s+)([一-龥A-Za-z\-\*KY]{1,12})/g,
       (m, pre, code, sp, name) => {
         if (!_stockByCode[code]) return m;
-        return `${pre}<a href="pages/stock-detail.html?code=${code}" class="chat-stock-link">${code}${sp}${name}</a>`;
+        return `${pre}<a href="pages/stock-detail?code=${code}" class="chat-stock-link">${code}${sp}${name}</a>`;
       });
     esc = esc.replace(/(^|[\s（(「『\[、，,])(\d{4})(?=[）)」』\]、，,\s。.!?]|$)/g,
       (m, pre, code) => {
         if (!_stockByCode[code]) return m;
-        return `${pre}<a href="pages/stock-detail.html?code=${code}" class="chat-stock-link">${code}</a>`;
+        return `${pre}<a href="pages/stock-detail?code=${code}" class="chat-stock-link">${code}</a>`;
       });
     esc = esc.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
     esc = esc.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g, "$1<em>$2</em>");
@@ -1262,7 +1262,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const codeMatch = (userQuestion || "").match(/\b(\d{4})\b/);
     if (codeMatch && _stockByCode[codeMatch[1]]) {
       const s = _stockByCode[codeMatch[1]];
-      ctas.push({ icon: "📊", text: `看 ${s.code} ${s.name} 完整分析`, href: `pages/stock-detail.html?code=${s.code}` });
+      ctas.push({ icon: "📊", text: `看 ${s.code} ${s.name} 完整分析`, href: `pages/stock-detail?code=${s.code}` });
     }
     if (/合理區間|偏低|偏高|低估|高估|被低估|公允/.test(q)) {
       ctas.push({ icon: "💎", text: "看合理區間偏低 TOP 5", href: "pages/stocks.html?sort=fv_low" });

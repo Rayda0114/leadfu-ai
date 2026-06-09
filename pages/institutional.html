@@ -118,7 +118,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const s = findStock(item.code) || { code: item.code, name: item.name, market: "listed", price: 0, change: 0, category: "" };
     const netLots = item[fieldKey[kind]];
     const cls = netLots > 0 ? "up" : (netLots < 0 ? "down" : "flat");
-    return `<a class="inst-row" href="stock-detail.html?code=${item.code}">
+    return `<a class="inst-row" href="stock-detail?code=${item.code}">
       <span class="inst-row-code">${item.code}</span>
       <span class="inst-row-name">${item.name.trim()}</span>
       ${s.category ? `<span class="inst-row-cat">${s.category}</span>` : ""}

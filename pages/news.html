@@ -172,7 +172,7 @@
   .news-chip { font-size: 12px; background: #eef4f0; color: #1B4332; border-radius: 5px; padding: 2px 9px; text-decoration: none; }
   .news-chip:hover { background: #dcebe2; }
 </style>
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -276,7 +276,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   : s ? '<span class="news-sent flat">中性</span>' : "";
       const chips = (n.ai_related || []).map(c => {
         const st = findStock(c);
-        return `<a class="news-chip" href="stock-detail.html?code=${c}">${c} ${st ? st.name : ""}</a>`;
+        return `<a class="news-chip" href="stock-detail?code=${c}">${c} ${st ? st.name : ""}</a>`;
       }).join("");
       const hz = (n.ai_horizon && n.ai_horizon !== "不明") ? ` <span class="horizon">・${n.ai_horizon}影響</span>` : "";
       const note = n.ai_note ? `<div class="news-ainote">💡 ${n.ai_note}${hz}</div>` : "";
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span class="news-time">${n.time}</span>
           <span class="news-tag ${n.tag}">${n.tag}</span>
           ${sentB}
-          <a class="news-title" href="news-detail.html?id=${n.id}">${n.title}</a>
+          <a class="news-title" href="news-detail?id=${n.id}">${n.title}</a>
         </div>
         ${note}
         ${chips ? `<div class="news-chips">${chips}</div>` : ""}

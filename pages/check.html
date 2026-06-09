@@ -144,7 +144,7 @@
     a[href]:after { content:""; }
   }
 </style>
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       <div class="chk-actions">
         <button class="primary" id="chkPrint">🖨️ 下載 PDF</button>
         <button id="chkFav">${inWl ? "✓ 已在自選" : "＋ 加入自選股"}</button>
-        <a href="stock-detail.html?code=${code}">看完整個股頁 →</a>
+        <a href="stock-detail?code=${code}">看完整個股頁 →</a>
         <a href="risk-radar.html">看防錯雷達 →</a>
       </div>
       <div class="chk-foot">※ 本檢查為公開資料（TWSE／TPEx 盤後）整理，僅供「買進前先看清楚」之參考，不構成買賣建議。<br>※ 「適合短線／長期」是依風險與基本面訊號的中立判斷，請依您自身投資目標與風險承受度決定。</div>

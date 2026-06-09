@@ -235,7 +235,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -334,7 +334,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="ht-item-main">
             <div class="ht-item-title">
               ${flag ? `<span class="ht-item-flag">${flag}</span>` : ""}
-              <a href="stock-detail.html?code=${s.code}" class="ht-item-stock">${s.code} ${s.name}</a>
+              <a href="stock-detail?code=${s.code}" class="ht-item-stock">${s.code} ${s.name}</a>
             </div>
             <div class="ht-item-reason">${reasonText(s, view)}</div>
           </div>
@@ -344,7 +344,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
           <div class="ht-item-actions">
             <a href="../index.html?ask=${askText}" class="ht-item-ask">📊 問 AI</a>
-            <a href="stock-detail.html?code=${s.code}" class="ht-item-detail">查看 →</a>
+            <a href="stock-detail?code=${s.code}" class="ht-item-detail">查看 →</a>
           </div>
         </li>
       `;

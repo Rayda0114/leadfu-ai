@@ -120,7 +120,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const sc = d.short_change || 0;
       const mcCls = mc > 0 ? "up" : (mc < 0 ? "down" : "flat");
       const scCls = sc > 0 ? "down" : (sc < 0 ? "up" : "flat");
-      return `<a class="data-row" href="stock-detail.html?code=${d.code}">
+      return `<a class="data-row" href="stock-detail?code=${d.code}">
         <span class="data-rank">${(i+1).toString().padStart(2,'0')}</span>
         <span class="data-code"><strong>${d.code}</strong> ${d.name}</span>
         <span class="data-cat">${cat}</span>

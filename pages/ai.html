@@ -93,7 +93,7 @@
   </div>
 </main>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -238,14 +238,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       (m, pre, code, sp, name) => {
         const s = _stockByCode[code];
         if (!s) return m;
-        return `${pre}<a href="stock-detail.html?code=${code}" class="chat-stock-link">${code}${sp}${name}</a>`;
+        return `${pre}<a href="stock-detail?code=${code}" class="chat-stock-link">${code}${sp}${name}</a>`;
       });
     // 也處理單獨出現的代號（沒接公司名的情況）
     esc = esc.replace(/(^|[\s（(「『\[、，,])(\d{4})(?=[）)」』\]、，,\s。.!?]|$)/g,
       (m, pre, code) => {
         const s = _stockByCode[code];
         if (!s) return m;
-        return `${pre}<a href="stock-detail.html?code=${code}" class="chat-stock-link">${code}</a>`;
+        return `${pre}<a href="stock-detail?code=${code}" class="chat-stock-link">${code}</a>`;
       });
     // 3. 輕量 markdown
     esc = esc.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");

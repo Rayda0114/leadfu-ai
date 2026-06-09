@@ -109,7 +109,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const posPct = Math.round(Math.max(0, Math.min(1, x.position)) * 100);
       const yld = (typeof v.yield_pct === "number") ? `殖利 ${v.yield_pct.toFixed(1)}%` : "";
       const oneoff = (div[x.code] && div[x.code].oneoff) ? ` <span style="font-size:10px;background:#fdeced;color:#c0392b;border-radius:4px;padding:1px 5px;">⚠配老本</span>` : "";
-      return `<a class="data-row" href="stock-detail.html?code=${x.code}">
+      return `<a class="data-row" href="stock-detail?code=${x.code}">
         <span class="data-rank">${(i + 1).toString().padStart(2, '0')}</span>
         <span class="data-code"><strong>${x.code}</strong> ${x.name}${oneoff}</span>
         <span class="data-cat">${s.category || ""}</span>
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       </a>`;
     }).join("");
     try {
-      const items = rows.slice(0, 20).map((x, i) => ({ "@type": "ListItem", position: i + 1, name: `${x.code} ${x.name}`, url: `https://leadfuai.com/pages/stock-detail.html?code=${x.code}` }));
+      const items = rows.slice(0, 20).map((x, i) => ({ "@type": "ListItem", position: i + 1, name: `${x.code} ${x.name}`, url: `https://leadfuai.com/pages/stock-detail?code=${x.code}` }));
       let ld = document.getElementById("vsLd");
       if (!ld) { ld = document.createElement("script"); ld.type = "application/ld+json"; ld.id = "vsLd"; document.head.appendChild(ld); }
       ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "ItemList", name: document.getElementById("vsTitle").textContent, itemListElement: items });

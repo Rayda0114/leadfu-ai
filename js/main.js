@@ -562,7 +562,7 @@ function renderTicker() {
   const items = topStocks.map(s => {
     const cls = changeClass(s.change);
     return `<span class="tk-item" data-code="${s.code}">
-      <a href="${pageHref('stock-detail.html?code=' + s.code)}" style="color:inherit;text-decoration:none;">
+      <a href="${pageHref('stock-detail?code=' + s.code)}" style="color:inherit;text-decoration:none;">
         <span class="tk-code">${s.code} ${s.name}</span>
         <span class="tk-price">${fmtPrice(s.price)}</span>
         <span class="${cls}">${arrow(s.change)} ${fmtChange(s.change)}</span>
@@ -607,8 +607,8 @@ function renderStockTable() {
     const cls = changeClass(s.change);
     const inFav = isInWatchlist(s.code);
     return `<tr data-code="${s.code}">
-      <td class="code"><a href="${pageHref('stock-detail.html?code=' + s.code)}">${s.code}</a></td>
-      <td class="name"><a href="${pageHref('stock-detail.html?code=' + s.code)}" style="color:inherit;">${s.name}</a></td>
+      <td class="code"><a href="${pageHref('stock-detail?code=' + s.code)}">${s.code}</a></td>
+      <td class="name"><a href="${pageHref('stock-detail?code=' + s.code)}" style="color:inherit;">${s.name}</a></td>
       <td class="num ${cls}">${fmtPrice(s.price)}</td>
       <td class="num ${cls}">${arrow(s.change)} ${fmtChange(s.change)}</td>
       <td class="num ${cls}">${fmtPct(pct)}</td>
@@ -769,7 +769,7 @@ function bindMobileRowTap() {
     // 不要攔截真實連結與按鈕（避免「+自選」按鈕被誤觸發跳轉）
     if (e.target.closest("a, button")) return;
     const code = tr.dataset.code;
-    if (code) location.href = pageHref("stock-detail.html?code=" + code);
+    if (code) location.href = pageHref("stock-detail?code=" + code);
   });
   // 滑鼠 hover 顯示手型 cursor（視覺提示「這列可點」）
   if (!document.getElementById("_rowTapStyle")) {
@@ -790,7 +790,7 @@ function renderNews() {
     <li>
       <span class="news-time">${n.time}</span>
       <span class="news-tag ${n.tag}">${n.tag}</span>
-      <a class="news-title" href="${pageHref('news-detail.html?id=' + n.id)}">${n.title}</a>
+      <a class="news-title" href="${pageHref('news-detail?id=' + n.id)}">${n.title}</a>
     </li>
   `).join("");
 }
@@ -866,7 +866,7 @@ function renderFairValueLow() {
       }
 
       // 開關 OFF（現在）：全 open
-      return `<a class="fv-low-card" href="${pageHref('stock-detail.html?code=' + fv.code)}">
+      return `<a class="fv-low-card" href="${pageHref('stock-detail?code=' + fv.code)}">
         <div class="fv-low-card-head">
           <span class="fv-low-card-code">${fv.code}</span>
           <span class="fv-low-card-name">${fv.name}</span>
@@ -901,7 +901,7 @@ function renderFairValueLow() {
       // 位置標籤：避免顯示難懂的負百分比、也不暗示「便宜可買」
       const posLabel = fv.position <= 0 ? "低於區間下緣" : "合理區間下緣";
       const price = s ? fmtPrice(s.price) : "—";
-      return `<li style="cursor:pointer;" onclick="location.href='${pageHref('stock-detail.html?code=' + fv.code)}'">
+      return `<li style="cursor:pointer;" onclick="location.href='${pageHref('stock-detail?code=' + fv.code)}'">
         <div class="ipo-name">${fv.code} ${fv.name} <span style="float:right;font-weight:600;color:#1B4332;">${price}</span></div>
         <div class="ipo-info">
           合理區間 NT$${Math.round(fv.low).toLocaleString()} ~ NT$${Math.round(fv.high).toLocaleString()}
@@ -1158,19 +1158,19 @@ function bindSearch() {
 
     // 1. 完全符合代號 → 跳個股
     const exact = STOCK_DATA.stocks.find(s => s.code === q);
-    if (exact) { location.href = pageHref('stock-detail.html?code=' + exact.code); return; }
+    if (exact) { location.href = pageHref('stock-detail?code=' + exact.code); return; }
 
     // 2. 完全符合公司名稱 → 跳個股
     const exactName = STOCK_DATA.stocks.find(s => s.name === q);
-    if (exactName) { location.href = pageHref('stock-detail.html?code=' + exactName.code); return; }
+    if (exactName) { location.href = pageHref('stock-detail?code=' + exactName.code); return; }
 
     // 3. 公司名稱開頭含查詢字串（例如「環球晶」→ 環球晶圓）→ 唯一結果直接跳
     const startsWith = STOCK_DATA.stocks.filter(s => s.name.startsWith(q));
-    if (startsWith.length === 1) { location.href = pageHref('stock-detail.html?code=' + startsWith[0].code); return; }
+    if (startsWith.length === 1) { location.href = pageHref('stock-detail?code=' + startsWith[0].code); return; }
 
     // 4. 部分包含（任何位置）→ 唯一結果直接跳
     const includes = STOCK_DATA.stocks.filter(s => s.name.includes(q) || s.code.includes(q));
-    if (includes.length === 1) { location.href = pageHref('stock-detail.html?code=' + includes[0].code); return; }
+    if (includes.length === 1) { location.href = pageHref('stock-detail?code=' + includes[0].code); return; }
 
     // 5. 多結果或全無 → 進搜尋頁
     location.href = pageHref('search.html?q=' + encodeURIComponent(q));
@@ -2246,7 +2246,7 @@ function injectStockJsonLd() {
   const rev = (STOCK_DATA.revenue && STOCK_DATA.revenue[code]) || null;
   const val = (STOCK_DATA.valuation && STOCK_DATA.valuation[code]) || null;
   const inst = (STOCK_DATA.institutional && STOCK_DATA.institutional[code]) || null;
-  const url = SITE_ORIGIN + "/pages/stock-detail.html?code=" + code;
+  const url = SITE_ORIGIN + "/pages/stock-detail?code=" + code;
   const pct = pctChange(s.price, s.change);
 
   // ── 動態 SEO：每檔個股都有獨特 title / meta description / og tags ──
@@ -2870,7 +2870,7 @@ function setupAiAlert() {
       // 中性標籤：只描述「今日漲幅排名」這個客觀事實，不做推介
       const tagText = `今日漲幅第 ${i + 1} 名`;
       const reason = `今日${s.change > 0 ? "上漲" : "下跌"} ${fmtPct(s.pct)}，成交量 ${s.volume.toLocaleString()} 張，屬 ${s.category} 類股。以上為公開數據整理，非投資建議。`;
-      return `<a class="ai-alert-item" href="${pageHref('stock-detail.html?code=' + s.code)}">
+      return `<a class="ai-alert-item" href="${pageHref('stock-detail?code=' + s.code)}">
         <div class="ai-alert-rank">0${i+1}</div>
         <div class="ai-alert-content">
           <div class="ai-alert-row">
@@ -2886,7 +2886,7 @@ function setupAiAlert() {
     let policyItem = "";
     const policyNews = (STOCK_DATA.news || []).find(n => n.tag === "公告" || n.tag === "焦點");
     if (policyNews) {
-      const newsHref = pageHref("news-detail.html?id=" + (policyNews.id || ""));
+      const newsHref = pageHref("news-detail?id=" + (policyNews.id || ""));
       policyItem = `<a class="ai-alert-item" href="${newsHref}">
         <div class="ai-alert-rank">03</div>
         <div class="ai-alert-content">
@@ -3206,7 +3206,7 @@ function lqBuildWatchlistRows() {
   container.innerHTML = `
     <div class="lq-watchlist-label">${useFallback ? "熱門" : "自選"}</div>
     ${visible.map(it => `
-      <a class="lq-w-row" data-code="${it.code}" data-market="${it.market}" href="${pageHref('stock-detail.html?code=' + it.code)}">
+      <a class="lq-w-row" data-code="${it.code}" data-market="${it.market}" href="${pageHref('stock-detail?code=' + it.code)}">
         <span class="lqw-name">${it.code} ${it.name}</span>
         <span class="lqw-price">--</span>
         <span class="lqw-change">--</span>

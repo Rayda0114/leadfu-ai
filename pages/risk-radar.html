@@ -145,7 +145,7 @@
   .rk-fpill.active { background:#1B4332; color:#fff; border-color:#1B4332; }
   .up { color:#d23b3b; } .down { color:#1e9e54; } .flat { color:#888; }
 </style>
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="rk-score" style="color:${col};">${r.score}<small>/100</small></div>
         <div class="rk-meta">
           <div class="rk-name">
-            <a href="stock-detail.html?code=${code}"><b>${code}</b> ${s.name}</a>
+            <a href="stock-detail?code=${code}"><b>${code}</b> ${s.name}</a>
             <span class="rk-level" style="background:${bg};color:${col};">${r.level}風險</span>${mine}
           </div>
           <div class="rk-sub">${pillMarket(s)} ${s.category || ""} · ${L.fmtPrice(s.price)} <span class="${cls}">${L.arrow(s.change)} ${L.fmtPct(pct)}</span> · ${trendHtml(r)}</div>

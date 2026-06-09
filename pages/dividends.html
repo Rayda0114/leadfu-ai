@@ -114,7 +114,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const yieldText = d.yield_pct !== null && d.yield_pct !== undefined ? `${d.yield_pct.toFixed(2)}%` : "—";
       const peText = d.pe_ratio ? d.pe_ratio.toFixed(2) : "—";
       const pbText = d.pb_ratio ? d.pb_ratio.toFixed(2) : "—";
-      return `<a class="data-row" href="stock-detail.html?code=${d.code}">
+      return `<a class="data-row" href="stock-detail?code=${d.code}">
         <span class="data-rank">${(i+1).toString().padStart(2,'0')}</span>
         <span class="data-code"><strong>${d.code}</strong> ${d.name}${(div[d.code] && div[d.code].oneoff) ? ` <span style="font-size:10px;background:#fdeced;color:#c0392b;border-radius:4px;padding:1px 5px;white-space:nowrap;" title="${div[d.code].oneoff_reason || ''}">⚠配老本</span>` : ""}</span>
         <span class="data-cat">${cat}</span>
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       </a>`;
     }).join("");
     try {
-      const items = list.slice(0, 20).map((d, i) => ({ "@type": "ListItem", position: i + 1, name: `${d.code} ${d.name}`, url: `https://leadfuai.com/pages/stock-detail.html?code=${d.code}` }));
+      const items = list.slice(0, 20).map((d, i) => ({ "@type": "ListItem", position: i + 1, name: `${d.code} ${d.name}`, url: `https://leadfuai.com/pages/stock-detail?code=${d.code}` }));
       let ld = document.getElementById("divLd");
       if (!ld) { ld = document.createElement("script"); ld.type = "application/ld+json"; ld.id = "divLd"; document.head.appendChild(ld); }
       ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "ItemList", name: document.getElementById("divTitle").textContent, itemListElement: items });

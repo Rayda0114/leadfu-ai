@@ -84,7 +84,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 const INDUSTRY_ICONS = {
   "半導體": "🔬", "電子零組件": "⚙️", "光電": "💡", "電腦及周邊": "💻",
@@ -319,7 +319,7 @@ function renderIndustry(ind, idx) {
         <div class="ind-hl-label">本週重點個股</div>
         <div class="ind-hl-grid">
           ${ind.highlights.map(h => `
-            <a class="ind-hl-card" href="stock-detail.html?code=${h.code}">
+            <a class="ind-hl-card" href="stock-detail?code=${h.code}">
               <div class="ind-hl-kind">${HIGHLIGHT_ICONS[h.kind] || "📌"} ${h.kind}</div>
               <div class="ind-hl-stock"><strong>${h.code}</strong> ${h.name}</div>
               <div class="ind-hl-value">${h.value}</div>

@@ -319,7 +319,7 @@
     .pf-table .pt-w-bar { display:none; }
   }
 </style>
-<script src="../js/main.js?v=3.24.6"></script>
+<script src="../js/main.js?v=3.24.7"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -500,7 +500,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     body.innerHTML = rows.map(({ it, a }) => `
       <div class="pf-alert">
-        <div class="pa-head"><a href="stock-detail.html?code=${it.code}"><b>${it.code}</b> ${it.s.name}</a>
+        <div class="pa-head"><a href="stock-detail?code=${it.code}"><b>${it.code}</b> ${it.s.name}</a>
           <span style="color:#999;font-size:12px;margin-left:6px;">佔 ${(it.weight*100).toFixed(0)}%</span></div>
         <div class="pa-tags">${a.map(x => `<span class="pa-tag ${x.lv}">${x.t}：${x.d}</span>`).join("")}</div>
       </div>`).join("");
@@ -642,7 +642,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         ? `<span style="font-weight:800;color:${rkColor(rk.level)};">${rk.score}</span><br><small style="color:${rkColor(rk.level)};">${rk.level}</small>`
         : `<small style="color:#16A34A;font-weight:700;">低</small>`;
       return `<tr data-code="${it.code}">
-        <td class="pt-name"><a href="stock-detail.html?code=${it.code}"><b>${it.code}</b> ${s.name}</a><br><small>${marketLabel[s.market] || ""} ${s.category || ""}</small></td>
+        <td class="pt-name"><a href="stock-detail?code=${it.code}"><b>${it.code}</b> ${s.name}</a><br><small>${marketLabel[s.market] || ""} ${s.category || ""}</small></td>
         <td class="pt-${cls}" data-label="現價／漲跌">${L.fmtPrice(s.price)}<br><small>${L.arrow(s.change)}${L.fmtPct(pct)}</small></td>
         <td data-label="股數"><input type="number" class="pt-shares" min="0" step="1000" value="${it.h.shares}"></td>
         <td data-label="成本"><input type="number" class="pt-cost" min="0" step="0.01" value="${it.h.cost > 0 ? it.h.cost : ""}" placeholder="—"></td>
