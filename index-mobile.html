@@ -92,12 +92,12 @@
   html{font-size:16px;}
   body{margin:0;background:var(--bg);color:var(--ink);
        font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
-       -webkit-font-smoothing:antialiased;line-height:1.62;padding-bottom:calc(82px + var(--safe-b));}
+       -webkit-font-smoothing:antialiased;line-height:1.62;padding-bottom:calc(74px + var(--safe-b));}
   .num{font-variant-numeric:tabular-nums;}
   .px{padding-left:22px;padding-right:22px;}
   img{max-width:100%;}
 
-  .top{display:flex;align-items:center;justify-content:space-between;min-height:72px;padding:18px 22px 12px;}
+  .top{display:flex;align-items:center;justify-content:space-between;min-height:72px;padding:calc(18px + env(safe-area-inset-top)) 22px 12px;}
   .brand{display:flex;align-items:center;gap:13px;min-width:0;}
   .mark-ic{width:46px;height:46px;border-radius:13px;display:block;flex:none;box-shadow:0 5px 16px rgba(0,0,0,.28);}
   .brand b{display:block;font-size:20px;line-height:1;font-weight:900;}
@@ -326,11 +326,6 @@
   <div class="fl">領富 AI</div>
   台股全市場財經資訊網 · 本站資訊僅供參考，不構成投資建議<br>客服 LINE：<a href="https://line.me/R/ti/p/@130tqckv">@130tqckv</a> · 唯一官方網址 leadfuai.com
 </footer>
-
-<div class="bottom">
-  <a class="cta" href="#" id="bottomCheckBtn">免費檢查股票</a>
-  <span>0 元</span>
-</div>
 
 <script src="js/main.js?v=3.24.5"></script>
 <script>
