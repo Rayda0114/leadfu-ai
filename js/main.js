@@ -1684,16 +1684,74 @@ window.addEventListener("pagehide", () => LeadFuTTS.cancel());
  * 💬 會員回饋小工具（漂浮按鈕 + Modal）
  * 任何頁面都能 1 秒丟意見，存進 Supabase feedback 表
  * ============================================================ */
-function setupFeedbackWidget() {
-  // 漂浮按鈕（右下角，手機在 bottom-tab-bar 上方）
-  const btn = document.createElement("button");
-  btn.className = "feedback-fab";
-  btn.type = "button";
-  btn.setAttribute("aria-label", "意見回饋");
-  btn.title = "意見回饋";
-  btn.innerHTML = `<span class="feedback-fab-emoji" aria-hidden="true">💬</span><span class="feedback-fab-label">回饋</span>`;
-  document.body.appendChild(btn);
-  btn.addEventListener("click", showFeedbackModal);
+function setupSupportWidget() {
+  if (document.querySelector(".cs-widget")) return;
+  const P = location.pathname.includes("/pages/") ? "" : "pages/";
+  const LINE = "https://line.me/R/ti/p/@130tqckv";
+  const lineSVG = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>`;
+  const headSVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M18 12h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1z"/><path d="M6 12H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1z"/></svg>`;
+  const xSVG = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
+
+  const w = document.createElement("div");
+  w.className = "cs-widget";
+  w.innerHTML =
+    '<button class="cs-launcher" type="button" aria-label="客服" aria-haspopup="dialog">' +
+      '<span class="cs-launcher-ic">' + headSVG + '</span><span>客服</span></button>' +
+    '<button class="cs-tab" type="button" aria-label="開啟客服" hidden>客服</button>' +
+    '<div class="cs-scrim" hidden></div>' +
+    '<div class="cs-panel" role="dialog" aria-label="客服中心" aria-modal="false" hidden>' +
+      '<div class="cs-panel-head"><div><b>客服中心</b><span>需要協助嗎？選一個 👇</span></div>' +
+        '<button class="cs-close" type="button" aria-label="關閉">' + xSVG + '</button></div>' +
+      '<div class="cs-panel-body">' +
+        '<a class="cs-item" href="' + LINE + '" target="_blank" rel="noopener">' +
+          '<span class="cs-item-ic cs-ic-line">' + lineSVG + '</span>' +
+          '<span class="cs-item-tx"><b>LINE 客服</b><small>加官方 LINE，真人＋AI 回覆</small></span>' +
+          '<span class="cs-item-go">›</span></a>' +
+        '<a class="cs-item" href="' + P + 'ai.html">' +
+          '<span class="cs-item-ic cs-ic-ai">🤖</span>' +
+          '<span class="cs-item-tx"><b>AI 問股</b><small>用 AI 查個股、問問題</small></span>' +
+          '<span class="cs-item-go">›</span></a>' +
+        '<a class="cs-item" href="' + P + 'fraud-alert.html">' +
+          '<span class="cs-item-ic cs-ic-shield">🛡️</span>' +
+          '<span class="cs-item-tx"><b>投資防詐</b><small>辨識冒名詐騙，保護自己</small></span>' +
+          '<span class="cs-item-go">›</span></a>' +
+        '<a class="cs-item" href="' + P + 'about.html">' +
+          '<span class="cs-item-ic cs-ic-q">❓</span>' +
+          '<span class="cs-item-tx"><b>常見問題</b><small>關於領富 AI 的常見疑問</small></span>' +
+          '<span class="cs-item-go">›</span></a>' +
+      '</div></div>';
+  document.body.appendChild(w);
+
+  const launcher = w.querySelector(".cs-launcher");
+  const tab = w.querySelector(".cs-tab");
+  const panel = w.querySelector(".cs-panel");
+  const scrim = w.querySelector(".cs-scrim");
+  let minimized = false;
+  try { minimized = localStorage.getItem("cs_min") === "1"; } catch (e) {}
+
+  function base() { launcher.hidden = minimized; tab.hidden = !minimized; }
+  function openPanel() {
+    launcher.hidden = true; tab.hidden = true;
+    panel.hidden = false; scrim.hidden = false;
+    void panel.offsetWidth;
+    panel.classList.add("open"); scrim.classList.add("open");
+  }
+  function closePanel() {
+    panel.classList.remove("open"); scrim.classList.remove("open");
+    setTimeout(function () { panel.hidden = true; scrim.hidden = true; base(); }, 280);
+  }
+  launcher.addEventListener("click", openPanel);
+  tab.addEventListener("click", openPanel);
+  scrim.addEventListener("click", closePanel);
+  w.querySelector(".cs-close").addEventListener("click", function () {
+    minimized = true;
+    try { localStorage.setItem("cs_min", "1"); } catch (e) {}
+    closePanel();
+  });
+  w.querySelectorAll(".cs-item").forEach(function (a) {
+    a.addEventListener("click", closePanel);
+  });
+  base();
 }
 
 /* 📱 LINE 客服浮動鈕（疊在「回饋」上方，右下角；全站） */
@@ -3770,8 +3828,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupDisclaimer();
   setupInAppBrowserWarning();   // 偵測 LINE/FB/IG/WeChat 內建瀏覽器，跳警告擋掉 OAuth
   setupThemeToggle();           // 🎨 主題切換（墨綠 ↔ 喜氣紅）
-  setupFeedbackWidget();        // 漂浮回饋按鈕，每頁右下角
-  setupLineFab();               // LINE 客服浮動鈕，疊在回饋上方
+  setupSupportWidget();         // 🎧 客服浮動小工具：單顆「客服」鈕 → 底部面板（LINE/AI問股/防詐/常見問題）→ X 縮成右側標籤
   setupPWA();
   setupAntiFraudBanner();       // 📢 防詐騙官方資訊條（首頁、可關閉 7 天）
   injectFooterFraudReminder();  // 📢 全站 footer 防詐聲明（給 SEO + AI 爬蟲穩定錨點）
