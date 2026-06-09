@@ -11,8 +11,6 @@ ECPAY_MERCHANT_ID = "3501534"
 [assets]
 directory = "."
 binding = "ASSETS"
-# 讓所有請求都走 worker（不然靜態 index.html 會被 Cloudflare 直接服務，手機判斷攔不到「/」）
-experimental_serve_directly = false
 
 # Cloudflare 定時觸發（準時，不受 GitHub Actions 排程延遲）：
 #   00:30 UTC = 08:30 台北 → 盤前新聞推播（開盤前送達）；新聞由 GitHub 清晨先抓好並部署到站。
