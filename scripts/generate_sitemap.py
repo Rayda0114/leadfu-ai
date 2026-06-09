@@ -98,54 +98,69 @@ def url_entry(path, changefreq, priority, lastmod=None):
     return "\n".join(parts)
 
 
+def write_urlset(filename, url_list):
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    xml += "\n".join(url_list)
+    xml += "\n</urlset>\n"
+    (ROOT / filename).write_text(xml, encoding="utf-8")
+
+
 def main():
     today = datetime.now().strftime("%Y-%m-%d")
-    urls = []
+    page_urls, stock_urls, content_urls = [], [], []
 
-    # 1. 靜態頁面
+    # 1. 首頁 + 工具/靜態頁（學習文章歸「內容」子 sitemap）
     for path, freq, prio in STATIC_PAGES:
-        urls.append(url_entry(path, freq, prio, today))
-    print(f"靜態頁面: {len(STATIC_PAGES)}")
+        entry = url_entry(path, freq, prio, today)
+        if path.startswith("/pages/learn"):
+            content_urls.append(entry)
+        else:
+            page_urls.append(entry)
 
     # 2. 個股詳情頁
     stocks_data = load_json(DATA_DIR / "stocks_live.json")
-    stock_count = 0
     if stocks_data and stocks_data.get("stocks"):
         for s in stocks_data["stocks"]:
             code = s.get("code")
             if code:
-                urls.append(url_entry(
-                    f"/pages/stock-detail.html?code={code}",
-                    "daily", 0.6, today
+                stock_urls.append(url_entry(
+                    f"/pages/stock-detail.html?code={code}", "daily", 0.6, today
                 ))
-                stock_count += 1
-    print(f"個股詳情頁: {stock_count}")
 
-    # 3. 新聞詳情頁
+    # 3. 新聞詳情頁 → 內容
     news_data = load_json(DATA_DIR / "news_live.json")
-    news_count = 0
     if news_data and news_data.get("news"):
         for n in news_data["news"]:
             nid = n.get("id")
             date = n.get("date") or today
             if nid:
-                urls.append(url_entry(
-                    f"/pages/news-detail.html?id={nid}",
-                    "monthly", 0.5, date
+                content_urls.append(url_entry(
+                    f"/pages/news-detail.html?id={nid}", "monthly", 0.5, date
                 ))
-                news_count += 1
-    print(f"新聞詳情頁: {news_count}")
 
-    # 組裝
-    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    xml += "\n".join(urls)
-    xml += "\n</urlset>\n"
+    # 寫出 3 個子 sitemap
+    write_urlset("sitemap-pages.xml", page_urls)       # 首頁 + 工具頁
+    write_urlset("sitemap-stocks.xml", stock_urls)     # 個股頁（2,500+）
+    write_urlset("sitemap-content.xml", content_urls)  # 教學文章 + 新聞
 
-    SITEMAP.write_text(xml, encoding="utf-8")
+    # 4. sitemap.xml 改為「索引檔」，指向 3 個子 sitemap（robots / GSC 已指向它）
+    refs = []
+    for fn in ("sitemap-pages.xml", "sitemap-stocks.xml", "sitemap-content.xml"):
+        refs.append(
+            f"  <sitemap>\n    <loc>{BASE_URL}/{fn}</loc>\n"
+            f"    <lastmod>{today}</lastmod>\n  </sitemap>"
+        )
+    idx = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    idx += '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    idx += "\n".join(refs)
+    idx += "\n</sitemapindex>\n"
+    SITEMAP.write_text(idx, encoding="utf-8")
 
-    total = len(STATIC_PAGES) + stock_count + news_count
-    print(f"\n✅ sitemap.xml 已更新（共 {total} 個 URL）")
+    print(
+        f"✅ sitemap 索引 + 3 子檔已更新："
+        f"首頁/工具 {len(page_urls)}、個股 {len(stock_urls)}、內容 {len(content_urls)}"
+    )
 
 
 if __name__ == "__main__":
