@@ -1802,6 +1802,17 @@ export default {
       return Response.redirect(url.toString(), 301);
     }
 
+    // ── 手機 UA 開首頁 → 回手機版設計（桌機維持原版；同一網址、依裝置出不同內容，Vary 告知快取/Google）──
+    if ((url.pathname === "/" || url.pathname === "/index.html") && request.method === "GET") {
+      const ua = (request.headers.get("user-agent") || "").toLowerCase();
+      if (/iphone|ipod|android.*mobile|windows phone|blackberry|bb10|iemobile|opera mini/.test(ua)) {
+        const mres = await env.ASSETS.fetch(new Request(new URL("/index-mobile.html", url).toString(), request));
+        const out = new Response(mres.body, mres);
+        out.headers.set("Vary", "User-Agent");
+        return out;
+      }
+    }
+
     if (url.pathname === "/api/ask")            return handleAsk(request, env);
     if (url.pathname === "/api/health")         return handleHealth(env);
     if (url.pathname === "/api/quote")          return handleQuote(request);

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>領富 AI - 台股全市場（上市/上櫃/興櫃）即時行情 + AI 對話</title>
+<meta name="description" content="領富 AI 整合台股全市場 2,300+ 檔（上市 + 上櫃 + 興櫃）即時報價、公司基本資料、月營收與產業分類。AI 自然語言對話查股，跨上市櫃一次找好。資料來源 TWSE 證交所 + TPEx 櫃買中心。">
+<link rel="canonical" href="https://leadfuai.com/">
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b3328">
+<meta name="color-scheme" content="light">
+
+<!-- Favicons -->
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png?v=5">
+
+<!-- iOS Safari「加到主畫面」-->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="領富 AI">
+<link rel="apple-touch-icon" href="/icons/icon-180.png?v=5">
+
+<!-- Open Graph -->
+<meta property="og:title" content="領富 AI · 台股全市場 AI 對話">
+<meta property="og:description" content="跨上市/上櫃/興櫃 2,300+ 檔，AI 自然語言一次找好">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leadfuai.com/">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="css/style.css?v=3.23.5">
+
+<!-- Schema.org Organization -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://leadfuai.com/#organization",
+  "name": "領富 AI",
+  "alternateName": ["LeadFu AI", "領富", "LeadFu"],
+  "legalName": "領富 AI（LeadFu）",
+  "url": "https://leadfuai.com",
+  "logo": { "@type": "ImageObject", "url": "https://leadfuai.com/icons/icon-512.png", "width": 512, "height": 512 },
+  "description": "領富 AI 是台灣全市場（上市、上櫃、興櫃）2,300+ 檔股票公開資料整理平台，提供三大法人、融資融券、借券、月營收、估值、技術指標、AI 對話、AI 產業週報等服務。資料來源 TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站。不提供個股推薦、不代為下單、不收取任何投資款項。",
+  "disambiguatingDescription": "重要聲明：本品牌名稱「領富 AI」近期遭詐騙集團冒用於 Facebook / LINE / Instagram 招攬「飆股群組」「保證獲利」等不法投資詐騙。本公司唯一官方網址為 leadfuai.com，唯一官方 LINE 為 @130tqckv。本公司並無發行任何 APP，不主動加 LINE 群組，不保證獲利，不收受任何投資款項。如有疑似冒用，請撥 165 反詐騙專線檢舉。",
+  "knowsAbout": ["台股", "上市股票", "上櫃股票", "興櫃股票", "三大法人買賣超", "融資融券", "借券", "月營收", "本益比", "殖利率", "股價淨值比", "KD 指標", "MACD", "布林通道", "AI 投資助理", "產業分析"],
+  "areaServed": { "@type": "Country", "name": "Taiwan" },
+  "sameAs": ["https://line.me/R/ti/p/@130tqckv"],
+  "contactPoint": { "@type": "ContactPoint", "contactType": "Customer Service", "url": "https://line.me/R/ti/p/@130tqckv", "availableLanguage": ["zh-TW", "zh-Hant", "Chinese"] },
+  "potentialAction": { "@type": "SearchAction", "target": "https://leadfuai.com/pages/stocks.html?q={search_term_string}", "query-input": "required name=search_term_string" }
+}
+</script>
+
+<!-- WebSite schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://leadfuai.com/#website",
+  "url": "https://leadfuai.com",
+  "name": "領富 AI",
+  "alternateName": "LeadFu AI",
+  "publisher": { "@id": "https://leadfuai.com/#organization" },
+  "inLanguage": "zh-TW"
+}
+</script>
+
+<!-- FAQPage schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "領富 AI 會報明牌嗎？", "acceptedAnswer": { "@type": "Answer", "text": "不會。我們只整理公開資料、做風險檢查，不喊單、不報明牌、不開飆股群組。" } },
+    { "@type": "Question", "name": "免費版能用什麼？", "acceptedAnswer": { "@type": "Answer", "text": "單次買前檢查、風險分數、合理區間位置、新聞 AI 判讀都免費；每日自動複查與主動提醒是 VIP。" } }
+  ]
+}
+</script>
+
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --forest-2:#144735; --paper:#fffdf8; --sand:#e9dfc9;
+    --gold:#b9914f; --gold-2:#d6b36f; --green:#148a55; --red:#be4a3e; --amber:#d99c31;
+    --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+       -webkit-font-smoothing:antialiased;line-height:1.62;padding-bottom:calc(82px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+  .px{padding-left:22px;padding-right:22px;}
+  img{max-width:100%;}
+
+  .top{display:flex;align-items:center;justify-content:space-between;min-height:72px;padding:18px 22px 12px;}
+  .brand{display:flex;align-items:center;gap:13px;min-width:0;}
+  .mark-ic{width:46px;height:46px;border-radius:13px;display:block;flex:none;box-shadow:0 5px 16px rgba(0,0,0,.28);}
+  .brand b{display:block;font-size:20px;line-height:1;font-weight:900;}
+  .brand b i{font-style:normal;color:var(--gold-2);}
+  .brand span{display:block;font-size:11.5px;margin-top:6px;letter-spacing:.2px;color:rgba(248,245,236,.62);}
+  .ghost{min-height:40px;padding:0 17px;border-radius:999px;display:inline-flex;align-items:center;
+         font-size:13.5px;font-weight:800;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;text-decoration:none;}
+
+  .signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;}
+  .signal::before{content:"";width:26px;height:1px;background:currentColor;display:inline-block;}
+
+  /* HERO */
+  .hero{position:relative;color:#f8f5ec;padding:6px 0 60px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 84% 4%, rgba(185,145,79,.30), transparent 32%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .hero-body{padding:14px 22px 0;}
+  .hero .signal{color:#d9bd82;}
+  h1{margin:15px 0 0;font-size:36px;line-height:1.14;font-weight:900;letter-spacing:-.5px;}
+  .hero-copy{margin:14px 0 0;max-width:320px;color:rgba(248,245,236,.74);font-size:14.5px;line-height:1.62;}
+  .search-panel{margin-top:22px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);backdrop-filter:blur(14px);border-radius:20px;overflow:hidden;}
+  .search-line{display:grid;grid-template-columns:1fr 58px;min-height:60px;border-bottom:1px solid rgba(255,255,255,.11);}
+  .search-line input{border:0;outline:0;background:transparent;padding:0 16px;color:#fff;font-size:16px;font-family:inherit;min-width:0;}
+  .search-line input::placeholder{color:rgba(248,245,236,.66);font-weight:600;}
+  .search-line button{border:0;background:var(--gold-2);color:#102016;font-size:21px;font-weight:900;cursor:pointer;}
+  .quick{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.08);}
+  .quick a{padding:11px 14px;background:rgba(9,36,29,.5);text-decoration:none;display:block;}
+  .quick small{display:block;color:rgba(248,245,236,.46);font-size:11px;margin-bottom:4px;}
+  .quick b{display:block;color:#fff;font-size:14.5px;}
+
+  .riskcard{margin:-42px 22px 0;position:relative;z-index:1;background:var(--paper);border-radius:22px;padding:18px;box-shadow:0 22px 54px rgba(13,29,23,.24);}
+  .rc-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;}
+  .rc-top .lbl{color:#8a8173;font-size:11.5px;font-weight:800;letter-spacing:.04em;}
+  .rc-top b{display:block;margin-top:4px;font-size:24px;line-height:1.05;font-weight:900;}
+  .pill{border:1px solid rgba(20,138,85,.22);border-radius:999px;background:#e9f4ec;color:var(--green);padding:7px 12px;font-size:13px;font-weight:900;white-space:nowrap;}
+  .score{display:grid;grid-template-columns:auto 1fr;gap:13px;align-items:end;margin-top:14px;}
+  .score strong{color:var(--forest);font-size:54px;line-height:.85;font-weight:900;}
+  .score em{font-style:normal;color:var(--muted);font-size:17px;font-weight:700;}
+  .bar{height:9px;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--amber),var(--red));position:relative;overflow:hidden;margin-bottom:6px;}
+  .bar::after{content:"";position:absolute;inset:0 0 0 18%;background:#ece7dd;}
+  .reasons{display:grid;gap:9px;margin:16px 0 0;padding:0;list-style:none;}
+  .reasons li{display:grid;grid-template-columns:8px 1fr;gap:11px;color:var(--soft);font-size:13px;line-height:1.45;}
+  .rdot{width:8px;height:8px;border-radius:999px;background:var(--red);margin-top:5px;}
+  .rdot.ok{background:var(--green);}
+
+  .section{padding:34px 22px 0;}
+  .section .signal{color:#8b6b36;}
+  h2{margin:14px 0 10px;font-size:31px;line-height:1.12;font-weight:900;letter-spacing:-.4px;}
+  .section p.sub{margin:0;color:var(--muted);font-size:14.5px;line-height:1.6;}
+
+  .ledger-cap{display:flex;align-items:center;gap:7px;margin:20px 0 2px;font-size:12px;font-weight:800;color:#7a8a5f;}
+  .ledger-cap .lg{width:18px;height:18px;border-radius:5px;background:#06C755;display:grid;place-items:center;}
+  .ledger{border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);}
+  .lrow{display:grid;grid-template-columns:66px 1fr auto;gap:12px;align-items:center;min-height:78px;border-bottom:1px solid var(--hair2);}
+  .lrow:last-child{border-bottom:0;}
+  .tk{color:#94856c;font-size:13px;font-weight:800;letter-spacing:.04em;}
+  .lrow b{display:block;font-size:18px;line-height:1.1;font-weight:900;}
+  .lrow small{display:block;color:var(--muted);font-size:12px;line-height:1.35;margin-top:5px;}
+  .delta{font-size:15px;font-weight:900;text-align:right;white-space:nowrap;}
+  .delta.up{color:var(--red);} .delta.ok{color:var(--green);}
+
+  .insight{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px;}
+  .insight div{min-height:112px;padding:13px 11px;background:var(--paper);border:1px solid var(--hairline);border-radius:16px;}
+  .insight b{display:block;font-size:14px;line-height:1.25;margin-bottom:7px;}
+  .insight span{color:var(--muted);font-size:12px;line-height:1.35;}
+
+  .sec-cta{display:flex;align-items:center;gap:18px;margin-top:22px;}
+  .btn{min-height:52px;border-radius:15px;display:inline-grid;place-items:center;padding:0 22px;background:var(--forest);color:#fff;text-decoration:none;font-size:15px;font-weight:900;}
+  .link{font-size:14.5px;font-weight:800;color:var(--forest);text-decoration:none;}
+
+  .scroller{display:flex;gap:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:0 22px 4px;scrollbar-width:none;}
+  .scroller::-webkit-scrollbar{display:none;}
+  .qc{flex:0 0 150px;background:var(--paper);border:1px solid var(--hairline);border-radius:16px;padding:14px;text-decoration:none;color:inherit;display:block;}
+  .qc small{display:block;color:#94856c;font-size:11px;font-weight:700;margin-bottom:10px;}
+  .qc b{display:block;font-size:14.5px;font-weight:900;}
+  .qc .tk{font-size:11.5px;}
+  .qc .pxx{font-size:18px;font-weight:900;margin-top:9px;}
+  .up{color:var(--red);} .dn{color:var(--green);} .qc .pxx em{font-style:normal;font-size:12.5px;font-weight:800;margin-left:5px;}
+
+  .plan{margin-top:20px;border-radius:22px;overflow:hidden;border:1px solid var(--hairline);background:var(--paper);box-shadow:0 18px 44px rgba(13,29,23,.08);}
+  .plan-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:17px;background:#171f1a;color:#fff;}
+  .plan-head small{display:block;color:rgba(255,255,255,.56);font-size:11.5px;font-weight:800;margin-bottom:5px;letter-spacing:.04em;}
+  .plan-head b{display:block;font-size:23px;line-height:1.05;font-weight:900;}
+  .trial{border:1px solid rgba(217,189,130,.4);border-radius:999px;color:#e0bf7a;padding:7px 12px;font-size:12.5px;font-weight:900;white-space:nowrap;}
+  .prow{display:grid;grid-template-columns:84px 1fr;gap:12px;padding:15px 17px;border-bottom:1px solid var(--hair2);}
+  .prow:last-child{border-bottom:0;}
+  .prow b{display:block;color:var(--forest);font-size:15px;font-weight:900;}
+  .prow span{display:block;color:var(--soft);font-size:13.5px;line-height:1.45;}
+  .quote{margin-top:16px;padding:15px 16px;border-left:3px solid var(--gold);background:rgba(255,253,248,.7);color:#51452f;font-size:14.5px;line-height:1.55;}
+
+  .acc{border-top:1px solid var(--hairline);}
+  .acc:first-child{border-top:0;}
+  .acc-btn{width:100%;background:none;border:0;text-align:left;padding:20px 0;font-size:15.5px;font-weight:900;color:var(--ink);display:flex;align-items:center;font-family:inherit;cursor:pointer;}
+  .acc-btn .ar{margin-left:auto;color:#9aa39c;font-size:18px;transition:transform .25s;}
+  .acc.open .acc-btn .ar{transform:rotate(180deg);}
+  .acc-body{display:none;padding:0 0 18px;}
+  .acc.open .acc-body{display:block;}
+  .ll a{display:block;padding:13px 0;border-top:1px solid var(--hair2);font-size:14.5px;color:var(--soft);font-weight:600;text-decoration:none;}
+  .ll a:first-child{border-top:0;}
+  .faq p{font-size:13.5px;color:var(--muted);line-height:1.68;margin:0 0 14px;}
+  .faq b{color:var(--ink);font-weight:900;display:block;margin-bottom:3px;}
+
+  footer{margin-top:14px;padding:28px 22px calc(28px + var(--safe-b));border-top:1px solid var(--hairline);color:#9aa39c;font-size:11.5px;line-height:1.8;}
+  footer .fl{font-weight:900;color:var(--forest);font-size:15px;margin-bottom:5px;}
+  footer a{color:#7a8378;text-decoration:none;}
+
+  .bottom{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:1fr auto;gap:10px;
+          padding:11px 16px calc(11px + var(--safe-b));background:rgba(255,253,248,.94);border-top:1px solid var(--hairline);backdrop-filter:blur(16px);}
+  .bottom a.cta{min-height:52px;border-radius:15px;display:grid;place-items:center;background:var(--forest);color:#fff;text-decoration:none;font-size:16px;font-weight:900;}
+  .bottom span{min-width:58px;min-height:52px;border-radius:15px;display:grid;place-items:center;border:1px solid rgba(11,51,40,.16);color:var(--forest);font-size:12px;font-weight:900;background:#f7f3e8;}
+
+  /* 寬螢幕（萬一被桌機開到）：置中成手機寬欄，不變形 */
+  @media (min-width:600px){
+    body{max-width:440px;margin:0 auto;background:var(--bg);box-shadow:0 0 60px rgba(0,0,0,.12);}
+    .bottom{left:50%;transform:translateX(-50%);max-width:440px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="top">
+    <div class="brand"><img class="mark-ic" src="/icons/leadfu-mark.png" alt="領富 AI"><div><b>領富 <i>AI</i></b><span>台股風險守門員</span></div></div>
+    <a class="ghost lb-login" href="pages/login.html">登入</a>
+  </div>
+  <div class="hero-body">
+    <div class="signal">Pre-trade check</div>
+    <h1>買股票前，先看<br>風險值不值得承擔</h1>
+    <p class="hero-copy">不是報明牌。領富 AI 把估值、籌碼、注意股與新聞風險，整理成一張看得懂的決策卡。</p>
+    <form class="search-panel" id="checkHeroForm" autocomplete="off">
+      <div class="search-line">
+        <input id="checkHeroInput" type="search" inputmode="search" placeholder="輸入股票代號 / 公司名稱">
+        <button id="checkHeroBtn" type="submit" aria-label="檢查">⌕</button>
+      </div>
+      <div class="quick">
+        <a href="pages/check.html?code=2330"><small>快速檢查</small><b>2330 台積電</b></a>
+        <a href="pages/portfolio-health.html"><small>持股守門員</small><b>建立清單</b></a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- 風險決策卡（靜態範例）-->
+<div class="riskcard">
+  <div class="rc-top">
+    <div><span class="lbl">範例 · 輸入 2330 你會看到</span><b>2330 台積電</b></div>
+    <div class="pill">低風險</div>
+  </div>
+  <div class="score"><div><strong class="num">14</strong><em> /100</em></div><div class="bar"></div></div>
+  <ul class="reasons">
+    <li><span class="rdot"></span><span>外資連 2 日賣超，短線先看籌碼變化。</span></li>
+    <li><span class="rdot"></span><span>借券餘額增加，追價前確認量能。</span></li>
+    <li><span class="rdot ok"></span><span>仍在合理區間下緣，估值壓力較低。</span></li>
+  </ul>
+</div>
+
+<!-- 每日守門員 -->
+<section class="section">
+  <div class="signal">Daily monitor</div>
+  <h2>每天盤後，<br>只看真正變危險的持股</h2>
+  <p class="sub">把資訊流變成風險摘要。你不用每天重查所有股票，只要看今天「哪裡變了」。</p>
+  <div class="ledger-cap"><span class="lg"><svg width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.5 2 2 5.6 2 10c0 4 3.6 7.3 8.5 7.9.5.1.7.4.6.9l-.2 1c-.1.4.2.7.6.5 1.3-.6 5.7-3.5 7.6-6C21.5 12.6 22 11.4 22 10c0-4.4-4.5-8-10-8z"/></svg></span>你每天會收到的 LINE 守門摘要</div>
+  <div class="ledger">
+    <div class="lrow"><div class="tk">2603</div><div><b>長榮</b><small>月營收轉弱、外資賣超擴大</small></div><div class="delta up">風險 +16</div></div>
+    <div class="lrow"><div class="tk">1101</div><div><b>台泥</b><small>借券餘額增加，本週列注意股</small></div><div class="delta up">風險 +9</div></div>
+    <div class="lrow"><div class="tk">2330</div><div><b>台積電</b><small>估值仍偏低，暫無重大異常</small></div><div class="delta ok">穩定</div></div>
+  </div>
+  <div class="insight">
+    <div><b>只報變化</b><span>不被一堆行情數字淹沒。</span></div>
+    <div><b>講清原因</b><span>外資、借券、估值、注意股。</span></div>
+    <div><b>LINE 提醒</b><span>風險升高才通知你。</span></div>
+  </div>
+  <div class="sec-cta"><a class="btn" href="pages/portfolio-health.html">加入持股，每天幫我複查</a><a class="link" href="pages/risk-radar.html">防錯雷達 →</a></div>
+</section>
+
+<!-- 今日值得關注 -->
+<section class="section" style="padding-bottom:4px;">
+  <div class="signal">Watchlist today</div>
+  <h2 style="font-size:24px;">今日值得關注，點一下問 AI</h2>
+</section>
+<div class="scroller">
+  <a class="qc" href="pages/ai.html?q=2330"><small>AI 題材</small><b>台積電</b><div class="tk">2330</div><div class="pxx up">1,045 <em>▲1.2%</em></div></a>
+  <a class="qc" href="pages/ai.html?q=0056"><small>高股息</small><b>元大高股息</b><div class="tk">0056</div><div class="pxx dn">38.6 <em>▼0.5%</em></div></a>
+  <a class="qc" href="pages/ai.html?q=2603"><small>航運</small><b>長榮</b><div class="tk">2603</div><div class="pxx up">205 <em>▲2.1%</em></div></a>
+  <a class="qc" href="pages/ai.html?q=2882"><small>金融</small><b>國泰金</b><div class="tk">2882</div><div class="pxx up">62.4 <em>▲0.8%</em></div></a>
+</div>
+
+<!-- 方案 -->
+<section class="section">
+  <div class="signal">Membership</div>
+  <h2 style="font-size:27px;">免費讓你查一次，<br>VIP 幫你每天盯</h2>
+  <p class="sub">付費價值不是更多頁面，而是每天幫你把持股變化整理好。</p>
+  <div class="plan">
+    <div class="plan-head"><div><small>RECOMMENDED</small><b>VIP 守門員</b></div><div class="trial">先試用</div></div>
+    <div class="prow"><b>免費會員</b><span>單次買前檢查、範例報告、基本風險分數。</span></div>
+    <div class="prow"><b>VIP 進階</b><span>自選股每日健診、風險上升主動 LINE 提醒、警示歷史。</span></div>
+    <div class="prow"><b>完整方案</b><span>策略掃描、報告匯出、持股組合風險整理。</span></div>
+  </div>
+  <div class="quote">「我不用每天自己盯盤，系統會幫我看哪些持股今天變危險。」</div>
+</section>
+
+<!-- 收合 -->
+<section class="section" style="padding-top:30px;">
+  <div class="acc">
+    <button class="acc-btn" type="button" onclick="this.parentNode.classList.toggle('open')">更多免費工具<span class="ar">⌄</span></button>
+    <div class="acc-body"><div class="ll">
+      <a href="pages/ai.html">AI 對話（即時報價・引用來源）</a>
+      <a href="pages/value-stocks.html">合理區間偏低 TOP 5</a>
+      <a href="pages/stocks.html">股價總覽・熱門排行</a>
+      <a href="pages/news.html">財經新聞</a>
+    </div></div>
+  </div>
+  <div class="acc faq">
+    <button class="acc-btn" type="button" onclick="this.parentNode.classList.toggle('open')">關於領富 AI，大家最常問<span class="ar">⌄</span></button>
+    <div class="acc-body">
+      <p><b>領富 AI 會報明牌嗎？</b>不會。我們只整理公開資料、做風險檢查，不喊單、不報明牌、不開飆股群組。</p>
+      <p><b>免費版能用什麼？</b>單次買前檢查、風險分數、合理區間位置、新聞 AI 判讀都免費；每日自動複查＋主動提醒是 VIP。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">領富 AI</div>
+  台股全市場財經資訊網 · 本站資訊僅供參考，不構成投資建議<br>客服 LINE：<a href="https://line.me/R/ti/p/@130tqckv">@130tqckv</a> · 唯一官方網址 leadfuai.com
+</footer>
+
+<div class="bottom">
+  <a class="cta" href="#" id="bottomCheckBtn">免費檢查股票</a>
+  <span>0 元</span>
+</div>
+
+<script src="js/main.js?v=3.24.5"></script>
+<script>
+/* 首頁第一屏：檢查框 → 買前檢查（沿用原邏輯）*/
+(async () => {
+  try {
+    if (!window.LeadFu || !window.LeadFu.ready) return;
+    await window.LeadFu.ready;
+    const L = window.LeadFu;
+    const input = document.getElementById("checkHeroInput");
+    const resolve = (v) => {
+      v = (v || "").trim(); if (!v) return null;
+      const m = v.match(/\b(00\d{2,4}[A-Z]?|\d{4})\b/); if (m) return m[1];
+      const st = (L.data.stocks || []).find(x => x.name && (v.includes(x.name) || x.name.includes(v)));
+      return st ? st.code : null;
+    };
+    const go = () => {
+      const code = resolve(input && input.value);
+      if (code) location.href = "pages/check.html?code=" + code;
+      else if (input) { input.style.color = "#ffd9c4"; input.value = ""; input.placeholder = "找不到，請輸入代號（例如 2330）"; }
+    };
+    const form = document.getElementById("checkHeroForm");
+    if (form) form.addEventListener("submit", (e) => { e.preventDefault(); go(); });
+    const btn = document.getElementById("checkHeroBtn");
+    if (btn) btn.addEventListener("click", (e) => { e.preventDefault(); go(); });
+    // 底部固定鍵：聚焦搜尋框
+    const bottomBtn = document.getElementById("bottomCheckBtn");
+    if (bottomBtn) bottomBtn.addEventListener("click", (e) => { e.preventDefault(); window.scrollTo({top:0,behavior:"smooth"}); setTimeout(()=>{ if(input) input.focus(); }, 350); });
+  } catch (e) {}
+})();
+</script>
+
+</body>
+</html>
