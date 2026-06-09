@@ -1790,6 +1790,209 @@ async function handleLineWebhook(request, env, ctx) {
 }
 
 
+/* ============================================================
+ * 個股 SEO 頁 /stock/{代號}：worker 伺服器端渲染（每檔獨特內容）
+ * 解決 2,500 檔個股頁「JS 空殼 → 已找到未收錄」：Google 初次抓到的
+ * 原始 HTML 即含 標題/描述/風險/注意股/合理區間/產業 等獨特內容。
+ * ============================================================ */
+const STOCK_IND_SLUG = {
+  "半導體": "semiconductor", "生技醫療": "biotech", "電子零組件": "electronic-components",
+  "ETF": "etf", "光電": "optoelectronics", "電腦及周邊": "computer-peripherals",
+  "電機機械": "electrical-machinery", "通信網路": "telecom", "建材營造": "construction",
+  "綠能環保": "green-energy", "觀光餐旅": "tourism", "資訊服務": "it-services",
+  "紡織": "textile", "鋼鐵": "steel", "化學": "chemical", "數位雲端": "cloud",
+  "金融保險": "finance", "汽車": "automotive", "食品": "food",
+  "電子通路": "electronics-distribution", "居家生活": "home-living", "航運": "shipping",
+  "運動休閒": "sports-leisure", "文化創意": "culture-creative", "塑膠": "plastics",
+  "電器電纜": "electrical-cable", "貿易百貨": "trading-retail", "油電燃氣": "utilities",
+  "橡膠": "rubber", "水泥": "cement", "造紙": "paper", "農業科技": "agritech",
+  "玻璃陶瓷": "glass-ceramics",
+};
+
+let _STOCK_DATA = null, _STOCK_DATA_T = 0;
+async function loadStockData(env, origin) {
+  if (_STOCK_DATA && Date.now() - _STOCK_DATA_T < 3600000) return _STOCK_DATA;
+  const j = async (p) => {
+    try { const r = await env.ASSETS.fetch(new Request(origin + p)); return r.ok ? await r.json() : null; }
+    catch (e) { return null; }
+  };
+  const [stk, risk, atten, fv] = await Promise.all([
+    j("/data/stocks_live.json"), j("/data/risk_score_live.json"),
+    j("/data/attention_live.json"), j("/data/fair_value_live.json"),
+  ]);
+  const map = {};
+  for (const s of (stk && stk.stocks) || []) map[String(s.code)] = s;
+  const att = {};
+  const ad = atten && atten.data;
+  if (Array.isArray(ad)) { for (const x of ad) att[String(x && x.code != null ? x.code : x)] = x || true; }
+  else if (ad && typeof ad === "object") { for (const k in ad) att[String(k)] = ad[k]; }
+  _STOCK_DATA = {
+    map, risk: (risk && risk.data) || {}, att, fv: (fv && fv.data) || fv || {},
+    updated: (stk && stk.updatedAt) || (risk && risk.updatedAt) || "",
+  };
+  _STOCK_DATA_T = Date.now();
+  return _STOCK_DATA;
+}
+
+function esc(v) {
+  return String(v == null ? "" : v).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+
+async function renderStockPage(url, env) {
+  let code = decodeURIComponent(url.pathname.slice(7)).replace(/\/+$/, "").trim().toUpperCase();
+  if (!code || code.includes("/") || code.length > 12) return env.ASSETS.fetch(new Request(url.origin + "/pages/stocks", { headers: { "x": "1" } }));
+  const D = await loadStockData(env, url.origin);
+  const s = D.map[code];
+  const today = (D.updated || "").slice(0, 10) || new Date().toISOString().slice(0, 10);
+
+  if (!s) {
+    const nf = `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>找不到代號 ${esc(code)} - 領富 AI</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/css/style.css?v=3.23.7"></head><body><div style="max-width:600px;margin:80px auto;padding:24px;text-align:center;font-family:sans-serif;"><h1>找不到「${esc(code)}」這檔股票</h1><p style="color:#666;">可能代號有誤，或不在追蹤範圍。<br><a href="/pages/stocks" style="color:#1B4332;">← 回股價總覽</a>　<a href="/pages/check" style="color:#1B4332;">用買前檢查器查詢</a></p></div></body></html>`;
+    return new Response(nf, { status: 404, headers: { "content-type": "text/html;charset=utf-8" } });
+  }
+
+  const name = s.name || code;
+  const market = s.status || "";
+  const cat = s.category || "";
+  const slug = STOCK_IND_SLUG[cat];
+  const r = D.risk[code] || {};
+  const level = r.level || "";
+  const score = (r.score != null) ? r.score : null;
+  const reasons = (r.reasons || []).slice(0, 5);
+  const att = D.att[code];
+  const fv = D.fv[code] || {};
+  const fvLow = fv.low != null ? fv.low : (fv.fairLow != null ? fv.fairLow : null);
+  const fvHigh = fv.high != null ? fv.high : (fv.fairHigh != null ? fv.fairHigh : null);
+  const price = (typeof s.price === "number") ? s.price : null;
+
+  const LV_COLOR = { "高": "#c0392b", "警示": "#c0392b", "中": "#e08e0b", "低": "#1a7a45" };
+  const lvColor = LV_COLOR[level] || "#8a8a8a";
+  const attYes = !!att;
+  const attLine = attYes
+    ? "⚠ 目前列為證交所/櫃買「注意股或處置股」，交易可能採分盤撮合、預收款券，請特別留意。"
+    : "目前未列入注意股／處置股名單（以證交所、櫃買中心每日公告為準）。";
+
+  const reasonsHtml = reasons.length
+    ? `<ul class="sd-reasons">${reasons.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
+    : `<p class="sd-muted">目前無明顯風險警示項目。</p>`;
+
+  const fvCard = (fvLow != null && fvHigh != null)
+    ? `<div class="sd-stat"><span>合理區間估值</span><b>${esc(fvLow)} – ${esc(fvHigh)}</b><small>領富 AI Fair Value Range™</small></div>`
+    : `<div class="sd-stat"><span>合理區間估值</span><b style="font-size:16px;">需更多資料</b><small>見完整分析</small></div>`;
+
+  const indLink = slug ? `/pages/industries/${slug}` : `/pages/industries`;
+
+  const desc = `${name}（${code}）股票分析：風險等級${level ? " " + level : "整理"}、注意股狀態、${cat ? cat + "產業、" : ""}合理區間估值與籌碼摘要。資料來源 TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站，每日更新。非投資建議。`;
+  const title = `${code} ${name} 股票分析：風險・注意股・合理區間 - 領富 AI`;
+  const canon = `https://leadfuai.com/stock/${encodeURIComponent(code)}`;
+
+  const jsonld = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebPage", "@id": canon + "#page", "name": title, "description": desc, "url": canon, "isPartOf": { "@id": "https://leadfuai.com/#website" }, "dateModified": today, "inLanguage": "zh-TW", "publisher": { "@id": "https://leadfuai.com/#organization" } },
+      { "@type": "BreadcrumbList", "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+        { "@type": "ListItem", "position": 2, "name": "股價總覽", "item": "https://leadfuai.com/pages/stocks" },
+        { "@type": "ListItem", "position": 3, "name": `${code} ${name}` },
+      ] },
+    ],
+  });
+
+  const html = `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(desc)}">
+<meta name="keywords" content="${esc(code)},${esc(name)},${esc(name)}股價,${esc(name)}風險,${esc(code)}注意股,${esc(cat)}">
+<link rel="canonical" href="${canon}">
+<meta property="og:title" content="${esc(code)} ${esc(name)} 股票分析 - 領富 AI">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${canon}">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta name="theme-color" content="#1B4332">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<script type="application/ld+json">${jsonld}</script>
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  .sd-wrap{max-width:880px;margin:0 auto;padding:18px 12px 50px;}
+  .sd-bc{font-size:13px;color:#888;margin-bottom:10px;}
+  .sd-bc a{color:#1B4332;text-decoration:none;}
+  .sd-h1{font-size:27px;color:#1B4332;margin:0 0 4px;font-weight:800;}
+  .sd-sub{font-size:14px;color:#666;margin:0 0 4px;}
+  .sd-src{font-size:12.5px;color:#999;margin:6px 0 18px;}
+  .sd-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 22px;}
+  .sd-stat{background:#f7faf8;border:1px solid #e8ece9;border-radius:14px;padding:15px 12px;text-align:center;}
+  .sd-stat span{display:block;font-size:12px;color:#777;}
+  .sd-stat b{display:block;font-size:24px;font-weight:800;line-height:1.2;margin-top:5px;color:#1B4332;font-variant-numeric:tabular-nums;}
+  .sd-stat small{display:block;font-size:11px;color:#9aa39d;margin-top:3px;}
+  .sd-sec{background:#fff;border:1px solid #e8ece9;border-radius:14px;padding:16px 18px;margin:14px 0;}
+  .sd-sec h2{font-size:17px;color:#1B4332;margin:0 0 8px;}
+  .sd-reasons{margin:6px 0 0;padding-left:18px;color:#444;font-size:14px;line-height:1.9;}
+  .sd-att{font-size:14px;line-height:1.7;color:${attYes ? "#c0392b" : "#1a7a45"};font-weight:600;}
+  .sd-muted{color:#888;font-size:14px;}
+  .sd-tools{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0;}
+  .sd-tools a{background:#1B4332;color:#fff;padding:11px 18px;border-radius:999px;text-decoration:none;font-size:14px;font-weight:700;}
+  .sd-tools a.ghost{background:#eef7f1;color:#1B4332;}
+  .sd-disc{background:#fdf6ec;border:1px solid #f0e2c8;border-radius:12px;padding:14px 16px;font-size:13px;color:#7a6a4a;line-height:1.7;margin-top:20px;}
+</style>
+</head>
+<body>
+<header class="top-bar"><div class="container top-bar-inner"><div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div><div class="top-right"><a href="/pages/login">會員登入</a><a href="/pages/register">免費註冊</a><a href="https://line.me/R/ti/p/@130tqckv" class="line-cta" target="_blank" rel="noopener">LINE 客服</a></div></div></header>
+<div class="logo-bar"><div class="container logo-bar-inner"><a href="/" class="logo"><span class="logo-bi">領富</span><span class="logo-ai">AI</span><span class="logo-sub">LeadFu · 領先市場兩步</span></a><div class="search-box"><input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱"><button id="searchBtn">查詢</button></div></div></div>
+<nav class="main-nav"><div class="container"><ul><li><a href="/">首頁</a></li><li><a href="/pages/stocks">股價總覽</a></li><li><a href="/pages/industries">產業分類</a></li><li><a href="/pages/risk-radar">防錯雷達</a></li><li><a href="/pages/check">買前檢查</a></li><li><a href="/pages/ai">AI 對話</a></li></ul></div></nav>
+
+<main class="sd-wrap">
+  <div class="sd-bc"><a href="/">首頁</a> ▸ <a href="/pages/stocks">股價總覽</a>${cat ? ` ▸ <a href="${indLink}">${esc(cat)}</a>` : ""} ▸ <span>${esc(code)} ${esc(name)}</span></div>
+  <h1 class="sd-h1">${esc(code)}　${esc(name)}</h1>
+  <p class="sd-sub">${market ? esc(market) : ""}${cat ? "・" + esc(cat) : ""} 類股${price != null ? "・參考價 " + esc(price) + " 元" : ""}</p>
+  <div class="sd-src">📅 更新日期：${esc(today)}　·　資料來源：TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站</div>
+
+  <div class="sd-stats">
+    <div class="sd-stat"><span>風險等級</span><b style="color:${lvColor};">${level ? esc(level) : "—"}</b><small>${score != null ? "風險分數 " + esc(score) + "/100" : "領富 AI 風險評估"}</small></div>
+    <div class="sd-stat"><span>注意股狀態</span><b style="font-size:18px;color:${attYes ? "#c0392b" : "#1a7a45"};">${attYes ? "列入" : "正常"}</b><small>證交所每日公告</small></div>
+    ${fvCard}
+    <div class="sd-stat"><span>所屬產業</span><b style="font-size:17px;"><a href="${indLink}" style="color:#1B4332;">${cat ? esc(cat) : "—"}</a></b><small>同產業類股</small></div>
+  </div>
+
+  <div class="sd-sec">
+    <h2>⚠ 風險摘要</h2>
+    <p class="sd-att">${esc(attLine)}</p>
+    ${reasonsHtml}
+  </div>
+
+  <div class="sd-tools">
+    <a href="/pages/stock-detail?code=${esc(code)}">📊 完整互動分析（即時報價・圖表・籌碼）</a>
+    <a class="ghost" href="/pages/check?code=${esc(code)}">🔍 買前檢查</a>
+    <a class="ghost" href="${indLink}">🏭 ${cat ? esc(cat) : "產業"}類股</a>
+  </div>
+
+  <div class="sd-sec">
+    <h2>📖 延伸閱讀</h2>
+    <p class="sd-muted" style="line-height:2;">
+      <a href="/pages/learn/warning-stocks" style="color:#1B4332;">注意股、處置股是什麼？</a>　·
+      <a href="/pages/learn/institutional-investors" style="color:#1B4332;">三大法人買賣超怎麼看</a>　·
+      <a href="/pages/learn/pe-ratio" style="color:#1B4332;">本益比是什麼</a>
+    </p>
+  </div>
+
+  <div class="sd-disc">
+    <strong>📌 免責聲明</strong><br>
+    本頁為「${esc(code)} ${esc(name)}」之公開資料整理，僅供研究參考，<strong>不構成任何個股推薦或買賣建議</strong>。
+    風險等級、合理區間為領富 AI 依公開資料以系統化方式整理，非投資評等或目標價；個股實際狀況請以證交所、櫃買中心與公開資訊觀測站之公告為準。
+    投資有風險，決定前請您自行評估或諮詢合法之證券投資顧問。
+  </div>
+</main>
+
+<footer class="site-footer"><div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. · 本網站所有資訊僅供參考，不構成投資建議。</div></div></footer>
+<script src="/js/main.js?v=3.24.7"></script>
+</body>
+</html>`;
+
+  return new Response(html, { headers: { "content-type": "text/html;charset=utf-8", "cache-control": "public, max-age=1800" } });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -1800,6 +2003,11 @@ export default {
       url.hostname = url.hostname.replace(/^www\./, "");
       url.port = "";
       return Response.redirect(url.toString(), 301);
+    }
+
+    // ── 個股 SEO 頁 /stock/{代號}：worker 伺服器端渲染（每檔獨特內容；出錯則往下走、不影響全站）──
+    if (url.pathname.startsWith("/stock/") && request.method === "GET") {
+      try { return await renderStockPage(url, env); } catch (e) { /* fall through to ASSETS */ }
     }
 
     // ── 手機 UA 開首頁 → 回手機版設計（桌機維持原版；同一網址、依裝置出不同內容，Vary 告知快取/Google）──
