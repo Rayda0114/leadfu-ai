@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       name: "營收成長", sort: "依年增率排序",
       build() {
         return Object.entries(REV)
-          .filter(([c, r]) => (r.yoy || 0) >= 30 && byCode[c] && byCode[c].price > 0 && byCode[c].status !== "興櫃")
+          .filter(([c, r]) => (r.yoy || 0) >= 30 && (r.yoy || 0) <= 1000 && byCode[c] && byCode[c].price > 0 && byCode[c].status !== "興櫃")
           .sort((a, b) => b[1].yoy - a[1].yoy)
           .map(([c, r]) => ({ code: c, why: `${esc(r.period)} 營收年增 +${r.yoy.toFixed(1)}%・月增 ${r.mom >= 0 ? "+" : ""}${(r.mom || 0).toFixed(1)}%` }));
       },
