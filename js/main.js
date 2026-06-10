@@ -3524,10 +3524,44 @@ function startStockLive(code, stock) {
   });
 }
 
-async function fetchJson(file) {
-  const resp = await fetch(dataUrl(file), { cache: "no-cache" });
+/* ── 資料 JSON 提速層（2026-06-11）──
+   問題：每換一頁，19 個資料 JSON「串行」重抓（cache:no-cache）→ 手機換頁等數秒。
+   解法：① Cache API + 15 分 TTL：同 session 換頁直接用快取（資料每日盤後才更新，
+        15 分內快取對正確性無實質影響）② 同頁去重：同檔只抓一次（搭配 loadLiveData
+        的並行預熱，串行 await 全部變秒回）。快取名綁版本，改版自動失效。 */
+const DATA_CACHE_NAME = "leadfu-data-v3251";
+const DATA_CACHE_TTL = 15 * 60 * 1000;
+try { caches.keys().then(ks => ks.forEach(k => { if (k.indexOf("leadfu-data-") === 0 && k !== DATA_CACHE_NAME) caches.delete(k); })); } catch (e) {}
+
+async function _fetchJsonRaw(file) {
+  const url = dataUrl(file);
+  let cache = null;
+  try { cache = await caches.open(DATA_CACHE_NAME); } catch (e) { /* 無痕模式等環境不支援 → 直接網路 */ }
+  if (cache) {
+    try {
+      const hit = await cache.match(url);
+      if (hit) {
+        const at = +(hit.headers.get("x-cached-at") || 0);
+        if (Date.now() - at < DATA_CACHE_TTL) return await hit.json();
+      }
+    } catch (e) {}
+  }
+  const resp = await fetch(url, { cache: "no-cache" });
   if (!resp.ok) throw new Error("HTTP " + resp.status);
+  if (cache) {
+    try {
+      const buf = await resp.clone().arrayBuffer();
+      cache.put(url, new Response(buf, { headers: { "Content-Type": "application/json", "x-cached-at": String(Date.now()) } }));
+    } catch (e) {}
+  }
   return resp.json();
+}
+const _jsonOnce = {};
+function fetchJson(file) {
+  if (!_jsonOnce[file]) {
+    _jsonOnce[file] = _fetchJsonRaw(file).catch(e => { delete _jsonOnce[file]; throw e; });
+  }
+  return _jsonOnce[file];
 }
 
 /* 個股詳情頁專用：延後載入 K 線歷史（klines.json 約 9.8MB）
@@ -3551,6 +3585,17 @@ async function loadKlines() {
 }
 
 async function loadLiveData() {
+  // 🚀 並行預熱（2026-06-11）：下方 19 段原本「串行」await（一檔抓完才抓下一檔），
+  // 手機換頁要等數秒。先把全部檔案同時發出（fetchJson 有同檔去重，不會重複下載），
+  // 下方逐段 await 即各自等自己的 promise → 總時間 ≈ 最慢一檔，而非全部相加。
+  [
+    "stocks_live.json", "news_live.json", "announcements_live.json", "companies_live.json",
+    "revenue_live.json", "institutional_live.json", "valuation_live.json", "financials_live.json",
+    "margin_live.json", "margin_tpex_live.json", "sbl_live.json", "indicators_live.json",
+    "insider_live.json", "fair_value_live.json", "attention_live.json", "risk_score_live.json",
+    "inst_streak_live.json", "dividend_live.json", "ipo_live.json",
+  ].forEach(f => { fetchJson(f).catch(() => {}); });
+
   // 1. 個股報價（含 metadata：updatedAt / source / stockCount / marketBreakdown）
   try {
     const live = await fetchJson("stocks_live.json");
