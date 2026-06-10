@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const fv = FV[code];
     if (fv && typeof fv.position === "number" && fv.position < 0) { flag = flag || "a"; why.push("跌破合理區間下緣"); }
     if (s && typeof s.price === "number" && s.price > 0 && pct(s) <= -5) { flag = "r"; why.push(`今日重挫 ${pct(s).toFixed(1)}%`); }
-    return { flag, why };
+    return { flag, why: [...new Set(why)] };
   }
 
   function refresh() {
