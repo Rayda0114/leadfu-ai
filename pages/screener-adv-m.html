@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>進階選股 - 自訂條件・策略掃描 - 領富 AI</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://leadfuai.com/pages/screener">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --paper:#fffdf8; --gold:#b9914f; --gold-2:#d6b36f;
+    --up:#be4a3e; --down:#148a55; --flat:#8a948e; --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(76px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+  .up{color:var(--up);} .down{color:var(--down);} .flat{color:var(--flat);}
+
+  .m-hero{color:#f8f5ec;padding:calc(18px + env(safe-area-inset-top)) 22px 44px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.28), transparent 34%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .m-hero-top{display:flex;justify-content:space-between;align-items:center;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-back{font-size:12.5px;color:rgba(248,245,236,.7);text-decoration:none;font-weight:800;}
+  .m-hero h1{margin:11px 0 0;font-size:24px;font-weight:900;letter-spacing:-.3px;}
+  .m-hero p{margin:7px 0 0;font-size:12.5px;color:rgba(248,245,236,.6);}
+
+  /* 快選 -->
+  */
+  .m-presets{margin:-26px 18px 0;position:relative;z-index:2;background:var(--paper);border-radius:18px;padding:13px 13px 11px;box-shadow:0 16px 40px rgba(13,29,23,.16);}
+  .m-presets small{font-size:11.5px;font-weight:900;color:#8a8173;letter-spacing:.05em;display:block;margin-bottom:9px;}
+  .m-pgrid{display:flex;flex-wrap:wrap;gap:8px;}
+  .m-pchip{border:1px solid var(--hairline);background:#faf8f1;border-radius:999px;padding:8px 13px;font-family:inherit;font-size:12.5px;font-weight:800;color:var(--forest);cursor:pointer;}
+  .m-pchip.on{background:var(--forest);border-color:var(--forest);color:#f4ead2;}
+
+  .m-sec{padding:18px 18px 0;}
+  .m-sec-head{display:flex;justify-content:space-between;align-items:baseline;}
+  .m-sec-head h2{margin:0;font-size:17px;font-weight:900;}
+  .m-sec-head a,.m-sec-head button{font-size:12px;color:var(--soft);font-weight:800;text-decoration:none;background:none;border:0;font-family:inherit;cursor:pointer;}
+
+  /* 條件面板 */
+  .m-cond{margin-top:10px;background:var(--paper);border:1px solid var(--hair2);border-radius:18px;overflow:hidden;}
+  .m-cond details{border-bottom:1px solid var(--hair2);}
+  .m-cond details:last-of-type{border-bottom:0;}
+  .m-cond summary{list-style:none;padding:13px 15px;font-size:14px;font-weight:900;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:var(--forest);}
+  .m-cond summary::after{content:"＋";color:#b09255;font-weight:900;}
+  .m-cond details[open] summary::after{content:"－";}
+  .m-cbody{padding:2px 15px 13px;}
+  .m-frow{display:grid;grid-template-columns:1fr 108px;gap:10px;align-items:center;padding:7px 0;}
+  .m-frow label{font-size:13.5px;font-weight:700;color:#444;}
+  .m-frow input[type=number],.m-frow select{min-height:38px;padding:0 10px;border-radius:10px;border:1px solid var(--hairline);background:#fff;font-family:inherit;font-size:14px;color:var(--ink);width:100%;}
+  .m-chkrow{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13.5px;font-weight:700;color:#444;}
+  .m-chkrow input{width:18px;height:18px;flex:none;}
+  .m-mktchips{display:flex;gap:7px;padding:6px 0;}
+  .m-mktchips button{flex:1;min-height:36px;border-radius:999px;border:1px solid var(--hairline);background:transparent;font-family:inherit;font-size:12.5px;font-weight:800;color:var(--soft);cursor:pointer;}
+  .m-mktchips button.on{background:var(--forest);border-color:var(--forest);color:#f4ead2;}
+
+  .m-apply{position:sticky;bottom:calc(72px + var(--safe-b));z-index:50;margin:14px 18px 0;display:grid;grid-template-columns:1fr 92px;gap:10px;}
+  .m-apply button{min-height:50px;border-radius:14px;border:0;font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;}
+  .m-apply .go{background:var(--forest);color:#f4ead2;box-shadow:0 12px 30px rgba(11,51,40,.3);}
+  .m-apply .reset{background:#fff;border:1px solid var(--hairline);color:var(--soft);}
+
+  .m-res-head{display:flex;justify-content:space-between;align-items:baseline;padding:18px 20px 0;}
+  .m-res-head b{font-size:14px;font-weight:900;}
+  .m-res-head b i{font-style:normal;color:var(--up);}
+  .m-res-head span{font-size:12px;color:#9a948a;font-weight:700;}
+  .m-list{margin:10px 18px 0;background:var(--paper);border:1px solid var(--hair2);border-radius:18px;overflow:hidden;}
+  .m-row{display:flex;align-items:center;gap:11px;padding:12px 15px;border-bottom:1px solid var(--hair2);min-height:60px;text-decoration:none;color:var(--ink);}
+  .m-row:last-child{border-bottom:0;}
+  .m-main{flex:1;min-width:0;}
+  .m-name{font-size:15px;font-weight:800;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .m-sub{font-size:11.5px;color:#a09a8c;font-weight:700;margin-top:2px;}
+  .m-tag{font-size:10.5px;font-weight:900;padding:2px 7px;border-radius:8px;white-space:nowrap;}
+  .m-tag.warn{background:#fdf2dd;color:#a8731c;border:1px solid #ecd9b0;}
+  .m-tag.risk{background:#fbeae8;color:#a13a2f;border:1px solid #eccfc9;}
+  .m-right{text-align:right;flex:none;}
+  .m-price{font-size:15.5px;font-weight:900;}
+  .m-chg{font-size:12px;font-weight:900;margin-top:2px;}
+  .m-empty{padding:24px 20px;text-align:center;color:#8a8d85;font-size:13.5px;}
+  .m-more{display:block;text-align:center;padding:13px;font-size:13.5px;font-weight:900;color:var(--forest);background:none;width:100%;border:0;border-top:1px solid var(--hair2);font-family:inherit;cursor:pointer;}
+
+  /* 我的策略 */
+  .m-strat{margin-top:10px;background:var(--paper);border:1px solid var(--hair2);border-radius:18px;overflow:hidden;}
+  .m-srow{display:flex;align-items:center;gap:10px;padding:12px 15px;border-bottom:1px solid var(--hair2);}
+  .m-srow:last-child{border-bottom:0;}
+  .m-srow .nm{flex:1;min-width:0;font-size:14px;font-weight:800;}
+  .m-srow .nm small{display:block;font-size:11px;color:#9a948a;font-weight:700;margin-top:1px;}
+  .m-srow button{border:0;background:none;font-family:inherit;cursor:pointer;font-size:12.5px;font-weight:900;}
+  .m-srow .use{color:var(--forest);background:#ecf3ee;border-radius:999px;padding:7px 13px;}
+  .m-srow .bell{font-size:16px;opacity:.35;}
+  .m-srow .bell.on{opacity:1;}
+  .m-srow .del{color:#a13a2f;}
+  .m-snew{display:block;width:calc(100% - 30px);margin:12px 15px 14px;min-height:44px;border-radius:12px;border:1.5px dashed #cdc5b2;background:none;font-family:inherit;font-size:13.5px;font-weight:900;color:var(--forest);cursor:pointer;}
+  .m-scan-note{margin-top:10px;border-radius:16px;padding:13px 16px;color:#f8f5ec;background:linear-gradient(135deg,#1d3a2e,#0b3328);font-size:12.5px;line-height:1.7;}
+  .m-scan-note b{color:#ecd9ab;}
+
+  .m-src{padding:18px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.7;}
+
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <div class="m-hero-top">
+    <span class="m-signal">Advanced Screener</span>
+    <a class="m-back" href="/pages/screener-m">‹ 回選股</a>
+  </div>
+  <h1>進階選股</h1>
+  <p>自由組合條件，存成策略後可開每日自動掃描（LINE 通知）</p>
+</header>
+
+<section class="m-presets">
+  <small>熱門快選</small>
+  <div class="m-pgrid" id="mPresets">
+    <button class="m-pchip" data-p="up">今日上漲</button>
+    <button class="m-pchip" data-p="down">今日下跌</button>
+    <button class="m-pchip" data-p="volume">成交量爆量</button>
+    <button class="m-pchip" data-p="ai">AI 概念股</button>
+    <button class="m-pchip" data-p="bio">生技醫療</button>
+    <button class="m-pchip" data-p="high">高價股 $500+</button>
+    <button class="m-pchip" data-p="low">低價股 $100−</button>
+    <button class="m-pchip" data-p="dividend">高股息 ≥5%</button>
+    <button class="m-pchip" data-p="value">價值股</button>
+    <button class="m-pchip" data-p="growth">成長股</button>
+    <button class="m-pchip" data-p="undervalued">合理區間偏低＋訊號強</button>
+    <button class="m-pchip" data-p="chips">法人買＋融資增</button>
+    <button class="m-pchip" data-p="divgrow">高息＋營收雙增</button>
+  </div>
+</section>
+
+<section class="m-sec">
+  <div class="m-sec-head"><h2>自訂條件</h2><a href="/pages/screener?full=1">桌機完整版（含回測）›</a></div>
+  <div class="m-cond">
+    <details open>
+      <summary>基本面</summary>
+      <div class="m-cbody">
+        <div class="m-frow"><label>月營收年增 ≥ %</label><input type="number" id="revMin" placeholder="例 10"></div>
+        <div class="m-frow"><label>月營收月增 ≥ %</label><input type="number" id="momMin" placeholder="例 0"></div>
+        <div class="m-frow"><label>毛利率 ≥ %</label><input type="number" id="gmMin" placeholder="例 30"></div>
+        <div class="m-frow"><label>本益比 ≤ 倍</label><input type="number" id="peMax" placeholder="例 15"></div>
+        <div class="m-frow"><label>殖利率 ≥ %</label><input type="number" id="yldMin" placeholder="例 5"></div>
+        <label class="m-chkrow"><input type="checkbox" id="chkOpProfit">本業獲利中（營益率 &gt; 0）</label>
+      </div>
+    </details>
+    <details>
+      <summary>估值・訊號</summary>
+      <div class="m-cbody">
+        <div class="m-frow"><label>合理區間位置</label><select id="fvPos"><option value="">不限</option><option value="low">偏低</option><option value="fair">合理</option><option value="high">偏高</option></select></div>
+        <div class="m-frow"><label>訊號強度（信心）≥</label><input type="number" id="confMin" placeholder="例 3" step="0.5"></div>
+        <label class="m-chkrow"><input type="checkbox" id="chkMa20">站上月線（MA20）</label>
+      </div>
+    </details>
+    <details>
+      <summary>籌碼・題材</summary>
+      <div class="m-cbody">
+        <label class="m-chkrow"><input type="checkbox" id="chkForeign">外資今日買超</label>
+        <label class="m-chkrow"><input type="checkbox" id="chkTrust">投信今日買超</label>
+        <div class="m-frow"><label>外資連買 ≥ 日</label><input type="number" id="instBuyDays" placeholder="例 3"></div>
+        <label class="m-chkrow"><input type="checkbox" id="chkMargin">融資增加</label>
+        <label class="m-chkrow"><input type="checkbox" id="chkSbl">借券增加（空方升溫）</label>
+        <label class="m-chkrow"><input type="checkbox" id="chkAnnounce">近期有重大公告</label>
+        <label class="m-chkrow"><input type="checkbox" id="chkExAttention" checked>排除注意／處置股</label>
+        <label class="m-chkrow"><input type="checkbox" id="chkExLowVol">排除低流動性（量&lt;100張）</label>
+      </div>
+    </details>
+    <details>
+      <summary>市場・產業・價量</summary>
+      <div class="m-cbody">
+        <div class="m-mktchips" id="mMkt">
+          <button class="on" data-m="">全部</button>
+          <button data-m="上市">上市</button>
+          <button data-m="上櫃">上櫃</button>
+          <button data-m="興櫃">興櫃</button>
+        </div>
+        <div class="m-frow"><label>產業</label><select id="catSel"><option value="">全部產業</option></select></div>
+        <div class="m-frow"><label>價格 ≥</label><input type="number" id="priceMin" placeholder="元"></div>
+        <div class="m-frow"><label>價格 ≤</label><input type="number" id="priceMax" placeholder="元"></div>
+        <div class="m-frow"><label>漲跌幅 ≥ %</label><input type="number" id="pctMin" placeholder="例 0.01" step="0.01"></div>
+        <div class="m-frow"><label>漲跌幅 ≤ %</label><input type="number" id="pctMax" placeholder="例 -0.01" step="0.01"></div>
+        <div class="m-frow"><label>成交量 ≥ 張</label><input type="number" id="volMin" placeholder="例 500"></div>
+        <div class="m-frow"><label>排序</label><select id="sortSel">
+          <option value="chgDown">漲幅大→小</option><option value="chgUp">跌幅大→小</option>
+          <option value="vol">成交量大→小</option><option value="yld">殖利率高→低</option>
+          <option value="rev">營收年增高→低</option><option value="price">價格高→低</option>
+          <option value="code">代號</option>
+        </select></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<div class="m-apply">
+  <button class="go" id="mApply">套用條件，開始篩選</button>
+  <button class="reset" id="mReset">重設</button>
+</div>
+
+<div class="m-res-head" id="mResHead" style="display:none;"><b>符合 <i class="num" id="mResN">0</i> 檔</b><span id="mResSort"></span></div>
+<div class="m-list" id="mRes" style="display:none;"></div>
+
+<section class="m-sec">
+  <div class="m-sec-head"><h2>我的策略</h2><span id="mStratSync" style="font-size:11.5px;color:#9a948a;font-weight:700;"></span></div>
+  <div class="m-strat">
+    <div id="mStratList"></div>
+    <button class="m-snew" id="mStratSave">＋ 把目前條件存成策略</button>
+  </div>
+  <div class="m-scan-note"><b>每日自動掃描：</b>策略旁按 🔔 開啟後，每天盤後我們幫你掃全市場，「新」符合條件的股票直接推到你的 LINE — 不用自己每天開來篩。（VIP・需綁定 LINE）</div>
+</section>
+
+<div class="m-src">
+  資料來源：TWSE・TPEx・MOPS，盤後更新。篩選結果為公開資料整理，非投資建議。
+</div>
+
+<nav class="m-tabbar">
+  <a href="/" id="tbHome"></a>
+  <a href="/pages/stocks-m" id="tbChart"></a>
+  <a href="/pages/screener-m" class="on" id="tbSearch"></a>
+  <a href="/pages/watchlist-m" id="tbStar"></a>
+  <a href="/pages/member-m" id="tbUser"></a>
+</nav>
+
+<script src="/js/main.js?v=3.25.0"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const data = L.data || {};
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const tb = {
+    tbHome: ['<path d="M216,120v96H152V152H104v64H40V120a8,8,0,0,1,2.34-5.66l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,216,120Z" fill="#c9a24b" opacity=".9"/><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"/>', "首頁"],
+    tbChart: ['<path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM168,48h32V200H168ZM112,96h40V200H112ZM56,144H96v56H56Z"/>', "行情"],
+    tbSearch: ['<circle cx="112" cy="112" r="80" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>', "選股"],
+    tbStar: ['<path d="M229.06,108.79l-48.7,42,14.88,62.79a8.4,8.4,0,0,1-12.52,9.17L128,189.09,73.28,222.74a8.4,8.4,0,0,1-12.52-9.17l14.88-62.79-48.7-42A8.46,8.46,0,0,1,31.73,94l63.91-5.2,24.62-59.6a8.36,8.36,0,0,1,15.48,0l24.62,59.6L224.27,94A8.46,8.46,0,0,1,229.06,108.79Z" fill="#c9a24b" opacity=".9"/><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"/>', "自選"],
+    tbUser: ['<circle cx="128" cy="96" r="64" fill="#c9a24b" opacity=".9"/><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/>', "我的"],
+  };
+  for (const [id, [paths, label]] of Object.entries(tb)) {
+    document.getElementById(id).innerHTML = `<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor">${paths}</svg>${label}`;
+  }
+
+  // ── 與桌機版相同的資料前置 ──
+  const annSet = new Set((data.announcements || []).map(a => String(a.code)).filter(Boolean));
+  const attSet = new Set(Object.keys(data.attention || {}));
+  function fvClass(code) {
+    const x = (data.fairValue || {})[code];
+    if (!x || typeof x.position !== "number") return null;
+    if (x.position <= 0.30) return "low";
+    if (x.position >= 0.80) return "high";
+    return "fair";
+  }
+  const pctChange = L.pctChange;
+
+  // ── runFilter：與桌機 screener.html / scan_strategies.py 同一套邏輯（原樣移植）──
+  function runFilter(f, stocks) {
+    const rev = data.revenue || {}, fin = data.financials || {}, val = data.valuation || {},
+          ind = data.indicators || {}, inst = data.institutional || {}, sbl = data.sbl || {}, mgn = data.margin || {};
+    let list = stocks.slice();
+    if (f.priceMin != null) list = list.filter(s => s.price >= f.priceMin);
+    if (f.priceMax != null) list = list.filter(s => s.price <= f.priceMax);
+    if (f.volMin != null)   list = list.filter(s => s.volume >= f.volMin);
+    if (f.volMax != null)   list = list.filter(s => s.volume <= f.volMax);
+    if (f.exLowVol)         list = list.filter(s => (s.volume || 0) >= 100);
+    if (f.status && f.status.length) list = list.filter(s => f.status.includes(s.status));
+    if (f.cats && f.cats.length)     list = list.filter(s => f.cats.includes(s.category));
+    if (f.pctMin != null || f.pctMax != null) {
+      list = list.filter(s => { const p = pctChange(s.price, s.change);
+        if (f.pctMin != null && p < f.pctMin) return false;
+        if (f.pctMax != null && p > f.pctMax) return false; return true; });
+    }
+    if (f.revMin != null) list = list.filter(s => { const x = rev[s.code]; return x && typeof x.yoy === "number" && x.yoy >= f.revMin; });
+    if (f.momMin != null) list = list.filter(s => { const x = rev[s.code]; return x && typeof x.mom === "number" && x.mom >= f.momMin; });
+    if (f.gmMin  != null) list = list.filter(s => { const x = fin[s.code]; return x && typeof x.gross_margin === "number" && x.gross_margin >= f.gmMin; });
+    if (f.peMax  != null) list = list.filter(s => { const x = val[s.code]; return x && x.pe_ratio > 0 && x.pe_ratio <= f.peMax; });
+    if (f.yldMin != null) list = list.filter(s => { const x = val[s.code]; return x && typeof x.yield_pct === "number" && x.yield_pct >= f.yldMin; });
+    if (f.confMin != null) list = list.filter(s => { const x = (data.fairValue||{})[s.code]; return x && typeof x.confidence === "number" && x.confidence >= f.confMin; });
+    if (f.fvPos)    list = list.filter(s => fvClass(s.code) === f.fvPos);
+    if (f.ma20)     list = list.filter(s => { const x = ind[s.code]; return x && x.ma20 && s.price > x.ma20; });
+    if (f.foreign)  list = list.filter(s => { const x = inst[s.code]; return x && typeof x.foreign_net_lots === "number" && x.foreign_net_lots > 0; });
+    if (f.trust)    list = list.filter(s => { const x = inst[s.code]; return x && typeof x.trust_net_lots === "number" && x.trust_net_lots > 0; });
+    if (f.opProfit) list = list.filter(s => { const x = fin[s.code]; return x && typeof x.op_margin === "number" && x.op_margin > 0; });
+    if (f.sbl)      list = list.filter(s => { const x = sbl[s.code]; return x && typeof x.sbl_change === "number" && x.sbl_change > 0; });
+    if (f.margin)   list = list.filter(s => { const x = mgn[s.code]; return x && typeof x.margin_change === "number" && x.margin_change > 0; });
+    if (f.announce) list = list.filter(s => annSet.has(String(s.code)));
+    if (f.exAttention) list = list.filter(s => !attSet.has(s.code));
+    if (f.instBuyDays) list = list.filter(s => { const x = (data.instStreak || {})[s.code]; return x && x.dir === "buy" && x.days >= f.instBuyDays; });
+    return list;
+  }
+
+  // ── UI ⇄ filters（鍵名與桌機 readFilters 完全一致）──
+  const $ = id => document.getElementById(id);
+  let mkt = "";
+  const cats = [...new Set((data.stocks || []).map(s => s.category).filter(Boolean))].sort();
+  $("catSel").innerHTML += cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join("");
+
+  function readFilters() {
+    const f = {};
+    const num = id => { const v = $(id).value; if (v !== "") f[id] = +v; };
+    ["priceMin","priceMax","pctMin","pctMax","volMin","revMin","momMin","gmMin","peMax","yldMin","confMin","instBuyDays"].forEach(num);
+    f.fvPos = $("fvPos").value;
+    f.ma20 = $("chkMa20").checked;
+    f.foreign = $("chkForeign").checked;
+    f.trust = $("chkTrust").checked;
+    f.opProfit = $("chkOpProfit").checked;
+    f.sbl = $("chkSbl").checked;
+    f.margin = $("chkMargin").checked;
+    f.announce = $("chkAnnounce").checked;
+    f.exLowVol = $("chkExLowVol").checked;
+    f.exAttention = $("chkExAttention").checked;
+    f.status = mkt ? [mkt] : [];
+    f.cats = $("catSel").value ? [$("catSel").value] : [];
+    return f;
+  }
+  function writeFilters(f) {
+    resetUI(false);
+    ["priceMin","priceMax","pctMin","pctMax","volMin","revMin","momMin","gmMin","peMax","yldMin","confMin","instBuyDays"].forEach(k => { if (f[k] != null) $(k).value = f[k]; });
+    if (f.fvPos) $("fvPos").value = f.fvPos;
+    [["ma20","chkMa20"],["foreign","chkForeign"],["trust","chkTrust"],["opProfit","chkOpProfit"],["sbl","chkSbl"],["margin","chkMargin"],["announce","chkAnnounce"],["exLowVol","chkExLowVol"],["exAttention","chkExAttention"]].forEach(([k, id]) => { $(id).checked = !!f[k]; });
+    mkt = (f.status && f.status[0]) || "";
+    document.querySelectorAll("#mMkt button").forEach(b => b.classList.toggle("on", b.dataset.m === mkt));
+    if (f.cats && f.cats[0] && cats.includes(f.cats[0])) $("catSel").value = f.cats[0];
+  }
+  function resetUI(rerun) {
+    ["priceMin","priceMax","pctMin","pctMax","volMin","revMin","momMin","gmMin","peMax","yldMin","confMin","instBuyDays"].forEach(k => $(k).value = "");
+    $("fvPos").value = ""; $("catSel").value = "";
+    ["chkMa20","chkForeign","chkTrust","chkOpProfit","chkSbl","chkMargin","chkAnnounce","chkExLowVol"].forEach(id => $(id).checked = false);
+    $("chkExAttention").checked = true;
+    mkt = "";
+    document.querySelectorAll("#mMkt button").forEach(b => b.classList.toggle("on", b.dataset.m === ""));
+    document.querySelectorAll(".m-pchip").forEach(x => x.classList.remove("on"));
+    if (rerun) { $("mResHead").style.display = "none"; $("mRes").style.display = "none"; }
+  }
+
+  // ── 結果 ──
+  let lastList = [], shown = 30;
+  function metricSub(s, sort) {
+    const rev = (data.revenue || {})[s.code], val = (data.valuation || {})[s.code];
+    if (sort === "yld" && val && val.yield_pct != null) return `殖利率 ${val.yield_pct.toFixed(2)}%`;
+    if (sort === "rev" && rev && rev.yoy != null) return `營收年增 ${rev.yoy >= 0 ? "+" : ""}${rev.yoy.toFixed(1)}%`;
+    if (sort === "vol") return `量 ${(s.volume || 0).toLocaleString()} 張`;
+    return s.category || "";
+  }
+  function tags(code) {
+    let h = "";
+    const a = (data.attention || {})[code];
+    if (a) h += `<span class="m-tag warn">${esc(a.type || "注意")}</span>`;
+    const r = (data.riskScore || {})[code];
+    if (r && (r.level === "高" || r.level === "極高" || r.level === "警示")) h += `<span class="m-tag risk">高風險</span>`;
+    return h;
+  }
+  function renderResult() {
+    const sort = $("sortSel").value;
+    let list = lastList.slice();
+    const p = s => pctChange(s.price, s.change);
+    if (sort === "chgDown") list.sort((a, b) => p(b) - p(a));
+    else if (sort === "chgUp") list.sort((a, b) => p(a) - p(b));
+    else if (sort === "vol") list.sort((a, b) => (b.volume || 0) - (a.volume || 0));
+    else if (sort === "price") list.sort((a, b) => b.price - a.price);
+    else if (sort === "yld") list.sort((a, b) => (((data.valuation || {})[b.code] || {}).yield_pct || 0) - (((data.valuation || {})[a.code] || {}).yield_pct || 0));
+    else if (sort === "rev") list.sort((a, b) => (((data.revenue || {})[b.code] || {}).yoy ?? -1e9) - (((data.revenue || {})[a.code] || {}).yoy ?? -1e9));
+    else list.sort((a, b) => String(a.code).localeCompare(String(b.code)));
+
+    $("mResHead").style.display = "flex"; $("mRes").style.display = "block";
+    $("mResN").textContent = list.length.toLocaleString();
+    $("mResSort").textContent = $("sortSel").selectedOptions[0].textContent;
+    const view = list.slice(0, shown);
+    $("mRes").innerHTML = (view.map(s => {
+      const pc = p(s);
+      const cls = (s.change || 0) > 0 ? "up" : (s.change || 0) < 0 ? "down" : "flat";
+      return `<a class="m-row" href="/pages/stock-m?code=${esc(s.code)}">
+        <div class="m-main"><div class="m-name">${esc(s.name)} ${tags(String(s.code))}</div>
+        <div class="m-sub num">${esc(s.code)}・${esc(metricSub(s, sort))}</div></div>
+        <div class="m-right num"><div class="m-price">${L.fmtPrice(s.price)}</div><div class="m-chg ${cls}">${pc >= 0 ? "+" : ""}${pc.toFixed(2)}%</div></div>
+      </a>`;
+    }).join("") || `<div class="m-empty">沒有符合條件的股票，放寬一點試試</div>`) +
+    (list.length > shown ? `<button class="m-more" id="mMore">顯示更多（${shown} / ${list.length.toLocaleString()}）▾</button>` : "");
+    const mb = $("mMore");
+    if (mb) mb.addEventListener("click", () => { shown += 50; renderResult(); });
+  }
+  function apply(scrollTo) {
+    shown = 30;
+    lastList = runFilter(readFilters(), data.stocks || []);
+    renderResult();
+    if (scrollTo !== false) $("mResHead").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  $("mApply").addEventListener("click", apply);
+  $("mReset").addEventListener("click", () => resetUI(true));
+  $("sortSel").addEventListener("change", () => { if (lastList.length) renderResult(); });
+  document.querySelectorAll("#mMkt button").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("#mMkt button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on"); mkt = b.dataset.m;
+  }));
+
+  // ── 快選（與桌機 preset 同條件）──
+  const PRESET = {
+    up: f => { f.pctMin = 0.01; },
+    down: f => { f.pctMax = -0.01; },
+    volume: f => { f.volMin = 500; },
+    ai: f => { f.cats = ["半導體"]; },
+    bio: f => { f.cats = ["生技醫療"]; },
+    high: f => { f.priceMin = 500; },
+    low: f => { f.priceMax = 100; },
+    dividend: f => { f.yldMin = 5; },
+    value: f => { f.peMax = 15; f.gmMin = 30; },
+    growth: f => { f.revMin = 10; f.opProfit = true; },
+    undervalued: f => { f.fvPos = "low"; f.confMin = 3; },
+    chips: f => { f.foreign = true; f.margin = true; f.exLowVol = true; },
+    divgrow: f => { f.yldMin = 4; f.revMin = 0; f.momMin = 0; },
+  };
+  document.querySelectorAll(".m-pchip").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".m-pchip").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    const f = { exAttention: true };
+    PRESET[b.dataset.p](f);
+    writeFilters(f);
+    apply();
+  }));
+
+  // ── 我的策略（雲端同步，schema 與桌機/scan_strategies.py 相同）──
+  function renderStrats() {
+    const arr = L.getStrategies() || [];
+    $("mStratSync").textContent = (L.hasSession && L.hasSession()) ? "☁ 雲端同步" : "登入後跨裝置同步";
+    $("mStratList").innerHTML = arr.length ? arr.map((st, i) => `
+      <div class="m-srow">
+        <div class="nm">${esc(st.name)}<small>${st.scan ? "每日掃描中・新符合會推 LINE" : "未開啟每日掃描"}</small></div>
+        <button class="bell ${st.scan ? "on" : ""}" data-i="${i}" title="每日掃描">🔔</button>
+        <button class="use" data-i="${i}">套用</button>
+        <button class="del" data-i="${i}">✕</button>
+      </div>`).join("") : `<div class="m-empty" style="padding:16px;">還沒有存任何策略</div>`;
+    $("mStratList").querySelectorAll(".use").forEach(b => b.addEventListener("click", () => {
+      const st = (L.getStrategies() || [])[+b.dataset.i];
+      if (st) { writeFilters(st.filters || {}); apply(); }
+    }));
+    $("mStratList").querySelectorAll(".bell").forEach(b => b.addEventListener("click", () => {
+      const arr2 = L.getStrategies() || [];
+      const st = arr2[+b.dataset.i];
+      if (!st) return;
+      st.scan = !st.scan;
+      if (st.scan) { st.last_codes = st.last_codes || []; }
+      L.saveStrategies(arr2);
+      L.showToast && L.showToast(st.scan ? "已開啟每日掃描（盤後推 LINE）" : "已關閉每日掃描");
+      renderStrats();
+    }));
+    $("mStratList").querySelectorAll(".del").forEach(b => b.addEventListener("click", () => {
+      const arr2 = L.getStrategies() || [];
+      arr2.splice(+b.dataset.i, 1);
+      L.saveStrategies(arr2);
+      renderStrats();
+    }));
+  }
+  $("mStratSave").addEventListener("click", () => {
+    const name = prompt("策略名稱（例：高息穩健）");
+    if (!name) return;
+    const arr = L.getStrategies() || [];
+    arr.push({ name: name.trim().slice(0, 20), filters: readFilters(), scan: false, last_codes: [], last_scan: "" });
+    L.saveStrategies(arr);
+    L.showToast && L.showToast("已儲存策略");
+    renderStrats();
+  });
+  renderStrats();
+});
+</script>
+</body>
+</html>
