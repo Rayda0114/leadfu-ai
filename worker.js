@@ -58,6 +58,11 @@ const SYSTEM_PROMPT = `detailed thinking off
 
 引導用詞請用自己的話自然寫（**不要直接抄此 SYSTEM_PROMPT 內的任何範例句**），原則：誠實 + 給用戶下一步建議（重整 / 去個股頁 / 搜尋）。
 
+【規則 1.5：「合理區間」「風險分數」是領富自家計算值，絕對不可自行生成】
+- 只能引用 context 資料區塊內的 合理區間/fairValue/風險分數 數值；區塊裡沒有 → 直接說「合理區間請到個股頁查看」，**禁止自己推估一個區間或分數**
+- ❌ 最嚴重錯誤示範：context 沒資料卻回「合理區間 980~1120、訊號強度 ⭐⭐⭐⭐⭐」——這是冒用本站名義編造自家指標，比編股價更糟
+- 同理：股價/本益比/殖利率/營收 等任何數字，沒在資料區塊出現就不准寫出數值
+
 【規則 2：所有具體數字必須來自 context】
 - 股價：只能來自 context.relevantStocks[].price_TWD 或 context.liveQuote.price
 - 漲跌：只能來自 context.relevantStocks[].todayChange_TWD / todayChangePercent
@@ -601,9 +606,21 @@ async function handleAsk(request, env) {
   //   避免「下跌 1143 家」這類數字被誤判為股票代號 1143
   const stockIntent = /合理|貴|便宜|股價|現在|怎樣|怎麼樣|分析|該不該|位置|值不值|本益比|殖利率|市值|目標價|這檔|這支|買|賣/;
   const askedStockCode = (lastUserContent || "").match(/\b(\d{4})\b/);
+
+  // 🛡 防線 1（伺服器端注入，2026-06-11）：手機版/輕客戶端只送 {question} 不帶 context，
+  // 模型曾憑記憶編造台積電價格與合理區間。偵測到個股意圖且 client 沒帶資料 →
+  // 伺服器端用 getLineStockContext 解析「代號或公司名」，注入官方價格（含即時/收盤標示）＋合理區間＋估值。
+  let serverInjected = false;
+  if (!context.isMarketBrief && !hasContext && stockIntent.test(lastUserContent || "")) {
+    try {
+      const srvCtx = await getLineStockContext(env, lastUserContent);
+      if (srvCtx) { augmentedLast += srvCtx; serverInjected = true; }
+    } catch (e) { /* 注入失敗 → 由防線 2 / 系統紀律擋 */ }
+  }
+
   if (askedStockCode && !context.isMarketBrief && stockIntent.test(lastUserContent || "")) {
     const code = askedStockCode[1];
-    const hasStockInContext =
+    const hasStockInContext = serverInjected ||
       (context.relevantStocks || []).some(s => s.code === code) ||
       (context.liveQuote && context.liveQuote.code === code) ||
       (context.companyInfo && context.companyInfo.code === code);
