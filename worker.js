@@ -1947,7 +1947,7 @@ async function renderStockPage(url, env) {
   <div class="sd-bc"><a href="/">首頁</a> ▸ <a href="/pages/stocks">股價總覽</a>${cat ? ` ▸ <a href="${indLink}">${esc(cat)}</a>` : ""} ▸ <span>${esc(code)} ${esc(name)}</span></div>
   <h1 class="sd-h1">${esc(code)}　${esc(name)}</h1>
   <p class="sd-sub">${market ? esc(market) : ""}${cat ? "・" + esc(cat) : ""} 類股${price != null ? "・參考價 " + esc(price) + " 元" : ""}</p>
-  <div class="sd-src">📅 更新日期：${esc(today)}　·　資料來源：TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站</div>
+  <div class="sd-src"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 11h16"/></svg>更新日期：${esc(today)}　·　資料來源：TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站</div>
 
   <div class="sd-stats">
     <div class="sd-stat"><span>風險等級</span><b style="color:${lvColor};">${level ? esc(level) : "—"}</b><small>${score != null ? "風險分數 " + esc(score) + "/100" : "領富 AI 風險評估"}</small></div>
@@ -1957,19 +1957,19 @@ async function renderStockPage(url, env) {
   </div>
 
   <div class="sd-sec">
-    <h2>⚠ 風險摘要</h2>
+    <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="m15 9 4.5-4.5"/></svg>風險摘要</h2>
     <p class="sd-att">${esc(attLine)}</p>
     ${reasonsHtml}
   </div>
 
   <div class="sd-tools">
-    <a href="/pages/stock-detail?code=${esc(code)}">📊 完整互動分析（即時報價・圖表・籌碼）</a>
-    <a class="ghost" href="/pages/check?code=${esc(code)}">🔍 買前檢查</a>
+    <a href="/pages/stock-detail?code=${esc(code)}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M4 19V11M10 19V5M16 19v-8M21 19H3"/></svg>完整互動分析（即時報價・圖表・籌碼）</a>
+    <a class="ghost" href="/pages/check?code=${esc(code)}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>買前檢查</a>
     <a class="ghost" href="${indLink}">🏭 ${cat ? esc(cat) : "產業"}類股</a>
   </div>
 
   <div class="sd-sec">
-    <h2>📖 延伸閱讀</h2>
+    <h2><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M12 6c-2-1.4-4.8-2-8-2v14c3.2 0 6 .6 8 2 2-1.4 4.8-2 8-2V4c-3.2 0-6 .6-8 2z"/><path d="M12 6v14"/></svg>延伸閱讀</h2>
     <p class="sd-muted" style="line-height:2;">
       <a href="/pages/learn/warning-stocks" style="color:#1B4332;">注意股、處置股是什麼？</a>　·
       <a href="/pages/learn/institutional-investors" style="color:#1B4332;">三大法人買賣超怎麼看</a>　·
@@ -1978,7 +1978,7 @@ async function renderStockPage(url, env) {
   </div>
 
   <div class="sd-disc">
-    <strong>📌 免責聲明</strong><br>
+    <strong><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M12 16v5"/><path d="M9 3h6l1 7 2 3H6l2-3z"/></svg>免責聲明</strong><br>
     本頁為「${esc(code)} ${esc(name)}」之公開資料整理，僅供研究參考，<strong>不構成任何個股推薦或買賣建議</strong>。
     風險等級、合理區間為領富 AI 依公開資料以系統化方式整理，非投資評等或目標價；個股實際狀況請以證交所、櫃買中心與公開資訊觀測站之公告為準。
     投資有風險，決定前請您自行評估或諮詢合法之證券投資顧問。
