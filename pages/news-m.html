@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>財經新聞 - AI 利多利空判讀 - 領富 AI</title>
+<meta name="description" content="台股財經新聞 AI 判讀：每則標利多/利空/中性、一句白話解讀、影響個股。支援只看與我自選股相關的新聞。">
+<link rel="canonical" href="https://leadfuai.com/pages/news">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --paper:#fffdf8; --gold:#b9914f; --gold-2:#d6b36f;
+    --up:#be4a3e; --down:#148a55; --flat:#8a948e; --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(76px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+
+  .m-hero{color:#f8f5ec;padding:calc(20px + env(safe-area-inset-top)) 22px 54px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.28), transparent 34%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .m-hero-top{display:flex;justify-content:space-between;align-items:center;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-date{font-size:12px;color:rgba(248,245,236,.55);font-weight:700;}
+  .m-hero h1{margin:13px 0 0;font-size:28px;line-height:1.25;font-weight:900;letter-spacing:-.4px;}
+  .m-hero p{margin:9px 0 0;font-size:13px;color:rgba(248,245,236,.62);}
+
+  .m-pulse{margin:-32px 18px 0;position:relative;z-index:2;background:var(--paper);border-radius:20px;padding:15px 17px 13px;box-shadow:0 20px 48px rgba(13,29,23,.2);}
+  .m-pr{display:flex;justify-content:space-between;align-items:center;}
+  .m-pr small{font-size:11.5px;font-weight:800;color:#8a8173;letter-spacing:.05em;}
+  .m-breadth{margin-top:9px;display:flex;height:9px;border-radius:99px;overflow:hidden;background:#eee9dc;}
+  .m-breadth i{display:block;height:100%;}
+  .m-breadth .b{background:var(--up);} .m-breadth .n{background:#cfc9ba;} .m-breadth .s{background:var(--down);}
+  .m-blab{display:flex;justify-content:space-between;margin-top:7px;font-size:12px;font-weight:800;}
+  .m-blab .b{color:var(--up);} .m-blab .n{color:#9a948a;} .m-blab .s{color:var(--down);}
+
+  .m-ai{margin:14px 18px 0;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#1d3a2e,#0b3328);color:#f8f5ec;}
+  .m-ai-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;}
+  .m-ai-head b{font-size:14.5px;font-weight:900;}
+  .m-ai-head small{display:block;font-size:11.5px;color:rgba(248,245,236,.6);margin-top:2px;}
+  .m-ai-btn{margin-left:auto;flex:none;font-size:12px;font-weight:900;color:#0b3328;background:var(--gold-2);border-radius:999px;padding:7px 14px;border:0;font-family:inherit;cursor:pointer;}
+  .m-ai-body{display:none;padding:0 16px 14px;font-size:13.5px;line-height:1.8;color:rgba(248,245,236,.88);white-space:pre-wrap;}
+  .m-ai.open .m-ai-body{display:block;}
+
+  .m-filter{display:flex;gap:8px;align-items:center;padding:18px 18px 0;flex-wrap:wrap;}
+  .m-fchip{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--hairline);background:transparent;font-family:inherit;font-size:13px;font-weight:800;color:var(--soft);cursor:pointer;display:inline-flex;align-items:center;}
+  .m-fchip.on{background:var(--forest);border-color:var(--forest);color:#f4ead2;}
+
+  .m-list{margin:12px 18px 0;background:var(--paper);border:1px solid var(--hair2);border-radius:20px;overflow:hidden;}
+  .m-item{display:block;padding:14px 15px;border-bottom:1px solid var(--hair2);text-decoration:none;color:var(--ink);}
+  .m-item:last-child{border-bottom:0;}
+  .m-meta{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#9a948a;font-weight:700;flex-wrap:wrap;}
+  .m-pill{color:#fff;padding:1px 9px;border-radius:10px;font-weight:900;font-size:11px;}
+  .m-pill.bull{background:var(--up);} .m-pill.bear{background:var(--down);} .m-pill.neu{background:#8a948e;}
+  .m-title{font-size:14.5px;font-weight:800;line-height:1.55;margin-top:6px;}
+  .m-note{margin-top:6px;font-size:12.5px;color:#8a7a55;line-height:1.6;padding-left:10px;border-left:3px solid var(--gold-2);}
+  .m-rel{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+  .m-relchip{font-size:11.5px;font-weight:900;color:var(--forest);background:#ecf3ee;border-radius:999px;padding:4px 11px;text-decoration:none;}
+  .m-empty{padding:26px 20px;text-align:center;color:#8a8d85;font-size:13.5px;line-height:1.8;}
+  .m-more{display:block;text-align:center;padding:14px;font-size:13.5px;font-weight:900;color:var(--forest);background:none;width:100%;border:0;border-top:1px solid var(--hair2);font-family:inherit;cursor:pointer;}
+
+  .m-src{padding:18px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.7;}
+
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <div class="m-hero-top">
+    <span class="m-signal">Market News</span>
+    <span class="m-date" id="mDate"></span>
+  </div>
+  <h1>財經新聞</h1>
+  <p id="mSubT">每則新聞 AI 判讀利多／利空，並標出影響個股</p>
+</header>
+
+<section class="m-pulse">
+  <div class="m-pr"><small>今日新聞情緒</small><small style="color:#b3ac9d;" id="mTotalN"></small></div>
+  <div class="m-breadth" id="mBreadth"></div>
+  <div class="m-blab num" id="mBlab"></div>
+</section>
+
+<div class="m-ai" id="mAi">
+  <div class="m-ai-head">
+    <div><b>AI 今日新聞重點</b><small>把今天的新聞整理成 5 個重點</small></div>
+    <button class="m-ai-btn" id="mAiBtn">產生</button>
+  </div>
+  <div class="m-ai-body" id="mAiBody"></div>
+</div>
+
+<div class="m-filter" id="mFilter">
+  <button class="m-fchip on" data-f="">全部</button>
+  <button class="m-fchip" data-f="利多">利多</button>
+  <button class="m-fchip" data-f="利空">利空</button>
+  <button class="m-fchip" data-f="mine">與我的自選相關</button>
+</div>
+
+<div class="m-list" id="mList"></div>
+
+<div class="m-src">
+  新聞為公開媒體報導之彙整連結；利多／利空為 AI 對單則新聞的方向判讀，僅供參考、非投資建議。
+</div>
+
+<nav class="m-tabbar">
+  <a href="/" id="tbHome"></a>
+  <a href="/pages/stocks-m" id="tbChart"></a>
+  <a href="/pages/screener-m" id="tbSearch"></a>
+  <a href="/pages/watchlist-m" id="tbStar"></a>
+  <a href="/pages/member-m" id="tbUser"></a>
+</nav>
+
+<script src="/js/main.js?v=3.25.0"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const tb = {
+    tbHome: ['<path d="M216,120v96H152V152H104v64H40V120a8,8,0,0,1,2.34-5.66l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,216,120Z" fill="#c9a24b" opacity=".9"/><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"/>', "首頁"],
+    tbChart: ['<path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM168,48h32V200H168ZM112,96h40V200H112ZM56,144H96v56H56Z"/>', "行情"],
+    tbSearch: ['<circle cx="112" cy="112" r="80" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>', "選股"],
+    tbStar: ['<path d="M229.06,108.79l-48.7,42,14.88,62.79a8.4,8.4,0,0,1-12.52,9.17L128,189.09,73.28,222.74a8.4,8.4,0,0,1-12.52-9.17l14.88-62.79-48.7-42A8.46,8.46,0,0,1,31.73,94l63.91-5.2,24.62-59.6a8.36,8.36,0,0,1,15.48,0l24.62,59.6L224.27,94A8.46,8.46,0,0,1,229.06,108.79Z" fill="#c9a24b" opacity=".9"/><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"/>', "自選"],
+    tbUser: ['<circle cx="128" cy="96" r="64" fill="#c9a24b" opacity=".9"/><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/>', "我的"],
+  };
+  for (const [id, [paths, label]] of Object.entries(tb)) {
+    document.getElementById(id).innerHTML = `<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor">${paths}</svg>${label}`;
+  }
+
+  const d = new Date();
+  const wd = ["日","一","二","三","四","五","六"][d.getDay()];
+  document.getElementById("mDate").textContent = `${d.getMonth()+1}/${d.getDate()}（${wd}）`;
+
+  const NEWS = (L.data && L.data.news) || [];
+  const byCode = {}; ((L.data && L.data.stocks) || []).forEach(s => byCode[String(s.code)] = s);
+
+  // 情緒比例
+  const nb = NEWS.filter(n => n.ai_sentiment === "利多").length;
+  const ns = NEWS.filter(n => n.ai_sentiment === "利空").length;
+  const nn = NEWS.length - nb - ns;
+  const tot = Math.max(1, NEWS.length);
+  document.getElementById("mTotalN").textContent = `共 ${NEWS.length} 則`;
+  document.getElementById("mBreadth").innerHTML =
+    `<i class="b" style="width:${(nb/tot*100).toFixed(1)}%"></i><i class="n" style="width:${(nn/tot*100).toFixed(1)}%"></i><i class="s" style="width:${(ns/tot*100).toFixed(1)}%"></i>`;
+  document.getElementById("mBlab").innerHTML =
+    `<span class="b">利多 ${nb}</span><span class="n">中性 ${nn}</span><span class="s">利空 ${ns}</span>`;
+
+  // 與我的自選相關
+  const wl = L.getWatchlist().map(String);
+  const wlNames = wl.map(c => (byCode[c] || {}).name).filter(Boolean);
+  function isMine(n) {
+    if (Array.isArray(n.ai_related) && n.ai_related.some(c => wl.includes(String(c)))) return true;
+    return wlNames.some(nm => (n.title || "").includes(nm));
+  }
+
+  // 列表
+  let filter = "", shown = 20;
+  function render() {
+    let arr = NEWS;
+    if (filter === "mine") arr = arr.filter(isMine);
+    else if (filter) arr = arr.filter(n => n.ai_sentiment === filter);
+    const list = arr.slice(0, shown);
+    document.getElementById("mList").innerHTML = (list.map(n => {
+      const st = n.ai_sentiment === "利多" ? ["bull", "利多"] : n.ai_sentiment === "利空" ? ["bear", "利空"] : ["neu", "中性"];
+      const rel = (Array.isArray(n.ai_related) ? n.ai_related : []).slice(0, 4).map(c => {
+        const s = byCode[String(c)];
+        return s ? `<a class="m-relchip" href="/pages/stock-m?code=${esc(c)}" onclick="event.stopPropagation();">${esc(c)} ${esc(s.name)}</a>` : "";
+      }).join("");
+      const title = esc((n.title || "").split(" - ")[0]);
+      return `<a class="m-item" href="/pages/news-detail?id=${esc(n.id)}">
+        <div class="m-meta"><span class="m-pill ${st[0]}">${st[1]}</span><span>${esc(n.date || "")}${n.time ? " " + esc(n.time) : ""}</span>${n.tag ? `<span>${esc(n.tag)}</span>` : ""}</div>
+        <div class="m-title">${title}</div>
+        ${n.ai_note ? `<div class="m-note">${esc(n.ai_note)}</div>` : ""}
+        ${rel ? `<div class="m-rel">${rel}</div>` : ""}
+      </a>`;
+    }).join("") || `<div class="m-empty">${filter === "mine" ? "今天沒有與你自選股直接相關的新聞 ✓" : "這個分類目前沒有新聞"}</div>`) +
+    (arr.length > shown ? `<button class="m-more" id="mMore">顯示更多（${shown} / ${arr.length}）▾</button>` : "");
+    const mb = document.getElementById("mMore");
+    if (mb) mb.addEventListener("click", () => { shown += 20; render(); });
+  }
+  render();
+  document.querySelectorAll(".m-fchip").forEach(c => c.addEventListener("click", () => {
+    document.querySelectorAll(".m-fchip").forEach(x => x.classList.remove("on"));
+    c.classList.add("on");
+    filter = c.dataset.f; shown = 20; render();
+  }));
+
+  // AI 今日重點
+  let aiDone = false;
+  document.getElementById("mAiBtn").addEventListener("click", async () => {
+    const box = document.getElementById("mAi"), body = document.getElementById("mAiBody"), btn = document.getElementById("mAiBtn");
+    box.classList.add("open");
+    if (aiDone) return;
+    btn.disabled = true; btn.textContent = "整理中…";
+    body.textContent = "AI 正在閱讀今天的新聞…";
+    try {
+      const heads = NEWS.slice(0, 20).map(n => `${n.ai_sentiment || ""}｜${(n.title || "").split(" - ")[0]}`).join("\n");
+      const resp = await fetch("/api/ask", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: "以下是今天的台股新聞標題清單，請用繁體中文整理成最多 5 點重點，每點一句話、中立資訊整理語氣、不得有任何買賣建議，最後加一句「以上為新聞整理，非投資建議」。\n\n" + heads, stream: false }),
+      });
+      const data = await resp.json();
+      body.textContent = (data && data.answer) ? data.answer : "整理失敗，請稍後再試。";
+      aiDone = true; btn.textContent = "完成";
+    } catch (e) {
+      body.textContent = "整理失敗，請稍後再試。"; btn.textContent = "重試"; btn.disabled = false;
+    }
+  });
+});
+</script>
+</body>
+</html>
