@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ── 📰 我的 X 快訊（讀訂閱的大佬最新快訊）──
   function renderXAlert(a) {
-    const C = { bullish: "#1a7a45", bearish: "#c0392b", neutral: "#888" }[a.impact] || "#888";
+    const C = { bullish: "#c0392b", bearish: "#1a7a45", neutral: "#888" }[a.impact] || "#888";  // 台股慣例：偏多(紅)、偏空(綠)
     const L = { bullish: "偏多", bearish: "偏空", neutral: "中性" }[a.impact] || (a.impact || "");
     const syms = (a.symbols || []).join(" · ");
     let t = "";
