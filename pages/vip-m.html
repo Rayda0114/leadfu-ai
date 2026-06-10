@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>VIP 訂閱方案 - 每日持股風險守門 - 領富 AI</title>
+<meta name="description" content="領富 AI VIP：每天盤後自動健診你的持股、風險上升 LINE 主動提醒、X 快訊雷達、策略掃描。免費讓你查一次，VIP 幫你每天盯。純資料服務，不提供個股推薦。">
+<link rel="canonical" href="https://leadfuai.com/pages/vip">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --paper:#fffdf8; --gold:#b9914f; --gold-2:#d6b36f;
+    --up:#be4a3e; --down:#148a55; --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(76px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+
+  .m-hero{color:#f8f5ec;padding:calc(20px + env(safe-area-inset-top)) 22px 58px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.3), transparent 34%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-hero h1{margin:13px 0 0;font-size:29px;line-height:1.3;font-weight:900;letter-spacing:-.4px;}
+  .m-hero h1 i{font-style:normal;color:#ecd9ab;}
+  .m-hero p{margin:10px 0 0;font-size:13.5px;color:rgba(248,245,236,.68);line-height:1.7;max-width:320px;}
+
+  /* LINE 範例卡 */
+  .m-line{margin:-34px 18px 0;position:relative;z-index:2;background:var(--paper);border-radius:20px;overflow:hidden;box-shadow:0 20px 48px rgba(13,29,23,.22);}
+  .m-line-head{background:#06C755;color:#fff;font-size:12.5px;font-weight:900;padding:10px 16px;}
+  .m-line-body{padding:14px 16px;}
+  .m-line-t{font-size:15px;font-weight:900;color:var(--forest);}
+  .m-line-s{font-size:13px;color:#555;margin-top:4px;}
+  .m-line-s b{color:var(--up);}
+  .m-li{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--hair2);align-items:flex-start;margin-top:10px;}
+  .m-li:first-of-type{margin-top:12px;}
+  .m-dot{flex:none;width:9px;height:9px;border-radius:50%;margin-top:6px;}
+  .m-dot.r{background:var(--up);box-shadow:0 0 0 3px #f6e0dc;}
+  .m-dot.a{background:#d99c31;box-shadow:0 0 0 3px #f6ecd8;}
+  .m-li b{font-size:14px;color:var(--forest);}
+  .m-li small{display:block;font-size:12px;color:#777;margin-top:1px;}
+  .m-line-foot{font-size:11.5px;color:#9a948a;padding:10px 16px;border-top:1px solid var(--hair2);}
+
+  .m-sec{padding:24px 18px 0;}
+  .m-sec h2{margin:0 0 4px;font-size:19px;font-weight:900;text-align:center;}
+  .m-sec .sub{font-size:12.5px;color:#8a8d85;text-align:center;margin:0 0 14px;}
+
+  /* 對照表 */
+  .m-vs{background:var(--paper);border:1px solid var(--hair2);border-radius:18px;overflow:hidden;}
+  .m-vs-row{display:grid;grid-template-columns:1fr 64px 76px;align-items:center;border-bottom:1px solid var(--hair2);}
+  .m-vs-row:last-child{border-bottom:0;}
+  .m-vs-row > div{padding:11px 12px;font-size:13px;}
+  .m-vs-row .c{text-align:center;font-weight:900;}
+  .m-vs-head{background:#f2f6f3;font-weight:900;color:var(--forest);font-size:12px !important;}
+  .m-vs-head .vipcol{background:#0b3328;color:#ecd9ab;}
+  .m-vs-row .free{color:#c2bcab;}
+  .m-vs-row .yes{color:#16704a;background:#f4faf6;}
+
+  /* 方案卡 */
+  .m-plan{background:var(--paper);border:1px solid var(--hair2);border-radius:20px;overflow:hidden;margin-top:12px;}
+  .m-plan.hot{outline:2px solid var(--gold-2);outline-offset:-2px;box-shadow:0 18px 44px rgba(13,29,23,.14);}
+  .m-plan-head{padding:15px 17px;display:flex;align-items:baseline;gap:10px;}
+  .m-plan.hot .m-plan-head{background:linear-gradient(135deg,#1d3a2e,#0b3328);color:#f8f5ec;}
+  .m-plan-head b{font-size:18px;font-weight:900;}
+  .m-plan-head .price{margin-left:auto;font-size:19px;font-weight:900;}
+  .m-plan-head .price small{font-size:11.5px;font-weight:700;opacity:.7;}
+  .m-plan.hot .price{color:#ecd9ab;}
+  .m-plan ul{margin:0;padding:13px 17px 15px 34px;font-size:13.5px;line-height:2;color:#444;}
+  .m-plan ul .soon{color:#b08a3e;font-size:11px;font-weight:900;border:1px solid #ecd9b0;border-radius:8px;padding:1px 6px;margin-left:5px;}
+  .m-plan .cta{display:block;margin:0 16px 16px;min-height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;text-decoration:none;}
+  .m-plan .cta.pri{background:var(--forest);color:#f4ead2;}
+  .m-plan .cta.ghost{background:#fff;border:1px solid var(--hairline);color:var(--forest);}
+
+  /* FAQ */
+  .m-faq{background:var(--paper);border:1px solid var(--hair2);border-radius:18px;overflow:hidden;}
+  .m-faq details{border-bottom:1px solid var(--hair2);}
+  .m-faq details:last-child{border-bottom:0;}
+  .m-faq summary{list-style:none;padding:14px 16px;font-size:14px;font-weight:800;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+  .m-faq summary::after{content:"＋";color:#b09255;font-weight:900;}
+  .m-faq details[open] summary::after{content:"－";}
+  .m-faq .a{padding:0 16px 14px;font-size:13px;color:#666;line-height:1.75;}
+
+  .m-disc{margin:18px 18px 0;border-radius:14px;padding:13px 16px;background:#fdf6ec;border:1px solid #f0e2c8;font-size:12px;color:#7a6a4a;line-height:1.7;}
+  .m-src{padding:14px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.7;text-align:center;}
+
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <span class="m-signal">Membership</span>
+  <h1>免費讓你查一次，<br><i>VIP 幫你每天盯</i></h1>
+  <p>付費價值不是更多頁面，而是每天盤後 AI 自動健診你的持股，有風險第一時間 LINE 通知你。</p>
+</header>
+
+<!-- 你每天會收到的 LINE -->
+<section class="m-line">
+  <div class="m-line-head">範例・你每天會收到的 LINE</div>
+  <div class="m-line-body">
+    <div class="m-line-t">今日持股健診</div>
+    <div class="m-line-s">你關注的 12 檔中，<b>3 檔需要注意</b> 👇</div>
+    <div class="m-li"><span class="m-dot r"></span><div><b>2330 台積電</b><small>外資連 3 日賣超、借券餘額增加</small></div></div>
+    <div class="m-li"><span class="m-dot r"></span><div><b>2603 長榮</b><small>月營收轉弱（年減 18%）</small></div></div>
+    <div class="m-li"><span class="m-dot a"></span><div><b>1101 台泥</b><small>本週被列為「注意股」</small></div></div>
+  </div>
+  <div class="m-line-foot">其餘 9 檔今日無異常 ✓・示意範例，公開資料整理、非投資建議</div>
+</section>
+
+<!-- 對照 -->
+<section class="m-sec">
+  <h2>免費 vs VIP 進階</h2>
+  <p class="sub">免費版「看懂一檔」；VIP 讓系統「每天幫你盯」</p>
+  <div class="m-vs">
+    <div class="m-vs-row m-vs-head"><div>真正有感的服務</div><div class="c">免費</div><div class="c vipcol">VIP 進階</div></div>
+    <div class="m-vs-row"><div>買前檢查・風險分數・合理區間（單次查）</div><div class="c yes">✓</div><div class="c yes">✓</div></div>
+    <div class="m-vs-row"><div>每日持股健診＋LINE 風險摘要推播</div><div class="c free">—</div><div class="c yes">✓</div></div>
+    <div class="m-vs-row"><div>風險上升・列入注意股 主動提醒</div><div class="c free">—</div><div class="c yes">✓</div></div>
+    <div class="m-vs-row"><div>X 快訊雷達（訂閱金融大佬・中文快訊）</div><div class="c free">—</div><div class="c yes">✓</div></div>
+    <div class="m-vs-row"><div>投資儀表板完整版・策略每日自動掃描</div><div class="c free">—</div><div class="c yes">✓</div></div>
+    <div class="m-vs-row"><div>AI 對話次數</div><div class="c free num">5 次/日</div><div class="c yes">無上限</div></div>
+    <div class="m-vs-row"><div>自選股檔數</div><div class="c free num">10</div><div class="c yes num">100</div></div>
+  </div>
+</section>
+
+<!-- 方案 -->
+<section class="m-sec">
+  <h2>選擇方案</h2>
+  <p class="sub">隨時可取消・純資料服務、不喊單不代操</p>
+
+  <div class="m-plan hot">
+    <div class="m-plan-head"><b>VIP 進階</b><span style="font-size:11px;font-weight:900;color:#ecd9ab;border:1px solid rgba(236,217,171,.4);border-radius:8px;padding:2px 7px;">主推</span><span class="price num">NT$199<small>/月</small></span></div>
+    <ul>
+      <li>每日盤後持股健診＋LINE 風險摘要</li>
+      <li>風險上升、列入注意股 主動提醒</li>
+      <li>X 快訊雷達：訂閱金融大佬、發文翻中文</li>
+      <li>投資儀表板完整版＋策略每日掃描</li>
+      <li>AI 對話無上限・自選股 100 檔</li>
+    </ul>
+    <a class="cta pri" href="/pages/vip?full=1#plans">開啟每日風險守門 →</a>
+  </div>
+
+  <div class="m-plan">
+    <div class="m-plan-head"><b>免費會員</b><span class="price num">NT$0</span></div>
+    <ul>
+      <li>買前檢查（8 項紅旗）單次查詢</li>
+      <li>個股判斷卡・財報健檢・同業比較</li>
+      <li>合理區間（單檔）・新聞 AI 判讀</li>
+      <li>AI 對話 5 次/日・自選股 10 檔</li>
+    </ul>
+    <a class="cta ghost" href="/pages/register.html">免費註冊，先用看看</a>
+  </div>
+
+  <div class="m-plan">
+    <div class="m-plan-head"><b>VIP 旗艦</b><span class="price num">NT$499<small>/月</small></span></div>
+    <ul>
+      <li>進階全部功能</li>
+      <li>跌破合理區間下緣 即時警示<span class="soon">即將推出</span></li>
+      <li>合理區間歷史走勢圖<span class="soon">即將推出</span></li>
+      <li>自選股無上限・AI 產業週報/月報</li>
+      <li>線上專屬講座・優先客服</li>
+    </ul>
+    <a class="cta ghost" href="/pages/vip?full=1#plans">了解旗艦方案 →</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="m-sec">
+  <h2>常見問題</h2>
+  <p class="sub"></p>
+  <div class="m-faq">
+    <details><summary>VIP 會報明牌嗎？</summary><div class="a">不會。領富 AI 是「資料整理＋風險守門」服務：我們把公開資料整理成你看得懂的健診與提醒，買賣決定永遠在你手上。不喊單、不報明牌、不開飆股群組。</div></details>
+    <details><summary>免費版能用到什麼程度？</summary><div class="a">單次的買前檢查、風險分數、合理區間、判斷卡、新聞 AI 判讀都免費 —— 足夠你「看懂一檔股票」。VIP 的差別是系統「每天自動」幫你複查整個持股清單並主動通知。</div></details>
+    <details><summary>怎麼付款？可以退嗎？</summary><div class="a">線上刷卡（綠界金流），按月訂閱、隨時可取消，取消後服務維持到當期結束。付款與發票紀錄在會員中心可查。</div></details>
+    <details><summary>X 快訊雷達是什麼？</summary><div class="a">VIP 專屬功能：勾選你想追蹤的國際金融大佬（馬斯克、聯準會、彭博等 70+ 帳號），他們一發布市場相關貼文，AI 翻成中文摘要推給你，每則附原文連結。內容為輿情整理、非投資建議。</div></details>
+  </div>
+</section>
+
+<div class="m-disc"><b>合規聲明：</b>領富 AI 為公開資料整理與軟體服務，非證券投資顧問；所有內容不構成投資建議，不代操、不收受投資款項。唯一官網 leadfuai.com、唯一官方 LINE @130tqckv，謹防詐騙集團冒用。</div>
+<div class="m-src">領富 AI・台股風險守門員</div>
+
+<nav class="m-tabbar">
+  <a href="/" id="tbHome"></a>
+  <a href="/pages/stocks-m" id="tbChart"></a>
+  <a href="/pages/screener-m" id="tbSearch"></a>
+  <a href="/pages/watchlist-m" id="tbStar"></a>
+  <a href="/pages/member-m" class="on" id="tbUser"></a>
+</nav>
+
+<script src="/js/main.js?v=3.25.0"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const tb = {
+    tbHome: ['<path d="M216,120v96H152V152H104v64H40V120a8,8,0,0,1,2.34-5.66l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,216,120Z" fill="#c9a24b" opacity=".9"/><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"/>', "首頁"],
+    tbChart: ['<path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM168,48h32V200H168ZM112,96h40V200H112ZM56,144H96v56H56Z"/>', "行情"],
+    tbSearch: ['<circle cx="112" cy="112" r="80" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>', "選股"],
+    tbStar: ['<path d="M229.06,108.79l-48.7,42,14.88,62.79a8.4,8.4,0,0,1-12.52,9.17L128,189.09,73.28,222.74a8.4,8.4,0,0,1-12.52-9.17l14.88-62.79-48.7-42A8.46,8.46,0,0,1,31.73,94l63.91-5.2,24.62-59.6a8.36,8.36,0,0,1,15.48,0l24.62,59.6L224.27,94A8.46,8.46,0,0,1,229.06,108.79Z" fill="#c9a24b" opacity=".9"/><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"/>', "自選"],
+    tbUser: ['<circle cx="128" cy="96" r="64" fill="#c9a24b" opacity=".9"/><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/>', "我的"],
+  };
+  for (const [id, [paths, label]] of Object.entries(tb)) {
+    document.getElementById(id).innerHTML = `<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor">${paths}</svg>${label}`;
+  }
+});
+</script>
+</body>
+</html>

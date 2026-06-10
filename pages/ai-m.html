@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>AI 對話 - 自然語言查台股 - 領富 AI</title>
+<meta name="description" content="用白話問台股：「台積電現在貴嗎？」「高殖利率的金融股有哪些？」AI 以全市場公開資料回答，附資料來源、不喊單。">
+<link rel="canonical" href="https://leadfuai.com/pages/ai">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --paper:#fffdf8; --gold:#b9914f; --gold-2:#d6b36f;
+    --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:calc(76px + 64px + var(--safe-b));}  /* tabbar + 輸入列 */
+  .num{font-variant-numeric:tabular-nums;}
+
+  .m-hero{color:#f8f5ec;padding:calc(18px + env(safe-area-inset-top)) 22px 22px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.28), transparent 40%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .m-hero-top{display:flex;justify-content:space-between;align-items:center;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-clear{font-size:12px;color:rgba(248,245,236,.65);font-weight:800;background:none;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 13px;font-family:inherit;cursor:pointer;}
+  .m-hero h1{margin:10px 0 0;font-size:22px;font-weight:900;}
+  .m-hero p{margin:6px 0 0;font-size:12px;color:rgba(248,245,236,.6);}
+
+  .m-chat{padding:16px 16px 8px;display:flex;flex-direction:column;gap:12px;min-height:38vh;}
+  .m-msg{max-width:86%;padding:11px 14px;border-radius:18px;font-size:14.5px;line-height:1.75;white-space:pre-wrap;word-break:break-word;}
+  .m-msg.user{align-self:flex-end;background:var(--forest);color:#f4ead2;border-bottom-right-radius:6px;}
+  .m-msg.ai{align-self:flex-start;background:var(--paper);border:1px solid var(--hair2);border-bottom-left-radius:6px;box-shadow:0 6px 18px rgba(13,29,23,.06);}
+  .m-msg.ai .src{display:block;margin-top:8px;font-size:11px;color:#9a948a;border-top:1px solid var(--hair2);padding-top:7px;}
+  .m-typing{align-self:flex-start;display:flex;gap:5px;padding:14px 16px;background:var(--paper);border:1px solid var(--hair2);border-radius:18px;border-bottom-left-radius:6px;}
+  .m-typing i{width:7px;height:7px;border-radius:50%;background:#b9a87e;animation:tp 1.2s infinite;}
+  .m-typing i:nth-child(2){animation-delay:.2s;} .m-typing i:nth-child(3){animation-delay:.4s;}
+  @keyframes tp{0%,60%,100%{opacity:.3;transform:translateY(0);}30%{opacity:1;transform:translateY(-3px);}}
+
+  .m-hello{padding:8px 18px 0;}
+  .m-hello-card{background:var(--paper);border:1px solid var(--hair2);border-radius:18px;padding:16px;}
+  .m-hello-card b{font-size:15px;font-weight:900;color:var(--forest);}
+  .m-hello-card p{margin:6px 0 0;font-size:13px;color:#777;line-height:1.7;}
+  .m-sugg-t{padding:16px 18px 0;font-size:12px;font-weight:900;color:#8a8173;letter-spacing:.05em;}
+  .m-suggs{display:flex;flex-wrap:wrap;gap:9px;padding:10px 18px 0;}
+  .m-suggs button{border:1px solid var(--hairline);background:var(--paper);border-radius:999px;padding:10px 15px;font-family:inherit;font-size:13.5px;font-weight:800;color:var(--forest);cursor:pointer;text-align:left;}
+
+  .m-inputbar{position:fixed;left:0;right:0;bottom:calc(58px + var(--safe-b));z-index:901;padding:8px 12px;background:linear-gradient(180deg,rgba(244,242,236,0),rgba(244,242,236,.96) 30%);}
+  .m-inputin{display:grid;grid-template-columns:1fr 52px;background:var(--paper);border:1px solid var(--hairline);border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(13,29,23,.12);}
+  .m-inputin textarea{border:0;outline:0;background:transparent;padding:14px 15px;font-size:16px;font-family:inherit;color:var(--ink);resize:none;max-height:96px;min-height:48px;}
+  .m-inputin textarea::placeholder{color:#a8a294;font-weight:600;}
+  .m-inputin button{border:0;background:var(--forest);color:var(--gold-2);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .m-inputin button:disabled{opacity:.5;}
+
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <div class="m-hero-top">
+    <span class="m-signal">Ask AI</span>
+    <button class="m-clear" id="mClear" style="display:none;">清除對話</button>
+  </div>
+  <h1>AI 對話</h1>
+  <p>以台股全市場公開資料回答・附資料來源・不喊單、非投資建議</p>
+</header>
+
+<div class="m-hello" id="mHello">
+  <div class="m-hello-card">
+    <b>用白話問我台股的事 👋</b>
+    <p>我手上有全市場 2,500+ 檔的股價、月營收、三大法人、估值與技術指標（盤後更新）。我只做資料整理，買賣決定在你手上。</p>
+  </div>
+  <div class="m-sugg-t">試試這些問題</div>
+  <div class="m-suggs" id="mSuggs">
+    <button>台積電現在貴嗎？</button>
+    <button>高殖利率的金融股有哪些？</button>
+    <button>今天大盤發生什麼事？</button>
+    <button>2330 和 2454 哪檔殖利率高？</button>
+    <button>最近外資在買什麼？</button>
+  </div>
+</div>
+
+<div class="m-chat" id="mChat"></div>
+
+<div class="m-inputbar">
+  <div class="m-inputin">
+    <textarea id="mIn" rows="1" placeholder="輸入問題，例：台積電現在貴嗎？"></textarea>
+    <button id="mSend" aria-label="送出">
+      <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M231.4,44.34s0,.1,0,.15l-58.2,191.94a15.88,15.88,0,0,1-14,11.51q-.69.06-1.38.06a15.86,15.86,0,0,1-14.42-9.15l-35.71-75.39a4,4,0,0,1,.79-4.54l57.26-57.27a8,8,0,0,0-11.31-11.31L97.08,147.6a4,4,0,0,1-4.54.79l-75-35.53A16.37,16.37,0,0,1,8,97.36,15.89,15.89,0,0,1,19.57,82.84l191.94-58.2.15,0A16,16,0,0,1,231.4,44.34Z"/></svg>
+    </button>
+  </div>
+</div>
+
+<nav class="m-tabbar">
+  <a href="/" id="tbHome"></a>
+  <a href="/pages/stocks-m" id="tbChart"></a>
+  <a href="/pages/screener-m" id="tbSearch"></a>
+  <a href="/pages/watchlist-m" id="tbStar"></a>
+  <a href="/pages/member-m" id="tbUser"></a>
+</nav>
+
+<script src="/js/main.js?v=3.25.0"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const tb = {
+    tbHome: ['<path d="M216,120v96H152V152H104v64H40V120a8,8,0,0,1,2.34-5.66l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,216,120Z" fill="#c9a24b" opacity=".9"/><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"/>', "首頁"],
+    tbChart: ['<path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM168,48h32V200H168ZM112,96h40V200H112ZM56,144H96v56H56Z"/>', "行情"],
+    tbSearch: ['<circle cx="112" cy="112" r="80" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>', "選股"],
+    tbStar: ['<path d="M229.06,108.79l-48.7,42,14.88,62.79a8.4,8.4,0,0,1-12.52,9.17L128,189.09,73.28,222.74a8.4,8.4,0,0,1-12.52-9.17l14.88-62.79-48.7-42A8.46,8.46,0,0,1,31.73,94l63.91-5.2,24.62-59.6a8.36,8.36,0,0,1,15.48,0l24.62,59.6L224.27,94A8.46,8.46,0,0,1,229.06,108.79Z" fill="#c9a24b" opacity=".9"/><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"/>', "自選"],
+    tbUser: ['<circle cx="128" cy="96" r="64" fill="#c9a24b" opacity=".9"/><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/>', "我的"],
+  };
+  for (const [id, [paths, label]] of Object.entries(tb)) {
+    document.getElementById(id).innerHTML = `<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor">${paths}</svg>${label}`;
+  }
+
+  const chat = document.getElementById("mChat");
+  const inp = document.getElementById("mIn");
+  const send = document.getElementById("mSend");
+  let busy = false;
+
+  function add(role, text) {
+    const el = document.createElement("div");
+    el.className = "m-msg " + role;
+    el.textContent = text;
+    chat.appendChild(el);
+    el.scrollIntoView({ behavior: "smooth", block: "end" });
+    return el;
+  }
+  function typing(on) {
+    let t = document.getElementById("mTyping");
+    if (on && !t) {
+      t = document.createElement("div");
+      t.className = "m-typing"; t.id = "mTyping";
+      t.innerHTML = "<i></i><i></i><i></i>";
+      chat.appendChild(t);
+      t.scrollIntoView({ behavior: "smooth", block: "end" });
+    } else if (!on && t) t.remove();
+  }
+
+  async function ask(q) {
+    q = (q || "").trim();
+    if (!q || busy) return;
+    busy = true; send.disabled = true;
+    document.getElementById("mHello").style.display = "none";
+    document.getElementById("mClear").style.display = "inline-block";
+    add("user", q);
+    inp.value = ""; inp.style.height = "";
+    typing(true);
+    try {
+      const resp = await fetch("/api/ask", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: q, stream: false }),
+      });
+      const data = await resp.json().catch(() => null);
+      typing(false);
+      const ans = data && (data.answer || data.error);
+      const el = add("ai", ans || "抱歉，暫時無法回答，請稍後再試。");
+      const srcN = document.createElement("span");
+      srcN.className = "src";
+      srcN.textContent = "公開資料整理（TWSE／TPEx／MOPS，盤後）・非投資建議";
+      el.appendChild(srcN);
+      L.trackEvent && L.trackEvent("ai_chat", { page: "ai-m" });
+    } catch (e) {
+      typing(false);
+      add("ai", "連線失敗了，請檢查網路後再試一次。");
+    }
+    busy = false; send.disabled = false;
+  }
+
+  send.addEventListener("click", () => ask(inp.value));
+  inp.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(inp.value); }
+  });
+  inp.addEventListener("input", () => { inp.style.height = ""; inp.style.height = Math.min(96, inp.scrollHeight) + "px"; });
+  document.querySelectorAll("#mSuggs button").forEach(b => b.addEventListener("click", () => ask(b.textContent)));
+  document.getElementById("mClear").addEventListener("click", () => {
+    chat.innerHTML = "";
+    document.getElementById("mHello").style.display = "block";
+    document.getElementById("mClear").style.display = "none";
+  });
+
+  const q0 = new URLSearchParams(location.search).get("ask");
+  if (q0) ask(q0);
+});
+</script>
+</body>
+</html>
