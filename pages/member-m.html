@@ -118,7 +118,7 @@
   <div class="m-stats num" id="mStats"></div>
 
   <section class="m-sec">
-    <div class="m-sec-head"><h2>📰 我的 X 快訊</h2><span style="font-size:11px;color:#B8860B;font-weight:900;">💎 VIP</span></div>
+    <div class="m-sec-head"><h2>📰 我的 X 快訊</h2><span style="font-size:11px;color:#B8860B;font-weight:900;"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px;"><path d="M7 3h10l4.5 6.5L12 21 2.5 9.5z"/></svg>VIP</span></div>
     <div class="m-feed" id="mFeed"><div class="m-fempty">載入中…</div></div>
     <div class="m-subwrap" id="mSubWrap">
       <div class="m-subrow" id="mSubToggle">
@@ -188,7 +188,7 @@
   <a href="/pages/member-m" class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b9914f" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.6 4.5-5.5 8-5.5s6.5 1.9 8 5.5"/></svg>我的</a>
 </nav>
 
-<script src="/js/main.js?v=3.24.8"></script>
+<script src="/js/main.js?v=3.24.9"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/js/auth.js?v=3.24.3"></script>
 <script>
@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const vipBox = document.getElementById("mVip");
   vipBox.style.display = "flex";
   vipBox.innerHTML = isVip
-    ? `<b>💎 VIP 守門員・${esc(user.vip_level || "進階")}</b><small>有效至 ${until.toLocaleDateString("zh-TW")}</small><a href="/pages/vip.html">管理訂閱 ›</a>`
+    ? `<b><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px;"><path d="M7 3h10l4.5 6.5L12 21 2.5 9.5z"/></svg>VIP 守門員・${esc(user.vip_level || "進階")}</b><small>有效至 ${until.toLocaleDateString("zh-TW")}</small><a href="/pages/vip.html">管理訂閱 ›</a>`
     : `<b style="color:#cfc9ba;">免費會員</b><small>升級解鎖每日守門與 X 快訊</small><a href="/pages/vip.html">升級 VIP ›</a>`;
 
   // ── 統計 ──
@@ -248,7 +248,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ── X 快訊 feed（VIP） ──
   const feed = document.getElementById("mFeed");
   if (!isVip) {
-    feed.innerHTML = `<div class="m-fempty">💎 VIP 專屬：訂閱的金融大佬一發布市場相關貼文，<br>這裡就會出現中文整理。<br><a href="/pages/vip.html" style="color:var(--forest);font-weight:900;">升級 VIP →</a></div>`;
+    feed.innerHTML = `<div class="m-fempty"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px;"><path d="M7 3h10l4.5 6.5L12 21 2.5 9.5z"/></svg>VIP 專屬：訂閱的金融大佬一發布市場相關貼文，<br>這裡就會出現中文整理。<br><a href="/pages/vip.html" style="color:var(--forest);font-weight:900;">升級 VIP →</a></div>`;
   } else {
     try {
       if (!subs.length) {
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     subLoaded = true;
     const body = document.getElementById("mSubBody");
     if (!isVip) {
-      body.innerHTML = `<div class="m-fempty">💎 VIP 專屬功能，<a href="/pages/vip.html" style="color:var(--forest);font-weight:900;">升級解鎖 →</a></div>`;
+      body.innerHTML = `<div class="m-fempty"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px;"><path d="M7 3h10l4.5 6.5L12 21 2.5 9.5z"/></svg>VIP 專屬功能，<a href="/pages/vip.html" style="color:var(--forest);font-weight:900;">升級解鎖 →</a></div>`;
       return;
     }
     try {

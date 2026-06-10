@@ -861,7 +861,7 @@ function renderFairValueLow() {
             <span class="fv-low-pill">${posLabel}</span>
             <span class="fv-low-stars">${"⭐".repeat(Math.round(fv.confidence || 0))}</span>
           </div>
-          <div class="fv-low-vip-tag">💎 VIP 解鎖</div>
+          <div class="fv-low-vip-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px;"><path d="M7 3h10l4.5 6.5L12 21 2.5 9.5z"/></svg>VIP 解鎖</div>
         </a>`;
       }
 
@@ -1516,12 +1516,14 @@ function setupBottomTabBar() {
   const prefix = inPages ? "" : "pages/";
   const home   = inPages ? "../index.html" : "index.html";
 
+  // 線條 SVG 圖示（stroke 用 currentColor → active 自動變色；取代舊 emoji 🏠📊🔍⭐👤）
+  const _svg = (inner, extra) => `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" ${extra || ""} style="display:block;margin:0 auto;">${inner}</svg>`;
   const tabs = [
-    { label: "首頁",   icon: "🏠", href: home,                       match: /index\.html$|\/$/ },
-    { label: "行情",   icon: "📊", href: prefix + "stocks.html",     match: /stocks\.html|stock-detail\.html|industries\.html/ },
-    { label: "選股",   icon: "🔍", href: prefix + "screener.html",   match: /screener\.html|search\.html/ },
-    { label: "自選",   icon: "⭐", href: prefix + "watchlist.html",  match: /watchlist\.html/ },
-    { label: "我的",   icon: "👤", href: prefix + "member.html",     match: /member\.html|login\.html|register\.html|vip\.html/ }
+    { label: "首頁", icon: _svg('<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>', 'stroke-linejoin="round"'), href: home, match: /index\.html$|\/$/ },
+    { label: "行情", icon: _svg('<path d="M4 19V11M10 19V5M16 19v-8M21 19H3"/>'), href: prefix + "stocks-m.html", match: /stocks\.html|stock-detail\.html|industries\.html/ },
+    { label: "選股", icon: _svg('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'), href: prefix + "screener-m.html", match: /screener\.html|search\.html/ },
+    { label: "自選", icon: _svg('<path d="m12 3 2.7 5.6 6.3.9-4.6 4.4 1.1 6.1L12 17l-5.5 3 1.1-6.1L3 9.5l6.3-.9z"/>', 'stroke-linejoin="round"'), href: prefix + "watchlist-m.html", match: /watchlist\.html/ },
+    { label: "我的", icon: _svg('<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.6 4.5-5.5 8-5.5s6.5 1.9 8 5.5"/>'), href: prefix + "member-m.html", match: /member\.html|login\.html|register\.html|vip\.html/ }
   ];
 
   const bar = document.createElement("nav");

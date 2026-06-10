@@ -1986,7 +1986,7 @@ async function renderStockPage(url, env) {
 </main>
 
 <footer class="site-footer"><div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. · 本網站所有資訊僅供參考，不構成投資建議。</div></div></footer>
-<script src="/js/main.js?v=3.24.8"></script>
+<script src="/js/main.js?v=3.24.9"></script>
 </body>
 </html>`;
 
