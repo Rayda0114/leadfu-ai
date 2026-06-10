@@ -1769,7 +1769,8 @@ async function getLineStockContext(env, q) {
     }
     return o;
   });
-  return "\n\n---\n以下是領富 AI 提供的官方公開資料（請優先依此回答，**禁止編造數字**；**提到股價時務必照各檔「股價時間」標示是「即時」還是「收盤」，例如「2330 台積電 即時 2315」或「（今日收盤）」；絕對不可把收盤價/參考價講成即時價**；ETF 殖利率為近一年實際配息估算）：\n```json\n" + JSON.stringify(out).slice(0, 4000) + "\n```";
+  const _ts = `${_tpe.getUTCFullYear()}-${String(_tpe.getUTCMonth() + 1).padStart(2, "0")}-${String(_tpe.getUTCDate()).padStart(2, "0")} ${String(_tpe.getUTCHours()).padStart(2, "0")}:${String(_tpe.getUTCMinutes()).padStart(2, "0")}`;
+  return "\n\n---\n以下是領富 AI 提供的官方公開資料（請優先依此回答，**禁止編造數字**；**提到股價時務必照各檔「股價時間」標示是「即時」還是「收盤」，例如「2330 台積電 即時 2315」或「（今日收盤）」；絕對不可把收盤價/參考價講成即時價**；ETF 殖利率為近一年實際配息估算）：\n```json\n" + JSON.stringify(out).slice(0, 4000) + "\n```\n回答結尾如需標註資料時間，**只能用**：「資料時間：" + _ts + "（台北）」——禁止自己編其他日期時間。";
 }
 
 async function lineAnswer(env, q) {
