@@ -85,6 +85,98 @@
       ]
     },
     {
+      "id": "tech_leaders",
+      "name": "科技領袖",
+      "accounts": [
+        {
+          "handle": "LisaSu",
+          "name": "Lisa Su 蘇姿丰",
+          "blurb": "AMD 執行長，AI 晶片 / 半導體"
+        },
+        {
+          "handle": "bchesky",
+          "name": "Brian Chesky",
+          "blurb": "Airbnb 共同創辦人，產品 / 創業思考"
+        },
+        {
+          "handle": "dkhos",
+          "name": "Dara Khosrowshahi",
+          "blurb": "Uber 執行長，出行產業 / 轉型"
+        },
+        {
+          "handle": "Benioff",
+          "name": "Marc Benioff",
+          "blurb": "Salesforce 創辦人，企業軟體 / CRM"
+        },
+        {
+          "handle": "ArvindKrishna",
+          "name": "Arvind Krishna",
+          "blurb": "IBM 執行長，雲端 / 企業 AI"
+        },
+        {
+          "handle": "ajassy",
+          "name": "Andy Jassy",
+          "blurb": "Amazon 執行長（少發，可搭 @amazon）"
+        },
+        {
+          "handle": "ShantanuN",
+          "name": "Shantanu Narayen",
+          "blurb": "Adobe 執行長，創意軟體 / AI"
+        },
+        {
+          "handle": "Gwynne_Shotwell",
+          "name": "Gwynne Shotwell",
+          "blurb": "SpaceX 總裁，太空產業"
+        },
+        {
+          "handle": "masason",
+          "name": "孫正義 Masayoshi Son",
+          "blurb": "軟銀 SoftBank，科技投資"
+        }
+      ]
+    },
+    {
+      "id": "vc_thinkers",
+      "name": "創投・思想家",
+      "accounts": [
+        {
+          "handle": "patrickc",
+          "name": "Patrick Collison",
+          "blurb": "Stripe 共同創辦人，科技 / 生產力"
+        },
+        {
+          "handle": "naval",
+          "name": "Naval Ravikant",
+          "blurb": "AngelList，創業哲學 / 財富思維"
+        },
+        {
+          "handle": "garrytan",
+          "name": "Garry Tan",
+          "blurb": "Y Combinator 總裁，新創生態"
+        },
+        {
+          "handle": "reidhoffman",
+          "name": "Reid Hoffman",
+          "blurb": "LinkedIn 創辦人，創業 / AI"
+        },
+        {
+          "handle": "demishassabis",
+          "name": "Demis Hassabis",
+          "blurb": "DeepMind 創辦人，頂尖 AI 科學家"
+        },
+        {
+          "handle": "PalmerLuckey",
+          "name": "Palmer Luckey",
+          "blurb": "Anduril，國防科技 / 地緣政治"
+        },
+        {
+          "handle": "BillGates",
+          "name": "Bill Gates",
+          "blurb": "科技 / 健康 / 氣候，視野廣"
+        }
+      ]
+    },
+    {
       "id": "macro",
       "name": "宏觀總經",
       "accounts": [
@@ -127,6 +219,16 @@
           "handle": "AswathDamodaran",
           "name": "Aswath Damodaran",
           "blurb": "NYU 估值大師"
+        },
+        {
+          "handle": "HowardMarksBook",
+          "name": "Howard Marks",
+          "blurb": "Oaktree，投資哲學 / 風險（信件極高品質）"
+        },
+        {
+          "handle": "ptj_official",
+          "name": "Paul Tudor Jones",
+          "blurb": "傳奇宏觀交易員（handle 待確認）"
         }
       ]
     },
@@ -164,6 +266,16 @@
           "handle": "Apple",
           "name": "Apple",
           "blurb": "蘋果官方（產品發表/財報，全球關注）"
+        },
+        {
+          "handle": "Oracle",
+          "name": "Oracle",
+          "blurb": "甲骨文官方（Ellison 無活躍個人帳號）"
+        },
+        {
+          "handle": "amazon",
+          "name": "Amazon",
+          "blurb": "亞馬遜官方（搭 @ajassy）"
         }
       ]
     },
@@ -277,6 +389,11 @@
           "handle": "CoinDesk",
           "name": "CoinDesk",
           "blurb": "加密媒體"
+        },
+        {
+          "handle": "jack",
+          "name": "Jack Dorsey",
+          "blurb": "Block 創辦人，去中心化 / 比特幣"
         }
       ]
     },
@@ -293,6 +410,11 @@
           "handle": "GRDecter",
           "name": "Genevieve Roch-Decter",
           "blurb": "市場 / 個股"
+        },
+        {
+          "handle": "RampCapitalLLC",
+          "name": "Ramp Capital",
+          "blurb": "市場 meme + 洞見（諷刺風格，需自行判斷）"
         }
       ]
     }
