@@ -100,7 +100,7 @@
 
 <div class="m-strat" id="mStrat">
   <div class="m-scard on" data-k="dividend"><div class="m-sic">Dividend</div><b>高殖利率</b><small>殖利率 ≥ 5%，存股族首選</small><span class="m-hit num" data-hit>計算中…</span></div>
-  <div class="m-scard" data-k="growth"><div class="m-sic">Growth</div><b>營收成長</b><small>月營收年增 ≥ 20%、動能轉強</small><span class="m-hit num" data-hit>計算中…</span></div>
+  <div class="m-scard" data-k="growth"><div class="m-sic">Growth</div><b>營收成長</b><small>月營收年增 ≥ 30%（不含興櫃）</small><span class="m-hit num" data-hit>計算中…</span></div>
   <div class="m-scard" data-k="value"><div class="m-sic">Value</div><b>便宜績優</b><small>低於合理區間、評估信心高</small><span class="m-hit num" data-hit>計算中…</span></div>
   <div class="m-scard" data-k="foreign"><div class="m-sic">Foreign</div><b>外資連買</b><small>外資連 3 日以上買超</small><span class="m-hit num" data-hit>計算中…</span></div>
 </div>
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       name: "營收成長", sort: "依年增率排序",
       build() {
         return Object.entries(REV)
-          .filter(([c, r]) => (r.yoy || 0) >= 20 && byCode[c] && byCode[c].price > 0)
+          .filter(([c, r]) => (r.yoy || 0) >= 30 && byCode[c] && byCode[c].price > 0 && byCode[c].status !== "興櫃")
           .sort((a, b) => b[1].yoy - a[1].yoy)
           .map(([c, r]) => ({ code: c, why: `${esc(r.period)} 營收年增 +${r.yoy.toFixed(1)}%・月增 ${r.mom >= 0 ? "+" : ""}${(r.mom || 0).toFixed(1)}%` }));
       },
