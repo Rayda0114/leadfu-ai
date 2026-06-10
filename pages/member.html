@@ -73,6 +73,11 @@
     </div>
 
     <div class="panel">
+      <div class="panel-head"><h2>📡 X 快訊雷達 · 我的訂閱</h2><span style="font-size:12px;color:#B8860B;font-weight:700;">💎 VIP</span></div>
+      <div id="xWatcherBody"><div style="padding:16px;color:#888;font-size:13px;">載入中…</div></div>
+    </div>
+
+    <div class="panel">
       <div class="panel-head"><h2>會員權益</h2></div>
       <div style="padding:16px 20px;font-size:14px;line-height:1.9;">
         <p>✅ 免費自選股清單（最多 50 檔）</p>
@@ -163,6 +168,64 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("profileGrid").innerHTML = rows.map(([l,v]) =>
     `<div class="info-row"><div class="info-label">${l}</div><div class="info-value">${v}</div></div>`
   ).join("");
+
+  // ── 📡 X 快訊雷達 · 我的訂閱（VIP 專屬）──
+  async function setupXWatcher(u) {
+    const body = document.getElementById("xWatcherBody");
+    if (!body) return;
+    const until = u && u.vip_until ? new Date(u.vip_until) : null;
+    const isVip = !!(until && until.getTime() > Date.now());
+    if (!isVip) {
+      body.innerHTML = `<div style="padding:18px;text-align:center;color:#555;font-size:14px;line-height:1.8;">
+        💎 <b>VIP 專屬功能</b><br>勾選你想追蹤的金融大佬，他們一發布市場相關貼文，<br>領富 AI 就翻成中文整理推給你（資訊整理，非投資建議）。
+        <div style="margin-top:12px;"><a href="vip.html" style="display:inline-block;background:#1B4332;color:#fff;padding:8px 22px;border-radius:3px;font-weight:600;text-decoration:none;">升級 VIP 解鎖 →</a></div></div>`;
+      return;
+    }
+    const sb = window.LeadFuAuth.client;
+    let catalog, subs = new Set();
+    try {
+      const [cat, sel] = await Promise.all([
+        fetch("/data/x_catalog.json?v=" + Date.now()).then(r => r.json()),
+        sb.from("x_subscriptions").select("handle").eq("user_id", u.id)
+      ]);
+      catalog = cat;
+      (sel.data || []).forEach(r => subs.add(r.handle));
+    } catch (e) {
+      body.innerHTML = `<p style="padding:16px;color:#c0392b;font-size:13px;">訂閱清單載入失敗，請重新整理。</p>`;
+      return;
+    }
+    let html = `<div style="padding:12px 16px;font-size:13px;color:#666;line-height:1.7;">勾選想追蹤的大佬，他們發布<b>市場相關</b>貼文時，會翻成中文整理給你。<br><span style="color:#999;font-size:12px;">（資訊整理服務，非投資建議；每則皆附原文連結）</span></div>`;
+    (catalog.categories || []).forEach(c => {
+      html += `<div style="padding:7px 16px;font-weight:700;color:#1B4332;font-size:13px;background:#f7faf8;border-top:1px solid #eef0f3;">${c.name}</div>`;
+      (c.accounts || []).forEach(a => {
+        const ck = subs.has(a.handle) ? "checked" : "";
+        html += `<label style="display:flex;gap:10px;padding:9px 16px;align-items:flex-start;cursor:pointer;border-bottom:1px solid #f4f6f5;">
+          <input type="checkbox" class="xw-cb" data-handle="${a.handle}" ${ck} style="margin-top:3px;width:17px;height:17px;flex:none;">
+          <span><b style="font-size:14px;color:#1B4332;">${a.name}</b> <span style="color:#aaa;font-size:12px;">@${a.handle}</span><br><span style="font-size:12px;color:#888;">${a.blurb || ""}</span></span>
+        </label>`;
+      });
+    });
+    html += `<div id="xwMsg" style="padding:9px 16px;font-size:12.5px;min-height:18px;"></div>`;
+    body.innerHTML = html;
+    body.querySelectorAll(".xw-cb").forEach(cb => {
+      cb.addEventListener("change", async () => {
+        const handle = cb.dataset.handle, msg = document.getElementById("xwMsg");
+        cb.disabled = true;
+        try {
+          if (cb.checked) await sb.from("x_subscriptions").upsert({ user_id: u.id, handle });
+          else await sb.from("x_subscriptions").delete().eq("user_id", u.id).eq("handle", handle);
+          if (msg) { msg.textContent = "已儲存 ✓"; msg.style.color = "#1a7a45"; }
+        } catch (e) {
+          cb.checked = !cb.checked;
+          if (msg) { msg.textContent = "儲存失敗，請重試"; msg.style.color = "#c0392b"; }
+        } finally {
+          cb.disabled = false;
+          setTimeout(() => { if (msg) msg.textContent = ""; }, 1600);
+        }
+      });
+    });
+  }
+  setupXWatcher(user);
 
   // ── VIP 狀態顯示 + 綠界開通成功提示 ──
   (function setupVip() {

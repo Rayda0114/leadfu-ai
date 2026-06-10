@@ -1,0 +1,248 @@
+{
+  "feature": "X 快訊雷達",
+  "updated": "2026-06-10",
+  "note": "VIP 可勾選訂閱的帳號菜單；watcher 掃描所有分類的聯集。僅收『資訊型 / 領袖 / 宏觀 / 快訊 / 媒體』，不收喊單型 KOL（合規：市場資訊整理、非投資建議）。",
+  "categories": [
+    {
+      "id": "leaders",
+      "name": "領袖大佬",
+      "accounts": [
+        {
+          "handle": "elonmusk",
+          "name": "Elon Musk",
+          "blurb": "Tesla / SpaceX / xAI，全球最具市場影響力"
+        },
+        {
+          "handle": "realDonaldTrump",
+          "name": "Donald Trump",
+          "blurb": "關稅、政策、地緣 —— 對市場衝擊極大"
+        },
+        {
+          "handle": "saylor",
+          "name": "Michael Saylor",
+          "blurb": "BTC / MicroStrategy(MSTR)"
+        },
+        {
+          "handle": "BillAckman",
+          "name": "Bill Ackman",
+          "blurb": "Pershing Square，激進投資人"
+        },
+        {
+          "handle": "CathieDWood",
+          "name": "Cathie Wood",
+          "blurb": "ARK Invest，成長型科技股"
+        },
+        {
+          "handle": "Carl_C_Icahn",
+          "name": "Carl Icahn",
+          "blurb": "傳奇激進投資人 / 企業狙擊"
+        },
+        {
+          "handle": "michaeljburry",
+          "name": "Michael Burry",
+          "blurb": "《大空頭》原型，危機警告"
+        },
+        {
+          "handle": "chamath",
+          "name": "Chamath Palihapitiya",
+          "blurb": "Social Capital / All-In Podcast"
+        },
+        {
+          "handle": "RayDalio",
+          "name": "Ray Dalio",
+          "blurb": "Bridgewater，宏觀與債務週期"
+        },
+        {
+          "handle": "mcuban",
+          "name": "Mark Cuban",
+          "blurb": "知名投資人 / 企業家"
+        },
+        {
+          "handle": "pmarca",
+          "name": "Marc Andreessen",
+          "blurb": "a16z，頂級創投"
+        },
+        {
+          "handle": "DavidSacks",
+          "name": "David Sacks",
+          "blurb": "科技 / 政策（白宮 AI・加密）"
+        }
+      ]
+    },
+    {
+      "id": "macro",
+      "name": "宏觀總經",
+      "accounts": [
+        {
+          "handle": "elerianm",
+          "name": "Mohamed El-Erian",
+          "blurb": "前 PIMCO，宏觀經濟權威"
+        },
+        {
+          "handle": "Nouriel",
+          "name": "Nouriel Roubini",
+          "blurb": "Dr. Doom，危機預測"
+        },
+        {
+          "handle": "TruthGundlach",
+          "name": "Jeffrey Gundlach",
+          "blurb": "DoubleLine，債券天王"
+        },
+        {
+          "handle": "LizAnnSonders",
+          "name": "Liz Ann Sonders",
+          "blurb": "Schwab 首席投資策略師"
+        },
+        {
+          "handle": "biancoresearch",
+          "name": "Jim Bianco",
+          "blurb": "債市 / 總經研究"
+        },
+        {
+          "handle": "NorthmanTrader",
+          "name": "Sven Henrich",
+          "blurb": "市場結構 / 風險"
+        },
+        {
+          "handle": "profplum99",
+          "name": "Michael Green",
+          "blurb": "流動性 / 被動投資結構"
+        },
+        {
+          "handle": "AswathDamodaran",
+          "name": "Aswath Damodaran",
+          "blurb": "NYU 估值大師"
+        }
+      ]
+    },
+    {
+      "id": "newswire",
+      "name": "快訊頭條",
+      "accounts": [
+        {
+          "handle": "DeItaone",
+          "name": "Walter Bloomberg",
+          "blurb": "快訊型頭條（Fed/財報/總經）"
+        },
+        {
+          "handle": "KobeissiLetter",
+          "name": "The Kobeissi Letter",
+          "blurb": "總經 / 市場結構"
+        },
+        {
+          "handle": "FirstSquawk",
+          "name": "First Squawk",
+          "blurb": "即時市場頭條"
+        },
+        {
+          "handle": "LiveSquawk",
+          "name": "Live Squawk",
+          "blurb": "即時市場頭條"
+        },
+        {
+          "handle": "financialjuice",
+          "name": "Financial Juice",
+          "blurb": "即時財經快訊"
+        },
+        {
+          "handle": "StockMKTNewz",
+          "name": "Evan (StockMKTNewz)",
+          "blurb": "個股 / 市場新聞"
+        },
+        {
+          "handle": "thestalwart",
+          "name": "Joe Weisenthal",
+          "blurb": "Bloomberg，宏觀即時評論"
+        },
+        {
+          "handle": "unusual_whales",
+          "name": "unusual_whales",
+          "blurb": "選擇權異常 / 個股流向"
+        },
+        {
+          "handle": "zerohedge",
+          "name": "ZeroHedge",
+          "blurb": "市場情緒（觀點尖銳）"
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "name": "財經媒體",
+      "accounts": [
+        {
+          "handle": "markets",
+          "name": "Bloomberg Markets",
+          "blurb": "彭博市場"
+        },
+        {
+          "handle": "business",
+          "name": "Bloomberg",
+          "blurb": "彭博"
+        },
+        {
+          "handle": "Reuters",
+          "name": "Reuters",
+          "blurb": "路透"
+        },
+        {
+          "handle": "CNBC",
+          "name": "CNBC",
+          "blurb": "CNBC"
+        },
+        {
+          "handle": "Stocktwits",
+          "name": "Stocktwits",
+          "blurb": "散戶情緒 / 個股討論"
+        }
+      ]
+    },
+    {
+      "id": "crypto",
+      "name": "加密大佬",
+      "accounts": [
+        {
+          "handle": "WatcherGuru",
+          "name": "Watcher.Guru",
+          "blurb": "加密 / 突發財經"
+        },
+        {
+          "handle": "cz_binance",
+          "name": "CZ (Binance)",
+          "blurb": "幣安創辦人"
+        },
+        {
+          "handle": "VitalikButerin",
+          "name": "Vitalik Buterin",
+          "blurb": "以太坊創辦人"
+        },
+        {
+          "handle": "APompliano",
+          "name": "Anthony Pompliano",
+          "blurb": "加密投資人"
+        },
+        {
+          "handle": "CoinDesk",
+          "name": "CoinDesk",
+          "blurb": "加密媒體"
+        }
+      ]
+    },
+    {
+      "id": "aggregator",
+      "name": "綜合聚合",
+      "accounts": [
+        {
+          "handle": "MarioNawfal",
+          "name": "Mario Nawfal",
+          "blurb": "綜合財經 / 科技 / 加密"
+        },
+        {
+          "handle": "GRDecter",
+          "name": "Genevieve Roch-Decter",
+          "blurb": "市場 / 個股"
+        }
+      ]
+    }
+  ]
+}
