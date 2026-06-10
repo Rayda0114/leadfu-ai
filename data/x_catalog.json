@@ -10,77 +10,92 @@
         {
           "handle": "elonmusk",
           "name": "Elon Musk",
-          "blurb": "Tesla / SpaceX / xAI，全球最具市場影響力"
+          "blurb": "Tesla / SpaceX / xAI，全球最具市場影響力",
+          "tier": 1
         },
         {
           "handle": "realDonaldTrump",
           "name": "Donald Trump",
-          "blurb": "關稅、政策、地緣 —— 對市場衝擊極大"
+          "blurb": "關稅、政策、地緣 —— 對市場衝擊極大",
+          "tier": 1
         },
         {
           "handle": "saylor",
           "name": "Michael Saylor",
-          "blurb": "BTC / MicroStrategy(MSTR)"
+          "blurb": "BTC / MicroStrategy(MSTR)",
+          "tier": 1
         },
         {
           "handle": "BillAckman",
           "name": "Bill Ackman",
-          "blurb": "Pershing Square，激進投資人"
+          "blurb": "Pershing Square，激進投資人",
+          "tier": 1
         },
         {
           "handle": "CathieDWood",
           "name": "Cathie Wood",
-          "blurb": "ARK Invest，成長型科技股"
+          "blurb": "ARK Invest，成長型科技股",
+          "tier": 1
         },
         {
           "handle": "Carl_C_Icahn",
           "name": "Carl Icahn",
-          "blurb": "傳奇激進投資人 / 企業狙擊"
+          "blurb": "傳奇激進投資人 / 企業狙擊",
+          "tier": 1
         },
         {
           "handle": "michaeljburry",
           "name": "Michael Burry",
-          "blurb": "《大空頭》原型，危機警告"
+          "blurb": "《大空頭》原型，危機警告",
+          "tier": 1
         },
         {
           "handle": "chamath",
           "name": "Chamath Palihapitiya",
-          "blurb": "Social Capital / All-In Podcast"
+          "blurb": "Social Capital / All-In Podcast",
+          "tier": 2
         },
         {
           "handle": "RayDalio",
           "name": "Ray Dalio",
-          "blurb": "Bridgewater，宏觀與債務週期"
+          "blurb": "Bridgewater，宏觀與債務週期",
+          "tier": 2
         },
         {
           "handle": "mcuban",
           "name": "Mark Cuban",
-          "blurb": "知名投資人 / 企業家"
+          "blurb": "知名投資人 / 企業家",
+          "tier": 2
         },
         {
           "handle": "pmarca",
           "name": "Marc Andreessen",
-          "blurb": "a16z，頂級創投"
+          "blurb": "a16z，頂級創投",
+          "tier": 2
         },
         {
           "handle": "DavidSacks",
           "name": "David Sacks",
-          "blurb": "科技 / 政策（白宮 AI・加密）"
+          "blurb": "科技 / 政策（白宮 AI・加密）",
+          "tier": 2
         },
         {
           "handle": "sama",
           "name": "Sam Altman",
-          "blurb": "OpenAI 執行長，AI 領域最活躍之一"
+          "blurb": "OpenAI 執行長，AI 領域最活躍之一",
+          "tier": 1
         },
         {
           "handle": "jensenhuang",
           "name": "Jensen Huang 黃仁勳",
-          "blurb": "NVIDIA 執行長（個人少發，一發必受關注）"
+          "blurb": "NVIDIA 執行長（個人少發，一發必受關注）",
+          "tier": 1
         },
         {
           "handle": "sundarpichai",
           "name": "Sundar Pichai",
-          "blurb": "Google / Alphabet 執行長（個人少發）"
+          "blurb": "Google / Alphabet 執行長（個人少發）",
+          "tier": 2
         }
       ]
     },
@@ -91,47 +106,56 @@
         {
           "handle": "LisaSu",
           "name": "Lisa Su 蘇姿丰",
-          "blurb": "AMD 執行長，AI 晶片 / 半導體"
+          "blurb": "AMD 執行長，AI 晶片 / 半導體",
+          "tier": 2
         },
         {
           "handle": "bchesky",
           "name": "Brian Chesky",
-          "blurb": "Airbnb 共同創辦人，產品 / 創業思考"
+          "blurb": "Airbnb 共同創辦人，產品 / 創業思考",
+          "tier": 2
         },
         {
           "handle": "dkhos",
           "name": "Dara Khosrowshahi",
-          "blurb": "Uber 執行長，出行產業 / 轉型"
+          "blurb": "Uber 執行長，出行產業 / 轉型",
+          "tier": 2
         },
         {
           "handle": "Benioff",
           "name": "Marc Benioff",
-          "blurb": "Salesforce 創辦人，企業軟體 / CRM"
+          "blurb": "Salesforce 創辦人，企業軟體 / CRM",
+          "tier": 2
         },
         {
           "handle": "ArvindKrishna",
           "name": "Arvind Krishna",
-          "blurb": "IBM 執行長，雲端 / 企業 AI"
+          "blurb": "IBM 執行長，雲端 / 企業 AI",
+          "tier": 2
         },
         {
           "handle": "ajassy",
           "name": "Andy Jassy",
-          "blurb": "Amazon 執行長（少發，可搭 @amazon）"
+          "blurb": "Amazon 執行長（少發，可搭 @amazon）",
+          "tier": 2
         },
         {
           "handle": "ShantanuN",
           "name": "Shantanu Narayen",
-          "blurb": "Adobe 執行長，創意軟體 / AI"
+          "blurb": "Adobe 執行長，創意軟體 / AI",
+          "tier": 2
         },
         {
           "handle": "Gwynne_Shotwell",
           "name": "Gwynne Shotwell",
-          "blurb": "SpaceX 總裁，太空產業"
+          "blurb": "SpaceX 總裁，太空產業",
+          "tier": 2
         },
         {
           "handle": "masason",
           "name": "孫正義 Masayoshi Son",
-          "blurb": "軟銀 SoftBank，科技投資"
+          "blurb": "軟銀 SoftBank，科技投資",
+          "tier": 2
         }
       ]
     },
@@ -142,37 +166,44 @@
         {
           "handle": "patrickc",
           "name": "Patrick Collison",
-          "blurb": "Stripe 共同創辦人，科技 / 生產力"
+          "blurb": "Stripe 共同創辦人，科技 / 生產力",
+          "tier": 2
         },
         {
           "handle": "naval",
           "name": "Naval Ravikant",
-          "blurb": "AngelList，創業哲學 / 財富思維"
+          "blurb": "AngelList，創業哲學 / 財富思維",
+          "tier": 2
         },
         {
           "handle": "garrytan",
           "name": "Garry Tan",
-          "blurb": "Y Combinator 總裁，新創生態"
+          "blurb": "Y Combinator 總裁，新創生態",
+          "tier": 2
         },
         {
           "handle": "reidhoffman",
           "name": "Reid Hoffman",
-          "blurb": "LinkedIn 創辦人，創業 / AI"
+          "blurb": "LinkedIn 創辦人，創業 / AI",
+          "tier": 2
         },
         {
           "handle": "demishassabis",
           "name": "Demis Hassabis",
-          "blurb": "DeepMind 創辦人，頂尖 AI 科學家"
+          "blurb": "DeepMind 創辦人，頂尖 AI 科學家",
+          "tier": 2
         },
         {
           "handle": "PalmerLuckey",
           "name": "Palmer Luckey",
-          "blurb": "Anduril，國防科技 / 地緣政治"
+          "blurb": "Anduril，國防科技 / 地緣政治",
+          "tier": 2
         },
         {
           "handle": "BillGates",
           "name": "Bill Gates",
-          "blurb": "科技 / 健康 / 氣候，視野廣"
+          "blurb": "科技 / 健康 / 氣候，視野廣",
+          "tier": 2
         }
       ]
     },
@@ -183,52 +214,62 @@
         {
           "handle": "elerianm",
           "name": "Mohamed El-Erian",
-          "blurb": "前 PIMCO，宏觀經濟權威"
+          "blurb": "前 PIMCO，宏觀經濟權威",
+          "tier": 2
         },
         {
           "handle": "Nouriel",
           "name": "Nouriel Roubini",
-          "blurb": "Dr. Doom，危機預測"
+          "blurb": "Dr. Doom，危機預測",
+          "tier": 2
         },
         {
           "handle": "TruthGundlach",
           "name": "Jeffrey Gundlach",
-          "blurb": "DoubleLine，債券天王"
+          "blurb": "DoubleLine，債券天王",
+          "tier": 2
         },
         {
           "handle": "LizAnnSonders",
           "name": "Liz Ann Sonders",
-          "blurb": "Schwab 首席投資策略師"
+          "blurb": "Schwab 首席投資策略師",
+          "tier": 2
         },
         {
           "handle": "biancoresearch",
           "name": "Jim Bianco",
-          "blurb": "債市 / 總經研究"
+          "blurb": "債市 / 總經研究",
+          "tier": 2
         },
         {
           "handle": "NorthmanTrader",
           "name": "Sven Henrich",
-          "blurb": "市場結構 / 風險"
+          "blurb": "市場結構 / 風險",
+          "tier": 2
         },
         {
           "handle": "profplum99",
           "name": "Michael Green",
-          "blurb": "流動性 / 被動投資結構"
+          "blurb": "流動性 / 被動投資結構",
+          "tier": 2
         },
         {
           "handle": "AswathDamodaran",
           "name": "Aswath Damodaran",
-          "blurb": "NYU 估值大師"
+          "blurb": "NYU 估值大師",
+          "tier": 2
         },
         {
           "handle": "HowardMarksBook",
           "name": "Howard Marks",
-          "blurb": "Oaktree，投資哲學 / 風險（信件極高品質）"
+          "blurb": "Oaktree，投資哲學 / 風險（信件極高品質）",
+          "tier": 2
         },
         {
           "handle": "ptj_official",
           "name": "Paul Tudor Jones",
-          "blurb": "傳奇宏觀交易員（handle 待確認）"
+          "blurb": "傳奇宏觀交易員（handle 待確認）",
+          "tier": 2
         }
       ]
     },
@@ -239,12 +280,14 @@
         {
           "handle": "federalreserve",
           "name": "美國聯準會 Fed",
-          "blurb": "最權威貨幣政策官方來源（發文少但極具份量）"
+          "blurb": "最權威貨幣政策官方來源（發文少但極具份量）",
+          "tier": 1
         },
         {
-          "handle": "NYFed",
+          "handle": "NewYorkFed",
           "name": "紐約聯準銀行",
-          "blurb": "Fed 體系，發較多研究與市場相關內容"
+          "blurb": "Fed 體系，發較多研究與市場相關內容",
+          "tier": 2
         }
       ]
     },
@@ -255,27 +298,32 @@
         {
           "handle": "nvidia",
           "name": "NVIDIA",
-          "blurb": "AI 晶片龍頭官方（產品/財報/PR，量多）"
+          "blurb": "AI 晶片龍頭官方（產品/財報/PR，量多）",
+          "tier": 2
         },
         {
           "handle": "Google",
           "name": "Google",
-          "blurb": "Alphabet 官方（產品/AI/PR）"
+          "blurb": "Alphabet 官方（產品/AI/PR）",
+          "tier": 2
         },
         {
           "handle": "Apple",
           "name": "Apple",
-          "blurb": "蘋果官方（產品發表/財報，全球關注）"
+          "blurb": "蘋果官方（產品發表/財報，全球關注）",
+          "tier": 2
         },
         {
           "handle": "Oracle",
           "name": "Oracle",
-          "blurb": "甲骨文官方（Ellison 無活躍個人帳號）"
+          "blurb": "甲骨文官方（Ellison 無活躍個人帳號）",
+          "tier": 2
         },
         {
           "handle": "amazon",
           "name": "Amazon",
-          "blurb": "亞馬遜官方（搭 @ajassy）"
+          "blurb": "亞馬遜官方（搭 @ajassy）",
+          "tier": 2
         }
       ]
     },
@@ -286,47 +334,56 @@
         {
           "handle": "DeItaone",
           "name": "Walter Bloomberg",
-          "blurb": "快訊型頭條（Fed/財報/總經）"
+          "blurb": "快訊型頭條（Fed/財報/總經）",
+          "tier": 1
         },
         {
           "handle": "KobeissiLetter",
           "name": "The Kobeissi Letter",
-          "blurb": "總經 / 市場結構"
+          "blurb": "總經 / 市場結構",
+          "tier": 1
         },
         {
           "handle": "FirstSquawk",
           "name": "First Squawk",
-          "blurb": "即時市場頭條"
+          "blurb": "即時市場頭條",
+          "tier": 1
         },
         {
           "handle": "LiveSquawk",
           "name": "Live Squawk",
-          "blurb": "即時市場頭條"
+          "blurb": "即時市場頭條",
+          "tier": 1
         },
         {
           "handle": "financialjuice",
           "name": "Financial Juice",
-          "blurb": "即時財經快訊"
+          "blurb": "即時財經快訊",
+          "tier": 1
         },
         {
           "handle": "StockMKTNewz",
           "name": "Evan (StockMKTNewz)",
-          "blurb": "個股 / 市場新聞"
+          "blurb": "個股 / 市場新聞",
+          "tier": 2
         },
         {
           "handle": "thestalwart",
           "name": "Joe Weisenthal",
-          "blurb": "Bloomberg，宏觀即時評論"
+          "blurb": "Bloomberg，宏觀即時評論",
+          "tier": 2
         },
         {
           "handle": "unusual_whales",
           "name": "unusual_whales",
-          "blurb": "選擇權異常 / 個股流向"
+          "blurb": "選擇權異常 / 個股流向",
+          "tier": 1
         },
         {
           "handle": "zerohedge",
           "name": "ZeroHedge",
-          "blurb": "市場情緒（觀點尖銳）"
+          "blurb": "市場情緒（觀點尖銳）",
+          "tier": 1
         }
       ]
     },
@@ -337,27 +394,32 @@
         {
           "handle": "markets",
           "name": "Bloomberg Markets",
-          "blurb": "彭博市場"
+          "blurb": "彭博市場",
+          "tier": 2
         },
         {
           "handle": "business",
           "name": "Bloomberg",
-          "blurb": "彭博"
+          "blurb": "彭博",
+          "tier": 2
         },
         {
           "handle": "Reuters",
           "name": "Reuters",
-          "blurb": "路透"
+          "blurb": "路透",
+          "tier": 2
         },
         {
           "handle": "CNBC",
           "name": "CNBC",
-          "blurb": "CNBC"
+          "blurb": "CNBC",
+          "tier": 2
         },
         {
           "handle": "Stocktwits",
           "name": "Stocktwits",
-          "blurb": "散戶情緒 / 個股討論"
+          "blurb": "散戶情緒 / 個股討論",
+          "tier": 2
         }
       ]
     },
@@ -368,32 +430,38 @@
         {
           "handle": "WatcherGuru",
           "name": "Watcher.Guru",
-          "blurb": "加密 / 突發財經"
+          "blurb": "加密 / 突發財經",
+          "tier": 1
         },
         {
           "handle": "cz_binance",
           "name": "CZ (Binance)",
-          "blurb": "幣安創辦人"
+          "blurb": "幣安創辦人",
+          "tier": 2
         },
         {
           "handle": "VitalikButerin",
           "name": "Vitalik Buterin",
-          "blurb": "以太坊創辦人"
+          "blurb": "以太坊創辦人",
+          "tier": 2
         },
         {
           "handle": "APompliano",
           "name": "Anthony Pompliano",
-          "blurb": "加密投資人"
+          "blurb": "加密投資人",
+          "tier": 2
         },
         {
           "handle": "CoinDesk",
           "name": "CoinDesk",
-          "blurb": "加密媒體"
+          "blurb": "加密媒體",
+          "tier": 2
         },
         {
           "handle": "jack",
           "name": "Jack Dorsey",
-          "blurb": "Block 創辦人，去中心化 / 比特幣"
+          "blurb": "Block 創辦人，去中心化 / 比特幣",
+          "tier": 2
         }
       ]
     },
@@ -404,17 +472,20 @@
         {
           "handle": "MarioNawfal",
           "name": "Mario Nawfal",
-          "blurb": "綜合財經 / 科技 / 加密"
+          "blurb": "綜合財經 / 科技 / 加密",
+          "tier": 2
         },
         {
           "handle": "GRDecter",
           "name": "Genevieve Roch-Decter",
-          "blurb": "市場 / 個股"
+          "blurb": "市場 / 個股",
+          "tier": 2
         },
         {
           "handle": "RampCapitalLLC",
           "name": "Ramp Capital",
-          "blurb": "市場 meme + 洞見（諷刺風格，需自行判斷）"
+          "blurb": "市場 meme + 洞見（諷刺風格，需自行判斷）",
+          "tier": 2
         }
       ]
     }
