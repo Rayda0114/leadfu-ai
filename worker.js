@@ -626,6 +626,14 @@ async function handleAsk(request, env) {
       if (mb) { augmentedLast += mb; serverInjected = true; }
     } catch (e) {}
   }
+  // 🛡 三大法人/外資問題（2026-06-11）：「最近外資在買什麼」以前只能拒答 → 注入買賣超前10＋投信前5＋外資連買名單
+  const instIntent = /外資|投信|自營|法人|買超|賣超|籌碼/;
+  if (!hasContext && !context.isMarketBrief && instIntent.test(lastUserContent || "")) {
+    try {
+      const ic = await getInstFlowContext(env);
+      if (ic) { augmentedLast += ic; serverInjected = true; }
+    } catch (e) {}
+  }
 
   if (askedStockCode && !context.isMarketBrief && stockIntent.test(lastUserContent || "")) {
     const code = askedStockCode[1];
@@ -1828,10 +1836,45 @@ async function getMarketBriefContext(env) {
     + "\n```\n回答結尾如需標註資料時間，**只能用**：「資料時間：" + _ts + "（台北）」。";
 }
 
+/* 三大法人/外資問題的伺服器端資料注入（2026-06-11）：
+   「最近外資在買什麼」以前只能拒答 —— institutional(T86)＋inst_streak 都有，整理給模型。 */
+async function getInstFlowContext(env) {
+  if (!env.ASSETS) return "";
+  const grabJ = async (f) => { try { return await (await env.ASSETS.fetch(new Request("https://placeholder/data/" + f))).json(); } catch (e) { return null; } };
+  const [instD, strD] = await Promise.all([grabJ("institutional_live.json"), grabJ("inst_streak_live.json")]);
+  const inst = (instD && instD.data) || {};
+  const rows = Object.values(inst).filter(x => x && typeof x.foreign_net_lots === "number");
+  if (!rows.length) return "";
+  const fmt = x => `${x.code} ${x.name} ${x.foreign_net_lots >= 0 ? "+" : ""}${x.foreign_net_lots.toLocaleString()} 張`;
+  const brief = {
+    資料日期: (instD && instD.sourceDate) || "",
+    範圍說明: "三大法人買賣超（上市，TWSE T86），單位：張",
+    外資買超前10: [...rows].sort((a, b) => b.foreign_net_lots - a.foreign_net_lots).slice(0, 10).map(fmt),
+    外資賣超前10: [...rows].sort((a, b) => a.foreign_net_lots - b.foreign_net_lots).slice(0, 10).map(fmt),
+    投信買超前5: [...rows].filter(x => typeof x.trust_net_lots === "number")
+      .sort((a, b) => b.trust_net_lots - a.trust_net_lots).slice(0, 5)
+      .map(x => `${x.code} ${x.name} +${x.trust_net_lots.toLocaleString()} 張`),
+  };
+  const streak = (strD && strD.data) || {};
+  const streakTop = Object.entries(streak)
+    .filter(([, v]) => v && v.dir === "buy" && v.days >= 3)
+    .sort((a, b) => b[1].days - a[1].days).slice(0, 8)
+    .map(([c, v]) => `${c} ${(inst[c] && inst[c].name) || ""} 外資連買 ${v.days} 日`);
+  if (streakTop.length) brief.外資連買3日以上 = streakTop;
+  const _tpe = new Date(Date.now() + 8 * 3600 * 1000);
+  const _ts = `${_tpe.getUTCFullYear()}-${String(_tpe.getUTCMonth() + 1).padStart(2, "0")}-${String(_tpe.getUTCDate()).padStart(2, "0")} ${String(_tpe.getUTCHours()).padStart(2, "0")}:${String(_tpe.getUTCMinutes()).padStart(2, "0")}`;
+  return "\n\n---\n以下是領富 AI 提供的三大法人官方資料（**所有數字只能取自此區塊**；請整理外資買超/賣超焦點與連買名單，描述客觀資金流向即可，**不得**將買賣超解讀成買賣建議）：\n```json\n"
+    + JSON.stringify(brief).slice(0, 4500)
+    + "\n```\n回答結尾如需標註資料時間，**只能用**：「資料時間：" + _ts + "（台北）」。";
+}
+
 async function lineAnswer(env, q) {
   let ctxData = await getLineStockContext(env, q);
   if (!ctxData && /大盤|加權|盤勢|台指/.test(q)) {
     try { ctxData = await getMarketBriefContext(env); } catch (e) {}
+  }
+  if (!ctxData && /外資|投信|自營|法人|買超|賣超|籌碼/.test(q)) {
+    try { ctxData = await getInstFlowContext(env); } catch (e) {}
   }
   const sys = SYSTEM_PROMPT + "\n\n【LINE 客服情境】你正在領富 AI 官方 LINE 回覆用戶，回答請**簡潔**、適合手機閱讀、善用換行、不要太長。資料不足就引導用戶到 leadfuai.com 查詢。嚴守合規：不推薦個股、不代操、不保證獲利。";
   const messages = [{ role: "system", content: sys }, { role: "user", content: q + ctxData }];
