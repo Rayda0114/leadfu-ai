@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>防錯雷達 - 全市場風險分數 - 領富 AI</title>
+<meta name="description" content="台股全市場 0-100 風險分數：注意處置股、爆量、外資大賣、營收年減、本業虧損、跌破合理區間自動掃描。看到高分不是叫你賣，是提醒重新檢查持有理由。">
+<link rel="canonical" href="https://leadfuai.com/pages/risk-radar">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --paper:#fffdf8; --gold:#b9914f; --gold-2:#d6b36f;
+    --up:#be4a3e; --down:#148a55; --flat:#8a948e; --amber:#d99c31; --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(76px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+
+  .m-hero{color:#f8f5ec;padding:calc(20px + env(safe-area-inset-top)) 22px 56px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.28), transparent 34%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .m-hero-top{display:flex;justify-content:space-between;align-items:center;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-date{font-size:12px;color:rgba(248,245,236,.55);font-weight:700;}
+  .m-hero h1{margin:13px 0 0;font-size:28px;line-height:1.25;font-weight:900;letter-spacing:-.4px;}
+  .m-hero p{margin:9px 0 0;font-size:13px;color:rgba(248,245,236,.66);line-height:1.7;max-width:320px;}
+  .m-hero p b{color:#f0d9a8;}
+
+  .m-stats{margin:-32px 18px 0;position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:9px;}
+  .m-stat{background:var(--paper);border:1px solid var(--hair2);border-radius:16px;padding:12px 6px;text-align:center;box-shadow:0 14px 30px rgba(13,29,23,.1);}
+  .m-stat b{display:block;font-size:21px;font-weight:900;}
+  .m-stat small{display:block;font-size:10.5px;color:#8a8d85;font-weight:800;margin-top:3px;}
+  .c-x{color:#8e2418;} .c-h{color:var(--up);} .c-m{color:var(--amber);} .c-w{color:var(--forest);}
+
+  .m-sec{padding:22px 18px 0;}
+  .m-sec-head{display:flex;justify-content:space-between;align-items:baseline;}
+  .m-sec-head h2{margin:0;font-size:18px;font-weight:900;}
+  .m-sec-head span{font-size:12px;color:#9a948a;font-weight:700;}
+
+  .m-list{margin-top:11px;background:var(--paper);border:1px solid var(--hair2);border-radius:18px;overflow:hidden;}
+  .m-row{display:flex;align-items:flex-start;gap:13px;padding:13px 15px;border-bottom:1px solid var(--hair2);text-decoration:none;color:var(--ink);}
+  .m-row:last-child{border-bottom:0;}
+  .m-score{flex:none;width:56px;text-align:center;}
+  .m-score b{display:block;font-size:25px;font-weight:900;line-height:1;}
+  .m-score small{display:block;font-size:10px;color:#b3ac9d;font-weight:800;margin-top:2px;}
+  .m-main{flex:1;min-width:0;}
+  .m-name{font-size:15px;font-weight:800;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .m-tag{font-size:10.5px;font-weight:900;padding:2px 7px;border-radius:8px;white-space:nowrap;}
+  .m-tag.lx{background:#f6dcd7;color:#8e2418;border:1px solid #ecc4bc;}
+  .m-tag.lh{background:#fbeae8;color:#a13a2f;border:1px solid #eccfc9;}
+  .m-tag.lm{background:#fdf2dd;color:#a8731c;border:1px solid #ecd9b0;}
+  .m-tag.ll{background:#e8f3ec;color:#16704a;border:1px solid #cfe6d8;}
+  .m-tag.own{background:#eef2f8;color:#3c5a82;border:1px solid #d4dfee;}
+  .m-why{font-size:11.5px;color:#8a8d85;margin-top:4px;line-height:1.6;}
+  .m-trend{font-size:11px;font-weight:900;margin-top:4px;}
+  .m-trend.t-up{color:var(--up);} .m-trend.t-down{color:var(--down);} .m-trend.t-flat{color:#9a948a;}
+  .m-go{flex:none;color:#c2bcab;font-size:18px;margin-top:8px;}
+  .m-empty{padding:24px 20px;text-align:center;color:#8a8d85;font-size:13.5px;line-height:1.8;}
+  .m-more{display:block;text-align:center;padding:14px;font-size:13.5px;font-weight:900;color:var(--forest);background:none;width:100%;border:0;border-top:1px solid var(--hair2);font-family:inherit;cursor:pointer;}
+
+  .m-seg{display:flex;gap:7px;margin-top:12px;}
+  .m-seg button{flex:1;min-height:38px;border-radius:999px;border:1px solid var(--hairline);background:transparent;font-family:inherit;font-size:13px;font-weight:800;color:var(--soft);cursor:pointer;}
+  .m-seg button.on{background:var(--forest);border-color:var(--forest);color:#f4ead2;}
+
+  .m-note{margin:14px 18px 0;border-radius:16px;padding:13px 16px;background:#fdf6ec;border:1px solid #f0e2c8;font-size:12.5px;color:#7a6a4a;line-height:1.7;}
+  .m-note b{color:#a13a2f;}
+
+  .m-src{padding:18px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.7;}
+
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <div class="m-hero-top">
+    <span class="m-signal">Risk Radar</span>
+    <span class="m-date" id="mDate"></span>
+  </div>
+  <h1>防錯雷達</h1>
+  <p>每檔 0–100 風險分數：注意/處置、爆量、外資大賣、營收年減、本業虧損、跌破合理區間⋯自動掃描。<b>高分不是叫你賣，是提醒重新檢查持有理由。</b></p>
+</header>
+
+<div class="m-stats num" id="mStats"></div>
+
+<section class="m-sec" id="mMineSec" style="display:none;">
+  <div class="m-sec-head"><h2>我關注的股・風險檢查</h2><span id="mMineN"></span></div>
+  <div class="m-list" id="mMine"></div>
+</section>
+
+<section class="m-sec">
+  <div class="m-sec-head"><h2>全市場風險榜</h2><span>依分數高→低</span></div>
+  <div class="m-seg" id="mSeg">
+    <button class="on" data-l="">全部</button>
+    <button data-l="極高">極高</button>
+    <button data-l="高">高</button>
+    <button data-l="中">中</button>
+  </div>
+  <div class="m-list" id="mAll"></div>
+</section>
+
+<div class="m-note"><b>提醒：</b>風險分數是公開資料的系統化整理，<b>不是賣出訊號</b>、也不是投資建議。分數高代表「最近有較多需要留意的訊號」，請回頭檢查你當初的持有理由是否仍成立。</div>
+
+<div class="m-src">
+  資料來源：TWSE・TPEx・MOPS，盤後更新；分數涵蓋有風險訊號之個股（約 1,000 檔），未列入者目前無明顯訊號。
+</div>
+
+<nav class="m-tabbar">
+  <a href="/" id="tbHome"></a>
+  <a href="/pages/stocks-m" id="tbChart"></a>
+  <a href="/pages/screener-m" id="tbSearch"></a>
+  <a href="/pages/watchlist-m" id="tbStar"></a>
+  <a href="/pages/member-m" id="tbUser"></a>
+</nav>
+
+<script src="/js/main.js?v=3.25.0"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const stocks = (L.data && L.data.stocks) || [];
+  const byCode = {}; stocks.forEach(s => byCode[String(s.code)] = s);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const tb = {
+    tbHome: ['<path d="M216,120v96H152V152H104v64H40V120a8,8,0,0,1,2.34-5.66l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,216,120Z" fill="#c9a24b" opacity=".9"/><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"/>', "首頁"],
+    tbChart: ['<path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM168,48h32V200H168ZM112,96h40V200H112ZM56,144H96v56H56Z"/>', "行情"],
+    tbSearch: ['<circle cx="112" cy="112" r="80" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>', "選股"],
+    tbStar: ['<path d="M229.06,108.79l-48.7,42,14.88,62.79a8.4,8.4,0,0,1-12.52,9.17L128,189.09,73.28,222.74a8.4,8.4,0,0,1-12.52-9.17l14.88-62.79-48.7-42A8.46,8.46,0,0,1,31.73,94l63.91-5.2,24.62-59.6a8.36,8.36,0,0,1,15.48,0l24.62,59.6L224.27,94A8.46,8.46,0,0,1,229.06,108.79Z" fill="#c9a24b" opacity=".9"/><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"/>', "自選"],
+    tbUser: ['<circle cx="128" cy="96" r="64" fill="#c9a24b" opacity=".9"/><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/>', "我的"],
+  };
+  for (const [id, [paths, label]] of Object.entries(tb)) {
+    document.getElementById(id).innerHTML = `<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor">${paths}</svg>${label}`;
+  }
+
+  const d = new Date();
+  const wd = ["日","一","二","三","四","五","六"][d.getDay()];
+  document.getElementById("mDate").textContent = `${d.getMonth()+1}/${d.getDate()}（${wd}）`;
+
+  const riskD = await fetch("/data/risk_score_live.json").then(r => r.ok ? r.json() : null).catch(() => null);
+  const RISK = (riskD && riskD.data) || {};
+
+  const LV = { "極高": ["lx", "c-x"], "高": ["lh", "c-h"], "警示": ["lh", "c-h"], "中": ["lm", "c-m"], "低": ["ll", "c-w"] };
+  const scoreColor = lv => lv === "極高" ? "#8e2418" : (lv === "高" || lv === "警示") ? "var(--up)" : lv === "中" ? "var(--amber)" : "var(--forest)";
+  const trendHtml = r => {
+    if (!r || r.prevScore == null || r.score == null) return "";
+    const diff = r.score - r.prevScore;
+    if (diff >= 3) return `<div class="m-trend t-up">▲ 風險上升 ${r.prevScore} → ${r.score}</div>`;
+    if (diff <= -3) return `<div class="m-trend t-down">▼ 風險下降 ${r.prevScore} → ${r.score}</div>`;
+    return `<div class="m-trend t-flat">— 風險持平</div>`;
+  };
+
+  function row(code, r, ownTags) {
+    const s = byCode[code];
+    if (!s) return "";
+    const lv = r ? (r.level || "低") : "低";
+    const [tagCls] = LV[lv] || ["ll"];
+    const why = r && r.reasons && r.reasons.length ? [...new Set(r.reasons)].slice(0, 2).join("、") : "目前無明顯風險訊號";
+    const p = (typeof s.price === "number" && s.price > 0) ? L.pctChange(s.price, s.change) : null;
+    const pcls = p == null ? "" : p > 0 ? "style='color:var(--up);'" : p < 0 ? "style='color:var(--down);'" : "";
+    return `<a class="m-row" href="/pages/check?code=${esc(code)}">
+      <div class="m-score"><b style="color:${scoreColor(lv)};" class="num">${r && r.score != null ? r.score : "—"}</b><small>/100</small></div>
+      <div class="m-main">
+        <div class="m-name">${esc(s.name)} <span class="m-tag ${tagCls}">${esc(lv)}風險</span>${ownTags || ""}</div>
+        <div class="m-why num">${esc(code)}・${esc(s.category || "")}${p != null ? `・<span ${pcls}>${p >= 0 ? "+" : ""}${p.toFixed(2)}%</span>` : ""}</div>
+        <div class="m-why">${esc(why)}</div>
+        ${trendHtml(r)}
+      </div>
+      <span class="m-go">›</span>
+    </a>`;
+  }
+
+  // ── 統計 ──
+  const entries = Object.entries(RISK).filter(([c]) => byCode[c]);
+  const cnt = lv => entries.filter(([, r]) => r.level === lv).length;
+  const wl = L.getWatchlist().map(String);
+  const hd = Object.keys(L.getHoldings()).map(String);
+  const mine = [...new Set([...wl, ...hd])];
+  const mineHigh = mine.filter(c => RISK[c] && (RISK[c].level === "高" || RISK[c].level === "極高" || RISK[c].level === "警示")).length;
+  document.getElementById("mStats").innerHTML = `
+    <div class="m-stat"><b class="c-x">${cnt("極高")}</b><small>極高風險</small></div>
+    <div class="m-stat"><b class="c-h">${cnt("高") + cnt("警示")}</b><small>高風險</small></div>
+    <div class="m-stat"><b class="c-m">${cnt("中")}</b><small>中風險</small></div>
+    <div class="m-stat"><b class="${mineHigh ? "c-h" : "c-w"}">${mineHigh}</b><small>我關注的高風險</small></div>`;
+
+  // ── 我關注的股 ──
+  if (mine.length) {
+    document.getElementById("mMineSec").style.display = "block";
+    document.getElementById("mMineN").textContent = `${mine.length} 檔`;
+    const items = mine.map(c => ({ c, r: RISK[c] }))
+      .filter(x => byCode[x.c])
+      .sort((a, b) => ((b.r && b.r.score) || 0) - ((a.r && a.r.score) || 0));
+    document.getElementById("mMine").innerHTML = items.map(x => {
+      const tags =
+        (hd.includes(x.c) ? '<span class="m-tag own">持股</span>' : "") +
+        (wl.includes(x.c) ? '<span class="m-tag own">自選</span>' : "");
+      return row(x.c, x.r, tags);
+    }).join("") || `<div class="m-empty">加入自選或持股後，這裡會幫你盯風險。</div>`;
+  }
+
+  // ── 全市場 ──
+  let lvFilter = "", shown = 30;
+  function renderAll() {
+    let arr = entries;
+    if (lvFilter === "高") arr = arr.filter(([, r]) => r.level === "高" || r.level === "警示");
+    else if (lvFilter) arr = arr.filter(([, r]) => r.level === lvFilter);
+    arr = [...arr].sort((a, b) => (b[1].score || 0) - (a[1].score || 0));
+    const list = arr.slice(0, shown);
+    document.getElementById("mAll").innerHTML =
+      (list.map(([c, r]) => row(c, r, "")).join("") || `<div class="m-empty">這個等級目前沒有股票</div>`) +
+      (arr.length > shown ? `<button class="m-more" id="mMore">顯示更多（${shown} / ${arr.length}）▾</button>` : "");
+    const mb = document.getElementById("mMore");
+    if (mb) mb.addEventListener("click", () => { shown += 50; renderAll(); });
+  }
+  renderAll();
+  document.querySelectorAll("#mSeg button").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("#mSeg button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    lvFilter = b.dataset.l; shown = 30; renderAll();
+  }));
+});
+</script>
+</body>
+</html>
