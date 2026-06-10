@@ -147,6 +147,22 @@
       ]
     },
     {
+      "id": "company",
+      "name": "公司官方",
+      "accounts": [
+        {
+          "handle": "nvidia",
+          "name": "NVIDIA",
+          "blurb": "AI 晶片龍頭官方（產品/財報/PR，量多）"
+        },
+        {
+          "handle": "Google",
+          "name": "Google",
+          "blurb": "Alphabet 官方（產品/AI/PR）"
+        }
+      ]
+    },
+    {
       "id": "newswire",
       "name": "快訊頭條",
       "accounts": [
