@@ -183,7 +183,8 @@
   .plan-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:17px;background:#171f1a;color:#fff;}
   .plan-head small{display:block;color:rgba(255,255,255,.56);font-size:11.5px;font-weight:800;margin-bottom:5px;letter-spacing:.04em;}
   .plan-head b{display:block;font-size:23px;line-height:1.05;font-weight:900;}
-  .trial{border:1px solid rgba(217,189,130,.4);border-radius:999px;color:#e0bf7a;padding:7px 12px;font-size:12.5px;font-weight:900;white-space:nowrap;}
+  .trial{border:1px solid rgba(217,189,130,.4);border-radius:999px;color:#e0bf7a;padding:7px 12px;font-size:12.5px;font-weight:900;white-space:nowrap;text-decoration:none;display:inline-block;cursor:pointer;}
+  .trial:active{opacity:.7;}
   .prow{display:grid;grid-template-columns:84px 1fr;gap:12px;padding:15px 17px;border-bottom:1px solid var(--hair2);}
   .prow:last-child{border-bottom:0;}
   .prow b{display:block;color:var(--forest);font-size:15px;font-weight:900;}
@@ -294,7 +295,7 @@
   <h2 style="font-size:27px;">免費讓你查一次，<br>VIP 幫你每天盯</h2>
   <p class="sub">付費價值不是更多頁面，而是每天幫你把持股變化整理好。</p>
   <div class="plan">
-    <div class="plan-head"><div><small>RECOMMENDED</small><b>VIP 守門員</b></div><div class="trial">先試用</div></div>
+    <div class="plan-head"><div><small>RECOMMENDED</small><b>VIP 守門員</b></div><a class="trial" href="pages/vip.html">先試用</a></div>
     <div class="prow"><b>免費會員</b><span>單次買前檢查、範例報告、基本風險分數。</span></div>
     <div class="prow"><b>VIP 進階</b><span>自選股每日健診、風險上升主動 LINE 提醒、警示歷史。</span></div>
     <div class="prow"><b>完整方案</b><span>策略掃描、報告匯出、持股組合風險整理。</span></div>
