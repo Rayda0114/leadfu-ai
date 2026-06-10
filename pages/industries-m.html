@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>產業風向 - 33 大產業今日漲跌 - 領富 AI</title>
+<meta name="description" content="台股 33 大產業今日平均漲跌排行：半導體、生技、金融、航運一眼看完，每個產業附成分股與風險檢查。資料來源 TWSE、TPEx。">
+<link rel="canonical" href="https://leadfuai.com/pages/industries">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --paper:#fffdf8; --gold:#b9914f; --gold-2:#d6b36f;
+    --up:#be4a3e; --down:#148a55; --flat:#8a948e; --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(76px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+
+  .m-hero{color:#f8f5ec;padding:calc(20px + env(safe-area-inset-top)) 22px 54px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.28), transparent 34%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .m-hero-top{display:flex;justify-content:space-between;align-items:center;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-date{font-size:12px;color:rgba(248,245,236,.55);font-weight:700;}
+  .m-hero h1{margin:13px 0 0;font-size:28px;line-height:1.25;font-weight:900;letter-spacing:-.4px;}
+  .m-hero p{margin:9px 0 0;font-size:13px;color:rgba(248,245,236,.62);}
+
+  /* 疊卡：今日強弱 */
+  .m-pulse{margin:-32px 18px 0;position:relative;z-index:2;background:var(--paper);border-radius:20px;padding:15px 17px;box-shadow:0 20px 48px rgba(13,29,23,.2);}
+  .m-pr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .m-pr small{font-size:11.5px;font-weight:800;color:#8a8173;letter-spacing:.05em;}
+  .m-duel{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .m-side b{display:block;font-size:16.5px;font-weight:900;}
+  .m-side span{display:block;font-size:12px;color:#8a8d85;font-weight:700;margin-top:2px;}
+  .m-side .pct{font-size:14px;font-weight:900;}
+  .m-breadth{margin-top:12px;padding-top:11px;border-top:1px solid var(--hair2);display:flex;justify-content:space-between;font-size:12px;font-weight:800;}
+  .up{color:var(--up);} .down{color:var(--down);} .flat{color:var(--flat);}
+
+  .m-sec{padding:22px 18px 0;}
+  .m-sec-head{display:flex;justify-content:space-between;align-items:baseline;}
+  .m-sec-head h2{margin:0;font-size:19px;font-weight:900;}
+  .m-sec-head span{font-size:12px;color:#9a948a;font-weight:700;}
+
+  .m-list{margin-top:12px;background:var(--paper);border:1px solid var(--hair2);border-radius:20px;overflow:hidden;}
+  .m-row{display:flex;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid var(--hair2);min-height:62px;text-decoration:none;color:var(--ink);}
+  .m-row:last-child{border-bottom:0;}
+  .m-rank{width:20px;text-align:center;font-size:14px;font-weight:900;color:#c9b27e;font-style:italic;}
+  .m-main{flex:1;min-width:0;}
+  .m-name{font-size:15.5px;font-weight:800;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .m-sub{font-size:11.5px;color:#a09a8c;font-weight:700;margin-top:3px;}
+  .m-tag{font-size:10.5px;font-weight:900;padding:2px 7px;border-radius:8px;white-space:nowrap;background:#fdf2dd;color:#a8731c;border:1px solid #ecd9b0;}
+  .m-right{text-align:right;flex:none;}
+  .m-pct{font-size:16px;font-weight:900;}
+  .m-bar{margin-top:5px;height:4px;width:64px;border-radius:99px;background:#eee9dc;overflow:hidden;margin-left:auto;}
+  .m-bar i{display:block;height:100%;border-radius:99px;}
+  .m-go{flex:none;color:#c2bcab;font-size:19px;}
+
+  .m-src{padding:18px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.7;}
+
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <div class="m-hero-top">
+    <span class="m-signal">Sectors</span>
+    <span class="m-date" id="mDate"></span>
+  </div>
+  <h1>產業風向</h1>
+  <p id="mSubT">33 個產業・依今日平均漲跌排序</p>
+</header>
+
+<section class="m-pulse">
+  <div class="m-pr"><small>今日最強 vs 最弱</small><small style="color:#b3ac9d;">平均漲跌幅</small></div>
+  <div class="m-duel num" id="mDuel"></div>
+  <div class="m-breadth num" id="mBreadth"></div>
+</section>
+
+<section class="m-sec">
+  <div class="m-sec-head">
+    <h2>產業排行</h2>
+    <span>點產業看成分股與風險</span>
+  </div>
+  <div class="m-list" id="mList"><div style="padding:18px;color:#9a948a;font-size:13px;">載入中…</div></div>
+</section>
+
+<div class="m-src">
+  <svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z"/><path d="M208,88V48H48V88Z" fill="#c9a24b" opacity=".9"/></svg>資料來源：TWSE 證交所・TPEx 櫃買中心，盤後更新。<br>
+  平均漲跌為該產業有成交個股之簡單平均，僅供參考，不構成投資建議。
+</div>
+
+<nav class="m-tabbar">
+  <a href="/" id="tbHome"></a>
+  <a href="/pages/stocks-m" class="on" id="tbChart"></a>
+  <a href="/pages/screener-m" id="tbSearch"></a>
+  <a href="/pages/watchlist-m" id="tbStar"></a>
+  <a href="/pages/member-m" id="tbUser"></a>
+</nav>
+
+<script src="/js/main.js?v=3.25.0"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const stocks = (L.data && L.data.stocks) || [];
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  // tab bar 圖示沿用 main.js 注入版同一套（Phosphor Duotone）：直接借 main.js 已建好的隱藏 bar？
+  // main.js 的 bar 被我們以 .bottom-tab-bar placeholder 擋掉 → 自己放 5 顆（取自同一 I 集合的做法：精簡複製）
+  const tb = {
+    tbHome: ['<path d="M216,120v96H152V152H104v64H40V120a8,8,0,0,1,2.34-5.66l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,216,120Z" fill="#c9a24b" opacity=".9"/><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"/>', "首頁"],
+    tbChart: ['<path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM168,48h32V200H168ZM112,96h40V200H112ZM56,144H96v56H56Z"/>', "行情"],
+    tbSearch: ['<circle cx="112" cy="112" r="80" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>', "選股"],
+    tbStar: ['<path d="M229.06,108.79l-48.7,42,14.88,62.79a8.4,8.4,0,0,1-12.52,9.17L128,189.09,73.28,222.74a8.4,8.4,0,0,1-12.52-9.17l14.88-62.79-48.7-42A8.46,8.46,0,0,1,31.73,94l63.91-5.2,24.62-59.6a8.36,8.36,0,0,1,15.48,0l24.62,59.6L224.27,94A8.46,8.46,0,0,1,229.06,108.79Z" fill="#c9a24b" opacity=".9"/><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"/>', "自選"],
+    tbUser: ['<circle cx="128" cy="96" r="64" fill="#c9a24b" opacity=".9"/><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/>', "我的"],
+  };
+  for (const [id, [paths, label]] of Object.entries(tb)) {
+    document.getElementById(id).innerHTML =
+      `<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor">${paths}</svg>${label}`;
+  }
+
+  const j = p => fetch(p).then(r => r.ok ? r.json() : null).catch(() => null);
+  const attD = await j("/data/attention_live.json");
+  const ATT = (attD && attD.data) || {};
+
+  const d = new Date();
+  const wd = ["日","一","二","三","四","五","六"][d.getDay()];
+  document.getElementById("mDate").textContent = `${d.getMonth()+1}/${d.getDate()}（${wd}）`;
+
+  const SLUG = {"半導體":"semiconductor","生技醫療":"biotech","電子零組件":"electronic-components","ETF":"etf","光電":"optoelectronics","電腦及周邊":"computer-peripherals","電機機械":"electrical-machinery","通信網路":"telecom","建材營造":"construction","綠能環保":"green-energy","觀光餐旅":"tourism","資訊服務":"it-services","紡織":"textile","鋼鐵":"steel","化學":"chemical","數位雲端":"cloud","金融保險":"finance","汽車":"automotive","食品":"food","電子通路":"electronics-distribution","居家生活":"home-living","航運":"shipping","運動休閒":"sports-leisure","文化創意":"culture-creative","塑膠":"plastics","電器電纜":"electrical-cable","貿易百貨":"trading-retail","油電燃氣":"utilities","橡膠":"rubber","水泥":"cement","造紙":"paper","農業科技":"agritech","玻璃陶瓷":"glass-ceramics"};
+
+  const by = {};
+  stocks.forEach(s => {
+    if (!s.category || !SLUG[s.category]) return;
+    const g = by[s.category] = by[s.category] || { n: 0, traded: 0, sum: 0, vol: 0, att: 0 };
+    g.n++;
+    if (typeof s.price === "number" && s.price > 0) {
+      g.traded++;
+      g.sum += L.pctChange(s.price, s.change);
+      g.vol += (s.volume || 0);
+    }
+    if (ATT[String(s.code)]) g.att++;
+  });
+  const arr = Object.entries(by)
+    .filter(([, g]) => g.traded >= 3)
+    .map(([name, g]) => ({ name, n: g.n, avg: g.sum / g.traded, vol: g.vol, att: g.att }))
+    .sort((a, b) => b.avg - a.avg);
+
+  document.getElementById("mSubT").textContent = `${arr.length} 個產業・依今日平均漲跌排序`;
+
+  // 強弱對決 + 寬度
+  const top = arr[0], low = arr[arr.length - 1];
+  const cls = v => v > 0.05 ? "up" : v < -0.05 ? "down" : "flat";
+  const fmt = v => `${v >= 0 ? "+" : ""}${v.toFixed(2)}%`;
+  document.getElementById("mDuel").innerHTML = `
+    <div class="m-side"><b>${esc(top.name)}</b><span>最強・${top.n} 檔</span><span class="pct ${cls(top.avg)}">${fmt(top.avg)}</span></div>
+    <div class="m-side" style="text-align:right;"><b>${esc(low.name)}</b><span>最弱・${low.n} 檔</span><span class="pct ${cls(low.avg)}">${fmt(low.avg)}</span></div>`;
+  const upN = arr.filter(x => x.avg > 0.05).length;
+  const dnN = arr.filter(x => x.avg < -0.05).length;
+  document.getElementById("mBreadth").innerHTML =
+    `<span class="up">▲ ${upN} 個產業上漲</span><span class="flat">${arr.length - upN - dnN} 持平</span><span class="down">▼ ${dnN} 個產業下跌</span>`;
+
+  // 排行列表
+  const maxAbs = Math.max(...arr.map(x => Math.abs(x.avg)), 0.01);
+  document.getElementById("mList").innerHTML = arr.map((x, i) => {
+    const c = cls(x.avg);
+    const barColor = c === "up" ? "var(--up)" : c === "down" ? "var(--down)" : "#cfc9ba";
+    return `<a class="m-row" href="/pages/industries/${SLUG[x.name]}">
+      <div class="m-rank">${i + 1}</div>
+      <div class="m-main">
+        <div class="m-name">${esc(x.name)}${x.att ? `<span class="m-tag">注意 ${x.att}</span>` : ""}</div>
+        <div class="m-sub num">${x.n} 檔・量 ${(x.vol / 1000).toFixed(0)} 千張</div>
+      </div>
+      <div class="m-right num">
+        <div class="m-pct ${c}">${fmt(x.avg)}</div>
+        <div class="m-bar"><i style="width:${Math.max(6, Math.abs(x.avg) / maxAbs * 100).toFixed(0)}%;background:${barColor};"></i></div>
+      </div>
+      <span class="m-go">›</span>
+    </a>`;
+  }).join("");
+});
+</script>
+</body>
+</html>
