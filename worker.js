@@ -617,6 +617,15 @@ async function handleAsk(request, env) {
       if (srvCtx) { augmentedLast += srvCtx; serverInjected = true; }
     } catch (e) { /* 注入失敗 → 由防線 2 / 系統紀律擋 */ }
   }
+  // 🛡 大盤/市場問題（2026-06-11）：client 沒帶 context 時，伺服器端注入今日市場簡報
+  // （加權收盤、台指期日/夜盤、漲跌家數、產業強弱、風險溫度、新聞重點）——以前這類問題只能拒答。
+  const marketIntent = /大盤|加權|盤勢|台指期|今天.{0,6}(股市|行情|市場)|(股市|行情|市場).{0,6}(今天|怎|如何|狀況|氣氛)/;
+  if (!hasContext && !context.isMarketBrief && marketIntent.test(lastUserContent || "")) {
+    try {
+      const mb = await getMarketBriefContext(env);
+      if (mb) { augmentedLast += mb; serverInjected = true; }
+    } catch (e) {}
+  }
 
   if (askedStockCode && !context.isMarketBrief && stockIntent.test(lastUserContent || "")) {
     const code = askedStockCode[1];
@@ -1773,8 +1782,57 @@ async function getLineStockContext(env, q) {
   return "\n\n---\n以下是領富 AI 提供的官方公開資料（請優先依此回答，**禁止編造數字**；**提到股價時務必照各檔「股價時間」標示是「即時」還是「收盤」，例如「2330 台積電 即時 2315」或「（今日收盤）」；絕對不可把收盤價/參考價講成即時價**；ETF 殖利率為近一年實際配息估算）：\n```json\n" + JSON.stringify(out).slice(0, 4000) + "\n```\n回答結尾如需標註資料時間，**只能用**：「資料時間：" + _ts + "（台北）」——禁止自己編其他日期時間。";
 }
 
+/* 大盤/市場問題的伺服器端資料注入（2026-06-11）：
+   「今天大盤發生什麼事」這類問題以前只會拒答 —— 但加權指數收盤、台指期、
+   漲跌家數、產業強弱、風險溫度、今日新聞其實都有，整包餵給模型。 */
+async function getMarketBriefContext(env) {
+  if (!env.ASSETS) return "";
+  const grabJ = async (f) => { try { return await (await env.ASSETS.fetch(new Request("https://placeholder/data/" + f))).json(); } catch (e) { return null; } };
+  const [stk, tfx, news] = await Promise.all([
+    grabJ("stocks_live.json"), grabJ("taifex_live.json"), grabJ("news_live.json"),
+  ]);
+  const stocks = (stk && stk.stocks) || [];
+  if (!stocks.length && !tfx) return "";
+  const traded = stocks.filter(s => typeof s.price === "number" && s.price > 0);
+  const up = traded.filter(s => (s.change || 0) > 0).length;
+  const down = traded.filter(s => (s.change || 0) < 0).length;
+  const flat = traded.length - up - down;
+  const pctOf = s => { const prev = s.price - (s.change || 0); return prev > 0 ? (s.change || 0) / prev * 100 : 0; };
+  const byCat = {};
+  for (const s of traded) { if (s.category) (byCat[s.category] = byCat[s.category] || []).push(pctOf(s)); }
+  const ind = Object.entries(byCat).filter(([, v]) => v.length >= 8)
+    .map(([k, v]) => ({ 產業: k, 平均漲跌幅: +(v.reduce((a, b) => a + b, 0) / v.length).toFixed(2) }))
+    .sort((a, b) => b.平均漲跌幅 - a.平均漲跌幅);
+  const brief = {
+    資料日期: (stk && stk.updatedAt) || "",
+    漲跌家數: { 上漲: up, 下跌: down, 平盤: flat, 總檔數: traded.length },
+    最強產業前3: ind.slice(0, 3),
+    最弱產業前3: ind.slice(-3).reverse(),
+    成交量前五: [...traded].sort((a, b) => (b.volume || 0) - (a.volume || 0)).slice(0, 5)
+      .map(s => `${s.code} ${s.name} ${s.price} 元（漲跌 ${(s.change || 0) >= 0 ? "+" : ""}${s.change || 0}）`),
+  };
+  if (tfx) {
+    if (typeof tfx.taiex === "number") brief.加權指數最近收盤 = tfx.taiex;
+    if (tfx.txDay) brief.台指期日盤 = tfx.txDay;
+    if (tfx.txNight) brief.台指期夜盤 = tfx.txNight;
+    if (tfx.risk) brief.明日大盤波動風險 = { 等級: tfx.risk.level, 原因: (tfx.risk.reasons || []).slice(0, 3) };
+    if (tfx.asof) brief.期貨資料日期 = tfx.asof;
+  }
+  const heads = ((news && news.news) || []).slice(0, 6)
+    .map(n => `${n.ai_sentiment || "中性"}｜${(n.title || "").split(" - ")[0].slice(0, 40)}`);
+  if (heads.length) brief.今日新聞重點 = heads;
+  const _tpe = new Date(Date.now() + 8 * 3600 * 1000);
+  const _ts = `${_tpe.getUTCFullYear()}-${String(_tpe.getUTCMonth() + 1).padStart(2, "0")}-${String(_tpe.getUTCDate()).padStart(2, "0")} ${String(_tpe.getUTCHours()).padStart(2, "0")}:${String(_tpe.getUTCMinutes()).padStart(2, "0")}`;
+  return "\n\n---\n以下是領富 AI 提供的今日市場官方資料（請整理成易讀的大盤摘要回答；**所有數字只能取自此區塊**；加權指數為最近收盤值、台指期含日/夜盤、漲跌家數含上市上櫃興櫃；禁止編造任何未提供的指數或數字）：\n```json\n"
+    + JSON.stringify(brief).slice(0, 5000)
+    + "\n```\n回答結尾如需標註資料時間，**只能用**：「資料時間：" + _ts + "（台北）」。";
+}
+
 async function lineAnswer(env, q) {
-  const ctxData = await getLineStockContext(env, q);
+  let ctxData = await getLineStockContext(env, q);
+  if (!ctxData && /大盤|加權|盤勢|台指/.test(q)) {
+    try { ctxData = await getMarketBriefContext(env); } catch (e) {}
+  }
   const sys = SYSTEM_PROMPT + "\n\n【LINE 客服情境】你正在領富 AI 官方 LINE 回覆用戶，回答請**簡潔**、適合手機閱讀、善用換行、不要太長。資料不足就引導用戶到 leadfuai.com 查詢。嚴守合規：不推薦個股、不代操、不保證獲利。";
   const messages = [{ role: "system", content: sys }, { role: "user", content: q + ctxData }];
   const a = await aiAnswerSync(env, messages, 700);
