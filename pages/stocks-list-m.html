@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>全市場列表 - 上市上櫃興櫃 2,500+ 檔 - 領富 AI</title>
+<meta name="description" content="台股全市場股價列表：上市、上櫃、興櫃 2,500+ 檔，依產業、漲跌幅、成交量篩選排序，附風險守門標記。資料來源 TWSE、TPEx。">
+<link rel="canonical" href="https://leadfuai.com/pages/stocks">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --paper:#fffdf8; --gold:#b9914f; --gold-2:#d6b36f;
+    --up:#be4a3e; --down:#148a55; --flat:#8a948e; --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(76px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+
+  .m-hero{color:#f8f5ec;padding:calc(18px + env(safe-area-inset-top)) 22px 46px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.28), transparent 34%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .m-hero-top{display:flex;justify-content:space-between;align-items:center;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-back{font-size:12.5px;color:rgba(248,245,236,.7);text-decoration:none;font-weight:800;}
+  .m-hero h1{margin:12px 0 0;font-size:25px;line-height:1.25;font-weight:900;letter-spacing:-.3px;}
+  .m-hero p{margin:7px 0 0;font-size:12.5px;color:rgba(248,245,236,.6);}
+
+  /* 篩選面板（疊卡） */
+  .m-filter{margin:-28px 18px 0;position:relative;z-index:2;background:var(--paper);border-radius:20px;padding:13px 14px;box-shadow:0 18px 44px rgba(13,29,23,.18);}
+  .m-search{display:grid;grid-template-columns:1fr 50px;border:1px solid var(--hairline);border-radius:14px;overflow:hidden;background:#fff;}
+  .m-search input{border:0;outline:0;background:transparent;padding:12px 14px;font-size:16px;font-family:inherit;color:var(--ink);min-width:0;}
+  .m-search input::placeholder{color:#a8a294;font-weight:600;}
+  .m-search button{border:0;background:var(--forest);color:var(--gold-2);font-size:17px;cursor:pointer;}
+  .m-seg{display:flex;gap:7px;margin-top:11px;}
+  .m-seg button{flex:1;min-height:38px;border-radius:999px;border:1px solid var(--hairline);background:transparent;font-family:inherit;font-size:13px;font-weight:800;color:var(--soft);cursor:pointer;}
+  .m-seg button.on{background:var(--forest);border-color:var(--forest);color:#f4ead2;}
+  .m-drops{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px;}
+  .m-drop{position:relative;}
+  .m-drop select{appearance:none;-webkit-appearance:none;width:100%;min-height:40px;padding:0 30px 0 13px;border-radius:12px;border:1px solid var(--hairline);background:#fff;font-family:inherit;font-size:13.5px;font-weight:800;color:var(--soft);}
+  .m-drop::after{content:"▾";position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#b09255;font-size:12px;pointer-events:none;}
+  .m-count{margin-top:10px;font-size:11.5px;color:#9a948a;font-weight:700;}
+
+  .m-list{margin:14px 18px 0;background:var(--paper);border:1px solid var(--hair2);border-radius:20px;overflow:hidden;}
+  .m-row{display:flex;align-items:center;gap:11px;padding:12px 13px 12px 15px;border-bottom:1px solid var(--hair2);min-height:62px;text-decoration:none;color:var(--ink);}
+  .m-row:last-child{border-bottom:0;}
+  .m-main{flex:1;min-width:0;}
+  .m-name{font-size:15.5px;font-weight:800;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .m-sub{font-size:11.5px;color:#a09a8c;font-weight:700;margin-top:3px;}
+  .m-tag{font-size:10.5px;font-weight:900;padding:2px 7px;border-radius:8px;white-space:nowrap;}
+  .m-tag.warn{background:#fdf2dd;color:#a8731c;border:1px solid #ecd9b0;}
+  .m-tag.risk{background:#fbeae8;color:#a13a2f;border:1px solid #eccfc9;}
+  .m-right{text-align:right;flex:none;}
+  .m-price{font-size:16px;font-weight:900;}
+  .m-chg{font-size:12px;font-weight:900;margin-top:2px;}
+  .up{color:var(--up);} .down{color:var(--down);} .flat{color:var(--flat);}
+  .m-star{flex:none;width:38px;height:38px;border:0;background:none;cursor:pointer;color:#cfc9ba;display:flex;align-items:center;justify-content:center;}
+  .m-star.on{color:var(--gold);}
+  .m-more{display:block;text-align:center;padding:14px;font-size:13.5px;font-weight:900;color:var(--forest);text-decoration:none;border-top:1px solid var(--hair2);background:none;width:100%;border-left:0;border-right:0;border-bottom:0;font-family:inherit;cursor:pointer;}
+  .m-empty{padding:26px 20px;text-align:center;color:#8a8d85;font-size:13.5px;}
+
+  .m-src{padding:18px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.7;}
+
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <div class="m-hero-top">
+    <span class="m-signal">All Markets</span>
+    <a class="m-back" href="/pages/stocks-m">‹ 回行情</a>
+  </div>
+  <h1>全市場列表</h1>
+  <p id="mUpd">上市・上櫃・興櫃，盤後更新</p>
+</header>
+
+<section class="m-filter">
+  <div class="m-search">
+    <input type="text" id="mq" autocomplete="off" placeholder="輸入代號或名稱，例 2330">
+    <button id="mqBtn" aria-label="搜尋">⌕</button>
+  </div>
+  <div class="m-seg" id="mMkt">
+    <button class="on" data-m="">全部</button>
+    <button data-m="上市">上市</button>
+    <button data-m="上櫃">上櫃</button>
+    <button data-m="興櫃">興櫃</button>
+  </div>
+  <div class="m-drops">
+    <div class="m-drop"><select id="mCat"><option value="">全部產業</option></select></div>
+    <div class="m-drop"><select id="mSort">
+      <option value="code">依代號</option>
+      <option value="chgDown">漲幅大 → 小</option>
+      <option value="chgUp">跌幅大 → 小</option>
+      <option value="vol">成交量大 → 小</option>
+      <option value="price">價格高 → 低</option>
+    </select></div>
+  </div>
+  <div class="m-count num" id="mCount">載入中…</div>
+</section>
+
+<div class="m-list" id="mList"></div>
+
+<div class="m-src">
+  資料來源：TWSE 證交所・TPEx 櫃買中心，盤後更新（非即時）。<br>
+  「注意／處置／高風險」為證交所公告與領富 AI 風險守門標記，僅供參考、非投資建議。
+</div>
+
+<nav class="m-tabbar">
+  <a href="/" id="tbHome"></a>
+  <a href="/pages/stocks-m" class="on" id="tbChart"></a>
+  <a href="/pages/screener-m" id="tbSearch"></a>
+  <a href="/pages/watchlist-m" id="tbStar"></a>
+  <a href="/pages/member-m" id="tbUser"></a>
+</nav>
+
+<script src="/js/main.js?v=3.25.0"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const stocks = (L.data && L.data.stocks) || [];
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  // tab bar（Phosphor Duotone，與其他 -m 頁同套）
+  const tb = {
+    tbHome: ['<path d="M216,120v96H152V152H104v64H40V120a8,8,0,0,1,2.34-5.66l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,216,120Z" fill="#c9a24b" opacity=".9"/><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"/>', "首頁"],
+    tbChart: ['<path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM168,48h32V200H168ZM112,96h40V200H112ZM56,144H96v56H56Z"/>', "行情"],
+    tbSearch: ['<circle cx="112" cy="112" r="80" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>', "選股"],
+    tbStar: ['<path d="M229.06,108.79l-48.7,42,14.88,62.79a8.4,8.4,0,0,1-12.52,9.17L128,189.09,73.28,222.74a8.4,8.4,0,0,1-12.52-9.17l14.88-62.79-48.7-42A8.46,8.46,0,0,1,31.73,94l63.91-5.2,24.62-59.6a8.36,8.36,0,0,1,15.48,0l24.62,59.6L224.27,94A8.46,8.46,0,0,1,229.06,108.79Z" fill="#c9a24b" opacity=".9"/><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"/>', "自選"],
+    tbUser: ['<circle cx="128" cy="96" r="64" fill="#c9a24b" opacity=".9"/><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/>', "我的"],
+  };
+  for (const [id, [paths, label]] of Object.entries(tb)) {
+    document.getElementById(id).innerHTML = `<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor">${paths}</svg>${label}`;
+  }
+
+  const j = p => fetch(p).then(r => r.ok ? r.json() : null).catch(() => null);
+  const [riskD, attD] = await Promise.all([j("/data/risk_score_live.json"), j("/data/attention_live.json")]);
+  const RISK = (riskD && riskD.data) || {};
+  const ATT = (attD && attD.data) || {};
+  if (L.data && L.data.updatedAt) document.getElementById("mUpd").textContent =
+    "上市・上櫃・興櫃，更新 " + String(L.data.updatedAt).slice(5, 16).replace("T", " ");
+
+  // 產業下拉
+  const cats = [...new Set(stocks.map(s => s.category).filter(Boolean))].sort();
+  document.getElementById("mCat").innerHTML += cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join("");
+
+  function tags(code) {
+    let h = "";
+    const a = ATT[code];
+    if (a) h += `<span class="m-tag warn">${esc(a.type || "注意")}</span>`;
+    const r = RISK[code];
+    if (r && (r.level === "高" || r.level === "警示")) h += `<span class="m-tag risk">高風險</span>`;
+    return h;
+  }
+  const starOn = '<svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"/></svg>';
+  const starOff = '<svg width="20" height="20" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="14"><path d="M132.4,190.7l50.4,32c6.5,4.1,14.5-2,12.6-9.5l-14.6-57.4a8.7,8.7,0,0,1,2.9-8.8l45.2-37.7c5.9-4.9,2.9-14.8-4.8-15.3l-59-3.8a8.3,8.3,0,0,1-7.3-5.4l-22-55.4a8.3,8.3,0,0,0-15.6,0l-22,55.4a8.3,8.3,0,0,1-7.3,5.4l-59,3.8c-7.7.5-10.7,10.4-4.8,15.3L72.3,147a8.7,8.7,0,0,1,2.9,8.8L61.6,209c-2.3,9,7.4,16.3,15.2,11.4l46.7-29.7A8.2,8.2,0,0,1,132.4,190.7Z"/></svg>';
+
+  let mkt = "", cat = "", sortBy = "code", kw = "";
+  let shown = 60;
+  const pct = s => L.pctChange(s.price, s.change);
+
+  function filtered() {
+    let arr = stocks;
+    if (mkt) arr = arr.filter(s => s.status === mkt);
+    if (cat) arr = arr.filter(s => s.category === cat);
+    if (kw) {
+      const q = kw.toLowerCase();
+      arr = arr.filter(s => String(s.code).toLowerCase().includes(q) || (s.name || "").toLowerCase().includes(q));
+    }
+    const traded = s => typeof s.price === "number" && s.price > 0;
+    if (sortBy === "chgDown") arr = [...arr].filter(traded).sort((a, b) => pct(b) - pct(a));
+    else if (sortBy === "chgUp") arr = [...arr].filter(traded).sort((a, b) => pct(a) - pct(b));
+    else if (sortBy === "vol") arr = [...arr].sort((a, b) => (b.volume || 0) - (a.volume || 0));
+    else if (sortBy === "price") arr = [...arr].filter(traded).sort((a, b) => b.price - a.price);
+    else arr = [...arr].sort((a, b) => String(a.code).localeCompare(String(b.code)));
+    return arr;
+  }
+
+  function render() {
+    const arr = filtered();
+    document.getElementById("mCount").textContent = `符合 ${arr.length.toLocaleString()} 檔`;
+    const list = arr.slice(0, shown);
+    const rows = list.map(s => {
+      const has = typeof s.price === "number" && s.price > 0;
+      const p = has ? pct(s) : 0;
+      const cls = !has ? "flat" : (s.change || 0) > 0 ? "up" : (s.change || 0) < 0 ? "down" : "flat";
+      const inWl = L.isInWatchlist(String(s.code));
+      return `<div class="m-row" data-c="${esc(s.code)}">
+        <div class="m-main">
+          <div class="m-name">${esc(s.name)} ${tags(String(s.code))}</div>
+          <div class="m-sub num">${esc(s.code)}・${esc(s.category || "")}・${esc(s.status || "")}${s.volume ? "・量 " + Number(s.volume).toLocaleString() : ""}</div>
+        </div>
+        <div class="m-right num">
+          <div class="m-price">${has ? L.fmtPrice(s.price) : "—"}</div>
+          <div class="m-chg ${cls}">${has ? (p >= 0 ? "+" : "") + p.toFixed(2) + "%" : "無成交"}</div>
+        </div>
+        <button class="m-star ${inWl ? "on" : ""}" data-c="${esc(s.code)}" aria-label="自選">${inWl ? starOn : starOff}</button>
+      </div>`;
+    }).join("");
+    const more = arr.length > shown ? `<button class="m-more" id="mMore">顯示更多（${shown} / ${arr.length.toLocaleString()}）▾</button>` : "";
+    document.getElementById("mList").innerHTML = (rows || `<div class="m-empty">沒有符合的股票</div>`) + more;
+
+    document.querySelectorAll(".m-row").forEach(r => r.addEventListener("click", e => {
+      if (e.target.closest(".m-star")) return;
+      location.href = "/pages/stock-detail?code=" + encodeURIComponent(r.dataset.c);
+    }));
+    document.querySelectorAll(".m-star").forEach(b => b.addEventListener("click", e => {
+      e.stopPropagation();
+      const c = b.dataset.c;
+      if (L.isInWatchlist(c)) { L.removeFromWatchlist(c); b.classList.remove("on"); b.innerHTML = starOff; }
+      else { L.addToWatchlist(c); b.classList.add("on"); b.innerHTML = starOn; L.showToast && L.showToast(`已加入自選 ${c}`); }
+    }));
+    const mb = document.getElementById("mMore");
+    if (mb) mb.addEventListener("click", () => { shown += 100; render(); });
+  }
+  render();
+
+  document.querySelectorAll("#mMkt button").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("#mMkt button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    mkt = b.dataset.m; shown = 60; render();
+  }));
+  document.getElementById("mCat").addEventListener("change", e => { cat = e.target.value; shown = 60; render(); });
+  document.getElementById("mSort").addEventListener("change", e => { sortBy = e.target.value; shown = 60; render(); });
+  let deb;
+  document.getElementById("mq").addEventListener("input", e => {
+    clearTimeout(deb);
+    deb = setTimeout(() => { kw = e.target.value.trim(); shown = 60; render(); }, 250);
+  });
+  document.getElementById("mqBtn").addEventListener("click", () => {
+    kw = document.getElementById("mq").value.trim(); shown = 60; render();
+  });
+});
+</script>
+</body>
+</html>
