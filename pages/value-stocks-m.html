@@ -180,11 +180,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const list = arr.slice(0, shown);
     document.getElementById("mList").innerHTML = (list.map((x, i) => {
       const posPct = Math.round(x.f.position * 100);
+      const posLabel = posPct < 0 ? "低於下緣" : posPct > 100 ? "高於上緣" : `位置 ${posPct}%`;
       const yld = VAL[x.c] && VAL[x.c].yield_pct ? VAL[x.c].yield_pct.toFixed(1) + "%" : "—";
       return `<a class="m-row" href="/pages/stock-m?code=${esc(x.c)}">
         <div class="m-rank">${i + 1}</div>
         <div class="m-main">
-          <div class="m-name">${esc(x.s.name)} <span class="m-tag pos num">位置 ${posPct}%</span>${tags(x.c)}</div>
+          <div class="m-name">${esc(x.s.name)} <span class="m-tag pos num">${posLabel}</span>${tags(x.c)}</div>
           <div class="m-sub num">${esc(x.c)}・${esc(x.s.category || "")}・合理區間 ${x.f.low}–${x.f.high}</div>
         </div>
         <div class="m-right num"><div class="m-price">${L.fmtPrice(x.s.price)}</div><div class="m-yld">殖利 ${yld}</div></div>
