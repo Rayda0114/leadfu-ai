@@ -861,7 +861,7 @@ function renderFairValueLow() {
             <span class="fv-low-pill">${posLabel}</span>
             <span class="fv-low-stars">${"⭐".repeat(Math.round(fv.confidence || 0))}</span>
           </div>
-          <div class="fv-low-vip-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:3px;"><path d="M7 3h10l4.5 6.5L12 21 2.5 9.5z"/></svg>VIP 解鎖</div>
+          <div class="fv-low-vip-tag"><svg width="11" height="11" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M229.67,133.62l-96,96a7.94,7.94,0,0,1-11.24,0l-96-96a7.94,7.94,0,0,1,0-11.24l96.05-96a7.94,7.94,0,0,1,11.24,0l96,96.05A7.94,7.94,0,0,1,229.67,133.62Z" fill="#c9a24b" opacity=".9"/><path d="M235.33,116.72,139.28,20.66a16,16,0,0,0-22.56,0l-96,96.06a16,16,0,0,0,0,22.56l96.05,96.06h0a16,16,0,0,0,22.56,0l96.05-96.06a16,16,0,0,0,0-22.56ZM128,224h0L32,128,128,32,224,128Z"/></svg>VIP 解鎖</div>
         </a>`;
       }
 
@@ -1516,14 +1516,20 @@ function setupBottomTabBar() {
   const prefix = inPages ? "" : "pages/";
   const home   = inPages ? "../index.html" : "index.html";
 
-  // 線條 SVG 圖示（stroke 用 currentColor → active 自動變色；取代舊 emoji 🏠📊🔍⭐👤）
-  const _svg = (inner, extra) => `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" ${extra || ""} style="display:block;margin:0 auto;">${inner}</svg>`;
+  // Phosphor Duotone 圖示（金色第二層固定、主層 currentColor → active 自動變色）
+  const I = {
+    home: '<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor" style="display:block;margin:0 auto;"><path d="M216,120v96H152V152H104v64H40V120a8,8,0,0,1,2.34-5.66l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,216,120Z" fill="#c9a24b" opacity=".9"/><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"/></svg>',
+    chart: '<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor" style="display:block;margin:0 auto;"><path d="M208,40V208H152V40Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg>',
+    search: '<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor" style="display:block;margin:0 auto;"><path d="M192,112a80,80,0,1,1-80-80A80,80,0,0,1,192,112Z" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34,179.6,168.28a88.21,88.21,0,1,0-11.32,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>',
+    star: '<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor" style="display:block;margin:0 auto;"><path d="M229.06,108.79l-48.7,42,14.88,62.79a8.4,8.4,0,0,1-12.52,9.17L128,189.09,73.28,222.74a8.4,8.4,0,0,1-12.52-9.17l14.88-62.79-48.7-42A8.46,8.46,0,0,1,31.73,94L95.64,88.8l24.62-59.6a8.36,8.36,0,0,1,15.48,0l24.62,59.6L224.27,94A8.46,8.46,0,0,1,229.06,108.79Z" fill="#c9a24b" opacity=".9"/><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"/></svg>',
+    user: '<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor" style="display:block;margin:0 auto;"><path d="M192,96a64,64,0,1,1-64-64A64,64,0,0,1,192,96Z" fill="#c9a24b" opacity=".9"/><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg>'
+  };
   const tabs = [
-    { label: "首頁", icon: _svg('<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>', 'stroke-linejoin="round"'), href: home, match: /index\.html$|\/$/ },
-    { label: "行情", icon: _svg('<path d="M4 19V11M10 19V5M16 19v-8M21 19H3"/>'), href: prefix + "stocks-m.html", match: /stocks\.html|stock-detail\.html|industries\.html/ },
-    { label: "選股", icon: _svg('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'), href: prefix + "screener-m.html", match: /screener\.html|search\.html/ },
-    { label: "自選", icon: _svg('<path d="m12 3 2.7 5.6 6.3.9-4.6 4.4 1.1 6.1L12 17l-5.5 3 1.1-6.1L3 9.5l6.3-.9z"/>', 'stroke-linejoin="round"'), href: prefix + "watchlist-m.html", match: /watchlist\.html/ },
-    { label: "我的", icon: _svg('<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.6 4.5-5.5 8-5.5s6.5 1.9 8 5.5"/>'), href: prefix + "member-m.html", match: /member\.html|login\.html|register\.html|vip\.html/ }
+    { label: "首頁", icon: I.home, href: home, match: /index\.html$|\/$/ },
+    { label: "行情", icon: I.chart, href: prefix + "stocks-m.html", match: /stocks\.html|stock-detail\.html|industries\.html/ },
+    { label: "選股", icon: I.search, href: prefix + "screener-m.html", match: /screener\.html|search\.html/ },
+    { label: "自選", icon: I.star, href: prefix + "watchlist-m.html", match: /watchlist\.html/ },
+    { label: "我的", icon: I.user, href: prefix + "member-m.html", match: /member\.html|login\.html|register\.html|vip\.html/ }
   ];
 
   const bar = document.createElement("nav");
@@ -1691,7 +1697,7 @@ function setupSupportWidget() {
   const P = location.pathname.includes("/pages/") ? "" : "pages/";
   const LINE = "https://line.me/R/ti/p/@130tqckv";
   const lineSVG = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>`;
-  const headSVG = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M18 12h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1z"/><path d="M6 12H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1z"/></svg>`;
+  const headSVG = `<svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M80,144v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V128H64A16,16,0,0,1,80,144Zm112-16a16,16,0,0,0-16,16v40a16,16,0,0,0,16,16h32V128Z" fill="#c9a24b" opacity=".9"/><path d="M201.89,54.66A104.08,104.08,0,0,0,24,128v56a24,24,0,0,0,24,24H64a24,24,0,0,0,24-24V144a24,24,0,0,0-24-24H40.36A88.12,88.12,0,0,1,190.54,65.93,87.39,87.39,0,0,1,215.65,120H192a24,24,0,0,0-24,24v40a24,24,0,0,0,24,24h24a24,24,0,0,1-24,24H136a8,8,0,0,0,0,16h56a40,40,0,0,0,40-40V128A103.41,103.41,0,0,0,201.89,54.66ZM64,136a8,8,0,0,1,8,8v40a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V136Zm128,56a8,8,0,0,1-8-8V144a8,8,0,0,1,8-8h24v56Z"/></svg>`;
   const xSVG = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
 
   const w = document.createElement("div");
