@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>我的 - 會員中心 - 領富 AI</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --paper:#fffdf8; --gold:#b9914f; --gold-2:#d6b36f;
+    --up:#be4a3e; --down:#148a55; --flat:#8a948e; --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(76px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+
+  .m-hero{color:#f8f5ec;padding:calc(20px + env(safe-area-inset-top)) 22px 54px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.28), transparent 34%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-who{display:flex;align-items:center;gap:14px;margin-top:16px;}
+  .m-ava{flex:none;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#d6b36f,#b9914f);color:#0b3328;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;}
+  .m-who b{display:block;font-size:21px;font-weight:900;}
+  .m-who small{display:block;font-size:12px;color:rgba(248,245,236,.6);margin-top:2px;word-break:break-all;}
+  .m-vip{display:flex;align-items:center;gap:8px;margin-top:14px;background:rgba(214,179,111,.13);border:1px solid rgba(214,179,111,.34);border-radius:14px;padding:10px 13px;flex-wrap:wrap;}
+  .m-vip b{font-size:13.5px;font-weight:900;color:#ecd9ab;}
+  .m-vip small{font-size:11.5px;color:rgba(248,245,236,.58);}
+  .m-vip a{margin-left:auto;font-size:12px;color:#ecd9ab;font-weight:800;text-decoration:none;white-space:nowrap;}
+
+  .m-stats{margin:-28px 18px 0;position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .m-stat{background:var(--paper);border:1px solid var(--hair2);border-radius:16px;padding:13px 8px;text-align:center;box-shadow:0 14px 30px rgba(13,29,23,.1);text-decoration:none;color:var(--ink);}
+  .m-stat b{display:block;font-size:21px;font-weight:900;color:var(--forest);}
+  .m-stat b i{font-style:normal;color:var(--up);}
+  .m-stat small{display:block;font-size:11px;color:#8a8d85;font-weight:800;margin-top:3px;}
+
+  .m-sec{padding:22px 18px 0;}
+  .m-sec-head{display:flex;justify-content:space-between;align-items:baseline;}
+  .m-sec-head h2{margin:0;font-size:18px;font-weight:900;}
+  .m-sec-head a{font-size:12.5px;color:var(--soft);text-decoration:none;font-weight:700;}
+
+  .m-feed{margin-top:11px;background:var(--paper);border:1px solid var(--hair2);border-radius:18px;overflow:hidden;}
+  .m-fnote{padding:9px 15px;font-size:11px;color:#9a948a;border-bottom:1px solid var(--hair2);}
+  .m-frow{padding:12px 15px;border-bottom:1px solid var(--hair2);}
+  .m-frow:last-child{border-bottom:0;}
+  .m-fmeta{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#9a948a;font-weight:700;flex-wrap:wrap;}
+  .m-pill{color:#fff;padding:1px 9px;border-radius:10px;font-weight:900;font-size:11px;}
+  .m-pill.bull{background:var(--up);} .m-pill.bear{background:var(--down);} .m-pill.neu{background:#8a948e;}
+  .m-fmeta b{color:var(--forest);}
+  .m-fmeta .imp{color:#b08a3e;font-weight:900;}
+  .m-ftxt{font-size:13.5px;line-height:1.6;margin-top:5px;}
+  .m-flink{font-size:11.5px;color:var(--forest);font-weight:800;text-decoration:none;}
+  .m-fempty{padding:18px;color:#8a8d85;font-size:13px;line-height:1.7;text-align:center;}
+
+  .m-subwrap{margin-top:10px;background:var(--paper);border:1px solid var(--hair2);border-radius:16px;overflow:hidden;}
+  .m-subrow{display:flex;align-items:center;gap:12px;padding:13px 15px;cursor:pointer;}
+  .m-subrow .ic{flex:none;width:38px;height:38px;border-radius:11px;background:#ecf3ee;display:flex;align-items:center;justify-content:center;color:var(--forest);}
+  .m-subrow b{display:block;font-size:14.5px;font-weight:900;}
+  .m-subrow small{display:block;font-size:11.5px;color:#8a8d85;margin-top:1px;}
+  .m-subrow .go{margin-left:auto;color:#c2bcab;font-size:19px;transition:transform .2s;}
+  .m-subwrap.open .m-subrow .go{transform:rotate(90deg);}
+  .m-subbody{display:none;border-top:1px solid var(--hair2);max-height:420px;overflow-y:auto;}
+  .m-subwrap.open .m-subbody{display:block;}
+  .m-subcat{padding:8px 15px;font-weight:800;color:var(--forest);font-size:12.5px;background:#f7faf8;border-top:1px solid var(--hair2);}
+  .m-sublab{display:flex;gap:10px;padding:10px 15px;align-items:flex-start;cursor:pointer;border-bottom:1px solid #f4f2ec;}
+  .m-sublab input{margin-top:3px;width:17px;height:17px;flex:none;}
+  .m-sublab b{font-size:14px;color:var(--forest);font-weight:800;}
+  .m-sublab small{display:block;font-size:11.5px;color:#8a8d85;}
+  .m-submsg{padding:8px 15px;font-size:12px;min-height:16px;}
+
+  .m-menu{margin-top:11px;background:var(--paper);border:1px solid var(--hair2);border-radius:18px;overflow:hidden;}
+  .m-mrow{display:flex;align-items:center;gap:12px;padding:14px 15px;border-bottom:1px solid var(--hair2);text-decoration:none;color:var(--ink);min-height:52px;background:none;width:100%;border-left:0;border-right:0;border-top:0;font-family:inherit;cursor:pointer;text-align:left;}
+  .m-mrow:last-child{border-bottom:0;}
+  .m-mic{flex:none;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#f1ede1;color:var(--soft);}
+  .m-mrow b{font-size:14.5px;font-weight:800;flex:1;}
+  .m-mrow small{font-size:11.5px;color:#9a948a;font-weight:700;}
+  .m-mrow .go{color:#c2bcab;font-size:19px;}
+  .m-mrow.danger b{color:#a13a2f;}
+
+  .m-login{margin:20px 18px 0;background:var(--paper);border:1px solid var(--hair2);border-radius:20px;padding:30px 22px;text-align:center;}
+  .m-login h2{margin:0 0 8px;font-size:20px;font-weight:900;color:var(--forest);}
+  .m-login p{margin:0 0 18px;font-size:13.5px;color:#8a8d85;line-height:1.7;}
+  .m-login a.primary{display:block;background:var(--forest);color:#f4ead2;padding:13px;border-radius:14px;font-weight:900;font-size:15px;text-decoration:none;margin-bottom:10px;}
+  .m-login a.ghost{display:block;color:var(--forest);font-weight:800;font-size:14px;text-decoration:none;padding:8px;}
+
+  .m-src{padding:18px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.7;text-align:center;}
+
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <span class="m-signal">My Account</span>
+  <div class="m-who" id="mWho" style="display:none;">
+    <div class="m-ava" id="mAva">·</div>
+    <div><b id="mName">—</b><small id="mMail"></small></div>
+  </div>
+  <div class="m-vip" id="mVip" style="display:none;"></div>
+</header>
+
+<div id="mBody" style="display:none;">
+  <div class="m-stats num" id="mStats"></div>
+
+  <section class="m-sec">
+    <div class="m-sec-head"><h2>📰 我的 X 快訊</h2><span style="font-size:11px;color:#B8860B;font-weight:900;">💎 VIP</span></div>
+    <div class="m-feed" id="mFeed"><div class="m-fempty">載入中…</div></div>
+    <div class="m-subwrap" id="mSubWrap">
+      <div class="m-subrow" id="mSubToggle">
+        <span class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12a10 10 0 1 0 20 0 10 10 0 0 0-20 0"/><path d="M2 12h20M12 2c3 3.5 3 16.5 0 20-3-3.5-3-16.5 0-20"/></svg></span>
+        <span><b>X 快訊雷達・我的訂閱</b><small id="mSubCount">點開勾選想追蹤的金融大佬</small></span>
+        <span class="go">›</span>
+      </div>
+      <div class="m-subbody" id="mSubBody"></div>
+    </div>
+  </section>
+
+  <section class="m-sec">
+    <div class="m-sec-head"><h2>我的服務</h2></div>
+    <div class="m-menu">
+      <a class="m-mrow" href="/pages/portfolio-health.html">
+        <span class="m-mic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11.5 11 14l4-5"/><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 3v2M16 3v2"/></svg></span>
+        <b>投資儀表板・每日健診</b><span class="go">›</span>
+      </a>
+      <a class="m-mrow" href="/pages/watchlist-m">
+        <span class="m-mic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.3.9-4.6 4.4 1.1 6.1L12 17l-5.5 3 1.1-6.1L3 9.5l6.3-.9z"/></svg></span>
+        <b>我的自選股</b><small id="mWlN"></small><span class="go">›</span>
+      </a>
+      <a class="m-mrow" href="/pages/screener?full=1#scan">
+        <span class="m-mic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
+        <b>我的選股策略</b><small>每日自動掃描</small><span class="go">›</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="m-sec">
+    <div class="m-sec-head"><h2>帳戶與支援</h2></div>
+    <div class="m-menu">
+      <a class="m-mrow" href="/pages/vip.html">
+        <span class="m-mic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></span>
+        <b>VIP 訂閱與付款</b><span class="go">›</span>
+      </a>
+      <a class="m-mrow" href="https://line.me/R/ti/p/@130tqckv" target="_blank" rel="noopener">
+        <span class="m-mic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M18 12h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1zM6 12H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1z"/></svg></span>
+        <b>客服中心</b><small>官方 LINE @130tqckv</small><span class="go">›</span>
+      </a>
+      <a class="m-mrow" href="/pages/fraud-alert.html">
+        <span class="m-mic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3 4 6v6c0 5 3.4 7.7 8 9 4.6-1.3 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <b>投資人防詐專區</b><span class="go">›</span>
+      </a>
+      <button class="m-mrow danger" id="mLogout">
+        <span class="m-mic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#a13a2f" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg></span>
+        <b>登出</b>
+      </button>
+    </div>
+  </section>
+</div>
+
+<div class="m-login" id="mLogin" style="display:none;">
+  <h2>請先登入</h2>
+  <p>登入後可使用自選股雲端同步、每日健診、<br>X 快訊雷達等會員功能。</p>
+  <a class="primary" href="/pages/login.html">前往登入</a>
+  <a class="ghost" href="/pages/register.html">免費註冊 →</a>
+</div>
+
+<div class="m-src">領富 AI・台股風險守門員<br>官方 LINE @130tqckv・唯一官網 leadfuai.com</div>
+
+<nav class="m-tabbar">
+  <a href="/"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>首頁</a>
+  <a href="/pages/stocks-m"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19V11M10 19V5M16 19v-8M21 19H3"/></svg>行情</a>
+  <a href="/pages/screener-m"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>選股</a>
+  <a href="/pages/watchlist-m"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.3.9-4.6 4.4 1.1 6.1L12 17l-5.5 3 1.1-6.1L3 9.5l6.3-.9z"/></svg>自選</a>
+  <a href="/pages/member-m" class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b9914f" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.6 4.5-5.5 8-5.5s6.5 1.9 8 5.5"/></svg>我的</a>
+</nav>
+
+<script src="/js/main.js?v=3.24.8"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/auth.js?v=3.24.3"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const user = await window.LeadFuAuth.getProfile();
+  if (!user) {
+    document.getElementById("mLogin").style.display = "block";
+    return;
+  }
+  document.getElementById("mWho").style.display = "flex";
+  document.getElementById("mBody").style.display = "block";
+
+  // ── 身分 ──
+  const name = user.name || "會員";
+  document.getElementById("mName").textContent = name;
+  document.getElementById("mAva").textContent = name.trim().charAt(0).toUpperCase() || "領";
+  const mail = user.email || "";
+  const maskedMail = mail.replace(/^(.{3})[^@]*(@.*)$/, "$1****$2");
+  document.getElementById("mMail").textContent = `${maskedMail}${user.line_user_id ? "・LINE 已綁定 ✓" : ""}`;
+
+  // ── VIP ──
+  const until = user.vip_until ? new Date(user.vip_until) : null;
+  const isVip = !!(until && until.getTime() > Date.now());
+  const vipBox = document.getElementById("mVip");
+  vipBox.style.display = "flex";
+  vipBox.innerHTML = isVip
+    ? `<b>💎 VIP 守門員・${esc(user.vip_level || "進階")}</b><small>有效至 ${until.toLocaleDateString("zh-TW")}</small><a href="/pages/vip.html">管理訂閱 ›</a>`
+    : `<b style="color:#cfc9ba;">免費會員</b><small>升級解鎖每日守門與 X 快訊</small><a href="/pages/vip.html">升級 VIP ›</a>`;
+
+  // ── 統計 ──
+  const j = p => fetch(p).then(r => r.ok ? r.json() : null).catch(() => null);
+  const [riskD, attD] = await Promise.all([j("/data/risk_score_live.json"), j("/data/attention_live.json")]);
+  const RISK = (riskD && riskD.data) || {};
+  const ATT = (attD && attD.data) || {};
+  const wl = L.getWatchlist();
+  const warnN = wl.filter(c => {
+    const r = RISK[c];
+    return ATT[c] || (r && (r.level === "高" || r.level === "警示" || r.level === "中"));
+  }).length;
+  document.getElementById("mWlN").textContent = wl.length ? `${wl.length} 檔` : "";
+
+  const sb = window.LeadFuAuth.client;
+  let subs = [];
+  try {
+    const sel = await sb.from("x_subscriptions").select("handle").eq("user_id", user.id);
+    subs = (sel.data || []).map(r => r.handle);
+  } catch (e) {}
+  document.getElementById("mStats").innerHTML = `
+    <a class="m-stat" href="/pages/watchlist-m"><b>${wl.length}</b><small>自選股</small></a>
+    <a class="m-stat" href="/pages/watchlist-m"><b>${warnN ? `<i>${warnN}</i>` : "0"}</b><small>今日需注意</small></a>
+    <a class="m-stat" href="#" onclick="document.getElementById('mSubWrap').classList.add('open');return false;"><b>${subs.length}</b><small>X 訂閱大佬</small></a>`;
+
+  // ── X 快訊 feed（VIP） ──
+  const feed = document.getElementById("mFeed");
+  if (!isVip) {
+    feed.innerHTML = `<div class="m-fempty">💎 VIP 專屬：訂閱的金融大佬一發布市場相關貼文，<br>這裡就會出現中文整理。<br><a href="/pages/vip.html" style="color:var(--forest);font-weight:900;">升級 VIP →</a></div>`;
+  } else {
+    try {
+      if (!subs.length) {
+        feed.innerHTML = `<div class="m-fempty">你還沒訂閱任何帳號。<br>點下方「X 快訊雷達・我的訂閱」勾選大佬。</div>`;
+      } else {
+        const al = await sb.from("x_alerts").select("*").in("author", subs).order("created_at", { ascending: false }).limit(10);
+        const rows = al.data || [];
+        feed.innerHTML = rows.length
+          ? `<div class="m-fnote">資訊整理，非投資建議；偏多／偏空僅代表市場輿情方向。</div>` + rows.map(a => {
+              const P = { bullish: "bull", bearish: "bear" }[a.impact] || "neu";
+              const Lb = { bullish: "偏多", bearish: "偏空", neutral: "中性" }[a.impact] || "中性";
+              let t = "";
+              try { t = a.created_at ? new Date(a.created_at).toLocaleString("zh-TW", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }) : ""; } catch (e) {}
+              return `<div class="m-frow">
+                <div class="m-fmeta"><span class="m-pill ${P}">${Lb}</span><span class="imp">重要度 ${a.importance != null ? a.importance : "-"}</span><b>@${esc(a.author)}</b><span>${esc((a.symbols || []).join(" · "))}</span><span style="margin-left:auto;">${t}</span></div>
+                <div class="m-ftxt">${esc(a.summary_zh)}</div>
+                <a class="m-flink" href="${esc(a.url)}" target="_blank" rel="noopener">看原文 ↗</a>
+              </div>`;
+            }).join("")
+          : `<div class="m-fempty">訂閱的帳號目前還沒有快訊。<br>系統每隔幾分鐘掃一次，有新貼文就會出現。</div>`;
+      }
+    } catch (e) {
+      feed.innerHTML = `<div class="m-fempty" style="color:#a13a2f;">快訊載入失敗，請重新整理。</div>`;
+    }
+  }
+
+  // ── 訂閱管理（摺疊） ──
+  const subSet = new Set(subs);
+  document.getElementById("mSubCount").textContent = subs.length ? `已訂閱 ${subs.length} 位金融大佬` : "點開勾選想追蹤的金融大佬";
+  let subLoaded = false;
+  document.getElementById("mSubToggle").addEventListener("click", async () => {
+    const wrap = document.getElementById("mSubWrap");
+    wrap.classList.toggle("open");
+    if (subLoaded || !wrap.classList.contains("open")) return;
+    subLoaded = true;
+    const body = document.getElementById("mSubBody");
+    if (!isVip) {
+      body.innerHTML = `<div class="m-fempty">💎 VIP 專屬功能，<a href="/pages/vip.html" style="color:var(--forest);font-weight:900;">升級解鎖 →</a></div>`;
+      return;
+    }
+    try {
+      const cat = await fetch("/data/x_catalog.json?v=" + Date.now()).then(r => r.json());
+      let html = `<div class="m-submsg" id="mSubMsg"></div>`;
+      (cat.categories || []).forEach(c => {
+        html += `<div class="m-subcat">${esc(c.name)}</div>`;
+        (c.accounts || []).forEach(a => {
+          html += `<label class="m-sublab"><input type="checkbox" data-h="${esc(a.handle)}" ${subSet.has(a.handle) ? "checked" : ""}><span><b>${esc(a.name)}</b> <span style="color:#aaa;font-size:11px;">@${esc(a.handle)}</span><small>${esc(a.blurb || "")}</small></span></label>`;
+        });
+      });
+      body.innerHTML = html;
+      body.querySelectorAll("input[type=checkbox]").forEach(cb => cb.addEventListener("change", async () => {
+        const h = cb.dataset.h, msg = document.getElementById("mSubMsg");
+        cb.disabled = true;
+        try {
+          if (cb.checked) { await sb.from("x_subscriptions").upsert({ user_id: user.id, handle: h }); subSet.add(h); }
+          else { await sb.from("x_subscriptions").delete().eq("user_id", user.id).eq("handle", h); subSet.delete(h); }
+          msg.textContent = "已儲存 ✓"; msg.style.color = "#16704a";
+          document.getElementById("mSubCount").textContent = `已訂閱 ${subSet.size} 位金融大佬`;
+        } catch (e) {
+          cb.checked = !cb.checked;
+          msg.textContent = "儲存失敗，請重試"; msg.style.color = "#a13a2f";
+        } finally {
+          cb.disabled = false;
+          setTimeout(() => { msg.textContent = ""; }, 1500);
+        }
+      }));
+    } catch (e) {
+      body.innerHTML = `<div class="m-fempty">清單載入失敗，請重新整理。</div>`;
+    }
+  });
+
+  // ── 登出 ──
+  document.getElementById("mLogout").addEventListener("click", async () => {
+    await window.LeadFuAuth.signOut();
+    location.href = "/";
+  });
+});
+</script>
+</body>
+</html>

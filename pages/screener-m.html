@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>選股 - 一鍵策略選股 - 領富 AI</title>
+<meta name="description" content="高殖利率、營收成長、便宜績優、外資連買 — 一鍵從台股全市場 2,500+ 檔篩出，附風險守門標記。資料來源 TWSE、TPEx、MOPS。">
+<link rel="canonical" href="https://leadfuai.com/pages/screener">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --paper:#fffdf8; --gold:#b9914f; --gold-2:#d6b36f;
+    --up:#be4a3e; --down:#148a55; --flat:#8a948e; --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(76px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+
+  .m-hero{color:#f8f5ec;padding:calc(20px + env(safe-area-inset-top)) 22px 50px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.28), transparent 34%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-hero h1{margin:13px 0 0;font-size:28px;line-height:1.25;font-weight:900;letter-spacing:-.4px;}
+  .m-hero p{margin:9px 0 0;font-size:13.5px;color:rgba(248,245,236,.66);line-height:1.65;max-width:310px;}
+
+  .m-strat{margin:-28px 18px 0;position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+  .m-scard{background:var(--paper);border:1px solid var(--hair2);border-radius:18px;padding:14px 14px 12px;box-shadow:0 14px 34px rgba(13,29,23,.12);cursor:pointer;transition:transform .12s;}
+  .m-scard:active{transform:scale(.97);}
+  .m-scard.on{outline:2px solid var(--forest);outline-offset:-2px;}
+  .m-sic{font-size:11px;font-weight:900;letter-spacing:.1em;color:#b09255;text-transform:uppercase;}
+  .m-scard b{display:block;font-size:16.5px;font-weight:900;margin-top:5px;}
+  .m-scard small{display:block;font-size:12px;color:#8a8d85;line-height:1.55;margin-top:4px;}
+  .m-hit{display:inline-block;margin-top:9px;font-size:11.5px;font-weight:900;color:var(--forest);background:#ecf3ee;border-radius:999px;padding:3px 10px;}
+
+  .m-sec{padding:22px 18px 0;}
+  .m-sec-head{display:flex;justify-content:space-between;align-items:baseline;}
+  .m-sec-head h2{margin:0;font-size:18px;font-weight:900;}
+  .m-sec-head a{font-size:12.5px;color:var(--soft);text-decoration:none;font-weight:700;}
+
+  .m-res-head{display:flex;justify-content:space-between;align-items:baseline;padding:0 2px;}
+  .m-res-head b{font-size:14px;font-weight:900;}
+  .m-res-head b i{font-style:normal;color:var(--up);}
+  .m-res-head span{font-size:12px;color:#9a948a;font-weight:700;}
+  .m-list{margin-top:10px;background:var(--paper);border:1px solid var(--hair2);border-radius:20px;overflow:hidden;}
+  .m-row{display:flex;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid var(--hair2);min-height:62px;text-decoration:none;color:var(--ink);}
+  .m-row:last-child{border-bottom:0;}
+  .m-main{flex:1;min-width:0;}
+  .m-name{font-size:15.5px;font-weight:800;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .m-why{font-size:11.5px;color:#8a8d85;margin-top:3px;line-height:1.5;}
+  .m-tag{font-size:10.5px;font-weight:900;padding:2px 7px;border-radius:8px;white-space:nowrap;}
+  .m-tag.ok{background:#e8f3ec;color:#16704a;border:1px solid #cfe6d8;}
+  .m-tag.warn{background:#fdf2dd;color:#a8731c;border:1px solid #ecd9b0;}
+  .m-tag.risk{background:#fbeae8;color:#a13a2f;border:1px solid #eccfc9;}
+  .m-right{text-align:right;flex:none;}
+  .m-price{font-size:16px;font-weight:900;}
+  .m-chg{font-size:12px;font-weight:900;margin-top:2px;}
+  .up{color:var(--up);} .down{color:var(--down);} .flat{color:var(--flat);}
+  .m-more{display:block;text-align:center;padding:13px;font-size:13px;font-weight:800;color:var(--forest);text-decoration:none;border-top:1px solid var(--hair2);}
+
+  .m-adv{margin:16px 18px 0;background:var(--paper);border:1px solid var(--hair2);border-radius:16px;display:flex;align-items:center;gap:12px;padding:14px 15px;text-decoration:none;color:var(--ink);}
+  .m-adv .ic{flex:none;width:38px;height:38px;border-radius:11px;background:#f1ede1;display:flex;align-items:center;justify-content:center;color:var(--soft);}
+  .m-adv b{display:block;font-size:14.5px;font-weight:900;}
+  .m-adv small{display:block;font-size:11.5px;color:#8a8d85;margin-top:1px;}
+  .m-adv .go{margin-left:auto;color:#c2bcab;font-size:19px;}
+
+  .m-scan{margin:12px 18px 0;border-radius:18px;padding:15px 16px;color:#f8f5ec;display:flex;gap:12px;align-items:center;text-decoration:none;
+    background:linear-gradient(135deg,#1d3a2e,#0b3328);}
+  .m-scan-ic{flex:none;width:40px;height:40px;border-radius:12px;background:rgba(214,179,111,.16);display:flex;align-items:center;justify-content:center;color:var(--gold-2);}
+  .m-scan b{display:block;font-size:14.5px;font-weight:900;}
+  .m-scan small{display:block;font-size:11.5px;color:rgba(248,245,236,.6);margin-top:2px;line-height:1.5;}
+  .m-scan .vip{margin-left:auto;flex:none;font-size:11px;font-weight:900;color:#0b3328;background:var(--gold-2);border-radius:999px;padding:5px 11px;}
+
+  .m-src{padding:18px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.7;}
+
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <span class="m-signal">Stock Screener</span>
+  <h1>今天想找<br>哪一種股票？</h1>
+  <p>選一個策略，立刻從全市場 <span id="mTotal">2,500+</span> 檔篩出來，並附上風險檢查。</p>
+</header>
+
+<div class="m-strat" id="mStrat">
+  <div class="m-scard on" data-k="dividend"><div class="m-sic">Dividend</div><b>高殖利率</b><small>殖利率 ≥ 5%，存股族首選</small><span class="m-hit num" data-hit>計算中…</span></div>
+  <div class="m-scard" data-k="growth"><div class="m-sic">Growth</div><b>營收成長</b><small>月營收年增 ≥ 20%、動能轉強</small><span class="m-hit num" data-hit>計算中…</span></div>
+  <div class="m-scard" data-k="value"><div class="m-sic">Value</div><b>便宜績優</b><small>低於合理區間、評估信心高</small><span class="m-hit num" data-hit>計算中…</span></div>
+  <div class="m-scard" data-k="foreign"><div class="m-sic">Foreign</div><b>外資連買</b><small>外資連 3 日以上買超</small><span class="m-hit num" data-hit>計算中…</span></div>
+</div>
+
+<section class="m-sec">
+  <div class="m-res-head">
+    <b id="mResTitle">高殖利率 — 符合 <i class="num">—</i> 檔</b>
+    <span id="mResSort"></span>
+  </div>
+  <div class="m-list" id="mRes"><div style="padding:18px;color:#9a948a;font-size:13px;">載入資料中…</div></div>
+</section>
+
+<a class="m-adv" href="/pages/screener?full=1">
+  <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg></span>
+  <span><b>進階篩選（完整版）</b><small>營收・估值・籌碼・技術指標，自由組合條件</small></span>
+  <span class="go">›</span>
+</a>
+
+<a class="m-scan" href="/pages/screener?full=1#scan">
+  <span class="m-scan-ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8a8 8 0 0 1 16 0c0 6 2 7 2 7H2s2-1 2-7"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></span>
+  <span><b>每日自動掃描</b><small>盤後自動跑你的策略，「新」符合的股票用 LINE 通知你</small></span>
+  <span class="vip">💎 VIP</span>
+</a>
+
+<div class="m-src">
+  📅 資料來源：TWSE・TPEx・MOPS，盤後更新。<br>
+  篩選結果為公開資料整理，非投資建議；「低風險／注意」為領富 AI 風險守門標記，買前請再做完整檢查。
+</div>
+
+<nav class="m-tabbar">
+  <a href="/"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>首頁</a>
+  <a href="/pages/stocks-m"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19V11M10 19V5M16 19v-8M21 19H3"/></svg>行情</a>
+  <a href="/pages/screener-m" class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b9914f" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>選股</a>
+  <a href="/pages/watchlist-m"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.3.9-4.6 4.4 1.1 6.1L12 17l-5.5 3 1.1-6.1L3 9.5l6.3-.9z"/></svg>自選</a>
+  <a href="/pages/member-m"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.6 4.5-5.5 8-5.5s6.5 1.9 8 5.5"/></svg>我的</a>
+</nav>
+
+<script src="/js/main.js?v=3.24.8"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const stocks = (L.data && L.data.stocks) || [];
+  const byCode = {}; stocks.forEach(s => byCode[String(s.code)] = s);
+  document.getElementById("mTotal").textContent = stocks.length.toLocaleString();
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const j = p => fetch(p).then(r => r.ok ? r.json() : null).catch(() => null);
+  const [valD, revD, strD, fvD, riskD, attD] = await Promise.all([
+    j("/data/valuation_live.json"), j("/data/revenue_live.json"), j("/data/inst_streak_live.json"),
+    j("/data/fair_value_live.json"), j("/data/risk_score_live.json"), j("/data/attention_live.json"),
+  ]);
+  const VAL = (valD && valD.data) || {};
+  const REV = (revD && revD.revenue) || {};
+  const STR = (strD && strD.data) || {};
+  const FV = (fvD && fvD.data) || {};
+  const RISK = (riskD && riskD.data) || {};
+  const ATT = (attD && attD.data) || {};
+
+  function riskTag(code) {
+    const a = ATT[code];
+    if (a) return `<span class="m-tag warn">${esc(a.type || "注意")}</span>`;
+    const r = RISK[code];
+    if (r && (r.level === "高" || r.level === "警示")) return `<span class="m-tag risk">高風險</span>`;
+    if (r && r.level === "低") return `<span class="m-tag ok">低風險</span>`;
+    return "";
+  }
+
+  // ── 四策略（真資料） ──
+  const PRESETS = {
+    dividend: {
+      name: "高殖利率", sort: "依殖利率排序",
+      build() {
+        return Object.entries(VAL)
+          .filter(([c, v]) => (v.yield_pct || 0) >= 5 && byCode[c] && byCode[c].price > 0)
+          .sort((a, b) => b[1].yield_pct - a[1].yield_pct)
+          .map(([c, v]) => ({ code: c, why: `殖利率 ${v.yield_pct.toFixed(2)}%${v.pe_ratio ? "・本益比 " + v.pe_ratio : ""}` }));
+      },
+    },
+    growth: {
+      name: "營收成長", sort: "依年增率排序",
+      build() {
+        return Object.entries(REV)
+          .filter(([c, r]) => (r.yoy || 0) >= 20 && byCode[c] && byCode[c].price > 0)
+          .sort((a, b) => b[1].yoy - a[1].yoy)
+          .map(([c, r]) => ({ code: c, why: `${esc(r.period)} 營收年增 +${r.yoy.toFixed(1)}%・月增 ${r.mom >= 0 ? "+" : ""}${(r.mom || 0).toFixed(1)}%` }));
+      },
+    },
+    value: {
+      name: "便宜績優", sort: "依低估程度排序",
+      build() {
+        return Object.entries(FV)
+          .filter(([c, f]) => f.position != null && f.position <= 0.25 && (f.confidence || 0) >= 3.5 && byCode[c] && byCode[c].price > 0)
+          .sort((a, b) => a[1].position - b[1].position)
+          .map(([c, f]) => ({ code: c, why: `${esc(f.label || "低於合理區間")}・合理區間 ${f.low}–${f.high}` }));
+      },
+    },
+    foreign: {
+      name: "外資連買", sort: "依連買天數排序",
+      build() {
+        return Object.entries(STR)
+          .filter(([c, s]) => s.dir === "buy" && (s.days || 0) >= 3 && byCode[c] && byCode[c].price > 0)
+          .sort((a, b) => (b[1].days - a[1].days) || (b[1].foreign - a[1].foreign))
+          .map(([c, s]) => ({ code: c, why: `外資連 ${s.days} 日買超・今日 +${(s.foreign || 0).toLocaleString()} 張` }));
+      },
+    },
+  };
+  const RESULTS = {};
+  Object.keys(PRESETS).forEach(k => { RESULTS[k] = PRESETS[k].build(); });
+
+  // 卡片數字
+  document.querySelectorAll(".m-scard").forEach(card => {
+    const k = card.dataset.k;
+    card.querySelector("[data-hit]").textContent = `符合 ${RESULTS[k].length} 檔`;
+  });
+
+  const LIMIT = 15;
+  function render(k, showAll) {
+    const all = RESULTS[k];
+    const list = showAll ? all.slice(0, 50) : all.slice(0, LIMIT);
+    document.getElementById("mResTitle").innerHTML = `${PRESETS[k].name} — 符合 <i class="num">${all.length}</i> 檔`;
+    document.getElementById("mResSort").textContent = PRESETS[k].sort;
+    const rows = list.map(it => {
+      const s = byCode[it.code];
+      const p = L.pctChange(s.price, s.change);
+      const cls = (s.change||0) > 0 ? "up" : (s.change||0) < 0 ? "down" : "flat";
+      return `<a class="m-row" href="/pages/stock-detail?code=${esc(it.code)}">
+        <div class="m-main"><div class="m-name">${esc(s.name)} ${riskTag(it.code)}</div><div class="m-why num">${esc(it.code)}・${it.why}</div></div>
+        <div class="m-right num"><div class="m-price">${L.fmtPrice(s.price)}</div><div class="m-chg ${cls}">${p >= 0 ? "+" : ""}${p.toFixed(2)}%</div></div>
+      </a>`;
+    }).join("");
+    const more = (!showAll && all.length > LIMIT)
+      ? `<a class="m-more" href="#" id="mMore">顯示更多（共 ${all.length} 檔）▾</a>` : "";
+    document.getElementById("mRes").innerHTML = (rows || `<div style="padding:18px;color:#9a948a;font-size:13px;">目前沒有符合的股票</div>`) + more;
+    const mb = document.getElementById("mMore");
+    if (mb) mb.addEventListener("click", e => { e.preventDefault(); render(k, true); });
+  }
+  let current = "dividend";
+  render(current, false);
+  document.querySelectorAll(".m-scard").forEach(card => card.addEventListener("click", () => {
+    document.querySelectorAll(".m-scard").forEach(x => x.classList.remove("on"));
+    card.classList.add("on");
+    current = card.dataset.k;
+    render(current, false);
+  }));
+});
+</script>
+</body>
+</html>

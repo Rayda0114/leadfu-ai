@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>自選股 - 每日風險守門 - 領富 AI</title>
+<meta name="description" content="你的自選股清單與每日風險健診：注意股、風險分數變化、異常警示一頁看完。領富 AI 持股風險守門員。">
+<link rel="canonical" href="https://leadfuai.com/pages/watchlist">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --paper:#fffdf8; --gold:#b9914f; --gold-2:#d6b36f;
+    --up:#be4a3e; --down:#148a55; --flat:#8a948e; --amber:#d99c31; --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(76px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+
+  .m-hero{color:#f8f5ec;padding:calc(20px + env(safe-area-inset-top)) 22px 56px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.28), transparent 34%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .m-hero-top{display:flex;justify-content:space-between;align-items:center;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-date{font-size:12px;color:rgba(248,245,236,.55);font-weight:700;}
+  .m-hero h1{margin:14px 0 0;font-size:26px;line-height:1.35;font-weight:900;letter-spacing:-.3px;}
+  .m-hero h1 i{font-style:normal;color:#f0b9a8;}
+  .m-hero p{margin:8px 0 0;font-size:13px;color:rgba(248,245,236,.62);}
+
+  .m-diag{margin:-34px 18px 0;position:relative;z-index:2;background:var(--paper);border-radius:20px;overflow:hidden;box-shadow:0 20px 48px rgba(13,29,23,.2);}
+  .m-dh{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--hair2);}
+  .m-dh b{font-size:14.5px;font-weight:900;}
+  .m-dh small{font-size:11.5px;color:#9a948a;font-weight:700;}
+  .m-drow{display:flex;gap:11px;padding:12px 16px;border-bottom:1px solid var(--hair2);align-items:flex-start;text-decoration:none;color:var(--ink);}
+  .m-drow:last-of-type{border-bottom:0;}
+  .m-dot{flex:none;width:9px;height:9px;border-radius:50%;margin-top:6px;}
+  .m-dot.r{background:var(--up);box-shadow:0 0 0 3px #f6e0dc;}
+  .m-dot.a{background:var(--amber);box-shadow:0 0 0 3px #f6ecd8;}
+  .m-dmain{flex:1;min-width:0;}
+  .m-dname{font-size:14.5px;font-weight:900;}
+  .m-dwhy{font-size:12px;color:#8a8d85;margin-top:2px;line-height:1.55;}
+  .m-dgo{flex:none;color:#c2bcab;font-size:18px;margin-top:2px;}
+  .m-dok{padding:11px 16px;font-size:12.5px;color:#16704a;background:#f2f8f4;font-weight:800;}
+
+  .m-filter{display:flex;gap:8px;align-items:center;padding:18px 18px 0;flex-wrap:wrap;}
+  .m-fchip{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--hairline);background:transparent;font-family:inherit;font-size:13px;font-weight:800;color:var(--soft);cursor:pointer;display:inline-flex;align-items:center;}
+  .m-fchip.on{background:var(--forest);border-color:var(--forest);color:#f4ead2;}
+  .m-edit{margin-left:auto;font-size:12.5px;color:var(--soft);font-weight:800;background:none;border:0;font-family:inherit;cursor:pointer;}
+
+  .m-list{margin:12px 18px 0;background:var(--paper);border:1px solid var(--hair2);border-radius:20px;overflow:hidden;}
+  .m-row{display:flex;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid var(--hair2);min-height:64px;text-decoration:none;color:var(--ink);}
+  .m-row:last-child{border-bottom:0;}
+  .m-main{flex:1;min-width:0;}
+  .m-name{font-size:15.5px;font-weight:800;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+  .m-sub{font-size:11.5px;color:#a09a8c;font-weight:700;margin-top:2px;}
+  .m-tag{font-size:10.5px;font-weight:900;padding:2px 7px;border-radius:8px;white-space:nowrap;}
+  .m-tag.ok{background:#e8f3ec;color:#16704a;border:1px solid #cfe6d8;}
+  .m-tag.warn{background:#fdf2dd;color:#a8731c;border:1px solid #ecd9b0;}
+  .m-tag.risk{background:#fbeae8;color:#a13a2f;border:1px solid #eccfc9;}
+  .m-right{text-align:right;flex:none;}
+  .m-price{font-size:16.5px;font-weight:900;}
+  .m-chg{font-size:12.5px;font-weight:900;margin-top:2px;}
+  .up{color:var(--up);} .down{color:var(--down);} .flat{color:var(--flat);}
+  .m-del{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid #eccfc9;background:#fbeae8;color:#a13a2f;font-size:15px;font-weight:900;cursor:pointer;display:none;align-items:center;justify-content:center;}
+  body.editing .m-del{display:inline-flex;}
+  .m-empty{padding:26px 20px;text-align:center;color:#8a8d85;font-size:13.5px;line-height:1.8;}
+
+  .m-add{margin:14px 18px 0;display:grid;grid-template-columns:1fr 54px;border:1.5px dashed #cdc5b2;border-radius:16px;overflow:hidden;background:rgba(255,253,248,.6);position:relative;}
+  .m-add input{border:0;outline:0;background:transparent;padding:13px 16px;font-size:16px;font-family:inherit;color:var(--ink);min-width:0;}
+  .m-add input::placeholder{color:#a8a294;font-weight:600;}
+  .m-add button{border:0;background:transparent;color:var(--gold);font-size:24px;font-weight:900;cursor:pointer;}
+  .m-sugg{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:30;background:#fff;border:1px solid var(--hair2);border-radius:14px;box-shadow:0 14px 34px rgba(0,0,0,.14);max-height:260px;overflow-y:auto;display:none;}
+  .m-sugg div{padding:12px 15px;font-size:14.5px;border-bottom:1px solid #f4f2ec;}
+  .m-sugg div:last-child{border-bottom:0;}
+  .m-sugg b{color:var(--forest);}
+
+  .m-guard{margin:14px 18px 0;border-radius:18px;padding:15px 16px;color:#f8f5ec;display:flex;gap:12px;align-items:center;text-decoration:none;
+    background:linear-gradient(135deg,#1d3a2e,#0b3328);}
+  .m-gic{flex:none;width:40px;height:40px;border-radius:12px;background:rgba(214,179,111,.16);display:flex;align-items:center;justify-content:center;color:var(--gold-2);}
+  .m-guard b{display:block;font-size:14.5px;font-weight:900;}
+  .m-guard small{display:block;font-size:11.5px;color:rgba(248,245,236,.6);margin-top:2px;line-height:1.5;}
+  .m-guard .vip{margin-left:auto;flex:none;font-size:11px;font-weight:900;color:#0b3328;background:var(--gold-2);border-radius:999px;padding:5px 11px;}
+
+  .m-src{padding:18px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.7;}
+
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <div class="m-hero-top">
+    <span class="m-signal">Daily Guard</span>
+    <span class="m-date" id="mDate"></span>
+  </div>
+  <h1 id="mTitle">我的自選股</h1>
+  <p id="mSubT">每天盤後，AI 自動幫你複查每一檔</p>
+</header>
+
+<section class="m-diag" id="mDiag" style="display:none;">
+  <div class="m-dh"><b>📋 今日健診</b><small>盤後自動複查</small></div>
+  <div id="mDiagRows"></div>
+</section>
+
+<div class="m-filter" id="mFilter" style="display:none;">
+  <button class="m-fchip on" data-f="all">全部</button>
+  <button class="m-fchip" data-f="warn">需注意</button>
+  <button class="m-fchip" data-f="ok">低風險</button>
+  <button class="m-edit" id="mEdit">編輯</button>
+</div>
+
+<div class="m-list" id="mList"></div>
+
+<div class="m-add">
+  <input type="text" id="mAddInp" autocomplete="off" placeholder="輸入代號加入自選，例 2330">
+  <button id="mAddBtn" aria-label="加入">＋</button>
+  <div class="m-sugg" id="mAddSugg"></div>
+</div>
+
+<a class="m-guard" href="/pages/vip.html">
+  <span class="m-gic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8a8 8 0 0 1 16 0c0 6 2 7 2 7H2s2-1 2-7"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></span>
+  <span><b>風險上升主動提醒</b><small>自選股一有風險升高、列入注意股，LINE 馬上通知你</small></span>
+  <span class="vip">💎 VIP</span>
+</a>
+
+<div class="m-src">
+  📅 資料來源：TWSE・TPEx・MOPS，盤後更新。<br>
+  健診與風險標記為公開資料之系統化整理，非投資建議；實際公告以證交所、櫃買中心為準。
+</div>
+
+<nav class="m-tabbar">
+  <a href="/"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>首頁</a>
+  <a href="/pages/stocks-m"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19V11M10 19V5M16 19v-8M21 19H3"/></svg>行情</a>
+  <a href="/pages/screener-m"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>選股</a>
+  <a href="/pages/watchlist-m" class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b9914f" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.3.9-4.6 4.4 1.1 6.1L12 17l-5.5 3 1.1-6.1L3 9.5l6.3-.9z"/></svg>自選</a>
+  <a href="/pages/member-m"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.6 4.5-5.5 8-5.5s6.5 1.9 8 5.5"/></svg>我的</a>
+</nav>
+
+<script src="/js/main.js?v=3.24.8"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const stocks = (L.data && L.data.stocks) || [];
+  const byCode = {}; stocks.forEach(s => byCode[String(s.code)] = s);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const j = p => fetch(p).then(r => r.ok ? r.json() : null).catch(() => null);
+  const [riskD, attD] = await Promise.all([j("/data/risk_score_live.json"), j("/data/attention_live.json")]);
+  const RISK = (riskD && riskD.data) || {};
+  const ATT = (attD && attD.data) || {};
+
+  const d = new Date();
+  const wd = ["日","一","二","三","四","五","六"][d.getDay()];
+  document.getElementById("mDate").textContent = `${d.getMonth()+1}/${d.getDate()}（${wd}）`;
+
+  // 健診分類：注意/處置 or 風險高 → 紅；風險中 or 分數明顯上升 → 橘
+  function diagnose(code) {
+    const out = { flag: null, why: [] };
+    const a = ATT[code];
+    const r = RISK[code];
+    if (a) { out.flag = "r"; out.why.push(`列入${a.type || "注意"}股（${a.reason || ""}）`); }
+    if (r) {
+      if (r.level === "高" || r.level === "警示") { out.flag = "r"; out.why.push(...(r.reasons || []).slice(0, 2)); }
+      else if (r.level === "中") { out.flag = out.flag || "a"; out.why.push(...(r.reasons || []).slice(0, 2)); }
+      else if (r.prevScore != null && r.score != null && r.score - r.prevScore >= 12) {
+        out.flag = out.flag || "a"; out.why.push(`風險分數上升 ${r.prevScore} → ${r.score}`);
+      }
+    }
+    return out;
+  }
+  function tag(code) {
+    const dg = diagnose(code);
+    if (dg.flag === "r") return `<span class="m-tag risk">需注意</span>`;
+    if (dg.flag === "a") return `<span class="m-tag warn">觀察</span>`;
+    const r = RISK[code];
+    if (r && r.level === "低") return `<span class="m-tag ok">低風險</span>`;
+    return "";
+  }
+
+  let filter = "all";
+  function refresh() {
+    const wl = L.getWatchlist();
+    const items = wl.map(c => ({ code: String(c), s: byCode[String(c)], dg: diagnose(String(c)) })).filter(x => x.s);
+    const warn = items.filter(x => x.dg.flag);
+
+    // Hero
+    if (items.length) {
+      document.getElementById("mTitle").innerHTML = warn.length
+        ? `你的 ${items.length} 檔自選<br>今日 <i>${warn.length} 檔需注意</i>`
+        : `你的 ${items.length} 檔自選<br>今日全部無異常 ✓`;
+      document.getElementById("mSubT").textContent = `每天盤後，AI 自動幫你複查每一檔${L.hasSession && L.hasSession() ? "・☁ 已同步雲端" : ""}`;
+    } else {
+      document.getElementById("mTitle").textContent = "建立你的自選清單";
+      document.getElementById("mSubT").textContent = "加入想追蹤的股票，AI 每天盤後幫你檢查風險";
+    }
+
+    // 健診卡
+    const diag = document.getElementById("mDiag");
+    if (items.length) {
+      diag.style.display = "block";
+      const rows = warn.slice(0, 6).map(x => `
+        <a class="m-drow" href="/pages/check?code=${esc(x.code)}">
+          <span class="m-dot ${x.dg.flag}"></span>
+          <div class="m-dmain"><div class="m-dname">${esc(x.code)} ${esc(x.s.name)}</div><div class="m-dwhy">${esc(x.dg.why.slice(0, 2).join("、") || "需要留意")}</div></div>
+          <span class="m-dgo">›</span>
+        </a>`).join("");
+      const okN = items.length - warn.length;
+      document.getElementById("mDiagRows").innerHTML =
+        (rows || "") + (okN > 0 ? `<div class="m-dok">${warn.length ? `其餘 ${okN} 檔今日無異常 ✓` : `${okN} 檔今日全部無異常 ✓`}</div>` : "");
+    } else diag.style.display = "none";
+
+    // 篩選 + 列表
+    document.getElementById("mFilter").style.display = items.length ? "flex" : "none";
+    document.querySelector('[data-f="all"]').textContent = `全部 ${items.length}`;
+    document.querySelector('[data-f="warn"]').textContent = `需注意 ${warn.length}`;
+    document.querySelector('[data-f="ok"]').textContent = `低風險 ${items.length - warn.length}`;
+
+    let show = items;
+    if (filter === "warn") show = warn;
+    if (filter === "ok") show = items.filter(x => !x.dg.flag);
+    const order = { r: 0, a: 1 };
+    show = [...show].sort((x, y) => (order[x.dg.flag] ?? 2) - (order[y.dg.flag] ?? 2));
+
+    document.getElementById("mList").innerHTML = show.length ? show.map(x => {
+      const p = L.pctChange(x.s.price, x.s.change);
+      const cls = (x.s.change||0) > 0 ? "up" : (x.s.change||0) < 0 ? "down" : "flat";
+      return `<a class="m-row" href="/pages/stock-detail?code=${esc(x.code)}">
+        <div class="m-main"><div class="m-name">${esc(x.s.name)} ${tag(x.code)}</div><div class="m-sub num">${esc(x.code)}・${esc(x.s.category || "")}</div></div>
+        <div class="m-right num"><div class="m-price">${L.fmtPrice(x.s.price)}</div><div class="m-chg ${cls}">${p >= 0 ? "+" : ""}${p.toFixed(2)}%</div></div>
+        <button class="m-del" data-c="${esc(x.code)}" aria-label="移除">✕</button>
+      </a>`;
+    }).join("") : `<div class="m-empty">${items.length ? "這個分類目前沒有股票" : "還沒有自選股。<br>用下方輸入框加入第一檔，例如 2330。"}</div>`;
+
+    document.querySelectorAll(".m-del").forEach(b => b.addEventListener("click", e => {
+      e.preventDefault(); e.stopPropagation();
+      L.removeFromWatchlist(b.dataset.c);
+      refresh();
+    }));
+  }
+  refresh();
+
+  document.querySelectorAll(".m-fchip").forEach(c => c.addEventListener("click", () => {
+    document.querySelectorAll(".m-fchip").forEach(x => x.classList.remove("on"));
+    c.classList.add("on");
+    filter = c.dataset.f;
+    refresh();
+  }));
+  document.getElementById("mEdit").addEventListener("click", () => {
+    document.body.classList.toggle("editing");
+    document.getElementById("mEdit").textContent = document.body.classList.contains("editing") ? "完成" : "編輯";
+  });
+
+  // 新增
+  const inp = document.getElementById("mAddInp"), sg = document.getElementById("mAddSugg");
+  function add(code) {
+    L.addToWatchlist(String(code));
+    inp.value = ""; sg.style.display = "none";
+    refresh();
+    L.showToast && L.showToast(`已加入 ${code}`);
+  }
+  inp.addEventListener("input", () => {
+    const q = inp.value.trim().toLowerCase();
+    if (!q) { sg.style.display = "none"; return; }
+    const hits = stocks.filter(s => String(s.code).toLowerCase().startsWith(q) || (s.name || "").toLowerCase().includes(q)).slice(0, 8);
+    if (!hits.length) { sg.style.display = "none"; return; }
+    sg.innerHTML = hits.map(s => `<div data-c="${esc(s.code)}"><b>${esc(s.code)}</b>　${esc(s.name)}<span style="color:#9a948a;font-size:12px;">　${L.isInWatchlist(String(s.code)) ? "已在自選" : ""}</span></div>`).join("");
+    sg.style.display = "block";
+    sg.querySelectorAll("div").forEach(el => el.addEventListener("click", () => add(el.dataset.c)));
+  });
+  document.getElementById("mAddBtn").addEventListener("click", () => {
+    const q = inp.value.trim().toLowerCase();
+    const f = stocks.find(s => String(s.code).toLowerCase() === q) || stocks.find(s => (s.name || "").toLowerCase() === q);
+    if (f) add(f.code);
+  });
+  document.addEventListener("click", e => { if (!e.target.closest(".m-add")) sg.style.display = "none"; });
+});
+</script>
+</body>
+</html>
