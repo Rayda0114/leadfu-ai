@@ -131,6 +131,22 @@
       ]
     },
     {
+      "id": "official",
+      "name": "官方機構",
+      "accounts": [
+        {
+          "handle": "federalreserve",
+          "name": "美國聯準會 Fed",
+          "blurb": "最權威貨幣政策官方來源（發文少但極具份量）"
+        },
+        {
+          "handle": "NYFed",
+          "name": "紐約聯準銀行",
+          "blurb": "Fed 體系，發較多研究與市場相關內容"
+        }
+      ]
+    },
+    {
       "id": "newswire",
       "name": "快訊頭條",
       "accounts": [
