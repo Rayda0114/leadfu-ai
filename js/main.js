@@ -1749,7 +1749,7 @@ function setupSupportWidget() {
   let minimized = false;
   try { minimized = localStorage.getItem("cs_min") === "1"; } catch (e) {}
 
-  function base() { launcher.hidden = minimized; tab.hidden = !minimized; }
+  function base() { launcher.hidden = false; tab.hidden = true; }   // 2026-06-12 直立標籤退役：一律顯示膠囊（用戶要求移除側邊客服標籤）
   function openPanel() {
     launcher.hidden = true; tab.hidden = true;
     panel.hidden = false; scrim.hidden = false;
@@ -3541,7 +3541,7 @@ function startStockLive(code, stock) {
    解法：① Cache API + 15 分 TTL：同 session 換頁直接用快取（資料每日盤後才更新，
         15 分內快取對正確性無實質影響）② 同頁去重：同檔只抓一次（搭配 loadLiveData
         的並行預熱，串行 await 全部變秒回）。快取名綁版本，改版自動失效。 */
-const DATA_CACHE_NAME = "leadfu-data-v3253";
+const DATA_CACHE_NAME = "leadfu-data-v3254";
 const DATA_CACHE_TTL = 15 * 60 * 1000;
 try { caches.keys().then(ks => ks.forEach(k => { if (k.indexOf("leadfu-data-") === 0 && k !== DATA_CACHE_NAME) caches.delete(k); })); } catch (e) {}
 
