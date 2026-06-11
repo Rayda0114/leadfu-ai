@@ -347,7 +347,6 @@ function _ensureAuth() {
   if (!_hasSupabaseSession()) return Promise.resolve(null);   // 匿名：不載
   if (_authLoadPromise) return _authLoadPromise;
   _authLoadPromise = new Promise((resolve) => {
-    const base = location.pathname.includes("/pages/") ? "../" : "";
     const inject = (src, onload) => {
       const s = document.createElement("script");
       s.src = src; s.onload = onload; s.onerror = () => resolve(null);
@@ -355,7 +354,7 @@ function _ensureAuth() {
     };
     // 先載 Supabase CDN（auth.js 依賴 window.supabase），再載 auth.js
     inject("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2", () => {
-      inject(base + "js/auth.js", () => resolve(window.LeadFuAuth || null));
+      inject("/js/auth.js", () => resolve(window.LeadFuAuth || null));
     });
   });
   return _authLoadPromise;
@@ -3091,8 +3090,8 @@ document.addEventListener("click", (e) => {
  *   stocks_live.json / news_live.json / announcements_live.json / klines.json
  * ============================================================ */
 function dataUrl(file) {
-  const inPages = location.pathname.includes("/pages/");
-  return (inPages ? "../" : "") + "data/" + file;
+  // 絕對路徑：/pages/、/stock/{code} 等任何深度的頁面都正確（相對路徑在 /stock/ 下會抓到 HTML）
+  return "/data/" + file;
 }
 
 /* ============================================================
@@ -3529,7 +3528,7 @@ function startStockLive(code, stock) {
    解法：① Cache API + 15 分 TTL：同 session 換頁直接用快取（資料每日盤後才更新，
         15 分內快取對正確性無實質影響）② 同頁去重：同檔只抓一次（搭配 loadLiveData
         的並行預熱，串行 await 全部變秒回）。快取名綁版本，改版自動失效。 */
-const DATA_CACHE_NAME = "leadfu-data-v3251";
+const DATA_CACHE_NAME = "leadfu-data-v3252";
 const DATA_CACHE_TTL = 15 * 60 * 1000;
 try { caches.keys().then(ks => ks.forEach(k => { if (k.indexOf("leadfu-data-") === 0 && k !== DATA_CACHE_NAME) caches.delete(k); })); } catch (e) {}
 

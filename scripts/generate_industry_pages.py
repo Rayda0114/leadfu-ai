@@ -20,8 +20,8 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 OUT = ROOT / "pages" / "industries"
 BASE = "https://leadfuai.com"
-CSS_V = "3.23.8"
-JS_V = "3.25.1"
+CSS_V = "3.23.9"
+JS_V = "3.25.2"
 TODAY = datetime.now().strftime("%Y-%m-%d")
 
 # 產業（category）→（英文 slug, 一句產業概況）。未列入者（其他/其他電子/存託憑證等模糊分類）不產生獨立頁。

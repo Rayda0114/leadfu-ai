@@ -21,7 +21,7 @@
 <meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
-<link rel="stylesheet" href="../css/style.css?v=3.23.8">
+<link rel="stylesheet" href="../css/style.css?v=3.23.9">
 </head>
 <body>
 
@@ -94,7 +94,7 @@
   </div>
 </main>
 
-<script src="../js/main.js?v=3.25.1"></script>
+<script src="../js/main.js?v=3.25.2"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -115,6 +115,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) history = JSON.parse(raw) || [];
   } catch {}
+
+  // 預編譯個股代號 → 名稱對照（給 formatText 加連結用）
+  // ⚠ 必須宣告在 showWelcome()/renderBubble() 執行之前（const TDZ），否則開場渲染整個炸掉
+  const _stockByCode = {};
+  (L.data.stocks || []).forEach(s => { _stockByCode[s.code] = s; });
 
   // URL 帶 ?q=... 從首頁過來 → 先清空舊歷史開新對話
   const initialQ = new URLSearchParams(location.search).get("q");
@@ -200,10 +205,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const t = document.getElementById("chat-typing");
     if (t) t.remove();
   }
-
-  // 預編譯個股代號 → 名稱對照（給 formatText 加連結用）
-  const _stockByCode = {};
-  (L.data.stocks || []).forEach(s => { _stockByCode[s.code] = s; });
 
   function formatText(text) {
     if (!text) return "";

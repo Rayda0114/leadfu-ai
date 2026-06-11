@@ -9200,3 +9200,11 @@ body { background: #f4f2ec; color: #0d1d17; }
 .site-footer a { color: rgba(248,245,236,.72); }
 .site-footer a:hover { color: #ecd9ab; }
 .site-footer .copyright { background: rgba(0,0,0,.25); color: rgba(248,245,236,.4); }
+
+/* 修桌機 bug（2026-06-11）：
+   1) main.js 注入的手機漢堡列只在 ≤768px 有樣式，桌機裸露成「≡ 功能選單」殘影 → 桌機隱藏
+   2) 12 項主導覽在筆電寬度折行（VIP 孤兒）→ 縮 padding/字級讓一行收完 */
+@media (min-width: 769px) {
+  .main-nav-bar { display: none; }
+  .main-nav li a { padding: 12px 13px; font-size: 14.5px; }
+}
