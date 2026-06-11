@@ -1,493 +1,559 @@
 {
-  "feature": "X 快訊雷達",
-  "updated": "2026-06-10",
-  "note": "VIP 可勾選訂閱的帳號菜單；watcher 掃描所有分類的聯集。僅收『資訊型 / 領袖 / 宏觀 / 快訊 / 媒體』，不收喊單型 KOL（合規：市場資訊整理、非投資建議）。",
-  "categories": [
+ "feature": "X 快訊雷達",
+ "updated": "2026-06-11",
+ "note": "VIP 可勾選訂閱的帳號菜單；watcher 掃描所有分類的聯集。僅收『資訊型 / 領袖 / 宏觀 / 快訊 / 媒體』，不收喊單型 KOL（合規：市場資訊整理、非投資建議）。",
+ "categories": [
+  {
+   "id": "leaders",
+   "name": "領袖大佬",
+   "accounts": [
     {
-      "id": "leaders",
-      "name": "領袖大佬",
-      "accounts": [
-        {
-          "handle": "elonmusk",
-          "name": "Elon Musk",
-          "blurb": "Tesla / SpaceX / xAI，全球最具市場影響力",
-          "tier": 1
-        },
-        {
-          "handle": "realDonaldTrump",
-          "name": "Donald Trump",
-          "blurb": "關稅、政策、地緣 —— 對市場衝擊極大",
-          "tier": 1
-        },
-        {
-          "handle": "saylor",
-          "name": "Michael Saylor",
-          "blurb": "BTC / MicroStrategy(MSTR)",
-          "tier": 1
-        },
-        {
-          "handle": "BillAckman",
-          "name": "Bill Ackman",
-          "blurb": "Pershing Square，激進投資人",
-          "tier": 1
-        },
-        {
-          "handle": "CathieDWood",
-          "name": "Cathie Wood",
-          "blurb": "ARK Invest，成長型科技股",
-          "tier": 1
-        },
-        {
-          "handle": "Carl_C_Icahn",
-          "name": "Carl Icahn",
-          "blurb": "傳奇激進投資人 / 企業狙擊",
-          "tier": 1
-        },
-        {
-          "handle": "michaeljburry",
-          "name": "Michael Burry",
-          "blurb": "《大空頭》原型，危機警告",
-          "tier": 1
-        },
-        {
-          "handle": "chamath",
-          "name": "Chamath Palihapitiya",
-          "blurb": "Social Capital / All-In Podcast",
-          "tier": 2
-        },
-        {
-          "handle": "RayDalio",
-          "name": "Ray Dalio",
-          "blurb": "Bridgewater，宏觀與債務週期",
-          "tier": 2
-        },
-        {
-          "handle": "mcuban",
-          "name": "Mark Cuban",
-          "blurb": "知名投資人 / 企業家",
-          "tier": 2
-        },
-        {
-          "handle": "pmarca",
-          "name": "Marc Andreessen",
-          "blurb": "a16z，頂級創投",
-          "tier": 2
-        },
-        {
-          "handle": "DavidSacks",
-          "name": "David Sacks",
-          "blurb": "科技 / 政策（白宮 AI・加密）",
-          "tier": 2
-        },
-        {
-          "handle": "sama",
-          "name": "Sam Altman",
-          "blurb": "OpenAI 執行長，AI 領域最活躍之一",
-          "tier": 1
-        },
-        {
-          "handle": "jensenhuang",
-          "name": "Jensen Huang 黃仁勳",
-          "blurb": "NVIDIA 執行長（個人少發，一發必受關注）",
-          "tier": 1
-        },
-        {
-          "handle": "sundarpichai",
-          "name": "Sundar Pichai",
-          "blurb": "Google / Alphabet 執行長（個人少發）",
-          "tier": 2
-        }
-      ]
+     "handle": "elonmusk",
+     "name": "馬斯克 Elon Musk",
+     "blurb": "Tesla / SpaceX / xAI，全球最具市場影響力",
+     "tier": 1
     },
     {
-      "id": "tech_leaders",
-      "name": "科技領袖",
-      "accounts": [
-        {
-          "handle": "LisaSu",
-          "name": "Lisa Su 蘇姿丰",
-          "blurb": "AMD 執行長，AI 晶片 / 半導體",
-          "tier": 2
-        },
-        {
-          "handle": "bchesky",
-          "name": "Brian Chesky",
-          "blurb": "Airbnb 共同創辦人，產品 / 創業思考",
-          "tier": 2
-        },
-        {
-          "handle": "dkhos",
-          "name": "Dara Khosrowshahi",
-          "blurb": "Uber 執行長，出行產業 / 轉型",
-          "tier": 2
-        },
-        {
-          "handle": "Benioff",
-          "name": "Marc Benioff",
-          "blurb": "Salesforce 創辦人，企業軟體 / CRM",
-          "tier": 2
-        },
-        {
-          "handle": "ArvindKrishna",
-          "name": "Arvind Krishna",
-          "blurb": "IBM 執行長，雲端 / 企業 AI",
-          "tier": 2
-        },
-        {
-          "handle": "ajassy",
-          "name": "Andy Jassy",
-          "blurb": "Amazon 執行長（少發，可搭 @amazon）",
-          "tier": 2
-        },
-        {
-          "handle": "ShantanuN",
-          "name": "Shantanu Narayen",
-          "blurb": "Adobe 執行長，創意軟體 / AI",
-          "tier": 2
-        },
-        {
-          "handle": "Gwynne_Shotwell",
-          "name": "Gwynne Shotwell",
-          "blurb": "SpaceX 總裁，太空產業",
-          "tier": 2
-        },
-        {
-          "handle": "masason",
-          "name": "孫正義 Masayoshi Son",
-          "blurb": "軟銀 SoftBank，科技投資",
-          "tier": 2
-        }
-      ]
+     "handle": "realDonaldTrump",
+     "name": "川普 Donald Trump",
+     "blurb": "關稅、政策、地緣 —— 對市場衝擊極大",
+     "tier": 1
     },
     {
-      "id": "vc_thinkers",
-      "name": "創投・思想家",
-      "accounts": [
-        {
-          "handle": "patrickc",
-          "name": "Patrick Collison",
-          "blurb": "Stripe 共同創辦人，科技 / 生產力",
-          "tier": 2
-        },
-        {
-          "handle": "naval",
-          "name": "Naval Ravikant",
-          "blurb": "AngelList，創業哲學 / 財富思維",
-          "tier": 2
-        },
-        {
-          "handle": "garrytan",
-          "name": "Garry Tan",
-          "blurb": "Y Combinator 總裁，新創生態",
-          "tier": 2
-        },
-        {
-          "handle": "reidhoffman",
-          "name": "Reid Hoffman",
-          "blurb": "LinkedIn 創辦人，創業 / AI",
-          "tier": 2
-        },
-        {
-          "handle": "demishassabis",
-          "name": "Demis Hassabis",
-          "blurb": "DeepMind 創辦人，頂尖 AI 科學家",
-          "tier": 2
-        },
-        {
-          "handle": "PalmerLuckey",
-          "name": "Palmer Luckey",
-          "blurb": "Anduril，國防科技 / 地緣政治",
-          "tier": 2
-        },
-        {
-          "handle": "BillGates",
-          "name": "Bill Gates",
-          "blurb": "科技 / 健康 / 氣候，視野廣",
-          "tier": 2
-        }
-      ]
+     "handle": "saylor",
+     "name": "塞勒 Michael Saylor",
+     "blurb": "BTC / MicroStrategy(MSTR)",
+     "tier": 1
     },
     {
-      "id": "macro",
-      "name": "宏觀總經",
-      "accounts": [
-        {
-          "handle": "elerianm",
-          "name": "Mohamed El-Erian",
-          "blurb": "前 PIMCO，宏觀經濟權威",
-          "tier": 2
-        },
-        {
-          "handle": "Nouriel",
-          "name": "Nouriel Roubini",
-          "blurb": "Dr. Doom，危機預測",
-          "tier": 2
-        },
-        {
-          "handle": "TruthGundlach",
-          "name": "Jeffrey Gundlach",
-          "blurb": "DoubleLine，債券天王",
-          "tier": 2
-        },
-        {
-          "handle": "LizAnnSonders",
-          "name": "Liz Ann Sonders",
-          "blurb": "Schwab 首席投資策略師",
-          "tier": 2
-        },
-        {
-          "handle": "biancoresearch",
-          "name": "Jim Bianco",
-          "blurb": "債市 / 總經研究",
-          "tier": 2
-        },
-        {
-          "handle": "NorthmanTrader",
-          "name": "Sven Henrich",
-          "blurb": "市場結構 / 風險",
-          "tier": 2
-        },
-        {
-          "handle": "profplum99",
-          "name": "Michael Green",
-          "blurb": "流動性 / 被動投資結構",
-          "tier": 2
-        },
-        {
-          "handle": "AswathDamodaran",
-          "name": "Aswath Damodaran",
-          "blurb": "NYU 估值大師",
-          "tier": 2
-        },
-        {
-          "handle": "HowardMarksBook",
-          "name": "Howard Marks",
-          "blurb": "Oaktree，投資哲學 / 風險（信件極高品質）",
-          "tier": 2
-        },
-        {
-          "handle": "ptj_official",
-          "name": "Paul Tudor Jones",
-          "blurb": "傳奇宏觀交易員（handle 待確認）",
-          "tier": 2
-        }
-      ]
+     "handle": "BillAckman",
+     "name": "阿克曼 Bill Ackman",
+     "blurb": "Pershing Square，激進投資人",
+     "tier": 1
     },
     {
-      "id": "official",
-      "name": "官方機構",
-      "accounts": [
-        {
-          "handle": "federalreserve",
-          "name": "美國聯準會 Fed",
-          "blurb": "最權威貨幣政策官方來源（發文少但極具份量）",
-          "tier": 1
-        },
-        {
-          "handle": "NewYorkFed",
-          "name": "紐約聯準銀行",
-          "blurb": "Fed 體系，發較多研究與市場相關內容",
-          "tier": 2
-        }
-      ]
+     "handle": "CathieDWood",
+     "name": "木頭姐 Cathie Wood",
+     "blurb": "ARK Invest，成長型科技股",
+     "tier": 1
     },
     {
-      "id": "company",
-      "name": "公司官方",
-      "accounts": [
-        {
-          "handle": "nvidia",
-          "name": "NVIDIA",
-          "blurb": "AI 晶片龍頭官方（產品/財報/PR，量多）",
-          "tier": 2
-        },
-        {
-          "handle": "Google",
-          "name": "Google",
-          "blurb": "Alphabet 官方（產品/AI/PR）",
-          "tier": 2
-        },
-        {
-          "handle": "Apple",
-          "name": "Apple",
-          "blurb": "蘋果官方（產品發表/財報，全球關注）",
-          "tier": 2
-        },
-        {
-          "handle": "Oracle",
-          "name": "Oracle",
-          "blurb": "甲骨文官方（Ellison 無活躍個人帳號）",
-          "tier": 2
-        },
-        {
-          "handle": "amazon",
-          "name": "Amazon",
-          "blurb": "亞馬遜官方（搭 @ajassy）",
-          "tier": 2
-        }
-      ]
+     "handle": "Carl_C_Icahn",
+     "name": "伊坎 Carl Icahn",
+     "blurb": "傳奇激進投資人 / 企業狙擊",
+     "tier": 1
     },
     {
-      "id": "newswire",
-      "name": "快訊頭條",
-      "accounts": [
-        {
-          "handle": "DeItaone",
-          "name": "Walter Bloomberg",
-          "blurb": "快訊型頭條（Fed/財報/總經）",
-          "tier": 1
-        },
-        {
-          "handle": "KobeissiLetter",
-          "name": "The Kobeissi Letter",
-          "blurb": "總經 / 市場結構",
-          "tier": 1
-        },
-        {
-          "handle": "FirstSquawk",
-          "name": "First Squawk",
-          "blurb": "即時市場頭條",
-          "tier": 1
-        },
-        {
-          "handle": "LiveSquawk",
-          "name": "Live Squawk",
-          "blurb": "即時市場頭條",
-          "tier": 1
-        },
-        {
-          "handle": "financialjuice",
-          "name": "Financial Juice",
-          "blurb": "即時財經快訊",
-          "tier": 1
-        },
-        {
-          "handle": "StockMKTNewz",
-          "name": "Evan (StockMKTNewz)",
-          "blurb": "個股 / 市場新聞",
-          "tier": 2
-        },
-        {
-          "handle": "thestalwart",
-          "name": "Joe Weisenthal",
-          "blurb": "Bloomberg，宏觀即時評論",
-          "tier": 2
-        },
-        {
-          "handle": "unusual_whales",
-          "name": "unusual_whales",
-          "blurb": "選擇權異常 / 個股流向",
-          "tier": 1
-        },
-        {
-          "handle": "zerohedge",
-          "name": "ZeroHedge",
-          "blurb": "市場情緒（觀點尖銳）",
-          "tier": 1
-        }
-      ]
+     "handle": "michaeljburry",
+     "name": "大賣空貝瑞 Michael Burry",
+     "blurb": "《大空頭》原型，危機警告",
+     "tier": 1
     },
     {
-      "id": "media",
-      "name": "財經媒體",
-      "accounts": [
-        {
-          "handle": "markets",
-          "name": "Bloomberg Markets",
-          "blurb": "彭博市場",
-          "tier": 2
-        },
-        {
-          "handle": "business",
-          "name": "Bloomberg",
-          "blurb": "彭博",
-          "tier": 2
-        },
-        {
-          "handle": "Reuters",
-          "name": "Reuters",
-          "blurb": "路透",
-          "tier": 2
-        },
-        {
-          "handle": "CNBC",
-          "name": "CNBC",
-          "blurb": "CNBC",
-          "tier": 2
-        },
-        {
-          "handle": "Stocktwits",
-          "name": "Stocktwits",
-          "blurb": "散戶情緒 / 個股討論",
-          "tier": 2
-        }
-      ]
+     "handle": "chamath",
+     "name": "查馬斯 Chamath",
+     "blurb": "Social Capital / All-In Podcast",
+     "tier": 2
     },
     {
-      "id": "crypto",
-      "name": "加密大佬",
-      "accounts": [
-        {
-          "handle": "WatcherGuru",
-          "name": "Watcher.Guru",
-          "blurb": "加密 / 突發財經",
-          "tier": 1
-        },
-        {
-          "handle": "cz_binance",
-          "name": "CZ (Binance)",
-          "blurb": "幣安創辦人",
-          "tier": 2
-        },
-        {
-          "handle": "VitalikButerin",
-          "name": "Vitalik Buterin",
-          "blurb": "以太坊創辦人",
-          "tier": 2
-        },
-        {
-          "handle": "APompliano",
-          "name": "Anthony Pompliano",
-          "blurb": "加密投資人",
-          "tier": 2
-        },
-        {
-          "handle": "CoinDesk",
-          "name": "CoinDesk",
-          "blurb": "加密媒體",
-          "tier": 2
-        },
-        {
-          "handle": "jack",
-          "name": "Jack Dorsey",
-          "blurb": "Block 創辦人，去中心化 / 比特幣",
-          "tier": 2
-        }
-      ]
+     "handle": "RayDalio",
+     "name": "達利歐 Ray Dalio",
+     "blurb": "Bridgewater，宏觀與債務週期",
+     "tier": 2
     },
     {
-      "id": "aggregator",
-      "name": "綜合聚合",
-      "accounts": [
-        {
-          "handle": "MarioNawfal",
-          "name": "Mario Nawfal",
-          "blurb": "綜合財經 / 科技 / 加密",
-          "tier": 2
-        },
-        {
-          "handle": "GRDecter",
-          "name": "Genevieve Roch-Decter",
-          "blurb": "市場 / 個股",
-          "tier": 2
-        },
-        {
-          "handle": "RampCapitalLLC",
-          "name": "Ramp Capital",
-          "blurb": "市場 meme + 洞見（諷刺風格，需自行判斷）",
-          "tier": 2
-        }
-      ]
+     "handle": "mcuban",
+     "name": "庫班 Mark Cuban",
+     "blurb": "知名投資人 / 企業家",
+     "tier": 2
+    },
+    {
+     "handle": "pmarca",
+     "name": "安德森 Marc Andreessen",
+     "blurb": "a16z，頂級創投",
+     "tier": 2
+    },
+    {
+     "handle": "DavidSacks",
+     "name": "薩克斯 David Sacks",
+     "blurb": "科技 / 政策（白宮 AI・加密）",
+     "tier": 2
+    },
+    {
+     "handle": "sama",
+     "name": "奧特曼 Sam Altman",
+     "blurb": "OpenAI 執行長，AI 領域最活躍之一",
+     "tier": 1
+    },
+    {
+     "handle": "jensenhuang",
+     "name": "黃仁勳 Jensen Huang",
+     "blurb": "NVIDIA 執行長（個人少發，一發必受關注）",
+     "tier": 1
+    },
+    {
+     "handle": "sundarpichai",
+     "name": "皮查伊 Sundar Pichai",
+     "blurb": "Google / Alphabet 執行長（個人少發）",
+     "tier": 2
+    },
+    {
+     "handle": "ThirdPointDan",
+     "name": "丹·勒布 Dan Loeb",
+     "blurb": "Third Point 創辦人，激進投資人，公開持倉常引發關注",
+     "tier": 2
     }
-  ]
+   ]
+  },
+  {
+   "id": "tech_leaders",
+   "name": "科技領袖",
+   "accounts": [
+    {
+     "handle": "LisaSu",
+     "name": "蘇姿丰 Lisa Su",
+     "blurb": "AMD 執行長，AI 晶片 / 半導體",
+     "tier": 2
+    },
+    {
+     "handle": "bchesky",
+     "name": "切斯基 Brian Chesky",
+     "blurb": "Airbnb 共同創辦人，產品 / 創業思考",
+     "tier": 2
+    },
+    {
+     "handle": "dkhos",
+     "name": "科斯羅薩希（Uber）Dara K.",
+     "blurb": "Uber 執行長，出行產業 / 轉型",
+     "tier": 2
+    },
+    {
+     "handle": "Benioff",
+     "name": "貝尼奧夫 Marc Benioff",
+     "blurb": "Salesforce 創辦人，企業軟體 / CRM",
+     "tier": 2
+    },
+    {
+     "handle": "ArvindKrishna",
+     "name": "克里希納（IBM）Arvind Krishna",
+     "blurb": "IBM 執行長，雲端 / 企業 AI",
+     "tier": 2
+    },
+    {
+     "handle": "ajassy",
+     "name": "賈西（Amazon）Andy Jassy",
+     "blurb": "Amazon 執行長（少發，可搭 @amazon）",
+     "tier": 2
+    },
+    {
+     "handle": "ShantanuN",
+     "name": "納拉延（Adobe）Shantanu N.",
+     "blurb": "Adobe 執行長，創意軟體 / AI",
+     "tier": 2
+    },
+    {
+     "handle": "Gwynne_Shotwell",
+     "name": "蕭特威爾（SpaceX）Gwynne S.",
+     "blurb": "SpaceX 總裁，太空產業",
+     "tier": 2
+    },
+    {
+     "handle": "masason",
+     "name": "孫正義 Masayoshi Son",
+     "blurb": "軟銀 SoftBank，科技投資",
+     "tier": 2
+    },
+    {
+     "handle": "darioamodei",
+     "name": "阿莫迪 Dario Amodei",
+     "blurb": "Anthropic（Claude）執行長 — AI 安全與前沿模型，與 Altman 互補視角",
+     "tier": 2
+    },
+    {
+     "handle": "satyanadella",
+     "name": "納德拉 Satya Nadella",
+     "blurb": "微軟執行長 — 發文不多但份量重",
+     "tier": 2
+    },
+    {
+     "handle": "tim_cook",
+     "name": "庫克 Tim Cook",
+     "blurb": "蘋果執行長 — 低調風格，重大時刻發聲",
+     "tier": 2
+    },
+    {
+     "handle": "finkd",
+     "name": "祖克柏 Mark Zuckerberg",
+     "blurb": "Meta 創辦人（主力在 Threads，X 偶發）",
+     "tier": 2
+    }
+   ]
+  },
+  {
+   "id": "vc_thinkers",
+   "name": "創投・思想家",
+   "accounts": [
+    {
+     "handle": "patrickc",
+     "name": "柯里森（Stripe）Patrick Collison",
+     "blurb": "Stripe 共同創辦人，科技 / 生產力",
+     "tier": 2
+    },
+    {
+     "handle": "naval",
+     "name": "納瓦爾 Naval",
+     "blurb": "AngelList，創業哲學 / 財富思維",
+     "tier": 2
+    },
+    {
+     "handle": "garrytan",
+     "name": "陳嘉瑞（YC）Garry Tan",
+     "blurb": "Y Combinator 總裁，新創生態",
+     "tier": 2
+    },
+    {
+     "handle": "reidhoffman",
+     "name": "霍夫曼 Reid Hoffman",
+     "blurb": "LinkedIn 創辦人，創業 / AI",
+     "tier": 2
+    },
+    {
+     "handle": "demishassabis",
+     "name": "哈薩比斯 Demis Hassabis",
+     "blurb": "DeepMind 創辦人，頂尖 AI 科學家",
+     "tier": 2
+    },
+    {
+     "handle": "PalmerLuckey",
+     "name": "拉奇（Anduril）Palmer Luckey",
+     "blurb": "Anduril，國防科技 / 地緣政治",
+     "tier": 2
+    },
+    {
+     "handle": "BillGates",
+     "name": "比爾·蓋茲 Bill Gates",
+     "blurb": "科技 / 健康 / 氣候，視野廣",
+     "tier": 2
+    }
+   ]
+  },
+  {
+   "id": "macro",
+   "name": "宏觀總經",
+   "accounts": [
+    {
+     "handle": "elerianm",
+     "name": "埃爾-埃利安 Mohamed El-Erian",
+     "blurb": "前 PIMCO，宏觀經濟權威",
+     "tier": 2
+    },
+    {
+     "handle": "Nouriel",
+     "name": "末日博士魯比尼 Nouriel Roubini",
+     "blurb": "Dr. Doom，危機預測",
+     "tier": 2
+    },
+    {
+     "handle": "TruthGundlach",
+     "name": "岡拉克 Jeffrey Gundlach",
+     "blurb": "DoubleLine，債券天王",
+     "tier": 2
+    },
+    {
+     "handle": "LizAnnSonders",
+     "name": "桑德斯（嘉信）Liz Ann Sonders",
+     "blurb": "Schwab 首席投資策略師",
+     "tier": 2
+    },
+    {
+     "handle": "biancoresearch",
+     "name": "比安科 Jim Bianco",
+     "blurb": "債市 / 總經研究",
+     "tier": 2
+    },
+    {
+     "handle": "NorthmanTrader",
+     "name": "亨里希 Sven Henrich",
+     "blurb": "市場結構 / 風險",
+     "tier": 2
+    },
+    {
+     "handle": "profplum99",
+     "name": "麥可·格林 Michael Green",
+     "blurb": "流動性 / 被動投資結構",
+     "tier": 2
+    },
+    {
+     "handle": "AswathDamodaran",
+     "name": "估值教授達摩達蘭 Aswath D.",
+     "blurb": "NYU 估值大師",
+     "tier": 2
+    },
+    {
+     "handle": "HowardMarksBook",
+     "name": "霍華·馬克斯 Howard Marks",
+     "blurb": "Oaktree，投資哲學 / 風險（信件極高品質）",
+     "tier": 2
+    },
+    {
+     "handle": "ptj_official",
+     "name": "都鐸·瓊斯 Paul Tudor Jones",
+     "blurb": "傳奇宏觀交易員（handle 待確認）",
+     "tier": 2
+    }
+   ]
+  },
+  {
+   "id": "official",
+   "name": "官方機構",
+   "accounts": [
+    {
+     "handle": "federalreserve",
+     "name": "美國聯準會 Fed",
+     "blurb": "最權威貨幣政策官方來源（發文少但極具份量）",
+     "tier": 1
+    },
+    {
+     "handle": "NewYorkFed",
+     "name": "紐約聯準銀行 NY Fed",
+     "blurb": "Fed 體系，發較多研究與市場相關內容",
+     "tier": 2
+    },
+    {
+     "handle": "USTreasury",
+     "name": "美國財政部 Treasury",
+     "blurb": "國債、財政政策官方訊息",
+     "tier": 2
+    },
+    {
+     "handle": "SECgov",
+     "name": "美國證監會 SEC",
+     "blurb": "監管政策與執法行動",
+     "tier": 2
+    },
+    {
+     "handle": "FRED_Data",
+     "name": "聖路易聯儲 FRED",
+     "blurb": "經濟數據圖表（官方數據源）",
+     "tier": 2
+    }
+   ]
+  },
+  {
+   "id": "company",
+   "name": "公司官方",
+   "accounts": [
+    {
+     "handle": "nvidia",
+     "name": "輝達官方 NVIDIA",
+     "blurb": "AI 晶片龍頭官方（產品/財報/PR，量多）",
+     "tier": 2
+    },
+    {
+     "handle": "Google",
+     "name": "Google 官方",
+     "blurb": "Alphabet 官方（產品/AI/PR）",
+     "tier": 2
+    },
+    {
+     "handle": "Apple",
+     "name": "蘋果官方 Apple",
+     "blurb": "蘋果官方（產品發表/財報，全球關注）",
+     "tier": 2
+    },
+    {
+     "handle": "Oracle",
+     "name": "甲骨文官方 Oracle",
+     "blurb": "甲骨文官方（Ellison 無活躍個人帳號）",
+     "tier": 2
+    },
+    {
+     "handle": "amazon",
+     "name": "亞馬遜官方 Amazon",
+     "blurb": "亞馬遜官方（搭 @ajassy）",
+     "tier": 2
+    },
+    {
+     "handle": "Meta",
+     "name": "Meta 官方",
+     "blurb": "Meta 公司層級消息",
+     "tier": 2
+    }
+   ]
+  },
+  {
+   "id": "newswire",
+   "name": "快訊頭條",
+   "accounts": [
+    {
+     "handle": "DeItaone",
+     "name": "華爾街快訊 DeItaone",
+     "blurb": "快訊型頭條（Fed/財報/總經）",
+     "tier": 1
+    },
+    {
+     "handle": "KobeissiLetter",
+     "name": "科貝西報告 Kobeissi",
+     "blurb": "總經 / 市場結構",
+     "tier": 1
+    },
+    {
+     "handle": "FirstSquawk",
+     "name": "第一快訊 First Squawk",
+     "blurb": "即時市場頭條",
+     "tier": 1
+    },
+    {
+     "handle": "LiveSquawk",
+     "name": "LiveSquawk 快訊",
+     "blurb": "即時市場頭條",
+     "tier": 1
+    },
+    {
+     "handle": "financialjuice",
+     "name": "FinancialJuice 快訊",
+     "blurb": "即時財經快訊",
+     "tier": 1
+    },
+    {
+     "handle": "StockMKTNewz",
+     "name": "美股新聞 Evan",
+     "blurb": "個股 / 市場新聞",
+     "tier": 2
+    },
+    {
+     "handle": "thestalwart",
+     "name": "韋森塔爾（彭博）Joe W.",
+     "blurb": "Bloomberg，宏觀即時評論",
+     "tier": 2
+    },
+    {
+     "handle": "unusual_whales",
+     "name": "異常鯨 Unusual Whales",
+     "blurb": "選擇權異常 / 個股流向",
+     "tier": 1
+    },
+    {
+     "handle": "zerohedge",
+     "name": "零對沖 ZeroHedge",
+     "blurb": "市場情緒（觀點尖銳）",
+     "tier": 1
+    }
+   ]
+  },
+  {
+   "id": "media",
+   "name": "財經媒體",
+   "accounts": [
+    {
+     "handle": "markets",
+     "name": "彭博市場 Bloomberg Markets",
+     "blurb": "彭博市場",
+     "tier": 2
+    },
+    {
+     "handle": "business",
+     "name": "彭博 Bloomberg",
+     "blurb": "彭博",
+     "tier": 2
+    },
+    {
+     "handle": "Reuters",
+     "name": "路透社 Reuters",
+     "blurb": "路透",
+     "tier": 2
+    },
+    {
+     "handle": "CNBC",
+     "name": "CNBC 財經台",
+     "blurb": "CNBC",
+     "tier": 2
+    },
+    {
+     "handle": "Stocktwits",
+     "name": "Stocktwits 股民社群",
+     "blurb": "散戶情緒 / 個股討論",
+     "tier": 2
+    },
+    {
+     "handle": "WSJ",
+     "name": "華爾街日報 WSJ",
+     "blurb": "深度財經報導",
+     "tier": 2
+    }
+   ]
+  },
+  {
+   "id": "crypto",
+   "name": "加密大佬",
+   "accounts": [
+    {
+     "handle": "WatcherGuru",
+     "name": "Watcher.Guru 加密快訊",
+     "blurb": "加密 / 突發財經",
+     "tier": 1
+    },
+    {
+     "handle": "cz_binance",
+     "name": "趙長鵬 CZ（幣安）",
+     "blurb": "幣安創辦人",
+     "tier": 2
+    },
+    {
+     "handle": "VitalikButerin",
+     "name": "V 神 Vitalik（以太坊）",
+     "blurb": "以太坊創辦人",
+     "tier": 2
+    },
+    {
+     "handle": "APompliano",
+     "name": "龐普 Anthony Pompliano",
+     "blurb": "加密投資人",
+     "tier": 2
+    },
+    {
+     "handle": "CoinDesk",
+     "name": "CoinDesk 加密媒體",
+     "blurb": "加密媒體",
+     "tier": 2
+    },
+    {
+     "handle": "jack",
+     "name": "傑克·多西 Jack Dorsey",
+     "blurb": "Block 創辦人，去中心化 / 比特幣",
+     "tier": 2
+    },
+    {
+     "handle": "brian_armstrong",
+     "name": "阿姆斯壯 Brian Armstrong",
+     "blurb": "Coinbase 執行長 — 加密貨幣產業動向",
+     "tier": 2
+    }
+   ]
+  },
+  {
+   "id": "aggregator",
+   "name": "綜合聚合",
+   "accounts": [
+    {
+     "handle": "MarioNawfal",
+     "name": "馬里奧 Mario Nawfal",
+     "blurb": "綜合財經 / 科技 / 加密",
+     "tier": 2
+    },
+    {
+     "handle": "GRDecter",
+     "name": "G. Roch-Decter 財經觀點",
+     "blurb": "市場 / 個股",
+     "tier": 2
+    },
+    {
+     "handle": "RampCapitalLLC",
+     "name": "Ramp Capital 市場情緒",
+     "blurb": "市場 meme + 洞見（諷刺風格，需自行判斷）",
+     "tier": 2
+    }
+   ]
+  }
+ ]
 }
