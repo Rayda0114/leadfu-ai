@@ -593,5 +593,41 @@ ${userId ? `會員 ID：${userId.slice(0,8)}...` : ""}
   }
 });
 </script>
+
+<div class="vp2-sticky" id="vp2Sticky">
+  <div><span class="price">前 3 個月 NT$199/月</span><small>一天 6.6 元・隨時取消・30 天退費</small></div>
+  <button onclick="document.getElementById('vipPlans').scrollIntoView({behavior:'smooth'})">幫我盯持股</button>
+</div>
+<script>
+/* 📊 今日系統實績（全部真實資料） + sticky 底欄 */
+(async function () {
+  try {
+    const j = async f => { try { return await (await fetch("/data/" + f)).json(); } catch (e) { return null; } };
+    const [st, rs, sn, dv] = await Promise.all([
+      j("stocks_live.json"), j("risk_score_live.json"), j("sentiment_live.json"), j("dividend_live.json")]);
+    const num = (el, v) => { const e = document.getElementById(el); if (e && v != null) e.textContent = v.toLocaleString("en-US"); };
+    if (st) num("stN1", st.stockCount || (st.stocks || []).length);
+    if (rs && rs.data) num("stN2", Object.values(rs.data).filter(r => r.level === "高" || r.level === "警示" || r.level === "極高").length);
+    if (sn) num("stN3", sn.count);
+    if (dv && dv.data) {
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const lim = new Date(today.getTime() + 7 * 86400000);
+      num("stN4", Object.values(dv.data).filter(d => { if (!d.ex_date) return false; const e = new Date(d.ex_date + "T00:00:00"); return e >= today && e <= lim; }).length);
+    }
+    const cap = document.getElementById("stCap");
+    if (cap && st && st.updatedAt) cap.textContent = "資料更新：" + st.updatedAt + "・來源：證交所、櫃買中心、公開資訊觀測站等官方公開資料";
+    const tt = document.getElementById("vp2StatsTitle");
+    if (tt) { const h = new Date(Date.now() + 8 * 3600 * 1000).getUTCHours(); if (h < 16) tt.textContent = "昨天收盤後，系統替台灣投資人做了這些事"; }
+  } catch (e) {}
+  const bar = document.getElementById("vp2Sticky");
+  const plans = document.getElementById("vipPlans");
+  let plansVisible = false;
+  if ("IntersectionObserver" in window && plans) {
+    new IntersectionObserver(es => { plansVisible = es[0].isIntersecting; sync(); }, { rootMargin: "0px 0px -20% 0px" }).observe(plans);
+  }
+  function sync() { bar.classList.toggle("show", window.scrollY > 600 && !plansVisible); }
+  window.addEventListener("scroll", sync, { passive: true });
+})();
+</script>
 </body>
 </html>
