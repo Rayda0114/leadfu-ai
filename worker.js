@@ -604,7 +604,7 @@ async function handleAsk(request, env) {
   // → 注入「資料未到位」訊息，阻止 AI 用記憶編造價格
   // ⚠ 市場摘要 / 盤後整理（isMarketBrief）跳過此檢查 —
   //   避免「下跌 1143 家」這類數字被誤判為股票代號 1143
-  const stockIntent = /合理|貴|便宜|股價|現在|怎樣|怎麼樣|分析|該不該|位置|值不值|本益比|殖利率|市值|目標價|這檔|這支|買|賣/;
+  const stockIntent = /合理|貴|便宜|股價|現在|怎樣|怎麼樣|分析|該不該|位置|值不值|本益比|殖利率|市值|目標價|這檔|這支|買|賣|大戶|持股|股東|籌碼|配息|股利/;
   const askedStockCode = (lastUserContent || "").match(/\b(\d{4})\b/);
 
   // 🛡 防線 1（伺服器端注入，2026-06-11）：手機版/輕客戶端只送 {question} 不帶 context，
