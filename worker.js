@@ -1015,6 +1015,37 @@ const LINE_LOGIN_CHANNEL_ID = "2010279883";
 const LINE_LOGIN_REDIRECT_URI = "https://leadfuai.com/pages/line-callback.html";
 const SUPABASE_PROJECT_URL = "https://lhwxpnyzplylajxunlua.supabase.co";
 
+/* ── ⚡ X 快訊雷達 · 公開版 feed ──
+   首頁/VIP 頁的試閱牆：只給「重要度 ≥6」的最新 6 則（VIP 在會員中心看自己訂閱的全量）。
+   service key 只在 Worker 端使用；邊緣快取 5 分鐘，Supabase 不會被打爆。 */
+async function handleXAlertsFeed(request, env, ctx) {
+  const cacheKey = new Request("https://leadfuai.com/api/market/x-alerts");
+  const cache = caches.default;
+  const hit = await cache.match(cacheKey);
+  if (hit) return hit;
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) {
+    return new Response(JSON.stringify({ ok: false, error: "not configured" }), { status: 503, headers: { "Content-Type": "application/json; charset=utf-8" } });
+  }
+  const qs = "select=author,summary_zh,impact,importance,topic,symbols,published_at,created_at,url"
+    + "&importance=gte.6&order=created_at.desc&limit=6";
+  const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/x_alerts?${qs}`, {
+    headers: { "apikey": env.SUPABASE_SERVICE_ROLE_KEY, "Authorization": `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}` }
+  });
+  if (!r.ok) {
+    return new Response(JSON.stringify({ ok: false, error: "upstream " + r.status }), { status: 502, headers: { "Content-Type": "application/json; charset=utf-8" } });
+  }
+  const alerts = await r.json();
+  const resp = new Response(JSON.stringify({ ok: true, alerts }), {
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "public, max-age=300",
+      "Access-Control-Allow-Origin": "*"
+    }
+  });
+  if (ctx) ctx.waitUntil(cache.put(cacheKey, resp.clone()));
+  return resp;
+}
+
 function lineAuthError(msg, status) {
   return new Response(JSON.stringify({ error: msg }), {
     status: status || 400,
@@ -2105,7 +2136,7 @@ async function renderStockPage(url, env) {
 </main>
 
 <footer class="site-footer"><div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. · 本網站所有資訊僅供參考，不構成投資建議。</div></div></footer>
-<script src="/js/main.js?v=3.25.2"></script>
+<script src="/js/main.js?v=3.25.3"></script>
 </body>
 </html>`;
 
@@ -2144,6 +2175,7 @@ export default {
     if (url.pathname === "/api/ask")            return handleAsk(request, env);
     if (url.pathname === "/api/health")         return handleHealth(env);
     if (url.pathname === "/api/quote")          return handleQuote(request);
+    if (url.pathname === "/api/market/x-alerts") return handleXAlertsFeed(request, env, ctx);
     if (url.pathname === "/api/line-auth")      return handleLineAuth(request, env);
     if (url.pathname === "/api/line-handoff")   return handleLineHandoff(request, env);
     if (url.pathname === "/api/ecpay-create")   return handleEcpayCreate(request, env);

@@ -274,6 +274,27 @@
   .fv-low-card{background:#fffdf8 !important; border:1px solid rgba(13,29,23,.08) !important; border-radius:16px !important; box-shadow:0 8px 22px rgba(13,29,23,.05) !important;}
   .daily-brief{background:#fffdf8 !important; border:1px solid rgba(13,29,23,.08) !important; border-radius:18px !important;}
   .fv-low-h2::before, .ai-second-head h2::before, .guardian-sec h2::before{content:""; display:inline-block; width:24px; height:3px; background:#d6b36f; border-radius:2px; margin-right:10px; vertical-align:middle;}
+
+  /* ⚡ X 快訊雷達（首頁公開試閱區，2026-06-11） */
+  .xr-sec{padding:34px 0 10px;}
+  .xr-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+  .xr-head h2{margin:0;font-size:24px;font-weight:900;color:#0d1d17;letter-spacing:-.3px;}
+  .xr-head h2::before{content:"";display:inline-block;width:24px;height:3px;background:#d6b36f;border-radius:2px;margin-right:10px;vertical-align:middle;}
+  .xr-head p{margin:6px 0 0;font-size:13px;color:#68736c;}
+  .xr-cta{background:#0b3328;color:#f4ead2;font-size:13.5px;font-weight:800;padding:10px 18px;border-radius:999px;text-decoration:none;white-space:nowrap;}
+  .xr-cta:hover{background:#144735;text-decoration:none;}
+  .xr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  @media(max-width:1024px){.xr-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.xr-grid{grid-template-columns:1fr;}}
+  .xr-card{background:#fffdf8;border:1px solid rgba(13,29,23,.08);border-radius:16px;padding:13px 15px;box-shadow:0 8px 22px rgba(13,29,23,.05);display:flex;flex-direction:column;gap:8px;}
+  .xr-meta{display:flex;align-items:center;gap:7px;font-size:11.5px;color:#9a948a;flex-wrap:wrap;}
+  .xr-impact{font-weight:900;font-size:10.5px;padding:2px 8px;border-radius:9px;color:#fff;}
+  .xr-author{font-weight:800;color:#0b3328;}
+  .xr-sum{font-size:13.5px;line-height:1.65;color:#2a352f;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .xr-foot{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;}
+  .xr-imp{color:#b08a3e;font-weight:800;}
+  .xr-link{color:#0b3328;font-weight:800;text-decoration:none;}
+  .xr-note{margin-top:12px;font-size:11.5px;color:#9a948a;}
 </style>
 
 <!-- 🔍 首頁第一屏：輸入股票 → 免費買前檢查 -->
@@ -455,6 +476,51 @@
   </div>
 </a>
 
+
+
+<!-- ⚡ X 快訊雷達（公開試閱：重要度 ≥6 最新數則；VIP 在會員中心看自選訂閱全量） -->
+<section class="xr-sec" id="xRadarSec" style="display:none;">
+  <div class="container">
+    <div class="xr-head">
+      <div>
+        <h2>X 快訊雷達</h2>
+        <p>全球金融大佬、官媒與機構的 X 動向 · AI 中文整理 · 每 5 分鐘掃描 · 每則附原文連結</p>
+      </div>
+      <a class="xr-cta" href="pages/vip.html#x-radar">VIP 訂閱你的大佬清單 →</a>
+    </div>
+    <div class="xr-grid" id="xrGrid"></div>
+    <div class="xr-note">資訊整理、非投資建議；「偏多／偏空」僅代表市場輿情方向，不是買賣訊號。VIP 可自選 70+ 位帳號、只看你關注的人。</div>
+  </div>
+</section>
+<script>
+(function () {
+  fetch("/api/market/x-alerts").then(r => r.json()).then(d => {
+    var rows = (d && d.alerts) || [];
+    if (!rows.length) return;
+    var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var rel = function (iso) {
+      try {
+        var m = Math.max(1, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+        if (m < 60) return m + " 分鐘前";
+        if (m < 1440) return Math.round(m / 60) + " 小時前";
+        return Math.round(m / 1440) + " 天前";
+      } catch (e) { return ""; }
+    };
+    var C = { bullish: "#be4a3e", bearish: "#148a55", neutral: "#8a948e" };   /* 台股慣例：偏多紅、偏空綠 */
+    var L = { bullish: "偏多", bearish: "偏空", neutral: "中性" };
+    document.getElementById("xrGrid").innerHTML = rows.slice(0, 4).map(function (a) {
+      return '<div class="xr-card">'
+        + '<div class="xr-meta"><span class="xr-impact" style="background:' + (C[a.impact] || C.neutral) + ';">' + (L[a.impact] || "中性") + '</span>'
+        + '<span class="xr-author">@' + esc(a.author) + '</span><span style="margin-left:auto;">' + rel(a.created_at) + '</span></div>'
+        + '<div class="xr-sum">' + esc(a.summary_zh) + '</div>'
+        + '<div class="xr-foot"><span class="xr-imp">重要度 ' + (a.importance != null ? a.importance : "-") + '/10</span>'
+        + '<a class="xr-link" href="' + esc(a.url) + '" target="_blank" rel="noopener nofollow">原文 ↗</a></div>'
+        + '</div>';
+    }).join("");
+    document.getElementById("xRadarSec").style.display = "";
+  }).catch(function (e) {});
+})();
+</script>
 
 <main class="container main-grid">
 
@@ -942,7 +1008,7 @@
 }
 </script>
 
-<script src="js/main.js?v=3.25.2"></script>
+<script src="js/main.js?v=3.25.3"></script>
 <script>
 // <svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M208,40V208H152V40Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg>今日 AI 盤後摘要（每日生成，6 小時內快取）
 document.addEventListener("DOMContentLoaded", async () => {
