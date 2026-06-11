@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>輿情雷達 DEMO（內部預覽）- 領富 AI</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<style>
+  :root{--bg:#f4f2ec;--ink:#0d1d17;--muted:#68736c;--hairline:rgba(13,29,23,.12);--hair2:rgba(13,29,23,.08);
+    --forest:#0b3328;--paper:#fffdf8;--gold:#b9914f;--gold2:#d6b36f;--up:#be4a3e;--down:#148a55;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:60px;}
+  .hero{color:#f8f5ec;padding:calc(22px + env(safe-area-inset-top)) 22px 30px;
+    background:linear-gradient(160deg,rgba(255,255,255,.05) 0 1px,transparent 1px 100%),
+    radial-gradient(circle at 86% 0%,rgba(185,145,79,.28),transparent 36%),
+    linear-gradient(180deg,#08271f 0%,#0d3328 100%);background-size:19px 19px,auto,auto;}
+  .sig{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .sig::before{content:"";width:26px;height:1px;background:currentColor;}
+  .hero h1{margin:12px 0 0;font-size:26px;font-weight:900;letter-spacing:-.4px;}
+  .hero h1 .beta{font-size:11px;background:#d6b36f;color:#0b3328;border-radius:8px;padding:2px 8px;vertical-align:middle;margin-left:8px;}
+  .hero p{margin:9px 0 0;font-size:13px;color:rgba(248,245,236,.68);line-height:1.75;max-width:560px;}
+  .wrap{max-width:760px;margin:0 auto;}
+  .sec{padding:26px 18px 0;}
+  .sec h2{margin:0 0 4px;font-size:19px;font-weight:900;}
+  .sec h2::before{content:"";display:inline-block;width:22px;height:3px;background:var(--gold2);border-radius:2px;margin-right:10px;vertical-align:middle;}
+  .sec .sub{margin:0 0 14px;font-size:12.5px;color:#8a8d85;line-height:1.7;}
+  .ok-card{background:#eef5ef;border:1px solid #d4e4d6;border-radius:16px;padding:15px 17px;font-size:14px;color:#1c5c38;font-weight:700;line-height:1.7;}
+  .ok-card small{display:block;font-weight:600;color:#5b7a64;margin-top:5px;font-size:12px;}
+  .warn-card{background:#fdf4f0;border:1.5px solid #ecc8bb;border-radius:18px;padding:16px 18px;margin-top:12px;position:relative;}
+  .warn-card .demo-tag{position:absolute;top:-9px;right:14px;background:#8a8d85;color:#fff;font-size:10.5px;font-weight:900;padding:2px 9px;border-radius:8px;letter-spacing:.06em;}
+  .warn-card b.h{display:flex;align-items:center;gap:8px;font-size:15.5px;color:#a13a2f;}
+  .warn-card p{margin:8px 0 0;font-size:13px;color:#7a4a3e;line-height:1.8;}
+  .card{background:var(--paper);border:1px solid var(--hair2);border-radius:18px;padding:15px 17px;margin-bottom:12px;box-shadow:0 8px 22px rgba(13,29,23,.05);}
+  .c-top{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;}
+  .c-top b{font-size:16.5px;font-weight:900;}
+  .c-top .code{font-size:12px;color:#9a948a;font-weight:800;}
+  .chip{font-size:11px;font-weight:900;padding:2px 9px;border-radius:9px;margin-left:auto;}
+  .chip.hot{background:#fbeae8;color:#a13a2f;border:1px solid #eccfc9;}
+  .chip.warm{background:#fdf2dd;color:#a8731c;border:1px solid #ecd9b0;}
+  .chip.cool{background:#eef3ee;color:#1a7a45;border:1px solid #d7e5d9;}
+  .stats{display:flex;gap:16px;margin-top:10px;font-size:12px;color:#8a8d85;font-weight:700;flex-wrap:wrap;align-items:flex-end;}
+  .stats b{display:block;font-size:17px;color:var(--forest);font-weight:900;font-variant-numeric:tabular-nums;}
+  .bars{display:flex;align-items:flex-end;gap:5px;height:38px;margin-left:auto;}
+  .bars i{width:17px;border-radius:4px 4px 0 0;background:#dcd6c6;}
+  .bars i.now{background:var(--gold);}
+  .bars-cap{font-size:10px;color:#a9a392;text-align:right;margin-top:3px;}
+  .titles{margin-top:11px;border-top:1px solid var(--hair2);padding-top:9px;display:flex;flex-direction:column;gap:7px;}
+  .titles a{display:flex;gap:8px;font-size:12.5px;color:#3a453e;text-decoration:none;line-height:1.55;}
+  .titles .push{flex:none;min-width:30px;text-align:center;font-size:10.5px;font-weight:900;color:#a8731c;background:#fdf2dd;border-radius:7px;padding:2px 4px;height:fit-content;}
+  .src{padding:22px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.8;}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <span class="sig">Sentiment Radar · Internal Demo</span>
+  <h1>個股輿情雷達<span class="beta">DEMO</span></h1>
+  <p>近 30 天，市場在熱什麼 —— PTT 股板討論熱度 + 大佬 X 動向 + 新聞，整理成一張看得懂的輿情卡。只做熱度統計與標題樣本，不轉述喊單、非投資建議。</p>
+</div></header>
+
+<div class="wrap">
+<section class="sec">
+  <h2>炒作熱度警示</h2>
+  <p class="sub">規則：本週 PTT 討論 ≥8 篇、且為前三週平均的 3 倍以上 → 警示「常見於炒作前期」。將來可掛進買前檢查與防錯雷達。</p>
+  <div id="warnZone"></div>
+  <div class="warn-card"><span class="demo-tag">設計示意・非真實資料</span>
+    <b class="h">⚠ 9999 範例科技 · 討論熱度異常</b>
+    <p>本週 PTT 討論 <b>42 篇</b>，是前三週平均（5 篇）的 <b>8.4 倍</b>，且伴隨股價短期大漲。社群討論量暴增常見於<b>炒作前期</b>——買進前請先完成 8 項紅旗檢查，並提防「飆股群組」邀約。</p>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>個股輿情卡（真實資料）</h2>
+  <p class="sub" id="scanInfo">載入中…</p>
+  <div id="cards"></div>
+</section>
+</div>
+
+<div class="src wrap">資料來源：PTT Stock 板公開資料（熱度統計與標題，附原文連結）、領富新聞庫。輿情整理非投資建議；討論熱度不代表股價方向。</div>
+
+<script>
+fetch("/data/sentiment_live.json").then(r => r.json()).then(d => {
+  const rows = Object.entries(d.data || {}).map(([code, v]) => ({ code, ...v }));
+  rows.sort((a, b) => b.ptt_week - a.ptt_week || b.ptt_ratio - a.ptt_ratio);
+  document.getElementById("scanInfo").textContent =
+    `掃描 ${d.count} 檔（成交量熱門＋示範自選）・更新 ${d.updatedAt}・視窗 ${d.window_days} 天`;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  // ① 警示區
+  const spikes = rows.filter(r => r.heat_spike);
+  document.getElementById("warnZone").innerHTML = spikes.length
+    ? spikes.map(r => `<div class="warn-card"><b class="h">⚠ ${r.code} ${esc(r.name)} · 討論熱度異常</b>
+        <p>本週 PTT 討論 <b>${r.ptt_week} 篇</b>，是前三週平均（${r.ptt_baseline} 篇）的 <b>${r.ptt_ratio} 倍</b>。社群討論量暴增常見於炒作前期，買進前請先完成紅旗檢查。</p></div>`).join("")
+    : `<div class="ok-card">✓ 本次掃描的 ${rows.length} 檔中，目前沒有熱度異常的個股。<small>市場安靜也是一種資訊 —— 警示出現時才需要提高警覺。下方示意卡為警示出現時的樣子。</small></div>`;
+  // ② 輿情卡
+  document.getElementById("cards").innerHTML = rows.map(r => {
+    const max = Math.max.apply(null, r.ptt_trend.concat([1]));
+    const bars = r.ptt_trend.map((v, i) =>
+      `<i class="${i === 3 ? "now" : ""}" style="height:${Math.max(8, v / max * 38)}px" title="${v} 篇"></i>`).join("");
+    const heat = r.ptt_week >= 10 ? ["hot", "高熱度"] : r.ptt_week >= 4 ? ["warm", "中熱度"] : ["cool", "低聲量"];
+    const titles = (r.hot_titles || []).map(h =>
+      `<a href="${esc(h.url)}" target="_blank" rel="noopener nofollow"><span class="push">${h.push >= 100 ? "爆" : h.push}</span><span>${esc(h.t)}</span></a>`).join("");
+    return `<div class="card">
+      <div class="c-top"><b>${esc(r.name)}</b><span class="code">${r.code}</span><span class="chip ${heat[0]}">${heat[1]}</span></div>
+      <div class="stats">
+        <span>本週討論<b>${r.ptt_week} 篇</b></span>
+        <span>前三週平均<b>${r.ptt_baseline}</b></span>
+        <span>本週推文<b>${r.ptt_push_week}</b></span>
+        <span>新聞 30 天<b>${r.news_30d}</b></span>
+        <span class="bars-wrap"><span class="bars">${bars}</span><div class="bars-cap">4 週趨勢 →</div></span>
+      </div>
+      ${titles ? `<div class="titles">${titles}</div>` : ""}
+    </div>`;
+  }).join("");
+}).catch(e => { document.getElementById("scanInfo").textContent = "資料載入失敗"; });
+</script>
+</body>
+</html>

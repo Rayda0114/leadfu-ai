@@ -634,6 +634,14 @@ async function handleAsk(request, env) {
       if (ic) { augmentedLast += ic; serverInjected = true; }
     } catch (e) {}
   }
+  // 📡 輿情問題（2026-06-11）：「大家怎麼看台積電」「最近討論熱度」→ 注入近 30 天 PTT 熱度統計
+  const sentIntent = /怎麼看|輿情|討論|熱度|聲量|風向|鄉民|ptt|股板|在吵|炒作/i;
+  if (!context.isMarketBrief && sentIntent.test(lastUserContent || "")) {
+    try {
+      const sc = await getSentimentContext(env, lastUserContent || "");
+      if (sc) { augmentedLast += sc; serverInjected = true; }
+    } catch (e) {}
+  }
   // ⚡ X 快訊問題（2026-06-11）：「川普最近說什麼」「馬斯克發了什麼文」→ 注入 X 快訊雷達真實摘要
   const xIntent = /川普|特朗普|馬斯克|黃仁勳|輝達|奧特曼|鮑爾|聯準會|木頭姐|伍德|達里歐|阿克曼|伯里|庫班|蘇姿丰|皮查伊|孫正義|蓋茲|趙長鵬|納瓦爾|路透|彭博|推特|twitter|[^a-z]x ?(上|平台|發)|發[文推]|貼文|快訊|大佬/i;
   if (!context.isMarketBrief && xIntent.test(lastUserContent || "")) {
@@ -1206,6 +1214,41 @@ async function getXAlertsContext(env, q) {
   const fmt = iso => { const d = new Date(new Date(iso).getTime() + 8 * 3600 * 1000); return `${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")} ${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}`; };
   const lines = rows.map(a => `・[${fmt(a.created_at)} 台北] @${a.author}（${LBL[a.impact] || "中性"}・重要度 ${a.importance}）：${a.summary_zh}`);
   return `\n\n【X 快訊雷達 · 真實 X 貼文中文摘要（近 ${hours} 小時）】\n${lines.join("\n")}\n（回答規則：只能根據上面的摘要轉述，引用時附帳號與時間；「偏多/偏空」是輿情方向不是買賣建議；沒列出的不可自行補充。可順帶告知：VIP 可在會員中心訂閱 70+ 位帳號的 X 快訊。）`;
+}
+
+/* ── 📡 AI 對話注入：個股輿情（近 30 天 PTT 熱度 + X 大佬提及）──
+   「大家怎麼看台積電」→ 注入掃描快照的真實熱度統計與標題樣本；熱度≠方向、非建議。 */
+async function getSentimentContext(env, q) {
+  if (!q) return null;
+  const sj = await _assetJson(env, "sentiment_live.json");
+  if (!sj || !sj.data) return null;
+  let hit = null, hitCode = null;
+  for (const [code, v] of Object.entries(sj.data)) {
+    if (q.includes(code) || (v.name && v.name.length >= 2 && q.includes(v.name))) { hit = v; hitCode = code; break; }
+  }
+  const lines = [];
+  if (hit) {
+    lines.push(`${hitCode} ${hit.name}：本週 PTT 股板討論 ${hit.ptt_week} 篇（前三週平均 ${hit.ptt_baseline} 篇/週，${hit.ptt_ratio} 倍）、本週推文 ${hit.ptt_push_week}、近 30 天站內新聞 ${hit.news_30d} 則。`);
+    if (hit.heat_spike) lines.push(`⚠ 討論熱度異常（≥3 倍且 ≥8 篇）：社群聲量暴增常見於炒作前期，提醒用戶先做買前紅旗檢查、提防飆股群組。`);
+    for (const t of (hit.hot_titles || []).slice(0, 3)) lines.push(`・本週熱門標題（推 ${t.push}）：${t.t}`);
+    // X 大佬是否提及（摘要全文搜尋，近 30 天）
+    try {
+      const since = new Date(Date.now() - 30 * 86400 * 1000).toISOString();
+      const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/x_alerts?select=author,summary_zh,impact,created_at&summary_zh=ilike.${encodeURIComponent("%" + hit.name + "%")}&created_at=gte.${since}&order=created_at.desc&limit=3`, { headers: ecpayAdmin(env) });
+      if (r.ok) {
+        const xs = await r.json();
+        for (const a of (Array.isArray(xs) ? xs : [])) lines.push(`・X 大佬提及：@${a.author}（${{ bullish: "偏多", bearish: "偏空" }[a.impact] || "中性"}）${String(a.summary_zh).slice(0, 60)}`);
+      }
+    } catch (e) {}
+  } else if (/輿情|討論|熱度|聲量|風向|鄉民|ptt|股板/i.test(q)) {
+    const rows = Object.entries(sj.data).map(([c, v]) => ({ c, ...v })).sort((a, b) => b.ptt_week - a.ptt_week).slice(0, 3);
+    if (!rows.length) return null;
+    lines.push(`本期掃描 ${sj.count} 檔的討論熱度前三：` + rows.map(r => `${r.c} ${r.name}（本週 ${r.ptt_week} 篇）`).join("、") + "。");
+  } else {
+    return null;
+  }
+  return `\n\n【輿情雷達 · 近 30 天真實統計（更新 ${sj.updatedAt}，來源 PTT 股板公開資料）】\n` + lines.join("\n")
+    + `\n（回答規則：只能引用上面統計；必須說明「討論熱度不代表股價方向」；標題僅是社群貼文非事實查證；非投資建議。）`;
 }
 
 function lineAuthError(msg, status) {

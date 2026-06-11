@@ -1,0 +1,338 @@
+{
+ "updatedAt": "2026-06-11 14:34",
+ "source": "PTT Stock 板（熱度統計）+ 站內新聞；僅輿情整理、非投資建議",
+ "window_days": 30,
+ "count": 15,
+ "data": {
+  "2409": {
+   "name": "友達",
+   "ptt_week": 1,
+   "ptt_baseline": 0.3,
+   "ptt_ratio": 3.0,
+   "ptt_trend": [
+    0,
+    1,
+    0,
+    1
+   ],
+   "ptt_push_week": 37,
+   "heat_spike": false,
+   "hot_titles": [
+    {
+     "t": "[新聞]面板四飆股友達、群創、彩晶、瑞軒同步跌",
+     "push": 37,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1780933467.A.DBC.html"
+    }
+   ],
+   "news_30d": 0
+  },
+  "2303": {
+   "name": "聯電",
+   "ptt_week": 1,
+   "ptt_baseline": 1.3,
+   "ptt_ratio": 0.8,
+   "ptt_trend": [
+    1,
+    2,
+    1,
+    1
+   ],
+   "ptt_push_week": 70,
+   "heat_spike": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 2303 聯電 115年5月營收",
+     "push": 70,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1780646129.A.44D.html"
+    }
+   ],
+   "news_30d": 1
+  },
+  "2883": {
+   "name": "凱基金",
+   "ptt_week": 0,
+   "ptt_baseline": 0.7,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    2,
+    0
+   ],
+   "ptt_push_week": 0,
+   "heat_spike": false,
+   "hot_titles": [],
+   "news_30d": 0
+  },
+  "2344": {
+   "name": "華邦電",
+   "ptt_week": 1,
+   "ptt_baseline": 2.3,
+   "ptt_ratio": 0.4,
+   "ptt_trend": [
+    0,
+    1,
+    6,
+    1
+   ],
+   "ptt_push_week": 61,
+   "heat_spike": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 2344 華邦電五月營收 MoM3.9% YoY 181.97",
+     "push": 61,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1780897687.A.0B5.html"
+    }
+   ],
+   "news_30d": 0
+  },
+  "9105": {
+   "name": "泰金寶-DR",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "heat_spike": false,
+   "hot_titles": [],
+   "news_30d": 0
+  },
+  "6770": {
+   "name": "力積電",
+   "ptt_week": 2,
+   "ptt_baseline": 1.7,
+   "ptt_ratio": 1.2,
+   "ptt_trend": [
+    0,
+    1,
+    4,
+    2
+   ],
+   "ptt_push_week": 126,
+   "heat_spike": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 6770力積電 現增參與發行GDR 66.68元",
+     "push": 83,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781060951.A.13E.html"
+    },
+    {
+     "t": "[情報] 6770 力積電 115年5月營收",
+     "push": 43,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1780649962.A.75F.html"
+    }
+   ],
+   "news_30d": 0
+  },
+  "2324": {
+   "name": "仁寶",
+   "ptt_week": 1,
+   "ptt_baseline": 1.3,
+   "ptt_ratio": 0.8,
+   "ptt_trend": [
+    3,
+    0,
+    1,
+    1
+   ],
+   "ptt_push_week": 37,
+   "heat_spike": false,
+   "hot_titles": [
+    {
+     "t": "[新聞] 老AI熄火！宏碁、仁寶雙觸跌停　緯創摔9%",
+     "push": 37,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1780618326.A.21A.html"
+    }
+   ],
+   "news_30d": 0
+  },
+  "3481": {
+   "name": "群創",
+   "ptt_week": 3,
+   "ptt_baseline": 2.7,
+   "ptt_ratio": 1.1,
+   "ptt_trend": [
+    0,
+    5,
+    3,
+    3
+   ],
+   "ptt_push_week": 130,
+   "heat_spike": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 3481群創  5月營收",
+     "push": 65,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781078710.A.B43.html"
+    },
+    {
+     "t": "[新聞]面板四飆股友達、群創、彩晶、瑞軒同步跌",
+     "push": 37,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1780933467.A.DBC.html"
+    },
+    {
+     "t": "[新聞] 他曾認賠392萬怒賣群創「喊50、100的人",
+     "push": 28,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1780823614.A.62C.html"
+    }
+   ],
+   "news_30d": 0
+  },
+  "2887": {
+   "name": "台新新光金",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "heat_spike": false,
+   "hot_titles": [],
+   "news_30d": 0
+  },
+  "1714": {
+   "name": "和桐",
+   "ptt_week": 2,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    2
+   ],
+   "ptt_push_week": 39,
+   "heat_spike": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 1714和桐110年5月營收16.22億、年減22.7%",
+     "push": 23,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1623063745.A.281.html"
+    },
+    {
+     "t": "[標的] 1714.TW 和桐    讓清潔劑再次偉大多",
+     "push": 16,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1780924804.A.388.html"
+    }
+   ],
+   "news_30d": 0
+  },
+  "2484": {
+   "name": "希華",
+   "ptt_week": 1,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "ptt_push_week": 1,
+   "heat_spike": false,
+   "hot_titles": [
+    {
+     "t": "[新聞] 希華音叉型石英震盪器傳打入美系電動車",
+     "push": 1,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1623211222.A.36E.html"
+    }
+   ],
+   "news_30d": 0
+  },
+  "2408": {
+   "name": "南亞科",
+   "ptt_week": 1,
+   "ptt_baseline": 5.0,
+   "ptt_ratio": 0.2,
+   "ptt_trend": [
+    5,
+    3,
+    7,
+    1
+   ],
+   "ptt_push_week": 39,
+   "heat_spike": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 皇翔買聯發科; 中環買聯發科,買賣南亞科",
+     "push": 39,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1780920174.A.353.html"
+    }
+   ],
+   "news_30d": 0
+  },
+  "4953": {
+   "name": "緯軟",
+   "ptt_week": 0,
+   "ptt_baseline": 0.3,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "ptt_push_week": 0,
+   "heat_spike": false,
+   "hot_titles": [],
+   "news_30d": 0
+  },
+  "2330": {
+   "name": "台積電",
+   "ptt_week": 13,
+   "ptt_baseline": 17.0,
+   "ptt_ratio": 0.8,
+   "ptt_trend": [
+    14,
+    22,
+    15,
+    13
+   ],
+   "ptt_push_week": 637,
+   "heat_spike": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 台積電 外資持股比例跌破70%",
+     "push": 100,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781083953.A.BB0.html"
+    },
+    {
+     "t": "[情報] 2330台積電5月營收 mom+1.5% yoy+30.1%",
+     "push": 100,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781069901.A.1FC.html"
+    },
+    {
+     "t": "[新聞] 台積電被告侵權！美議員致函「要求嚴格執",
+     "push": 99,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781145013.A.8DF.html"
+    }
+   ],
+   "news_30d": 1
+  },
+  "5246": {
+   "name": "勵威",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "heat_spike": false,
+   "hot_titles": [],
+   "news_30d": 0
+  }
+ }
+}
