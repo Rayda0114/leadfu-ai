@@ -31,6 +31,9 @@ STATIC_PAGES = [
     ("/pages/value-stocks.html",       "daily",   0.85),
     ("/pages/etf.html",                "daily",   0.9),
     ("/pages/etf-compare.html",        "daily",   0.85),
+    ("/pages/etf-health",              "daily",   0.85),   # 高股息 ETF 健檢（每日更新）
+    ("/pages/dividend-tax",            "weekly",  0.85),   # 股利所得稅試算（搜尋需求頁）
+    ("/pages/start",                   "monthly", 0.8),    # 新手上路（轉換入口）
     ("/pages/conference.html",         "daily",   0.7),
     ("/pages/stocks.html",             "daily",   0.9),
     ("/pages/screener.html",           "daily",   0.9),
