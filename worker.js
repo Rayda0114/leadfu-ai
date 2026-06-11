@@ -635,7 +635,7 @@ async function handleAsk(request, env) {
     } catch (e) {}
   }
   // ⚡ X 快訊問題（2026-06-11）：「川普最近說什麼」「馬斯克發了什麼文」→ 注入 X 快訊雷達真實摘要
-  const xIntent = /川普|特朗普|馬斯克|黃仁勳|奧特曼|鮑爾|聯準會|木頭姐|達里歐|阿克曼|伯里|庫班|蘇姿丰|皮查伊|孫正義|蓋茲|趙長鵬|納瓦爾|推特|twitter|[^a-z]x ?(上|平台)|發[文推]|貼文|快訊|大佬/i;
+  const xIntent = /川普|特朗普|馬斯克|黃仁勳|輝達|奧特曼|鮑爾|聯準會|木頭姐|伍德|達里歐|阿克曼|伯里|庫班|蘇姿丰|皮查伊|孫正義|蓋茲|趙長鵬|納瓦爾|路透|彭博|推特|twitter|[^a-z]x ?(上|平台|發)|發[文推]|貼文|快訊|大佬/i;
   if (!context.isMarketBrief && xIntent.test(lastUserContent || "")) {
     try {
       const xc = await getXAlertsContext(env, lastUserContent || "");
