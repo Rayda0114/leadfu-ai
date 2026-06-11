@@ -1228,9 +1228,11 @@ async function getSentimentContext(env, q) {
   }
   const lines = [];
   if (hit) {
-    lines.push(`${hitCode} ${hit.name}：PTT 本週 ${hit.ptt_week} 篇（前三週平均 ${hit.ptt_baseline}，${hit.ptt_ratio} 倍）、全網新聞本週 ${hit.gn_week}${hit.gn_saturated ? "+（飽和）" : ""} 則（${hit.gn_ratio} 倍）、X 大佬近 30 天提及 ${hit.x_mentions_30d != null ? hit.x_mentions_30d : "—"} 次、本週推文 ${hit.ptt_push_week}。`);
+    lines.push(`${hitCode} ${hit.name}：PTT 本週 ${hit.ptt_week} 篇（前三週平均 ${hit.ptt_baseline}，${hit.ptt_ratio} 倍）、全網新聞本週 ${hit.gn_week}${hit.gn_saturated ? "+（飽和）" : ""} 則（${hit.gn_ratio} 倍）、YouTube 影片本週 ${hit.yt_week != null ? hit.yt_week + (hit.yt_saturated ? "+（飽和）" : "") : "—"} 部、X 大佬近 30 天提及 ${hit.x_mentions_30d != null ? hit.x_mentions_30d : "—"} 次。`);
+    const ytv = (hit.yt_top || [])[0];
+    if (ytv) lines.push(`・YT 熱門影片（${ytv.views} 次觀看）：${ytv.t}`);
     if (hit.heat_spike) lines.push(`🔴 雙源熱度警示：PTT 與新聞同時暴增，常見於炒作前期 —— 提醒用戶先做買前紅旗檢查、提防飆股群組。`);
-    else if (hit.heat_watch) lines.push(`🟠 單源熱度注意：${hit.ptt_spike ? "PTT 討論" : "新聞聲量"}異常升溫，建議搭配籌碼與基本面確認。`);
+    else if (hit.heat_watch) lines.push(`🟠 單源熱度注意：${hit.ptt_spike ? "PTT 討論" : hit.gn_spike ? "新聞聲量" : "YouTube 影片聲量"}異常升溫，建議搭配籌碼與基本面確認。`);
     for (const t of (hit.hot_titles || []).slice(0, 3)) lines.push(`・本週熱門標題（推 ${t.push}）：${t.t}`);
     // X 大佬是否提及（摘要全文搜尋，近 30 天）
     try {
@@ -1248,7 +1250,7 @@ async function getSentimentContext(env, q) {
   } else {
     return null;
   }
-  return `\n\n【輿情雷達 · 近 30 天多源統計（更新 ${sj.updatedAt}，來源：PTT 股板 + Google News + X 快訊雷達）】\n` + lines.join("\n")
+  return `\n\n【輿情雷達 · 近 30 天多源統計（更新 ${sj.updatedAt}，來源：PTT 股板 + Google News + YouTube + X 快訊雷達）】\n` + lines.join("\n")
     + `\n（回答規則：只能引用上面統計；必須說明「討論熱度不代表股價方向」；標題僅是社群貼文非事實查證；非投資建議。）`;
 }
 

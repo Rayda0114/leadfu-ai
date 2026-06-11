@@ -4,7 +4,9 @@
   1. PTT 股板（散戶討論，4 週趨勢）
   2. Google News RSS（媒體熱度，after:/before: 切週，免費無驗證；計數上限 100/週=飽和）
   3. X 快訊雷達 DB（大佬提及，summary 全文比對）
-警示分級：PTT+新聞「雙源同時暴增」= 紅色警示；單源暴增 = 橘色注意
+  4. YouTube Data API（財經影片聲量；金鑰在 ~/.hermes/youtube_api_key，絕不進 repo；
+     quota：search=100 單位/次，每日 10,000 → 15 檔 ≈ 1,515 單位）
+警示分級：任兩源同時暴增 = 🔴 紅色警示；單源暴增 = 🟠 橘色注意
 輸出：data/sentiment_live.json
 合規：只做熱度統計與標題樣本（附原文連結），不轉述喊單內容、非投資建議。
 炒作警示規則：本週貼文數 ≥8 且為前三週平均的 ≥3 倍 → heat_spike（常見於炒作前期）
@@ -105,6 +107,56 @@ def x_mentions_30d(name):
     except Exception:
         return None
 
+
+def yt_weekly(name):
+    """YouTube：近 28 天提及影片的週分布 + 觀看數（單次 search 上限 50 部=飽和）。失敗回 None。"""
+    try:
+        key = (Path.home() / ".hermes" / "youtube_api_key").read_text().strip()
+    except Exception:
+        return None
+    after = (NOW - timedelta(days=28)).strftime("%Y-%m-%dT00:00:00Z")
+    url = ("https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&order=date&maxResults=50"
+           + "&regionCode=TW&relevanceLanguage=zh-Hant&publishedAfter=" + after
+           + "&q=" + urllib.parse.quote(name) + "&key=" + key)
+    try:
+        data = json.loads(http_get(url) or "{}")
+    except Exception:
+        return None
+    items = data.get("items") or []
+    if "error" in data:
+        print("  [YT] API 錯誤:", str(data["error"].get("message", ""))[:80])
+        return None
+    weeks = [0, 0, 0, 0]   # w0=本週
+    vids = []
+    for it in items:
+        s = it.get("snippet") or {}
+        try:
+            dt = datetime.strptime(s["publishedAt"][:10], "%Y-%m-%d")
+        except Exception:
+            continue
+        b = min((NOW - dt).days // 7, 3)
+        weeks[b] += 1
+        vid = (it.get("id") or {}).get("videoId")
+        if vid:
+            vids.append({"id": vid, "t": s.get("title", ""), "ch": s.get("channelTitle", "")})
+    views = {}
+    if vids:
+        ids = ",".join(v["id"] for v in vids[:50])
+        try:
+            st = json.loads(http_get("https://www.googleapis.com/youtube/v3/videos?part=statistics&id="
+                                     + ids + "&key=" + key) or "{}")
+            for it in (st.get("items") or []):
+                views[it["id"]] = int((it.get("statistics") or {}).get("viewCount", 0))
+        except Exception:
+            pass
+    for v in vids:
+        v["views"] = views.get(v["id"], 0)
+    top = sorted(vids, key=lambda x: -x["views"])[:2]
+    return {"trend": weeks[::-1], "week": weeks[0], "saturated": len(items) >= 50,
+            "views_30d": sum(views.values()),
+            "top": [{"t": v["t"], "ch": v["ch"], "views": v["views"],
+                     "url": "https://www.youtube.com/watch?v=" + v["id"]} for v in top]}
+
 def week_bucket(dstr):
     days = (NOW - datetime.strptime(dstr, "%Y-%m-%d")).days
     return min(days // 7, 4)  # 0=本週 1,2,3=前三週 4=更舊
@@ -148,9 +200,15 @@ def main():
         gn_spike = (not gn_saturated) and gn[3] >= 15 and (gn_base == 0 or gn[3] >= gn_base * 2.5)
         # 源 3：X 大佬提及
         xm = x_mentions_30d(name)
-        # 警示分級：雙源紅，單源橘
-        dual = spike and gn_spike
-        single = (spike or gn_spike) and not dual
+        # 源 4：YouTube 影片聲量
+        yt = yt_weekly(name)
+        yt_base = (sum(yt["trend"][:3]) / 3.0) if yt else 0
+        yt_ratio = (round(yt["week"] / yt_base, 1) if yt_base > 0 else (99.0 if yt and yt["week"] >= 5 else 0.0)) if yt else 0
+        yt_spike = bool(yt) and not yt["saturated"] and yt["week"] >= 5 and (yt_base == 0 or yt["week"] >= yt_base * 2.5)
+        # 警示分級：任兩源同時暴增 = 🔴；單源 = 🟠
+        n_spk = int(spike) + int(gn_spike) + int(yt_spike)
+        dual = n_spk >= 2
+        single = n_spk == 1
         result[code] = {
             "name": name, "ptt_week": weeks[0], "ptt_baseline": round(baseline, 1),
             "ptt_ratio": ratio, "ptt_trend": weeks[::-1],   # 舊→新
@@ -158,14 +216,19 @@ def main():
             "gn_trend": gn, "gn_week": gn[3], "gn_base": round(gn_base, 1),
             "gn_ratio": gn_ratio, "gn_saturated": gn_saturated,
             "x_mentions_30d": xm,
-            "ptt_spike": spike, "gn_spike": gn_spike,
+            "yt_trend": yt["trend"] if yt else None, "yt_week": yt["week"] if yt else None,
+            "yt_ratio": yt_ratio, "yt_saturated": bool(yt and yt["saturated"]),
+            "yt_views_30d": yt["views_30d"] if yt else None,
+            "yt_top": yt["top"] if yt else [],
+            "ptt_spike": spike, "gn_spike": gn_spike, "yt_spike": yt_spike,
             "heat_spike": dual, "heat_watch": single,
             "hot_titles": [{"t": h["title"], "push": h["push"], "url": h["url"]} for h in hot_titles],
         }
         tag = " 🔴 雙源警示" if dual else (" 🟠 單源注意" if single else "")
-        print(f"[{i}/{len(codes)}] {code} {name}: PTT {weeks[0]} 篇(x{ratio}) · 新聞 {gn[3]} 則(x{gn_ratio}{'·飽和' if gn_saturated else ''}) · X {xm if xm is not None else '-'} 次{tag}")
+        yts = f"YT {yt['week']} 部(x{yt_ratio}{'·飽和' if yt and yt['saturated'] else ''})" if yt else "YT -"
+        print(f"[{i}/{len(codes)}] {code} {name}: PTT {weeks[0]} 篇(x{ratio}) · 新聞 {gn[3]} 則(x{gn_ratio}{'·飽和' if gn_saturated else ''}) · {yts} · X {xm if xm is not None else '-'} 次{tag}")
     out = {"updatedAt": NOW.strftime("%Y-%m-%d %H:%M"),
-           "source": "PTT Stock 板 + Google News + X 快訊雷達（多源熱度統計）；僅輿情整理、非投資建議",
+           "source": "PTT Stock 板 + Google News + YouTube + X 快訊雷達（四源熱度統計）；僅輿情整理、非投資建議",
            "window_days": 30, "count": len(result), "data": result}
     (DATA / "sentiment_live.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"\n✅ sentiment_live.json：{len(result)} 檔")

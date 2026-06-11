@@ -56,13 +56,13 @@
 <header class="hero"><div class="wrap">
   <span class="sig">Sentiment Radar · Internal Demo</span>
   <h1>個股輿情雷達<span class="beta">DEMO</span></h1>
-  <p>近 30 天，市場在熱什麼 —— <b>PTT 散戶討論 × Google 全網新聞 × 大佬 X 動向</b>，三源合成一張看得懂的輿情卡。只做熱度統計與標題樣本，不轉述喊單、非投資建議。</p>
+  <p>近 30 天，市場在熱什麼 —— <b>PTT 散戶討論 × Google 全網新聞 × YouTube 財經影片 × 大佬 X 動向</b>，四源合成一張看得懂的輿情卡。只做熱度統計與標題樣本，不轉述喊單、非投資建議。</p>
 </div></header>
 
 <div class="wrap">
 <section class="sec">
   <h2>炒作熱度警示</h2>
-  <p class="sub">分級規則：<b>PTT 與新聞兩源同時暴增（≥2.5~3 倍）→ 🔴 紅色警示</b>；單源暴增 → 🟠 橘色注意。雙源確認大幅降低誤報。將來可掛進買前檢查與防錯雷達。</p>
+  <p class="sub">分級規則：PTT／新聞／YouTube <b>任兩源同時暴增（≥2.5~3 倍）→ 🔴 紅色警示</b>；單源暴增 → 🟠 橘色注意。雙源確認大幅降低誤報。將來可掛進買前檢查與防錯雷達。</p>
   <div id="warnZone"></div>
   <div class="warn-card"><span class="demo-tag">設計示意・非真實資料</span>
     <b class="h">⚠ 9999 範例科技 · 討論熱度異常</b>
@@ -77,7 +77,7 @@
 </section>
 </div>
 
-<div class="src wrap">資料來源：PTT Stock 板公開資料（熱度統計與標題，附原文連結）、Google News（媒體聲量，週計數上限 100「+」表飽和）、X 快訊雷達資料庫。輿情整理非投資建議；討論熱度不代表股價方向。</div>
+<div class="src wrap">資料來源：PTT Stock 板公開資料（熱度統計與標題，附原文連結）、Google News（媒體聲量，週上限 100）、YouTube Data API（影片聲量，搜尋上限 50；「+」表飽和、飽和不觸發警示）、X 快訊雷達資料庫。輿情整理非投資建議；討論熱度不代表股價方向。</div>
 
 <script>
 fetch("/data/sentiment_live.json").then(r => r.json()).then(d => {
@@ -94,7 +94,8 @@ fetch("/data/sentiment_live.json").then(r => r.json()).then(d => {
       <p>PTT 本週 <b>${r.ptt_week} 篇</b>（${r.ptt_ratio} 倍）＋ 新聞 <b>${r.gn_week} 則</b>（${r.gn_ratio} 倍）同時暴增。社群與媒體聲量同步飆升，常見於炒作前期 —— 買進前請先完成紅旗檢查、提防飆股群組。</p></div>`).join("");
   wz += single.map(r => {
     const why = r.ptt_spike ? `PTT 討論本週 ${r.ptt_week} 篇，是前三週平均（${r.ptt_baseline}）的 ${r.ptt_ratio} 倍` :
-      `全網新聞本週 ${r.gn_week} 則，是前三週平均（${r.gn_base}）的 ${r.gn_ratio} 倍`;
+      r.gn_spike ? `全網新聞本週 ${r.gn_week} 則，是前三週平均（${r.gn_base}）的 ${r.gn_ratio} 倍` :
+      `YouTube 影片本週 ${r.yt_week} 部，是前三週平均的 ${r.yt_ratio} 倍`;
     return `<div class="warn-card" style="background:#fdf8ec;border-color:#ecd9b0;"><b class="h" style="color:#a8731c;">🟠 ${r.code} ${esc(r.name)} · 單源熱度注意</b>
       <p style="color:#7a6a4a;">${why}。單一來源聲量異常，建議搭配籌碼與基本面確認再行動。</p></div>`;
   }).join("");
@@ -110,15 +111,17 @@ fetch("/data/sentiment_live.json").then(r => r.json()).then(d => {
       `<i class="${i === 3 ? "now" : ""}" style="height:${Math.max(8, v / gmax * 38)}px;${i === 3 ? "" : "background:#cfd9cd;"}" title="新聞 ${v} 則"></i>`).join("");
     const score = r.ptt_week * 3 + (r.gn_saturated ? 30 : Math.min(r.gn_week, 30)) + (r.x_mentions_30d || 0) * 5;
     const heat = r.heat_spike ? ["hot", "雙源警示"] : r.heat_watch ? ["warm", "單源注意"] : score >= 50 ? ["hot", "高熱度"] : score >= 20 ? ["warm", "中熱度"] : ["cool", "低聲量"];
-    const titles = (r.hot_titles || []).map(h =>
+    let titles = (r.hot_titles || []).map(h =>
       `<a href="${esc(h.url)}" target="_blank" rel="noopener nofollow"><span class="push">${h.push >= 100 ? "爆" : h.push}</span><span>${esc(h.t)}</span></a>`).join("");
+    const ytv = (r.yt_top || [])[0];
+    if (ytv) titles += `<a href="${esc(ytv.url)}" target="_blank" rel="noopener nofollow"><span class="push" style="background:#fbeae8;color:#a13a2f;">YT</span><span>${esc(ytv.t.slice(0, 38))} · ${ytv.views >= 10000 ? (ytv.views / 10000).toFixed(1) + " 萬" : ytv.views} 次觀看</span></a>`;
     return `<div class="card">
       <div class="c-top"><b>${esc(r.name)}</b><span class="code">${r.code}</span><span class="chip ${heat[0]}">${heat[1]}</span></div>
       <div class="stats">
         <span>PTT 本週<b>${r.ptt_week} 篇</b></span>
         <span>新聞本週<b>${r.gn_week}${r.gn_saturated ? "+" : ""} 則</b></span>
+        <span>YT 影片本週<b>${r.yt_week != null ? r.yt_week + (r.yt_saturated ? "+" : "") + " 部" : "—"}</b></span>
         <span>X 大佬提及<b>${r.x_mentions_30d != null ? r.x_mentions_30d : "—"}</b></span>
-        <span>本週推文<b>${r.ptt_push_week}</b></span>
         <span class="bars-wrap"><span class="bars">${bars}</span><div class="bars-cap">PTT 4 週 →</div></span>
         <span class="bars-wrap"><span class="bars">${gbars}</span><div class="bars-cap">新聞 4 週 →</div></span>
       </div>
