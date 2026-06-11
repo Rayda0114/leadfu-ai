@@ -452,5 +452,42 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (e) {}
 })();
 </script>
+
+<script>
+/* 💰 含息真實報酬（依持股買入日期 × 配息歷史；上市為主、估算值） */
+(async function () {
+  try {
+    await window.LeadFu.ready;
+    const L = window.LeadFu;
+    const H = L.getHoldings() || {};
+    const codes = Object.keys(H);
+    if (!codes.length) return;
+    let hist = {};
+    try { hist = (await (await fetch("/data/dividend_history.json")).json()).data || {}; } catch (e) { return; }
+    const byCode = {}; ((L.data || {}).stocks || []).forEach(s => byCode[String(s.code)] = s);
+    const today = new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10);
+    let received = 0, totalCost = 0, totalValue = 0;
+    codes.forEach(c => {
+      const h = H[c] || {};
+      const sh = +h.shares || 0, cost = +h.cost || 0;
+      const px = (byCode[c] || {}).price;
+      totalCost += cost * sh;
+      if (typeof px === "number" && px > 0) totalValue += px * sh;
+      if (!h.since) return;   // 沒有買入日期 → 保守不計息，避免高估
+      (hist[c] || []).forEach(ev => {
+        if (ev.type && ev.type.indexOf("息") > -1 && ev.cash && ev.ex_date > h.since && ev.ex_date <= today) received += ev.cash * sh;
+      });
+    });
+    if (received <= 0 || totalCost <= 0) return;
+    const money = n => Math.round(n).toLocaleString("en-US");
+    const inclPnl = totalValue - totalCost + received;
+    const pct = (inclPnl / totalCost * 100).toFixed(2);
+    const el = document.getElementById("mPl");
+    if (!el || document.getElementById("mInclDiv")) return;
+    el.insertAdjacentHTML("afterend",
+      `<div id="mInclDiv" style="font-size:12px;color:#8a8d85;font-weight:700;margin-top:4px;">💰 含已領息 +${money(received)} → 含息報酬 ${inclPnl >= 0 ? "+" : ""}${money(inclPnl)}（${pct}%）<small style="color:#a9a392;">・估算</small></div>`);
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
