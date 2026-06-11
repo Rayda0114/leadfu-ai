@@ -52,6 +52,7 @@
   .src{padding:22px 22px 8px;font-size:11.5px;color:#9a948a;line-height:1.8;}
 
 /* ↓ 自 style.css 抽出：回頂端 + 客服小工具（獨立工具頁共用） */
+.cs-launcher{display:none !important;}  /* 工具頁只留直立標籤 */
   /* 浮動回到頂部按鈕（位置在回饋按鈕上方，避免重疊）*/
   .back-to-top {
     position: fixed;
@@ -70,7 +71,6 @@
     z-index: 998;
   }
   .back-to-top.visible { display: flex; align-items: center; justify-content: center; }
-}
 /* ============================================================
  * 🎧 客服浮動小工具（取代舊的兩顆圓形 FAB：回饋 + LINE）
  *    單顆「客服」膠囊 → 底部面板（LINE / AI 問股 / 防詐 / 常見問題）
