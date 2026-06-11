@@ -423,7 +423,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const L = window.LeadFu;
     const DIV = (L.data || {}).dividend || {};
     const byCode = {}; ((L.data || {}).stocks || []).forEach(s => byCode[String(s.code)] = s);
-    const codes = [...new Set([...(L.getHoldings() || []).map(h => String(h.code)), ...(L.getWatchlist() || []).map(String)])];
+    const codes = [...new Set([...Object.keys(L.getHoldings() || {}), ...(L.getWatchlist() || []).map(String)])];
     if (!codes.length) return;
     const today = new Date(); today.setHours(0, 0, 0, 0);
     const lim = new Date(today.getTime() + 7 * 86400000);
