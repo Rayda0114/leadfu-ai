@@ -2025,7 +2025,12 @@ async function getLineStockContext(env, q) {
       if (val[s.code]) o.估值 = val[s.code];
     }
     const td = tdcc[s.code];
-    if (td) o.千張大戶 = { 持股比率百分比: td.big_ratio, 大戶人數: td.big_holders, 較上週變化: td.wow, 連續增減週數: td.streak, 資料說明: "集保結算所每週股權分散表" };
+    if (td) {
+      o.千張大戶 = { 持股比率百分比: td.big_ratio, 大戶人數: td.big_holders, 資料說明: "集保結算所每週股權分散表" };
+      if (td.wow != null) o.千張大戶.較上週變化百分點 = td.wow;
+      if (td.streak >= 2) o.千張大戶.趨勢 = `連 ${td.streak} 週增加`;
+      else if (td.streak <= -2) o.千張大戶.趨勢 = `連 ${-td.streak} 週減少`;
+    }
     return o;
   });
   const _ts = `${_tpe.getUTCFullYear()}-${String(_tpe.getUTCMonth() + 1).padStart(2, "0")}-${String(_tpe.getUTCDate()).padStart(2, "0")} ${String(_tpe.getUTCHours()).padStart(2, "0")}:${String(_tpe.getUTCMinutes()).padStart(2, "0")}`;
