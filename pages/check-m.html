@@ -97,7 +97,7 @@
 
 <header class="m-hero">
   <span class="m-signal">Pre-Trade Check</span>
-  <h1>買進之前，<br>先檢查 8 個紅旗</h1>
+  <h1>買進之前，<br>先檢查 9 個紅旗</h1>
   <p>注意股、流動性、營收、法人、借券、估值、公告、風險分數 — 一頁看完有沒有地雷。</p>
   <div class="m-spanel">
     <div class="m-sline">
@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       ? [ATT.type === "處置" ? "r" : "a", "注意／處置股", `已列為${ATT.type}股（${ATT.reason || "證交所公告"}），交易可能受限制`]
       : ["g", "注意／處置股", "未列入注意、處置名單"]);
     // 1.5 輿情熱度（📡 輿情雷達：PTT × 新聞 × YT）
-    const SN = (window.__SENT || {})[c];
+    const SN = (window.__SENT || {})[code];
     flags.push(!SN ? ["n", "輿情熱度", "尚未納入每日輿情掃描（涵蓋熱門股與會員自選）"]
       : SN.heat_spike ? ["r", "輿情熱度", `PTT ${SN.ptt_week} 篇（${SN.ptt_ratio} 倍）＋新聞 ${SN.gn_week} 則（${SN.gn_ratio} 倍）同步暴增，常見於炒作前期`]
       : SN.heat_watch ? ["a", "輿情熱度", `${SN.ptt_spike ? `PTT 本週 ${SN.ptt_week} 篇（${SN.ptt_ratio} 倍）` : SN.gn_spike ? `新聞本週 ${SN.gn_week} 則（${SN.gn_ratio} 倍）` : `YT 影片本週 ${SN.yt_week} 部（${SN.yt_ratio} 倍）`}異常升溫，搭配籌碼確認`]
