@@ -97,6 +97,40 @@
   .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
   .m-tabbar svg{display:block;margin:0 auto 3px;}
   .m-tabbar a.on{color:var(--forest);}
+
+  /* ═ VIP 2.0 行動版 ═ */
+  .v2-not{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+  .v2-not-card{background:var(--paper);border:1.5px solid rgba(13,29,23,.1);border-radius:16px;padding:15px 16px;}
+  .v2-not-card b{display:block;font-size:16.5px;color:#a13a2f;margin-bottom:6px;}
+  .v2-not-card p{font-size:13.5px;line-height:1.8;color:#444;margin:0;}
+  .v2-gold{margin:14px 4px 0;text-align:center;font-size:14.5px;font-weight:900;color:#0b3328;line-height:1.7;}
+  .v2-stats{background:#0d2a20;border-radius:18px;padding:18px 14px 12px;color:#f8f5ec;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+  .v2-stat{text-align:center;}
+  .v2-stat b{display:block;font-size:30px;font-weight:900;color:#ecd9ab;font-variant-numeric:tabular-nums;}
+  .v2-stat small{display:block;font-size:11px;color:rgba(248,245,236,.75);margin-top:3px;line-height:1.5;}
+  .v2-stats-cap{grid-column:1/-1;text-align:center;font-size:10.5px;color:rgba(248,245,236,.5);}
+  .v2-slot{padding:14px 0;border-bottom:1px dashed rgba(13,29,23,.12);}
+  .v2-slot:last-child{border-bottom:0;}
+  .v2-time{font-size:20px;font-weight:900;color:#0b3328;font-variant-numeric:tabular-nums;margin-bottom:4px;}
+  .v2-slot h3{margin:0 0 8px;font-size:15px;font-weight:900;line-height:1.55;}
+  .v2-bubble{background:#e7f3e9;border:1px solid #cfe5d3;border-radius:4px 14px 14px 14px;padding:10px 12px;font-size:13px;line-height:1.65;color:#1d3326;}
+  .v2-bubble::before{content:"LINE・示意畫面";display:block;font-size:9.5px;color:#6fa07a;font-weight:800;margin-bottom:3px;}
+  .v2-slot p.why{margin:7px 0 0;font-size:12.5px;color:#5a6b62;line-height:1.7;}
+  .v2-slot.quiet .v2-bubble{background:#f2f1ec;border-color:#e2e0d6;color:#8a8d85;}
+  .v2-radar-card{background:linear-gradient(135deg,#1d3a2e,#0b3328);border-radius:18px;padding:18px;color:#f8f5ec;margin-top:10px;}
+  .v2-radar-card h3{margin:0 0 8px;font-size:16px;font-weight:900;color:#ecd9ab;}
+  .v2-radar-card p{font-size:13px;line-height:1.8;color:rgba(248,245,236,.85);margin:0;}
+  .v2-honest{background:var(--paper);border:1.5px solid rgba(13,29,23,.1);border-radius:16px;padding:15px 16px;margin-top:12px;}
+  .v2-honest b.h{display:block;font-size:15px;color:#0b3328;margin-bottom:6px;}
+  .v2-honest p{font-size:13px;line-height:1.85;color:#444;margin:0 0 5px;}
+  .v2-honest small{display:block;font-size:11px;color:#9a948a;line-height:1.65;margin-top:8px;}
+  .v2-family{background:linear-gradient(180deg,#faf6ec,#f4efe2);border:1px solid #eadfc4;border-radius:18px;padding:18px;margin-top:12px;}
+  .v2-family p{font-size:13.5px;line-height:1.9;color:#4a4334;margin:0 0 8px;}
+  .v2-family p b{color:#0b3328;}
+  .v2-final{background:linear-gradient(180deg,#08271f,#0d3328);border-radius:18px;padding:24px 18px;text-align:center;color:#f8f5ec;margin-top:14px;}
+  .v2-final h3{margin:0 0 10px;font-size:18px;font-weight:900;color:#fff;line-height:1.6;}
+  .v2-final p{font-size:13px;line-height:1.8;color:rgba(248,245,236,.8);margin:0 0 6px;}
+  .v2-final p b{color:#ecd9ab;}
 </style>
 </head>
 <body>
@@ -104,77 +138,145 @@
 
 <header class="m-hero">
   <span class="m-signal">Membership</span>
-  <h1>免費讓你查一次，<br><i>VIP 幫你每天盯</i></h1>
-  <p>付費價值不是更多頁面，而是每天盤後 AI 自動健診你的持股，有風險第一時間 LINE 通知你。</p>
+  <h1>股票出事前，<br>其實都有跡象。<br><i>只是沒人告訴你。</i></h1>
+  <p>法人偷偷轉賣、借券悄悄變多、營收開始轉弱——VIP 每天收盤後自動檢查你的每一檔持股。<b style="color:#ecd9ab;">有狀況，LINE 馬上告訴你。沒事，就不吵你。</b></p>
+  <p style="font-size:12px;color:rgba(248,245,236,.6);">我們不報明牌、不代操。資訊我們整理，<b style="color:#ecd9ab;">決定永遠在你手上。</b></p>
+  <a href="#mPlans" style="display:flex;align-items:center;justify-content:center;min-height:52px;margin-top:14px;border-radius:14px;background:#d6b36f;color:#102016;font-size:16px;font-weight:900;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.25);">從今天收盤開始，幫我盯</a>
 </header>
 
-<!-- 你每天會收到的 LINE -->
-<section class="m-line">
-  <div class="m-line-head">範例・你每天會收到的 LINE</div>
-  <div class="m-line-body">
-    <div class="m-line-t">今日持股健診</div>
-    <div class="m-line-s">你關注的 12 檔中，<b>3 檔需要注意</b> 👇</div>
-    <div class="m-li"><span class="m-dot r"></span><div><b>2330 台積電</b><small>外資連 3 日賣超、借券餘額增加</small></div></div>
-    <div class="m-li"><span class="m-dot r"></span><div><b>2603 長榮</b><small>月營收轉弱（年減 18%）</small></div></div>
-    <div class="m-li"><span class="m-dot a"></span><div><b>1101 台泥</b><small>本週被列為「注意股」</small></div></div>
+<section class="m-sec">
+  <h2>先說清楚我們「不做」什麼</h2>
+  <p class="sub">市面上假投顧、飆股群組太多了。請您先看這三件事：</p>
+  <div class="v2-not">
+    <div class="v2-not-card"><b>🚫 不報明牌</b><p>我們不會跟您說哪支會漲、該買哪支。只把官方公開資料整理好、有風險提醒您——買不買，永遠是您自己決定。</p></div>
+    <div class="v2-not-card"><b>🚫 不代操、不收投資款</b><p>我們唯一會收的錢，就是這頁寫的月費。任何人以「領富 AI」名義要您匯款投資，<b style="color:#a13a2f;">都是詐騙</b>。</p></div>
+    <div class="v2-not-card"><b>🚫 不拉群、不私訊報股票</b><p>沒有任何「老師群」「會員群」。有人自稱領富 AI 邀您進群，請直接撥 <a href="tel:165" style="color:#a13a2f;font-weight:900;">165 反詐騙專線</a>。</p></div>
   </div>
-  <div class="m-line-foot">其餘 9 檔今日無異常 ✓・示意範例，公開資料整理、非投資建議</div>
+  <div class="v2-gold">會跟你保證獲利的，才是你要小心的。我們不會。</div>
 </section>
 
-<!-- 對照 -->
 <section class="m-sec">
-  <h2>免費 vs VIP 進階</h2>
-  <p class="sub">免費版「看懂一檔」；VIP 讓系統「每天幫你盯」</p>
+  <h2 id="mStatsTitle">今天，系統做了這些事</h2>
+  <div class="v2-stats">
+    <div class="v2-stat"><b id="stN1">—</b><small>檔上市櫃股票<br>完成盤後健診</small></div>
+    <div class="v2-stat"><b id="stN2">—</b><small>檔目前掛著<br>風險警示</small></div>
+    <div class="v2-stat"><b id="stN3">—</b><small>檔熱門股完成<br>輿情掃描</small></div>
+    <div class="v2-stat"><b id="stN4">—</b><small>檔未來 7 天<br>除權息追蹤中</small></div>
+    <div class="v2-stats-cap" id="stCap">來源：證交所、櫃買中心等官方公開資料</div>
+  </div>
+</section>
+
+<section class="m-sec">
+  <h2>訂了之後，你的一天長這樣</h2>
+  <div class="v2-slot"><div class="v2-time">07:00</div><h3>早餐還沒吃完，今天的風向先到。</h3>
+    <div class="v2-bubble">早安。台指期夜盤平穩、避險情緒正常。今日大盤波動風險：低。</div>
+    <p class="why">開盤前先知道市場的脾氣，不容易被盤中的大紅大綠嚇到。</p></div>
+  <div class="v2-slot"><div class="v2-time">09:12</div><h3>地球另一邊出大事，五分鐘內變中文。</h3>
+    <div class="v2-bubble">【國際快訊・市場關注度 9】川普發文點名晶片關稅，重點整理：……</div>
+    <p class="why">83 個帳號每 5 分鐘掃一次，真正重要的才推給你。不用學英文、不用熬夜。</p></div>
+  <div class="v2-slot"><div class="v2-time">15:40</div><h3>收盤了，換我們上工。</h3>
+    <div class="v2-bubble">你的 6 檔持股健診完成：5 檔今日無變化；1 檔借券餘額連 3 日增加，明細點此查看。</div>
+    <p class="why">法人在買還是在賣、借券有沒有暴增——每天有人替你先看過一遍。</p></div>
+  <div class="v2-slot"><div class="v2-time">16:00</div><h3>大日子，提前一週講。</h3>
+    <div class="v2-bubble">提醒：你的持股中華電（2412）3 天後除息。</div>
+    <p class="why">除權息、法說會，不再是「咦，原來是昨天」。</p></div>
+  <div class="v2-slot quiet"><div class="v2-time">隔天</div><h3>整天 0 則。</h3>
+    <div class="v2-bubble">（今天沒有任何通知）</div>
+    <p class="why">沒事的日子，就是安靜。會吵你的，都是該知道的事。</p></div>
+  <p style="font-size:10.5px;color:#9a948a;margin-top:8px;">以上為示意畫面。所有提醒僅為資料整理，非買賣建議。23:00–07:00 預設勿擾。</p>
+</section>
+
+<section class="m-sec">
+  <h2>兩座雷達，幫你看你看不到的地方</h2>
+  <div class="v2-radar-card"><h3>🌍 X 快訊雷達</h3><p>川普凌晨三點發的文，市場早上就有反應。<b style="font-size:20px;color:#ecd9ab;">83</b> 個會撼動市場的帳號每 5 分鐘掃描，AI 翻成三行白話中文；關注度 9 以上 LINE 主動推。半夜勿擾，睡你的覺。</p></div>
+  <div class="v2-radar-card"><h3>📣 輿情雷達</h3><p>一檔股票突然被討論到爆——是真消息，還是有人帶風向？VIP 看得到討論明細：誰在講、在講什麼、熱度從哪天開始衝。群組裡有人吹的股票，先來這裡看看它正不正常。</p></div>
+  <p style="font-size:10.5px;color:#9a948a;margin-top:8px;">關注度為市場討論熱度統計，不代表任何買賣訊號。</p>
+</section>
+
+<section class="m-sec">
+  <h2>免費是工具，VIP 是有人幫你盯</h2>
+  <p class="sub">免費版你要記得來用；VIP 你忘了它，它也記得你。</p>
   <div class="m-vs">
-    <div class="m-vs-row m-vs-head"><div>真正有感的服務</div><div class="c">免費</div><div class="c vipcol">VIP 進階</div></div>
-    <div class="m-vs-row"><div>買前檢查・風險分數・合理區間（單次查）</div><div class="c yes">✓</div><div class="c yes">✓</div></div>
-    <div class="m-vs-row"><div>每日持股健診＋LINE 風險摘要推播</div><div class="c free">—</div><div class="c yes">✓</div></div>
-    <div class="m-vs-row"><div>風險上升・列入注意股 主動提醒</div><div class="c free">—</div><div class="c yes">✓</div></div>
-    <div class="m-vs-row"><div>X 快訊雷達（訂閱金融大佬・中文快訊）</div><div class="c free">—</div><div class="c yes">✓</div></div>
-    <div class="m-vs-row"><div>投資儀表板完整版・策略每日自動掃描</div><div class="c free">—</div><div class="c yes">✓</div></div>
-    <div class="m-vs-row"><div>AI 對話次數</div><div class="c free num">5 次/日</div><div class="c yes">無上限</div></div>
-    <div class="m-vs-row"><div>自選股檔數</div><div class="c free num">10</div><div class="c yes num">100</div></div>
+    <div class="m-vs-row m-vs-head"><div>情境</div><div class="c">免費</div><div class="c vipcol">VIP</div></div>
+    <div class="m-vs-row"><div>想買之前：紅旗檢查＋AI 對話</div><div class="c free num">限次</div><div class="c yes">無限</div></div>
+    <div class="m-vs-row"><div>買了之後：每天盤後自動健診、有事才叫你</div><div class="c free">—</div><div class="c yes">✓</div></div>
+    <div class="m-vs-row"><div>除權息、法說會 提前 7 天 LINE 提醒</div><div class="c free">—</div><div class="c yes">✓</div></div>
+    <div class="m-vs-row"><div>半夜美國出大事 → 5 分鐘變中文摘要</div><div class="c free">—</div><div class="c yes">✓</div></div>
+    <div class="m-vs-row"><div>被討論到爆的股票 看誰在講、講什麼</div><div class="c free num">只看統計</div><div class="c yes">明細</div></div>
+    <div class="m-vs-row"><div>存好的選股條件 每天自動掃全市場</div><div class="c free">—</div><div class="c yes">✓</div></div>
+    <div class="m-vs-row"><div>每天 07:00 大盤風險推播</div><div class="c free">—</div><div class="c yes">✓</div></div>
   </div>
 </section>
 
 <!-- 方案 -->
-<section class="m-sec">
+<section class="m-sec" id="mPlans">
   <h2>選擇方案</h2>
-  <p class="sub">隨時可取消・純資料服務、不喊單不代操</p>
+  <p class="sub">隨時取消・30 天無理由退費・綠界安全付款</p>
 
   <div class="m-plan hot">
-    <div class="m-plan-head"><b>VIP 進階</b><span style="font-size:11px;font-weight:900;color:#ecd9ab;border:1px solid rgba(236,217,171,.4);border-radius:8px;padding:2px 7px;">主推</span><span class="price num">NT$199<small>/月</small></span></div>
+    <div class="m-plan-head"><b>VIP——每天有人幫你盯持股</b><span style="font-size:11px;font-weight:900;color:#ecd9ab;border:1px solid rgba(236,217,171,.4);border-radius:8px;padding:2px 7px;">創始會員價</span></div>
+    <div style="margin:6px 0 2px;"><span style="font-size:15px;color:rgba(248,245,236,.55);text-decoration:line-through;">NT$399</span> <span class="num" style="font-size:34px;font-weight:900;color:#ecd9ab;">NT$199</span><small style="color:rgba(248,245,236,.7);font-weight:800;">/月・前 3 個月</small></div>
+    <div style="font-size:12px;color:rgba(248,245,236,.75);margin-bottom:8px;">一天 6.6 元，比一份報紙便宜。<b>第 4 個月起 NT$399/月，隨時取消。</b></div>
     <ul>
-      <li>每日盤後持股健診＋LINE 風險摘要</li>
-      <li>風險上升、列入注意股 主動提醒</li>
-      <li>X 快訊雷達：訂閱金融大佬、發文翻中文</li>
-      <li>投資儀表板完整版＋策略每日掃描</li>
-      <li>AI 對話無上限・自選股 100 檔</li>
+      <li><b>買前幫你查</b>：9 項紅旗、AI 對話，無限次</li>
+      <li><b>買後幫你盯</b>：持股每天盤後自動健診</li>
+      <li><b>有事叫你</b>：風險、除權息、法說會 LINE 提醒</li>
+      <li><b>大事翻給你聽</b>：83 帳號快訊中文摘要＋輿情明細</li>
+      <li><b>每天早上 7 點</b>：今日大盤風險推播</li>
     </ul>
-    <a class="cta pri" href="/pages/vip?full=1#plans">開啟每日風險守門 →</a>
+    <a class="cta pri" href="/pages/vip?full=1#vipPlans">用 199 開始幫我盯持股 →</a>
+    <div style="font-size:10.5px;color:rgba(248,245,236,.55);text-align:center;margin-top:7px;">🏦 綠界安全付款・✂️ 取消按一下就好</div>
   </div>
 
   <div class="m-plan">
-    <div class="m-plan-head"><b>免費會員</b><span class="price num">NT$0</span></div>
+    <div class="m-plan-head"><b>免費版——先試試也很好</b><span class="price num">NT$0</span></div>
     <ul>
-      <li>買前檢查（9 項紅旗）單次查詢</li>
-      <li>個股判斷卡・財報健檢・同業比較</li>
-      <li>合理區間（單檔）・新聞 AI 判讀</li>
-      <li>AI 對話 5 次/日・自選股 10 檔</li>
+      <li>單次買前檢查（9 項紅旗）</li>
+      <li>合理區間排行・便宜股排行</li>
+      <li>AI 對話（每日限次）・ETF 健檢・股利稅試算</li>
     </ul>
-    <a class="cta ghost" href="/pages/register.html">免費註冊，先用看看</a>
+    <a class="cta ghost" href="/pages/check-m">先免費檢查一檔股票</a>
   </div>
 
   <div class="m-plan">
-    <div class="m-plan-head"><b>VIP 旗艦</b><span class="price num">NT$499<small>/月</small></span></div>
+    <div class="m-plan-head"><b>VIP 旗艦——給更進階的你</b><span class="price num">NT$499<small>/月</small></span></div>
     <ul>
-      <li>進階全部功能</li>
-      <li>跌破合理區間下緣 即時警示<span class="soon">即將推出</span></li>
-      <li>合理區間歷史走勢圖<span class="soon">即將推出</span></li>
-      <li>自選股無上限・AI 產業週報/月報</li>
-      <li>線上專屬講座・優先客服</li>
+      <li>VIP 全部功能，加上：</li>
+      <li>選股策略每天自動掃全市場、新符合 LINE 通知</li>
+      <li>持股組合風險整理・報告匯出</li>
     </ul>
-    <a class="cta ghost" href="/pages/vip?full=1#plans">了解旗艦方案 →</a>
+    <a class="cta ghost" href="/pages/vip?full=1#vipPlans">了解旗艦方案 →</a>
+  </div>
+
+  <div class="v2-honest">
+    <b class="h">為什麼只收 199？</b>
+    <p>領富 AI 今年才上線。我們需要第一批每天真的在用、願意說真話的會員。前三個月只收 199——<b>不是服務打折，是你來得早。</b>用一個月不合用，按一下取消就好；你最多花 199，換一個確定的答案。</p>
+  </div>
+  <div class="v2-honest">
+    <b class="h">跟您說實話</b>
+    <p>領富 AI 不能讓您賺錢——沒有任何工具可以，說可以的都在騙您。我們能做的，是每天收盤後幫您把持股檢查一遍，有狀況 LINE 您一聲。該不該買、該不該賣，永遠是您的決定。我們只是讓您做決定時，<b>手上有資料，而不是只有別人的一句話。</b></p>
+    <small>領富 AI 為資訊整理服務，非證券投資顧問事業，所有內容不構成投資建議。投資一定有風險，決策前請審慎評估。</small>
+  </div>
+</section>
+
+<section class="m-sec">
+  <h2>取消，比訂閱還簡單</h2>
+  <div class="v2-honest" style="margin-top:8px;">
+    <p>✂️ 不用打電話、不用理由——會員頁「管理訂閱」按一下就完成</p>
+    <p>📅 取消後用到當期最後一天，之後一毛不扣</p>
+    <p>🛡 <b>30 天無理由退費</b>：第一個月不滿意，全額退還</p>
+    <p>🏦 綠界金流處理刷卡，您的卡號我們看不到</p>
+    <p style="color:#8a8d85;font-size:12px;">我們只收這筆月費。要您匯款投資、進群組的都不是我們——請撥 <a href="tel:165" style="color:#a13a2f;font-weight:900;">165</a>。</p>
+  </div>
+</section>
+
+<section class="m-sec">
+  <div class="v2-family">
+    <h2 style="font-size:18px;">幫爸媽訂的，可能比幫自己訂的還多</h2>
+    <p>爸媽不會跟你說他加了哪些群組。你勸過他「不要亂聽消息」，但你不可能每天幫他看盤。<b>我們可以。</b></p>
+    <p>他什麼都不用學，<b>會收 LINE 就會用</b>。回家 3 分鐘幫他設定好：① 用他的手機登入 ② 輸入他的持股 ③ 完成。</p>
+    <p>與其替他做決定，不如給他一個看得懂、自己能判斷的工具。<b>這比替他做決定，更是孝順。</b></p>
+    <a href="#mPlans" style="display:flex;align-items:center;justify-content:center;min-height:48px;margin-top:6px;border-radius:12px;background:#0b3328;color:#f4ead2;font-size:14.5px;font-weight:900;text-decoration:none;">替爸媽訂一份</a>
   </div>
 </section>
 
@@ -183,15 +285,27 @@
   <h2>常見問題</h2>
   <p class="sub"></p>
   <div class="m-faq">
-    <details><summary>VIP 會報明牌嗎？</summary><div class="a">不會。領富 AI 是「資料整理＋風險守門」服務：我們把公開資料整理成你看得懂的健診與提醒，買賣決定永遠在你手上。不喊單、不報明牌、不開飆股群組。</div></details>
-    <details><summary>免費版能用到什麼程度？</summary><div class="a">單次的買前檢查、風險分數、合理區間、判斷卡、新聞 AI 判讀都免費 —— 足夠你「看懂一檔股票」。VIP 的差別是系統「每天自動」幫你複查整個持股清單並主動通知。</div></details>
-    <details><summary>怎麼付款？可以退嗎？</summary><div class="a">線上刷卡（綠界金流），按月訂閱、隨時可取消，取消後服務維持到當期結束。付款與發票紀錄在會員中心可查。</div></details>
-    <details><summary>X 快訊雷達是什麼？</summary><div class="a">VIP 專屬功能：勾選你想追蹤的國際金融大佬（馬斯克、聯準會、彭博等 70+ 帳號），他們一發布市場相關貼文，AI 翻成中文摘要推給你，每則附原文連結。內容為輿情整理、非投資建議。</div></details>
+    <details open><summary>會不會自動扣款扣不停？怎麼取消？</summary><div class="a">不會。會員頁面按一下「取消訂閱」就完成——不用打電話、不用理由。取消後服務用到當期最後一天。另有 30 天無理由退費：第一個月不滿意，全額退還。</div></details>
+    <details open><summary>第 4 個月會變多少錢？</summary><div class="a">恢復原價 NT$399/月（旗艦 NT$999/月），直接寫在方案卡上、不藏小字。您隨時可以在恢復原價前取消。</div></details>
+    <details open><summary>你們會不會報明牌、帶我買賣？</summary><div class="a">不會，永遠不會。不報明牌、不代操不收投資款、不拉群。有人冒用「領富 AI」名義拉群報明牌，一律是詐騙，請撥 165。</div></details>
+    <details><summary>我不太會用手機，會不會很難？</summary><div class="a">不會。九成的事在 LINE 裡完成——會收 LINE 訊息就會用。設定 3 分鐘（加 LINE → 輸入持股 → 完成），卡住了 LINE 客服有真人回覆。</div></details>
+    <details><summary>年付有比較划算嗎？</summary><div class="a">有。年付用 10 個月的價錢用 12 個月：進階年付 NT$1,990（≈每月 166）、旗艦 NT$4,990。也免去「忘記取消變原價」的麻煩。</div></details>
+  </div>
+</section>
+
+<section class="m-sec">
+  <div class="v2-final">
+    <h3>今晚收盤後，<br>你的持股就有新的資料</h3>
+    <p>新的法人買賣、新的借券變化、新的營收公告——這些今晚就會產生。差別只在：<b>有沒有人幫你看。</b></p>
+    <a href="#mPlans" style="display:flex;align-items:center;justify-content:center;min-height:52px;margin-top:12px;border-radius:14px;background:#d6b36f;color:#102016;font-size:15.5px;font-weight:900;text-decoration:none;">從今天收盤開始，幫我盯——前 3 個月 199</a>
+    <p style="font-size:11px;margin-top:8px;color:rgba(248,245,236,.6);">隨時取消・30 天退費・綠界安全付款・一天 6.6 元</p>
   </div>
 </section>
 
 <div class="m-disc"><b>合規聲明：</b>領富 AI 為公開資料整理與軟體服務，非證券投資顧問；所有內容不構成投資建議，不代操、不收受投資款項。唯一官網 leadfuai.com、唯一官方 LINE @130tqckv，謹防詐騙集團冒用。</div>
 <div class="m-src">領富 AI・台股風險守門員</div>
+
+
 
 <nav class="m-tabbar">
   <a href="/" id="tbHome"></a>
@@ -215,6 +329,28 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById(id).innerHTML = `<svg width="22" height="22" viewBox="0 0 256 256" fill="currentColor">${paths}</svg>${label}`;
   }
 });
+</script>
+
+<script>
+(async function () {
+  try {
+    const j = async f => { try { return await (await fetch("/data/" + f)).json(); } catch (e) { return null; } };
+    const [st, rs, sn, dv] = await Promise.all([j("stocks_live.json"), j("risk_score_live.json"), j("sentiment_live.json"), j("dividend_live.json")]);
+    const num = (el, v) => { const e = document.getElementById(el); if (e && v != null) e.textContent = v.toLocaleString("en-US"); };
+    if (st) num("stN1", st.stockCount || (st.stocks || []).length);
+    if (rs && rs.data) num("stN2", Object.values(rs.data).filter(r => r.level === "高" || r.level === "警示" || r.level === "極高").length);
+    if (sn) num("stN3", sn.count);
+    if (dv && dv.data) {
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const lim = new Date(today.getTime() + 7 * 86400000);
+      num("stN4", Object.values(dv.data).filter(d => { if (!d.ex_date) return false; const e = new Date(d.ex_date + "T00:00:00"); return e >= today && e <= lim; }).length);
+    }
+    const cap = document.getElementById("stCap");
+    if (cap && st && st.updatedAt) cap.textContent = "資料更新：" + st.updatedAt + "・官方公開資料";
+    const tt = document.getElementById("mStatsTitle");
+    if (tt) { const h = new Date(Date.now() + 8 * 3600 * 1000).getUTCHours(); if (h < 16) tt.textContent = "昨天收盤後，系統做了這些事"; }
+  } catch (e) {}
+})();
 </script>
 </body>
 </html>
