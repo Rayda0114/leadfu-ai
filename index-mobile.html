@@ -217,6 +217,16 @@
     body{max-width:440px;margin:0 auto;background:var(--bg);box-shadow:0 0 60px rgba(0,0,0,.12);}
     .bottom{left:50%;transform:translateX(-50%);max-width:440px;}
   }
+
+  /* ⚡ X 快訊雷達（VIP 賣點，2026-06-11） */
+  .xr-rows{border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);margin-top:18px;}
+  .xr-row{display:flex;flex-direction:column;gap:5px;padding:13px 0;border-bottom:1px solid var(--hair2);}
+  .xr-row:last-child{border-bottom:0;}
+  .xr-meta{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#9a948a;font-weight:700;}
+  .xr-tag{font-size:10px;font-weight:900;color:#fff;padding:2px 8px;border-radius:8px;flex:none;}
+  .xr-au{color:var(--forest);font-weight:900;}
+  .xr-imp{margin-left:auto;color:#b08a3e;font-weight:800;}
+  .xr-sum{font-size:13.5px;line-height:1.7;color:#2a352f;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 </style>
 </head>
 <body>
@@ -289,6 +299,20 @@
   <a class="qc" href="pages/ai.html?q=2882"><small>金融</small><b>國泰金</b><div class="tk">2882</div><div class="pxx up">62.4 <em>▲0.8%</em></div></a>
 </div>
 
+<!-- ⚡ X 快訊雷達（VIP 賣點 + LIVE 試閱） -->
+<section class="section">
+  <div class="signal">X Radar · VIP</div>
+  <h2>大佬一發文，<br>你比市場先看懂</h2>
+  <p class="sub">川普、馬斯克、聯準會、路透… 70+ 個會撼動市場的 X 帳號，每 5 分鐘掃一次，AI 整理成中文摘要，標好輿情方向與重要度。</p>
+  <div class="xr-rows" id="xrMobRows" style="display:none;"></div>
+  <div class="insight">
+    <div><b>中文摘要</b><span>不用自己翻英文貼文。</span></div>
+    <div><b>自選訂閱</b><span>只看你關注的大佬。</span></div>
+    <div><b>LINE 推播</b><span>重大動向主動提醒。</span></div>
+  </div>
+  <div class="sec-cta"><a class="btn" href="pages/vip.html#x-radar">看 VIP 方案</a><a class="link" href="pages/member.html#x-radar">先試用 →</a></div>
+</section>
+
 <!-- 方案 -->
 <section class="section">
   <div class="signal">Membership</div>
@@ -359,5 +383,60 @@
 })();
 </script>
 
+
+<script>
+/* ⚡ X 快訊雷達 LIVE 試閱（公開 feed；失敗就不顯示列表，賣點文案照常） */
+(function () {
+  fetch("/api/market/x-alerts").then(r => r.json()).then(d => {
+    var rows = (d && d.alerts) || [];
+    var el = document.getElementById("xrMobRows");
+    if (!el || !rows.length) return;
+    var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); };
+    var rel = function (iso) { try { var m = Math.max(1, Math.round((Date.now() - new Date(iso).getTime()) / 60000)); return m < 60 ? m + " 分鐘前" : m < 1440 ? Math.round(m / 60) + " 小時前" : Math.round(m / 1440) + " 天前"; } catch (e) { return ""; } };
+    var C = { bullish: "#be4a3e", bearish: "#148a55", neutral: "#8a948e" };
+    var L = { bullish: "偏多", bearish: "偏空", neutral: "中性" };
+    el.innerHTML = rows.slice(0, 3).map(function (a) {
+      return '<div class="xr-row"><div class="xr-meta">'
+        + '<span class="xr-tag" style="background:' + (C[a.impact] || C.neutral) + ';">' + (L[a.impact] || "中性") + '</span>'
+        + '<span class="xr-au">@' + esc(a.author) + '</span>'
+        + '<span>' + rel(a.created_at) + '</span><span class="xr-imp">重要度 ' + (a.importance != null ? a.importance : "-") + '</span></div>'
+        + '<div class="xr-sum">' + esc(a.summary_zh) + '</div></div>';
+    }).join("");
+    el.style.display = "";
+  }).catch(function (e) {});
+})();
+
+/* 風險決策卡：接 2330 真數字（與買前檢查同源，避免靜態樣本過期打架） */
+(async function () {
+  try {
+    if (!window.LeadFu || !window.LeadFu.ready) return;
+    await window.LeadFu.ready;
+    var D = window.LeadFu.data || {};
+    var rs = (D.riskScore || {})["2330"] || {};
+    var st = (D.instStreak || {})["2330"] || {};
+    var fv = (D.fairValue || {})["2330"] || {};
+    var sb = (D.sbl || {})["2330"] || {};
+    var card = document.querySelector(".riskcard");
+    if (!card || rs.score == null) return;
+    var num = card.querySelector(".score strong");
+    if (num) num.textContent = rs.score;
+    var pill = card.querySelector(".pill");
+    var lvl = { "低": ["低風險", "", ""], "中": ["中風險", "#fdf2dd", "#a8731c"], "高": ["高風險", "#fbeae8", "#a13a2f"], "警示": ["警示", "#fbeae8", "#a13a2f"] }[rs.level];
+    if (pill && lvl) { pill.textContent = lvl[0]; if (lvl[1]) { pill.style.background = lvl[1]; pill.style.color = lvl[2]; } }
+    var items = [];
+    var lots = st.foreign != null ? Math.abs(st.foreign).toLocaleString("en-US") : null;
+    if (st.dir === "sell" && st.days >= 2) items.push([0, "外資連 " + st.days + " 日賣超，短線先看籌碼變化。"]);
+    else if (st.dir === "sell" && lots) items.push([0, "外資今日賣超 " + lots + " 張。"]);
+    else if (st.dir === "buy" && st.days >= 2) items.push([1, "外資連 " + st.days + " 日買超。"]);
+    if (sb.sbl_change > 0) items.push([0, "借券餘額增加，追價前確認量能。"]);
+    else if (sb.sbl_change < 0) items.push([1, "借券餘額減少。"]);
+    if (fv.label) items.push([fv.position != null && fv.position < 0.55 ? 1 : 0, "股價位於" + fv.label + "。"]);
+    var ul = card.querySelector(".reasons");
+    if (ul && items.length) ul.innerHTML = items.slice(0, 3).map(function (it) {
+      return '<li><span class="rdot' + (it[0] ? " ok" : "") + '"></span><span>' + it[1] + "</span></li>";
+    }).join("");
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
