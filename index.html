@@ -1803,7 +1803,59 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!window.LeadFu || !window.LeadFu.ready) return;
     await window.LeadFu.ready;
     const L = window.LeadFu;
-    // 範例卡：用 index.html 內的靜態範例（含「連續賣超」脈絡＋合規措辭），不被即時資料覆蓋
+
+    /* 範例卡：即時帶入 2330 真數字，與「買前檢查」同一份資料源 → 永遠一致、不會自打嘴巴。
+       取值與 check 頁同源：riskScore / instStreak / fairValue / sbl（皆以代號為 key）。 */
+    try {
+      const D = L.data || {};
+      const C = "2330";
+      const rs = (D.riskScore || {})[C] || {};
+      const st = (D.instStreak || {})[C] || {};
+      const fv = (D.fairValue || {})[C] || {};
+      const sb = (D.sbl || {})[C] || {};
+      const score = (rs.score != null) ? rs.score : null;
+      const level = rs.level || null;                       // 低 / 中 / 高 / 警示
+      const lots = (st.foreign != null) ? Math.abs(st.foreign) : null;
+      const dir = st.dir;                                   // buy / sell
+      const days = st.days || 0;
+      const fmtLots = n => n != null ? n.toLocaleString("en-US") : "—";
+      const levelClass = { "低": "ex-low", "中": "ex-mid", "高": "ex-high", "警示": "ex-high" };
+      const levelText = { "低": "低風險", "中": "中風險", "高": "高風險", "警示": "警示" };
+
+      // ── 卡片①：範例結果卡 ──
+      const setTxt = (sel, t) => { const e = document.querySelector(sel); if (e && t != null) e.textContent = t; };
+      if (level) {
+        const badge = document.querySelector("#exampleCard .ex-status");
+        if (badge) { badge.className = "ex-status " + (levelClass[level] || "ex-mid"); badge.textContent = levelText[level] || level; }
+      }
+      if (score != null) {
+        const sEl = document.querySelector("#exampleCard .ex-score strong"); if (sEl) sEl.textContent = score;
+        const bar = document.querySelector("#exampleCard .ex-bar-fill"); if (bar) bar.style.width = Math.min(100, score) + "%";
+      }
+      // 今日需注意：依即時資料重建（只列真實成立的項目）
+      const notes = [];
+      if (dir === "sell" && lots != null) notes.push(`外資今日賣超 ${fmtLots(lots)} 張`);
+      else if (dir === "buy" && lots != null) notes.push(`外資今日買超 ${fmtLots(lots)} 張`);
+      if (days >= 2 && dir) notes.push(`<b>是否連續${dir === "sell" ? "賣" : "買"}超：</b>是，已連 ${days} 日`);
+      if (sb.sbl_change > 0) notes.push("借券餘額增加");
+      else if (sb.sbl_change < 0) notes.push("借券餘額減少");
+      if (fv.label) notes.push(`股價位於${fv.label}`);
+      const ul = document.querySelector("#exampleCard .ex-notes");
+      if (ul && notes.length) ul.innerHTML = notes.map(n => `<li>${n}</li>`).join("");
+
+      // ── 卡片②：盤後複查範例卡 ──
+      const gcTag = document.querySelector(".guardian-card .gc-tag");
+      if (gcTag && level && score != null) gcTag.textContent = `${levelText[level] || level} ${score}`;
+      const gItems = [];
+      if (days >= 2 && dir) gItems.push(`🏦 外資連 ${days} 日${dir === "sell" ? "賣" : "買"}超`);
+      else if (dir && lots != null) gItems.push(`🏦 外資今日${dir === "sell" ? "賣" : "買"}超 ${fmtLots(lots)} 張`);
+      if (sb.sbl_change > 0) gItems.push("📉 借券餘額增加");
+      else if (sb.sbl_change < 0) gItems.push("📈 借券餘額減少");
+      if (fv.label) gItems.push(`${fv.position != null && fv.position < 0.5 ? "✅" : "📊"} 股價位於${fv.label}`);
+      const gul = document.querySelector(".guardian-card .gc-items");
+      if (gul && gItems.length) gul.innerHTML = gItems.map(n => `<li>${n}</li>`).join("");
+    } catch (e) { /* 取值失敗就保留 HTML 內靜態範例，不致命 */ }
+
     // 檢查框：輸入 → 買前檢查
     const input = document.getElementById("checkHeroInput");
     const resolve = (v) => {
