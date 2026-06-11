@@ -242,6 +242,38 @@
     .anti-fraud-banner .afb-inner { font-size:11.5px; padding-top:4px; padding-bottom:4px; }
     .anti-fraud-banner .afb-icon { display:none; }
   }
+
+  /* ═══ 🎨 桌機首頁「暖色編輯風」換皮（2026-06-11）═══
+     蓋掉上方舊定義與 style.css；只動視覺、所有 ID/功能不變。 */
+  .check-hero{background:
+    linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+    radial-gradient(circle at 84% 0%, rgba(185,145,79,.3), transparent 36%),
+    linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto; border-bottom:0; padding:54px 0 52px;}
+  .check-h1{color:#f8f5ec; font-weight:900; letter-spacing:-.5px;}
+  .check-h1 .accent{color:#ecd9ab;}
+  .check-sub{color:rgba(248,245,236,.72);}
+  .check-search{border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.08); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-radius:18px;}
+  .check-search:focus-within{box-shadow:0 0 0 3px rgba(214,179,111,.28); border-color:rgba(214,179,111,.5);}
+  .check-search input{background:transparent; color:#fff;}
+  .check-search input::placeholder{color:rgba(248,245,236,.55);}
+  .ch-mic{color:#d6b36f;} .ch-mic:hover{background:rgba(214,179,111,.12); color:#ecd9ab;}
+  .ch-go{background:#d6b36f; color:#102016;} .ch-go:hover{background:#e3c587;}
+  .check-btn-primary{background:#d6b36f; color:#102016; border-radius:999px; font-weight:900;}
+  .check-btn-primary:hover{background:#e3c587;}
+  .check-guarantees{color:rgba(248,245,236,.62);}
+  .example-card{background:#fffdf8; border:1px solid rgba(13,29,23,.08); border-radius:20px; box-shadow:0 24px 60px rgba(0,0,0,.34);}
+  .guardian-sec{background:transparent; border-bottom:0;}
+  .ai-second{background:transparent; border-bottom:0;}
+  .ai-chat-embed{background:#fffdf8 !important; border:1px solid rgba(13,29,23,.08) !important; border-radius:20px !important; box-shadow:0 12px 32px rgba(13,29,23,.08) !important;}
+  .hero-card-v2{background:#fffdf8 !important; border:1px solid rgba(13,29,23,.1) !important; border-radius:16px !important;}
+  .live-quote-bar{background:#08271f !important; border-bottom:1px solid rgba(214,179,111,.32) !important;}
+  .ticker{background:#fffdf8; border-top:1px solid rgba(13,29,23,.08); border-bottom:1px solid rgba(13,29,23,.08);}
+  .ticker-label{background:#0b3328; color:#ecd9ab;}
+  .fv-low-hero-section{background:transparent; border-bottom:0;}
+  .fv-low-card{background:#fffdf8 !important; border:1px solid rgba(13,29,23,.08) !important; border-radius:16px !important; box-shadow:0 8px 22px rgba(13,29,23,.05) !important;}
+  .daily-brief{background:#fffdf8 !important; border:1px solid rgba(13,29,23,.08) !important; border-radius:18px !important;}
+  .fv-low-h2::before, .ai-second-head h2::before, .guardian-sec h2::before{content:""; display:inline-block; width:24px; height:3px; background:#d6b36f; border-radius:2px; margin-right:10px; vertical-align:middle;}
 </style>
 
 <!-- 🔍 首頁第一屏：輸入股票 → 免費買前檢查 -->
