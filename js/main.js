@@ -1749,7 +1749,7 @@ function setupSupportWidget() {
   let minimized = false;
   try { minimized = localStorage.getItem("cs_min") === "1"; } catch (e) {}
 
-  function base() { launcher.hidden = false; tab.hidden = true; }   // 2026-06-12 直立標籤退役：一律顯示膠囊（用戶要求移除側邊客服標籤）
+  function base() { launcher.hidden = true; tab.hidden = false; }   // 2026-06-12 用戶定版：一律用直立側邊標籤，橫式膠囊退役
   function openPanel() {
     launcher.hidden = true; tab.hidden = true;
     panel.hidden = false; scrim.hidden = false;
