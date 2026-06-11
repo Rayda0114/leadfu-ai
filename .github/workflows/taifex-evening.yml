@@ -1,0 +1,39 @@
+name: 領富 AI · 期交所晚間補抓（大盤溫度計）
+
+# 期交所 DailyMarketReportFut 每日「晚間」才發布當日資料（15:00 的主排程抓到的是前一天）。
+# 22:30 台北（UTC 14:30）補抓一次 → 大盤風險溫度計顯示當日、隔晨 07:00 的大盤風險推播也吃到新資料。
+on:
+  schedule:
+    - cron: "30 14 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  refresh-taifex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch TAIFEX
+        run: python scripts/fetch_taifex.py
+        env:
+          PYTHONIOENCODING: utf-8
+      - name: Commit if changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "leadfu-ai-bot"
+          git config user.email "bot@leadfu.ai"
+          git add data/taifex_live.json data/_taifex_alert.json 2>/dev/null || git add data/taifex_live.json
+          if ! git diff --staged --quiet; then
+            git commit -m "data(taifex): 晚間補抓 $(date -u +%F)"
+            git push
+            gh workflow run deploy-worker.yml && echo "🚀 已觸發 worker 部署" || echo "⚠ 部署觸發失敗"
+          else
+            echo "ℹ️ 無變動"
+          fi
