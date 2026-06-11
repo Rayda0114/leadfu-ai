@@ -414,5 +414,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   refresh();
 });
 </script>
+
+<script>
+/* 📅 事件雷達（行動版） */
+(async function () {
+  try {
+    await window.LeadFu.ready;
+    const L = window.LeadFu;
+    const DIV = (L.data || {}).dividend || {};
+    const byCode = {}; ((L.data || {}).stocks || []).forEach(s => byCode[String(s.code)] = s);
+    const codes = [...new Set([...(L.getHoldings() || []).map(h => String(h.code)), ...(L.getWatchlist() || []).map(String)])];
+    if (!codes.length) return;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const lim = new Date(today.getTime() + 7 * 86400000);
+    const W = ["日", "一", "二", "三", "四", "五", "六"];
+    const evs = [];
+    codes.forEach(c => {
+      const d = DIV[c];
+      if (d && d.ex_date) {
+        const ed = new Date(d.ex_date + "T00:00:00");
+        if (ed >= today && ed <= lim) evs.push({ d: ed, code: c, name: (byCode[c] || {}).name || "", txt: `除${d.type || "息"}${d.cash ? `・每股 ${d.cash} 元` : ""}`, oneoff: !!d.oneoff });
+      }
+    });
+    if (!evs.length) return;
+    evs.sort((a, b) => a.d - b.d);
+    const anchor = document.getElementById("mDiagSec");
+    if (!anchor || document.getElementById("mEventSec")) return;
+    const sec = document.createElement("section");
+    sec.className = "m-sec"; sec.id = "mEventSec";
+    sec.innerHTML = `<div class="m-sec-head"><h2>未來 7 天事件</h2><span>除權息日程</span></div>
+      <div style="margin-top:10px;background:var(--paper);border:1px solid var(--hair2);border-radius:18px;padding:4px 16px;">
+        ${evs.map(e => `<div style="display:flex;gap:10px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--hair2);font-size:14px;">
+          <b style="flex:none;color:var(--forest);font-variant-numeric:tabular-nums;">${e.d.getMonth() + 1}/${e.d.getDate()}（${W[e.d.getDay()]}）</b>
+          <span><a href="/pages/stock-m?code=${e.code}" style="font-weight:800;color:var(--forest);text-decoration:none;">${e.code} ${e.name}</a><br><small style="color:#8a8d85;">${e.txt}${e.oneoff ? "・⚠ 含一次性" : ""}</small></span></div>`).join("").replace(/border-bottom:1px solid var\(--hair2\);font-size:14px;">(?![\s\S]*border-bottom)/, 'border-bottom:0;font-size:14px;">')}
+      </div>`;
+    anchor.before(sec);
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>

@@ -126,6 +126,24 @@ def main():
         "data": out,
     }
     (DATA_DIR / "dividend_live.json").write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+    # 📚 配息歷史累積（dividend_history.json）：為「含息真實報酬」鋪路 — 每筆 (code, ex_date) 永久留存
+    hist_path = DATA_DIR / "dividend_history.json"
+    hist = {}
+    if hist_path.exists():
+        try: hist = json.loads(hist_path.read_text(encoding="utf-8")).get("data", {})
+        except Exception: hist = {}
+    added = 0
+    for code, v in out.items():
+        if not v.get("ex_date"): continue
+        rows = hist.setdefault(code, [])
+        if not any(r.get("ex_date") == v["ex_date"] for r in rows):
+            rows.append({"ex_date": v["ex_date"], "cash": v.get("cash"), "type": v.get("type"), "div_year": v.get("div_year")})
+            rows.sort(key=lambda r: r["ex_date"])
+            added += 1
+    hist_path.write_text(json.dumps({"updatedAt": payload["updatedAt"], "note": "配息歷史累積（每筆除息事件永久留存，含息報酬用）",
+                                     "data": hist}, ensure_ascii=False), encoding="utf-8")
+    print(f"📚 配息歷史累積 +{added} 筆")
     have_ex = sum(1 for v in out.values() if v.get("ex_month"))
     print(f"✅ 股息資料 {len(out)} 檔（有除息日 {have_ex}）→ dividend_live.json")
 

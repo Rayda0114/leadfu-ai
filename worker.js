@@ -2007,10 +2007,10 @@ async function getLineStockContext(env, q) {
     }
   } catch (e) {}
   const grab = async (f) => { try { return (await (await env.ASSETS.fetch(new Request("https://placeholder/data/" + f))).json()).data || {}; } catch (e) { return {}; } };
-  const [fv, val, nav, div, hold, basic, tdcc] = await Promise.all([
+  const [fv, val, nav, div, hold, basic, tdcc, dvd] = await Promise.all([
     grab("fair_value_live.json"), grab("valuation_live.json"), grab("etf_nav_live.json"),
     grab("etf_div_live.json"), grab("etf_holdings_live.json"), grab("etf_basic_live.json"),
-    grab("tdcc_live.json")
+    grab("tdcc_live.json"), grab("dividend_live.json")
   ]);
   const out = matched.map(s => {
     const o = { code: s.code, name: s.name, price: s.price, change: s.change, 股價時間: s._note, category: s.category, market: s.status };
@@ -2023,6 +2023,12 @@ async function getLineStockContext(env, q) {
     } else {
       if (fv[s.code]) o.合理區間 = fv[s.code];
       if (val[s.code]) o.估值 = val[s.code];
+    }
+    const dd = dvd[s.code];
+    if (dd && dd.ex_date && dd.ex_date >= new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10)) {
+      o.即將除權息 = { 日期: dd.ex_date, 類型: "除" + (dd.type || "息") };
+      if (dd.cash) o.即將除權息.每股現金股利 = dd.cash;
+      if (dd.oneoff) o.即將除權息.注意 = "含一次性配息（" + (dd.oneoff_reason || "非經常性來源") + "）";
     }
     const td = tdcc[s.code];
     if (td) {

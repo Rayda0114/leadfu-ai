@@ -925,5 +925,51 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (e) {}
 })();
 </script>
+
+<script>
+/* 📅 事件雷達：持股＋自選 未來 7 天（除權息 + 規則性期限） */
+(async function () {
+  try {
+    await window.LeadFu.ready;
+    const L = window.LeadFu;
+    const DIV = (L.data || {}).dividend || {};
+    const byCode = {}; ((L.data || {}).stocks || []).forEach(s => byCode[String(s.code)] = s);
+    const codes = [...new Set([...(L.getHoldings() || []).map(h => String(h.code)), ...(L.getWatchlist() || []).map(String)])];
+    if (!codes.length) return;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const lim = new Date(today.getTime() + 7 * 86400000);
+    const W = ["日", "一", "二", "三", "四", "五", "六"];
+    const evs = [];
+    codes.forEach(c => {
+      const d = DIV[c];
+      if (d && d.ex_date) {
+        const ed = new Date(d.ex_date + "T00:00:00");
+        if (ed >= today && ed <= lim) evs.push({ d: ed, code: c, name: (byCode[c] || {}).name || "", txt: `除${d.type || "息"}${d.cash ? `（每股 ${d.cash} 元）` : ""}`, oneoff: !!d.oneoff });
+      }
+    });
+    evs.sort((a, b) => a.d - b.d);
+    const gen = [];
+    const y = today.getFullYear(), m = today.getMonth() + 1;
+    const dl = [[new Date(`${y}-${String(m).padStart(2, "0")}-10T00:00:00`), "全市場上月營收公布期限（10 日）"],
+                [new Date(`${y}-05-15T00:00:00`), "Q1 財報公布期限"], [new Date(`${y}-08-14T00:00:00`), "Q2 財報公布期限"],
+                [new Date(`${y}-11-14T00:00:00`), "Q3 財報公布期限"], [new Date(`${y}-03-31T00:00:00`), "年報公布期限"]];
+    dl.forEach(([dt, txt]) => { if (dt >= today && dt <= lim) gen.push(`${dt.getMonth() + 1}/${dt.getDate()}（${W[dt.getDay()]}）${txt}`); });
+    if (!evs.length && !gen.length) return;
+    const anchor = document.getElementById("sysRiskBanner");
+    if (!anchor || document.getElementById("eventRadar")) return;
+    const div = document.createElement("div");
+    div.className = "panel"; div.id = "eventRadar"; div.style.marginBottom = "14px";
+    div.innerHTML = `<div class="panel-head"><h2>📅 未來 7 天・你的持股事件</h2><span style="font-size:12px;color:#888;">除權息為公告日程・僅資料整理</span></div>
+      <div style="padding:6px 16px 12px;">
+        ${evs.map(e => `<div style="display:flex;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px solid #f2f4f3;font-size:14px;">
+          <b style="flex:none;color:#0b3328;font-variant-numeric:tabular-nums;">${e.d.getMonth() + 1}/${e.d.getDate()}（${W[e.d.getDay()]}）</b>
+          <span><a href="stock-detail?code=${e.code}" style="font-weight:800;color:#0b3328;">${e.code} ${e.name}</a> ${e.txt}${e.oneoff ? ' <span style="font-size:11px;font-weight:900;background:#fdf2dd;color:#a8731c;border-radius:8px;padding:1px 7px;">⚠ 含一次性</span>' : ""}</span></div>`).join("")}
+        ${gen.map(g => `<div style="padding:8px 0;font-size:12.5px;color:#8a8d85;">📌 ${g}</div>`).join("")}
+        ${evs.length ? "" : `<div style="padding:8px 0;font-size:13px;color:#8a8d85;">你的持股／自選 7 天內沒有除權息事件。</div>`}
+      </div>`;
+    anchor.after(div);
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>

@@ -135,7 +135,28 @@ def build_digest(codes, code2name, cat_of, anns_today, news, alerts, risk, atten
     my_news = [n for n in news if any(nm and nm in n.get("title", "") for nm in names)][:2]
 
     # 完全沒風險、也沒公告/新聞 → 不推（避免天天報平安洗版）
-    if not flagged and not my_ann and not my_news:
+    # 📅 未來 7 天除權息事件（提前算：只有事件也值得推）
+    evs = []
+    try:
+        from datetime import datetime as _dtm, timedelta as _td
+        _divd = (load_json("dividend_live.json") or {}).get("data", {})
+        _today = _dtm.now().date()
+        for _c in codes:
+            _v = _divd.get(_c)
+            if not _v or not _v.get("ex_date"):
+                continue
+            try:
+                _ed = _dtm.strptime(_v["ex_date"], "%Y-%m-%d").date()
+            except Exception:
+                continue
+            if _today <= _ed <= _today + _td(days=7):
+                _cash = f"（每股 {_v['cash']} 元）" if _v.get("cash") else ""
+                evs.append((_ed, f"・{_ed.month}/{_ed.day} {_c} {code2name.get(_c, '')} 除{_v.get('type', '息')}{_cash}"))
+        evs.sort()
+    except Exception:
+        evs = []
+
+    if not flagged and not my_ann and not my_news and not evs:
         return None
 
     lines = ["📋 領富 AI ・ 你的每日風險摘要", ""]
@@ -152,6 +173,12 @@ def build_digest(codes, code2name, cat_of, anns_today, news, alerts, risk, atten
         lines.append(f"🚨 {len(high)} 檔風險分數偏高(≥50)：{_names(high, code2name)}")
     if not flagged:
         lines.append("✓ 今天沒有明顯風險訊號。")
+
+    if evs:
+        lines.append("")
+        lines.append("📅 未來 7 天：")
+        for _, _s in evs:
+            lines.append(_s)
     lines.append("")
 
     if top_cat and conc >= 40 and len(codes) >= 3:
