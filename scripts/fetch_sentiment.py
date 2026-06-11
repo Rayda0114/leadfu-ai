@@ -246,7 +246,8 @@ def main():
         tag = " 🔴 雙源警示" if dual else (" 🟠 單源注意" if single else "")
         yts = f"YT {yt['week']} 部(x{yt_ratio}{'·飽和' if yt and yt['saturated'] else ''})" if yt else "YT -"
         print(f"[{i}/{len(codes)}] {code} {name}: PTT {weeks[0]} 篇(x{ratio}) · 新聞 {gn[3]} 則(x{gn_ratio}{'·飽和' if gn_saturated else ''}) · {yts} · X {xm if xm is not None else '-'} 次{tag}")
-    out = {"updatedAt": NOW.strftime("%Y-%m-%d %H:%M"),
+    ptt_ok = bool(http_get("https://www.ptt.cc/bbs/Stock/index.html"))
+    out = {"updatedAt": NOW.strftime("%Y-%m-%d %H:%M"), "ptt_ok": ptt_ok,
            "source": "PTT Stock 板 + Google News + YouTube + X 快訊雷達（四源熱度統計）；僅輿情整理、非投資建議",
            "window_days": 30, "count": len(result), "data": result}
     (DATA / "sentiment_live.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")

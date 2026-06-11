@@ -1,9 +1,10 @@
-name: 領富 AI · 輿情雷達盤後掃描（雲端）
+name: 領富 AI · 輿情雷達盤後掃描（雲端備援）
 
-# 15:40 台北（UTC 07:40）— 不依賴本機電腦開機
+# 備援模式：本機 launchd 15:40 為主力（PTT 只放行住宅 IP）；
+# 雲端 16:10 台北（UTC 08:10）補位 — 本機沒跑（關機/更新）時，用 新聞+YT+X 三源產出（無 PTT）
 on:
   schedule:
-    - cron: "40 7 * * 1-5"
+    - cron: "10 8 * * 1-5"
   workflow_dispatch:
 
 permissions:
@@ -18,17 +19,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: 連線測試（PTT 雲端可達性）
+      - name: 備援守門（本機今天已跑過就跳過）
+        id: guard
         run: |
-          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 -H "Cookie: over18=1" -A "Mozilla/5.0" "https://www.ptt.cc/bbs/Stock/index.html")
-          echo "PTT from GitHub runner → HTTP $code"
+          TODAY=$(TZ=Asia/Taipei date +%F)
+          UPD=$(python -c "import json;print(json.load(open('data/sentiment_live.json')).get('updatedAt','')[:10])" 2>/dev/null || echo "")
+          if [ "$UPD" = "$TODAY" ]; then echo "skip=true" >> "$GITHUB_OUTPUT"; echo "本機已於今日掃描（$UPD），雲端備援跳過"; else echo "skip=false" >> "$GITHUB_OUTPUT"; echo "本機今日未跑（最後 $UPD）→ 雲端補位"; fi
+      - name: 連線測試（PTT 雲端可達性，不致命）
+        if: steps.guard.outputs.skip == 'false'
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 -H "Cookie: over18=1" -A "Mozilla/5.0" "https://www.ptt.cc/bbs/Stock/index.html" || echo "blocked")
+          echo "PTT from GitHub runner → $code（blocked 屬預期，PTT 擋雲端 IP）"
       - name: 輿情掃描
+        if: steps.guard.outputs.skip == 'false'
         run: python scripts/fetch_sentiment.py
         env:
           PYTHONIOENCODING: utf-8
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       - name: Commit if changed
+        if: steps.guard.outputs.skip == 'false'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -36,7 +46,7 @@ jobs:
           git config user.email "bot@leadfu.ai"
           git add data/sentiment_live.json
           if ! git diff --staged --quiet; then
-            git commit -m "data(輿情雷達): 雲端盤後掃描 $(date -u +%F)"
+            git commit -m "data(輿情雷達): 雲端備援掃描（無 PTT 源）$(date -u +%F)"
             git push
             gh workflow run deploy-worker.yml && echo "🚀 已觸發部署" || true
           else
