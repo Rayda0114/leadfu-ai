@@ -1965,7 +1965,7 @@ async function renderStockPage(url, env) {
   const today = (D.updated || "").slice(0, 10) || new Date().toISOString().slice(0, 10);
 
   if (!s) {
-    const nf = `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>找不到代號 ${esc(code)} - 領富 AI</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/css/style.css?v=3.23.7"></head><body><div style="max-width:600px;margin:80px auto;padding:24px;text-align:center;font-family:sans-serif;"><h1>找不到「${esc(code)}」這檔股票</h1><p style="color:#666;">可能代號有誤，或不在追蹤範圍。<br><a href="/pages/stocks" style="color:#1B4332;">← 回股價總覽</a>　<a href="/pages/check" style="color:#1B4332;">用買前檢查器查詢</a></p></div></body></html>`;
+    const nf = `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>找不到代號 ${esc(code)} - 領富 AI</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/css/style.css?v=3.23.8"></head><body><div style="max-width:600px;margin:80px auto;padding:24px;text-align:center;font-family:sans-serif;"><h1>找不到「${esc(code)}」這檔股票</h1><p style="color:#666;">可能代號有誤，或不在追蹤範圍。<br><a href="/pages/stocks" style="color:#1B4332;">← 回股價總覽</a>　<a href="/pages/check" style="color:#1B4332;">用買前檢查器查詢</a></p></div></body></html>`;
     return new Response(nf, { status: 404, headers: { "content-type": "text/html;charset=utf-8" } });
   }
 
@@ -2033,7 +2033,7 @@ async function renderStockPage(url, env) {
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
 <script type="application/ld+json">${jsonld}</script>
-<link rel="stylesheet" href="/css/style.css?v=3.23.7">
+<link rel="stylesheet" href="/css/style.css?v=3.23.8">
 <style>
   .sd-wrap{max-width:880px;margin:0 auto;padding:18px 12px 50px;}
   .sd-bc{font-size:13px;color:#888;margin-bottom:10px;}

@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 OUT = ROOT / "pages" / "industries"
 BASE = "https://leadfuai.com"
-CSS_V = "3.23.7"
+CSS_V = "3.23.8"
 JS_V = "3.25.1"
 TODAY = datetime.now().strftime("%Y-%m-%d")
 

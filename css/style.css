@@ -9147,3 +9147,56 @@ body.theme-red .us-teaser-banner { background: linear-gradient(100deg, #4A0E0E, 
 @media (prefers-reduced-motion: reduce) {
   .cs-launcher, .cs-panel, .cs-scrim, .cs-tab { transition: none; }
 }
+
+/* ════════════════════════════════════════════════════════════
+ * 🎨 桌機版「暖色編輯風」換皮（2026-06-11）
+ * 與手機版 -m 頁同一套設計語言：米色 #f4f2ec × 森林綠 #0b3328 × 黃銅金 #d6b36f
+ * 用覆寫層統一全站殼層（頂列/logo列/導覽/頁首/面板/表格/頁尾），
+ * 不動各頁邏輯與功能性顏色（紅漲綠跌維持原樣）。
+ * ════════════════════════════════════════════════════════════ */
+body { background: #f4f2ec; color: #0d1d17; }
+
+/* 頂列：黑 → 深森林 */
+.top-bar { background: #08271f; color: rgba(248,245,236,.6); border-bottom: 1px solid rgba(214,179,111,.22); }
+.top-bar a { color: rgba(248,245,236,.82); }
+.top-bar a:hover { color: #ecd9ab; }
+
+/* Logo 列：白 → 米色，搜尋框圓角化 */
+.logo-bar { background: #f4f2ec; border-bottom: 1px solid rgba(13,29,23,.1); }
+.search-box { border: 1px solid rgba(13,29,23,.16); border-radius: 14px; overflow: hidden; background: #fffdf8; }
+.search-box input { background: transparent; font-size: 15px; }
+.search-box button { background: #0b3328; color: #d6b36f; font-weight: 800; }
+.search-box button:hover { background: #144735; }
+
+/* 主導覽：金色 active 指示 */
+.main-nav { background: #0b3328; border-bottom: 2px solid #d6b36f; }
+.main-nav a { color: rgba(248,245,236,.85); font-weight: 700; }
+.main-nav a:hover { background: rgba(214,179,111,.14); color: #fff; }
+.main-nav li.active a { background: rgba(214,179,111,.18); color: #ecd9ab; box-shadow: inset 0 -3px 0 #d6b36f; }
+
+/* 頁首：白底欄 → 編輯風大標（金色短槓） */
+.page-head { background: transparent; border-bottom: 0; padding: 26px 0 4px; }
+.page-head h1 { font-size: 26px; font-weight: 900; color: #0d1d17; letter-spacing: -.3px; }
+.page-head h1::before { content: ""; display: inline-block; width: 26px; height: 3px; background: #d6b36f; border-radius: 2px; margin-right: 12px; vertical-align: middle; }
+.breadcrumb { color: #9a948a; }
+
+/* 面板：白直角卡 → 米白圓角紙卡 */
+.panel { background: #fffdf8; border: 1px solid rgba(13,29,23,.08); border-radius: 18px; box-shadow: 0 10px 28px rgba(13,29,23,.06); overflow: hidden; }
+.panel-head { border-bottom: 1px solid rgba(13,29,23,.08); padding: 14px 18px; }
+.panel-head h2, .panel-head h3 { font-weight: 900; color: #0b3328; }
+
+/* 按鈕 */
+.btn-primary { background: #0b3328; border-radius: 12px; font-weight: 800; }
+.btn-primary:hover { background: #144735; }
+
+/* 表格：黃色 hover → 淡綠；表頭森林綠 */
+.stock-table th { background: #f2f6f3; color: #0b3328; font-weight: 800; }
+.stock-table tr:hover { background: #f4f8f5; }
+.stock-table .code { color: #0b3328; }
+
+/* 頁尾：黑 → 深森林 */
+.site-footer { background: #08271f; color: rgba(248,245,236,.55); }
+.site-footer h4 { color: #ecd9ab; }
+.site-footer a { color: rgba(248,245,236,.72); }
+.site-footer a:hover { color: #ecd9ab; }
+.site-footer .copyright { background: rgba(0,0,0,.25); color: rgba(248,245,236,.4); }
