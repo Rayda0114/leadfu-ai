@@ -137,6 +137,11 @@
     <div class="m-panel"><div class="m-chips" id="mTech"></div></div>
   </section>
 
+    <section class="m-sec" id="mSentSec" style="display:none;">
+    <div class="m-sec-head"><h2>輿情雷達</h2><span>PTT × 新聞 × YT・近 30 天</span></div>
+    <div id="mSentBody" style="margin-top:10px;background:var(--paper);border:1px solid var(--hair2);border-radius:18px;padding:14px 16px;"></div>
+  </section>
+
   <section class="m-sec" id="mNewsSec" style="display:none;">
     <div class="m-sec-head"><h2>相關新聞</h2><a href="/pages/news.html">更多 ›</a></div>
     <div class="m-panel" id="mNews"></div>
@@ -337,6 +342,57 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("ctaCheck").href = "/pages/check?code=" + encodeURIComponent(code);
   document.getElementById("ctaFull").href = "/pages/stock-detail?full=1&code=" + encodeURIComponent(code);
 });
+</script>
+
+<script>
+/* 📡 輿情雷達卡（近30天 PTT×新聞×YT×X；統計免費、明細 VIP）*/
+(async function () {
+  const code = new URLSearchParams(location.search).get("code") || "";
+  const secEl = document.getElementById("mSentSec");
+  const bodyEl = document.getElementById("mSentBody");
+  if (!code || !secEl || !bodyEl) return;
+  let sj = null;
+  try { sj = await (await fetch("/data/sentiment_live.json", { cache: "no-cache" })).json(); } catch (e) { return; }
+  const sn = (sj.data || {})[code];
+  if (!sn) return;
+  try { if (window.LeadFu && window.LeadFu.ready) await window.LeadFu.ready; } catch (e) {}
+  let isVip = false;
+  try {
+    const has = window.LeadFu && window.LeadFu.hasSession && window.LeadFu.hasSession();
+    if (has) {
+      for (let i = 0; i < 10 && !window.LeadFuAuth; i++) await new Promise(r => setTimeout(r, 300));
+      if (window.LeadFuAuth && window.LeadFuAuth.getProfile) {
+        const u = await window.LeadFuAuth.getProfile();
+        isVip = !!(u && u.vip_until && new Date(u.vip_until).getTime() > Date.now());
+      }
+    }
+  } catch (e) {}
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  let html = "";
+  if (sn.heat_spike) html += `<div style="background:#fbeae8;border:1px solid #eccfc9;border-radius:12px;padding:10px 13px;margin-bottom:12px;font-size:13px;color:#a13a2f;font-weight:800;">🔴 輿情熱度異常（雙源確認）：PTT ${sn.ptt_week} 篇（${sn.ptt_ratio} 倍）＋新聞 ${sn.gn_week} 則（${sn.gn_ratio} 倍）同步暴增 —— 常見於炒作前期。</div>`;
+  else if (sn.heat_watch) html += `<div style="background:#fdf2dd;border:1px solid #ecd9b0;border-radius:12px;padding:10px 13px;margin-bottom:12px;font-size:13px;color:#a8731c;font-weight:800;">🟠 輿情熱度升溫（單源）：${sn.ptt_spike ? `PTT ${sn.ptt_week} 篇（${sn.ptt_ratio} 倍）` : sn.gn_spike ? `新聞 ${sn.gn_week} 則（${sn.gn_ratio} 倍）` : `YT ${sn.yt_week} 部（${sn.yt_ratio} 倍）`}異常升溫。</div>`;
+  const stat = (lab, val) => `<div style="text-align:center;"><div style="font-size:17px;font-weight:900;color:#0b3328;font-variant-numeric:tabular-nums;">${val}</div><div style="font-size:11px;color:#8a8d85;font-weight:700;margin-top:2px;">${lab}</div></div>`;
+  html += `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">`
+    + stat("PTT 本週", sn.ptt_week + " 篇")
+    + stat("新聞本週", sn.gn_week + (sn.gn_saturated ? "+" : "") + " 則")
+    + stat("YT 本週", sn.yt_week == null ? "—" : sn.yt_week + (sn.yt_saturated ? "+" : "") + " 部")
+    + stat("X 大佬提及", sn.x_mentions_30d != null ? sn.x_mentions_30d + " 次" : "—")
+    + `</div>`;
+  let items = (sn.hot_titles || []).slice(0, 2).map(h =>
+    `<a href="${esc(h.url)}" target="_blank" rel="noopener nofollow" style="display:flex;gap:8px;font-size:12.5px;color:#3a453e;text-decoration:none;line-height:1.55;"><span style="flex:none;min-width:30px;text-align:center;font-size:10.5px;font-weight:900;color:#a8731c;background:#fdf2dd;border-radius:7px;padding:2px 4px;height:fit-content;">${h.push >= 100 ? "爆" : h.push}</span><span>${esc(h.t)}</span></a>`);
+  const ytv = (sn.yt_top || [])[0];
+  if (ytv) items.push(`<a href="${esc(ytv.url)}" target="_blank" rel="noopener nofollow" style="display:flex;gap:8px;font-size:12.5px;color:#3a453e;text-decoration:none;line-height:1.55;"><span style="flex:none;min-width:30px;text-align:center;font-size:10.5px;font-weight:900;color:#a13a2f;background:#fbeae8;border-radius:7px;padding:2px 4px;height:fit-content;">YT</span><span>${esc(ytv.t.slice(0, 40))} · ${ytv.views >= 10000 ? (ytv.views / 10000).toFixed(1) + " 萬" : ytv.views} 次觀看</span></a>`);
+  if (items.length) {
+    if (isVip) {
+      html += `<div style="margin-top:12px;border-top:1px solid rgba(13,29,23,.08);padding-top:10px;display:flex;flex-direction:column;gap:7px;">${items.join("")}</div>`;
+    } else {
+      html += `<div style="margin-top:12px;border-top:1px solid rgba(13,29,23,.08);padding-top:10px;position:relative;"><div style="filter:blur(5px);pointer-events:none;display:flex;flex-direction:column;gap:7px;">${items.join("")}</div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><a href="/pages/vip#x-radar" style="background:#0b3328;color:#f4ead2;font-size:13px;font-weight:900;padding:9px 20px;border-radius:999px;text-decoration:none;box-shadow:0 8px 22px rgba(11,51,40,.3);">💎 VIP 解鎖熱門討論明細 →</a></div></div>`;
+    }
+  }
+  html += `<div style="margin-top:11px;font-size:11px;color:#9a948a;line-height:1.6;">更新 ${esc(sj.updatedAt)}・來源 PTT／Google News／YouTube／X（公開資料）・討論熱度不代表股價方向，非投資建議。</div>`;
+  bodyEl.innerHTML = html;
+  secEl.style.display = "";
+})();
 </script>
 </body>
 </html>

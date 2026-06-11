@@ -304,12 +304,14 @@
   <div class="signal">X Radar · VIP</div>
   <h2>大佬一發文，<br>你比市場先看懂</h2>
   <p class="sub">川普、馬斯克、聯準會、路透… 70+ 個會撼動市場的 X 帳號，每 5 分鐘掃一次，AI 整理成中文摘要，標好輿情方向與重要度。</p>
+  <div id="xrHeatStrip" style="display:none;gap:8px;flex-wrap:wrap;margin-top:10px;"></div>
   <div class="xr-rows" id="xrMobRows" style="display:none;"></div>
   <div class="insight">
     <div><b>中文摘要</b><span>不用自己翻英文貼文。</span></div>
     <div><b>自選訂閱</b><span>只看你關注的大佬。</span></div>
     <div><b>LINE 推播</b><span>重大動向主動提醒。</span></div>
   </div>
+  <p class="sub" style="margin-top:14px;">📡 搭配<b>個股輿情雷達</b>（PTT × 新聞 × YouTube 熱度異常警示）—— 已內建於買前檢查與防錯雷達。</p>
   <div class="sec-cta"><a class="btn" href="pages/vip.html#x-radar">看 VIP 方案</a><a class="link" href="pages/member.html#x-radar">先試用 →</a></div>
 </section>
 
@@ -436,6 +438,20 @@
       return '<li><span class="rdot' + (it[0] ? " ok" : "") + '"></span><span>' + it[1] + "</span></li>";
     }).join("");
   } catch (e) {}
+})();
+</script>
+
+<script>
+/* 📡 輿情警示 chips（有警示才出現） */
+(function () {
+  fetch("/data/sentiment_live.json").then(r => r.json()).then(sj => {
+    const rows = Object.entries(sj.data || {}).filter(([c, v]) => v.heat_spike || v.heat_watch);
+    const el = document.getElementById("xrHeatStrip");
+    if (!el || !rows.length) return;
+    el.innerHTML = rows.slice(0, 4).map(([c, v]) =>
+      `<a href="/pages/check?code=${c}" style="display:inline-flex;align-items:center;gap:6px;background:${v.heat_spike ? "#fbeae8" : "#fdf2dd"};color:${v.heat_spike ? "#a13a2f" : "#a8731c"};border:1px solid ${v.heat_spike ? "#eccfc9" : "#ecd9b0"};font-size:12.5px;font-weight:900;padding:6px 13px;border-radius:999px;text-decoration:none;">📡 ${c} ${v.name} 輿情${v.heat_spike ? "異常" : "升溫"} →</a>`).join(" ");
+    el.style.display = "flex";
+  }).catch(function (e) {});
 })();
 </script>
 </body>

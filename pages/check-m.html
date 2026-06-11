@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>買前檢查器 - 一鍵體檢個股紅旗 - 領富 AI</title>
-<meta name="description" content="輸入股票代號，一頁看完 8 項紅旗檢查：注意處置股、流動性、營收、法人、借券、估值、公告與風險分數，並判斷適合短線或長期觀察。買進前先看清楚。">
+<meta name="description" content="輸入股票代號，一頁看完 9 項紅旗檢查：注意處置股、流動性、營收、法人、借券、估值、公告與風險分數，並判斷適合短線或長期觀察。買進前先看清楚。">
 <link rel="canonical" href="https://leadfuai.com/pages/check">
 <meta name="theme-color" content="#0b3328">
 <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
@@ -122,7 +122,7 @@
   </section>
 
   <section class="m-sec">
-    <div class="m-sec-head"><h2>8 項紅旗檢查</h2><span>盤後資料</span></div>
+    <div class="m-sec-head"><h2>9 項紅旗檢查</h2><span>盤後資料</span></div>
     <div class="m-list" id="mFlags"></div>
   </section>
 
@@ -153,6 +153,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
+  try { const sj = await (await fetch("/data/sentiment_live.json", { cache: "no-cache" })).json(); window.__SENT = sj.data || {}; } catch (e) { window.__SENT = {}; }
   const L = window.LeadFu;
   const stocks = (L.data && L.data.stocks) || [];
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -204,12 +205,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     const p = (typeof s.price === "number" && s.price > 0) ? L.pctChange(s.price, s.change) : null;
     document.getElementById("vSub").textContent = `${s.status || ""}・${s.category || ""}${p != null ? `・${L.fmtPrice(s.price)}（${p >= 0 ? "+" : ""}${p.toFixed(2)}%）` : ""}`;
 
-    // ── 8 項紅旗 ──
+    // ── 9 項紅旗 ──
     const flags = [];
     // 1 注意/處置
     flags.push(ATT
       ? [ATT.type === "處置" ? "r" : "a", "注意／處置股", `已列為${ATT.type}股（${ATT.reason || "證交所公告"}），交易可能受限制`]
       : ["g", "注意／處置股", "未列入注意、處置名單"]);
+    // 1.5 輿情熱度（📡 輿情雷達：PTT × 新聞 × YT）
+    const SN = (window.__SENT || {})[c];
+    flags.push(!SN ? ["n", "輿情熱度", "尚未納入每日輿情掃描（涵蓋熱門股與會員自選）"]
+      : SN.heat_spike ? ["r", "輿情熱度", `PTT ${SN.ptt_week} 篇（${SN.ptt_ratio} 倍）＋新聞 ${SN.gn_week} 則（${SN.gn_ratio} 倍）同步暴增，常見於炒作前期`]
+      : SN.heat_watch ? ["a", "輿情熱度", `${SN.ptt_spike ? `PTT 本週 ${SN.ptt_week} 篇（${SN.ptt_ratio} 倍）` : SN.gn_spike ? `新聞本週 ${SN.gn_week} 則（${SN.gn_ratio} 倍）` : `YT 影片本週 ${SN.yt_week} 部（${SN.yt_ratio} 倍）`}異常升溫，搭配籌碼確認`]
+      : ["g", "輿情熱度", `PTT ${SN.ptt_week} 篇・新聞 ${SN.gn_week}${SN.gn_saturated ? "+" : ""} 則・YT ${SN.yt_week == null ? "—" : SN.yt_week + (SN.yt_saturated ? "+" : "")} 部，無異常暴增`]);
     // 2 流動性
     const vol = s.volume || 0;
     flags.push(vol < 50 ? ["r", "流動性", `今日成交僅 ${vol} 張，買得到不一定賣得掉`]

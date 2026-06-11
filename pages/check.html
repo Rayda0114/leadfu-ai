@@ -8,7 +8,7 @@
 <meta name="description" content="輸入股票代號，領富 AI 買前檢查器一頁告訴你：是否注意/處置股、流動性夠不夠、營收有沒有轉弱、法人是否連賣、借券是否增加、股價是否偏高、近期有無重大公告，適合短線還是長期觀察。">
 <link rel="canonical" href="https://leadfuai.com/pages/check">
 <meta property="og:title" content="買前檢查器 - 一鍵體檢個股紅旗 - 領富 AI">
-<meta property="og:description" content="輸入代號，一頁看完該檔的 8 項紅旗檢查 + 短線/長期觀察建議。買進前先看清楚。">
+<meta property="og:description" content="輸入代號，一頁看完該檔的 9 項紅旗檢查 + 短線/長期觀察建議。買進前先看清楚。">
 <meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://leadfuai.com/pages/check">
@@ -66,7 +66,7 @@
 
   <div class="panel" style="margin-bottom:16px;">
     <div style="padding:20px 22px;">
-      <p style="font-size:14px;color:#444;line-height:1.7;margin:0 0 14px;">輸入你想買的股票，一頁看完 <strong>8 項紅旗檢查</strong> —— 買進前先確認有沒有地雷。</p>
+      <p style="font-size:14px;color:#444;line-height:1.7;margin:0 0 14px;">輸入你想買的股票，一頁看完 <strong>9 項紅旗檢查</strong> —— 買進前先確認有沒有地雷。</p>
       <div class="chk-search">
         <input type="text" id="chkInput" autocomplete="off" placeholder="輸入股票代號或名稱，例如 2330 或 台積電">
         <div class="ta-box" id="chkSugg" style="display:none;"></div>
@@ -160,6 +160,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const aj = await (await fetch(base + "data/announcements_live.json", { cache: "no-cache" })).json();
     (aj.announcements || []).forEach(a => { if (a.code) { (annMap[a.code] = annMap[a.code] || []).push(a); } });
   } catch (e) {}
+  let SENT = {};
+  try {
+    const base2 = location.pathname.includes("/pages/") ? "../" : "";
+    const sj = await (await fetch(base2 + "data/sentiment_live.json", { cache: "no-cache" })).json();
+    SENT = sj.data || {};
+  } catch (e) {}
 
   const D = {
     risk: L.data.riskScore || {}, att: L.data.attention || {}, rev: L.data.revenue || {},
@@ -179,6 +185,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (att && att.type === "處置") out.push({ lv:"danger", i:"🔴", t:"已被列為「處置股」", d:`交易受限（可能全額交割／分盤集合競價），務必先了解原因。${att.reason || ""}` });
     else if (att) out.push({ lv:"warn", i:"⚠️", t:"已被列為「注意股」", d:`近期交易資訊達注意標準。${att.reason || ""}` });
     else out.push({ lv:"ok", i:"✅", t:"目前不是注意／處置股", d:"未被交易所列為注意或處置。" });
+
+    // 1.5 輿情熱度（📡 輿情雷達：PTT × 新聞 × YouTube，任兩源暴增=紅）
+    const sn = SENT[c];
+    if (sn && sn.heat_spike) out.push({ lv:"danger", i:"🔴", t:"輿情熱度異常（雙源確認）", d:`PTT 本週 ${sn.ptt_week} 篇（${sn.ptt_ratio} 倍）＋ 新聞 ${sn.gn_week} 則（${sn.gn_ratio} 倍）同步暴增 —— 常見於炒作前期，提防「飆股群組」邀約。` });
+    else if (sn && sn.heat_watch) out.push({ lv:"warn", i:"⚠️", t:"輿情熱度升溫（單源）", d:`${sn.ptt_spike ? `PTT 討論本週 ${sn.ptt_week} 篇（${sn.ptt_ratio} 倍）` : sn.gn_spike ? `全網新聞本週 ${sn.gn_week} 則（${sn.gn_ratio} 倍）` : `YouTube 影片本週 ${sn.yt_week} 部（${sn.yt_ratio} 倍）`}異常升溫，建議搭配籌碼與基本面確認。` });
+    else if (sn) out.push({ lv:"ok", i:"✅", t:"輿情熱度正常", d:`PTT 本週 ${sn.ptt_week} 篇、新聞 ${sn.gn_week}${sn.gn_saturated ? "+" : ""} 則、YT ${sn.yt_week == null ? "—" : sn.yt_week + (sn.yt_saturated ? "+" : "")} 部 —— 無異常暴增（討論熱度不代表股價方向）。` });
+    else out.push({ lv:"neutral", i:"➖", t:"輿情熱度", d:"此檔尚未納入每日輿情掃描（目前涵蓋熱門股與會員自選股）。" });
 
     // 2 流動性
     if (vol < 50) out.push({ lv:"danger", i:"🔴", t:"流動性極低", d:`今日成交僅 ${vol.toLocaleString()} 張 — 可能買不到、想賣也賣不掉，價差大。` });

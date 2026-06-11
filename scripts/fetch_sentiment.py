@@ -168,11 +168,25 @@ def load(name):
 def main():
     stocks = (load("stocks_live.json") or {}).get("stocks", [])
     by_code = {str(s["code"]): s for s in stocks}
-    # 掃描清單：成交量前 12（非 ETF）+ 示範自選 + 高波動示例
+    # 掃描清單（正式版）：成交量前 50（非 ETF，上市+上櫃）＋ 全體會員自選股
     vol_top = [str(s["code"]) for s in sorted(stocks, key=lambda x: -(x.get("volume") or 0))
-               if s.get("category") != "ETF" and s.get("status") == "上市"][:12]
-    extra = ["2883", "2303", "2409", "2324", "4953", "2344", "2330", "5246"]
-    codes = list(dict.fromkeys(vol_top + extra))
+               if s.get("category") != "ETF" and s.get("status") in ("上市", "上櫃")][:50]
+    member = []
+    try:
+        key = (Path.home() / ".hermes" / "x_supabase_key").read_text().strip()
+        req = urllib.request.Request(
+            "https://lhwxpnyzplylajxunlua.supabase.co/rest/v1/profiles?select=watchlist&watchlist=not.is.null",
+            headers={"apikey": key, "Authorization": "Bearer " + key})
+        for r in json.loads(urllib.request.urlopen(req, timeout=15).read()):
+            member += [str(c) for c in (r.get("watchlist") or [])]
+        print(f"[清單] 會員自選 {len(set(member))} 檔")
+    except Exception as e:
+        print("[清單] 會員自選讀取失敗（略過）:", str(e)[:60])
+    codes = list(dict.fromkeys(vol_top + member))
+    # YT quota 保護：search=100 單位/次、日上限 10,000 → 最多掃 90 檔
+    if len(codes) > 90:
+        print(f"[清單] {len(codes)} 檔超過 YT 配額上限，截至 90 檔")
+        codes = codes[:90]
 
     result = {}
     for i, code in enumerate(codes, 1):

@@ -150,6 +150,8 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
+  let __SENT = {};
+  try { const sj = await (await fetch("../data/sentiment_live.json", { cache: "no-cache" })).json(); __SENT = sj.data || {}; } catch (e) {}
   const L = window.LeadFu;
   const all = L.data.stocks || [];
   const risk = L.data.riskScore || {};
@@ -197,7 +199,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="rk-sub">${pillMarket(s)} ${s.category || ""} · ${L.fmtPrice(s.price)} <span class="${cls}">${L.arrow(s.change)} ${L.fmtPct(pct)}</span> · ${trendHtml(r)}</div>
         </div>
       </div>
-      <div class="rk-reasons">${(r.reasons || []).map(t => `<span class="rk-rs">${t}</span>`).join("")}</div>
+      <div class="rk-reasons">${(r.reasons || []).map(t => `<span class="rk-rs">${t}</span>`).join("")}${(() => { const sn = __SENT[code]; if (!sn) return ""; if (sn.heat_spike) return `<span class="rk-rs" style="background:#fbeae8;color:#a13a2f;border:1px solid #eccfc9;font-weight:800;">📡 輿情熱度異常（雙源）</span>`; if (sn.heat_watch) return `<span class="rk-rs" style="background:#fdf2dd;color:#a8731c;border:1px solid #ecd9b0;font-weight:800;">📡 輿情熱度升溫</span>`; return ""; })()}</div>
       <div class="rk-check">💡 出現上述訊號，建議<b>重新檢查當初買進的理由是否仍然成立</b>，而不是急著買或賣。（公開資料整理，非投資建議）</div>
     </div>`;
   }

@@ -484,10 +484,12 @@
     <div class="xr-head">
       <div>
         <h2>X 快訊雷達</h2>
-        <p>全球金融大佬、官媒與機構的 X 動向 · AI 中文整理 · 每 5 分鐘掃描 · 每則附原文連結</p>
+        <p>全球金融大佬、官媒與機構的 X 動向 · AI 中文整理 · 每 5 分鐘掃描 · 每則附原文連結<br>
+        📡 <b>個股輿情雷達</b>：PTT × 新聞 × YouTube 熱度異常警示，已內建於<a href="pages/check.html" style="color:#0b3328;font-weight:800;">買前檢查</a>與<a href="pages/risk-radar.html" style="color:#0b3328;font-weight:800;">防錯雷達</a></p>
       </div>
       <a class="xr-cta" href="pages/vip.html#x-radar">VIP 訂閱你的大佬清單 →</a>
     </div>
+    <div id="xrHeatStrip" style="display:none;gap:8px;flex-wrap:wrap;margin-bottom:12px;"></div>
     <div class="xr-grid" id="xrGrid"></div>
     <div class="xr-note">資訊整理、非投資建議；「偏多／偏空」僅代表市場輿情方向，不是買賣訊號。VIP 可自選 70+ 位帳號、只看你關注的人。</div>
   </div>
@@ -1949,6 +1951,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       mic.style.display = "none";
     }
   } catch (e) {}
+})();
+</script>
+
+<script>
+/* 📡 輿情警示 chips（有警示才出現） */
+(function () {
+  fetch("/data/sentiment_live.json").then(r => r.json()).then(sj => {
+    const rows = Object.entries(sj.data || {}).filter(([c, v]) => v.heat_spike || v.heat_watch);
+    const el = document.getElementById("xrHeatStrip");
+    if (!el || !rows.length) return;
+    el.innerHTML = rows.slice(0, 4).map(([c, v]) =>
+      `<a href="/pages/check?code=${c}" style="display:inline-flex;align-items:center;gap:6px;background:${v.heat_spike ? "#fbeae8" : "#fdf2dd"};color:${v.heat_spike ? "#a13a2f" : "#a8731c"};border:1px solid ${v.heat_spike ? "#eccfc9" : "#ecd9b0"};font-size:12.5px;font-weight:900;padding:6px 13px;border-radius:999px;text-decoration:none;">📡 ${c} ${v.name} 輿情${v.heat_spike ? "異常" : "升溫"} →</a>`).join(" ");
+    el.style.display = "flex";
+  }).catch(function (e) {});
 })();
 </script>
 </body>

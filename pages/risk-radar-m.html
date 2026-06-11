@@ -132,6 +132,8 @@
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
+  let __SENT = {};
+  try { const sj = await (await fetch("/data/sentiment_live.json", { cache: "no-cache" })).json(); __SENT = sj.data || {}; } catch (e) {}
   const L = window.LeadFu;
   const stocks = (L.data && L.data.stocks) || [];
   const byCode = {}; stocks.forEach(s => byCode[String(s.code)] = s);
@@ -170,7 +172,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!s) return "";
     const lv = r ? (r.level || "低") : "低";
     const [tagCls] = LV[lv] || ["ll"];
-    const why = r && r.reasons && r.reasons.length ? [...new Set(r.reasons)].slice(0, 2).join("、") : "目前無明顯風險訊號";
+    let why = r && r.reasons && r.reasons.length ? [...new Set(r.reasons)].slice(0, 2).join("、") : "目前無明顯風險訊號";
+    const __sn = __SENT[String(s.code)];
+    if (__sn && __sn.heat_spike) why = "📡 輿情熱度異常（雙源）、" + why;
+    else if (__sn && __sn.heat_watch) why = "📡 輿情熱度升溫、" + why;
     const p = (typeof s.price === "number" && s.price > 0) ? L.pctChange(s.price, s.change) : null;
     const pcls = p == null ? "" : p > 0 ? "style='color:var(--up);'" : p < 0 ? "style='color:var(--down);'" : "";
     return `<a class="m-row" href="/pages/check?code=${esc(code)}">
