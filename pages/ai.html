@@ -97,8 +97,13 @@
 <script src="../js/main.js?v=3.25.4"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
-  await window.LeadFu.ready;
-  const L = window.LeadFu;
+  // 🛡 ready 失敗/卡住不可拖垮整頁（白屏主因）：最多等 8 秒、出錯照常往下走
+  try {
+    if (window.LeadFu && window.LeadFu.ready) {
+      await Promise.race([window.LeadFu.ready, new Promise(r => setTimeout(r, 8000))]);
+    }
+  } catch (e) { console.warn("[AI] LeadFu.ready 失敗，降級啟動", e); }
+  const L = window.LeadFu || { data: {} };
 
   const STORAGE_KEY = "leadfu_chat_history_v1";
   const chatList = document.getElementById("chatList");
@@ -132,8 +137,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else if (history.length === 0) {
     showWelcome();
   } else {
-    history.forEach(renderBubble);
-    scrollToBottom();
+    // 🛡 任一筆舊紀錄壞掉不可整頁白屏：渲染失敗就重置歷史、回到歡迎畫面
+    try {
+      history.forEach(renderBubble);
+      scrollToBottom();
+    } catch (e) {
+      console.warn("[AI] 歷史渲染失敗，已重置", e);
+      history = [];
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e2) {}
+      chatList.innerHTML = "";
+      showWelcome();
+    }
   }
 
   function showWelcome() {
