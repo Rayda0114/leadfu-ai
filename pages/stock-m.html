@@ -394,5 +394,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   secEl.style.display = "";
 })();
 </script>
+
+<script>
+/* 👑 千張大戶（手機版核心數據追加格） */
+(async function () {
+  const code = new URLSearchParams(location.search).get("code") || "";
+  if (!code) return;
+  let td = null;
+  try { const tj = await (await fetch("/data/tdcc_live.json")).json(); td = (tj.data || {})[code]; } catch (e) { return; }
+  if (!td) return;
+  for (let i = 0; i < 30; i++) {
+    const grid = document.getElementById("mCore");
+    if (grid && grid.children.length) break;
+    await new Promise(r => setTimeout(r, 400));
+  }
+  const grid = document.getElementById("mCore");
+  if (!grid || !grid.children.length || document.getElementById("tdccCell")) return;
+  const sub = td.wow != null ? `週變化 ${td.wow >= 0 ? "+" : ""}${td.wow} pp` : `${(td.big_holders || 0).toLocaleString()} 位大戶`;
+  const cell = document.createElement("div");
+  cell.className = "m-cell"; cell.id = "tdccCell";
+  cell.innerHTML = `<small>千張大戶（週）</small><b class="num">${td.big_ratio}%</b><i class="num">${sub}</i>`;
+  grid.appendChild(cell);
+})();
+</script>
 </body>
 </html>

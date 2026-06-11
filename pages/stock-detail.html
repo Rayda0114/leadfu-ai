@@ -1521,5 +1521,37 @@ function renderAiResult(el, text) {
   secEl.style.display = "";
 })();
 </script>
+
+<script>
+/* 👑 千張大戶持股（TDCC 週資料；等籌碼面板渲染完再附加） */
+(async function () {
+  const code = new URLSearchParams(location.search).get("code") || "";
+  if (!code) return;
+  let td = null;
+  try { const tj = await (await fetch("/data/tdcc_live.json")).json(); td = (tj.data || {})[code]; window.__tdccDate = tj.date; } catch (e) { return; }
+  if (!td) return;
+  for (let i = 0; i < 30; i++) {
+    const sec = document.getElementById("sec-tech");
+    if (sec && sec.querySelector(".tech-h3")) break;
+    await new Promise(r => setTimeout(r, 400));
+  }
+  const sec = document.getElementById("sec-tech");
+  if (!sec || document.getElementById("tdccBlock")) return;
+  const wow = td.wow != null ? `<span class="tech-sub ${td.wow > 0 ? "up" : td.wow < 0 ? "down" : "flat"}">${td.wow >= 0 ? "+" : ""}${td.wow} pp</span>` : "";
+  const stk = td.streak >= 2 ? `連 ${td.streak} 週增加` : td.streak <= -2 ? `連 ${-td.streak} 週減少` : "";
+  const d = String(window.__tdccDate || "");
+  const div = document.createElement("div");
+  div.id = "tdccBlock";
+  div.innerHTML = `
+    <h3 class="tech-h3">👑 千張大戶持股（集保週資料）</h3>
+    <div class="tech-grid">
+      <div class="tech-card"><div class="tech-label">千張大戶持股比率</div><div class="tech-value">${td.big_ratio}% ${wow}</div></div>
+      <div class="tech-card"><div class="tech-label">大戶人數（≥1,000 張）</div><div class="tech-value">${(td.big_holders || 0).toLocaleString()} 位</div></div>
+      <div class="tech-card"><div class="tech-label">全體股東人數</div><div class="tech-value">${(td.holders || 0).toLocaleString()}</div></div>
+    </div>
+    <p style="font-size:11px;color:#888;margin-top:8px;">※ 集保結算所每週公布（資料日 ${d.slice(0,4)}/${d.slice(4,6)}/${d.slice(6,8)}）。大戶比率上升通常解讀為籌碼集中${stk ? `；目前${stk}` : ""}。僅公開資料整理、非投資建議。</p>`;
+  sec.appendChild(div);
+})();
+</script>
 </body>
 </html>

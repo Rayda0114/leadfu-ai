@@ -374,11 +374,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     const totalCost  = valid.reduce((a,b) => a + b.cost, 0);
     const todayGain  = valid.reduce((a,b) => a + b.todayGain, 0);
     const yValue     = valid.reduce((a,b) => a + b.yValue, 0);
-    let annualDiv = 0;
-    valid.forEach(it => { const y = (valuation[it.code] || {}).yield_pct; if (y) annualDiv += it.value * y / 100; });
+    let annualDiv = 0, nhiFee = 0;
+    valid.forEach(it => {
+      const y = (valuation[it.code] || {}).yield_pct;
+      if (y) {
+        const dv = it.value * y / 100;
+        annualDiv += dv;
+        if (dv >= 20000) nhiFee += dv * 0.0211;   // 二代健保：單檔年配 ≥2 萬估 2.11%（以單筆達 2 萬近似）
+      }
+    });
     valid.forEach(it => it.weight = totalValue > 0 ? it.value / totalValue : 0);
     valid.sort((a,b) => b.value - a.value);
-    return { items, valid, totalValue, totalCost, todayGain, yValue, annualDiv,
+    return { items, valid, totalValue, totalCost, todayGain, yValue, annualDiv, nhiFee,
       unreal:    totalCost > 0 ? totalValue - totalCost : null,
       unrealPct: totalCost > 0 ? (totalValue - totalCost) / totalCost * 100 : null,
       todayPct:  yValue > 0 ? todayGain / yValue * 100 : null };
@@ -402,7 +409,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const dEl = document.getElementById("sumDiv");
     if (m.annualDiv > 0) {
       const yieldPct = m.totalValue > 0 ? m.annualDiv / m.totalValue * 100 : 0;
-      dEl.textContent = money(m.annualDiv);
+      dEl.innerHTML = money(m.annualDiv)
+        + `<div style="font-size:12px;color:#666;margin-top:2px;">稅後約 ${money(m.annualDiv - (m.nhiFee || 0))}<span style="color:#999;">（扣二代健保估算）</span> · <a href="dividend-tax.html" style="color:#0b3328;font-weight:800;">完整稅務試算 →</a></div>`;
       document.getElementById("sumDivLab").textContent = `預估年股息（殖利率 ${yieldPct.toFixed(2)}%）`;
     } else { dEl.textContent = "—"; document.getElementById("sumDivLab").textContent = "預估年股息"; }
   }

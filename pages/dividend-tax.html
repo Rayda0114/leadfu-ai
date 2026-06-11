@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>股利所得稅試算：合併 8.5% 抵減 vs 分開 28%＋二代健保 - 領富 AI</title>
+<meta name="description" content="免費股利所得稅試算器：合併計稅（8.5% 可抵減稅額、上限 8 萬）vs 分開計稅 28% 哪個划算？二代健保補充保費 2.11% 怎麼扣？輸入年股利與稅率級距，30 秒算出稅後實領。">
+<link rel="canonical" href="https://leadfuai.com/pages/dividend-tax">
+<meta property="og:title" content="股利所得稅試算：8.5% 抵減 vs 28% 分開計稅 - 領富 AI">
+<meta property="og:description" content="輸入年股利與所得級距，30 秒算出兩種課稅方式與二代健保後的稅後實領。">
+<meta property="og:url" content="https://leadfuai.com/pages/dividend-tax">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+ {"@type":"Question","name":"股利 8.5% 可抵減稅額是什麼？","acceptedAnswer":{"@type":"Answer","text":"股利所得選擇合併計稅時，可按股利金額的 8.5% 抵減應納稅額，每一申報戶上限 8 萬元（相當於約 94 萬元股利）。所得稅率 20% 以下的存股族通常合併計稅較划算，甚至可能退稅。"}},
+ {"@type":"Question","name":"什麼人適合股利分開計稅 28%？","acceptedAnswer":{"@type":"Answer","text":"綜合所得稅率達 30% 或 40% 的高所得族群，股利按單一稅率 28% 分開計稅通常較划算；20% 級距以下選合併計稅多半較有利。"}},
+ {"@type":"Question","name":"股利的二代健保補充保費怎麼計算？","acceptedAnswer":{"@type":"Answer","text":"單次領取的股利（現金股利＋股票股利按面額 10 元計）達 2 萬元，整筆按 2.11% 扣取補充保費，由發放公司代扣。分散持股使單筆低於 2 萬可避免，但請以整體報酬為優先考量。"}}]}
+</script>
+<style>
+  :root{--bg:#f4f2ec;--ink:#0d1d17;--hairline:rgba(13,29,23,.12);--hair2:rgba(13,29,23,.08);
+    --forest:#0b3328;--paper:#fffdf8;--gold:#b9914f;--gold2:#d6b36f;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:50px;}
+  .hero{color:#f8f5ec;padding:calc(22px + env(safe-area-inset-top)) 22px 30px;
+    background:linear-gradient(160deg,rgba(255,255,255,.05) 0 1px,transparent 1px 100%),
+    radial-gradient(circle at 86% 0%,rgba(185,145,79,.28),transparent 36%),
+    linear-gradient(180deg,#08271f 0%,#0d3328 100%);background-size:19px 19px,auto,auto;}
+  .sig{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .sig::before{content:"";width:26px;height:1px;background:currentColor;}
+  .hero h1{margin:12px 0 0;font-size:24px;font-weight:900;letter-spacing:-.3px;line-height:1.35;}
+  .hero p{margin:9px 0 0;font-size:13px;color:rgba(248,245,236,.68);line-height:1.75;max-width:560px;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 18px;}
+  .card{background:var(--paper);border:1px solid var(--hair2);border-radius:18px;padding:18px;margin-top:18px;box-shadow:0 8px 22px rgba(13,29,23,.05);}
+  .f-row{margin-bottom:14px;}
+  .f-row label{display:block;font-size:13.5px;font-weight:800;color:#333;margin-bottom:6px;}
+  .f-row small{display:block;font-size:11.5px;color:#9a948a;margin-top:4px;line-height:1.6;}
+  .f-row input,.f-row select{width:100%;min-height:48px;padding:0 14px;border-radius:12px;border:1px solid var(--hairline);background:#fff;font-family:inherit;font-size:16px;color:var(--ink);}
+  .go{width:100%;min-height:52px;border-radius:14px;border:0;background:var(--forest);color:#f4ead2;font-family:inherit;font-size:16px;font-weight:900;cursor:pointer;margin-top:4px;}
+  .go:hover{background:#144735;}
+  .res{display:none;}
+  .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .res-box{border:1px solid var(--hair2);border-radius:14px;padding:14px;text-align:center;}
+  .res-box.win{border:2px solid var(--gold2);background:#fdfaf2;}
+  .res-box small{display:block;font-size:12px;color:#8a8d85;font-weight:800;}
+  .res-box b{display:block;font-size:21px;font-weight:900;color:var(--forest);margin-top:5px;font-variant-numeric:tabular-nums;}
+  .res-box .tag{display:inline-block;margin-top:6px;font-size:10.5px;font-weight:900;background:var(--gold2);color:#0b3328;padding:2px 9px;border-radius:8px;}
+  .final{margin-top:12px;background:linear-gradient(135deg,#1d3a2e,#0b3328);border-radius:14px;padding:15px 17px;color:#f8f5ec;}
+  .final small{font-size:12px;color:rgba(248,245,236,.6);font-weight:800;}
+  .final b{display:block;font-size:25px;font-weight:900;color:#ecd9ab;margin-top:3px;font-variant-numeric:tabular-nums;}
+  .final p{margin:8px 0 0;font-size:12.5px;color:rgba(248,245,236,.75);line-height:1.7;}
+  .note{margin-top:16px;font-size:11.5px;color:#9a948a;line-height:1.8;}
+  .faq{margin-top:8px;}
+  .faq h2{font-size:17px;font-weight:900;margin:22px 0 6px;}
+  .faq h2::before{content:"";display:inline-block;width:20px;height:3px;background:var(--gold2);border-radius:2px;margin-right:9px;vertical-align:middle;}
+  .faq p{font-size:13.5px;color:#444;line-height:1.85;margin:6px 0;}
+  .back{display:inline-block;margin-top:18px;color:var(--forest);font-weight:800;font-size:13.5px;text-decoration:none;}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap" style="padding:0;">
+  <span class="sig">Dividend Tax Calculator</span>
+  <h1>股利所得稅試算</h1>
+  <p>合併計稅（8.5% 抵減、上限 8 萬）還是分開計稅 28% 划算？二代健保扣多少？輸入兩個數字，30 秒算給你看。</p>
+</div></header>
+
+<div class="wrap">
+  <div class="card">
+    <div class="f-row">
+      <label>全年股利金額（元）</label>
+      <input type="number" id="inDiv" inputmode="numeric" placeholder="例：120000" min="0">
+      <small>現金股利＋股票股利（按面額 10 元計）。投資儀表板的「預估年股息」可直接填這裡。</small>
+    </div>
+    <div class="f-row">
+      <label>你的綜合所得稅率級距</label>
+      <select id="inRate">
+        <option value="0.05">5%（所得淨額 ~59 萬以下）</option>
+        <option value="0.12">12%（59 萬 ~ 133 萬）</option>
+        <option value="0.20">20%（133 萬 ~ 266 萬）</option>
+        <option value="0.30">30%（266 萬 ~ 498 萬）</option>
+        <option value="0.40">40%（498 萬以上）</option>
+      </select>
+      <small>不確定的話，多數上班族在 5% 或 12%。級距金額為概略值，以國稅局當年度公告為準。</small>
+    </div>
+    <div class="f-row">
+      <label>其中「單筆達 2 萬元」的股利合計（元）</label>
+      <input type="number" id="inNhi" inputmode="numeric" placeholder="預設＝全年股利">
+      <small>二代健保補充保費只對「單筆 ≥2 萬」的股利扣 2.11%。集中持有單一個股通常會中；分散小額則可能免扣。不填＝以全額估算（保守）。</small>
+    </div>
+    <button class="go" id="btnGo">立即試算</button>
+  </div>
+
+  <div class="card res" id="resCard">
+    <div class="res-grid">
+      <div class="res-box" id="boxA"><small>方案一：合併計稅</small><b id="taxA">—</b><span class="tag" id="tagA" style="display:none;">較划算 ✓</span><small id="subA" style="margin-top:5px;"></small></div>
+      <div class="res-box" id="boxB"><small>方案二：分開計稅 28%</small><b id="taxB">—</b><span class="tag" id="tagB" style="display:none;">較划算 ✓</span><small id="subB" style="margin-top:5px;"></small></div>
+    </div>
+    <div class="res-grid" style="margin-top:10px;">
+      <div class="res-box"><small>二代健保補充保費</small><b id="nhiOut">—</b><small>單筆 ≥2 萬 × 2.11%</small></div>
+      <div class="res-box"><small>所得稅＋健保 合計負擔</small><b id="totOut">—</b><small id="totSub"></small></div>
+    </div>
+    <div class="final"><small>稅後實領（採較划算方案）</small><b id="netOut">—</b><p id="verdict"></p></div>
+  </div>
+
+  <div class="faq">
+    <h2>8.5% 抵減是什麼？</h2>
+    <p>股利選「合併計稅」時，可按股利的 8.5% 抵減稅額，每戶上限 8 萬元（約對應 94 萬股利）。對 5%、12% 級距的存股族，抵減常常大於應納稅 —— 等於<b>領股利還能退稅</b>。</p>
+    <h2>誰適合分開計稅 28%？</h2>
+    <p>稅率 30%、40% 的高所得族群。20% 以下幾乎都是合併划算 —— 這個試算器會直接告訴你哪個省。</p>
+    <h2>二代健保 2.11% 怎麼避免？</h2>
+    <p>門檻是「單筆」2 萬：同一檔股票單次配息達 2 萬就整筆扣 2.11%。分散持股可降低，但別為了省 2.11% 犧牲整體報酬與配置 —— 撿芝麻丟西瓜。</p>
+  </div>
+
+  <p class="note">※ 本工具為簡化試算，未涵蓋基本生活費差額、扣除額、海外股利（計入基本所得額）等個別情況；級距與費率以財政部國稅局、衛福部健保署當年度公告為準。僅供參考，非稅務或投資建議。</p>
+  <a class="back" href="/pages/portfolio-health.html">← 回投資儀表板</a> ・ <a class="back" href="/pages/dividends.html">高殖利率排行 →</a>
+</div>
+
+<script src="/js/main.js?v=3.25.3"></script>
+<script>
+document.getElementById("btnGo").addEventListener("click", () => {
+  const dv = Math.max(0, +document.getElementById("inDiv").value || 0);
+  if (!dv) { document.getElementById("inDiv").focus(); return; }
+  const rate = +document.getElementById("inRate").value;
+  const nhiBase = document.getElementById("inNhi").value === "" ? dv : Math.min(dv, Math.max(0, +document.getElementById("inNhi").value || 0));
+  const money = n => "NT$ " + Math.round(n).toLocaleString("en-US");
+  // 方案一：合併
+  const credit = Math.min(dv * 0.085, 80000);
+  const taxA = dv * rate - credit;            // 可為負 = 退稅
+  // 方案二：分開
+  const taxB = dv * 0.28;
+  const nhi = nhiBase * 0.0211;
+  const aWin = taxA <= taxB;
+  const best = Math.min(taxA, taxB);
+  document.getElementById("taxA").textContent = taxA < 0 ? "退稅 " + money(-taxA) : money(taxA);
+  document.getElementById("subA").textContent = `股利×${(rate * 100).toFixed(0)}% − 抵減 ${money(credit)}`;
+  document.getElementById("taxB").textContent = money(taxB);
+  document.getElementById("subB").textContent = "股利 × 28%";
+  document.getElementById("tagA").style.display = aWin ? "" : "none";
+  document.getElementById("tagB").style.display = aWin ? "none" : "";
+  document.getElementById("boxA").className = "res-box" + (aWin ? " win" : "");
+  document.getElementById("boxB").className = "res-box" + (aWin ? "" : " win");
+  document.getElementById("nhiOut").textContent = money(nhi);
+  const tot = Math.max(best, -1e15) + nhi;
+  document.getElementById("totOut").textContent = best < 0 ? `健保 ${money(nhi)} − 退稅 ${money(-best)}` : money(tot);
+  document.getElementById("totSub").textContent = aWin ? "採合併計稅" : "採分開計稅";
+  document.getElementById("netOut").textContent = money(dv - best - nhi);
+  document.getElementById("verdict").textContent = aWin
+    ? (taxA < 0 ? `你適合「合併計稅」：8.5% 抵減大於應納稅額，反而可退稅 ${money(-taxA)}。` : `你適合「合併計稅」，比分開計稅省 ${money(taxB - taxA)}。`)
+    : `你的級距較高，「分開計稅 28%」比合併省 ${money(taxA - taxB)}。`;
+  document.getElementById("resCard").style.display = "block";
+  document.getElementById("resCard").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+</script>
+</body>
+</html>

@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     stats.style.display = "grid";
     stats.innerHTML = `
       <div class="m-stat"><b class="${cls2(tAmt)} num">${sign(tAmt)}${money(tAmt)}</b><small>今日損益（${sign(tPct)}${tPct.toFixed(2)}%）</small></div>
-      <div class="m-stat"><b class="num">${money(annDiv)}</b><small>預估年股息</small></div>
+      <div class="m-stat"><b class="num">${money(annDiv)}</b><small>預估年股息 · <a href="/pages/dividend-tax" style="color:#8b6b36;font-weight:900;text-decoration:none;">稅後試算 ›</a></small></div>
       <div class="m-stat"><b class="${bPct == null ? "" : (tPct >= bPct ? "up" : "down")} num">${bPct == null ? "—" : (tPct >= bPct ? "贏" : "輸")}</b><small>今日 vs 0050（${bPct == null ? "—" : sign(bPct) + bPct.toFixed(2) + "%"}）</small></div>`;
 
     // 警示

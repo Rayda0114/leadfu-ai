@@ -52,6 +52,7 @@ SCRIPTS = [
     "fetch_margin.py",          # 融資融券（上市，TWSE MI_MARGN）
     "fetch_margin_tpex.py",     # 融資融券（上櫃，TPEx balance）
     "fetch_sbl.py",             # 借券（外資空單，TWSE TWT93U）
+    "fetch_tdcc.py",            # 千張大戶持股比率（TDCC 集保股權分散表，每週更新、腳本自帶同日期跳過）
     "fetch_insider.py",         # 大股東名單（MOPS t187ap02）
     "fetch_klines_daily.py",    # K 線：每日全市場 +1 根（取代舊 fetch_klines.py 只更新興櫃）
     "calc_indicators.py",       # 技術指標 KD/MACD/布林/RSI/MA（從 klines 計算）

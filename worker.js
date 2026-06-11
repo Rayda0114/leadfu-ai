@@ -2007,9 +2007,10 @@ async function getLineStockContext(env, q) {
     }
   } catch (e) {}
   const grab = async (f) => { try { return (await (await env.ASSETS.fetch(new Request("https://placeholder/data/" + f))).json()).data || {}; } catch (e) { return {}; } };
-  const [fv, val, nav, div, hold, basic] = await Promise.all([
+  const [fv, val, nav, div, hold, basic, tdcc] = await Promise.all([
     grab("fair_value_live.json"), grab("valuation_live.json"), grab("etf_nav_live.json"),
-    grab("etf_div_live.json"), grab("etf_holdings_live.json"), grab("etf_basic_live.json")
+    grab("etf_div_live.json"), grab("etf_holdings_live.json"), grab("etf_basic_live.json"),
+    grab("tdcc_live.json")
   ]);
   const out = matched.map(s => {
     const o = { code: s.code, name: s.name, price: s.price, change: s.change, 股價時間: s._note, category: s.category, market: s.status };
@@ -2023,6 +2024,8 @@ async function getLineStockContext(env, q) {
       if (fv[s.code]) o.合理區間 = fv[s.code];
       if (val[s.code]) o.估值 = val[s.code];
     }
+    const td = tdcc[s.code];
+    if (td) o.千張大戶 = { 持股比率百分比: td.big_ratio, 大戶人數: td.big_holders, 較上週變化: td.wow, 連續增減週數: td.streak, 資料說明: "集保結算所每週股權分散表" };
     return o;
   });
   const _ts = `${_tpe.getUTCFullYear()}-${String(_tpe.getUTCMonth() + 1).padStart(2, "0")}-${String(_tpe.getUTCDate()).padStart(2, "0")} ${String(_tpe.getUTCHours()).padStart(2, "0")}:${String(_tpe.getUTCMinutes()).padStart(2, "0")}`;
