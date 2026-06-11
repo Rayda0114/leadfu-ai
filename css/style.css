@@ -9208,3 +9208,6 @@ body { background: #f4f2ec; color: #0d1d17; }
   .main-nav-bar { display: none; }
   .main-nav li a { padding: 12px 13px; font-size: 14.5px; }
 }
+
+/* 桌機隱藏 main.js 注入的手機漢堡列（≡ 功能選單）——其樣式只定義在 ≤768px，桌機裸露成殘影 */
+@media (min-width: 769px) { .main-nav-bar { display: none !important; } }
