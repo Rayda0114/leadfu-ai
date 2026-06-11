@@ -127,7 +127,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   (L.data.stocks || []).forEach(s => { _stockByCode[s.code] = s; });
 
   // URL 帶 ?q=... 從首頁過來 → 先清空舊歷史開新對話
-  const initialQ = new URLSearchParams(location.search).get("q");
+  let initialQ = null;
+  try { initialQ = new URLSearchParams(location.search).get("q"); }
+  catch (e) { console.warn("[AI] 查詢字串解析失敗（壞編碼），忽略 q", e); }
   if (initialQ) {
     history = [];
     chatList.innerHTML = "";
