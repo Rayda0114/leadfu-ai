@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     chatList.innerHTML = "";
     localStorage.removeItem(STORAGE_KEY);
     window.history.replaceState({}, "", "ai.html");
-    sendMessage(initialQ);
+    setTimeout(() => sendMessage(initialQ), 0);   // 延後一個 tick：let _pending 宣告在 293 行，直接呼叫會 TDZ 炸掉（?q= 入口長期白屏主因）
   } else if (history.length === 0) {
     showWelcome();
   } else {
