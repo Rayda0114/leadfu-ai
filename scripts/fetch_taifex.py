@@ -134,31 +134,78 @@ def next_settlement(today):
 def main():
     today = datetime.date.today()
 
-    # ── 1. 台指期 日盤/夜盤 ──
+    # ── 1. 台指期 日盤/夜盤（futDataDown：盤後當天即發布；OpenAPI 落後 1-2 天故棄用為主源）──
     tx_day, tx_night, asof = None, None, ""
+
+    def _fut_csv(d):
+        """期交所每日行情下載（Big5 CSV），含一般+盤後。回 list[dict-like row list]。"""
+        import urllib.parse as _up
+        body = _up.urlencode({"down_type": "1", "commodity_id": "TX",
+                              "queryStartDate": d.strftime("%Y/%m/%d"),
+                              "queryEndDate": d.strftime("%Y/%m/%d")}).encode()
+        req = urllib.request.Request("https://www.taifex.com.tw/cht/3/futDataDown", data=body,
+                                     headers={"User-Agent": "Mozilla/5.0 (LeadFu-AI)"})
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                raw = r.read()
+        except (urllib.error.URLError, ssl.SSLError):
+            with urllib.request.urlopen(req, timeout=30, context=_CTX) as r:
+                raw = r.read()
+        text = raw.decode("big5", "ignore")
+        rows = [ln.split(",") for ln in text.splitlines()[1:] if ln.strip()]
+        return [r for r in rows if len(r) >= 18 and r[1].strip() == "TX"]
+
     try:
-        fut = gj("https://openapi.taifex.com.tw/v1/DailyMarketReportFut")
-        tx = [r for r in fut if r.get("Contract") == "TX"]
-        # 近月 = 一般時段中成交量最大者（最活躍）
-        gen = [r for r in tx if r.get("TradingSession") == "一般"]
-        gen.sort(key=lambda r: -(fnum(r.get("Volume")) or 0))
-        if gen:
-            front = gen[0]
-            cm = front.get("ContractMonth(Week)")
-            asof = front.get("Date", "")
-            d_last, d_chg = fnum(front.get("Last")), fnum(front.get("Change"))
-            d_hi, d_lo = fnum(front.get("High")), fnum(front.get("Low"))
-            rng = round((d_hi - d_lo) / d_last * 100, 2) if (d_hi and d_lo and d_last) else None
-            tx_day = {"last": d_last, "change": d_chg, "pct": pct_from(d_last, d_chg), "rangePct": rng, "month": cm}
-            night = next((r for r in tx if r.get("TradingSession") == "盤後" and r.get("ContractMonth(Week)") == cm), None)
-            if night:
-                n_last = fnum(night.get("Last"))
-                # 夜盤漲跌 = 夜盤收盤 相對「日盤收盤」之變化（隔夜跳空，明日領先訊號）
-                ov = round((n_last - d_last) / d_last * 100, 2) if (n_last and d_last) else None
-                tx_night = {"last": n_last, "change": fnum(night.get("Change")), "pct": ov, "month": cm,
-                            "vsLabel": "較日盤收盤"}
+        rows = []
+        for back in range(0, 5):   # 今天起往回找最近一個有資料的交易日
+            d = today - datetime.timedelta(days=back)
+            rows = _fut_csv(d)
+            if rows:
+                break
+        if rows:
+            sess = lambda r: r[17].strip()
+            gen = [r for r in rows if sess(r) == "一般"]
+            gen.sort(key=lambda r: -(fnum(r[9]) or 0))   # 近月 = 一般時段量最大
+            if gen:
+                fr = gen[0]
+                cm = fr[2].strip()
+                asof = fr[0].strip().replace("/", "-")
+                d_last, d_chg = fnum(fr[6]), fnum(fr[7])
+                d_hi, d_lo = fnum(fr[4]), fnum(fr[5])
+                rng = round((d_hi - d_lo) / d_last * 100, 2) if (d_hi and d_lo and d_last) else None
+                tx_day = {"last": d_last, "change": d_chg, "pct": pct_from(d_last, d_chg), "rangePct": rng, "month": cm}
+                night = next((r for r in rows if sess(r) == "盤後" and r[2].strip() == cm), None)
+                if night:
+                    n_last = fnum(night[6])
+                    ov = round((n_last - d_last) / d_last * 100, 2) if (n_last and d_last) else None
+                    tx_night = {"last": n_last, "change": fnum(night[7]), "pct": ov, "month": cm,
+                                "vsLabel": "較日盤收盤"}
     except Exception as e:
-        print(f"[warn] 台指期: {e}")
+        print(f"[warn] 台指期(futDataDown): {e}")
+
+    # 後備：OpenAPI（可能落後 1-2 天）
+    if tx_day is None:
+        try:
+            fut = gj("https://openapi.taifex.com.tw/v1/DailyMarketReportFut")
+            tx = [r for r in fut if r.get("Contract") == "TX"]
+            gen = [r for r in tx if r.get("TradingSession") == "一般"]
+            gen.sort(key=lambda r: -(fnum(r.get("Volume")) or 0))
+            if gen:
+                front = gen[0]
+                cm = front.get("ContractMonth(Week)")
+                asof = front.get("Date", "")
+                d_last, d_chg = fnum(front.get("Last")), fnum(front.get("Change"))
+                d_hi, d_lo = fnum(front.get("High")), fnum(front.get("Low"))
+                rng = round((d_hi - d_lo) / d_last * 100, 2) if (d_hi and d_lo and d_last) else None
+                tx_day = {"last": d_last, "change": d_chg, "pct": pct_from(d_last, d_chg), "rangePct": rng, "month": cm}
+                night = next((r for r in tx if r.get("TradingSession") == "盤後" and r.get("ContractMonth(Week)") == cm), None)
+                if night:
+                    n_last = fnum(night.get("Last"))
+                    ov = round((n_last - d_last) / d_last * 100, 2) if (n_last and d_last) else None
+                    tx_night = {"last": n_last, "change": fnum(night.get("Change")), "pct": ov, "month": cm,
+                                "vsLabel": "較日盤收盤"}
+        except Exception as e:
+            print(f"[warn] 台指期(OpenAPI 後備): {e}")
 
     # ── 2. Put/Call Ratio（取最新一筆） ──
     pc = None
