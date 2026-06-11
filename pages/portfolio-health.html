@@ -934,7 +934,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const L = window.LeadFu;
     const DIV = (L.data || {}).dividend || {};
     const byCode = {}; ((L.data || {}).stocks || []).forEach(s => byCode[String(s.code)] = s);
-    const codes = [...new Set([...Object.keys(L.getHoldings() || {}), ...(L.getWatchlist() || []).map(String)])];
+    let _H = {};
+    for (let i = 0; i < 20; i++) { _H = L.getHoldings() || {}; if (Object.keys(_H).length) break; await new Promise(r => setTimeout(r, 400)); }
+    const codes = [...new Set([...Object.keys(_H), ...(L.getWatchlist() || []).map(String)])];
     if (!codes.length) return;
     const today = new Date(); today.setHours(0, 0, 0, 0);
     const lim = new Date(today.getTime() + 7 * 86400000);
