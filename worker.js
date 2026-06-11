@@ -634,6 +634,14 @@ async function handleAsk(request, env) {
       if (ic) { augmentedLast += ic; serverInjected = true; }
     } catch (e) {}
   }
+  // ⚡ X 快訊問題（2026-06-11）：「川普最近說什麼」「馬斯克發了什麼文」→ 注入 X 快訊雷達真實摘要
+  const xIntent = /川普|特朗普|馬斯克|黃仁勳|奧特曼|鮑爾|聯準會|木頭姐|達里歐|阿克曼|伯里|庫班|蘇姿丰|皮查伊|孫正義|蓋茲|趙長鵬|納瓦爾|推特|twitter|[^a-z]x ?(上|平台)|發[文推]|貼文|快訊|大佬/i;
+  if (!context.isMarketBrief && xIntent.test(lastUserContent || "")) {
+    try {
+      const xc = await getXAlertsContext(env, lastUserContent || "");
+      if (xc) { augmentedLast += xc; serverInjected = true; }
+    } catch (e) {}
+  }
 
   if (askedStockCode && !context.isMarketBrief && stockIntent.test(lastUserContent || "")) {
     const code = askedStockCode[1];
@@ -1044,6 +1052,160 @@ async function handleXAlertsFeed(request, env, ctx) {
   });
   if (ctx) ctx.waitUntil(cache.put(cacheKey, resp.clone()));
   return resp;
+}
+
+/* ── ⚡ X 快訊雷達 · 重大快訊 LINE 推播（2026-06-11）──
+   cron 每 10 分鐘：未推播且重要度 ≥X_PUSH_MIN_IMPORTANCE 的快訊 → 推給「有訂閱該帳號」的
+   VIP（需 line_user_id、profiles.x_push 未關）。台北 23:00–07:00 勿擾（不標記，早上自動補推）。
+   需 Supabase 欄位：x_alerts.pushed_at、profiles.x_push（SQL 未跑前會優雅跳過）。 */
+const X_PUSH_MIN_IMPORTANCE = 9;
+
+async function runXAlertPush(env, opts) {
+  opts = opts || {};
+  if (!env.SUPABASE_SERVICE_ROLE_KEY || !env.LINE_CHANNEL_ACCESS_TOKEN) return { sent: 0, error: "not configured" };
+  const tpeHour = (new Date(Date.now() + 8 * 3600 * 1000)).getUTCHours();
+  if (!opts.force && (tpeHour >= 23 || tpeHour < 7)) return { sent: 0, note: "夜間勿擾（23:00–07:00）" };
+
+  // 1) 撈未推播的重大快訊（近 12 小時，避免補推太舊的）
+  const sinceIso = new Date(Date.now() - 12 * 3600 * 1000).toISOString();
+  let alerts = [];
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/x_alerts?select=url,author,summary_zh,impact,importance,created_at&pushed_at=is.null&importance=gte.${X_PUSH_MIN_IMPORTANCE}&created_at=gte.${sinceIso}&order=created_at.asc&limit=20`, { headers: ecpayAdmin(env) });
+    if (!r.ok) return { sent: 0, error: `x_alerts ${r.status}（pushed_at 欄位還沒建？先跑 SQL）` };
+    alerts = await r.json();
+  } catch (e) { return { sent: 0, error: "supabase" }; }
+  if (!Array.isArray(alerts) || !alerts.length) return { sent: 0, note: "無未推播的重大快訊" };
+  const maxCreated = alerts[alerts.length - 1].created_at;
+
+  // 2) 這些作者的訂閱者
+  const authors = [...new Set(alerts.map(a => a.author))];
+  let subs = [];
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/x_subscriptions?select=user_id,handle&handle=in.(${authors.map(encodeURIComponent).join(",")})`, { headers: ecpayAdmin(env) });
+    if (r.ok) subs = await r.json();
+  } catch (e) {}
+  const byUser = {};
+  for (const s of (Array.isArray(subs) ? subs : [])) (byUser[s.user_id] = byUser[s.user_id] || new Set()).add(s.handle);
+  const userIds = Object.keys(byUser);
+
+  // 3) 收件人：VIP 有效 + 有 line_user_id + 沒關推播（x_push 欄位不存在時視為開）
+  let profiles = [];
+  if (userIds.length) {
+    try {
+      let r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?select=id,line_user_id,vip_until,x_push&id=in.(${userIds.join(",")})&line_user_id=not.is.null`, { headers: ecpayAdmin(env) });
+      if (!r.ok) r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?select=id,line_user_id,vip_until&id=in.(${userIds.join(",")})&line_user_id=not.is.null`, { headers: ecpayAdmin(env) });
+      if (r.ok) profiles = await r.json();
+    } catch (e) {}
+  }
+  const now = Date.now();
+  const recipients = (Array.isArray(profiles) ? profiles : []).filter(p =>
+    p.line_user_id && p.vip_until && new Date(p.vip_until).getTime() > now && p.x_push !== false);
+
+  // 4) 逐人組訊息（只含他訂閱的帳號；最多 3 則，重要度高的先）
+  const ICON = { bullish: "🔴", bearish: "🟢", neutral: "⚪" };   // 台股慣例：紅多綠空
+  const LBL = { bullish: "偏多", bearish: "偏空", neutral: "中性" };
+  const preview = [];
+  let sent = 0;
+  for (const p of recipients) {
+    const mine = alerts.filter(a => byUser[p.id].has(a.author)).sort((a, b) => b.importance - a.importance);
+    if (!mine.length) continue;
+    const top = mine.slice(0, 3);
+    const lines = top.map(a =>
+      `${ICON[a.impact] || "⚪"} ${LBL[a.impact] || "中性"}｜@${a.author}｜重要度 ${a.importance}\n${String(a.summary_zh || "").slice(0, 80)}`);
+    const more = mine.length > top.length ? `\n…還有 ${mine.length - top.length} 則` : "";
+    const lt = opts.dry ? null : await makeLoginToken(env, p.id);
+    const link = lt ? `https://leadfuai.com/pages/member?lt=${lt}&openExternalBrowser=1#x-radar` : "https://leadfuai.com/pages/member#x-radar";
+    const text = `⚡ X 快訊雷達｜你訂閱的大佬有重大動向\n━━━━━━━━━━\n${lines.join("\n━━━━━━━━━━\n")}${more}\n━━━━━━━━━━\n輿情整理、非投資建議，每則附原文連結\n完整快訊 → ${link}`;
+    if (opts.dry) { preview.push({ user: p.id.slice(0, 8) + "…", items: top.length + (mine.length - top.length) }); continue; }
+    if (await _linePush(env, p.line_user_id, text)) sent++;
+  }
+
+  // 5) 標記已處理（同組條件 + created_at 上界，避免 race 漏掉發送間隙新進的快訊）
+  if (!opts.dry) {
+    try {
+      await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/x_alerts?pushed_at=is.null&importance=gte.${X_PUSH_MIN_IMPORTANCE}&created_at=gte.${sinceIso}&created_at=lte.${encodeURIComponent(maxCreated)}`, {
+        method: "PATCH",
+        headers: { ...ecpayAdmin(env), "Content-Type": "application/json", "Prefer": "return=minimal" },
+        body: JSON.stringify({ pushed_at: new Date().toISOString() })
+      });
+    } catch (e) {}
+  }
+  return opts.dry
+    ? { sent: 0, dry: true, alerts: alerts.length, wouldSend: preview }
+    : { sent, alerts: alerts.length, recipients: recipients.length };
+}
+
+/* 手動觸發（站長限定；?dry=1 試跑不發送不標記、?force=1 忽略勿擾時段） */
+async function handleManualXPush(request, env) {
+  const url = new URL(request.url);
+  const token = (request.headers.get("Authorization") || "").replace(/^Bearer /, "") || url.searchParams.get("access_token") || "";
+  const user = await ecpayUser(token);
+  if (!user || !OWNER_UIDS.includes(user.id)) {
+    return new Response(JSON.stringify({ error: "owner only" }), { status: 403, headers: { "Content-Type": "application/json" } });
+  }
+  const res = await runXAlertPush(env, { dry: url.searchParams.get("dry") === "1", force: url.searchParams.get("force") === "1" });
+  return new Response(JSON.stringify(res), { headers: { "Content-Type": "application/json; charset=utf-8" } });
+}
+
+/* 會員自行開關推播（POST {enabled:bool}，Bearer = Supabase access token） */
+async function handleXPushToggle(request, env) {
+  if (request.method !== "POST") return new Response("method", { status: 405 });
+  const token = (request.headers.get("Authorization") || "").replace(/^Bearer /, "");
+  const user = await ecpayUser(token);
+  if (!user) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { "Content-Type": "application/json" } });
+  let body = {};
+  try { body = await request.json(); } catch (e) {}
+  const enabled = !!body.enabled;
+  const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?id=eq.${user.id}`, {
+    method: "PATCH",
+    headers: { ...ecpayAdmin(env), "Content-Type": "application/json", "Prefer": "return=minimal" },
+    body: JSON.stringify({ x_push: enabled })
+  });
+  if (!r.ok) return new Response(JSON.stringify({ error: "update failed（x_push 欄位還沒建？）" }), { status: 502, headers: { "Content-Type": "application/json" } });
+  return new Response(JSON.stringify({ ok: true, x_push: enabled }), { headers: { "Content-Type": "application/json; charset=utf-8" } });
+}
+
+/* ── ⚡ AI 對話注入：X 快訊雷達 context（「川普最近說什麼？」→ 真實貼文摘要）──
+   點名帳號 → 近 72h 該帳號快訊；泛問（推特上有什麼大事）→ 近 24h 重要度 ≥7。 */
+async function getXAlertsContext(env, q) {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY || !q) return null;
+  const ALIAS = {
+    "川普": "realDonaldTrump", "特朗普": "realDonaldTrump", "馬斯克": "elonmusk",
+    "黃仁勳": "jensenhuang", "輝達": "nvidia", "奧特曼": "sama", "鮑爾": "federalreserve",
+    "聯準會": "federalreserve", "木頭姐": "CathieDWood", "伍德": "CathieDWood",
+    "達里歐": "RayDalio", "阿克曼": "BillAckman", "伯里": "michaeljburry", "庫班": "mcuban",
+    "蘇姿丰": "LisaSu", "皮查伊": "sundarpichai", "孫正義": "masason", "蓋茲": "BillGates",
+    "趙長鵬": "cz_binance", "納瓦爾": "naval", "路透": "Reuters", "彭博": "business"
+  };
+  const matched = new Set();
+  for (const [zh, h] of Object.entries(ALIAS)) if (q.includes(zh)) matched.add(h);
+  try {
+    const cat = await _assetJson(env, "x_catalog.json");
+    const ql = q.toLowerCase();
+    for (const c of ((cat && cat.categories) || []))
+      for (const a of (c.accounts || []))
+        if (ql.includes(String(a.handle).toLowerCase()) || (a.name && q.includes(a.name))) matched.add(a.handle);
+  } catch (e) {}
+  const hours = matched.size ? 72 : 24;
+  const sinceIso = new Date(Date.now() - hours * 3600 * 1000).toISOString();
+  const filter = matched.size
+    ? `author=in.(${[...matched].map(encodeURIComponent).join(",")})`
+    : `importance=gte.7`;
+  let rows = [];
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/x_alerts?select=author,summary_zh,impact,importance,created_at&${filter}&created_at=gte.${sinceIso}&order=created_at.desc&limit=8`, { headers: ecpayAdmin(env) });
+    if (!r.ok) return null;
+    rows = await r.json();
+  } catch (e) { return null; }
+  if (!Array.isArray(rows) || !rows.length) {
+    return matched.size
+      ? `\n\n【X 快訊雷達】近 ${hours} 小時內，${[...matched].map(h => "@" + h).join("、")} 沒有市場相關的新貼文。請如實告知用戶「最近沒有相關動態」，禁止憑記憶編造他們說過什麼。`
+      : null;
+  }
+  const LBL = { bullish: "偏多", bearish: "偏空", neutral: "中性" };
+  const fmt = iso => { const d = new Date(new Date(iso).getTime() + 8 * 3600 * 1000); return `${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")} ${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}`; };
+  const lines = rows.map(a => `・[${fmt(a.created_at)} 台北] @${a.author}（${LBL[a.impact] || "中性"}・重要度 ${a.importance}）：${a.summary_zh}`);
+  return `\n\n【X 快訊雷達 · 真實 X 貼文中文摘要（近 ${hours} 小時）】\n${lines.join("\n")}\n（回答規則：只能根據上面的摘要轉述，引用時附帳號與時間；「偏多/偏空」是輿情方向不是買賣建議；沒列出的不可自行補充。可順帶告知：VIP 可在會員中心訂閱 70+ 位帳號的 X 快訊。）`;
 }
 
 function lineAuthError(msg, status) {
@@ -2176,6 +2338,8 @@ export default {
     if (url.pathname === "/api/health")         return handleHealth(env);
     if (url.pathname === "/api/quote")          return handleQuote(request);
     if (url.pathname === "/api/market/x-alerts") return handleXAlertsFeed(request, env, ctx);
+    if (url.pathname === "/api/cron-x-push")    return handleManualXPush(request, env);
+    if (url.pathname === "/api/x-push-toggle")  return handleXPushToggle(request, env);
     if (url.pathname === "/api/line-auth")      return handleLineAuth(request, env);
     if (url.pathname === "/api/line-handoff")   return handleLineHandoff(request, env);
     if (url.pathname === "/api/ecpay-create")   return handleEcpayCreate(request, env);
@@ -2194,6 +2358,8 @@ export default {
   // Cloudflare Cron Triggers：準時跑每日新聞推播（不受 GitHub Actions 排程延遲）
   async scheduled(event, env, ctx) {
     const cron = (event && event.cron) || "";
+    // */10 = X 快訊雷達重大快訊推播（每 10 分鐘）
+    if (cron.startsWith("*/10")) { ctx.waitUntil(runXAlertPush(env)); return; }
     // 00:30 UTC = 08:30 台北（盤前，開盤前）；07:50 UTC = 15:50 台北（盤後）。
     ctx.waitUntil(runNewsPush(env, cron.startsWith("30 0 ") ? "pre" : "post"));
   }

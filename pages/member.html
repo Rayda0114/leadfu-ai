@@ -461,5 +461,47 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 </script>
+
+<script>
+/* ⚡ X 快訊雷達 · 重大快訊 LINE 推播開關（重要度 ≥9 即推；獨立掛載，不動既有訂閱程式） */
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    await window.LeadFu.ready;
+    if (!window.LeadFuAuth || !window.LeadFuAuth.client) return;
+    const sb = window.LeadFuAuth.client;
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+    const host = document.getElementById("xWatcherBody");
+    if (!host || document.getElementById("xPushRow")) return;
+    const row = document.createElement("div");
+    row.id = "xPushRow";
+    row.style.cssText = "display:flex;align-items:center;gap:9px;padding:11px 16px;border-bottom:1px solid #eef0f3;background:#fbfaf5;font-size:13.5px;color:#333;";
+    row.innerHTML = '<input type="checkbox" id="xPushToggle" style="width:17px;height:17px;flex:none;cursor:pointer;">'
+      + '<label for="xPushToggle" style="cursor:pointer;"><b>重大快訊 LINE 推播</b>（重要度 ≥9 的訂閱帳號動向，主動推到你的 LINE；23:00–07:00 不打擾）</label>'
+      + '<span id="xPushState" style="margin-left:auto;font-size:12px;color:#999;"></span>';
+    host.parentNode.insertBefore(row, host);
+    const cb = document.getElementById("xPushToggle");
+    const st = document.getElementById("xPushState");
+    try {
+      const { data } = await sb.from("profiles").select("x_push").eq("id", session.user.id).single();
+      cb.checked = !data || data.x_push !== false;
+    } catch (e) { cb.checked = true; }
+    cb.addEventListener("change", async () => {
+      st.textContent = "儲存中…";
+      try {
+        const r = await fetch("/api/x-push-toggle", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + session.access_token },
+          body: JSON.stringify({ enabled: cb.checked })
+        });
+        const d = await r.json();
+        st.textContent = d.ok ? (cb.checked ? "已開啟 ✓" : "已關閉") : "儲存失敗";
+        if (!d.ok) cb.checked = !cb.checked;
+      } catch (e) { st.textContent = "儲存失敗"; cb.checked = !cb.checked; }
+      setTimeout(() => { st.textContent = ""; }, 2500);
+    });
+  } catch (e) {}
+});
+</script>
 </body>
 </html>
