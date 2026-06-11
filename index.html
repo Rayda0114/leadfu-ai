@@ -295,6 +295,13 @@
   .xr-imp{color:#b08a3e;font-weight:800;}
   .xr-link{color:#0b3328;font-weight:800;text-decoration:none;}
   .xr-note{margin-top:12px;font-size:11.5px;color:#9a948a;}
+
+  .start-banner{display:flex;align-items:center;gap:10px;margin-top:16px;max-width:480px;
+    padding:12px 18px;border-radius:14px;text-decoration:none;
+    background:rgba(214,179,111,.13);border:1.5px solid rgba(214,179,111,.5);
+    color:#f4ead2;font-size:14px;font-weight:700;
+    box-shadow:0 6px 18px rgba(0,0,0,.18);transition:background .15s ease,transform .15s ease;}
+  .start-banner:hover{background:rgba(214,179,111,.24);transform:translateY(-1px);text-decoration:none;}
 </style>
 
 <!-- 🔍 首頁第一屏：輸入股票 → 免費買前檢查 -->
@@ -319,7 +326,11 @@
           <a href="pages/portfolio-health.html" class="check-btn-secondary">建立我的持股清單</a>
         </div>
         <div class="check-guarantees"><span>✅ 公開資料整理</span><span>🚫 不提供明牌</span><span>💰 0 元先試用</span></div>
-        <div style="margin-top:12px;"><a href="pages/start.html" style="color:#ecd9ab;font-weight:800;font-size:13.5px;text-decoration:none;">🧭 1 分鐘，看懂領富能為你做的 6 件事 →</a></div>
+        <a href="pages/start.html" class="start-banner">
+          <span style="font-size:19px;">🧭</span>
+          <span><b style="color:#ecd9ab;">新朋友？</b>1 分鐘看懂領富能為你做的 6 件事</span>
+          <b style="margin-left:auto;color:#ecd9ab;">→</b>
+        </a>
       </div>
       <div class="check-hero-right">
         <div class="example-card" id="exampleCard">
