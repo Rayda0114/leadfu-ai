@@ -642,6 +642,14 @@ async function handleAsk(request, env) {
       if (sc) { augmentedLast += sc; serverInjected = true; }
     } catch (e) {}
   }
+  // 🔎 自然語言選股（2026-06-11）：「找殖利率4%以上、外資連買的股票」→ 確定性解析+伺服器篩選
+  const screenIntent = /(找|篩|挑|選出|有哪些|哪些|推薦).{0,18}(股票|個股|標的|檔)|幫我選股|選股條件/;
+  if (!context.isMarketBrief && screenIntent.test(lastUserContent || "")) {
+    try {
+      const sc2 = await getScreenContext(env, lastUserContent || "");
+      if (sc2) { augmentedLast += sc2; serverInjected = true; }
+    } catch (e) {}
+  }
   // ⚡ X 快訊問題（2026-06-11）：「川普最近說什麼」「馬斯克發了什麼文」→ 注入 X 快訊雷達真實摘要
   const xIntent = /川普|特朗普|馬斯克|黃仁勳|輝達|奧特曼|鮑爾|聯準會|木頭姐|伍德|達里歐|阿克曼|伯里|庫班|蘇姿丰|皮查伊|孫正義|蓋茲|趙長鵬|納瓦爾|路透|彭博|推特|twitter|[^a-z]x ?(上|平台|發)|發[文推]|貼文|快訊|大佬/i;
   if (!context.isMarketBrief && xIntent.test(lastUserContent || "")) {
@@ -1252,6 +1260,105 @@ async function getSentimentContext(env, q) {
   }
   return `\n\n【輿情雷達 · 近 30 天多源統計（更新 ${sj.updatedAt}，來源：PTT 股板 + Google News + YouTube + X 快訊雷達）】\n` + lines.join("\n")
     + `\n（回答規則：只能引用上面統計；必須說明「討論熱度不代表股價方向」；標題僅是社群貼文非事實查證；非投資建議。）`;
+}
+
+
+/* ── 🔎 自然語言選股（2026-06-11）──
+   「找殖利率 4% 以上、外資連買、還沒漲的股票」→ 解析條件 → 伺服器端用官方資料篩選 → 注入結果。
+   確定性解析（不靠模型猜數字），模型只負責呈現；結果非推薦，逐檔附買前檢查提醒。 */
+function parseScreenQuery(q) {
+  const f = {}; let m;
+  if ((m = q.match(/殖利率\s*([\d.]+)\s*%?\s*以上/))) f.yldMin = +m[1];
+  else if (/高殖利率|高股息/.test(q)) f.yldMin = 4;
+  if ((m = q.match(/本益比\s*([\d.]+)\s*(?:倍)?\s*(?:以下|以內)/))) f.peMax = +m[1];
+  else if (/低本益比/.test(q)) f.peMax = 15;
+  if ((m = q.match(/營收(?:年增|成長)\s*([\d.]+)\s*%?\s*以上/))) f.revMin = +m[1];
+  else if (/營收(?:有)?(?:成長|年增|轉強|增)/.test(q)) f.revMin = 10;
+  if ((m = q.match(/外資連買\s*(\d+)/))) f.fBuyDays = +m[1];
+  else if (/外資(?:連買|持續買|一直買|買超)/.test(q)) f.fBuyDays = 3;
+  if (/投信(?:買超|連買|加碼|也買)/.test(q)) f.trustBuy = true;
+  if (/還沒漲|沒怎麼漲|沒噴|低基期|尚未發動/.test(q)) f.r3mMax = 10;
+  if ((m = q.match(/([\d.]+)\s*元以下/))) f.priceMax = +m[1];
+  if ((m = q.match(/([\d.]+)\s*元以上/))) f.priceMin = +m[1];
+  if (/低於合理|合理區間下緣|被低估|便宜/.test(q)) f.fvLow = true;
+  if (/站上月線|月線之上|月線上/.test(q)) f.aboveMa20 = true;
+  if (/高毛利/.test(q)) f.gmMin = 30;
+  if ((m = q.match(/(?:成交)?量\s*([\d,]+)\s*張以上/))) f.volMin = +m[1].replace(/,/g, "");
+  for (const c of ["半導體", "金融保險", "電子零組件", "航運", "生技醫療", "光電", "電腦及周邊", "通信網路", "鋼鐵", "建材營造", "汽車", "食品"]) {
+    if (q.indexOf(c.slice(0, 2)) > -1) { f.category = c; break; }
+  }
+  if (/ETF/i.test(q)) f.etf = true;
+  return f;
+}
+
+async function getScreenContext(env, q) {
+  if (!env.ASSETS) return null;
+  const f = parseScreenQuery(q);
+  if (Object.keys(f).length < 1) return null;
+  let stocks = [];
+  try { stocks = (await (await env.ASSETS.fetch(new Request("https://placeholder/data/stocks_live.json"))).json()).stocks || []; } catch (e) { return null; }
+  const grab = async (file) => { try { return (await (await env.ASSETS.fetch(new Request("https://placeholder/data/" + file))).json()).data || {}; } catch (e) { return {}; } };
+  const [val, rev, streak, inst, fin, fv, ret, ind] = await Promise.all([
+    grab("valuation_live.json"), grab("revenue_live.json"), grab("inst_streak_live.json"),
+    grab("institutional_live.json"), grab("financials_live.json"), grab("fair_value_live.json"),
+    grab("returns_live.json"), grab("indicators_live.json")
+  ]);
+  const hits = [];
+  for (const s of stocks) {
+    const c = String(s.code);
+    if (s.status === "興櫃") continue;
+    const isEtf = s.category === "ETF";
+    if (f.etf && !isEtf) continue;
+    if (!f.etf && isEtf) continue;
+    if (f.category && s.category !== f.category) continue;
+    if (f.priceMax != null && !(s.price <= f.priceMax)) continue;
+    if (f.priceMin != null && !(s.price >= f.priceMin)) continue;
+    if (f.volMin != null && !((s.volume || 0) >= f.volMin)) continue;
+    const v = val[c];
+    if (f.yldMin != null && !(v && v.yield_pct >= f.yldMin)) continue;
+    if (f.peMax != null && !(v && v.pe_ratio > 0 && v.pe_ratio <= f.peMax)) continue;
+    const r = rev[c];
+    if (f.revMin != null && !(r && r.yoy >= f.revMin)) continue;
+    const st = streak[c];
+    if (f.fBuyDays != null && !(st && st.dir === "buy" && st.days >= f.fBuyDays)) continue;
+    const it = inst[c];
+    if (f.trustBuy && !(it && it.trust_net_lots > 0)) continue;
+    const fn = fin[c];
+    if (f.gmMin != null && !(fn && fn.gross_margin >= f.gmMin)) continue;
+    const fvv = fv[c];
+    if (f.fvLow && !(fvv && fvv.position != null && fvv.position <= 0.2)) continue;
+    const rr = ret[c];
+    if (f.r3mMax != null && !(rr && rr.r3m != null && rr.r3m <= f.r3mMax)) continue;
+    const id = ind[c];
+    if (f.aboveMa20 && !(id && id.ma20 && s.price > id.ma20)) continue;
+    hits.push({ s, v, r, st, rr });
+  }
+  hits.sort((a, b) => (b.s.volume || 0) - (a.s.volume || 0));
+  const labels = [];
+  if (f.yldMin != null) labels.push(`殖利率 ≥${f.yldMin}%`);
+  if (f.peMax != null) labels.push(`本益比 ≤${f.peMax}`);
+  if (f.revMin != null) labels.push(`月營收年增 ≥${f.revMin}%`);
+  if (f.fBuyDays != null) labels.push(`外資連買 ≥${f.fBuyDays} 日`);
+  if (f.trustBuy) labels.push("投信今日買超");
+  if (f.r3mMax != null) labels.push(`近 3 月漲幅 ≤${f.r3mMax}%（尚未大漲）`);
+  if (f.priceMax != null) labels.push(`股價 ≤${f.priceMax} 元`);
+  if (f.priceMin != null) labels.push(`股價 ≥${f.priceMin} 元`);
+  if (f.fvLow) labels.push("低於合理區間下緣");
+  if (f.aboveMa20) labels.push("站上月線");
+  if (f.gmMin != null) labels.push(`毛利率 ≥${f.gmMin}%`);
+  if (f.volMin != null) labels.push(`量 ≥${f.volMin} 張`);
+  if (f.category) labels.push(f.category);
+  if (f.etf) labels.push("限 ETF");
+  if (!labels.length) return null;
+  const top = hits.slice(0, 8);
+  const lines = top.map(h =>
+    `・${h.s.code} ${h.s.name}（${h.s.category || ""}）收盤 ${h.s.price}` +
+    (h.v && h.v.yield_pct != null ? `、殖利率 ${h.v.yield_pct}%` : "") +
+    (h.v && h.v.pe_ratio ? `、PE ${h.v.pe_ratio}` : "") +
+    (h.r && h.r.yoy != null ? `、營收年增 ${h.r.yoy}%` : "") +
+    (h.st && h.st.dir === "buy" ? `、外資連買 ${h.st.days} 日` : "") +
+    (h.rr && h.rr.r3m != null ? `、近3月 ${h.rr.r3m >= 0 ? "+" : ""}${h.rr.r3m}%` : ""));
+  return `\n\n【自然語言選股 · 伺服器端官方資料篩選結果】\n解析條件：${labels.join("、")}\n符合 ${hits.length} 檔${hits.length > 8 ? "（以下列成交量前 8）" : ""}：\n${lines.join("\n") || "（無符合條件的個股）"}\n（回答規則：先複述解析出的條件讓用戶確認；逐檔可附 https://leadfuai.com/pages/check?code=代號 提醒做買前檢查；這是條件篩選的資料整理，**不是推薦名單**；若條件解析與用戶想要的不同，請告知用戶換個說法。）`;
 }
 
 function lineAuthError(msg, status) {

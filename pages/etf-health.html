@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>高股息 ETF 健檢：殖利率是真的嗎？配息 vs 總報酬一次看 - 領富 AI</title>
+<meta name="description" content="高股息 ETF 體檢：TTM 殖利率 vs 含息總報酬、溢價風險、規模、配息頻率、收益平準金說明。「賺了股息、賠了價差」一眼看穿。49 檔配息型 ETF 每日更新。">
+<link rel="canonical" href="https://leadfuai.com/pages/etf-health">
+<meta property="og:title" content="高股息 ETF 健檢：殖利率是真的嗎？- 領富 AI">
+<meta property="og:description" content="殖利率 vs 含息總報酬、溢價、規模、配息頻率 — 高股息 ETF 一頁體檢。">
+<meta property="og:url" content="https://leadfuai.com/pages/etf-health">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+ {"@type":"Question","name":"高股息 ETF 的殖利率為什麼可能是假象？","acceptedAnswer":{"@type":"Answer","text":"殖利率＝配息÷股價。若配息來自收益平準金（拿你自己的本金配給你）或股價持續下跌，高殖利率可能伴隨負的總報酬 —— 賺了股息、賠了價差。判斷標準應看「含息總報酬」而非單看殖利率。"}},
+ {"@type":"Question","name":"收益平準金是什麼？","acceptedAnswer":{"@type":"Answer","text":"收益平準金是 ETF 為了讓配息率不被新申購資金稀釋而設的機制，部分配息可能來自申購者投入的本金而非成分股的股利。配息組成（股利所得/平準金/資本利得比例）會在各投信的收益分配通知中公告，金管會已要求加強揭露。"}},
+ {"@type":"Question","name":"買高股息 ETF 該注意什麼？","acceptedAnswer":{"@type":"Answer","text":"四件事：①含息總報酬是否為正（而非只看殖利率）②溢價是否過高（買貴於淨值）③規模是否太小（流動性與清算風險）④配息組成中平準金占比。"}}]}
+</script>
+<style>
+  :root{--bg:#f4f2ec;--ink:#0d1d17;--hairline:rgba(13,29,23,.12);--hair2:rgba(13,29,23,.08);
+    --forest:#0b3328;--paper:#fffdf8;--gold:#b9914f;--gold2:#d6b36f;--up:#be4a3e;--down:#148a55;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:50px;}
+  .hero{color:#f8f5ec;padding:calc(22px + env(safe-area-inset-top)) 22px 30px;
+    background:linear-gradient(160deg,rgba(255,255,255,.05) 0 1px,transparent 1px 100%),
+    radial-gradient(circle at 86% 0%,rgba(185,145,79,.28),transparent 36%),
+    linear-gradient(180deg,#08271f 0%,#0d3328 100%);background-size:19px 19px,auto,auto;}
+  .sig{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .sig::before{content:"";width:26px;height:1px;background:currentColor;}
+  .hero h1{margin:12px 0 0;font-size:24px;font-weight:900;letter-spacing:-.3px;line-height:1.35;}
+  .hero p{margin:9px 0 0;font-size:13px;color:rgba(248,245,236,.68);line-height:1.75;max-width:600px;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 18px;}
+  .edu{background:#fdf6ec;border:1px solid #f0e2c8;border-radius:18px;padding:15px 18px;margin-top:18px;}
+  .edu b{font-size:14px;color:#a8731c;}
+  .edu p{margin:7px 0 0;font-size:12.5px;color:#7a6a4a;line-height:1.8;}
+  .bar{display:flex;gap:8px;margin:18px 0 0;flex-wrap:wrap;align-items:center;}
+  .bar button{min-height:40px;border-radius:999px;border:1px solid var(--hairline);background:var(--paper);font-family:inherit;font-size:13px;font-weight:800;color:#46534b;cursor:pointer;padding:0 16px;}
+  .bar button.on{background:var(--forest);border-color:var(--forest);color:#f4ead2;}
+  .bar span{font-size:12px;color:#9a948a;margin-left:auto;}
+  .card{background:var(--paper);border:1px solid var(--hair2);border-radius:18px;padding:15px 17px;margin-top:12px;box-shadow:0 8px 22px rgba(13,29,23,.05);}
+  .c-top{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;}
+  .c-top b{font-size:16.5px;font-weight:900;}
+  .c-top .code{font-size:12px;color:#9a948a;font-weight:800;}
+  .c-top small{font-size:11px;color:#a9a392;width:100%;}
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px;}
+  @media(max-width:640px){.stats{grid-template-columns:repeat(3,1fr);}}
+  .st{text-align:center;border:1px solid var(--hair2);border-radius:12px;padding:9px 4px;}
+  .st b{display:block;font-size:15.5px;font-weight:900;color:var(--forest);font-variant-numeric:tabular-nums;}
+  .st b.up{color:var(--up);} .st b.dn{color:var(--down);}
+  .st small{display:block;font-size:10px;color:#8a8d85;font-weight:800;margin-top:2px;}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;}
+  .bg{font-size:11px;font-weight:800;padding:3px 10px;border-radius:9px;}
+  .bg.g{background:#eef3ee;color:#1a7a45;border:1px solid #d7e5d9;}
+  .bg.a{background:#fdf2dd;color:#a8731c;border:1px solid #ecd9b0;}
+  .bg.r{background:#fbeae8;color:#a13a2f;border:1px solid #eccfc9;}
+  .pz{margin-top:10px;font-size:11.5px;}
+  .pz a{color:#8b6b36;font-weight:800;text-decoration:none;}
+  .src{margin-top:20px;font-size:11.5px;color:#9a948a;line-height:1.8;}
+  .back{display:inline-block;margin-top:14px;color:var(--forest);font-weight:800;font-size:13.5px;text-decoration:none;}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap" style="padding:0;">
+  <span class="sig">ETF Health Check</span>
+  <h1>高股息 ETF 健檢</h1>
+  <p>殖利率是真的嗎？—— 高配息不等於高報酬。這頁把 <b>TTM 殖利率、含息總報酬、溢價、規模、配息頻率</b>攤開比給你看，「賺了股息、賠了價差」一眼看穿。</p>
+</div></header>
+
+<div class="wrap">
+  <div class="edu">
+    <b>📖 收益平準金是什麼？為什麼要看配息組成？</b>
+    <p>部分高股息 ETF 的配息含「收益平準金」—— 簡單說，可能是<b>拿你申購的本金配回給你</b>，不是成分股賺來的股利。配息組成（股利所得／平準金／資本利得占比）各投信會在「收益分配通知」公告，金管會已要求加強揭露。每檔卡片下方附查詢連結 —— <b>配息前，先看組成</b>。</p>
+  </div>
+  <div class="bar">
+    <button class="on" data-s="yield">殖利率 高→低</button>
+    <button data-s="total">含息報酬 高→低</button>
+    <button data-s="aum">規模 大→小</button>
+    <button data-s="warn">先看有警示的</button>
+    <span id="meta"></span>
+  </div>
+  <div id="list">載入中…</div>
+  <p class="src">資料：TWSE 官方 ETF 淨值／配息累積（站內每日更新）、近 6 月報酬為價格報酬＋半年配息估算。本頁為公開資料整理與風險提示，<b>非投資建議</b>；配息組成請以各投信收益分配通知為準。</p>
+  <a class="back" href="/pages/etf.html">← ETF 專區</a> ・ <a class="back" href="/pages/dividend-tax">股利稅試算 →</a> ・ <a class="back" href="/pages/dividends.html">高殖利率排行 →</a>
+</div>
+
+<script src="/js/main.js?v=3.25.3"></script>
+<script>
+fetch("/data/etf_health_live.json").then(r => r.json()).then(d => {
+  const rows = Object.entries(d.data || {}).map(([code, v]) => ({ code, ...v }));
+  document.getElementById("meta").textContent = `${rows.length} 檔・更新 ${d.updatedAt}`;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const render = mode => {
+    let list = [...rows];
+    if (mode === "yield") list.sort((a, b) => b.ttm_yield - a.ttm_yield);
+    if (mode === "total") list.sort((a, b) => (b.total6 ?? -99) - (a.total6 ?? -99));
+    if (mode === "aum") list.sort((a, b) => (b.aum_yi || 0) - (a.aum_yi || 0));
+    if (mode === "warn") list.sort((a, b) => (b.badges.some(x => x[1] === "r") * 2 + b.badges.some(x => x[1] === "a")) - (a.badges.some(x => x[1] === "r") * 2 + a.badges.some(x => x[1] === "a")));
+    document.getElementById("list").innerHTML = list.map(r => `
+      <div class="card">
+        <div class="c-top"><b>${esc(r.name)}</b><span class="code">${r.code}</span>
+          ${r.index ? `<small>追蹤：${esc(r.index)}</small>` : ""}</div>
+        <div class="stats">
+          <div class="st"><b>${r.ttm_yield}%</b><small>TTM 殖利率</small></div>
+          <div class="st"><b class="${r.total6 == null ? "" : r.total6 >= 0 ? "up" : "dn"}">${r.total6 == null ? "—" : (r.total6 >= 0 ? "+" : "") + r.total6 + "%"}</b><small>近6月含息報酬</small></div>
+          <div class="st"><b class="${r.premium > 0 ? "up" : r.premium < 0 ? "dn" : ""}">${r.premium == null ? "—" : (r.premium >= 0 ? "+" : "") + r.premium + "%"}</b><small>溢價(+買貴)</small></div>
+          <div class="st"><b>${r.aum_yi != null ? r.aum_yi.toLocaleString() : "—"}</b><small>規模(億)</small></div>
+          <div class="st"><b>${r.dist_count || "—"} 次/年</b><small>配息頻率</small></div>
+        </div>
+        <div class="badges">${r.badges.map(b => `<span class="bg ${b[1]}">${b[1] === "r" ? "🔴" : b[1] === "a" ? "🟠" : "✓"} ${esc(b[0])}</span>`).join("")}</div>
+        <div class="pz">每股 TTM 配息 ${r.ttm_cash} 元・上次除息 ${r.last_ex || "—"}・<a href="https://www.google.com/search?q=${encodeURIComponent(r.code + " " + r.name + " 收益分配通知 平準金")}" target="_blank" rel="noopener nofollow">查配息組成（收益分配通知）↗</a></div>
+      </div>`).join("");
+  };
+  render("yield");
+  document.querySelectorAll(".bar button").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".bar button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on"); render(b.dataset.s);
+  }));
+}).catch(e => { document.getElementById("list").textContent = "資料載入失敗"; });
+</script>
+</body>
+</html>
