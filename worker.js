@@ -643,7 +643,7 @@ async function handleAsk(request, env) {
     } catch (e) {}
   }
   // 🔎 自然語言選股（2026-06-11）：「找殖利率4%以上、外資連買的股票」→ 確定性解析+伺服器篩選
-  const screenIntent = /(找|篩|挑|選出|有哪些|哪些|推薦).{0,18}(股票|個股|標的|檔)|幫我選股|選股條件/;
+  const screenIntent = /(找|篩|挑|選出|有哪些|哪些|推薦)[^。？!]{0,50}(股票|個股|標的|檔)|幫我選股|選股條件/;
   if (!context.isMarketBrief && screenIntent.test(lastUserContent || "")) {
     try {
       const sc2 = await getScreenContext(env, lastUserContent || "");
