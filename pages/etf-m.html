@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ETF 專區 - 高股息/市值型/債券 全列表 - 領富 AI</title>
+<meta name="description" content="台股 225 檔 ETF 行動版總覽：高股息、市值型、債券、主題、海外、槓桿反向分類，規模、殖利率、折溢價、近 3 月報酬一頁看。">
+<link rel="canonical" href="https://leadfuai.com/pages/etf">
+<meta name="theme-color" content="#0b3328">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/css/style.css?v=3.23.9">
+<style>
+  :root{--bg:#f4f2ec;--ink:#0d1d17;--muted:#68736c;--soft:#46534b;
+    --hairline:rgba(13,29,23,.12);--hair2:rgba(13,29,23,.08);
+    --forest:#0b3328;--paper:#fffdf8;--gold:#b9914f;--gold-2:#d6b36f;
+    --up:#be4a3e;--down:#148a55;--flat:#8a948e;--safe-b:env(safe-area-inset-bottom,0px);}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(76px + var(--safe-b));}
+  .num{font-variant-numeric:tabular-nums;}
+  .m-hero{color:#f8f5ec;padding:calc(20px + env(safe-area-inset-top)) 22px 46px;
+    background:linear-gradient(160deg,rgba(255,255,255,.05) 0 1px,transparent 1px 100%),
+    radial-gradient(circle at 86% 0%,rgba(185,145,79,.28),transparent 34%),
+    linear-gradient(180deg,#08271f 0%,#0d3328 100%);background-size:19px 19px,auto,auto;}
+  .m-signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#d9bd82;}
+  .m-signal::before{content:"";width:26px;height:1px;background:currentColor;}
+  .m-hero h1{margin:12px 0 0;font-size:26px;font-weight:900;letter-spacing:-.4px;}
+  .m-hero p{margin:8px 0 0;font-size:12.5px;color:rgba(248,245,236,.66);line-height:1.7;}
+  .m-health{margin:-28px 18px 0;position:relative;z-index:2;display:flex;gap:11px;align-items:center;
+    background:linear-gradient(135deg,#1d3a2e,#0b3328);border-radius:18px;padding:14px 16px;
+    box-shadow:0 16px 40px rgba(13,29,23,.2);text-decoration:none;color:#f8f5ec;}
+  .m-health b{color:#ecd9ab;}
+  .m-health small{display:block;color:rgba(248,245,236,.7);margin-top:3px;line-height:1.6;}
+  .m-note{margin:12px 18px 0;background:#fdf6ec;border:1px solid #f0e2c8;border-radius:14px;padding:11px 14px;font-size:11.5px;color:#7a6a4a;line-height:1.7;}
+  .m-note a{color:#a8731c;font-weight:900;text-decoration:none;}
+  .m-seg{display:flex;gap:7px;margin:14px 0 0;padding:0 18px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .m-seg::-webkit-scrollbar{display:none;}
+  .m-seg button{flex:none;min-height:38px;border-radius:999px;border:1px solid var(--hairline);background:var(--paper);font-family:inherit;font-size:13px;font-weight:800;color:var(--soft);cursor:pointer;padding:0 15px;}
+  .m-seg button.on{background:var(--forest);border-color:var(--forest);color:#f4ead2;}
+  .m-sort{display:flex;gap:14px;align-items:baseline;padding:14px 20px 0;font-size:12px;color:#9a948a;font-weight:700;}
+  .m-sort button{background:none;border:0;font-family:inherit;font-size:12px;font-weight:800;color:#9a948a;cursor:pointer;padding:0;}
+  .m-sort button.on{color:var(--forest);border-bottom:2px solid var(--gold-2);padding-bottom:2px;}
+  .m-sort span{margin-left:auto;}
+  .m-list{margin:10px 18px 0;background:var(--paper);border:1px solid var(--hair2);border-radius:20px;overflow:hidden;}
+  .m-row{display:block;padding:13px 15px;border-bottom:1px solid var(--hair2);text-decoration:none;color:var(--ink);}
+  .m-row:last-child{border-bottom:0;}
+  .m-r1{display:flex;align-items:baseline;gap:8px;}
+  .m-name{font-size:15px;font-weight:800;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .m-code{font-size:11.5px;color:#9a948a;font-weight:800;flex:none;}
+  .m-tag{flex:none;font-size:10px;font-weight:900;padding:2px 7px;border-radius:8px;background:#eef3ee;color:#1a7a45;border:1px solid #d7e5d9;}
+  .m-px{flex:none;font-size:14.5px;font-weight:900;text-align:right;}
+  .m-r2{display:flex;gap:0;margin-top:7px;font-size:11px;color:#8a8d85;font-weight:700;}
+  .m-r2 span{flex:1;}
+  .m-r2 b{display:block;font-size:13px;font-weight:900;color:#2a352f;margin-top:1px;}
+  .m-r2 b.up{color:var(--up);} .m-r2 b.dn{color:var(--down);}
+  .m-more{display:block;text-align:center;padding:14px;font-size:13.5px;font-weight:900;color:var(--forest);background:none;width:100%;border:0;border-top:1px solid var(--hair2);font-family:inherit;cursor:pointer;}
+  .m-src{padding:18px 22px 8px;font-size:11px;color:#9a948a;line-height:1.7;}
+  .m-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:900;display:flex;background:rgba(255,253,248,.96);backdrop-filter:blur(12px);border-top:1px solid var(--hairline);padding:8px 6px calc(8px + var(--safe-b));}
+  .m-tabbar a{flex:1;text-align:center;text-decoration:none;color:#9a948a;font-size:10.5px;font-weight:800;}
+  .m-tabbar svg{display:block;margin:0 auto 3px;}
+  .m-tabbar a.on{color:var(--forest);}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="m-hero">
+  <span class="m-signal">ETF Zone</span>
+  <h1>ETF 專區</h1>
+  <p>台股全部 ETF・依類型分類・規模／殖利率／折溢價／近 3 月一頁看（盤後更新）</p>
+</header>
+
+<a class="m-health" href="/pages/etf-health">
+  <span style="font-size:22px;">🩺</span>
+  <span style="font-size:13px;flex:1;"><b>高股息 ETF 健檢</b><small>殖利率是真的嗎？含息總報酬、溢價、收益平準金一次看 →</small></span>
+</a>
+
+<div class="m-note">⚠ ETF 為一籃子標的，<b>不適用個股的合理區間／財報指標</b>；高股息不代表總報酬高，配息可能含平準金。<a href="/pages/etf-compare.html">熱門高股息比較表 →</a></div>
+
+<div class="m-seg" id="mSeg">
+  <button class="on" data-c="全部">全部</button>
+  <button data-c="高股息">高股息</button>
+  <button data-c="市值型">市值型</button>
+  <button data-c="債券">債券</button>
+  <button data-c="主題">主題</button>
+  <button data-c="海外">海外</button>
+  <button data-c="槓桿反向">槓桿/反向</button>
+</div>
+<div class="m-sort" id="mSort">
+  排序：
+  <button class="on" data-s="aum">規模</button>
+  <button data-s="yld">殖利率</button>
+  <button data-s="r3m">近3月</button>
+  <span id="mCount"></span>
+</div>
+<div class="m-list" id="mList"><div style="padding:20px;text-align:center;color:#8a8d85;font-size:13px;">載入中…</div></div>
+<div class="m-src">資料：TWSE 官方（ETF 淨值/配息/基本資料）＋站內報酬計算，盤後更新。殖利率為近一年配息估算；非投資建議。</div>
+
+<nav class="m-tabbar">
+  <a href="/" id="tbHome"></a>
+  <a href="/pages/stocks-m" class="on" id="tbChart"></a>
+  <a href="/pages/screener-m" id="tbSearch"></a>
+  <a href="/pages/watchlist-m" id="tbStar"></a>
+  <a href="/pages/member-m" id="tbUser"></a>
+</nav>
+
+<script src="/js/main.js?v=3.25.3"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const tb = {
+    tbHome: ['<path d="M216,120v96H152V152H104v64H40V120a8,8,0,0,1,2.34-5.66l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,216,120Z" fill="#c9a24b" opacity=".9"/><path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"/>', "首頁"],
+    tbChart: ['<path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H160a8,8,0,0,0-8,8V80H104a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM168,48h32V200H168ZM112,96h40V200H112ZM56,144H96v56H56Z"/>', "行情"],
+    tbSearch: ['<circle cx="112" cy="112" r="80" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/>', "選股"],
+    tbStar: ['<path d="M229.06,108.79l-48.7,42,14.88,62.79a8.4,8.4,0,0,1-12.52,9.17L128,189.09,73.28,222.74a8.4,8.4,0,0,1-12.52-9.17l14.88-62.79-48.7-42A8.46,8.46,0,0,1,31.73,94l63.91-5.2,24.62-59.6a8.36,8.36,0,0,1,15.48,0l24.62,59.6L224.27,94A8.46,8.46,0,0,1,229.06,108.79Z" fill="#c9a24b" opacity=".9"/><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"/>', "自選"],
+    tbUser: ['<circle cx="128" cy="96" r="64" fill="#c9a24b" opacity=".9"/><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/>', "我的"],
+  };
+  
+  const chart = document.getElementById("tbChart"); if (chart) chart.classList.add("on");
+
+  const [navJ, divJ, retJ] = await Promise.all([
+    fetch("/data/etf_nav_live.json").then(r => r.json()).catch(() => ({})),
+    fetch("/data/etf_div_live.json").then(r => r.json()).catch(() => ({})),
+    fetch("/data/returns_live.json").then(r => r.json()).catch(() => ({}))
+  ]);
+  const NAV = navJ.data || {}, DIV = divJ.data || {}, RET = retJ.data || {};
+
+  function etfCat(code, name) {
+    const n = name || "";
+    if (/正2|反1|正向|反向|槓桿/.test(n)) return "槓桿反向";
+    if (/債|Bond/i.test(n) || /B$/.test(code)) return "債券";
+    if (/美國|美股|標普|S&P|那斯達克|NASDAQ|費城|費半|日本|印度|越南|韓國|中國|滬深|上證|深100|深證|FANG|全球|歐洲|新興/.test(n)) return "海外";
+    if (/高股息|高息|優息|存股|高配息/.test(n)) return "高股息";
+    if (/半導體|科技|電子|資訊|5G|AI|人工智慧|資安|電動車|電池|生技|醫療|REIT|不動產|綠能|潔淨|金融|消費/.test(n)) return "主題";
+    return "市值型";
+  }
+
+  const rows = (L.data.stocks || []).filter(s => s.category === "ETF").map(s => {
+    const c = String(s.code), nv = NAV[c] || {}, dv = DIV[c] || {}, rt = RET[c] || {};
+    return { c, name: s.name, price: s.price, chg: s.change,
+      cat: etfCat(c, s.name), aum: nv.aumYi, prem: nv.premium,
+      yld: dv.ttmCash && s.price ? +(dv.ttmCash / s.price * 100).toFixed(2) : null,
+      r3m: rt.r3m != null ? rt.r3m : null };
+  });
+
+  let cat = "全部", sortBy = "aum", limit = 50;
+  function render() {
+    let list = rows.filter(r => cat === "全部" || r.cat === cat);
+    list.sort((a, b) => sortBy === "yld" ? (b.yld ?? -1) - (a.yld ?? -1)
+      : sortBy === "r3m" ? (b.r3m ?? -99) - (a.r3m ?? -99)
+      : (b.aum ?? -1) - (a.aum ?? -1));
+    document.getElementById("mCount").textContent = `${list.length} 檔`;
+    const shown = list.slice(0, limit);
+    document.getElementById("mList").innerHTML = shown.map(r => {
+      const p = (typeof r.price === "number" && r.price > 0 && typeof r.chg === "number") ? L.pctChange(r.price, r.chg) : null;
+      const pc = p == null ? "" : p > 0 ? "up" : p < 0 ? "dn" : "";
+      return `<a class="m-row" href="/pages/stock-m?code=${r.c}">
+        <div class="m-r1"><span class="m-name">${esc(r.name)}</span><span class="m-code num">${r.c}</span><span class="m-tag">${r.cat}</span></div>
+        <div class="m-r2 num">
+          <span>規模<b>${r.aum != null ? r.aum.toLocaleString() : "—"} 億</b></span>
+          <span>殖利率<b>${r.yld != null ? r.yld + "%" : "—"}</b></span>
+          <span>折溢<b class="${r.prem > 0 ? "up" : r.prem < 0 ? "dn" : ""}">${r.prem != null ? (r.prem > 0 ? "+" : "") + r.prem + "%" : "—"}</b></span>
+          <span>近3月<b class="${r.r3m > 0 ? "up" : r.r3m < 0 ? "dn" : ""}">${r.r3m != null ? (r.r3m > 0 ? "+" : "") + r.r3m + "%" : "—"}</b></span>
+          <span>現價<b class="${pc}">${r.price ?? "—"}${p != null ? ` <small style="font-weight:800;">${p > 0 ? "+" : ""}${p.toFixed(1)}%</small>` : ""}</b></span>
+        </div></a>`;
+    }).join("") + (list.length > limit ? `<button class="m-more" id="mMore">顯示更多（還有 ${list.length - limit} 檔）</button>` : "");
+    const more = document.getElementById("mMore");
+    if (more) more.addEventListener("click", () => { limit += 50; render(); });
+  }
+  document.querySelectorAll("#mSeg button").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("#mSeg button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on"); cat = b.dataset.c; limit = 50; render();
+  }));
+  document.querySelectorAll("#mSort button").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("#mSort button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on"); sortBy = b.dataset.s; render();
+  }));
+  render();
+});
+</script>
+</body>
+</html>
