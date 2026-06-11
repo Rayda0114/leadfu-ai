@@ -1,6 +1,10 @@
 """
 領富 AI · 個股輿情掃描（近 30 天）— last30days 概念的台股在地化
-來源：PTT 股板（討論熱度，主引擎）+ X 快訊雷達摘要（大佬提及）+ 站內新聞
+來源（多源熱度指數 v2）：
+  1. PTT 股板（散戶討論，4 週趨勢）
+  2. Google News RSS（媒體熱度，after:/before: 切週，免費無驗證；計數上限 100/週=飽和）
+  3. X 快訊雷達 DB（大佬提及，summary 全文比對）
+警示分級：PTT+新聞「雙源同時暴增」= 紅色警示；單源暴增 = 橘色注意
 輸出：data/sentiment_live.json
 合規：只做熱度統計與標題樣本（附原文連結），不轉述喊單內容、非投資建議。
 炒作警示規則：本週貼文數 ≥8 且為前三週平均的 ≥3 倍 → heat_spike（常見於炒作前期）
@@ -70,6 +74,37 @@ def scan_ptt(query, max_pages=6):
         time.sleep(0.8)
     return out
 
+
+def gnews_weekly(name):
+    """Google News RSS：近 4 週每週新聞則數（舊→新）。上限 100/週（飽和=高熱度）。"""
+    counts = []
+    for lo in (21, 14, 7, 0):   # 舊 → 新
+        a = (NOW - timedelta(days=lo + 7)).strftime("%Y-%m-%d")
+        b = (NOW - timedelta(days=lo)).strftime("%Y-%m-%d")
+        q = f'"{name}" after:{a} before:{b}' if lo else f'"{name}" after:{a}'
+        url = ("https://news.google.com/rss/search?q=" + urllib.parse.quote(q)
+               + "&hl=zh-TW&gl=TW&ceid=TW:zh-Hant")
+        xml = http_get(url)
+        counts.append(len(re.findall(r"<pubDate>", xml)))
+        time.sleep(0.6)
+    return counts
+
+def x_mentions_30d(name):
+    """X 快訊雷達 DB：近 30 天摘要提及次數（讀 ~/.hermes/x_supabase_key，失敗回 None）。"""
+    try:
+        key = (Path.home() / ".hermes" / "x_supabase_key").read_text().strip()
+        since = (NOW - timedelta(days=30)).strftime("%Y-%m-%dT00:00:00")
+        url = ("https://lhwxpnyzplylajxunlua.supabase.co/rest/v1/x_alerts?select=url"
+               + "&summary_zh=ilike." + urllib.parse.quote(f"%{name}%")
+               + "&created_at=gte." + since)
+        req = urllib.request.Request(url, headers={"apikey": key, "Authorization": "Bearer " + key,
+                                                   "Prefer": "count=exact", "Range": "0-0"})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            cr = r.headers.get("Content-Range", "")
+            return int(cr.split("/")[-1]) if "/" in cr else None
+    except Exception:
+        return None
+
 def week_bucket(dstr):
     days = (NOW - datetime.strptime(dstr, "%Y-%m-%d")).days
     return min(days // 7, 4)  # 0=本週 1,2,3=前三週 4=更舊
@@ -86,7 +121,6 @@ def main():
                if s.get("category") != "ETF" and s.get("status") == "上市"][:12]
     extra = ["2883", "2303", "2409", "2324", "4953", "2344", "2330", "5246"]
     codes = list(dict.fromkeys(vol_top + extra))
-    news = (load("news_live.json") or {}).get("news", []) or []
 
     result = {}
     for i, code in enumerate(codes, 1):
@@ -106,18 +140,32 @@ def main():
         spike = weeks[0] >= 8 and (baseline == 0 or weeks[0] >= baseline * 3)
         hot_titles = sorted([p_ for p_ in posts if week_bucket(p_["d"]) == 0],
                             key=lambda x: -x["push"])[:3]
-        news_hits = sum(1 for n in news if name and name in str(n.get("title", "")))
+        # 源 2：Google News 週趨勢（舊→新）
+        gn = gnews_weekly(name)
+        gn_base = sum(gn[:3]) / 3.0
+        gn_ratio = round(gn[3] / gn_base, 1) if gn_base > 0 else (99.0 if gn[3] >= 10 else 0.0)
+        gn_saturated = min(gn) >= 95          # 大型股四週都頂到 100，比率失真
+        gn_spike = (not gn_saturated) and gn[3] >= 15 and (gn_base == 0 or gn[3] >= gn_base * 2.5)
+        # 源 3：X 大佬提及
+        xm = x_mentions_30d(name)
+        # 警示分級：雙源紅，單源橘
+        dual = spike and gn_spike
+        single = (spike or gn_spike) and not dual
         result[code] = {
             "name": name, "ptt_week": weeks[0], "ptt_baseline": round(baseline, 1),
             "ptt_ratio": ratio, "ptt_trend": weeks[::-1],   # 舊→新
-            "ptt_push_week": pushes[0], "heat_spike": spike,
+            "ptt_push_week": pushes[0],
+            "gn_trend": gn, "gn_week": gn[3], "gn_base": round(gn_base, 1),
+            "gn_ratio": gn_ratio, "gn_saturated": gn_saturated,
+            "x_mentions_30d": xm,
+            "ptt_spike": spike, "gn_spike": gn_spike,
+            "heat_spike": dual, "heat_watch": single,
             "hot_titles": [{"t": h["title"], "push": h["push"], "url": h["url"]} for h in hot_titles],
-            "news_30d": news_hits,
         }
-        print(f"[{i}/{len(codes)}] {code} {name}: 本週 {weeks[0]} 篇（基期 {baseline:.1f}/週, x{ratio}）"
-              + (" ⚠️ 熱度異常" if spike else ""))
+        tag = " 🔴 雙源警示" if dual else (" 🟠 單源注意" if single else "")
+        print(f"[{i}/{len(codes)}] {code} {name}: PTT {weeks[0]} 篇(x{ratio}) · 新聞 {gn[3]} 則(x{gn_ratio}{'·飽和' if gn_saturated else ''}) · X {xm if xm is not None else '-'} 次{tag}")
     out = {"updatedAt": NOW.strftime("%Y-%m-%d %H:%M"),
-           "source": "PTT Stock 板（熱度統計）+ 站內新聞；僅輿情整理、非投資建議",
+           "source": "PTT Stock 板 + Google News + X 快訊雷達（多源熱度統計）；僅輿情整理、非投資建議",
            "window_days": 30, "count": len(result), "data": result}
     (DATA / "sentiment_live.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"\n✅ sentiment_live.json：{len(result)} 檔")

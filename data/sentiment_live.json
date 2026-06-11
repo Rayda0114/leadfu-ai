@@ -1,6 +1,6 @@
 {
- "updatedAt": "2026-06-11 14:34",
- "source": "PTT Stock 板（熱度統計）+ 站內新聞；僅輿情整理、非投資建議",
+ "updatedAt": "2026-06-11 14:58",
+ "source": "PTT Stock 板 + Google News + X 快訊雷達（多源熱度統計）；僅輿情整理、非投資建議",
  "window_days": 30,
  "count": 15,
  "data": {
@@ -16,15 +16,28 @@
     1
    ],
    "ptt_push_week": 37,
+   "gn_trend": [
+    63,
+    100,
+    100,
+    99
+   ],
+   "gn_week": 99,
+   "gn_base": 87.7,
+   "gn_ratio": 1.1,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
+   "heat_watch": false,
    "hot_titles": [
     {
      "t": "[新聞]面板四飆股友達、群創、彩晶、瑞軒同步跌",
      "push": 37,
      "url": "https://www.ptt.cc/bbs/Stock/M.1780933467.A.DBC.html"
     }
-   ],
-   "news_30d": 0
+   ]
   },
   "2303": {
    "name": "聯電",
@@ -38,15 +51,28 @@
     1
    ],
    "ptt_push_week": 70,
+   "gn_trend": [
+    100,
+    100,
+    100,
+    99
+   ],
+   "gn_week": 99,
+   "gn_base": 100.0,
+   "gn_ratio": 1.0,
+   "gn_saturated": true,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
+   "heat_watch": false,
    "hot_titles": [
     {
      "t": "[情報] 2303 聯電 115年5月營收",
      "push": 70,
      "url": "https://www.ptt.cc/bbs/Stock/M.1780646129.A.44D.html"
     }
-   ],
-   "news_30d": 1
+   ]
   },
   "2883": {
    "name": "凱基金",
@@ -60,9 +86,22 @@
     0
    ],
    "ptt_push_week": 0,
+   "gn_trend": [
+    57,
+    45,
+    100,
+    101
+   ],
+   "gn_week": 101,
+   "gn_base": 67.3,
+   "gn_ratio": 1.5,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
-   "hot_titles": [],
-   "news_30d": 0
+   "heat_watch": false,
+   "hot_titles": []
   },
   "2344": {
    "name": "華邦電",
@@ -76,15 +115,28 @@
     1
    ],
    "ptt_push_week": 61,
+   "gn_trend": [
+    100,
+    100,
+    100,
+    100
+   ],
+   "gn_week": 100,
+   "gn_base": 100.0,
+   "gn_ratio": 1.0,
+   "gn_saturated": true,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
+   "heat_watch": false,
    "hot_titles": [
     {
      "t": "[情報] 2344 華邦電五月營收 MoM3.9% YoY 181.97",
      "push": 61,
      "url": "https://www.ptt.cc/bbs/Stock/M.1780897687.A.0B5.html"
     }
-   ],
-   "news_30d": 0
+   ]
   },
   "9105": {
    "name": "泰金寶-DR",
@@ -98,9 +150,22 @@
     0
    ],
    "ptt_push_week": 0,
+   "gn_trend": [
+    12,
+    98,
+    58,
+    40
+   ],
+   "gn_week": 40,
+   "gn_base": 56.0,
+   "gn_ratio": 0.7,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
-   "hot_titles": [],
-   "news_30d": 0
+   "heat_watch": false,
+   "hot_titles": []
   },
   "6770": {
    "name": "力積電",
@@ -114,7 +179,21 @@
     2
    ],
    "ptt_push_week": 126,
+   "gn_trend": [
+    100,
+    100,
+    100,
+    92
+   ],
+   "gn_week": 92,
+   "gn_base": 100.0,
+   "gn_ratio": 0.9,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
+   "heat_watch": false,
    "hot_titles": [
     {
      "t": "[情報] 6770力積電 現增參與發行GDR 66.68元",
@@ -126,8 +205,7 @@
      "push": 43,
      "url": "https://www.ptt.cc/bbs/Stock/M.1780649962.A.75F.html"
     }
-   ],
-   "news_30d": 0
+   ]
   },
   "2324": {
    "name": "仁寶",
@@ -141,15 +219,28 @@
     1
    ],
    "ptt_push_week": 37,
+   "gn_trend": [
+    80,
+    100,
+    100,
+    100
+   ],
+   "gn_week": 100,
+   "gn_base": 93.3,
+   "gn_ratio": 1.1,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
+   "heat_watch": false,
    "hot_titles": [
     {
      "t": "[新聞] 老AI熄火！宏碁、仁寶雙觸跌停　緯創摔9%",
      "push": 37,
      "url": "https://www.ptt.cc/bbs/Stock/M.1780618326.A.21A.html"
     }
-   ],
-   "news_30d": 0
+   ]
   },
   "3481": {
    "name": "群創",
@@ -163,7 +254,21 @@
     3
    ],
    "ptt_push_week": 130,
+   "gn_trend": [
+    100,
+    100,
+    100,
+    102
+   ],
+   "gn_week": 102,
+   "gn_base": 100.0,
+   "gn_ratio": 1.0,
+   "gn_saturated": true,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
+   "heat_watch": false,
    "hot_titles": [
     {
      "t": "[情報] 3481群創  5月營收",
@@ -180,8 +285,7 @@
      "push": 28,
      "url": "https://www.ptt.cc/bbs/Stock/M.1780823614.A.62C.html"
     }
-   ],
-   "news_30d": 0
+   ]
   },
   "2887": {
    "name": "台新新光金",
@@ -195,9 +299,22 @@
     0
    ],
    "ptt_push_week": 0,
+   "gn_trend": [
+    100,
+    56,
+    100,
+    90
+   ],
+   "gn_week": 90,
+   "gn_base": 85.3,
+   "gn_ratio": 1.1,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
-   "hot_titles": [],
-   "news_30d": 0
+   "heat_watch": false,
+   "hot_titles": []
   },
   "1714": {
    "name": "和桐",
@@ -211,7 +328,21 @@
     2
    ],
    "ptt_push_week": 39,
+   "gn_trend": [
+    11,
+    16,
+    26,
+    58
+   ],
+   "gn_week": 58,
+   "gn_base": 17.7,
+   "gn_ratio": 3.3,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": true,
    "heat_spike": false,
+   "heat_watch": true,
    "hot_titles": [
     {
      "t": "[情報] 1714和桐110年5月營收16.22億、年減22.7%",
@@ -223,8 +354,7 @@
      "push": 16,
      "url": "https://www.ptt.cc/bbs/Stock/M.1780924804.A.388.html"
     }
-   ],
-   "news_30d": 0
+   ]
   },
   "2484": {
    "name": "希華",
@@ -238,15 +368,28 @@
     1
    ],
    "ptt_push_week": 1,
+   "gn_trend": [
+    15,
+    27,
+    28,
+    28
+   ],
+   "gn_week": 28,
+   "gn_base": 23.3,
+   "gn_ratio": 1.2,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
+   "heat_watch": false,
    "hot_titles": [
     {
      "t": "[新聞] 希華音叉型石英震盪器傳打入美系電動車",
      "push": 1,
      "url": "https://www.ptt.cc/bbs/Stock/M.1623211222.A.36E.html"
     }
-   ],
-   "news_30d": 0
+   ]
   },
   "2408": {
    "name": "南亞科",
@@ -260,15 +403,28 @@
     1
    ],
    "ptt_push_week": 39,
+   "gn_trend": [
+    100,
+    100,
+    100,
+    102
+   ],
+   "gn_week": 102,
+   "gn_base": 100.0,
+   "gn_ratio": 1.0,
+   "gn_saturated": true,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
+   "heat_watch": false,
    "hot_titles": [
     {
      "t": "[情報] 皇翔買聯發科; 中環買聯發科,買賣南亞科",
      "push": 39,
      "url": "https://www.ptt.cc/bbs/Stock/M.1780920174.A.353.html"
     }
-   ],
-   "news_30d": 0
+   ]
   },
   "4953": {
    "name": "緯軟",
@@ -282,23 +438,50 @@
     0
    ],
    "ptt_push_week": 0,
+   "gn_trend": [
+    12,
+    9,
+    11,
+    16
+   ],
+   "gn_week": 16,
+   "gn_base": 10.7,
+   "gn_ratio": 1.5,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
-   "hot_titles": [],
-   "news_30d": 0
+   "heat_watch": false,
+   "hot_titles": []
   },
   "2330": {
    "name": "台積電",
-   "ptt_week": 13,
+   "ptt_week": 14,
    "ptt_baseline": 17.0,
    "ptt_ratio": 0.8,
    "ptt_trend": [
     14,
     22,
     15,
-    13
+    14
    ],
    "ptt_push_week": 637,
+   "gn_trend": [
+    100,
+    100,
+    100,
+    104
+   ],
+   "gn_week": 104,
+   "gn_base": 100.0,
+   "gn_ratio": 1.0,
+   "gn_saturated": true,
+   "x_mentions_30d": 3,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
+   "heat_watch": false,
    "hot_titles": [
     {
      "t": "[情報] 台積電 外資持股比例跌破70%",
@@ -315,8 +498,7 @@
      "push": 99,
      "url": "https://www.ptt.cc/bbs/Stock/M.1781145013.A.8DF.html"
     }
-   ],
-   "news_30d": 1
+   ]
   },
   "5246": {
    "name": "勵威",
@@ -330,9 +512,22 @@
     0
    ],
    "ptt_push_week": 0,
+   "gn_trend": [
+    17,
+    21,
+    13,
+    27
+   ],
+   "gn_week": 27,
+   "gn_base": 17.0,
+   "gn_ratio": 1.6,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "ptt_spike": false,
+   "gn_spike": false,
    "heat_spike": false,
-   "hot_titles": [],
-   "news_30d": 0
+   "heat_watch": false,
+   "hot_titles": []
   }
  }
 }
