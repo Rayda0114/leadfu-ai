@@ -94,7 +94,8 @@ def gnews_weekly(name):
 def x_mentions_30d(name):
     """X 快訊雷達 DB：近 30 天摘要提及次數（讀 ~/.hermes/x_supabase_key，失敗回 None）。"""
     try:
-        key = (Path.home() / ".hermes" / "x_supabase_key").read_text().strip()
+        import os
+        key = os.environ.get("SUPABASE_SERVICE_KEY", "").strip() or (Path.home() / ".hermes" / "x_supabase_key").read_text().strip()
         since = (NOW - timedelta(days=30)).strftime("%Y-%m-%dT00:00:00")
         url = ("https://lhwxpnyzplylajxunlua.supabase.co/rest/v1/x_alerts?select=url"
                + "&summary_zh=ilike." + urllib.parse.quote(f"%{name}%")
@@ -110,10 +111,13 @@ def x_mentions_30d(name):
 
 def yt_weekly(name):
     """YouTube：近 28 天提及影片的週分布 + 觀看數（單次 search 上限 50 部=飽和）。失敗回 None。"""
-    try:
-        key = (Path.home() / ".hermes" / "youtube_api_key").read_text().strip()
-    except Exception:
-        return None
+    import os
+    key = os.environ.get("YOUTUBE_API_KEY", "").strip()
+    if not key:
+        try:
+            key = (Path.home() / ".hermes" / "youtube_api_key").read_text().strip()
+        except Exception:
+            return None
     after = (NOW - timedelta(days=28)).strftime("%Y-%m-%dT00:00:00Z")
     url = ("https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&order=date&maxResults=50"
            + "&regionCode=TW&relevanceLanguage=zh-Hant&publishedAfter=" + after
@@ -173,7 +177,8 @@ def main():
                if s.get("category") != "ETF" and s.get("status") in ("上市", "上櫃")][:50]
     member = []
     try:
-        key = (Path.home() / ".hermes" / "x_supabase_key").read_text().strip()
+        import os
+        key = os.environ.get("SUPABASE_SERVICE_KEY", "").strip() or (Path.home() / ".hermes" / "x_supabase_key").read_text().strip()
         req = urllib.request.Request(
             "https://lhwxpnyzplylajxunlua.supabase.co/rest/v1/profiles?select=watchlist&watchlist=not.is.null",
             headers={"apikey": key, "Authorization": "Bearer " + key})

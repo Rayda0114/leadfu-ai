@@ -1,0 +1,44 @@
+name: 領富 AI · 輿情雷達盤後掃描（雲端）
+
+# 15:40 台北（UTC 07:40）— 不依賴本機電腦開機
+on:
+  schedule:
+    - cron: "40 7 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 連線測試（PTT 雲端可達性）
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 -H "Cookie: over18=1" -A "Mozilla/5.0" "https://www.ptt.cc/bbs/Stock/index.html")
+          echo "PTT from GitHub runner → HTTP $code"
+      - name: 輿情掃描
+        run: python scripts/fetch_sentiment.py
+        env:
+          PYTHONIOENCODING: utf-8
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      - name: Commit if changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "leadfu-ai-bot"
+          git config user.email "bot@leadfu.ai"
+          git add data/sentiment_live.json
+          if ! git diff --staged --quiet; then
+            git commit -m "data(輿情雷達): 雲端盤後掃描 $(date -u +%F)"
+            git push
+            gh workflow run deploy-worker.yml && echo "🚀 已觸發部署" || true
+          else
+            echo "無變動"
+          fi
