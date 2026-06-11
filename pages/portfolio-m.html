@@ -459,7 +459,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     await window.LeadFu.ready;
     const L = window.LeadFu;
-    const H = L.getHoldings() || {};
+    let H = {};
+    for (let i = 0; i < 20; i++) {            // 等雲端持股同步（最多 8 秒）
+      H = L.getHoldings() || {};
+      if (Object.keys(H).length) break;
+      await new Promise(r => setTimeout(r, 400));
+    }
     const codes = Object.keys(H);
     if (!codes.length) return;
     let hist = {};
