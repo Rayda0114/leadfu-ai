@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>領富 AI 2.0 設計預覽（未上線）</title>
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#0A2E23; --pine:#10402F; --moss:#1A5240;
+  --gold:#C9A24B; --gold-2:#E5C883; --gold-soft:rgba(201,162,75,.14);
+  --paper:#FAF8F2; --card:#FFFFFF; --ink:#13211B; --soft:#43544B; --muted:#71807A;
+  --line:rgba(19,33,27,.10); --line2:rgba(19,33,27,.06);
+  --up:#C0392B; --down:#0E8A5F; --amber:#B97D1F;
+  --serif:"Noto Serif TC",serif; --sans:"Noto Sans TC",-apple-system,sans-serif;
+  --sh-1:0 1px 2px rgba(19,33,27,.04),0 8px 24px rgba(19,33,27,.06);
+  --sh-2:0 2px 6px rgba(19,33,27,.06),0 18px 44px rgba(19,33,27,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+.num{font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px;}
+svg{display:block;}
+
+/* ── 預覽徽帶 ── */
+.preview-ribbon{position:fixed;top:14px;right:-44px;z-index:2000;transform:rotate(38deg);background:#B33A2E;color:#fff;font-size:12px;font-weight:900;letter-spacing:.18em;padding:7px 56px;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none;}
+
+/* ── 通告列 ── */
+.notice{background:var(--forest);color:rgba(250,248,242,.85);font-size:12.5px;}
+.notice .wrap{display:flex;align-items:center;gap:18px;height:38px;}
+.notice .live{display:inline-flex;align-items:center;gap:6px;color:var(--gold-2);font-weight:700;}
+.notice .dot{width:7px;height:7px;border-radius:50%;background:#E5C883;animation:pulse 1.6s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.notice .right{margin-left:auto;display:flex;gap:18px;}
+.notice a:hover{color:#fff;}
+
+/* ── 主導覽 ── */
+header.site{position:sticky;top:0;z-index:900;background:rgba(250,248,242,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+header.site .wrap{display:flex;align-items:center;gap:30px;height:72px;}
+.brand{display:flex;align-items:baseline;gap:8px;font-family:var(--serif);}
+.brand b{font-size:26px;font-weight:900;color:var(--forest);letter-spacing:.02em;}
+.brand b em{font-style:normal;color:var(--gold);}
+.brand small{font-size:11.5px;color:var(--muted);font-family:var(--sans);font-weight:500;letter-spacing:.14em;}
+nav.main{display:flex;gap:4px;margin-left:6px;}
+nav.main a{font-size:14.5px;font-weight:700;color:var(--soft);padding:9px 13px;border-radius:10px;transition:all .15s;}
+nav.main a:hover{background:var(--gold-soft);color:var(--forest);}
+nav.main a.hot{color:var(--forest);}
+.nav-cta{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:800;border-radius:12px;cursor:pointer;border:0;font-family:inherit;transition:all .15s;}
+.btn.ghost{font-size:14px;color:var(--forest);padding:10px 16px;border:1.5px solid var(--line);background:#fff;}
+.btn.ghost:hover{border-color:var(--gold);}
+.btn.solid{font-size:14px;color:#fff;background:var(--forest);padding:10px 20px;box-shadow:var(--sh-1);}
+.btn.solid:hover{background:var(--pine);transform:translateY(-1px);}
+.btn.gold{font-size:15.5px;color:var(--forest);background:linear-gradient(135deg,var(--gold-2),var(--gold));padding:14px 28px;box-shadow:0 10px 26px rgba(201,162,75,.35);}
+.btn.gold:hover{transform:translateY(-1px);box-shadow:0 14px 32px rgba(201,162,75,.45);}
+
+/* ── HERO ── */
+.hero{background:
+  radial-gradient(ellipse 900px 500px at 88% -10%, rgba(201,162,75,.22), transparent 55%),
+  radial-gradient(ellipse 700px 420px at -8% 108%, rgba(26,82,64,.55), transparent 60%),
+  linear-gradient(168deg,#0A2E23 0%,#0D3829 58%,#0A2E23 100%);
+  color:#FAF8F2;position:relative;overflow:hidden;}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse at 30% 40%,#000 30%,transparent 75%);}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:54px;padding-top:72px;padding-bottom:78px;align-items:center;}
+.kicker{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:700;letter-spacing:.22em;color:var(--gold-2);margin-bottom:22px;}
+.kicker::before{content:"";width:26px;height:2px;background:var(--gold);}
+.hero h1{font-family:var(--serif);font-size:52px;line-height:1.32;font-weight:900;letter-spacing:.01em;margin-bottom:18px;}
+.hero h1 .hl{color:var(--gold-2);position:relative;}
+.hero p.sub{font-size:17px;color:rgba(250,248,242,.78);max-width:480px;margin-bottom:30px;}
+.hero p.sub b{color:#fff;font-weight:700;}
+.search{display:flex;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:6px;backdrop-filter:blur(8px);max-width:520px;box-shadow:0 18px 44px rgba(0,0,0,.25);}
+.search input{flex:1;background:transparent;border:0;outline:0;color:#fff;font-size:16.5px;padding:12px 18px;font-family:inherit;}
+.search input::placeholder{color:rgba(250,248,242,.45);}
+.search button{border:0;cursor:pointer;background:linear-gradient(135deg,var(--gold-2),var(--gold));color:var(--forest);font-size:15.5px;font-weight:900;padding:0 30px;border-radius:11px;font-family:inherit;display:flex;align-items:center;gap:8px;}
+.hero .quick{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.hero .quick a{font-size:13px;color:rgba(250,248,242,.66);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 14px;transition:all .15s;}
+.hero .quick a:hover{color:#fff;border-color:var(--gold);}
+.hero .vows{display:flex;gap:22px;margin-top:30px;font-size:13.5px;color:rgba(250,248,242,.72);}
+.hero .vows span{display:flex;align-items:center;gap:7px;}
+.hero .vows svg{width:15px;height:15px;stroke:var(--gold-2);}
+
+/* hero 右側 bento */
+.bento{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.bcard{background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:20px;backdrop-filter:blur(10px);transition:all .2s;position:relative;overflow:hidden;}
+.bcard:hover{background:rgba(255,255,255,.1);border-color:rgba(229,200,131,.4);transform:translateY(-2px);}
+.bcard .lab{font-size:11.5px;font-weight:700;letter-spacing:.12em;color:rgba(250,248,242,.55);display:flex;align-items:center;gap:7px;margin-bottom:10px;}
+.bcard .lab svg{width:14px;height:14px;stroke:var(--gold-2);}
+.bcard .big{font-size:30px;font-weight:900;line-height:1.15;}
+.bcard .small{font-size:12px;color:rgba(250,248,242,.6);margin-top:6px;line-height:1.55;}
+.bcard.wide{grid-column:1/-1;}
+.gauge-track{height:8px;border-radius:99px;background:linear-gradient(90deg,#2E8B6B 0 33%,#C9A24B 33% 66%,#C0594B 66% 100%);margin-top:12px;position:relative;opacity:.9;}
+.gauge-pin{position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--forest);box-shadow:0 2px 8px rgba(0,0,0,.4);transform:translateX(-8px);}
+.xline{font-size:13px;line-height:1.6;color:rgba(250,248,242,.85);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.xline b{color:var(--gold-2);}
+
+/* ── 數字帶 ── */
+.statband{background:var(--card);border-bottom:1px solid var(--line);}
+.statband .wrap{display:grid;grid-template-columns:repeat(4,1fr);padding-top:30px;padding-bottom:30px;}
+.stat{text-align:center;position:relative;}
+.stat+.stat::before{content:"";position:absolute;left:0;top:12%;bottom:12%;width:1px;background:var(--line);}
+.stat b{font-size:36px;font-weight:900;color:var(--forest);display:block;line-height:1.2;}
+.stat small{font-size:13px;color:var(--muted);font-weight:500;}
+
+/* ── 區塊通用 ── */
+section.blk{padding:84px 0;}
+.sec-head{max-width:640px;margin-bottom:48px;}
+.sec-head .tag{font-size:12.5px;font-weight:800;letter-spacing:.2em;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.sec-head .tag::before{content:"";width:22px;height:2px;background:var(--gold);}
+.sec-head h2{font-family:var(--serif);font-size:36px;font-weight:900;line-height:1.4;letter-spacing:.01em;}
+.sec-head p{font-size:15.5px;color:var(--soft);margin-top:12px;}
+.sec-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+.sec-head.center .tag{justify-content:center;}
+
+/* ── 三步驟 ── */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.step{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:34px 30px;box-shadow:var(--sh-1);position:relative;transition:all .2s;}
+.step:hover{box-shadow:var(--sh-2);transform:translateY(-3px);border-color:rgba(201,162,75,.4);}
+.step .no{font-family:var(--serif);font-size:15px;font-weight:900;color:var(--gold);letter-spacing:.1em;margin-bottom:18px;display:flex;align-items:center;gap:12px;}
+.step .no::after{content:"";flex:1;height:1px;background:var(--line);}
+.step .ic{width:46px;height:46px;border-radius:13px;background:var(--gold-soft);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.step .ic svg{width:24px;height:24px;stroke:var(--forest);}
+.step h3{font-size:19px;font-weight:900;margin-bottom:9px;}
+.step p{font-size:14px;color:var(--soft);line-height:1.8;}
+.step a.more{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:800;color:var(--forest);margin-top:14px;}
+.step a.more:hover{color:var(--gold);}
+
+/* ── 功能網格 ── */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.feat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;transition:all .2s;display:flex;flex-direction:column;gap:11px;}
+.feat:hover{box-shadow:var(--sh-2);transform:translateY(-3px);}
+.feat .top{display:flex;align-items:center;gap:13px;}
+.feat .ic{width:42px;height:42px;border-radius:12px;background:var(--forest);display:flex;align-items:center;justify-content:center;flex:none;}
+.feat .ic svg{width:21px;height:21px;stroke:var(--gold-2);}
+.feat h3{font-size:17.5px;font-weight:900;}
+.feat .chip{margin-left:auto;font-size:10.5px;font-weight:900;letter-spacing:.06em;color:var(--amber);background:rgba(185,125,31,.1);border:1px solid rgba(185,125,31,.25);padding:3px 9px;border-radius:99px;}
+.feat p{font-size:13.8px;color:var(--soft);line-height:1.75;}
+.feat .go{font-size:13.5px;font-weight:800;color:var(--forest);display:inline-flex;align-items:center;gap:6px;margin-top:auto;}
+.feat:hover .go{color:var(--gold);}
+
+/* ── 雙雷達 ── */
+.radar-band{background:linear-gradient(165deg,#0A2E23,#0F3D2D);color:#FAF8F2;border-radius:28px;padding:54px;display:grid;grid-template-columns:1fr 1fr;gap:44px;position:relative;overflow:hidden;}
+.radar-band::before{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;border:1px solid rgba(229,200,131,.16);}
+.radar-band::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;border:1px solid rgba(229,200,131,.12);}
+.radar-col h3{font-family:var(--serif);font-size:24px;font-weight:900;display:flex;align-items:center;gap:11px;margin-bottom:7px;}
+.radar-col h3 svg{width:22px;height:22px;stroke:var(--gold-2);}
+.radar-col>p{font-size:13.5px;color:rgba(250,248,242,.62);margin-bottom:20px;}
+.xfeed{display:flex;flex-direction:column;gap:10px;}
+.xitem{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:13px 16px;font-size:13.5px;line-height:1.65;}
+.xitem .meta{font-size:11px;color:var(--gold-2);font-weight:800;margin-bottom:3px;display:flex;gap:8px;}
+.xitem .tx{color:rgba(250,248,242,.88);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.sent-chips{display:flex;flex-wrap:wrap;gap:9px;}
+.schip{font-size:13px;font-weight:800;border-radius:12px;padding:9px 15px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);}
+.schip b{color:var(--gold-2);}
+.schip.hot{border-color:rgba(192,89,75,.55);background:rgba(192,89,75,.16);}
+.radar-col .act{margin-top:22px;}
+.radar-col .act a{font-size:14px;font-weight:800;color:var(--gold-2);display:inline-flex;gap:7px;align-items:center;}
+
+/* ── VIP 帶 ── */
+.vipband{border-radius:28px;background:var(--card);border:1.5px solid rgba(201,162,75,.45);box-shadow:var(--sh-2);padding:48px 54px;display:flex;align-items:center;gap:40px;position:relative;overflow:hidden;}
+.vipband::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,var(--gold-2),var(--gold));}
+.vipband h3{font-family:var(--serif);font-size:28px;font-weight:900;margin-bottom:8px;}
+.vipband p{font-size:14.5px;color:var(--soft);max-width:520px;}
+.vipband .price{margin-left:auto;text-align:right;flex:none;}
+.vipband .price .n{font-size:42px;font-weight:900;color:var(--forest);}
+.vipband .price small{display:block;font-size:12.5px;color:var(--muted);margin-bottom:12px;}
+
+/* ── 頁尾 ── */
+footer.site{background:var(--forest);color:rgba(250,248,242,.66);margin-top:84px;}
+footer.site .wrap{padding:54px 28px 40px;}
+.f-vows{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px;}
+.f-vow{border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:18px 20px;font-size:13.5px;line-height:1.7;}
+.f-vow b{color:#FAF8F2;display:block;font-size:15px;margin-bottom:4px;}
+.f-bottom{display:flex;align-items:center;gap:20px;border-top:1px solid rgba(255,255,255,.12);padding-top:24px;font-size:12.5px;flex-wrap:wrap;}
+.f-bottom .src{margin-left:auto;}
+@media(max-width:1080px){.hero .wrap{grid-template-columns:1fr;}.hero h1{font-size:40px;}.steps,.feats,.f-vows{grid-template-columns:1fr;}.radar-band{grid-template-columns:1fr;}.statband .wrap{grid-template-columns:1fr 1fr;gap:20px;}.vipband{flex-direction:column;text-align:center;}.vipband .price{margin:0;text-align:center;}}
+</style>
+</head>
+<body>
+<div class="preview-ribbon">PREVIEW</div>
+
+<div class="notice">
+  <div class="wrap">
+    <span class="num" id="todayStr">—</span>
+    <span class="live"><span class="dot"></span>X 快訊雷達運作中</span>
+    <div class="right">
+      <a href="/pages/fraud-alert">防詐專區</a>
+      <a href="tel:165">冒名詐騙請撥 165</a>
+    </div>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#"><b>領富 <em>AI</em></b><small>台股風險守門員</small></a>
+    <nav class="main">
+      <a class="hot" href="/pages/check">買前檢查</a>
+      <a href="/pages/portfolio-health">持股守門</a>
+      <a href="/pages/risk-radar">防錯雷達</a>
+      <a href="/pages/market-temp">大盤溫度</a>
+      <a href="/pages/screener">選股</a>
+      <a href="/pages/etf">ETF</a>
+      <a href="/pages/start">新手上路</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn ghost" href="/pages/login">登入</a>
+      <a class="btn solid" href="/pages/register">免費開始</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="kicker">PRE-TRADE CHECK・台股風險守門員</div>
+      <h1>買股票之前，<br>先讓 <span class="hl">9 項紅旗</span>替你把關。</h1>
+      <p class="sub">輸入代號，領富 AI 把<b>估值、籌碼、營收、注意股與新聞風險</b>整理成一張看得懂的決策卡 —— 不報明牌，<b>決定永遠在你手上。</b></p>
+      <form class="search" onsubmit="event.preventDefault();var v=this.querySelector('input').value.trim();if(v)location.href='/pages/check?code='+encodeURIComponent(v);">
+        <input type="text" placeholder="輸入代號或公司名，例如 2330 台積電" aria-label="股票代號">
+        <button type="submit">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          免費檢查
+        </button>
+      </form>
+      <div class="quick">
+        <span style="font-size:13px;color:rgba(250,248,242,.45);align-self:center;">熱門：</span>
+        <a href="/pages/check?code=2330">2330 台積電</a><a href="/pages/check?code=2317">2317 鴻海</a><a href="/pages/check?code=0056">0056 高股息</a><a href="/pages/value-stocks">今日便宜股 →</a>
+      </div>
+      <div class="vows">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg>官方公開資料</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="m8 8 8 8M16 8l-8 8"/></svg>不報明牌・不代操</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>0 元先試用</span>
+      </div>
+    </div>
+    <div class="bento">
+      <div class="bcard">
+        <div class="lab"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3a9 9 0 0 1 9 9h-4a5 5 0 0 0-5-5V3Z"/><circle cx="12" cy="12" r="9"/></svg>明日大盤波動風險</div>
+        <div class="big num" id="bTemp">—</div>
+        <div class="gauge-track"><div class="gauge-pin" id="bPin" style="left:50%"></div></div>
+        <div class="small num" id="bTempSub">台指期・選擇權避險情緒</div>
+      </div>
+      <div class="bcard">
+        <div class="lab"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>今日掛警示</div>
+        <div class="big num" id="bRisk">—</div>
+        <div class="small">檔風險分數偏高<br>持股有沒有中？<a href="/pages/risk-radar" style="color:var(--gold-2);font-weight:800;">查防錯雷達 →</a></div>
+      </div>
+      <div class="bcard wide">
+        <div class="lab"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg>X 快訊雷達・最新一則 <span class="dot" style="width:6px;height:6px;border-radius:50%;background:#E5C883;animation:pulse 1.6s infinite;"></span></div>
+        <div class="xline" id="bX">載入中…</div>
+        <div class="small" id="bXmeta"></div>
+      </div>
+      <div class="bcard wide" style="cursor:pointer;" onclick="location.href='/pages/check?code=2330'">
+        <div class="lab"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 11H4v9h5zM14.5 4h-5v16h5zM20 8h-5v12h5z"/></svg>範例・輸入 2330 你會看到</div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div class="big num" id="bScore">—<span style="font-size:14px;color:rgba(250,248,242,.5);font-weight:700;"> /100</span></div>
+          <div class="small" style="margin:0;" id="bScoreSub">風險分數・9 項紅旗逐項檢查 →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="statband">
+  <div class="wrap">
+    <div class="stat"><b class="num" id="sN1">—</b><small>檔上市櫃 每日盤後健診</small></div>
+    <div class="stat"><b class="num" id="sN2">—</b><small>檔今日掛風險警示</small></div>
+    <div class="stat"><b class="num">83</b><small>個國際帳號 X 雷達監測</small></div>
+    <div class="stat"><b class="num" id="sN4">—</b><small>檔熱門股 輿情掃描</small></div>
+  </div>
+</div>
+
+<section class="blk">
+  <div class="wrap">
+    <div class="sec-head center">
+      <div class="tag">HOW IT WORKS</div>
+      <h2>三步，把「聽說」變成「看過資料」</h2>
+      <p>不用學 K 線、不用懂籌碼術語 —— 會打字就會用。</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="no">STEP 01</div>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+        <h3>買之前，先檢查</h3>
+        <p>輸入代號，9 項紅旗逐一過：估值太貴？法人在跑？借券暴增？被列注意股？一張卡看完。</p>
+        <a class="more" href="/pages/check?code=2330">用台積電試一次 →</a>
+      </div>
+      <div class="step">
+        <div class="no">STEP 02</div>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 17 9 11l4 4 8-8"/><path d="M14 7h7v7"/></svg></div>
+        <h3>找標的，用講的</h3>
+        <p>跟 AI 說「殖利率 4% 以上、外資連買、還沒大漲」，它即時掃全市場篩給你，附買前檢查連結。</p>
+        <a class="more" href="/pages/ai">讓 AI 示範 →</a>
+      </div>
+      <div class="step">
+        <div class="no">STEP 03</div>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3>買之後，有人盯</h3>
+        <p>加入持股清單，每天收盤後自動複查；法人轉賣、借券增加、要除息了 —— LINE 主動提醒你。</p>
+        <a class="more" href="/pages/portfolio-health">建立我的清單 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="tag">TOOLBOX</div>
+      <h2>每個工具，都在回答一個你會遇到的問題</h2>
+    </div>
+    <div class="feats">
+      <a class="feat" href="/pages/value-stocks">
+        <div class="top"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg></div><h3>AI 合理區間</h3></div>
+        <p>「現在買會不會太貴？」—— 每天用估值統計算出每檔的合理價位帶，太貴太便宜一眼看出。</p>
+        <span class="go">看今日便宜股排行 →</span>
+      </a>
+      <a class="feat" href="/pages/ai">
+        <div class="top"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 12a8 8 0 1 0-3.1 6.3L21 20l-.9-3.4A8 8 0 0 0 21 12Z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></div><h3>白話選股</h3></div>
+        <p>「條件講得出來，股票找不到？」—— 用一句話選股，AI 即時掃 2,500 檔，只回官方資料。</p>
+        <span class="go">開始對話 →</span>
+      </a>
+      <a class="feat" href="/pages/vip#x-radar">
+        <div class="top"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg></div><h3>X 快訊雷達</h3><span class="chip">VIP</span></div>
+        <p>「川普半夜又發文了？」—— 83 個撼動市場的帳號每 5 分鐘掃描，AI 翻成三行中文，重大的推 LINE。</p>
+        <span class="go">看即時快訊 →</span>
+      </a>
+      <a class="feat" href="/pages/risk-radar">
+        <div class="top"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/></svg></div><h3>輿情雷達</h3></div>
+        <p>「群組裡有人猛吹一檔股票？」—— PTT×新聞×YouTube 熱度交叉比對，異常炒作先亮燈。</p>
+        <span class="go">打開防錯雷達 →</span>
+      </a>
+      <a class="feat" href="/pages/etf-health">
+        <div class="top"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg></div><h3>ETF 健檢</h3></div>
+        <p>「高股息是不是賺息賠價差？」—— 49 檔 ETF 的配息品質、平準金占比、溢價風險逐檔拆解。</p>
+        <span class="go">健檢我的 ETF →</span>
+      </a>
+      <a class="feat" href="/pages/dividend-tax">
+        <div class="top"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h4"/></svg></div><h3>股利稅試算</h3></div>
+        <p>「領 30 萬股息要繳多少稅？」—— 合併 vs 分開課稅、二代健保一次算清，附稅後實領。</p>
+        <span class="go">試算我的股息 →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="blk" style="padding-top:0;">
+  <div class="wrap">
+    <div class="radar-band">
+      <div class="radar-col">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg>X 快訊雷達 <span style="font-size:11px;background:rgba(229,200,131,.18);border:1px solid rgba(229,200,131,.4);color:var(--gold-2);border-radius:99px;padding:2px 10px;letter-spacing:.1em;">LIVE</span></h3>
+        <p>半夜的大事，早上看中文就好 —— 真實資料、每 5 分鐘更新</p>
+        <div class="xfeed" id="xFeed"><div class="xitem"><div class="tx">載入中…</div></div></div>
+        <div class="act"><a href="/pages/vip#x-radar">訂閱我關心的帳號 →</a></div>
+      </div>
+      <div class="radar-col">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/></svg>輿情雷達・今日熱度異常</h3>
+        <p>突然被討論到爆的股票，看清楚是誰在講、為什麼</p>
+        <div class="sent-chips" id="sentChips"><span class="schip">載入中…</span></div>
+        <div class="act"><a href="/pages/risk-radar">看完整輿情雷達 →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" style="padding-top:0;padding-bottom:0;">
+  <div class="wrap">
+    <div class="vipband">
+      <div>
+        <h3>免費版自己查，VIP 有人幫你盯。</h3>
+        <p>每天收盤後自動健診你的持股、除權息提前一週提醒、重大國際快訊翻成中文推 LINE —— 沒事就不吵你。</p>
+      </div>
+      <div class="price">
+        <span class="n num">NT$199<small style="font-size:15px;color:var(--muted);font-weight:700;">/月</small></span>
+        <small>前 3 個月創始價・一天 6.6 元・隨時取消</small>
+        <a class="btn gold" href="/pages/vip">了解 VIP 守門服務</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="f-vows">
+      <div class="f-vow"><b>不報明牌</b>只整理官方公開資料、提醒風險 —— 買賣決定永遠在你手上。</div>
+      <div class="f-vow"><b>不代操、不收投資款</b>我們唯一收的錢是月費。要你匯款投資的，都是詐騙。</div>
+      <div class="f-vow"><b>不拉群</b>沒有任何老師群、會員群。冒名邀你進群，請撥 165 反詐騙專線。</div>
+    </div>
+    <div class="f-bottom">
+      <span>© 2026 領富 AI・台股風險守門員</span>
+      <a href="/pages/terms">服務條款</a><a href="/pages/privacy">隱私權</a>
+      <span class="src">資料來源：臺灣證券交易所・櫃買中心・公開資訊觀測站・集保結算所・臺灣期貨交易所｜本站為資訊整理服務，不構成投資建議</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(async function () {
+  const $ = id => document.getElementById(id);
+  const j = async u => { try { const r = await fetch(u); return r.ok ? await r.json() : null; } catch (e) { return null; } };
+  const w = new Date(); $("todayStr").textContent = w.getFullYear() + "/" + String(w.getMonth() + 1).padStart(2, "0") + "/" + String(w.getDate()).padStart(2, "0") + "・台股全市場財經資訊網";
+
+  const [st, rs, sn, tf, x] = await Promise.all([
+    j("/data/stocks_live.json"), j("/data/risk_score_live.json"), j("/data/sentiment_live.json"),
+    j("/data/taifex_live.json"), j("/api/market/x-alerts")]);
+
+  if (st) $("sN1").textContent = (st.stockCount || 0).toLocaleString();
+  if (rs && rs.data) {
+    const n = Object.values(rs.data).filter(r => r.level === "高" || r.level === "極高" || r.level === "警示").length;
+    $("sN2").textContent = n; $("bRisk").textContent = n;
+    const s2330 = rs.data["2330"];
+    if (s2330 && s2330.score != null) { $("bScore").firstChild.textContent = s2330.score; }
+  }
+  if (sn) $("sN4").textContent = sn.count || "—";
+  if (tf && tf.risk) {
+    $("bTemp").textContent = "【" + tf.risk.level + "】";
+    $("bTemp").style.color = tf.risk.level === "高" ? "#E89A8B" : tf.risk.level === "低" ? "#9BD7BC" : "#E5C883";
+    const pos = tf.risk.level === "高" ? 84 : tf.risk.level === "低" ? 16 : 50;
+    $("bPin").style.left = pos + "%";
+    if (tf.txNight && tf.txNight.pct != null) $("bTempSub").textContent = "夜盤 " + (tf.txNight.pct > 0 ? "+" : "") + tf.txNight.pct + "%・資料日 " + (tf.asof || "");
+  }
+  if (x && x.alerts && x.alerts.length) {
+    const a0 = x.alerts[0];
+    $("bX").innerHTML = "<b>【關注度 " + a0.importance + "】</b>" + (a0.summary || a0.title || "");
+    $("bXmeta").textContent = "@" + (a0.handle || "") + "・" + (a0.created_at || "").slice(5, 16).replace("T", " ");
+    const feed = $("xFeed"); feed.innerHTML = "";
+    x.alerts.slice(0, 3).forEach(a => {
+      const d = document.createElement("div"); d.className = "xitem";
+      d.innerHTML = '<div class="meta"><span>關注度 ' + a.importance + '</span><span>@' + (a.handle || "") + '</span></div><div class="tx">' + (a.summary || a.title || "") + "</div>";
+      feed.appendChild(d);
+    });
+  }
+  if (sn && sn.stocks) {
+    const hot = sn.stocks.filter(s => s.signal === "heat_spike" || s.signal === "heat_watch").slice(0, 6);
+    const box = $("sentChips"); box.innerHTML = "";
+    (hot.length ? hot : sn.stocks.slice(0, 6)).forEach(s => {
+      const el = document.createElement("span");
+      el.className = "schip" + (s.signal === "heat_spike" ? " hot" : "");
+      el.innerHTML = "<b>" + s.code + "</b> " + s.name + (s.signal === "heat_spike" ? "・熱度飆升" : s.signal === "heat_watch" ? "・升溫" : "");
+      box.appendChild(el);
+    });
+  }
+})();
+</script>
+</body>
+</html>
