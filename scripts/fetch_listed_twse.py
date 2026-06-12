@@ -10,6 +10,7 @@
 """
 
 import json
+import time
 import ssl
 import sys
 from datetime import datetime
@@ -53,16 +54,34 @@ def fetch_twse_json():
         "User-Agent": "LeadFu-AI/1.0 (+https://leadfuai.com)",
         "Accept": "application/json"
     })
-    # 先試正常 SSL，失敗就用不驗證 context 退而求其次
-    try:
-        with urlopen(req, timeout=45) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except (URLError, ssl.SSLError) as e:
-        if "CERTIFICATE" in str(e) or isinstance(e.__cause__, ssl.SSLError):
-            print("⚠ SSL 驗證失敗，改用 unverified context（公開資料 OK）")
-            with urlopen(req, timeout=45, context=_INSECURE_CTX) as resp:
-                return json.loads(resp.read().decode("utf-8"))
-        raise
+
+    def _once():
+        # 先試正常 SSL，失敗就用不驗證 context 退而求其次
+        try:
+            with urlopen(req, timeout=45) as resp:
+                return resp.read().decode("utf-8")
+        except (URLError, ssl.SSLError) as e:
+            if "CERTIFICATE" in str(e) or isinstance(e.__cause__, ssl.SSLError):
+                print("⚠ SSL 驗證失敗，改用 unverified context（公開資料 OK）")
+                with urlopen(req, timeout=45, context=_INSECURE_CTX) as resp:
+                    return resp.read().decode("utf-8")
+            raise
+
+    # TWSE 盤後更新空窗會短暫回非 JSON（2026-06-12 15:37 實錄）→ 視為暫時性，退避重試
+    last_err = None
+    for attempt in range(5):
+        try:
+            body = _once()
+            return json.loads(body)
+        except json.JSONDecodeError as e:
+            last_err = e
+            head = (body or "")[:120].replace("\n", " ")
+            print(f"⚠ TWSE 回非 JSON（第 {attempt+1}/5 次）：{head!r}，90 秒後重試")
+        except (URLError, ssl.SSLError) as e:
+            last_err = e
+            print(f"⚠ TWSE 連線失敗（第 {attempt+1}/5 次）：{e}，90 秒後重試")
+        time.sleep(90)
+    raise last_err
 
 
 def safe_float(x, default=0.0):
