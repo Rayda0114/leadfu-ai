@@ -69,7 +69,7 @@ nav.main a.hot{color:var(--forest);}
 .hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:54px;padding-top:72px;padding-bottom:78px;align-items:center;}
 .kicker{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:700;letter-spacing:.22em;color:var(--gold-2);margin-bottom:22px;}
 .kicker::before{content:"";width:26px;height:2px;background:var(--gold);}
-.hero h1{font-family:var(--serif);font-size:52px;line-height:1.32;font-weight:900;letter-spacing:.01em;margin-bottom:18px;}
+.hero h1{font-family:var(--serif);font-size:46px;line-height:1.32;font-weight:900;letter-spacing:.01em;margin-bottom:18px;}
 .hero h1 .hl{color:var(--gold-2);position:relative;}
 .hero p.sub{font-size:17px;color:rgba(250,248,242,.78);max-width:480px;margin-bottom:30px;}
 .hero p.sub b{color:#fff;font-weight:700;}
@@ -108,7 +108,7 @@ nav.main a.hot{color:var(--forest);}
 
 /* ── 區塊通用 ── */
 section.blk{padding:84px 0;}
-.sec-head{max-width:640px;margin-bottom:48px;}
+.sec-head{max-width:720px;margin-bottom:48px;}
 .sec-head .tag{font-size:12.5px;font-weight:800;letter-spacing:.2em;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
 .sec-head .tag::before{content:"";width:22px;height:2px;background:var(--gold);}
 .sec-head h2{font-family:var(--serif);font-size:36px;font-weight:900;line-height:1.4;letter-spacing:.01em;}
@@ -217,7 +217,7 @@ footer.site .wrap{padding:54px 28px 40px;}
   <div class="wrap">
     <div>
       <div class="kicker">PRE-TRADE CHECK・台股風險守門員</div>
-      <h1>買股票之前，<br>先讓 <span class="hl">9 項紅旗</span>替你把關。</h1>
+      <h1>買股票之前，<br>先讓 <span class="hl" style="white-space:nowrap;">9 項紅旗</span><span style="white-space:nowrap;">替你把關。</span></h1>
       <p class="sub">輸入代號，領富 AI 把<b>估值、籌碼、營收、注意股與新聞風險</b>整理成一張看得懂的決策卡 —— 不報明牌，<b>決定永遠在你手上。</b></p>
       <form class="search" onsubmit="event.preventDefault();var v=this.querySelector('input').value.trim();if(v)location.href='/pages/check?code='+encodeURIComponent(v);">
         <input type="text" placeholder="輸入代號或公司名，例如 2330 台積電" aria-label="股票代號">
@@ -253,8 +253,8 @@ footer.site .wrap{padding:54px 28px 40px;}
         <div class="xline" id="bX">載入中…</div>
         <div class="small" id="bXmeta"></div>
       </div>
-      <div class="bcard wide" style="cursor:pointer;" onclick="location.href='/pages/check?code=2330'">
-        <div class="lab"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 11H4v9h5zM14.5 4h-5v16h5zM20 8h-5v12h5z"/></svg>範例・輸入 2330 你會看到</div>
+      <div class="bcard wide" style="cursor:pointer;" id="bSampleCard">
+        <div class="lab"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 11H4v9h5zM14.5 4h-5v16h5zM20 8h-5v12h5z"/></svg><span id="bScoreLab">今日警示實例</span></div>
         <div style="display:flex;align-items:center;gap:16px;">
           <div class="big num" id="bScore">—<span style="font-size:14px;color:rgba(250,248,242,.5);font-weight:700;"> /100</span></div>
           <div class="small" style="margin:0;" id="bScoreSub">風險分數・9 項紅旗逐項檢查 →</div>
@@ -310,7 +310,7 @@ footer.site .wrap{padding:54px 28px 40px;}
   <div class="wrap">
     <div class="sec-head">
       <div class="tag">TOOLBOX</div>
-      <h2>每個工具，都在回答一個你會遇到的問題</h2>
+      <h2>每個工具，都在回答一個真實的問題</h2>
     </div>
     <div class="feats">
       <a class="feat" href="/pages/value-stocks">
@@ -411,8 +411,15 @@ footer.site .wrap{padding:54px 28px 40px;}
   if (rs && rs.data) {
     const n = Object.values(rs.data).filter(r => r.level === "高" || r.level === "極高" || r.level === "警示").length;
     $("sN2").textContent = n; $("bRisk").textContent = n;
-    const s2330 = rs.data["2330"];
-    if (s2330 && s2330.score != null) { $("bScore").firstChild.textContent = s2330.score; }
+    // 範例卡：挑今日分數最高的真實警示股
+    const top = Object.entries(rs.data).sort((a, b) => (b[1].score || 0) - (a[1].score || 0))[0];
+    if (top) {
+      const [tc, tv] = top;
+      $("bScore").firstChild.textContent = tv.score;
+      $("bScoreLab").textContent = "今日警示實例・" + tc + " " + (tv.name || "");
+      $("bScoreSub").innerHTML = "風險【" + (tv.level || "") + "】・9 項紅旗逐項檢查 →";
+      $("bSampleCard").onclick = () => location.href = "/pages/check?code=" + tc;
+    }
   }
   if (sn) $("sN4").textContent = sn.count || "—";
   if (tf && tf.risk) {
@@ -423,23 +430,26 @@ footer.site .wrap{padding:54px 28px 40px;}
     if (tf.txNight && tf.txNight.pct != null) $("bTempSub").textContent = "夜盤 " + (tf.txNight.pct > 0 ? "+" : "") + tf.txNight.pct + "%・資料日 " + (tf.asof || "");
   }
   if (x && x.alerts && x.alerts.length) {
+    const esc = s => String(s || "").replace(/[<>&]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c]));
     const a0 = x.alerts[0];
-    $("bX").innerHTML = "<b>【關注度 " + a0.importance + "】</b>" + (a0.summary || a0.title || "");
-    $("bXmeta").textContent = "@" + (a0.handle || "") + "・" + (a0.created_at || "").slice(5, 16).replace("T", " ");
+    $("bX").innerHTML = "<b>【關注度 " + esc(a0.importance) + "】</b>" + esc(a0.summary_zh);
+    $("bXmeta").textContent = "@" + (a0.author || "") + "・" + (a0.published_at || "").slice(5, 16).replace("T", " ");
     const feed = $("xFeed"); feed.innerHTML = "";
     x.alerts.slice(0, 3).forEach(a => {
       const d = document.createElement("div"); d.className = "xitem";
-      d.innerHTML = '<div class="meta"><span>關注度 ' + a.importance + '</span><span>@' + (a.handle || "") + '</span></div><div class="tx">' + (a.summary || a.title || "") + "</div>";
+      d.innerHTML = '<div class="meta"><span>關注度 ' + esc(a.importance) + '</span><span>@' + esc(a.author) + "</span></div><div class=\"tx\">" + esc(a.summary_zh) + "</div>";
       feed.appendChild(d);
     });
   }
-  if (sn && sn.stocks) {
-    const hot = sn.stocks.filter(s => s.signal === "heat_spike" || s.signal === "heat_watch").slice(0, 6);
+  if (sn && sn.data) {
+    const list = Object.entries(sn.data).map(([code, v]) => ({ code, ...v }));
+    const hot = list.filter(s => s.signal === "heat_spike" || s.signal === "heat_watch");
+    const pick = (hot.length ? hot : list.sort((a, b) => (b.ptt_ratio || 0) - (a.ptt_ratio || 0))).slice(0, 6);
     const box = $("sentChips"); box.innerHTML = "";
-    (hot.length ? hot : sn.stocks.slice(0, 6)).forEach(s => {
+    pick.forEach(s => {
       const el = document.createElement("span");
       el.className = "schip" + (s.signal === "heat_spike" ? " hot" : "");
-      el.innerHTML = "<b>" + s.code + "</b> " + s.name + (s.signal === "heat_spike" ? "・熱度飆升" : s.signal === "heat_watch" ? "・升溫" : "");
+      el.innerHTML = "<b>" + s.code + "</b> " + (s.name || "") + (s.signal === "heat_spike" ? "・熱度飆升" : s.signal === "heat_watch" ? "・升溫" : "");
       box.appendChild(el);
     });
   }
