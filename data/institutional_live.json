@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-06-12 17:50",
+  "updatedAt": "2026-06-12 11:07",
   "source": "TWSE T86 三大法人買賣超日報",
   "sourceDate": "20260612",
   "title": "115年06月12日 三大法人買賣超日報",
-  "count": 1074,
+  "count": 1073,
   "data": {
     "2887": {
       "code": "2887",
@@ -4503,15 +4503,6 @@
       "trust_net_lots": 0,
       "dealer_net_lots": -1,
       "total_net_lots": 33,
-      "market": "listed"
-    },
-    "9930": {
-      "code": "9930",
-      "name": "中聯資源",
-      "foreign_net_lots": 32,
-      "trust_net_lots": 0,
-      "dealer_net_lots": -1,
-      "total_net_lots": 32,
       "market": "listed"
     },
     "6112": {

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-12 17:48",
+  "updatedAt": "2026-06-12 11:05",
   "source": "TPEx 櫃買中心 OpenAPI",
   "market": "otc",
   "count": 874,
@@ -325,6 +325,16 @@
       "market": "otc"
     },
     {
+      "code": "6274",
+      "name": "台燿",
+      "price": 1430.0,
+      "change": -45.0,
+      "volume": 9417,
+      "category": "金融控股",
+      "status": "上櫃",
+      "market": "otc"
+    },
+    {
       "code": "6182",
       "name": "合晶",
       "price": 88.9,
@@ -341,16 +351,6 @@
       "change": 12.5,
       "volume": 9353,
       "category": "半導體",
-      "status": "上櫃",
-      "market": "otc"
-    },
-    {
-      "code": "6274",
-      "name": "台燿",
-      "price": 1430.0,
-      "change": -45.0,
-      "volume": 9294,
-      "category": "金融控股",
       "status": "上櫃",
       "market": "otc"
     },
