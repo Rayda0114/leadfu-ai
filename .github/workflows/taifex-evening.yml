@@ -32,7 +32,11 @@ jobs:
           git add data/taifex_live.json data/_taifex_alert.json 2>/dev/null || git add data/taifex_live.json
           if ! git diff --staged --quiet; then
             git commit -m "data(taifex): 晚間補抓 $(date -u +%F)"
-            git push
+            for i in 1 2 3; do
+              git push && break
+              echo "push 被拒，rebase 重試…"
+              git pull --rebase -X theirs origin main
+            done
             gh workflow run deploy-worker.yml && echo "🚀 已觸發 worker 部署" || echo "⚠ 部署觸發失敗"
           else
             echo "ℹ️ 無變動"

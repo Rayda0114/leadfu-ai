@@ -55,7 +55,13 @@ jobs:
           if ! git diff --staged --quiet; then
             DATE=$(date -u +"%Y-%m-%d")
             git commit -m "data: 每日更新 ($DATE)"
-            git push
+            # 防推送競態：長任務期間 main 可能被推前（2026-06-11 整輪作廢主因）
+            # rebase -X theirs：資料檔以本輪新抓的為準
+            for i in 1 2 3; do
+              git push && break
+              echo "push 被拒（第 $i 次），rebase 後重試…"
+              git pull --rebase -X theirs origin main
+            done
             echo "✅ 已 commit 並 push"
             # ⚠ GITHUB_TOKEN 推的 commit 不會自動觸發 deploy-worker（GitHub 防遞迴）。
             #    這裡主動觸發一次部署，讓 worker 的 ASSETS（LINE AI 客服 + 網站讀的 stocks_live 等）更新到最新資料。

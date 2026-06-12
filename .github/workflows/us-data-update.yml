@@ -59,7 +59,11 @@ jobs:
           if ! git diff --staged --quiet; then
             DATE=$(date -u +"%Y-%m-%d")
             git commit -m "data: 美股 100 檔報價 + 合理區間更新 ($DATE)"
-            git push
+            for i in 1 2 3; do
+              git push && break
+              echo "push 被拒，rebase 重試…"
+              git pull --rebase -X theirs origin main
+            done
             gh workflow run deploy-worker.yml || true   # 觸發部署，讓新資料進 worker
             echo "✅ 已 commit 並 push（已觸發部署）"
           else

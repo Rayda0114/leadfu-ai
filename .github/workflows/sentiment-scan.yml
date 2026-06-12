@@ -47,7 +47,11 @@ jobs:
           git add data/sentiment_live.json
           if ! git diff --staged --quiet; then
             git commit -m "data(輿情雷達): 雲端備援掃描（無 PTT 源）$(date -u +%F)"
-            git push
+            for i in 1 2 3; do
+              git push && break
+              echo "push 被拒，rebase 重試…"
+              git pull --rebase -X theirs origin main
+            done
             gh workflow run deploy-worker.yml && echo "🚀 已觸發部署" || true
           else
             echo "無變動"
