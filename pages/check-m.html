@@ -205,6 +205,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     const p = (typeof s.price === "number" && s.price > 0) ? L.pctChange(s.price, s.change) : null;
     document.getElementById("vSub").textContent = `${s.status || ""}・${s.category || ""}${p != null ? `・${L.fmtPrice(s.price)}（${p >= 0 ? "+" : ""}${p.toFixed(2)}%）` : ""}`;
 
+    // ⚡ 即時報價（5 秒延遲）：盤中每 15 秒刷新副標的現價
+    (async function liveLoop() {
+      if (!L.liveQuote) return;
+      async function tick() {
+        const q = await L.liveQuote(code, s.market);
+        if (q && q.price) {
+          const pc = q.prevClose ? (q.change / q.prevClose) * 100 : 0;
+          document.getElementById("vSub").textContent =
+            `${s.status || ""}・${s.category || ""}・${L.fmtPrice(q.price)}（${pc >= 0 ? "+" : ""}${pc.toFixed(2)}%）` +
+            (q.isOpen ? "・即時 5 秒延遲" : "");
+        }
+        if (q && q.isOpen) setTimeout(tick, 15000);
+      }
+      tick();
+    })();
+
     // ── 9 項紅旗 ──
     const flags = [];
     // 1 注意/處置

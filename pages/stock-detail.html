@@ -553,6 +553,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   chgEl.innerHTML = `${arrow(s.change)} ${fmtChange(s.change)} (${fmtPct(pct)})`;
   chgEl.className = "stock-change-big " + cls;
 
+  // ⚡ 即時報價（TWSE MIS，5 秒延遲）：蓋過盤後快照；盤中每 15 秒刷新
+  (async function liveLoop() {
+    const Lq = window.LeadFu && window.LeadFu.liveQuote;
+    if (!Lq) return;
+    async function tick() {
+      const q = await Lq(code, s.market);
+      if (q && q.price) {
+        const pc = q.prevClose ? (q.change / q.prevClose) * 100 : 0;
+        const c2 = q.change > 0 ? "up" : q.change < 0 ? "down" : "flat";
+        priceEl.textContent = fmtPrice(q.price);
+        priceEl.className = "stock-price-big " + c2;
+        chgEl.innerHTML = `${arrow(q.change)} ${fmtChange(q.change)} (${fmtPct(pc)}) ` +
+          `<small style="font-size:11px;font-weight:700;color:#8a948e;vertical-align:middle;">${q.isOpen ? "即時・5 秒延遲" : "最新成交"}</small>`;
+        chgEl.className = "stock-change-big " + c2;
+      }
+      if (q && q.isOpen) setTimeout(tick, 15000);
+    }
+    tick();
+  })();
+
   // Quick stats：優先用真實月營收資料；退 mock 財報；都沒有顯示「-」
   const qsRev = (data.revenue || {})[code];
   function setQs(id, label, value, valueClass) {
