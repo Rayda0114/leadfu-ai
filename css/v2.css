@@ -82,3 +82,11 @@ html.v2 .site-footer h4,html.v2 .site-footer b,html.v2 .site-footer strong{color
 
 /* ── 預覽角標 ── */
 html.v2::after{content:"2.0 預覽中・網址加 ?v2=0 關閉";position:fixed;left:14px;bottom:14px;z-index:1800;background:#B33A2E;color:#fff;font-size:11.5px;font-weight:900;padding:7px 13px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.3);opacity:.93;pointer-events:none;}
+
+/* ── 進階選股：熱門快選膠囊 2.0 ── */
+html.v2 .preset-pill{background:#fff !important;border:1.5px solid var(--v2-line) !important;border-radius:999px !important;color:var(--v2-soft) !important;font-weight:800 !important;box-shadow:none !important;transition:all .15s;}
+html.v2 .preset-pill:hover{border-color:var(--v2-gold) !important;color:var(--v2-forest) !important;background:var(--v2-gold-soft) !important;transform:translateY(-1px);}
+
+/* ── 產業卡：emoji 圖示改金槓 ── */
+html.v2 .ind-icon{display:none !important;}
+html.v2 .ind-card::before{content:"";display:block;width:22px;height:3px;background:var(--v2-gold);border-radius:2px;margin-bottom:9px;}

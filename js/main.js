@@ -8,8 +8,19 @@
     if (localStorage.getItem("lf_v2") !== "1") return;
     document.documentElement.classList.add("v2");
     const l = document.createElement("link");
-    l.rel = "stylesheet"; l.href = "/css/v2.css?v=3.25.5";
+    l.rel = "stylesheet"; l.href = "/css/v2.css?v=3.25.6";
     document.head.appendChild(l);
+    // 2.0 排版純化：標題/導覽的開頭 emoji 在皮膚模式下移除（不動原始 HTML）
+    document.addEventListener("DOMContentLoaded", () => {
+      const EMO = /^[\s\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{20E3}]+/u;
+      document.querySelectorAll(".page-head h1, .panel-head h2, .main-nav a, .panel h4").forEach(el => {
+        for (const n of el.childNodes) {
+          if (n.nodeType === 3 && n.textContent.trim()) { n.textContent = n.textContent.replace(EMO, ""); break; }
+          if (n.nodeType === 1 && n.textContent.trim()) break;
+        }
+      });
+    });
+
     // 指數行情條：注入在主導覽下方
     document.addEventListener("DOMContentLoaded", async () => {
       const nav = document.querySelector(".main-nav");
@@ -3594,7 +3605,7 @@ function startStockLive(code, stock) {
    解法：① Cache API + 15 分 TTL：同 session 換頁直接用快取（資料每日盤後才更新，
         15 分內快取對正確性無實質影響）② 同頁去重：同檔只抓一次（搭配 loadLiveData
         的並行預熱，串行 await 全部變秒回）。快取名綁版本，改版自動失效。 */
-const DATA_CACHE_NAME = "leadfu-data-v3255";
+const DATA_CACHE_NAME = "leadfu-data-v3256";
 const DATA_CACHE_TTL = 15 * 60 * 1000;
 try { caches.keys().then(ks => ks.forEach(k => { if (k.indexOf("leadfu-data-") === 0 && k !== DATA_CACHE_NAME) caches.delete(k); })); } catch (e) {}
 

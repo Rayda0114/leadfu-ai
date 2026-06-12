@@ -212,7 +212,7 @@
   <a class="back" href="/pages/etf.html">← ETF 專區</a> ・ <a class="back" href="/pages/dividend-tax">股利稅試算 →</a> ・ <a class="back" href="/pages/dividends.html">高殖利率排行 →</a>
 </div>
 
-<script src="/js/main.js?v=3.25.5"></script>
+<script src="/js/main.js?v=3.25.6"></script>
 <script>
 fetch("/data/etf_health_live.json").then(r => r.json()).then(d => {
   const rows = Object.entries(d.data || {}).map(([code, v]) => ({ code, ...v }));
