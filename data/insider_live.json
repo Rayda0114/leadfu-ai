@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-06-10 11:03",
+  "updatedAt": "2026-06-12 17:50",
   "source": "MOPS 公開資訊觀測站 t187ap02（主要股東名單）",
-  "count": 1370,
+  "count": 1383,
   "data": {
     "1102": {
       "code": "1102",
@@ -1535,6 +1535,16 @@
       "market": "上市",
       "count": 2
     },
+    "2204": {
+      "code": "2204",
+      "name": "中華",
+      "shareholders": [
+        "三菱自動車工業株式會社",
+        "台元紡織股份有限公司"
+      ],
+      "market": "上市",
+      "count": 2
+    },
     "2207": {
       "code": "2207",
       "name": "和泰車",
@@ -1559,6 +1569,16 @@
       "shareholders": [
         "長榮海運股份有限公司",
         "張國華"
+      ],
+      "market": "上市",
+      "count": 2
+    },
+    "2227": {
+      "code": "2227",
+      "name": "裕日車",
+      "shareholders": [
+        "日產自動車株式會社",
+        "裕隆汽車製造股份有限公司"
       ],
       "market": "上市",
       "count": 2
@@ -1789,6 +1809,15 @@
       "name": "茂矽",
       "shareholders": [
         "朋程科技股份有限公司"
+      ],
+      "market": "上市",
+      "count": 1
+    },
+    "2344": {
+      "code": "2344",
+      "name": "華邦電",
+      "shareholders": [
+        "華新麗華股份有限公司"
       ],
       "market": "上市",
       "count": 1
@@ -2292,6 +2321,15 @@
       "name": "吉祥全",
       "shareholders": [
         "廣砷投資有限公司"
+      ],
+      "market": "上市",
+      "count": 1
+    },
+    "2492": {
+      "code": "2492",
+      "name": "華新科",
+      "shareholders": [
+        "華新麗華股份有限公司"
       ],
       "market": "上市",
       "count": 1
@@ -2905,6 +2943,15 @@
       "market": "上市",
       "count": 1
     },
+    "2881": {
+      "code": "2881",
+      "name": "富邦金",
+      "shareholders": [
+        "台北市政府"
+      ],
+      "market": "上市",
+      "count": 1
+    },
     "2882": {
       "code": "2882",
       "name": "國泰金",
@@ -3373,6 +3420,16 @@
       ],
       "market": "上市",
       "count": 1
+    },
+    "3167": {
+      "code": "3167",
+      "name": "大量",
+      "shareholders": [
+        "王作京",
+        "鄭天薌"
+      ],
+      "market": "上市",
+      "count": 2
     },
     "3168": {
       "code": "3168",
@@ -4835,6 +4892,15 @@
       "name": "大豐電",
       "shareholders": [
         "大無畏全球投資控股股份有限公"
+      ],
+      "market": "上市",
+      "count": 1
+    },
+    "6191": {
+      "code": "6191",
+      "name": "精成科",
+      "shareholders": [
+        "瀚宇博德股份有限公司"
       ],
       "market": "上市",
       "count": 1
@@ -6308,6 +6374,15 @@
       "market": "上市",
       "count": 2
     },
+    "8110": {
+      "code": "8110",
+      "name": "華東",
+      "shareholders": [
+        "華新麗華股份有限公司"
+      ],
+      "market": "上市",
+      "count": 1
+    },
     "8131": {
       "code": "8131",
       "name": "福懋科",
@@ -6675,6 +6750,15 @@
       "market": "上市",
       "count": 1
     },
+    "9917": {
+      "code": "9917",
+      "name": "中保科",
+      "shareholders": [
+        "株式會社(SECOM CO,LTD)"
+      ],
+      "market": "上市",
+      "count": 1
+    },
     "9918": {
       "code": "9918",
       "name": "欣天然",
@@ -6689,6 +6773,15 @@
       "name": "康那香",
       "shareholders": [
         "康曜投資股份有限公司"
+      ],
+      "market": "上市",
+      "count": 1
+    },
+    "9926": {
+      "code": "9926",
+      "name": "新海",
+      "shareholders": [
+        "百勳投資股份有限公司"
       ],
       "market": "上市",
       "count": 1
@@ -8241,6 +8334,16 @@
       "market": "上櫃",
       "count": 1
     },
+    "3628": {
+      "code": "3628",
+      "name": "盈正",
+      "shareholders": [
+        "許文",
+        "漢唐集成股份有限公司"
+      ],
+      "market": "上櫃",
+      "count": 2
+    },
     "3629": {
       "code": "3629",
       "name": "地心引力",
@@ -8285,6 +8388,15 @@
       "name": "安瑞-KY",
       "shareholders": [
         "Array Holdings for APGFIII Fund LPs"
+      ],
+      "market": "上櫃",
+      "count": 1
+    },
+    "3666": {
+      "code": "3666",
+      "name": "光耀",
+      "shareholders": [
+        "元德投資股份有限公司"
       ],
       "market": "上櫃",
       "count": 1
@@ -9099,6 +9211,15 @@
       "market": "上櫃",
       "count": 1
     },
+    "4760": {
+      "code": "4760",
+      "name": "勤凱科技",
+      "shareholders": [
+        "曾聰乙"
+      ],
+      "market": "上櫃",
+      "count": 1
+    },
     "4767": {
       "code": "4767",
       "name": "誠泰科技",
@@ -9757,11 +9878,10 @@
       "code": "5487",
       "name": "通泰",
       "shareholders": [
-        "侯正著",
         "福豐盛投資股份有限公司"
       ],
       "market": "上櫃",
-      "count": 2
+      "count": 1
     },
     "5489": {
       "code": "5489",
