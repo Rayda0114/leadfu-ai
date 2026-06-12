@@ -617,7 +617,8 @@ footer.site .wrap{padding:54px 28px 40px;}
   const pcCls = s => pctOf(s) > 0 ? "up" : pctOf(s) < 0 ? "down" : "";
 
   // 漲幅排行（過濾低價冷門股）
-  const gain = S.filter(s => s.price >= 10 && (s.volume || 0) >= 500000).sort((a, b) => pctOf(b) - pctOf(a)).slice(0, 6);
+  const volMed = [...S].map(s => s.volume || 0).sort((a, b) => a - b)[Math.floor(S.length * 0.7)] || 0;
+  const gain = S.filter(s => s.price >= 10 && (s.volume || 0) >= volMed).sort((a, b) => pctOf(b) - pctOf(a)).slice(0, 6);
   $("rkGain").innerHTML = gain.map((s, i) => row(i + 1, s, pcTxt, pcCls)).join("");
 
   // 成交量排行
