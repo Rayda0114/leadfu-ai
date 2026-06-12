@@ -178,6 +178,56 @@ footer.site .wrap{padding:54px 28px 40px;}
 .f-bottom{display:flex;align-items:center;gap:20px;border-top:1px solid rgba(255,255,255,.12);padding-top:24px;font-size:12.5px;flex-wrap:wrap;}
 .f-bottom .src{margin-left:auto;}
 @media(max-width:1080px){.hero .wrap{grid-template-columns:1fr;}.hero h1{font-size:40px;}.steps,.feats,.f-vows{grid-template-columns:1fr;}.radar-band{grid-template-columns:1fr;}.statband .wrap{grid-template-columns:1fr 1fr;gap:20px;}.vipband{flex-direction:column;text-align:center;}.vipband .price{margin:0;text-align:center;}}
+
+/* ── 指數行情條 ── */
+.tape{background:#0D241C;border-bottom:1px solid rgba(255,255,255,.08);color:#FAF8F2;}
+.tape .wrap{display:flex;align-items:stretch;gap:0;height:58px;}
+.tq{display:flex;align-items:center;gap:12px;padding:0 22px;border-right:1px solid rgba(255,255,255,.08);}
+.tq:first-child{padding-left:0;}
+.tq .nm{font-size:12.5px;color:rgba(250,248,242,.55);font-weight:700;}
+.tq .px{font-size:19px;font-weight:900;}
+.tq .pc{font-size:13px;font-weight:800;}
+.tq.up .px,.tq.up .pc{color:#FF8A7A;}
+.tq.down .px,.tq.down .pc{color:#5ED4A4;}
+.breadth{margin-left:auto;display:flex;align-items:center;gap:12px;padding-left:22px;}
+.breadth .bar{width:170px;height:7px;border-radius:99px;overflow:hidden;display:flex;background:rgba(255,255,255,.12);}
+.breadth .bar i{display:block;height:100%;}
+.breadth small{font-size:12px;color:rgba(250,248,242,.6);font-weight:700;}
+.tape .src{font-size:10.5px;color:rgba(250,248,242,.35);align-self:center;padding-left:16px;}
+
+/* ── 市場排行 ── */
+.mkt{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--sh-1);overflow:hidden;}
+.mcard .mh{display:flex;align-items:center;gap:10px;padding:16px 20px 12px;border-bottom:1px solid var(--line2);}
+.mcard .mh svg{width:17px;height:17px;stroke:var(--gold);}
+.mcard .mh b{font-size:15.5px;font-weight:900;}
+.mcard .mh a{margin-left:auto;font-size:12.5px;font-weight:800;color:var(--muted);}
+.mcard .mh a:hover{color:var(--forest);}
+.mrow{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px solid var(--line2);font-size:14px;transition:background .12s;}
+.mrow:last-child{border-bottom:0;}
+.mrow:hover{background:var(--gold-soft);}
+.mrow .rk{font-size:12px;font-weight:900;color:var(--muted);width:14px;font-family:var(--serif);}
+.mrow .cd{font-weight:900;color:var(--forest);width:52px;}
+.mrow .nm2{color:var(--soft);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mrow .px2{font-weight:800;width:74px;text-align:right;}
+.mrow .pc2{font-weight:900;width:74px;text-align:right;font-size:13.5px;}
+.mrow .pc2.up{color:var(--up);}
+.mrow .pc2.down{color:var(--down);}
+.mrow .tag2{font-size:11.5px;font-weight:800;color:var(--amber);background:rgba(185,125,31,.08);border-radius:8px;padding:2px 8px;}
+
+/* ── 新聞 ── */
+.newsgrid{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;}
+.ncard{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--sh-1);padding:8px 0;}
+.nrow{display:flex;gap:14px;padding:14px 22px;border-bottom:1px solid var(--line2);align-items:baseline;}
+.nrow:last-child{border-bottom:0;}
+.nrow .tm{font-size:12px;font-weight:800;color:var(--muted);flex:none;width:42px;}
+.nrow .tt{font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.nrow:hover .tt{color:var(--gold);}
+.nrow .sen{flex:none;font-size:11px;font-weight:900;border-radius:8px;padding:2px 8px;align-self:center;}
+.nrow .sen.pos{color:var(--up);background:rgba(192,57,43,.08);}
+.nrow .sen.neg{color:var(--down);background:rgba(14,138,95,.08);}
+.nrow .sen.neu{color:var(--muted);background:rgba(19,33,27,.05);}
+@media(max-width:1080px){.mkt{grid-template-columns:1fr;}.newsgrid{grid-template-columns:1fr;}.tape .wrap{overflow-x:auto;}}
 </style>
 </head>
 <body>
@@ -213,6 +263,20 @@ footer.site .wrap{padding:54px 28px 40px;}
   </div>
 </header>
 
+
+<div class="tape">
+  <div class="wrap">
+    <div class="tq" id="tqTaiex"><span class="nm">加權指數</span><span class="px num">—</span><span class="pc num"></span></div>
+    <div class="tq" id="tqOtc"><span class="nm">櫃買指數</span><span class="px num">—</span><span class="pc num"></span></div>
+    <div class="tq" id="tqFut"><span class="nm">台指期夜盤</span><span class="px num">—</span><span class="pc num"></span></div>
+    <div class="breadth">
+      <small id="brUp" style="color:#FF8A7A;">— 漲</small>
+      <div class="bar"><i id="brBarU" style="background:#C0594B;width:50%;"></i><i id="brBarD" style="background:#2E8B6B;width:50%;"></i></div>
+      <small id="brDn" style="color:#5ED4A4;">— 跌</small>
+    </div>
+    <span class="src" id="tapeSrc">TWSE MIS・5 秒延遲</span>
+  </div>
+</div>
 <section class="hero">
   <div class="wrap">
     <div>
@@ -272,6 +336,53 @@ footer.site .wrap{padding:54px 28px 40px;}
     <div class="stat"><b class="num" id="sN4">—</b><small>檔熱門股 輿情掃描</small></div>
   </div>
 </div>
+
+
+<section class="blk" style="padding-top:64px;padding-bottom:0;">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px;">
+      <div class="tag">TODAY'S MARKET</div>
+      <h2>今日市場</h2>
+    </div>
+    <div class="mkt">
+      <div class="mcard">
+        <div class="mh"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 17 9 11l4 4 8-8"/><path d="M14 7h7v7"/></svg><b>漲幅排行</b><a href="/pages/stocks">更多 →</a></div>
+        <div id="rkGain"></div>
+      </div>
+      <div class="mcard">
+        <div class="mh"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 11H4v9h5zM14.5 4h-5v16h5zM20 8h-5v12h5z"/></svg><b>成交量排行</b><a href="/pages/stocks">更多 →</a></div>
+        <div id="rkVol"></div>
+      </div>
+      <div class="mcard">
+        <div class="mh"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 8c2.5 0 4 1.6 4 4s-1.5 4-4 4M3 12h14M7 8l-4 4 4 4"/></svg><b>外資連買榜</b><a href="/pages/screener">更多 →</a></div>
+        <div id="rkInst"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="blk" style="padding-top:48px;padding-bottom:0;">
+  <div class="wrap">
+    <div class="newsgrid">
+      <div class="ncard">
+        <div class="mh" style="display:flex;align-items:center;gap:10px;padding:16px 22px 10px;border-bottom:1px solid var(--line2);">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:17px;height:17px;stroke:var(--gold);"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V6"/><path d="M12 6h6M12 10h6M12 14h6M12 18h6"/></svg>
+          <b style="font-size:15.5px;font-weight:900;">財經新聞・AI 判讀</b>
+          <a href="/pages/news" style="margin-left:auto;font-size:12.5px;font-weight:800;color:var(--muted);">全部新聞 →</a>
+        </div>
+        <div id="newsList"></div>
+      </div>
+      <div class="ncard">
+        <div class="mh" style="display:flex;align-items:center;gap:10px;padding:16px 22px 10px;border-bottom:1px solid var(--line2);">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:17px;height:17px;stroke:var(--gold);"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          <b style="font-size:15.5px;font-weight:900;">今日警示與異常</b>
+          <a href="/pages/risk-radar" style="margin-left:auto;font-size:12.5px;font-weight:800;color:var(--muted);">防錯雷達 →</a>
+        </div>
+        <div id="alertList"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="blk">
   <div class="wrap">
@@ -452,6 +563,98 @@ footer.site .wrap{padding:54px 28px 40px;}
       el.innerHTML = "<b>" + s.code + "</b> " + (s.name || "") + (s.signal === "heat_spike" ? "・熱度飆升" : s.signal === "heat_watch" ? "・升溫" : "");
       box.appendChild(el);
     });
+  }
+})();
+
+/* ═ 行情層（指數/排行/新聞）═ */
+(async function () {
+  const $ = id => document.getElementById(id);
+  const j = async u => { try { const r = await fetch(u, { cache: "no-store" }); return r.ok ? await r.json() : null; } catch (e) { return null; } };
+  const esc = s => String(s || "").replace(/[<>&]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c]));
+
+  // 指數（MIS 5 秒延遲，盤中每 15 秒刷）
+  async function tape() {
+    const d = await j("/api/quote?ex_ch=" + encodeURIComponent("tse_t00.tw|otc_o00.tw"));
+    const arr = (d && d.msgArray) || [];
+    const put = (el, q) => {
+      let z = parseFloat(q.z); if (isNaN(z) || z <= 0) z = parseFloat(q.pz);
+      const y = parseFloat(q.y); if (!z || !y) return;
+      const ch = z - y, pc = ch / y * 100;
+      el.className = "tq " + (ch > 0 ? "up" : ch < 0 ? "down" : "");
+      el.querySelector(".px").textContent = z.toLocaleString("en-US", { maximumFractionDigits: 2 });
+      el.querySelector(".pc").textContent = (ch >= 0 ? "▲" : "▼") + Math.abs(ch).toFixed(2) + " (" + (pc >= 0 ? "+" : "") + pc.toFixed(2) + "%)";
+    };
+    arr.forEach(q => { if (q.c === "t00") put($("tqTaiex"), q); else if (q.c === "o00") put($("tqOtc"), q); });
+  }
+  tape(); setInterval(tape, 15000);
+
+  const [st, tf, nw, ik, rs] = await Promise.all([
+    j("/data/stocks_live.json"), j("/data/taifex_live.json"), j("/data/news_live.json"),
+    j("/data/inst_streak_live.json"), j("/data/risk_score_live.json")]);
+
+  // 台指期夜盤
+  if (tf && tf.txNight && tf.txNight.pct != null) {
+    const e = $("tqFut"); const pc = tf.txNight.pct;
+    e.className = "tq " + (pc > 0 ? "up" : pc < 0 ? "down" : "");
+    e.querySelector(".px").textContent = (tf.txNight.last || 0).toLocaleString();
+    e.querySelector(".pc").textContent = (pc >= 0 ? "+" : "") + pc + "%";
+  }
+  if (!st || !st.stocks) return;
+  const S = st.stocks.filter(s => s.price > 0);
+
+  // 漲跌家數
+  const up = S.filter(s => (s.change || 0) > 0).length, dn = S.filter(s => (s.change || 0) < 0).length;
+  $("brUp").textContent = up.toLocaleString() + " 漲"; $("brDn").textContent = dn.toLocaleString() + " 跌";
+  const tot = up + dn || 1;
+  $("brBarU").style.width = (up / tot * 100) + "%"; $("brBarD").style.width = (dn / tot * 100) + "%";
+
+  const pctOf = s => { const prev = s.price - (s.change || 0); return prev > 0 ? (s.change || 0) / prev * 100 : 0; };
+  const row = (i, s, right, cls) =>
+    '<a class="mrow" href="/pages/check?code=' + s.code + '"><span class="rk">' + i + '</span><span class="cd num">' + s.code +
+    '</span><span class="nm2">' + esc(s.name) + '</span><span class="px2 num">' + (s.price || 0).toLocaleString("en-US", { maximumFractionDigits: 2 }) +
+    '</span><span class="pc2 num ' + cls(s) + '">' + right(s) + "</span></a>";
+  const pcTxt = s => { const p = pctOf(s); return (p >= 0 ? "+" : "") + p.toFixed(2) + "%"; };
+  const pcCls = s => pctOf(s) > 0 ? "up" : pctOf(s) < 0 ? "down" : "";
+
+  // 漲幅排行（過濾低價冷門股）
+  const gain = S.filter(s => s.price >= 10 && (s.volume || 0) >= 500000).sort((a, b) => pctOf(b) - pctOf(a)).slice(0, 6);
+  $("rkGain").innerHTML = gain.map((s, i) => row(i + 1, s, pcTxt, pcCls)).join("");
+
+  // 成交量排行
+  const vol = [...S].sort((a, b) => (b.volume || 0) - (a.volume || 0)).slice(0, 6);
+  $("rkVol").innerHTML = vol.map((s, i) => row(i + 1, s, pcTxt, pcCls)).join("");
+
+  // 外資連買榜
+  if (ik && ik.data) {
+    const m = {}; S.forEach(s => m[s.code] = s);
+    const buys = Object.entries(ik.data).filter(([c, v]) => v.dir === "buy" && m[c]).sort((a, b) => b[1].days - a[1].days).slice(0, 6);
+    $("rkInst").innerHTML = buys.map(([c, v], i) => {
+      const s = m[c];
+      return '<a class="mrow" href="/pages/check?code=' + c + '"><span class="rk">' + (i + 1) + '</span><span class="cd num">' + c +
+        '</span><span class="nm2">' + esc(s.name) + '</span><span class="px2 num">' + s.price.toLocaleString("en-US", { maximumFractionDigits: 2 }) +
+        '</span><span class="tag2">連 ' + v.days + " 日買</span></a>";
+    }).join("");
+  }
+
+  // 新聞（AI 判讀標籤）
+  if (nw && nw.news) {
+    $("newsList").innerHTML = nw.news.slice(0, 6).map(n => {
+      const sen = n.ai_sentiment === "利多" ? "pos" : n.ai_sentiment === "利空" ? "neg" : "neu";
+      return '<a class="nrow" href="' + esc(n.link) + '" target="_blank" rel="noopener"><span class="tm num">' + esc((n.time || "").slice(0, 5)) +
+        '</span><span class="tt">' + esc(n.title) + '</span><span class="sen ' + sen + '">' + esc(n.ai_sentiment || "中性") + "</span></a>";
+    }).join("");
+  }
+
+  // 警示清單（風險分數最高 6 檔）
+  if (rs && rs.data) {
+    const m2 = {}; S.forEach(s => m2[s.code] = s);
+    const tops = Object.entries(rs.data).sort((a, b) => (b[1].score || 0) - (a[1].score || 0)).slice(0, 6);
+    $("alertList").innerHTML = tops.map(([c, v], i) => {
+      const s = m2[c] || { name: v.name || "", price: 0 };
+      return '<a class="mrow" href="/pages/check?code=' + c + '"><span class="rk">' + (i + 1) + '</span><span class="cd num">' + c +
+        '</span><span class="nm2">' + esc(s.name) + '</span><span class="tag2" style="color:var(--up);background:rgba(192,57,43,.08);">' +
+        (v.score || 0) + " 分・" + esc(v.level || "") + "</span></a>";
+    }).join("");
   }
 })();
 </script>
