@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>領富 AI · 品牌列方案（含 icon）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#b9914f;--gold-2:#d6b36f;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:#dcd8ce;color:#1a2a23;
+       font-family:-apple-system,"PingFang TC","Noto Sans TC",sans-serif;
+       display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px 0 44px;}
+  .cap{width:390px;max-width:92vw;font-size:13px;font-weight:800;color:#3a463f;margin:18px 0 0;}
+  .cap span{color:#8a8173;font-weight:500;}
+  .panel{width:390px;max-width:92vw;color:#f8f5ec;border-radius:20px;overflow:hidden;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 86% 0%, rgba(185,145,79,.30), transparent 36%),
+      linear-gradient(180deg,#08271f,#0d3328);
+    background-size:19px 19px,auto,auto;}
+  .top{display:flex;align-items:center;justify-content:space-between;padding:20px 18px;min-height:90px;}
+  .brand{display:flex;align-items:center;gap:13px;min-width:0;}
+  .ghost{min-height:40px;padding:0 17px;border-radius:999px;display:inline-flex;align-items:center;
+         font-size:13.5px;font-weight:800;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);color:#fff;}
+
+  .ic{width:48px;height:48px;border-radius:13px;display:block;flex:none;box-shadow:0 5px 16px rgba(0,0,0,.28);}
+  .ic-ring{padding:3px;border-radius:16px;border:1px solid rgba(214,179,111,.5);background:rgba(214,179,111,.08);}
+  .ic-ring img{width:46px;height:46px;border-radius:11px;display:block;}
+  .wm{font-size:20px;font-weight:900;line-height:1;}
+  .wm i{font-style:normal;color:var(--gold-2);}
+  .tag{font-size:11.5px;color:rgba(248,245,236,.62);margin-top:6px;letter-spacing:.03em;}
+  .rule{display:flex;align-items:center;gap:8px;margin-top:7px;}
+  .rule::before{content:"";width:18px;height:1px;background:var(--gold-2);}
+  .rule span{font-size:10px;font-weight:800;letter-spacing:.18em;color:var(--gold-2);text-transform:uppercase;}
+  .wm-lg{font-size:23px;font-weight:900;line-height:1;}
+  .wm-lg i{font-style:normal;color:var(--gold-2);}
+</style>
+</head>
+<body>
+
+  <div class="cap">方案 A　<span>icon + 字標 + 中文副標（標準）</span></div>
+  <div class="panel"><div class="top">
+    <div class="brand"><img class="ic" src="_brand_icon.png" alt=""><div><div class="wm">領富 <i>AI</i></div><div class="tag">台股風險守門員</div></div></div>
+    <a class="ghost" href="#">登入</a>
+  </div></div>
+
+  <div class="cap">方案 B　<span>icon + 字標 + 編輯細線（RISK GUARDIAN）</span></div>
+  <div class="panel"><div class="top">
+    <div class="brand"><img class="ic" src="_brand_icon.png" alt=""><div><div class="wm">領富 <i>AI</i></div><div class="rule"><span>Risk Guardian</span></div></div></div>
+    <a class="ghost" href="#">登入</a>
+  </div></div>
+
+  <div class="cap">方案 C　<span>icon 加金環 + 字標 + 副標</span></div>
+  <div class="panel"><div class="top">
+    <div class="brand"><div class="ic-ring"><img src="_brand_icon.png" alt=""></div><div><div class="wm">領富 <i>AI</i></div><div class="tag">台股風險守門員</div></div></div>
+    <a class="ghost" href="#">登入</a>
+  </div></div>
+
+  <div class="cap">方案 D　<span>icon 稍大 + 大字標（無副標）· 最簡潔</span></div>
+  <div class="panel"><div class="top">
+    <div class="brand"><img class="ic" style="width:52px;height:52px;border-radius:14px;" src="_brand_icon.png" alt=""><div class="wm-lg">領富 <i>AI</i></div></div>
+    <a class="ghost" href="#">登入</a>
+  </div></div>
+
+</body>
+</html>

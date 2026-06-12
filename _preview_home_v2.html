@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>領富 AI · 手機版首頁（設計預覽 v2 · 精緻金融科技）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#11271D; --green:#1B4332; --green2:#2D6A4F; --green-d:#0E2218;
+    --gold:#B8860B; --gold2:#D4AF55; --gold-bg:#FBF6E9;
+    --bg:#F2F5F3; --card:#FFFFFF; --line:#E6EDE9; --line2:#EEF3F0;
+    --text:#1F2C27; --muted:#7B8983; --soft:#5A6962;
+    --danger:#C0392B; --warn:#D98324; --ok:#1A7A45;
+    --r:18px; --r2:13px;
+    --sh-s:0 2px 10px rgba(14,34,24,.06);
+    --sh:0 14px 34px rgba(14,34,24,.12);
+    --sh-l:0 22px 50px rgba(14,34,24,.20);
+    --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;font-family:"Noto Sans TC",-apple-system,system-ui,sans-serif;background:#d6dbd9;color:var(--text);
+       line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 0 28px;}
+  .pflag{font-size:12px;color:#3a463f;font-weight:600;letter-spacing:.3px;background:#fff;border:1px solid #c0cac4;border-radius:20px;padding:5px 14px;}
+  .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
+  .ic{width:1em;height:1em;display:inline-block;vertical-align:-.12em;flex:none;}
+
+  .device{width:412px;max-width:100vw;height:min(880px,calc(100vh - 56px));background:var(--bg);border:11px solid #15191b;
+          border-radius:46px;box-shadow:var(--sh-l);overflow:hidden;position:relative;flex:none;}
+  .screen{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:94px;scrollbar-width:none;}
+  .screen::-webkit-scrollbar{display:none;}
+  .px{padding-left:18px;padding-right:18px;}
+
+  header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line);}
+  .hd{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .logo{font-family:"Sora","Noto Sans TC",sans-serif;font-weight:800;font-size:20px;color:var(--green);letter-spacing:.3px;line-height:1;}
+  .logo .ai{color:var(--gold);}
+  .logo small{display:block;font-family:"Noto Sans TC";font-size:9.5px;color:var(--muted);font-weight:500;letter-spacing:.6px;margin-top:3px;}
+  .login{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--green);border:1.5px solid #cddbd4;border-radius:22px;padding:8px 15px;min-height:38px;}
+  .login .ic{font-size:15px;color:var(--green2);}
+
+  .fraud{background:#fbeeee;color:#9a3b3b;font-size:11px;padding:7px 18px;display:flex;gap:7px;align-items:center;justify-content:center;text-align:center;line-height:1.4;border-bottom:1px solid #f3dede;}
+  .fraud b{color:#7a1f1f;}
+  .fraud .ic{font-size:13px;flex:none;}
+
+  .hero{position:relative;background:
+        radial-gradient(120% 80% at 88% -10%, rgba(212,175,85,.22), transparent 60%),
+        linear-gradient(168deg,#23553F 0%, var(--green) 46%, var(--green-d) 100%);
+        color:#fff;padding:26px 18px 64px;overflow:hidden;}
+  .hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px);background-size:18px 18px;opacity:.5;pointer-events:none;}
+  .hero>*{position:relative;z-index:1;}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:#F4E3B4;
+         background:rgba(212,175,85,.14);border:1px solid rgba(212,175,85,.34);border-radius:22px;padding:6px 13px;margin-bottom:14px;letter-spacing:.3px;}
+  .badge .ic{font-size:13px;}
+  .h1{font-family:"Sora","Noto Sans TC",sans-serif;font-size:29px;line-height:1.28;font-weight:800;margin:0 0 10px;letter-spacing:-.2px;}
+  .h1 .ac{color:var(--gold2);}
+  .lead{font-size:14.5px;color:#D6E4DC;margin:0 0 18px;line-height:1.65;}
+  .lead b{color:#fff;font-weight:700;}
+  .search{display:flex;align-items:center;gap:8px;background:#fff;border-radius:15px;padding:7px 7px 7px 15px;box-shadow:0 16px 34px rgba(8,24,16,.34);}
+  .search .ic-s{font-size:19px;color:var(--muted);}
+  .search input{flex:1;border:0;outline:0;font-size:16px;font-family:inherit;background:transparent;min-width:0;color:var(--text);}
+  .search .go{flex:none;width:46px;height:46px;border:0;border-radius:11px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2c05;display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 6px 14px rgba(184,134,11,.4);}
+  .guars{display:flex;flex-wrap:wrap;gap:7px 16px;margin:14px 2px 0;font-size:12.5px;color:#CDE0D6;}
+  .guars span{display:inline-flex;align-items:center;gap:5px;}
+  .guars .ic{font-size:14px;color:var(--gold2);}
+
+  .floatwrap{margin-top:-46px;padding:0 16px;}
+  .ex{background:#fff;border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;border:1px solid rgba(255,255,255,.6);}
+  .ex-h{display:flex;align-items:center;gap:7px;background:linear-gradient(90deg,#F8FBF9,#fff);font-size:11.5px;color:var(--muted);font-weight:600;padding:10px 16px;border-bottom:1px solid var(--line2);}
+  .ex-h .ic{font-size:13px;color:var(--green2);}
+  .ex-b{padding:16px;}
+  .ex-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .ex-code{font-family:"Sora";font-size:20px;font-weight:800;color:var(--green);letter-spacing:.5px;}
+  .ex-name{font-size:14px;color:var(--soft);font-weight:500;}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:800;padding:5px 12px;border-radius:22px;}
+  .pill.low{background:#E7F5EC;color:var(--ok);}
+  .pill .dotg{width:7px;height:7px;border-radius:50%;background:var(--ok);}
+  .ex-score{font-size:13px;color:var(--soft);margin-bottom:8px;}
+  .ex-score b{font-family:"Sora";font-size:26px;color:var(--green);font-weight:800;}
+  .bar{height:9px;border-radius:6px;background:#EEF1EF;overflow:hidden;margin-bottom:14px;position:relative;}
+  .bar i{display:block;height:100%;width:14%;background:linear-gradient(90deg,#46B074,#1A7A45);border-radius:6px;}
+  .ex-nh{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:var(--danger);margin-bottom:8px;}
+  .ex-nh .ic{font-size:14px;}
+  .ex-list{margin:0;padding:0;list-style:none;font-size:13.5px;color:#3C4A44;}
+  .ex-list li{padding:6px 0 6px 22px;position:relative;border-top:1px solid var(--line2);}
+  .ex-list li:first-child{border-top:0;}
+  .ex-list li::before{content:"";position:absolute;left:5px;top:13px;width:6px;height:6px;border-radius:50%;background:var(--danger);}
+  .ex-list b{color:var(--green);font-weight:700;}
+  .ex-tip{display:flex;gap:8px;margin-top:12px;font-size:12.5px;background:var(--gold-bg);border-radius:11px;padding:11px 12px;color:#7A6320;line-height:1.55;}
+  .ex-tip .ic{font-size:15px;color:var(--gold);flex:none;margin-top:1px;}
+
+  section.blk{margin-top:18px;padding:24px 18px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--gold);letter-spacing:.4px;margin-bottom:9px;}
+  .eyebrow .ic{font-size:14px;}
+  .h2{font-family:"Sora","Noto Sans TC",sans-serif;font-size:22px;font-weight:800;color:var(--ink);margin:0 0 9px;line-height:1.36;letter-spacing:-.2px;}
+  .p{font-size:14px;color:var(--soft);margin:0 0 16px;line-height:1.68;}
+
+  .checks{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px;}
+  .ck{background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:13px 6px 11px;text-align:center;box-shadow:var(--sh-s);}
+  .ck .ic{font-size:22px;color:var(--green2);margin-bottom:6px;}
+  .ck span{display:block;font-size:13px;font-weight:600;color:var(--ink);}
+
+  .line-demo{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);border:1px solid var(--line);}
+  .ld-h{display:flex;align-items:center;gap:8px;background:linear-gradient(90deg,#06C755,#05b04c);color:#fff;font-size:13px;font-weight:700;padding:11px 15px;}
+  .ld-h .ic{font-size:16px;}
+  .ld-b{padding:15px;background:#fff;}
+  .ld-title{display:flex;align-items:center;gap:7px;font-size:14.5px;font-weight:800;color:var(--ink);margin-bottom:4px;}
+  .ld-title .ic{font-size:16px;color:var(--green2);}
+  .ld-sub{font-size:13px;color:var(--soft);margin-bottom:10px;}
+  .ld-sub b{color:var(--danger);font-weight:800;}
+  .ld-row{display:flex;gap:11px;padding:10px 0;border-top:1px solid var(--line2);align-items:flex-start;}
+  .ld-dot{width:9px;height:9px;border-radius:50%;margin-top:5px;flex:none;}
+  .ld-dot.hi{background:var(--danger);box-shadow:0 0 0 3px rgba(192,57,43,.13);}
+  .ld-dot.mid{background:var(--warn);box-shadow:0 0 0 3px rgba(217,131,36,.13);}
+  .ld-row b{color:var(--ink);font-size:13.5px;font-weight:700;}
+  .ld-row small{display:block;font-size:12.5px;color:var(--soft);margin-top:1px;}
+  .ld-foot{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);margin-top:11px;padding-top:10px;border-top:1px solid var(--line2);}
+  .ld-foot .ic{font-size:13px;color:var(--ok);}
+
+  .note{display:flex;gap:9px;font-size:13px;color:var(--soft);margin:16px 0 0;background:linear-gradient(180deg,#F6FAF8,#fff);border:1px solid var(--line);border-radius:13px;padding:13px 14px;line-height:1.6;}
+  .note .ic{font-size:17px;color:var(--gold);flex:none;margin-top:1px;}
+  .note b{color:var(--green);}
+
+  .secCTA{display:flex;gap:10px;margin-top:16px;}
+  .btn-1{flex:1.3;display:flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(135deg,var(--green2),var(--green));color:#fff;font-weight:800;font-size:15px;border:0;border-radius:13px;min-height:52px;box-shadow:0 10px 22px rgba(27,67,50,.26);}
+  .btn-1 .ic{font-size:18px;}
+  .btn-2{flex:1;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--green);font-weight:700;font-size:14.5px;border:1.5px solid #cddbd4;border-radius:13px;min-height:52px;}
+
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:13px;}
+  .scroller{display:flex;gap:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px 18px 6px;scrollbar-width:none;}
+  .scroller::-webkit-scrollbar{display:none;}
+  .qc{flex:0 0 152px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px;box-shadow:var(--sh-s);}
+  .qc-tag{display:inline-block;font-size:10.5px;font-weight:700;color:var(--gold);background:var(--gold-bg);border-radius:7px;padding:3px 8px;margin-bottom:9px;}
+  .qc-name{font-size:14.5px;font-weight:800;color:var(--ink);}
+  .qc-code{font-size:11.5px;color:var(--muted);}
+  .qc-price{font-family:"Sora";font-size:18px;font-weight:800;margin-top:8px;display:flex;align-items:baseline;gap:6px;}
+  .qc-chg{font-size:12px;font-weight:700;}
+  .up{color:#C0392B;} .dn{color:#1A7A45;}
+
+  .acc{margin:0 14px;background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-s);overflow:hidden;margin-top:12px;}
+  .acc-btn{width:100%;background:none;border:0;text-align:left;padding:16px 16px;font-size:15px;font-weight:700;color:var(--ink);
+           display:flex;align-items:center;gap:10px;font-family:inherit;min-height:56px;}
+  .acc-btn .lead-ic{font-size:18px;color:var(--green2);}
+  .acc-btn .ar{margin-left:auto;transition:transform .28s ease;color:var(--muted);font-size:17px;display:flex;}
+  .acc.open .acc-btn .ar{transform:rotate(180deg);}
+  .acc-body{display:none;padding:0 16px 14px;}
+  .acc.open .acc-body{display:block;}
+  .ll a{display:flex;align-items:center;gap:11px;padding:13px 2px;border-top:1px solid var(--line2);font-size:14.5px;color:var(--ink);font-weight:600;}
+  .ll a .ic{font-size:18px;color:var(--green2);flex:none;}
+  .ll a .ar{margin-left:auto;color:var(--gold);font-size:16px;}
+  .faq b{color:var(--green);} .faq p{font-size:13.5px;color:var(--soft);line-height:1.65;margin:0 0 12px;}
+
+  footer{padding:26px 18px calc(28px + var(--safe-b));text-align:center;color:var(--muted);font-size:11.5px;line-height:1.75;}
+  footer .fl{font-family:"Sora";font-weight:800;color:var(--green);font-size:16px;margin-bottom:5px;}
+  footer .fl .ai{color:var(--gold);}
+
+  .sticky{position:absolute;left:0;right:0;bottom:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:saturate(1.4) blur(16px);
+          border-top:1px solid var(--line);padding:11px 15px calc(11px + var(--safe-b));display:flex;gap:12px;align-items:center;box-shadow:0 -8px 26px rgba(14,34,24,.12);}
+  .sticky .meta{flex:1;min-width:0;}
+  .sticky .meta b{display:block;font-size:14px;font-weight:800;color:var(--ink);line-height:1.25;}
+  .sticky .meta small{font-size:11px;color:var(--muted);}
+  .sticky .cta{flex:none;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--green2),var(--green));color:#fff;font-weight:800;font-size:15px;border:0;border-radius:13px;padding:0 20px;height:52px;box-shadow:0 10px 22px rgba(27,67,50,.3);}
+  .sticky .cta .ic{font-size:18px;}
+</style>
+</head>
+<body>
+
+<div class="pflag">手機版首頁 · 設計預覽 v2（精緻金融科技 · 漸層版 · 重建）</div>
+
+<div class="device"><div class="screen">
+
+<header>
+  <div class="px hd">
+    <div class="logo">領富 <span class="ai">AI</span><small>LeadFu · 持股風險守門員</small></div>
+    <a class="login" href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0114 0v1"/></svg>登入</a>
+  </div>
+</header>
+
+<div class="fraud">
+  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v5c0 4.5-3 8-8 10-5-2-8-5.5-8-10V6l8-3z"/></svg>
+  本站唯一官方 <b>leadfuai.com</b> · LINE <b>@130tqckv</b>　不開飆股群組、不保證獲利
+</div>
+
+<section class="hero">
+  <span class="badge"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v5c0 4.5-3 8-8 10-5-2-8-5.5-8-10V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>台股買前檢查 · 持股風險守門員</span>
+  <h1 class="h1">買股票前，先檢查<br><span class="ac">有沒有風險</span></h1>
+  <p class="lead">輸入代號，AI 幫你整理<b>估值、營收、籌碼、新聞與注意股風險</b>。</p>
+  <form class="search" onsubmit="return false;">
+    <svg class="ic ic-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input type="search" inputmode="search" placeholder="輸入代號 / 名稱，例如 2330">
+    <button class="go" aria-label="檢查"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+  </form>
+  <div class="guars">
+    <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 6"/></svg>公開資料整理</span>
+    <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 6"/></svg>不提供明牌</span>
+    <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 6"/></svg>0 元先試用</span>
+  </div>
+</section>
+
+<div class="floatwrap">
+  <div class="ex">
+    <div class="ex-h"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>範例結果 · 輸入 2330 你會看到</div>
+    <div class="ex-b">
+      <div class="ex-top">
+        <div><span class="ex-code num">2330</span> <span class="ex-name">台積電</span></div>
+        <span class="pill low"><span class="dotg"></span>低風險</span>
+      </div>
+      <div class="ex-score">風險分數 <b class="num">14</b> <span style="color:#aab4af;">/ 100</span></div>
+      <div class="bar"><i></i></div>
+      <div class="ex-nh"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 16H3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg>今日需注意</div>
+      <ul class="ex-list">
+        <li>外資今日賣超 <b class="num">17,840</b> 張</li>
+        <li><b>是否連續賣超：</b>是，近 2 日持續調節</li>
+        <li>借券餘額增加 · 股價位於合理區間下緣</li>
+      </ul>
+      <div class="ex-tip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 2a6 6 0 00-4 10.5c.7.7 1 1.3 1 2.5h6c0-1.2.3-1.8 1-2.5A6 6 0 0012 2z"/></svg>建議加入持股追蹤 3 天，觀察外資與借券是否持續惡化。</div>
+    </div>
+  </div>
+</div>
+
+<section class="blk">
+  <span class="eyebrow"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v5c0 4.5-3 8-8 10-5-2-8-5.5-8-10V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>加入持股 · 每天盤後自動複查</span>
+  <h2 class="h2">每天幫你檢查持股、<br>有風險主動提醒</h2>
+  <p class="p">加入持股後，每天盤後自動幫你檢查這 6 件事，一有風險第一時間 LINE 通知 —— 不用自己天天盯盤。</p>
+  <div class="checks">
+    <div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><rect x="5" y="11" width="3.6" height="8" rx="1"/><rect x="10.2" y="6" width="3.6" height="13" rx="1"/><rect x="15.4" y="14" width="3.6" height="5" rx="1"/></svg><span>估值</span></div>
+    <div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg><span>營收</span></div>
+    <div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10M9 21V10M15 21V10M19 21V10"/><path d="M3.5 10L12 5l8.5 5z"/></svg><span>籌碼</span></div>
+    <div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h12a1 1 0 011 1v12a2 2 0 01-2 2H6a2 2 0 01-2-2V5z"/><path d="M17 8h2a1 1 0 011 1v8a2 2 0 01-2 2"/><path d="M8 9h5M8 13h5M8 16h3"/></svg><span>新聞</span></div>
+    <div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 16H3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg><span>注意股</span></div>
+    <div class="ck"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".7" fill="currentColor"/></svg><span>集中度</span></div>
+  </div>
+
+  <div class="line-demo">
+    <div class="ld-h"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 5.6 2 10c0 4 3.6 7.3 8.5 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.6 1.1-.5 5.9-3.5 8-6C21.4 12.7 22 11.4 22 10c0-4.4-4.5-8-10-8z"/></svg>盤前/盤後自動推播給你的 LINE</div>
+    <div class="ld-b">
+      <div class="ld-title"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>今日持股健診</div>
+      <div class="ld-sub">你關注的 12 檔中，<b>3 檔需要注意</b></div>
+      <div class="ld-row"><span class="ld-dot hi"></span><div><b>2330 台積電</b><small>外資連 3 日賣超、借券餘額增加</small></div></div>
+      <div class="ld-row"><span class="ld-dot hi"></span><div><b>2603 長榮</b><small>月營收轉弱（年減 18%）</small></div></div>
+      <div class="ld-row"><span class="ld-dot mid"></span><div><b>1101 台泥</b><small>本週被列為「注意股」</small></div></div>
+      <div class="ld-foot"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4L19 6"/></svg>其餘 9 檔今日無異常 · 示意範例，公開資料整理、非投資建議</div>
+    </div>
+  </div>
+
+  <div class="note"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><div>免費可看範例；<b>VIP 進階可每日自動複查、有風險主動 LINE 提醒</b>。</div></div>
+  <div class="secCTA">
+    <a class="btn-1" href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>建立我的持股清單</a>
+    <a class="btn-2" href="#">防錯雷達</a>
+  </div>
+</section>
+
+<section style="margin-top:8px;padding:18px 0 6px;">
+  <div class="px sec-head">
+    <div><span class="eyebrow"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 01-11.6 7.1L4 20l1-5A8 8 0 1121 12z"/></svg>今日值得關注</span>
+    <div class="h2" style="font-size:19px;margin:0;">點一下，直接問 AI</div></div>
+  </div>
+  <div class="scroller">
+    <div class="qc"><span class="qc-tag">AI 題材</span><div class="qc-name">台積電</div><div class="qc-code num">2330</div><div class="qc-price num up">1,045 <span class="qc-chg">▲ 1.2%</span></div></div>
+    <div class="qc"><span class="qc-tag">高股息</span><div class="qc-name">元大高股息</div><div class="qc-code num">0056</div><div class="qc-price num dn">38.6 <span class="qc-chg">▼ 0.5%</span></div></div>
+    <div class="qc"><span class="qc-tag">航運</span><div class="qc-name">長榮</div><div class="qc-code num">2603</div><div class="qc-price num up">205 <span class="qc-chg">▲ 2.1%</span></div></div>
+    <div class="qc"><span class="qc-tag">金融</span><div class="qc-name">國泰金</div><div class="qc-code num">2882</div><div class="qc-price num up">62.4 <span class="qc-chg">▲ 0.8%</span></div></div>
+  </div>
+</section>
+
+<div class="acc">
+  <button class="acc-btn" onclick="this.parentNode.classList.toggle('open')">
+    <svg class="ic lead-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    更多免費工具
+    <span class="ar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+  </button>
+  <div class="acc-body">
+    <div class="ll">
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>AI 對話（即時報價・引用來源）<span class="ar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>合理區間偏低 TOP 5<span class="ar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>今日 AI 盤後摘要<span class="ar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><rect x="5" y="11" width="3.6" height="8" rx="1"/><rect x="10.2" y="6" width="3.6" height="13" rx="1"/><rect x="15.4" y="14" width="3.6" height="5" rx="1"/></svg>熱門股票排行<span class="ar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></a>
+    </div>
+  </div>
+</div>
+
+<div class="acc">
+  <button class="acc-btn" onclick="this.parentNode.classList.toggle('open')">
+    <svg class="ic lead-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 014.5 1.5c0 1.5-2 2-2 3"/><circle cx="12" cy="16.5" r=".6" fill="currentColor"/></svg>
+    關於領富 AI，大家最常問
+    <span class="ar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+  </button>
+  <div class="acc-body faq">
+    <p style="padding-top:12px;"><b>領富 AI 會報明牌嗎？</b><br>不會。我們只整理公開資料、做風險檢查，不喊單、不報明牌、不開飆股群組。</p>
+    <p style="margin-bottom:2px;"><b>免費版能用什麼？</b><br>單檔買前檢查、風險分數、合理區間位置、新聞 AI 判讀都免費；每日自動複查 + 主動提醒是 VIP。</p>
+  </div>
+</div>
+
+<footer>
+  <div class="fl">領富 <span class="ai">AI</span></div>
+  台股全市場財經資訊網 · 本站資訊僅供參考，不構成投資建議<br>客服 LINE：@130tqckv
+</footer>
+
+</div><!-- /screen -->
+
+<div class="sticky">
+  <div class="meta"><b>免費檢查你的股票</b><small>0 元試用 · 不報明牌 · 公開資料整理</small></div>
+  <a class="cta" href="#" onclick="var s=document.querySelector('.screen');s.scrollTo({top:0,behavior:'smooth'});setTimeout(function(){document.querySelector('.search input').focus();},320);return false;">
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>立即檢查
+  </a>
+</div>
+
+</div><!-- /device -->
+
+</body>
+</html>

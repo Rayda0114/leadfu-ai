@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>領富 AI · 手機版首頁（設計預覽 v5 · 暖色編輯）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f2ec; --ink:#0d1d17; --muted:#68736c; --soft:#46534b;
+    --hairline:rgba(13,29,23,.12); --hair2:rgba(13,29,23,.08);
+    --forest:#0b3328; --forest-2:#144735; --paper:#fffdf8; --sand:#e9dfc9;
+    --gold:#b9914f; --gold-2:#d6b36f; --green:#148a55; --red:#be4a3e; --amber:#d99c31;
+    --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{font-size:16px;}
+  body{margin:0;background:#cbc7bd;color:var(--ink);
+       font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+       -webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:11px;padding:16px 0 30px;}
+  .pflag{font-size:12px;color:#4a463d;font-weight:600;background:#fffdf8;border:1px solid #c2bcae;border-radius:20px;padding:5px 14px;}
+
+  .device{width:412px;max-width:100vw;height:min(880px,calc(100vh - 56px));background:var(--bg);
+          border:11px solid #0a1310;border-radius:46px;box-shadow:0 24px 60px rgba(13,29,23,.30);overflow:hidden;position:relative;flex:none;}
+  .screen{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:90px;scrollbar-width:none;background:var(--bg);}
+  .screen::-webkit-scrollbar{display:none;}
+
+  /* 共用 top bar */
+  .top{display:flex;align-items:center;justify-content:space-between;min-height:72px;padding:18px 18px 12px;}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0;}
+  .mark{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;font-size:17px;font-weight:900;letter-spacing:.5px;}
+  .mark-ic{width:46px;height:46px;border-radius:13px;display:block;flex:none;box-shadow:0 5px 16px rgba(0,0,0,.28);}
+  .brand b{display:block;font-size:20px;line-height:1;font-weight:900;}
+  .brand b i{font-style:normal;color:var(--gold-2);}
+  .brand span{display:block;font-size:11.5px;margin-top:6px;letter-spacing:.2px;}
+  .ghost{width:auto;min-height:40px;padding:0 16px;border-radius:999px;display:inline-flex;align-items:center;font-size:13.5px;font-weight:800;}
+
+  /* 編輯小標 + 短線 */
+  .signal{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;}
+  .signal::before{content:"";width:26px;height:1px;background:currentColor;display:inline-block;}
+
+  /* ===== HERO（森林綠 + 細紋 + 黃銅光暈）===== */
+  .hero{position:relative;color:#f8f5ec;padding:6px 0 60px;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+      radial-gradient(circle at 84% 4%, rgba(185,145,79,.30), transparent 32%),
+      linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto;}
+  .hero .mark{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;}
+  .hero .brand b{color:#fff;} .hero .brand span{color:rgba(248,245,236,.62);}
+  .hero .ghost{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;}
+  .hero-body{padding:14px 18px 0;}
+  .hero .signal{color:#d9bd82;}
+  h1{margin:15px 0 0;font-size:36px;line-height:1.14;font-weight:900;letter-spacing:-.5px;}
+  .hero-copy{margin:14px 0 0;max-width:320px;color:rgba(248,245,236,.74);font-size:14.5px;line-height:1.62;}
+  .search-panel{margin-top:22px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);backdrop-filter:blur(14px);border-radius:20px;overflow:hidden;}
+  .search-line{display:grid;grid-template-columns:1fr 58px;min-height:60px;border-bottom:1px solid rgba(255,255,255,.11);}
+  .search-line span{display:flex;align-items:center;padding-left:16px;color:rgba(248,245,236,.7);font-size:15.5px;font-weight:600;}
+  .search-line button{border:0;background:var(--gold-2);color:#102016;font-size:21px;font-weight:900;}
+  .quick{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.08);}
+  .quick div{padding:11px 14px;background:rgba(9,36,29,.5);}
+  .quick small{display:block;color:rgba(248,245,236,.46);font-size:11px;margin-bottom:4px;}
+  .quick b{display:block;color:#fff;font-size:14.5px;}
+
+  /* 風險決策卡（暖紙、浮在綠上）*/
+  .riskcard{margin:-42px 18px 0;position:relative;z-index:1;background:var(--paper);border-radius:22px;padding:18px;box-shadow:0 22px 54px rgba(13,29,23,.24);}
+  .rc-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;}
+  .rc-top .lbl{color:#8a8173;font-size:11.5px;font-weight:800;letter-spacing:.04em;}
+  .rc-top b{display:block;margin-top:4px;font-size:24px;line-height:1.05;font-weight:900;}
+  .pill{border:1px solid rgba(20,138,85,.22);border-radius:999px;background:#e9f4ec;color:var(--green);padding:7px 12px;font-size:13px;font-weight:900;white-space:nowrap;}
+  .score{display:grid;grid-template-columns:auto 1fr;gap:13px;align-items:end;margin-top:14px;}
+  .score strong{color:var(--forest);font-size:54px;line-height:.85;font-weight:900;}
+  .score em{font-style:normal;color:var(--muted);font-size:17px;font-weight:700;}
+  .bar{height:9px;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--amber),var(--red));position:relative;overflow:hidden;margin-bottom:6px;}
+  .bar::after{content:"";position:absolute;inset:0 0 0 18%;background:#ece7dd;}
+  .reasons{display:grid;gap:9px;margin:16px 0 0;padding:0;list-style:none;}
+  .reasons li{display:grid;grid-template-columns:8px 1fr;gap:11px;color:var(--soft);font-size:13px;line-height:1.45;}
+  .rdot{width:8px;height:8px;border-radius:999px;background:var(--red);margin-top:5px;}
+  .rdot.ok{background:var(--green);}
+
+  /* ===== 一般段（暖米底）===== */
+  .section{padding:34px 18px 0;}
+  .section .signal{color:#8b6b36;}
+  h2{margin:14px 0 10px;font-size:31px;line-height:1.12;font-weight:900;letter-spacing:-.4px;}
+  .section p.sub{margin:0;color:var(--muted);font-size:14.5px;line-height:1.6;}
+
+  /* 帳本式 ledger */
+  .ledger-cap{display:flex;align-items:center;gap:7px;margin:20px 0 2px;font-size:12px;font-weight:800;color:#7a8a5f;}
+  .ledger-cap .lg{width:18px;height:18px;border-radius:5px;background:#06C755;display:grid;place-items:center;}
+  .ledger{border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);}
+  .lrow{display:grid;grid-template-columns:66px 1fr auto;gap:12px;align-items:center;min-height:78px;border-bottom:1px solid var(--hair2);}
+  .lrow:last-child{border-bottom:0;}
+  .tk{color:#94856c;font-size:13px;font-weight:800;letter-spacing:.04em;}
+  .lrow b{display:block;font-size:18px;line-height:1.1;font-weight:900;}
+  .lrow small{display:block;color:var(--muted);font-size:12px;line-height:1.35;margin-top:5px;}
+  .delta{font-size:15px;font-weight:900;text-align:right;white-space:nowrap;}
+  .delta.up{color:var(--red);} .delta.ok{color:var(--green);}
+
+  .insight{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px;}
+  .insight div{min-height:112px;padding:13px 11px;background:var(--paper);border:1px solid var(--hairline);border-radius:16px;}
+  .insight b{display:block;font-size:14px;line-height:1.25;margin-bottom:7px;}
+  .insight span{color:var(--muted);font-size:12px;line-height:1.35;}
+
+  .sec-cta{display:flex;align-items:center;gap:18px;margin-top:22px;}
+  .btn{min-height:52px;border-radius:15px;display:inline-grid;place-items:center;padding:0 22px;background:var(--forest);color:#fff;text-decoration:none;font-size:15px;font-weight:900;}
+  .link{font-size:14.5px;font-weight:800;color:var(--forest);text-decoration:none;}
+
+  /* 今日值得關注 */
+  .scroller{display:flex;gap:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:0 18px 4px;scrollbar-width:none;}
+  .scroller::-webkit-scrollbar{display:none;}
+  .qc{flex:0 0 150px;background:var(--paper);border:1px solid var(--hairline);border-radius:16px;padding:14px;}
+  .qc small{display:block;color:#94856c;font-size:11px;font-weight:700;margin-bottom:10px;}
+  .qc b{display:block;font-size:14.5px;font-weight:900;}
+  .qc .tk{font-size:11.5px;}
+  .qc .px{font-size:18px;font-weight:900;margin-top:9px;}
+  .up{color:var(--red);} .dn{color:var(--green);} .qc .px em{font-style:normal;font-size:12.5px;font-weight:800;margin-left:5px;}
+
+  /* 方案 panel + 引言 */
+  .plan{margin-top:20px;border-radius:22px;overflow:hidden;border:1px solid var(--hairline);background:var(--paper);box-shadow:0 18px 44px rgba(13,29,23,.08);}
+  .plan-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:17px;background:#171f1a;color:#fff;}
+  .plan-head small{display:block;color:rgba(255,255,255,.56);font-size:11.5px;font-weight:800;margin-bottom:5px;letter-spacing:.04em;}
+  .plan-head b{display:block;font-size:23px;line-height:1.05;font-weight:900;}
+  .trial{border:1px solid rgba(217,189,130,.4);border-radius:999px;color:#e0bf7a;padding:7px 12px;font-size:12.5px;font-weight:900;white-space:nowrap;}
+  .prow{display:grid;grid-template-columns:84px 1fr;gap:12px;padding:15px 17px;border-bottom:1px solid var(--hair2);}
+  .prow:last-child{border-bottom:0;}
+  .prow b{display:block;color:var(--forest);font-size:15px;font-weight:900;}
+  .prow span{display:block;color:var(--soft);font-size:13.5px;line-height:1.45;}
+  .quote{margin-top:16px;padding:15px 16px;border-left:3px solid var(--gold);background:rgba(255,253,248,.7);color:#51452f;font-size:14.5px;line-height:1.55;}
+
+  /* 收合 */
+  .acc{border-top:1px solid var(--hairline);}
+  .acc:first-child{border-top:0;}
+  .acc-btn{width:100%;background:none;border:0;text-align:left;padding:20px 18px;font-size:15.5px;font-weight:900;color:var(--ink);display:flex;align-items:center;font-family:inherit;}
+  .acc-btn .ar{margin-left:auto;color:#9aa39c;font-size:18px;transition:transform .25s;}
+  .acc.open .acc-btn .ar{transform:rotate(180deg);}
+  .acc-body{display:none;padding:0 18px 18px;}
+  .acc.open .acc-body{display:block;}
+  .ll a{display:block;padding:13px 0;border-top:1px solid var(--hair2);font-size:14.5px;color:var(--soft);font-weight:600;text-decoration:none;}
+  .ll a:first-child{border-top:0;}
+  .faq p{font-size:13.5px;color:var(--muted);line-height:1.68;margin:0 0 14px;}
+  .faq b{color:var(--ink);font-weight:900;display:block;margin-bottom:3px;}
+
+  footer{margin-top:14px;padding:28px 18px calc(28px + var(--safe-b));border-top:1px solid var(--hairline);color:#9aa39c;font-size:11.5px;line-height:1.8;}
+  footer .fl{font-weight:900;color:var(--forest);font-size:15px;margin-bottom:5px;}
+
+  /* 固定底部 */
+  .bottom{position:absolute;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:1fr auto;gap:10px;
+          padding:11px 16px calc(11px + var(--safe-b));background:rgba(255,253,248,.93);border-top:1px solid var(--hairline);backdrop-filter:blur(16px);}
+  .bottom a{min-height:52px;border-radius:15px;display:grid;place-items:center;background:var(--forest);color:#fff;text-decoration:none;font-size:16px;font-weight:900;}
+  .bottom span{min-width:58px;min-height:52px;border-radius:15px;display:grid;place-items:center;border:1px solid rgba(11,51,40,.16);color:var(--forest);font-size:12px;font-weight:900;background:#f7f3e8;}
+</style>
+</head>
+<body>
+
+<div class="pflag">手機版首頁 · 設計預覽 v5（暖色編輯 · 採用你的 mockup 語言 · 尚未上線）</div>
+
+<div class="device"><div class="screen">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="top">
+      <div class="brand"><img class="mark-ic" src="_brand_icon.png" alt="領富 AI"><div><b>領富 <i>AI</i></b><span>台股風險守門員</span></div></div>
+      <a class="ghost" href="#">登入</a>
+    </div>
+    <div class="hero-body">
+      <div class="signal">Pre-trade check</div>
+      <h1>買股票前，先看<br>風險值不值得承擔</h1>
+      <p class="hero-copy">不是報明牌。領富 AI 把估值、籌碼、注意股與新聞風險，整理成一張看得懂的決策卡。</p>
+      <div class="search-panel">
+        <div class="search-line"><span>輸入股票代號 / 公司名稱</span><button type="button" aria-label="檢查">⌕</button></div>
+        <div class="quick">
+          <div><small>快速檢查</small><b>2330 台積電</b></div>
+          <div><small>持股守門員</small><b>建立清單</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 風險決策卡 -->
+  <div class="riskcard">
+    <div class="rc-top">
+      <div><span class="lbl">範例 · 輸入 2330 你會看到</span><b>2330 台積電</b></div>
+      <div class="pill">低風險</div>
+    </div>
+    <div class="score"><div><strong>14</strong><em> /100</em></div><div class="bar"></div></div>
+    <ul class="reasons">
+      <li><span class="rdot"></span><span>外資連 2 日賣超，短線先看籌碼變化。</span></li>
+      <li><span class="rdot"></span><span>借券餘額增加，追價前確認量能。</span></li>
+      <li><span class="rdot ok"></span><span>仍在合理區間下緣，估值壓力較低。</span></li>
+    </ul>
+  </div>
+
+  <!-- ===== 每日守門員 ===== -->
+  <section class="section">
+    <div class="signal">Daily monitor</div>
+    <h2>每天盤後，<br>只看真正變危險的持股</h2>
+    <p class="sub">把資訊流變成風險摘要。你不用每天重查所有股票，只要看今天「哪裡變了」。</p>
+
+    <div class="ledger-cap"><span class="lg"><svg width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.5 2 2 5.6 2 10c0 4 3.6 7.3 8.5 7.9.5.1.7.4.6.9l-.2 1c-.1.4.2.7.6.5 1.3-.6 5.7-3.5 7.6-6C21.5 12.6 22 11.4 22 10c0-4.4-4.5-8-10-8z"/></svg></span>你每天會收到的 LINE 守門摘要</div>
+    <div class="ledger">
+      <div class="lrow"><div class="tk">2603</div><div><b>長榮</b><small>月營收轉弱、外資賣超擴大</small></div><div class="delta up">風險 +16</div></div>
+      <div class="lrow"><div class="tk">1101</div><div><b>台泥</b><small>借券餘額增加，本週列注意股</small></div><div class="delta up">風險 +9</div></div>
+      <div class="lrow"><div class="tk">2330</div><div><b>台積電</b><small>估值仍偏低，暫無重大異常</small></div><div class="delta ok">穩定</div></div>
+    </div>
+
+    <div class="insight">
+      <div><b>只報變化</b><span>不被一堆行情數字淹沒。</span></div>
+      <div><b>講清原因</b><span>外資、借券、估值、注意股。</span></div>
+      <div><b>LINE 提醒</b><span>風險升高才通知你。</span></div>
+    </div>
+
+    <div class="sec-cta"><a class="btn" href="#">加入持股，每天幫我複查</a><a class="link" href="#">防錯雷達 →</a></div>
+  </section>
+
+  <!-- ===== 今日值得關注 ===== -->
+  <section class="section" style="padding-bottom:4px;">
+    <div class="signal">Watchlist today</div>
+    <h2 style="font-size:24px;">今日值得關注，點一下問 AI</h2>
+  </section>
+  <div class="scroller">
+    <div class="qc"><small>AI 題材</small><b>台積電</b><div class="tk">2330</div><div class="px up">1,045 <em>▲1.2%</em></div></div>
+    <div class="qc"><small>高股息</small><b>元大高股息</b><div class="tk">0056</div><div class="px dn">38.6 <em>▼0.5%</em></div></div>
+    <div class="qc"><small>航運</small><b>長榮</b><div class="tk">2603</div><div class="px up">205 <em>▲2.1%</em></div></div>
+    <div class="qc"><small>金融</small><b>國泰金</b><div class="tk">2882</div><div class="px up">62.4 <em>▲0.8%</em></div></div>
+  </div>
+
+  <!-- ===== 方案 ===== -->
+  <section class="section">
+    <div class="signal">Membership</div>
+    <h2 style="font-size:27px;">免費讓你查一次，<br>VIP 幫你每天盯</h2>
+    <p class="sub">付費價值不是更多頁面，而是每天幫你把持股變化整理好。</p>
+    <div class="plan">
+      <div class="plan-head"><div><small>RECOMMENDED</small><b>VIP 守門員</b></div><div class="trial">先試用</div></div>
+      <div class="prow"><b>免費會員</b><span>單次買前檢查、範例報告、基本風險分數。</span></div>
+      <div class="prow"><b>VIP 進階</b><span>自選股每日健診、風險上升主動 LINE 提醒、警示歷史。</span></div>
+      <div class="prow"><b>完整方案</b><span>策略掃描、報告匯出、持股組合風險整理。</span></div>
+    </div>
+    <div class="quote">「我不用每天自己盯盤，系統會幫我看哪些持股今天變危險。」</div>
+  </section>
+
+  <!-- ===== 收合 ===== -->
+  <section class="section" style="padding-top:30px;">
+    <div class="acc">
+      <button class="acc-btn" onclick="this.parentNode.classList.toggle('open')" style="padding-left:0;padding-right:0;">更多免費工具<span class="ar">⌄</span></button>
+      <div class="acc-body" style="padding-left:0;padding-right:0;"><div class="ll">
+        <a href="#">AI 對話（即時報價・引用來源）</a><a href="#">合理區間偏低 TOP 5</a><a href="#">今日 AI 盤後摘要</a><a href="#">熱門股票排行</a>
+      </div></div>
+    </div>
+    <div class="acc faq">
+      <button class="acc-btn" onclick="this.parentNode.classList.toggle('open')" style="padding-left:0;padding-right:0;">關於領富 AI，大家最常問<span class="ar">⌄</span></button>
+      <div class="acc-body" style="padding-left:0;padding-right:0;">
+        <p><b>領富 AI 會報明牌嗎？</b>不會。我們只整理公開資料、做風險檢查，不喊單、不報明牌、不開飆股群組。</p>
+        <p><b>免費版能用什麼？</b>單次買前檢查、風險分數、合理區間位置、新聞 AI 判讀都免費；每日自動複查＋主動提醒是 VIP。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fl">領富 AI</div>
+    台股全市場財經資訊網 · 本站資訊僅供參考，不構成投資建議<br>客服 LINE：@130tqckv
+  </footer>
+
+</div><!-- /screen -->
+
+<div class="bottom">
+  <a href="#" onclick="var s=document.querySelector('.screen');s.scrollTo({top:0,behavior:'smooth'});return false;">免費檢查股票</a>
+  <span>0 元</span>
+</div>
+
+</div><!-- /device -->
+
+</body>
+</html>

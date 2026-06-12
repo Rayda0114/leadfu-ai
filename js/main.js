@@ -1,3 +1,56 @@
+/* ═ 桌面 2.0 皮膚預覽開關（?v2=1 開 / ?v2=0 關，只影響本人瀏覽器）═ */
+(function () {
+  try {
+    if (location.pathname.includes("-m") || /Mobi/.test(navigator.userAgent)) return;
+    const q = new URLSearchParams(location.search);
+    if (q.get("v2") === "1") localStorage.setItem("lf_v2", "1");
+    if (q.get("v2") === "0") localStorage.removeItem("lf_v2");
+    if (localStorage.getItem("lf_v2") !== "1") return;
+    document.documentElement.classList.add("v2");
+    const l = document.createElement("link");
+    l.rel = "stylesheet"; l.href = "/css/v2.css?v=3.25.5";
+    document.head.appendChild(l);
+    // 指數行情條：注入在主導覽下方
+    document.addEventListener("DOMContentLoaded", async () => {
+      const nav = document.querySelector(".main-nav");
+      if (!nav || document.querySelector(".v2-tape")) return;
+      const tape = document.createElement("div");
+      tape.className = "v2-tape";
+      tape.innerHTML = '<div class="v2-tape-in">' +
+        '<div class="v2-tq" id="v2Taiex"><span class="nm">加權指數</span><span class="px">—</span><span class="pc"></span></div>' +
+        '<div class="v2-tq" id="v2Otc"><span class="nm">櫃買指數</span><span class="px">—</span><span class="pc"></span></div>' +
+        '<div class="v2-breadth"><small style="color:#FF8A7A;" id="v2Up">—</small><div class="bar"><i id="v2BarU" style="background:#C0594B;width:50%;"></i><i id="v2BarD" style="background:#2E8B6B;width:50%;"></i></div><small style="color:#5ED4A4;" id="v2Dn">—</small></div></div>';
+      nav.insertAdjacentElement("afterend", tape);
+      async function tick() {
+        try {
+          const r = await fetch("/api/quote?ex_ch=" + encodeURIComponent("tse_t00.tw|otc_o00.tw"), { cache: "no-store" });
+          const d = await r.json();
+          (d.msgArray || []).forEach(q2 => {
+            const el = q2.c === "t00" ? document.getElementById("v2Taiex") : q2.c === "o00" ? document.getElementById("v2Otc") : null;
+            if (!el) return;
+            let z = parseFloat(q2.z); if (isNaN(z) || z <= 0) z = parseFloat(q2.pz);
+            const y = parseFloat(q2.y); if (!z || !y) return;
+            const ch = z - y;
+            el.className = "v2-tq " + (ch > 0 ? "up" : ch < 0 ? "down" : "");
+            el.querySelector(".px").textContent = z.toLocaleString("en-US", { maximumFractionDigits: 2 });
+            el.querySelector(".pc").textContent = (ch >= 0 ? "▲" : "▼") + Math.abs(ch).toFixed(2) + " (" + (ch / y * 100 >= 0 ? "+" : "") + (ch / y * 100).toFixed(2) + "%)";
+          });
+        } catch (e) {}
+      }
+      tick(); setInterval(tick, 15000);
+      try {
+        await window.LeadFu.ready;
+        const S = (window.LeadFu.data.stocks || []).filter(s => s.price > 0);
+        const up = S.filter(s => (s.change || 0) > 0).length, dn = S.filter(s => (s.change || 0) < 0).length, tot = up + dn || 1;
+        document.getElementById("v2Up").textContent = up.toLocaleString() + " 漲";
+        document.getElementById("v2Dn").textContent = dn.toLocaleString() + " 跌";
+        document.getElementById("v2BarU").style.width = (up / tot * 100) + "%";
+        document.getElementById("v2BarD").style.width = (dn / tot * 100) + "%";
+      } catch (e) {}
+    });
+  } catch (e) {}
+})();
+
 /* ============================================================
  * 領富 AI - Core JS
  * ============================================================ */
@@ -3541,7 +3594,7 @@ function startStockLive(code, stock) {
    解法：① Cache API + 15 分 TTL：同 session 換頁直接用快取（資料每日盤後才更新，
         15 分內快取對正確性無實質影響）② 同頁去重：同檔只抓一次（搭配 loadLiveData
         的並行預熱，串行 await 全部變秒回）。快取名綁版本，改版自動失效。 */
-const DATA_CACHE_NAME = "leadfu-data-v3254";
+const DATA_CACHE_NAME = "leadfu-data-v3255";
 const DATA_CACHE_TTL = 15 * 60 * 1000;
 try { caches.keys().then(ks => ks.forEach(k => { if (k.indexOf("leadfu-data-") === 0 && k !== DATA_CACHE_NAME) caches.delete(k); })); } catch (e) {}
 
