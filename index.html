@@ -457,7 +457,7 @@ footer.site .wrap{padding:54px 28px 40px;}
           <b style="font-size:15.5px;font-weight:900;">財經新聞・AI 判讀</b>
           <a href="/pages/news" style="margin-left:auto;font-size:12.5px;font-weight:800;color:var(--muted);">全部新聞 →</a>
         </div>
-        <div id="newsList"></div>
+        <div id="homeNewsList"></div>
       </div>
       <div class="ncard">
         <div class="mh" style="display:flex;align-items:center;gap:10px;padding:16px 22px 10px;border-bottom:1px solid var(--line2);">
@@ -750,7 +750,7 @@ footer.site .wrap{padding:54px 28px 40px;}
 
   // 新聞（AI 判讀標籤）
   if (nw && nw.news) {
-    $("newsList").innerHTML = nw.news.slice(0, 6).map(n => {
+    $("homeNewsList").innerHTML = nw.news.slice(0, 6).map(n => {
       const sen = n.ai_sentiment === "利多" ? "pos" : n.ai_sentiment === "利空" ? "neg" : "neu";
       return '<a class="nrow" href="' + esc(n.link) + '" target="_blank" rel="noopener"><span class="tm num">' + esc((n.time || "").slice(0, 5)) +
         '</span><span class="tt">' + esc(n.title) + '</span><span class="sen ' + sen + '">' + esc(n.ai_sentiment || "中性") + "</span></a>";
