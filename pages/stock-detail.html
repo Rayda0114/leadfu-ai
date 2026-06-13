@@ -66,7 +66,7 @@
           document.title = `${code} ${s.name} ETF 股價・成分股・折溢價 - 領富 AI`;
           setMeta("metaDesc", `${code} ${s.name} ETF｜即時淨值、折溢價、規模、前十大成分股、殖利率與配息一次看。領富 AI 整理 TWSE 官方資料，不推薦、不代操。`);
         } else {
-          document.title = `${code} ${s.name} 股價${mkt ? "・" + mkt : ""}｜月營收·法人·合理區間 - 領富 AI`;
+          document.title = `${code} ${s.name} 風險評分・合理價區間・買前檢查｜${s.name}股價分析 - 領富 AI`;
           setMeta("metaDesc", `${code} ${s.name}${mkt ? "（" + mkt + "）" : ""}即時股價 NT$${s.price}，今日 ${s.change > 0 ? "+" : ""}${s.change}。產業：${s.category || ""}。領富 AI 整理月營收、本益比、三大法人、合理區間與防錯雷達。資料源 TWSE+TPEx+MOPS。`);
         }
         setMeta("ogTitle", `${code} ${s.name}${isETF ? " ETF" : ""} 股價${mkt ? " " + mkt : ""} - 領富 AI`);
