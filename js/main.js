@@ -3,12 +3,13 @@
   try {
     if (/-m(\.html)?$/.test(location.pathname) || /Mobi/.test(navigator.userAgent)) return;   // 結尾 -m 才是手機頁（us-market 含 "-m" 曾被誤殺）
     const q = new URLSearchParams(location.search);
-    if (q.get("v2") === "1") localStorage.setItem("lf_v2", "1");
-    if (q.get("v2") === "0") localStorage.removeItem("lf_v2");
-    if (localStorage.getItem("lf_v2") !== "1") return;
+    // 2026-06-13 正式上線：2.0 皮膚預設啟用；?v2=0 可暫時退回舊版（本機記憶，給除錯/回退）
+    if (q.get("v2") === "0") { localStorage.setItem("lf_v2_off", "1"); return; }
+    if (q.get("v2") === "1") localStorage.removeItem("lf_v2_off");
+    if (localStorage.getItem("lf_v2_off") === "1") return;
     document.documentElement.classList.add("v2");
     const l = document.createElement("link");
-    l.rel = "stylesheet"; l.href = "/css/v2.css?v=3.25.7";
+    l.rel = "stylesheet"; l.href = "/css/v2.css?v=3.25.8";
     document.head.appendChild(l);
     // 2.0 排版純化：標題/導覽的開頭 emoji 在皮膚模式下移除（不動原始 HTML）
     document.addEventListener("DOMContentLoaded", () => {
@@ -3605,7 +3606,7 @@ function startStockLive(code, stock) {
    解法：① Cache API + 15 分 TTL：同 session 換頁直接用快取（資料每日盤後才更新，
         15 分內快取對正確性無實質影響）② 同頁去重：同檔只抓一次（搭配 loadLiveData
         的並行預熱，串行 await 全部變秒回）。快取名綁版本，改版自動失效。 */
-const DATA_CACHE_NAME = "leadfu-data-v3257";
+const DATA_CACHE_NAME = "leadfu-data-v3258";
 const DATA_CACHE_TTL = 15 * 60 * 1000;
 try { caches.keys().then(ks => ks.forEach(k => { if (k.indexOf("leadfu-data-") === 0 && k !== DATA_CACHE_NAME) caches.delete(k); })); } catch (e) {}
 

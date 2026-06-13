@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 手機裝置 → 導向暖色手機版設計（桌機維持此頁）；越早越好，避免閃一下桌機版 -->
+<script>(function(){try{if((location.pathname==="/"||location.pathname==="/index.html")&&/iphone|ipod|android.*mobile|windows phone|blackberry|iemobile|opera mini/i.test(navigator.userAgent)){location.replace("/index-mobile"+location.search+location.hash);}}catch(e){}})();</script>
+<link rel="alternate" media="only screen and (max-width: 640px)" href="https://leadfuai.com/index-mobile">
+<title>領富 AI - 台股全市場（上市/上櫃/興櫃）即時行情 + AI 對話</title>
+<meta name="description" content="領富 AI 整合台股全市場 2,300+ 檔（上市 + 上櫃 + 興櫃）即時報價、公司基本資料、月營收與產業分類。AI 自然語言對話查股，跨上市櫃一次找好。資料來源 TWSE 證交所 + TPEx 櫃買中心。">
+<link rel="canonical" href="https://leadfuai.com/">
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1B4332">
+<meta name="color-scheme" content="light">
+
+<!-- Favicons -->
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png?v=5">
+
+<!-- iOS Safari「加到主畫面」-->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="領富 AI">
+<link rel="apple-touch-icon" href="/icons/icon-180.png?v=5">
+
+<!-- Open Graph（之後分享連結會有預覽圖）-->
+<meta property="og:title" content="領富 AI · 台股全市場 AI 對話">
+<meta property="og:description" content="跨上市/上櫃/興櫃 2,300+ 檔，AI 自然語言一次找好">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leadfuai.com/">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="css/style.css?v=3.23.9">
+
+<!-- Schema.org Organization：讓 Google / AI 認識「合法企業 + 提醒冒用」 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://leadfuai.com/#organization",
+  "name": "領富 AI",
+  "alternateName": ["LeadFu AI", "領富", "LeadFu"],
+  "legalName": "領富 AI（LeadFu）",
+  "url": "https://leadfuai.com",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://leadfuai.com/icons/icon-512.png",
+    "width": 512,
+    "height": 512
+  },
+  "description": "領富 AI 是台灣全市場（上市、上櫃、興櫃）2,300+ 檔股票公開資料整理平台，提供三大法人、融資融券、借券、月營收、估值、技術指標、AI 對話、AI 產業週報等服務。資料來源 TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站。不提供個股推薦、不代為下單、不收取任何投資款項。",
+  "disambiguatingDescription": "重要聲明：本品牌名稱「領富 AI」近期遭詐騙集團冒用於 Facebook / LINE / Instagram 招攬「飆股群組」「保證獲利」等不法投資詐騙。本公司唯一官方網址為 leadfuai.com，唯一官方 LINE 為 @130tqckv。本公司並無發行任何 APP，不主動加 LINE 群組，不保證獲利，不收受任何投資款項。如有疑似冒用，請撥 165 反詐騙專線檢舉。",
+  "knowsAbout": ["台股", "上市股票", "上櫃股票", "興櫃股票", "三大法人買賣超", "融資融券", "借券", "月營收", "本益比", "殖利率", "股價淨值比", "KD 指標", "MACD", "布林通道", "AI 投資助理", "產業分析"],
+  "areaServed": {
+    "@type": "Country",
+    "name": "Taiwan"
+  },
+  "sameAs": [
+    "https://line.me/R/ti/p/@130tqckv"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Service",
+    "url": "https://line.me/R/ti/p/@130tqckv",
+    "availableLanguage": ["zh-TW", "zh-Hant", "Chinese"]
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://leadfuai.com/pages/stocks.html?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- WebSite schema：讓 Google sitelinks 顯示搜尋框 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://leadfuai.com/#website",
+  "url": "https://leadfuai.com",
+  "name": "領富 AI",
+  "alternateName": "LeadFu AI",
+  "publisher": { "@id": "https://leadfuai.com/#organization" },
+  "inLanguage": "zh-TW"
+}
+</script>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left">
+      <span id="todayDate"></span>
+      <span class="divider">|</span>
+      <span>台股全市場財經資訊網</span>
+    </div>
+    <div class="top-right">
+      <a href="https://line.me/R/ti/p/@130tqckv" class="line-cta" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06C755" style="vertical-align:middle;" aria-hidden="true"><path d="M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.631.63H17.61v1.125h1.755c.349 0 .631.283.631.63 0 .344-.282.629-.631.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>LINE 客服</a>
+    </div>
+  </div>
+</header>
+
+<!-- 防詐騙官方資訊 banner（可關閉、關閉後 7 天再出現） -->
+<div class="anti-fraud-banner" id="antiFraudBanner">
+  <div class="container afb-inner">
+    <div class="afb-icon">📢</div>
+    <div class="afb-text">
+      <span class="afb-full"><strong>本站唯一官方資訊：</strong>網址 <code>leadfuai.com</code> · LINE
+      <a href="https://line.me/R/ti/p/@130tqckv" target="_blank" rel="noopener" class="afb-line">@130tqckv</a>
+      ｜<span class="afb-warn">⚠ 我們沒有 APP、不開飆股群組、不保證獲利</span>｜冒用請報 <a href="https://165.npa.gov.tw/" target="_blank" rel="noopener" class="afb-165">165</a></span>
+      <span class="afb-short">官方網站 <code>leadfuai.com</code>｜不報明牌、不開群組、不保證獲利</span>
+      <a href="pages/fraud-alert.html" class="afb-more">了解防詐 →</a>
+    </div>
+    <button type="button" class="afb-close" aria-label="關閉" data-action="close">✕</button>
+  </div>
+</div>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="logo-actions">
+      <a href="pages/app.html" class="qlink">📱 手機</a>
+      <a href="pages/software.html" class="qlink">💻 桌機</a>
+      <a href="pages/login.html" class="lb-login">會員登入</a>
+      <a href="pages/register.html" class="lb-register">免費註冊</a>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li class="active"><a href="index.html">首頁</a></li>
+      <li><a href="pages/check.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M192,112a80,80,0,1,1-80-80A80,80,0,0,1,192,112Z" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34,179.6,168.28a88.21,88.21,0,1,0-11.32,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>買前檢查</a></li>
+      <li><a href="pages/portfolio-health.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M232,152v24a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V153.13C24,95.65,70.15,48.2,127.63,48A104,104,0,0,1,232,152Z" fill="#c9a24b" opacity=".9"/><path d="M207.06,72.67A111.24,111.24,0,0,0,128,40h-.4C66.07,40.21,16,91,16,153.13V176a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V152A111.25,111.25,0,0,0,207.06,72.67ZM224,176H119.71l54.76-75.3a8,8,0,0,0-12.94-9.42L99.92,176H32V153.13c0-3.08.15-6.12.43-9.13H56a8,8,0,0,0,0-16H35.27c10.32-38.86,44-68.24,84.73-71.66V80a8,8,0,0,0,16,0V56.33A96.14,96.14,0,0,1,221,128H200a8,8,0,0,0,0,16h23.67c.21,2.65.33,5.31.33,8Z"/></svg>投資儀表板</a></li>
+      <li><a href="pages/risk-radar.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M216,56v56c0,96-88,120-88,120S40,208,40,112V56a8,8,0,0,1,8-8H208A8,8,0,0,1,216,56Z" fill="#c9a24b" opacity=".9"/><path d="M120,136V96a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,48a12,12,0,1,0-12-12A12,12,0,0,0,128,184ZM224,56v56c0,52.72-25.52,84.67-46.93,102.19-23.06,18.86-46,25.27-47,25.53a8,8,0,0,1-4.2,0c-1-.26-23.91-6.67-47-25.53C57.52,196.67,32,164.72,32,112V56A16,16,0,0,1,48,40H208A16,16,0,0,1,224,56Zm-16,0L48,56l0,56c0,37.3,13.82,67.51,41.07,89.81A128.25,128.25,0,0,0,128,223.62a129.3,129.3,0,0,0,39.41-22.2C194.34,179.16,208,149.07,208,112Z"/></svg>防錯雷達</a></li>
+      <li><a href="pages/market-risk.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M152,138V48a32,32,0,0,0-64,0v90a56,56,0,1,0,64,0Zm-32,70a24,24,0,1,1,24-24A24,24,0,0,1,120,208Z" fill="#c9a24b" opacity=".9"/><path d="M212,56a28,28,0,1,0,28,28A28,28,0,0,0,212,56Zm0,40a12,12,0,1,1,12-12A12,12,0,0,1,212,96Zm-84,57V88a8,8,0,0,0-16,0v65a32,32,0,1,0,16,0Zm-8,47a16,16,0,1,1,16-16A16,16,0,0,1,120,200Zm40-66V48a40,40,0,0,0-80,0v86a64,64,0,1,0,80,0Zm-40,98a48,48,0,0,1-27.42-87.4A8,8,0,0,0,96,138V48a24,24,0,0,1,48,0v90a8,8,0,0,0,3.42,6.56A48,48,0,0,1,120,232Z"/></svg>大盤溫度</a></li>
+      <li><a href="pages/screener.html">進階選股</a></li>
+      <li><a href="pages/stocks.html">股價總覽</a></li>
+      <li><a href="pages/etf.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M224,80l-96,56L32,80l96-56Z" fill="#c9a24b" opacity=".9"/><path d="M230.91,172A8,8,0,0,1,228,182.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,169.09l92,53.65,92-53.65A8,8,0,0,1,230.91,172ZM220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26Z"/></svg>ETF 專區</a></li>
+      <li><a href="pages/start">🧭 新手上路</a></li><li><a href="pages/news.html">財經新聞</a></li>
+      <li><a href="pages/ai.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M224,128A96,96,0,0,1,79.93,211.11h0L42.54,223.58a8,8,0,0,1-10.12-10.12l12.47-37.39h0A96,96,0,1,1,224,128Z" fill="#c9a24b" opacity=".9"/><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-4-1.08,7.85,7.85,0,0,0-2.53.42L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Zm12-88a12,12,0,1,1-12-12A12,12,0,0,1,140,128Zm-44,0a12,12,0,1,1-12-12A12,12,0,0,1,96,128Zm88,0a12,12,0,1,1-12-12A12,12,0,0,1,184,128Z"/></svg>AI 對話</a></li>
+      <li><a href="pages/watchlist.html">自選股</a></li>
+      <li><a href="pages/vip.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M229.67,133.62l-96,96a7.94,7.94,0,0,1-11.24,0l-96-96a7.94,7.94,0,0,1,0-11.24l96.05-96a7.94,7.94,0,0,1,11.24,0l96,96.05A7.94,7.94,0,0,1,229.67,133.62Z" fill="#c9a24b" opacity=".9"/><path d="M235.33,116.72,139.28,20.66a16,16,0,0,0-22.56,0l-96,96.06a16,16,0,0,0,0,22.56l96.05,96.06h0a16,16,0,0,0,22.56,0l96.05-96.06a16,16,0,0,0,0-22.56ZM128,224h0L32,128,128,32,224,128Z"/></svg>VIP</a></li>
+    </ul>
+  </div>
+</nav>
+
+<style>
+  /* === 首頁第一屏：輸入股票 → 免費買前檢查 === */
+  .check-hero { background:linear-gradient(180deg,#f3f9f5 0%,#ffffff 100%); padding:40px 0 34px; border-bottom:1px solid #eef0f3; }
+  .check-hero-grid { display:grid; grid-template-columns:1.08fr 0.92fr; gap:34px; align-items:center; }
+  @media(max-width:880px){ .check-hero-grid{ grid-template-columns:1fr; gap:24px; } .check-hero{ padding:26px 0 24px; } }
+  .check-badge { display:inline-block; font-size:12.5px; font-weight:600; color:#1B4332; background:#dcf0e4; padding:5px 13px; border-radius:20px; }
+  .check-h1 { font-size:33px; font-weight:800; color:#13241c; line-height:1.25; margin:14px 0 9px; }
+  .check-h1 .accent { color:#1B4332; }
+  @media(max-width:880px){ .check-h1{ font-size:25px; } }
+  .check-sub { font-size:15px; color:#4b5563; line-height:1.7; margin-bottom:18px; }
+  .check-search { display:flex; align-items:stretch; border:2px solid #1B4332; border-radius:12px; background:#fff; overflow:hidden; }
+  .check-search:focus-within { box-shadow:0 0 0 3px rgba(27,67,50,.15); }
+  #checkHeroInput { flex:1; min-width:0; padding:16px 16px; font-size:16px; border:none; outline:none; background:transparent; }
+  .ch-mic { background:none; border:none; cursor:pointer; color:#1B4332; padding:0 14px; display:flex; align-items:center; }
+  .ch-mic:hover { color:#163a2b; background:#f3f9f5; }
+  .ch-mic.voice-mic-pulse-hint { animation:chmic 1s ease-in-out infinite; }
+  @keyframes chmic { 0%,100%{ color:#1B4332; } 50%{ color:#e6900a; } }
+  .ch-go { background:#1B4332; border:none; cursor:pointer; color:#fff; padding:0 22px; display:flex; align-items:center; }
+  .ch-go:hover { background:#163a2b; }
+  .check-cta-row { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+  .check-btn-primary { background:#1B4332; color:#fff; border:none; font-size:16px; font-weight:700; padding:14px 30px; border-radius:10px; cursor:pointer; }
+  .check-btn-primary:hover { background:#163a2b; }
+  .check-btn-secondary { display:inline-flex; align-items:center; background:#fff; color:#1B4332; border:1.5px solid #1B4332; font-size:15px; font-weight:600; padding:13px 22px; border-radius:10px; text-decoration:none; }
+  .check-guarantees { display:flex; gap:18px; margin-top:16px; font-size:13px; color:#555; flex-wrap:wrap; }
+  .example-card { background:#fff; border:1px solid #e3e8ee; border-radius:14px; box-shadow:0 8px 28px rgba(20,40,30,.09); padding:18px 20px; }
+  .ex-label { font-size:11px; color:#9fb0a6; letter-spacing:1.5px; }
+  .ex-top { display:flex; justify-content:space-between; align-items:center; margin:6px 0 12px; }
+  .ex-code { font-size:21px; font-weight:800; color:#13241c; } .ex-name { color:#555; font-size:15px; }
+  .ex-status { font-size:13px; font-weight:700; padding:4px 13px; border-radius:20px; white-space:nowrap; }
+  .ex-low { background:#dcf3e3; color:#178a4c; } .ex-mid { background:#fdecc8; color:#b45309; } .ex-high { background:#fde2e2; color:#c0392b; }
+  .ex-score { font-size:14px; color:#555; } .ex-score strong { font-size:30px; color:#1B4332; line-height:1; }
+  .ex-bar { height:8px; background:#eef2f5; border-radius:5px; overflow:hidden; margin:9px 0 15px; }
+  .ex-bar-fill { height:100%; background:linear-gradient(90deg,#178a4c,#e6900a,#c0392b); }
+  .ex-notes-h { font-size:13px; font-weight:700; color:#163A2E; margin-bottom:5px; }
+  .ex-notes { list-style:none; padding:0; margin:0 0 12px; }
+  .ex-notes li { font-size:13.5px; color:#444; padding:4px 0 4px 18px; position:relative; line-height:1.5; }
+  .ex-notes li:before { content:"•"; position:absolute; left:4px; color:#c0392b; font-weight:700; }
+  .ex-next { font-size:12.5px; color:#7a6f55; background:#faf7ef; border:1px solid #efe7d3; border-radius:8px; padding:8px 11px; margin-top:11px; line-height:1.55; }
+  .ex-cta { display:block; margin-top:9px; font-size:13.5px; font-weight:700; color:#1B4332; text-decoration:none; }
+  .ex-cta:hover { text-decoration:underline; }
+  /* 🛡️ 第二屏：每日持股風險守門員 */
+  .guardian-sec { background:#f3f9f5; padding:38px 0; border-bottom:1px solid #eef0f3; }
+  .guardian-grid { display:grid; grid-template-columns:1.05fr 0.95fr; gap:32px; align-items:center; }
+  @media(max-width:880px){ .guardian-grid{ grid-template-columns:1fr; gap:22px; } .guardian-sec{ padding:26px 0; } }
+  .guardian-badge { display:inline-block; font-size:12.5px; font-weight:600; color:#1B4332; background:#dcf0e4; padding:5px 13px; border-radius:20px; }
+  .guardian-text h2 { font-size:27px; font-weight:800; color:#13241c; margin:13px 0 8px; }
+  @media(max-width:880px){ .guardian-text h2{ font-size:22px; } }
+  .guardian-text > p { font-size:14.5px; color:#4b5563; line-height:1.75; margin-bottom:16px; }
+  .guardian-checks { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+  .guardian-checks span { background:#fff; border:1px solid #d8e5dc; border-radius:18px; padding:7px 14px; font-size:13.5px; color:#1B4332; font-weight:600; }
+  .guardian-vip { font-size:13.5px; color:#4b5563; margin:-4px 0 14px; line-height:1.6; }
+  .guardian-vip strong { color:#1B4332; }
+  .guardian-cta-row { display:flex; gap:10px; flex-wrap:wrap; }
+  .guardian-card { background:#fff; border:1px solid #e3e8ee; border-radius:14px; box-shadow:0 8px 28px rgba(20,40,30,.09); padding:18px 20px; }
+  .gc-head { font-size:12px; color:#9fb0a6; letter-spacing:.5px; }
+  .gc-stock { font-size:18px; font-weight:800; color:#13241c; margin:7px 0 12px; display:flex; align-items:center; gap:8px; }
+  .gc-tag { font-size:12px; font-weight:700; background:#dcf3e3; color:#178a4c; padding:3px 10px; border-radius:14px; }
+  .gc-items { list-style:none; padding:0; margin:0 0 12px; }
+  .gc-items li { font-size:14px; color:#374151; padding:6px 0; border-bottom:1px solid #f3f4f6; }
+  .gc-items li:last-child { border-bottom:0; }
+  .gc-foot { font-size:12px; color:#888; border-top:1px dashed #e3e8ee; padding-top:10px; }
+  .ai-second { padding:30px 0; background:#fafbfc; border-bottom:1px solid #eef0f3; }
+  .ai-second-head { text-align:center; margin-bottom:16px; }
+  .ai-second-head h2 { font-size:21px; color:#163A2E; margin-bottom:4px; }
+  .ai-second-head p { font-size:13.5px; color:#666; }
+  .ai-second-grid { display:grid; grid-template-columns:1.15fr 0.85fr; gap:24px; align-items:start; }
+  @media(max-width:880px){ .ai-second-grid{ grid-template-columns:1fr; } }
+  /* 首頁上方：拿掉搜尋框，改為登入/免費註冊 CTA */
+  .logo-bar-inner .logo-actions { display:flex; align-items:center; gap:14px; margin-left:auto; }
+  .logo-actions .qlink { font-size:13px; color:#555; text-decoration:none; white-space:nowrap; }
+  .logo-actions .qlink:hover { color:#1B4332; }
+  .lb-login { font-size:14px; font-weight:600; color:#1B4332; text-decoration:none; padding:8px 15px; border:1.5px solid #1B4332; border-radius:8px; white-space:nowrap; }
+  .lb-login:hover { background:#eef5f1; }
+  .lb-register { font-size:14px; font-weight:700; color:#fff; background:#1B4332; text-decoration:none; padding:9px 18px; border-radius:8px; white-space:nowrap; }
+  .lb-register:hover { background:#163a2b; }
+  @media(max-width:768px){
+    .logo-actions .qlink { display:none; }          /* 手機隱藏 app 連結，保留登入/註冊 */
+    .logo-actions { gap:9px; }
+    .lb-login, .lb-register { font-size:13px; padding:7px 12px; }
+  }
+  /* 防詐橫幅：手機縮成一行 */
+  .afb-short { display:none; }
+  @media(max-width:768px){
+    .afb-full { display:none; }
+    .afb-short { display:inline; }
+    .anti-fraud-banner .afb-inner { font-size:11.5px; padding-top:4px; padding-bottom:4px; }
+    .anti-fraud-banner .afb-icon { display:none; }
+  }
+
+  /* ═══ 🎨 桌機首頁「暖色編輯風」換皮（2026-06-11）═══
+     蓋掉上方舊定義與 style.css；只動視覺、所有 ID/功能不變。 */
+  .check-hero{background:
+    linear-gradient(160deg, rgba(255,255,255,.05) 0 1px, transparent 1px 100%),
+    radial-gradient(circle at 84% 0%, rgba(185,145,79,.3), transparent 36%),
+    linear-gradient(180deg,#08271f 0%, #0d3328 100%);
+    background-size:19px 19px,auto,auto; border-bottom:0; padding:54px 0 52px;}
+  .check-h1{color:#f8f5ec; font-weight:900; letter-spacing:-.5px;}
+  .check-h1 .accent{color:#ecd9ab;}
+  .check-sub{color:rgba(248,245,236,.72);}
+  .check-search{border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.08); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-radius:18px;}
+  .check-search:focus-within{box-shadow:0 0 0 3px rgba(214,179,111,.28); border-color:rgba(214,179,111,.5);}
+  .check-search input{background:transparent; color:#fff;}
+  .check-search input::placeholder{color:rgba(248,245,236,.55);}
+  .ch-mic{color:#d6b36f;} .ch-mic:hover{background:rgba(214,179,111,.12); color:#ecd9ab;}
+  .ch-go{background:#d6b36f; color:#102016;} .ch-go:hover{background:#e3c587;}
+  .check-btn-primary{background:#d6b36f; color:#102016; border-radius:999px; font-weight:900;}
+  .check-btn-primary:hover{background:#e3c587;}
+  .check-guarantees{color:rgba(248,245,236,.62);}
+  .example-card{background:#fffdf8; border:1px solid rgba(13,29,23,.08); border-radius:20px; box-shadow:0 24px 60px rgba(0,0,0,.34);}
+  .guardian-sec{background:transparent; border-bottom:0;}
+  .ai-second{background:transparent; border-bottom:0;}
+  .ai-chat-embed{background:#fffdf8 !important; border:1px solid rgba(13,29,23,.08) !important; border-radius:20px !important; box-shadow:0 12px 32px rgba(13,29,23,.08) !important;}
+  .hero-card-v2{background:#fffdf8 !important; border:1px solid rgba(13,29,23,.1) !important; border-radius:16px !important;}
+  .live-quote-bar{background:#08271f !important; border-bottom:1px solid rgba(214,179,111,.32) !important;}
+  .ticker{background:#fffdf8; border-top:1px solid rgba(13,29,23,.08); border-bottom:1px solid rgba(13,29,23,.08);}
+  .ticker-label{background:#0b3328; color:#ecd9ab;}
+  .fv-low-hero-section{background:transparent; border-bottom:0;}
+  .fv-low-card{background:#fffdf8 !important; border:1px solid rgba(13,29,23,.08) !important; border-radius:16px !important; box-shadow:0 8px 22px rgba(13,29,23,.05) !important;}
+  .daily-brief{background:#fffdf8 !important; border:1px solid rgba(13,29,23,.08) !important; border-radius:18px !important;}
+  .fv-low-h2::before, .ai-second-head h2::before, .guardian-sec h2::before{content:""; display:inline-block; width:24px; height:3px; background:#d6b36f; border-radius:2px; margin-right:10px; vertical-align:middle;}
+
+  /* ⚡ X 快訊雷達（首頁公開試閱區，2026-06-11） */
+  .xr-sec{padding:34px 0 10px;}
+  .xr-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+  .xr-head h2{margin:0;font-size:24px;font-weight:900;color:#0d1d17;letter-spacing:-.3px;}
+  .xr-head h2::before{content:"";display:inline-block;width:24px;height:3px;background:#d6b36f;border-radius:2px;margin-right:10px;vertical-align:middle;}
+  .xr-head p{margin:6px 0 0;font-size:13px;color:#68736c;}
+  .xr-cta{background:#0b3328;color:#f4ead2;font-size:13.5px;font-weight:800;padding:10px 18px;border-radius:999px;text-decoration:none;white-space:nowrap;}
+  .xr-cta:hover{background:#144735;text-decoration:none;}
+  .xr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  @media(max-width:1024px){.xr-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.xr-grid{grid-template-columns:1fr;}}
+  .xr-card{background:#fffdf8;border:1px solid rgba(13,29,23,.08);border-radius:16px;padding:13px 15px;box-shadow:0 8px 22px rgba(13,29,23,.05);display:flex;flex-direction:column;gap:8px;}
+  .xr-meta{display:flex;align-items:center;gap:7px;font-size:11.5px;color:#9a948a;flex-wrap:wrap;}
+  .xr-impact{font-weight:900;font-size:10.5px;padding:2px 8px;border-radius:9px;color:#fff;}
+  .xr-author{font-weight:800;color:#0b3328;}
+  .xr-sum{font-size:13.5px;line-height:1.65;color:#2a352f;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .xr-foot{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;}
+  .xr-imp{color:#b08a3e;font-weight:800;}
+  .xr-link{color:#0b3328;font-weight:800;text-decoration:none;}
+  .xr-note{margin-top:12px;font-size:11.5px;color:#9a948a;}
+
+  .start-banner{display:flex;align-items:center;gap:10px;margin-top:16px;max-width:480px;
+    padding:12px 18px;border-radius:14px;text-decoration:none;
+    background:rgba(214,179,111,.13);border:1.5px solid rgba(214,179,111,.5);
+    color:#f4ead2;font-size:14px;font-weight:700;
+    box-shadow:0 6px 18px rgba(0,0,0,.18);transition:background .15s ease,transform .15s ease;}
+  .start-banner:hover{background:rgba(214,179,111,.24);transform:translateY(-1px);text-decoration:none;}
+</style>
+
+<!-- 🔍 首頁第一屏：輸入股票 → 免費買前檢查 -->
+<section class="check-hero">
+  <div class="container">
+    <div class="check-hero-grid">
+      <div class="check-hero-left">
+        <span class="check-badge">台股買前檢查 · 持股風險守門員</span>
+        <h1 class="check-h1">買股票前，先檢查<span class="accent">有沒有風險</span></h1>
+        <p class="check-sub">輸入股票代號，領富 AI 幫你整理<strong>估值、營收、籌碼、新聞與注意股風險</strong>。</p>
+        <form id="checkHeroForm" class="check-search" autocomplete="off">
+          <input type="text" id="checkHeroInput" placeholder="輸入股票代號 / 公司名稱，例如 2330 台積電" autocomplete="off" inputmode="search">
+          <button type="button" id="checkHeroMic" class="ch-mic" aria-label="語音搜尋" title="語音搜尋（點麥克風開始）">
+            <svg viewBox="0 0 24 24" width="23" height="23" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5.91-3a.91.91 0 0 0-.91.91A4.99 4.99 0 0 1 12 17a4.99 4.99 0 0 1-5-5.09.91.91 0 1 0-1.82 0A6.81 6.81 0 0 0 11 18.91V21a1 1 0 1 0 2 0v-2.09a6.81 6.81 0 0 0 5.82-6.91.91.91 0 0 0-.91-.91z"/></svg>
+          </button>
+          <button type="submit" id="checkHeroSearchBtn" class="ch-go" aria-label="搜尋">
+            <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          </button>
+        </form>
+        <div class="check-cta-row">
+          <button type="button" class="check-btn-primary" id="checkHeroBtn">免費檢查股票</button>
+          <a href="pages/portfolio-health.html" class="check-btn-secondary">建立我的持股清單</a>
+        </div>
+        <div class="check-guarantees"><span>✅ 公開資料整理</span><span>🚫 不提供明牌</span><span>💰 0 元先試用</span></div>
+        <a href="pages/start.html" class="start-banner">
+          <span style="font-size:19px;">🧭</span>
+          <span><b style="color:#ecd9ab;">新朋友？</b>1 分鐘看懂領富能為你做的 6 件事</span>
+          <b style="margin-left:auto;color:#ecd9ab;">→</b>
+        </a>
+      </div>
+      <div class="check-hero-right">
+        <div class="example-card" id="exampleCard">
+          <div class="ex-label">範例結果</div>
+          <div class="ex-top"><div><span class="ex-code">2330</span> <span class="ex-name">台積電</span></div><div class="ex-status ex-low">低風險</div></div>
+          <div class="ex-score">風險分數 <strong>14</strong> / 100</div>
+          <div class="ex-bar"><div class="ex-bar-fill" style="width:14%"></div></div>
+          <div class="ex-notes-h">今日需注意</div>
+          <ul class="ex-notes"><li>外資今日賣超 17,840 張</li><li><b>是否連續賣超：</b>是，近 2 日持續調節</li><li>借券餘額增加</li><li>股價位於合理區間下緣</li></ul>
+          <div class="ex-next">💡 建議加入持股追蹤 3 天，觀察外資與借券是否持續惡化。</div>
+          <a class="ex-cta" href="pages/portfolio-health.html">加入持股，每天盤後幫你複查 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 🛡️ 第二屏：每日持股風險守門員（守住定位，不讓 AI 搶第二屏） -->
+<section class="guardian-sec">
+  <div class="container">
+    <div class="guardian-grid">
+      <div class="guardian-text">
+        <span class="guardian-badge">🛡️ 加入持股 · 每天盤後自動複查</span>
+        <h2>每日持股風險守門員</h2>
+        <p>加入持股後，每天盤後自動幫你檢查這 6 件事，一有風險第一時間提醒 —— 不用自己天天盯盤。</p>
+        <div class="guardian-checks">
+          <span>📊 估值</span><span>📈 營收</span><span>🏦 籌碼</span>
+          <span>📰 新聞</span><span>⚠ 注意股</span><span>🎯 集中度</span>
+        </div>
+        <p class="guardian-vip">免費可看範例；<strong>VIP 可每日自動複查、有風險主動 LINE 提醒</strong>。</p>
+        <div class="guardian-cta-row">
+          <a href="pages/portfolio-health.html" class="check-btn-primary">建立我的持股清單</a>
+          <a href="pages/risk-radar.html" class="check-btn-secondary">看防錯雷達</a>
+        </div>
+      </div>
+      <div class="guardian-visual">
+        <div class="guardian-card">
+          <div class="gc-head">🔔 今日盤後複查 · 範例</div>
+          <div class="gc-stock">2330 台積電 <span class="gc-tag">低風險 14</span></div>
+          <ul class="gc-items">
+            <li>🏦 外資連 2 日賣超</li>
+            <li>📉 借券餘額增加</li>
+            <li>✅ 股價仍在合理區間</li>
+          </ul>
+          <div class="gc-foot">每天盤後自動複查，有風險主動 LINE 提醒</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ✨ 第三區：AI 對話（保留所有 id 給 main.js） -->
+<section class="ai-second">
+  <div class="container">
+    <div class="ai-second-head">
+      <h2>或者，直接問 AI</h2>
+      <p>不想逐項看？用口語問領富 AI：「2330 現在貴嗎」「高股息 ETF 推薦」「半導體今天怎樣」</p>
+    </div>
+    <div class="ai-second-grid">
+      <div class="ai-chat-embed" id="aiChatEmbed">
+        <div class="ai-chat-embed-head">
+          <h2><span class="ai-sparkle">✨</span> 領富 AI · 直接問我</h2>
+          <div class="ai-chat-embed-sub">即時報價 · 合理區間 · 引用來源</div>
+          <button type="button" class="ai-chat-embed-newbtn" id="aiEmbedNewBtn" title="新對話">＋ 新對話</button>
+        </div>
+        <div class="ai-chat-embed-scroll" id="aiEmbedScroll">
+          <div class="ai-chat-embed-list" id="aiEmbedList"></div>
+        </div>
+        <div class="ai-chat-embed-input">
+          <form id="aiEmbedForm" autocomplete="off">
+            <button type="button" id="aiEmbedMicBtn" class="ai-chat-embed-mic" aria-label="語音輸入" title="語音輸入">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5.91-3a.91.91 0 0 0-.91.91A4.99 4.99 0 0 1 12 17a4.99 4.99 0 0 1-5-5.09.91.91 0 1 0-1.82 0A6.81 6.81 0 0 0 11 18.91V21a1 1 0 1 0 2 0v-2.09a6.81 6.81 0 0 0 5.82-6.91.91.91 0 0 0-.91-.91z"/></svg>
+            </button>
+            <textarea id="aiEmbedInput" placeholder="輸入問題或按麥克風講話..." rows="1" maxlength="800"></textarea>
+            <button type="submit" id="aiEmbedSendBtn" class="ai-chat-embed-send">送出</button>
+          </form>
+          <p class="ai-chat-embed-disclaimer">✅ 即時報價　✅ 合理區間　✅ 引用來源　✅ 0 元免費</p>
+        </div>
+      </div>
+      <div class="ai-second-side">
+        <div class="hero-side-head"><span class="hero-side-spark">💬</span><span>今日值得關注（點我問 AI）</span></div>
+        <div class="hero-visual" id="heroCards">
+          <div class="hero-card hero-card-v2 hero-card-skel"><div class="hc-cat-tag">載入中...</div><div class="hc-stock-name">&nbsp;</div><div class="hc-price-row"><span class="hc-price-v2">&nbsp;</span></div></div>
+          <div class="hero-card hero-card-v2 hero-card-skel"><div class="hc-cat-tag">載入中...</div><div class="hc-stock-name">&nbsp;</div><div class="hc-price-row"><span class="hc-price-v2">&nbsp;</span></div></div>
+          <div class="hero-card hero-card-v2 hero-card-skel"><div class="hc-cat-tag">載入中...</div><div class="hc-stock-name">&nbsp;</div><div class="hc-price-row"><span class="hc-price-v2">&nbsp;</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 即時指數列（5 秒延遲，TWSE MIS 公開 API） -->
+<div class="live-quote-bar" id="liveQuoteBar">
+  <div class="container live-quote-inner">
+    <div class="lq-status">
+      <span class="lq-pulse"></span>
+      <span class="lq-status-text" id="lqStatusText">連線中…</span>
+      <span class="lq-delay">5 秒延遲</span>
+    </div>
+    <div class="lq-indices">
+      <div class="lq-index" id="lqTaiex">
+        <span class="lq-name">加權</span>
+        <span class="lq-value">--</span>
+        <span class="lq-change">--</span>
+      </div>
+      <div class="lq-index" id="lqOtc">
+        <span class="lq-name">櫃買</span>
+        <span class="lq-value">--</span>
+        <span class="lq-change">--</span>
+      </div>
+    </div>
+    <div class="lq-watchlist" id="lqWatchlist">
+      <!-- 自選股前 5 名：登入用戶才填，否則顯示前 5 熱門股 -->
+    </div>
+    <div class="lq-meta">
+      <span id="lqUpdated">--</span>
+    </div>
+  </div>
+</div>
+
+<div class="ticker">
+  <div class="container ticker-bar-inner">
+    <div class="ticker-label">熱門排行</div>
+    <div class="ticker-track" id="tickerTrack">載入中...</div>
+  </div>
+</div>
+
+<!-- 💎 合理區間偏低 TOP 5（旗艦差異化功能，最顯眼位置） -->
+<section class="fv-low-hero-section">
+  <div class="container">
+    <div class="fv-low-eyebrow">💎 LeadFu Fair Value Range™</div>
+    <h2 class="fv-low-h2">今日合理區間偏低 TOP 5</h2>
+    <p class="fv-low-sub">領富 AI 演算法每日篩出股價落在合理區間下緣的個股。<strong>位置低 ≠ 便宜可買</strong> —— 仍需檢查基本面與流動性；本清單僅供研究、非買進建議。</p>
+    <div class="fv-low-grid" id="fvLowHeroList">
+      <div class="fv-low-card-skel">資料載入中...</div>
+    </div>
+    <div class="fv-low-foot">
+      <a href="pages/stocks.html" class="fv-low-more">看完整排行 →</a>
+      <span class="fv-low-note">※ 排除股價 &lt; 10 元與低流動性，僅含訊號強度 ≥ 4 顆星</span>
+    </div>
+  </div>
+</section>
+
+<!-- 🌎 美股專區即將開放 teaser -->
+<a href="pages/us-market.html" class="us-teaser-banner">
+  <div class="container us-teaser-inner">
+    <div class="us-teaser-left">
+      <span class="us-teaser-badge">🌎 COMING SOON</span>
+      <div class="us-teaser-text">
+        <strong>美股專區即將開放</strong>
+        <span>七巨頭、半導體、ETF + 獨家「美股合理區間」— 台灣第一個 AI 算美股合理價的平台</span>
+      </div>
+    </div>
+    <span class="us-teaser-cta">搶先了解 →</span>
+  </div>
+</a>
+
+
+
+<!-- ⚡ X 快訊雷達（公開試閱：重要度 ≥6 最新數則；VIP 在會員中心看自選訂閱全量） -->
+<section class="xr-sec" id="xRadarSec" style="display:none;">
+  <div class="container">
+    <div class="xr-head">
+      <div>
+        <h2>X 快訊雷達</h2>
+        <p>全球金融大佬、官媒與機構的 X 動向 · AI 中文整理 · 每 5 分鐘掃描 · 每則附原文連結<br>
+        📡 <b>個股輿情雷達</b>：PTT × 新聞 × YouTube 熱度異常警示，已內建於<a href="pages/check.html" style="color:#0b3328;font-weight:800;">買前檢查</a>與<a href="pages/risk-radar.html" style="color:#0b3328;font-weight:800;">防錯雷達</a></p>
+      </div>
+      <a class="xr-cta" href="pages/vip.html#x-radar">VIP 訂閱你的大佬清單 →</a>
+    </div>
+    <div id="xrHeatStrip" style="display:none;gap:8px;flex-wrap:wrap;margin-bottom:12px;"></div>
+    <div class="xr-grid" id="xrGrid"></div>
+    <div class="xr-note">資訊整理、非投資建議；「偏多／偏空」僅代表市場輿情方向，不是買賣訊號。VIP 可自選 70+ 位帳號、只看你關注的人。</div>
+  </div>
+</section>
+<script>
+(function () {
+  fetch("/api/market/x-alerts").then(r => r.json()).then(d => {
+    var rows = (d && d.alerts) || [];
+    if (!rows.length) return;
+    var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var rel = function (iso) {
+      try {
+        var m = Math.max(1, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+        if (m < 60) return m + " 分鐘前";
+        if (m < 1440) return Math.round(m / 60) + " 小時前";
+        return Math.round(m / 1440) + " 天前";
+      } catch (e) { return ""; }
+    };
+    var C = { bullish: "#be4a3e", bearish: "#148a55", neutral: "#8a948e" };   /* 台股慣例：偏多紅、偏空綠 */
+    var L = { bullish: "偏多", bearish: "偏空", neutral: "中性" };
+    document.getElementById("xrGrid").innerHTML = rows.slice(0, 4).map(function (a) {
+      return '<div class="xr-card">'
+        + '<div class="xr-meta"><span class="xr-impact" style="background:' + (C[a.impact] || C.neutral) + ';">' + (L[a.impact] || "中性") + '</span>'
+        + '<span class="xr-author">@' + esc(a.author) + '</span><span style="margin-left:auto;">' + rel(a.created_at) + '</span></div>'
+        + '<div class="xr-sum">' + esc(a.summary_zh) + '</div>'
+        + '<div class="xr-foot"><span class="xr-imp">重要度 ' + (a.importance != null ? a.importance : "-") + '/10</span>'
+        + '<a class="xr-link" href="' + esc(a.url) + '" target="_blank" rel="noopener nofollow">原文 ↗</a></div>'
+        + '</div>';
+    }).join("");
+    document.getElementById("xRadarSec").style.display = "";
+  }).catch(function (e) {});
+})();
+</script>
+
+<main class="container main-grid">
+
+  <section class="col-main">
+
+    <!-- <svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M208,40V208H152V40Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg>今日 AI 盤後摘要（每日生成，6 小時內快取） -->
+    <div class="daily-brief" id="dailyBrief">
+      <div class="daily-brief-head">
+        <div>
+          <h2 class="daily-brief-title"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M208,40V208H152V40Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg>今日 AI 盤後摘要</h2>
+          <div class="daily-brief-date" id="dailyBriefDate">--</div>
+        </div>
+        <button type="button" class="daily-brief-refresh" id="dailyBriefRefresh" title="重新整理 AI 摘要">🔄</button>
+      </div>
+      <div class="daily-brief-grid">
+        <div class="daily-stat daily-stat-up"><div class="daily-stat-num" id="dbUp">--</div><div class="daily-stat-label">上漲家數</div></div>
+        <div class="daily-stat daily-stat-down"><div class="daily-stat-num" id="dbDown">--</div><div class="daily-stat-label">下跌家數</div></div>
+        <div class="daily-stat daily-stat-flat"><div class="daily-stat-num" id="dbFlat">--</div><div class="daily-stat-label">平盤</div></div>
+        <div class="daily-stat daily-stat-warn"><div class="daily-stat-num" id="dbWarn">--</div><div class="daily-stat-label">⚠ 注意股</div></div>
+      </div>
+      <div class="daily-brief-industries">
+        <div class="daily-industry-block">
+          <div class="daily-industry-label">🔥 領漲產業</div>
+          <div id="dbTopUpInd" class="daily-industry-list">--</div>
+        </div>
+        <div class="daily-industry-block">
+          <div class="daily-industry-label">❄ 領跌產業</div>
+          <div id="dbTopDownInd" class="daily-industry-list">--</div>
+        </div>
+      </div>
+      <div class="daily-brief-ai">
+        <div class="daily-brief-ai-head">
+          <span class="daily-brief-sparkle">✨</span>
+          <span>AI 一句話整理</span>
+          <button type="button" class="chat-tts-btn" id="dbTtsBtn" title="朗讀">🔊</button>
+        </div>
+        <div class="daily-brief-ai-body" id="dbAiBody">
+          <span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span>
+        </div>
+      </div>
+      <a href="pages/weekly.html" class="daily-brief-weekly-cta">
+        📰 看完整「本週產業週報」 →
+      </a>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>熱門股票排行</h2>
+        <div class="panel-tabs">
+          <button class="tab active" data-filter="all">全部</button>
+          <button class="tab" data-filter="上市">上市</button>
+          <button class="tab" data-filter="上櫃">上櫃</button>
+          <button class="tab" data-filter="興櫃">興櫃</button>
+        </div>
+      </div>
+      <table class="stock-table">
+        <thead>
+          <tr>
+            <th>代號</th>
+            <th>名稱</th>
+            <th class="num">成交價</th>
+            <th class="num">漲跌</th>
+            <th class="num">漲跌幅</th>
+            <th class="num">成交量(張)</th>
+            <th>類別</th>
+            <th>狀態</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="stockTbody">
+          <tr><td colspan="9" class="loading">資料載入中...</td></tr>
+        </tbody>
+      </table>
+      <div class="panel-foot">
+        資料更新時間：<span id="updatedAt">--</span>
+        ・<a href="pages/stocks.html">查看完整股價列表 ▸</a>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>財經焦點</h2>
+        <a href="pages/news.html" class="more">更多 ▸</a>
+      </div>
+      <ul class="news-list" id="newsList">
+        <li class="loading">載入中...</li>
+      </ul>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-panel-head">
+        <div class="ai-panel-title">AI 今日盤勢摘要</div>
+        <button class="ai-trigger" data-action="newsSummary" data-target="#aiHomeResult">產生今日摘要 →</button>
+      </div>
+      <p class="ai-placeholder">AI 自動彙整今日台股全市場焦點、漲跌排行、外資動向。每日盤後 14:30 自動更新。</p>
+      <div id="aiHomeResult" style="margin-top:12px;"></div>
+    </div>
+
+  </section>
+
+  <aside class="col-side">
+
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>熱門題材</h3></div>
+      <ul class="topic-list h-scroll h-scroll-mini h-scroll-no-fade" id="topicList"></ul>
+    </div>
+
+    <div class="panel side-panel ad-box">
+      <div class="ad-tag">官方</div>
+      <div class="ad-body">
+        <div class="ad-title">領富 AI LINE 官方</div>
+        <p>加官方 LINE 領取每日盤後資料整理摘要，唯一客服 @130tqckv。</p>
+        <button class="btn-primary line-cta">📱 加 LINE 客服</button>
+      </div>
+    </div>
+
+    <div class="panel side-panel side-features">
+      <div class="panel-head"><h3>🎯 投資人最在意三件事</h3></div>
+      <div class="side-feature-list">
+        <a class="side-feature-item" href="pages/risk-radar.html">
+          <div class="sfi-icon">⚠</div>
+          <div class="sfi-body">
+            <div class="sfi-title">防錯雷達</div>
+            <div class="sfi-desc">注意股／處置股／月營收暴跌</div>
+          </div>
+        </a>
+        <a class="side-feature-item" href="pages/ai.html">
+          <div class="sfi-icon">🤖</div>
+          <div class="sfi-body">
+            <div class="sfi-title">AI 投資助理</div>
+            <div class="sfi-desc">用自然語言問股票</div>
+          </div>
+        </a>
+        <a class="side-feature-item" href="pages/weekly.html">
+          <div class="sfi-icon">📰</div>
+          <div class="sfi-body">
+            <div class="sfi-title">AI 產業週報</div>
+            <div class="sfi-desc">每週一 8:00 自動產出</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="panel side-panel">
+      <div class="panel-head"><h3>免費 LINE 推播</h3></div>
+      <div class="line-box">
+        <div class="line-icon">LINE</div>
+        <div>
+          <p>每日盤前 / 盤後重點推播</p>
+          <button class="btn-line">加入官方帳號</button>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+</main>
+
+<!-- 😟 痛點 hook FAQ — 給有受過傷的退休族看 -->
+<section class="pain-faq-section">
+  <div class="container">
+    <div class="pain-eyebrow">領富 AI 想解決的事</div>
+    <h2 class="pain-h2">您有過這些經驗嗎？</h2>
+
+    <div class="pain-grid">
+      <div class="pain-item">
+        <div class="pain-icon">😢</div>
+        <div class="pain-text"><strong>老師說的「飆股」</strong>買進後就套牢</div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">📉</div>
+        <div class="pain-text"><strong>LINE 群組「內線消息」</strong>追高被套</div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">😡</div>
+        <div class="pain-text">月營收公告後<strong>已經跌了</strong>才看到新聞</div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">🔒</div>
+        <div class="pain-text">買到<strong>「注意股 / 處置股」</strong>鎖死出不來</div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">📕</div>
+        <div class="pain-text">外資<strong>借券狂空</strong>您的持股，您完全不知道</div>
+      </div>
+      <div class="pain-item">
+        <div class="pain-icon">🚨</div>
+        <div class="pain-text">被「<strong>領富 AI</strong>」名義的<strong>詐騙群組</strong>邀請過</div>
+      </div>
+    </div>
+
+    <div class="pain-resolve">
+      <p>這些<strong>全部都有公開資料可以提前發現</strong>。問題不是資料不存在，是<strong>沒人幫您整理</strong>。</p>
+      <p class="pain-resolve-2">這就是領富 AI 在做的事 — <strong>把退休族需要的避雷資料，整理到您看得懂</strong>。</p>
+      <div class="pain-cta-row">
+        <a href="pages/risk-radar.html" class="pain-cta-btn pain-cta-primary">⚠ 看防錯雷達</a>
+        <a href="pages/vip.html" class="pain-cta-btn pain-cta-ghost">💎 限時 5 折 NT$199/月（前 3 個月）</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ❓ 常見問題（品牌防禦 + SEO 精選摘要 + AI 搜尋引用）-->
+<section class="brand-faq-section">
+  <div class="container">
+    <div class="brand-faq-eyebrow">❓ 常見問題</div>
+    <h2 class="brand-faq-h2">關於領富 AI，大家最常問</h2>
+
+    <div class="brand-faq-list">
+      <details class="brand-faq-item" open>
+        <summary>領富 AI 是詐騙嗎？</summary>
+        <div class="brand-faq-ans">
+          <strong>不是。</strong>領富 AI（LeadFu）是台股全市場公開資料整理平台，唯一官方網址是 <code>leadfuai.com</code>，唯一官方 LINE 是 <a href="https://line.me/R/ti/p/@130tqckv" target="_blank" rel="noopener">@130tqckv</a>。
+          我們<strong>不報明牌、不保證獲利、不收任何投資款項、沒有 APP、不主動加 LINE 群組</strong>。
+          近期有詐騙集團冒用「領富 AI」名義在 FB / LINE 招攬「飆股群組」，那些都不是我們。如遇冒用請撥 <a href="https://165.npa.gov.tw/" target="_blank" rel="noopener">165 反詐騙專線</a>。
+        </div>
+      </details>
+
+      <details class="brand-faq-item">
+        <summary>領富 AI 要付費嗎？</summary>
+        <div class="brand-faq-ans">
+          基本功能<strong>完全免費</strong>，0 元註冊就能用：跨上市/上櫃/興櫃 2,300+ 檔即時報價、AI 對話、合理區間基本資訊、月營收、產業分類。
+          VIP 訂閱（限時 5 折，NT$199/月起）才解鎖完整合理區間、防錯雷達、持股健診、產業週報等進階功能。
+        </div>
+      </details>
+
+      <details class="brand-faq-item">
+        <summary>領富 AI 的資料從哪裡來？可信嗎？</summary>
+        <div class="brand-faq-ans">
+          全部來自<strong>政府公開資料</strong>：TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站的官方 OpenAPI。
+          每日盤後自動更新，AI 回答都會標註資料來源與更新時間。即時報價透過 TWSE MIS API（5 秒延遲）。
+        </div>
+      </details>
+
+      <details class="brand-faq-item">
+        <summary>領富 AI 會推薦股票、報明牌嗎？</summary>
+        <div class="brand-faq-ans">
+          <strong>不會。</strong>我們沒有投顧執照，依法不做任何個股買賣建議。
+          領富 AI 只做「資料整理」— 幫您把三大法人、籌碼、月營收、技術指標、合理區間等公開資料整理到看得懂。
+          買賣決定請您依自身狀況評估，或諮詢合法的證券投資顧問。
+        </div>
+      </details>
+
+      <details class="brand-faq-item">
+        <summary>什麼是「領富 AI 合理區間」？</summary>
+        <div class="brand-faq-ans">
+          這是領富 AI 的專有演算法（LeadFu Fair Value Range™），整合產業本益比、布林通道、60 日區間、月營收年增、法人籌碼、技術指標等多項公開資料，
+          算出每檔股票的「合理價格區間」與目前位置（偏低/中性/偏高），讓您<strong>看清楚現在是貴還是便宜</strong>，再做決定。這不是投資建議，是客觀數據參考。
+        </div>
+      </details>
+
+      <details class="brand-faq-item">
+        <summary>領富 AI 跟 ChatGPT 問股票有什麼不同？</summary>
+        <div class="brand-faq-ans">
+          ChatGPT 沒有即時股價資料、訓練資料會過期、可能編造數字。
+          領富 AI <strong>串接 14 個官方資料源、每日更新、回答附資料來源與時間</strong>，問股價就是當日真實數據，還有獨家合理區間分析。問台股，問領富 AI 比較準。
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- FAQPage 結構化資料：搶 Google 精選摘要 + AI 搜尋引用 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "領富 AI 是詐騙嗎？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "不是。領富 AI（LeadFu）是台股全市場公開資料整理平台，唯一官方網址是 leadfuai.com，唯一官方 LINE 是 @130tqckv。我們不報明牌、不保證獲利、不收任何投資款項、沒有 APP、不主動加 LINE 群組。近期有詐騙集團冒用「領富 AI」名義招攬飆股群組，那些都不是我們，如遇冒用請撥 165 反詐騙專線。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "領富 AI 要付費嗎？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "基本功能完全免費，0 元註冊就能用：跨上市/上櫃/興櫃 2,300+ 檔即時報價、AI 對話、合理區間基本資訊、月營收、產業分類。VIP 訂閱（限時 5 折，NT$199/月起）才解鎖完整合理區間、防錯雷達、持股健診、產業週報等進階功能。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "領富 AI 的資料從哪裡來？可信嗎？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "全部來自政府公開資料：TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站的官方 OpenAPI。每日盤後自動更新，AI 回答都會標註資料來源與更新時間。即時報價透過 TWSE MIS API（5 秒延遲）。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "領富 AI 會推薦股票、報明牌嗎？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "不會。我們沒有投顧執照，依法不做任何個股買賣建議。領富 AI 只做資料整理，幫您把三大法人、籌碼、月營收、技術指標、合理區間等公開資料整理到看得懂。買賣決定請您依自身狀況評估，或諮詢合法的證券投資顧問。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "什麼是「領富 AI 合理區間」？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "這是領富 AI 的專有演算法（LeadFu Fair Value Range），整合產業本益比、布林通道、60 日區間、月營收年增、法人籌碼、技術指標等多項公開資料，算出每檔股票的合理價格區間與目前位置（偏低/中性/偏高），讓您看清楚現在是貴還是便宜。這不是投資建議，是客觀數據參考。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "領富 AI 跟 ChatGPT 問股票有什麼不同？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ChatGPT 沒有即時股價資料、訓練資料會過期、可能編造數字。領富 AI 串接 14 個官方資料源、每日更新、回答附資料來源與時間，問股價就是當日真實數據，還有獨家合理區間分析。問台股，問領富 AI 比較準。"
+      }
+    }
+  ]
+}
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div><div class="footer-logo">領富 AI</div><p>台股全市場財經資訊網<br>客服 LINE：<a href="https://line.me/R/ti/p/@130tqckv" class="line-cta" target="_blank" rel="noopener" style="color:#06C755;font-weight:600;">@130tqckv</a></p></div>
+    <div><h4>分析工具</h4><ul><li><a href="pages/check.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M192,112a80,80,0,1,1-80-80A80,80,0,0,1,192,112Z" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34,179.6,168.28a88.21,88.21,0,1,0-11.32,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>買前檢查</a></li><li><a href="pages/portfolio-health.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M232,152v24a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V153.13C24,95.65,70.15,48.2,127.63,48A104,104,0,0,1,232,152Z" fill="#c9a24b" opacity=".9"/><path d="M207.06,72.67A111.24,111.24,0,0,0,128,40h-.4C66.07,40.21,16,91,16,153.13V176a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V152A111.25,111.25,0,0,0,207.06,72.67ZM224,176H119.71l54.76-75.3a8,8,0,0,0-12.94-9.42L99.92,176H32V153.13c0-3.08.15-6.12.43-9.13H56a8,8,0,0,0,0-16H35.27c10.32-38.86,44-68.24,84.73-71.66V80a8,8,0,0,0,16,0V56.33A96.14,96.14,0,0,1,221,128H200a8,8,0,0,0,0,16h23.67c.21,2.65.33,5.31.33,8Z"/></svg>投資儀表板</a></li><li><a href="pages/risk-radar.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M216,56v56c0,96-88,120-88,120S40,208,40,112V56a8,8,0,0,1,8-8H208A8,8,0,0,1,216,56Z" fill="#c9a24b" opacity=".9"/><path d="M120,136V96a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,48a12,12,0,1,0-12-12A12,12,0,0,0,128,184ZM224,56v56c0,52.72-25.52,84.67-46.93,102.19-23.06,18.86-46,25.27-47,25.53a8,8,0,0,1-4.2,0c-1-.26-23.91-6.67-47-25.53C57.52,196.67,32,164.72,32,112V56A16,16,0,0,1,48,40H208A16,16,0,0,1,224,56Zm-16,0L48,56l0,56c0,37.3,13.82,67.51,41.07,89.81A128.25,128.25,0,0,0,128,223.62a129.3,129.3,0,0,0,39.41-22.2C194.34,179.16,208,149.07,208,112Z"/></svg>防錯雷達</a></li><li><a href="pages/market-risk.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M152,138V48a32,32,0,0,0-64,0v90a56,56,0,1,0,64,0Zm-32,70a24,24,0,1,1,24-24A24,24,0,0,1,120,208Z" fill="#c9a24b" opacity=".9"/><path d="M212,56a28,28,0,1,0,28,28A28,28,0,0,0,212,56Zm0,40a12,12,0,1,1,12-12A12,12,0,0,1,212,96Zm-84,57V88a8,8,0,0,0-16,0v65a32,32,0,1,0,16,0Zm-8,47a16,16,0,1,1,16-16A16,16,0,0,1,120,200Zm40-66V48a40,40,0,0,0-80,0v86a64,64,0,1,0,80,0Zm-40,98a48,48,0,0,1-27.42-87.4A8,8,0,0,0,96,138V48a24,24,0,0,1,48,0v90a8,8,0,0,0,3.42,6.56A48,48,0,0,1,120,232Z"/></svg>大盤溫度</a></li><li><a href="pages/screener.html">進階選股</a></li><li><a href="pages/samples.html">範例報告</a></li><li><a href="pages/etf-health">ETF 健檢</a></li><li><a href="pages/dividend-tax">股利稅試算</a></li></ul></div>
+    <div><h4>市場資料</h4><ul><li><a href="pages/stocks.html">股價總覽</a></li><li><a href="pages/dividends.html">高殖利率排行</a></li><li><a href="pages/value-stocks.html">便宜股排行</a></li><li><a href="pages/institutional.html">三大法人</a></li><li><a href="pages/margin.html">融資融券</a></li><li><a href="pages/sbl.html">借券</a></li><li><a href="pages/industries.html">產業分類</a></li><li><a href="pages/weekly.html">產業週報</a></li></ul></div>
+    <div><h4>資訊・會員</h4><ul><li><a href="pages/news.html">財經新聞</a></li><li><a href="pages/discussion.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M208,144a80,80,0,0,1-160,0c0-30.57,14.42-58.26,31-80l33,32,26.27-72C159.86,41.92,208,88.15,208,144Z" fill="#c9a24b" opacity=".9"/><path d="M183.89,153.34a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68ZM216,144a88,88,0,0,1-176,0c0-27.92,11-56.47,32.66-84.85a8,8,0,0,1,11.93-.89l24.12,23.41,22-60.41a8,8,0,0,1,12.63-3.41C165.21,36,216,84.55,216,144Zm-16,0c0-46.09-35.79-85.92-58.21-106.33L119.52,98.74a8,8,0,0,1-13.09,3L80.06,76.16C64.09,99.21,56,122,56,144a72,72,0,0,0,144,0Z"/></svg>AI 熱議</a></li><li><a href="pages/ai.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M224,128A96,96,0,0,1,79.93,211.11h0L42.54,223.58a8,8,0,0,1-10.12-10.12l12.47-37.39h0A96,96,0,1,1,224,128Z" fill="#c9a24b" opacity=".9"/><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-4-1.08,7.85,7.85,0,0,0-2.53.42L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Zm12-88a12,12,0,1,1-12-12A12,12,0,0,1,140,128Zm-44,0a12,12,0,1,1-12-12A12,12,0,0,1,96,128Zm88,0a12,12,0,1,1-12-12A12,12,0,0,1,184,128Z"/></svg>AI 對話</a></li><li><a href="pages/vip.html"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M229.67,133.62l-96,96a7.94,7.94,0,0,1-11.24,0l-96-96a7.94,7.94,0,0,1,0-11.24l96.05-96a7.94,7.94,0,0,1,11.24,0l96,96.05A7.94,7.94,0,0,1,229.67,133.62Z" fill="#c9a24b" opacity=".9"/><path d="M235.33,116.72,139.28,20.66a16,16,0,0,0-22.56,0l-96,96.06a16,16,0,0,0,0,22.56l96.05,96.06h0a16,16,0,0,0,22.56,0l96.05-96.06a16,16,0,0,0,0-22.56ZM128,224h0L32,128,128,32,224,128Z"/></svg>VIP 訂閱</a></li><li><a href="pages/watchlist.html">自選股</a></li><li><a href="pages/about.html">關於我們</a></li><li><a href="pages/terms.html">服務條款</a></li><li><a href="pages/privacy.html">隱私權政策</a></li><li><a href="pages/fraud-alert.html">投資人防詐</a></li><li><a href="pages/contact.html">聯絡客服</a></li></ul></div>
+  </div>
+  <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
+</footer>
+
+<!-- AI 今日盤勢警報（進站彈窗）-->
+<div class="ai-alert-overlay" id="aiAlertOverlay" hidden>
+  <div class="ai-alert-modal" role="dialog" aria-labelledby="aiAlertTitle" aria-modal="true">
+    <button class="ai-alert-close" aria-label="關閉" id="aiAlertClose">✕</button>
+    <div class="ai-alert-header">
+      <div class="ai-alert-eyebrow">✨ 領富 AI · 今日盤勢警報</div>
+      <h2 id="aiAlertTitle">AI 為你篩出今日三大重點</h2>
+      <div class="ai-alert-date" id="aiAlertDate">--</div>
+    </div>
+    <div class="ai-alert-body" id="aiAlertItems">
+      <!-- 由 JS 動態填入：今日漲幅前 2 名 + 1 則最新公告/政策 -->
+    </div>
+    <div class="ai-alert-footer">
+      <a href="pages/register.html" class="ai-alert-btn primary">📊 看完整報告</a>
+      <button class="ai-alert-btn line" data-action="line">💬 加 LINE 受推播</button>
+    </div>
+    <p class="ai-alert-disclaimer">※ 本資訊由 AI 自動產生，僅供參考，不構成投資建議。投資前請審慎評估風險。</p>
+  </div>
+</div>
+
+<!-- JSON-LD 結構化資料（給 Google / Bing 認識品牌 + 啟用搜尋框）-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://leadfuai.com/#organization",
+      "name": "領富 AI",
+      "alternateName": ["LeadFu AI", "LeadFu", "領富"],
+      "url": "https://leadfuai.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://leadfuai.com/icons/icon-512.png",
+        "width": 512,
+        "height": 512
+      },
+      "image": "https://leadfuai.com/icons/icon-512.png",
+      "description": "台灣全市場（上市・上櫃・興櫃）股票財經資訊網。提供 2,300+ 檔即時報價、公司基本資料、月營收、產業分類與 AI 自然語言查詢。資料來源為 TWSE 證交所與 TPEx 櫃買中心公開 OpenAPI。",
+      "slogan": "看清楚再決定・AI 台股研究助理",
+      "foundingDate": "2026",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Taiwan",
+        "alternateName": "TW"
+      },
+      "knowsAbout": [
+        "台灣股市",
+        "上市股票",
+        "上櫃股票",
+        "興櫃股票",
+        "TWSE 證交所",
+        "TPEx 櫃買中心",
+        "公司基本資料",
+        "月營收",
+        "IPO 新股抽籤",
+        "證券投資人保護",
+        "投資詐騙防範",
+        "半導體",
+        "生技醫療",
+        "電子零組件"
+      ],
+      "knowsLanguage": ["zh-TW", "zh-Hant"],
+      "sameAs": [
+        "https://line.me/R/ti/p/@130tqckv",
+        "https://github.com/Rayda0114/leadfu-ai"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+886-800-035-178",
+        "contactType": "customer service",
+        "areaServed": "TW",
+        "availableLanguage": ["zh-TW"]
+      },
+      "disambiguatingDescription": "本站僅提供公開資料整理，非證券投資顧問服務（不持有投顧執照），不撮合交易、不代收投資款項，所有資料不構成投資建議。"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://leadfuai.com/#website",
+      "url": "https://leadfuai.com/",
+      "name": "領富 AI · LeadFu AI",
+      "alternateName": "LeadFu AI",
+      "description": "台灣全市場（上市・上櫃・興櫃）股票財經資訊網",
+      "inLanguage": "zh-TW",
+      "publisher": { "@id": "https://leadfuai.com/#organization" },
+      "potentialAction": [
+        {
+          "@type": "SearchAction",
+          "target": "https://leadfuai.com/pages/search.html?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
+        {
+          "@type": "Action",
+          "name": "AI 自然語言查詢",
+          "target": "https://leadfuai.com/pages/ai.html?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://leadfuai.com/#webapp",
+      "name": "領富 AI",
+      "url": "https://leadfuai.com/",
+      "applicationCategory": "FinanceApplication",
+      "applicationSubCategory": "Stock Market Information",
+      "operatingSystem": "Web, iOS, Android",
+      "description": "台股全市場（上市/上櫃/興櫃）即時報價、AI 自然語言查詢、公司基本資料、月營收、產業分類、IPO 行事曆",
+      "featureList": [
+        "2,300+ 檔即時股價",
+        "AI 自然語言查詢",
+        "語音搜尋",
+        "公司基本資料 2,322 家",
+        "月營收年增率",
+        "產業分類",
+        "個股 K 線",
+        "新聞與重大訊息",
+        "投資人防詐警示",
+        "自選股追蹤"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" },
+      "browserRequirements": "Requires JavaScript and HTML5"
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://leadfuai.com/#dataset",
+      "name": "台灣全市場股票即時資料集",
+      "description": "上市 1,084 檔 + 上櫃 878 檔 + 興櫃 348 檔，每日盤後更新",
+      "url": "https://leadfuai.com/data/stocks_live.json",
+      "creator": { "@id": "https://leadfuai.com/#organization" },
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "isAccessibleForFree": true,
+      "keywords": "台灣股票, 上市, 上櫃, 興櫃, 股價, TWSE, TPEx",
+      "spatialCoverage": "Taiwan",
+      "temporalCoverage": "2026/..",
+      "distribution": [
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "application/json",
+          "contentUrl": "https://leadfuai.com/data/stocks_live.json"
+        },
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "application/json",
+          "contentUrl": "https://leadfuai.com/data/companies_live.json"
+        },
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "application/json",
+          "contentUrl": "https://leadfuai.com/data/revenue_live.json"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<script src="js/main.js?v=3.25.7"></script>
+<script>
+// <svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M208,40V208H152V40Z" fill="#c9a24b" opacity=".9"/><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg>今日 AI 盤後摘要（每日生成，6 小時內快取）
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  await setupDailyBrief();
+});
+async function setupDailyBrief() {
+  const L = window.LeadFu;
+  const all = L.data.stocks || [];
+  if (!all.length) return;
+
+  // 1. 計算統計
+  const upStocks = all.filter(s => s.change > 0);
+  const downStocks = all.filter(s => s.change < 0);
+  const flatStocks = all.filter(s => s.change === 0);
+
+  // 注意股/處置股數量
+  const ann = L.data.announcements || [];
+  const warnStocks = new Set();
+  ann.forEach(a => {
+    if (a.type === "注意股" || a.type === "處置股") warnStocks.add(a.code);
+  });
+
+  // 領漲領跌產業（依平均漲跌幅）
+  const cats = {};
+  all.forEach(s => {
+    if (!s.category || s.price <= 0) return;
+    const pct = L.pctChange(s.price, s.change);
+    if (!cats[s.category]) cats[s.category] = { sum: 0, n: 0 };
+    cats[s.category].sum += pct;
+    cats[s.category].n++;
+  });
+  const indStats = Object.entries(cats)
+    .filter(([, v]) => v.n >= 5)   // 至少 5 檔才算（避免 1 檔扭曲）
+    .map(([name, v]) => ({ name, avg: v.sum / v.n, count: v.n }))
+    .sort((a, b) => b.avg - a.avg);
+  const topUp = indStats.slice(0, 3);
+  const topDown = indStats.slice(-3).reverse();
+
+  // 填數字
+  const d = new Date();
+  const w = ["日","一","二","三","四","五","六"];
+  document.getElementById("dailyBriefDate").textContent =
+    `${d.getFullYear()}/${(d.getMonth()+1).toString().padStart(2,"0")}/${d.getDate().toString().padStart(2,"0")} (週${w[d.getDay()]})・全市場 ${all.length} 檔`;
+  document.getElementById("dbUp").textContent = upStocks.length.toLocaleString();
+  document.getElementById("dbDown").textContent = downStocks.length.toLocaleString();
+  document.getElementById("dbFlat").textContent = flatStocks.length.toLocaleString();
+  document.getElementById("dbWarn").textContent = warnStocks.size;
+
+  document.getElementById("dbTopUpInd").innerHTML = topUp.length === 0
+    ? "<span style='color:#999;'>暫無資料</span>"
+    : topUp.map(i => `<span class="daily-ind-pill daily-ind-pill-up">${i.name} <em>+${i.avg.toFixed(2)}%</em></span>`).join(" ");
+  document.getElementById("dbTopDownInd").innerHTML = topDown.length === 0
+    ? "<span style='color:#999;'>暫無資料</span>"
+    : topDown.map(i => `<span class="daily-ind-pill daily-ind-pill-down">${i.name} <em>${i.avg.toFixed(2)}%</em></span>`).join(" ");
+
+  // 2. AI 摘要（快取 6 小時，避免每次刷新都呼叫 API）
+  // v2：修掉「代號1143 誤判」+「日期幻覺」後換 key，讓舊壞快取失效
+  const cacheKey = "leadfu_daily_brief_v2_" + d.toISOString().slice(0, 10);
+  const cacheRaw = localStorage.getItem(cacheKey);
+  let cached = null;
+  if (cacheRaw) {
+    try {
+      const c = JSON.parse(cacheRaw);
+      if (Date.now() - c.ts < 6 * 3600 * 1000) cached = c.text;
+    } catch {}
+  }
+
+  const aiBody = document.getElementById("dbAiBody");
+  const ttsBtn = document.getElementById("dbTtsBtn");
+
+  if (cached) {
+    aiBody.textContent = cached;
+    bindTtsBtn(ttsBtn, cached);
+  } else {
+    // 呼叫 AI，streaming
+    await fetchDailyBriefAi({
+      upCount: upStocks.length,
+      downCount: downStocks.length,
+      flatCount: flatStocks.length,
+      warnCount: warnStocks.size,
+      topUpIndustries: topUp.map(i => ({ name: i.name, avg: i.avg.toFixed(2), count: i.count })),
+      topDownIndustries: topDown.map(i => ({ name: i.name, avg: i.avg.toFixed(2), count: i.count }))
+    }, aiBody, ttsBtn, cacheKey);
+  }
+
+  // 重新整理鈕
+  document.getElementById("dailyBriefRefresh").addEventListener("click", async () => {
+    localStorage.removeItem(cacheKey);
+    aiBody.innerHTML = `<span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span>`;
+    await fetchDailyBriefAi({
+      upCount: upStocks.length, downCount: downStocks.length, flatCount: flatStocks.length,
+      warnCount: warnStocks.size,
+      topUpIndustries: topUp.map(i => ({ name: i.name, avg: i.avg.toFixed(2), count: i.count })),
+      topDownIndustries: topDown.map(i => ({ name: i.name, avg: i.avg.toFixed(2), count: i.count }))
+    }, aiBody, ttsBtn, cacheKey);
+  });
+}
+
+async function fetchDailyBriefAi(stats, bodyEl, ttsBtn, cacheKey) {
+  window.LeadFu && window.LeadFu.trackEvent("ai_summary", { source: "daily_brief" });
+  const prompt = `請用 2-3 句話幫我整理今天台股全市場的盤後重點，給 45-75 歲一般投資人看的，淺白語言。資料如下：\n\n上漲 ${stats.upCount} 家、下跌 ${stats.downCount} 家、平盤 ${stats.flatCount} 家、注意股 ${stats.warnCount} 檔。\n領漲產業：${stats.topUpIndustries.map(i => i.name+" "+i.avg+"%").join("、")}。\n領跌產業：${stats.topDownIndustries.map(i => i.name+" "+i.avg+"%").join("、")}。\n\n只寫盤面客觀觀察，不要推薦個股，不要預測明日走勢。`;
+
+  // 傳真實資料時間 + 標記為市場摘要（worker 會跳過股票代號誤判）
+  const _meta = (window.LeadFu && window.LeadFu.data && window.LeadFu.data.stocksMeta) || {};
+  try {
+    const resp = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8", "Accept": "text/event-stream" },
+      body: JSON.stringify({
+        messages: [{ role: "user", content: prompt }],
+        context: {
+          isMarketBrief: true,
+          dataMeta: {
+            updatedAt: _meta.updatedAt || "請參考頁面標示",
+            source: _meta.source || "TWSE 證交所 + TPEx 櫃買中心"
+          }
+        },
+        stream: true
+      })
+    });
+    if (!resp.ok) {
+      bodyEl.textContent = "（AI 暫時忙碌，請稍後重新整理）";
+      return;
+    }
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let buffer = "";
+    let fullText = "";
+    let gotFirst = false;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+      for (const raw of lines) {
+        const line = raw.trim();
+        if (!line.startsWith("data:")) continue;
+        const data = line.slice(5).trim();
+        if (data === "[DONE]") continue;
+        try {
+          const json = JSON.parse(data);
+          const delta = json.choices?.[0]?.delta?.content;
+          if (delta) {
+            if (!gotFirst) { bodyEl.textContent = ""; gotFirst = true; }
+            fullText += delta;
+            bodyEl.textContent = fullText;
+          }
+        } catch {}
+      }
+    }
+    if (fullText) {
+      localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), text: fullText }));
+      bindTtsBtn(ttsBtn, fullText);
+    }
+  } catch (err) {
+    bodyEl.textContent = "（連線 AI 服務失敗）";
+  }
+}
+
+function bindTtsBtn(btn, text) {
+  if (!btn || !window.LeadFuTTS || !window.LeadFuTTS.isSupported()) {
+    if (btn) btn.style.display = "none";
+    return;
+  }
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.LeadFuTTS.toggleButton(btn, text);
+  });
+}
+
+// 首頁 AI 內嵌對話視窗（直接在首頁聊，跟 ai.html 共用 localStorage 歷史）
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.LeadFu.ready;
+  const L = window.LeadFu;
+  const root = document.getElementById("aiChatEmbed");
+  if (!root) return;
+
+  const STORAGE_KEY = "leadfu_chat_history_v1";
+  const list = document.getElementById("aiEmbedList");
+  const scroll = document.getElementById("aiEmbedScroll");
+  const input = document.getElementById("aiEmbedInput");
+  const form = document.getElementById("aiEmbedForm");
+  const sendBtn = document.getElementById("aiEmbedSendBtn");
+  const newBtn = document.getElementById("aiEmbedNewBtn");
+  const micBtn = document.getElementById("aiEmbedMicBtn");
+
+  let history = [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) history = JSON.parse(raw) || [];
+  } catch {}
+
+  const _stockByCode = {};
+  (L.data.stocks || []).forEach(s => { _stockByCode[s.code] = s; });
+
+  function escAttr(s) { return String(s).replace(/"/g, "&quot;"); }
+  function formatText(text) {
+    if (!text) return "";
+    let esc = String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    // 💎 偵測「合理區間」段落並轉成精美卡片
+    // 用 placeholder 隔離卡片，避免後面的 <p>/<br> 處理切爛 HTML 結構
+    const _cards = [];
+    esc = esc.replace(
+      /💎\s*\*\*?領富\s*AI\s*合理區間\*\*?[\s\S]*?(?=\n\s*\n|$)/g,
+      (block) => {
+        const lowM = block.match(/合理區間[^N]*NT\$?\s*([\d,]+)\s*[~～-]\s*NT\$?\s*([\d,]+)/);
+        const posM = block.match(/目前位置[^：:]*[：:]\s*([^（(,，\n]+)/);
+        const pctM = block.match(/區間\s*(\d+)\s*%/);
+        const starsM = block.match(/(⭐+)/);
+        if (!lowM) return block;
+        const low = lowM[1];
+        const high = lowM[2];
+        const label = posM ? posM[1].trim().replace(/[。.]$/, "") : "—";
+        const pctNum = pctM ? parseInt(pctM[1], 10) : null;
+        const fillPct = pctNum != null ? Math.max(0, Math.min(100, pctNum)) : 50;
+        const stars = starsM ? starsM[1] : "⭐⭐⭐⭐⭐";
+        // 從卡片區塊裡抽出「⭐ 後面那段解讀文字」
+        const afterStars = block.split(/⭐+/).pop().trim();
+        // 用單行 HTML（無多餘換行）避免被 <p>/<br> 影響
+        const cardHTML = `<div class="fv-chat-card"><div class="fv-cc-head">💎 領富 AI 合理區間</div><div class="fv-cc-bar"><div class="fv-cc-bar-track"><div class="fv-cc-bar-marker" style="left:${fillPct}%;"></div></div><div class="fv-cc-bar-labels"><span>NT$ ${low}</span><span>NT$ ${high}</span></div></div><div class="fv-cc-meta"><div><span class="fv-cc-tag">位置</span> <strong>${label}</strong>${pctNum != null ? ` <small>(${pctNum}%)</small>` : ""}</div><div><span class="fv-cc-tag">強度</span> ${stars}</div></div>${afterStars ? `<div class="fv-cc-note">${afterStars.replace(/\n/g, " ")}</div>` : ""}</div>`;
+        _cards.push(cardHTML);
+        return `\n\n__FV_CARD_${_cards.length - 1}__\n\n`;
+      }
+    );
+
+    esc = esc.replace(/(^|[\s（(「『\[、，,])(\d{4})(\s+)([一-龥A-Za-z\-\*KY]{1,12})/g,
+      (m, pre, code, sp, name) => {
+        if (!_stockByCode[code]) return m;
+        return `${pre}<a href="pages/stock-detail?code=${code}" class="chat-stock-link">${code}${sp}${name}</a>`;
+      });
+    esc = esc.replace(/(^|[\s（(「『\[、，,])(\d{4})(?=[）)」』\]、，,\s。.!?]|$)/g,
+      (m, pre, code) => {
+        if (!_stockByCode[code]) return m;
+        return `${pre}<a href="pages/stock-detail?code=${code}" class="chat-stock-link">${code}</a>`;
+      });
+    esc = esc.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
+    esc = esc.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g, "$1<em>$2</em>");
+    esc = esc.replace(/`([^`\n]+?)`/g, "<code style=\"background:#f0f3f8;padding:1px 5px;border-radius:3px;font-size:0.92em;\">$1</code>");
+    let html = esc.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+    // 把 placeholder 換回卡片 HTML（順便剝掉外層 <p>）
+    _cards.forEach((cardHTML, i) => {
+      html = html.replace(new RegExp(`<p>\\s*__FV_CARD_${i}__\\s*</p>`, "g"), cardHTML);
+      html = html.replace(new RegExp(`__FV_CARD_${i}__`, "g"), cardHTML);
+    });
+    return html;
+  }
+
+  function renderBubble(msg) {
+    const div = document.createElement("div");
+    div.className = "chat-bubble chat-bubble-" + msg.role;
+    const avatar = msg.role === "assistant"
+      ? `<div class="chat-avatar chat-avatar-ai">AI</div>`
+      : `<div class="chat-avatar chat-avatar-user">我</div>`;
+    const ttsBtn = (msg.role === "assistant" && window.LeadFuTTS && window.LeadFuTTS.isSupported())
+      ? `<button class="chat-tts-btn" type="button" aria-label="朗讀" title="朗讀">🔊</button>`
+      : "";
+    div.innerHTML = `${avatar}<div class="chat-content">${ttsBtn}${formatText(msg.content)}</div>`;
+    if (ttsBtn) {
+      const btn = div.querySelector(".chat-tts-btn");
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        window.LeadFuTTS.toggleButton(btn, msg.content);
+      });
+    }
+    list.appendChild(div);
+  }
+
+  function renderSuggestionChips(items) {
+    const wrap = document.createElement("div");
+    wrap.className = "chat-suggestions";
+    wrap.innerHTML = items.map(it =>
+      `<button type="button" class="chat-chip" data-q="${escAttr(it.text)}">${it.icon} ${it.text}</button>`
+    ).join("");
+    wrap.querySelectorAll(".chat-chip").forEach(b => {
+      b.addEventListener("click", () => sendMessage(b.dataset.q));
+    });
+    list.appendChild(wrap);
+  }
+
+  function showWelcome() {
+    renderBubble({ role: "assistant", content: "您好！我是領富 AI ✨\n\n問股票、找合理區間、看產業熱門 — 直接問我就好。\n也可以按麥克風🎤用講的，或試試下面這些範例：" });
+    renderSuggestionChips([
+      { icon: "💎", text: "2330 台積電現在合理嗎" },
+      { icon: "🔬", text: "半導體現在熱門股" },
+      { icon: "💰", text: "高股息推薦哪幾檔" },
+      { icon: "⚠", text: "我買到注意股怎麼辦" },
+      { icon: "📊", text: "100 萬怎麼配置才穩" },
+      { icon: "🚨", text: "怎麼避免投資詐騙" }
+    ]);
+    scrollToBottom();
+  }
+
+  function scrollToBottom() {
+    requestAnimationFrame(() => { scroll.scrollTop = scroll.scrollHeight; });
+  }
+  function scrollToBottomIfNearBottom() {
+    const fromBottom = scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight;
+    if (fromBottom < 120) scrollToBottom();
+  }
+
+  function saveHistory() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-20))); } catch {}
+  }
+
+  function createStreamingBubble() {
+    const div = document.createElement("div");
+    div.className = "chat-bubble chat-bubble-assistant chat-streaming";
+    div.innerHTML = `<div class="chat-avatar chat-avatar-ai">AI</div><div class="chat-content"><span class="chat-typing-mini"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span></span></div>`;
+    list.appendChild(div);
+    scrollToBottom();
+    const contentEl = div.querySelector(".chat-content");
+    let lastText = "";
+    return {
+      removeTyping() { const t = div.querySelector(".chat-typing-mini"); if (t) t.remove(); },
+      update(text) { lastText = text; contentEl.innerHTML = formatText(text); },
+      finalize() {
+        div.classList.remove("chat-streaming");
+        if (window.LeadFuTTS && window.LeadFuTTS.isSupported() && lastText) {
+          const btn = document.createElement("button");
+          btn.className = "chat-tts-btn";
+          btn.type = "button";
+          btn.title = "朗讀";
+          btn.textContent = "🔊";
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.LeadFuTTS.toggleButton(btn, lastText);
+          });
+          contentEl.insertBefore(btn, contentEl.firstChild);
+        }
+        // 🎯 智能下一步 CTA — 根據用戶問題 + AI 回答關鍵字自動推薦相關功能
+        const lastUserMsg = history.filter(m => m.role === "user").pop();
+        const ctas = detectNextStepCTAs(lastUserMsg ? lastUserMsg.content : "", lastText);
+        if (ctas.length) renderNextStepCTAs(ctas);
+      }
+    };
+  }
+
+  /** 依用戶問題 + AI 回答內容偵測下一步行動建議 */
+  function detectNextStepCTAs(userQuestion, aiAnswer) {
+    const ctas = [];
+    const q = (userQuestion + " " + (aiAnswer || "")).toLowerCase();
+    // 偵測 4 位數股票代號 → 給「看詳細頁」連結（最高優先）
+    const codeMatch = (userQuestion || "").match(/\b(\d{4})\b/);
+    if (codeMatch && _stockByCode[codeMatch[1]]) {
+      const s = _stockByCode[codeMatch[1]];
+      ctas.push({ icon: "📊", text: `看 ${s.code} ${s.name} 完整分析`, href: `pages/stock-detail?code=${s.code}` });
+    }
+    if (/合理區間|偏低|偏高|低估|高估|被低估|公允/.test(q)) {
+      ctas.push({ icon: "💎", text: "看合理區間偏低 TOP 5", href: "pages/stocks.html?sort=fv_low" });
+    }
+    if (/詐騙|被騙|騙人|飆股群組|line.*群組|老師.*飆/.test(q)) {
+      ctas.push({ icon: "🚨", text: "看防詐騙專區", href: "pages/fraud-alert.html" });
+    }
+    if (/注意股|處置股|警示|借券|融券|風險/.test(q)) {
+      ctas.push({ icon: "⚠", text: "看防錯雷達", href: "pages/risk-radar.html" });
+    }
+    if (/持股|配置|組合|資產配置|健診|健檢|多少錢配/.test(q)) {
+      ctas.push({ icon: "📋", text: "做持股健診", href: "pages/portfolio-health.html" });
+    }
+    if (/週報|產業趨勢|本週|這週|產業.*熱門|產業.*分析/.test(q)) {
+      ctas.push({ icon: "📰", text: "看 AI 產業週報", href: "pages/weekly.html" });
+    }
+    if (/殖利率|配息|股息|現金股利|高股息/.test(q)) {
+      ctas.push({ icon: "💰", text: "看高殖利率排行", href: "pages/dividends.html" });
+    }
+    if (/月營收|營收公告|公司.*公告|重大訊息/.test(q)) {
+      ctas.push({ icon: "📢", text: "看公司公告", href: "pages/announcements.html" });
+    }
+    if (/開戶|券商|複委託|手續費|美股.*買/.test(q)) {
+      ctas.push({ icon: "🏦", text: "VIP 訂閱（開戶推薦即將推出）", href: "pages/vip.html" });
+    }
+    if (/vip|訂閱|付費|升級|多少錢/.test(q)) {
+      ctas.push({ icon: "💎", text: "VIP 限時 5 折 →", href: "pages/vip.html" });
+    }
+    if (/三大法人|外資|投信|自營/.test(q)) {
+      ctas.push({ icon: "👥", text: "看三大法人買賣超", href: "pages/institutional.html" });
+    }
+    if (/篩選|選股|挑股/.test(q)) {
+      ctas.push({ icon: "🔍", text: "用進階選股工具", href: "pages/screener.html" });
+    }
+    // 去重 + 最多 3 個
+    const seen = new Set();
+    return ctas.filter(c => { if (seen.has(c.href)) return false; seen.add(c.href); return true; }).slice(0, 3);
+  }
+
+  function renderNextStepCTAs(ctas) {
+    if (!ctas.length) return;
+    const wrap = document.createElement("div");
+    wrap.className = "chat-next-ctas";
+    wrap.innerHTML = `<div class="chat-next-label">💬 下一步你可能想看：</div>` +
+      ctas.map(c => `<a href="${c.href}" class="chat-next-chip">${c.icon} ${c.text}</a>`).join("");
+    list.appendChild(wrap);
+    scrollToBottomIfNearBottom();
+  }
+
+  /** 欄位名自帶單位，避免 AI 把金額誤讀為 % */
+  function normalizeStockForAI(s) {
+    const pct = L.pctChange(s.price, s.change);
+    return {
+      code: s.code,
+      name: s.name,
+      market: s.market,
+      category: s.category,
+      price_TWD: s.price,
+      todayChange_TWD: s.change,
+      todayChangePercent: Number(pct.toFixed(2)),
+      volume_lots: s.volume
+    };
+  }
+
+  function isWatchlistQuestion(q) {
+    if (!q) return false;
+    return /(我的?|本人)?(自選|追蹤|關注|觀察|盯|心儀).*?(股|清單|名單|這幾檔)/.test(q)
+        || /我自選|自選股/.test(q);
+  }
+
+  function buildWatchlistContext() {
+    const codes = (L.getWatchlist ? L.getWatchlist() : []);
+    const ctx = { watchlistIsEmpty: codes.length === 0 };
+    if (!codes.length) return ctx;
+    const all = L.data.stocks || [];
+    const companies = L.data.companies || {};
+    const revenue = L.data.revenue || {};
+    const news = L.data.news || [];
+    const announcements = L.data.announcements || [];
+    const watchStocks = codes.map(c => all.find(s => s.code === c)).filter(Boolean);
+    ctx.watchlistStocks = watchStocks.map(normalizeStockForAI);
+    const co = {};
+    codes.forEach(c => { if (companies[c]) co[c] = companies[c]; });
+    if (Object.keys(co).length) ctx.watchlistCompanies = co;
+    const rev = {};
+    codes.forEach(c => { if (revenue[c]) rev[c] = revenue[c]; });
+    if (Object.keys(rev).length) ctx.watchlistRevenue = rev;
+    const relNews = news.filter(n =>
+      n.related && Array.isArray(n.related) && n.related.some(c => codes.includes(c))
+    ).slice(0, 8).map(n => ({
+      title: n.title, date: n.date, tag: n.tag, related: n.related,
+      summary: Array.isArray(n.body) ? (n.body[0] || "").slice(0, 150) : ""
+    }));
+    if (relNews.length) ctx.watchlistNews = relNews;
+    const relAnn = announcements.filter(a => codes.includes(a.code)).slice(0, 10);
+    if (relAnn.length) ctx.watchlistAnnouncements = relAnn;
+    return ctx;
+  }
+
+  /** 📊 資料元資訊 — AI 每次回答都會引用這份資料的更新時間／來源 */
+  function buildDataMeta() {
+    const meta = L.data.stocksMeta || {};
+    return {
+      updatedAt: meta.updatedAt || L.data.updatedAt || "請參考頁面",
+      source: meta.source || "TWSE 證交所 + TPEx 櫃買中心 + MOPS 公開資訊觀測站",
+      stockCount: meta.stockCount || (L.data.stocks || []).length,
+      sourceDate: meta.sourceDate || ""
+    };
+  }
+
+  /** ⚡ 從 /api/quote 拉即時報價（5 秒延遲，TWSE MIS API）
+   *  正確格式：ex_ch=tse_2330.tw（上市）或 otc_6488.tw（上櫃）；興櫃 MIS 沒提供 */
+  async function fetchLiveQuote(code) {
+    if (!code) return null;
+    const stock = _stockByCode[code];
+    if (!stock) return null;
+    if (stock.market === "emerging") return null;  // 興櫃 MIS 沒有
+
+    const prefix = stock.market === "otc" ? "otc_" : "tse_";
+    const ex_ch = `${prefix}${code}.tw`;
+    try {
+      const resp = await fetch(`/api/quote?ex_ch=${encodeURIComponent(ex_ch)}`, { cache: "no-cache" });
+      if (!resp.ok) return null;
+      const data = await resp.json();
+      const q = data && data.msgArray && data.msgArray[0];
+      if (!q) return null;
+      // 解析 MIS 回應為 AI 易讀的格式
+      const z = parseFloat(q.z);
+      const pz = parseFloat(q.pz);
+      const y = parseFloat(q.y);
+      const price = (!isNaN(z) && z > 0) ? z : (!isNaN(pz) && pz > 0 ? pz : null);
+      if (price == null || isNaN(y)) return null;
+      const change = price - y;
+      const pct = (change / y) * 100;
+      return {
+        code: q.c || code,
+        name: q.n || stock.name,
+        price_TWD: Number(price.toFixed(2)),
+        prevClose_TWD: y,
+        change_TWD: Number(change.toFixed(2)),
+        changePercent: Number(pct.toFixed(2)),
+        volume_lots: parseFloat(q.v) || null,
+        timestamp: q.tlong ? new Date(parseInt(q.tlong)).toISOString() : null,
+        source: "TWSE MIS API (5 秒延遲)"
+      };
+    } catch (e) { /* 即時報價失敗就 fallback 到 stocks_live.json */ }
+    return null;
+  }
+
+  function buildContext(question) {
+    if (!question) return {};
+    if (isWatchlistQuestion(question)) return buildWatchlistContext();
+    const ctx = {};
+    ctx.dataMeta = buildDataMeta();
+    const all = L.data.stocks || [];
+    const codeMatch = question.match(/\b\d{4}\b/);
+    let targetStock = null;
+    if (codeMatch) targetStock = all.find(s => s.code === codeMatch[0]);
+    if (!targetStock) {
+      const sortedByLen = [...all].filter(s => s.name && s.name.length >= 2)
+                                  .sort((a, b) => b.name.length - a.name.length);
+      targetStock = sortedByLen.find(s => question.includes(s.name));
+    }
+    if (targetStock) {
+      ctx.relevantStocks = [normalizeStockForAI(targetStock)];
+      const co = (L.data.companies && L.data.companies[targetStock.code]) || null;
+      if (co) ctx.companyInfo = co;
+      const rev = (L.data.revenue && L.data.revenue[targetStock.code]) || null;
+      if (rev) ctx.revenueInfo = rev;
+      // 💎 領富 AI 合理區間
+      const fv = (L.data.fairValue && L.data.fairValue[targetStock.code]) || null;
+      if (fv) ctx.fairValue = fv;
+      return ctx;
+    }
+    let market = null;
+    if (/上市/.test(question)) market = "listed";
+    else if (/上櫃/.test(question)) market = "otc";
+    else if (/興櫃/.test(question)) market = "emerging";
+    const industries = ["半導體","電子零組件","電腦及周邊","通信網路","電子通路",
+                        "光電","生技醫療","金融保險","綠能環保","數位雲端",
+                        "電子","電機機械","鋼鐵","紡織","食品","汽車","建材營造"];
+    const matchedIndustry = industries.find(i => question.includes(i));
+    let pool = all.slice();
+    if (market) pool = pool.filter(s => s.market === market);
+    if (matchedIndustry) pool = pool.filter(s => s.category && s.category.includes(matchedIndustry));
+    pool = pool.filter(s => s.price > 0);
+    if (/漲|上漲/.test(question)) pool.sort((a, b) => L.pctChange(b.price, b.change) - L.pctChange(a.price, a.change));
+    else if (/跌|下跌/.test(question)) pool.sort((a, b) => L.pctChange(a.price, a.change) - L.pctChange(b.price, b.change));
+    else pool.sort((a, b) => (b.volume || 0) - (a.volume || 0));
+    ctx.relevantStocks = pool.slice(0, 15).map(normalizeStockForAI);
+    // 💎 多檔合理區間
+    if (L.data.fairValue) {
+      const fvMap = {};
+      ctx.relevantStocks.forEach(s => { if (L.data.fairValue[s.code]) fvMap[s.code] = L.data.fairValue[s.code]; });
+      if (Object.keys(fvMap).length) ctx.fairValueMap = fvMap;
+    }
+    return ctx;
+  }
+
+  let _pending = false;
+  async function sendMessage(text) {
+    text = (text || "").trim();
+    if (!text) return;
+    if (_pending) return;
+    _pending = true;
+    window.LeadFu && window.LeadFu.trackEvent("ai_chat", { source: "home" });
+    list.querySelectorAll(".chat-suggestions").forEach(el => el.remove());
+
+    const userMsg = { role: "user", content: text, ts: Date.now() };
+    history.push(userMsg);
+    renderBubble(userMsg);
+    saveHistory();
+    scrollToBottom();
+
+    sendBtn.disabled = true;
+    sendBtn.textContent = "...";
+    input.disabled = true;
+
+    const context = buildContext(text);
+
+    // ⚡ 即時報價優先：偵測到股票代號就先打 /api/quote
+    const codeForQuote = (text.match(/\b\d{4}\b/) || [])[0];
+    if (codeForQuote && _stockByCode[codeForQuote]) {
+      const live = await fetchLiveQuote(codeForQuote);
+      if (live) context.liveQuote = live;
+    }
+
+    const aiMsg = { role: "assistant", content: "", ts: Date.now() };
+    const aiBubble = createStreamingBubble();
+    let fullText = "";
+    let gotFirstChunk = false;
+
+    try {
+      const resp = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8", "Accept": "text/event-stream" },
+        body: JSON.stringify({
+          messages: history.map(m => ({ role: m.role, content: m.content })),
+          context,
+          stream: true
+        })
+      });
+      if (!resp.ok) {
+        let errInfo;
+        try { errInfo = await resp.json(); } catch { errInfo = { error: "AI 暫時無法回答" }; }
+        const errText = errInfo.error || "AI 暫時無法回答";
+        const isRateLimit = resp.status === 429;
+        const tail = isRateLimit ? "\n\n💡 提示：等 5-10 秒後再試。" : "\n\n請稍後再試一次。";
+        aiMsg.content = errText + tail;
+        aiBubble.update(aiMsg.content);
+        aiBubble.finalize();
+        history.push(aiMsg);
+        saveHistory();
+        return;
+      }
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let buffer = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+        for (const raw of lines) {
+          const line = raw.trim();
+          if (!line.startsWith("data:")) continue;
+          const data = line.slice(5).trim();
+          if (data === "[DONE]") continue;
+          try {
+            const json = JSON.parse(data);
+            const delta = json.choices?.[0]?.delta?.content;
+            if (delta) {
+              if (!gotFirstChunk) { aiBubble.removeTyping(); gotFirstChunk = true; }
+              fullText += delta;
+              aiBubble.update(fullText);
+              scrollToBottomIfNearBottom();
+            }
+          } catch {}
+        }
+      }
+      aiMsg.content = fullText || "(AI 沒有回應)";
+      aiBubble.update(aiMsg.content);
+      aiBubble.finalize();
+      history.push(aiMsg);
+      saveHistory();
+    } catch (err) {
+      aiMsg.content = "連線 AI 服務失敗，請檢查網路後再試。";
+      aiBubble.update(aiMsg.content);
+      aiBubble.finalize();
+      history.push(aiMsg);
+      saveHistory();
+    } finally {
+      _pending = false;
+      sendBtn.disabled = false;
+      sendBtn.textContent = "送出";
+      input.disabled = false;
+      scrollToBottom();
+      input.focus();
+    }
+  }
+
+  // 表單送出
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (text) {
+      input.value = "";
+      autoResize();
+      sendMessage(text);
+    }
+  });
+  function autoResize() {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 140) + "px";
+  }
+  input.addEventListener("input", autoResize);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      form.dispatchEvent(new Event("submit"));
+    }
+  });
+
+  // 新對話
+  newBtn.addEventListener("click", () => {
+    if (history.length > 0 && !confirm("確定要開新對話嗎？目前的對話歷史會清空。")) return;
+    history = [];
+    list.innerHTML = "";
+    localStorage.removeItem(STORAGE_KEY);
+    showWelcome();
+  });
+
+  // 語音輸入（B 方案：不支援就顯示引導，不隱藏麥克風）
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    // 偵測 iOS 上非 Safari 的瀏覽器（Chrome / Firefox / Edge on iOS 都用 WKWebView 沒語音 API）
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const isIOSChrome = isIOS && /CriOS/.test(ua);
+    const isIOSFirefox = isIOS && /FxiOS/.test(ua);
+    const isIOSEdge = isIOS && /EdgiOS/.test(ua);
+    const isIOSNonSafari = isIOSChrome || isIOSFirefox || isIOSEdge;
+
+    micBtn.classList.add("chat-mic-unsupported");
+    micBtn.setAttribute("title", "語音輸入小提示");
+    micBtn.addEventListener("click", () => showVoiceUpsellModal(isIOSNonSafari));
+  } else {
+    let recog = null;
+    micBtn.addEventListener("click", () => {
+      if (recog) { try { recog.abort(); } catch {} recog = null; micBtn.classList.remove("chat-mic-active"); return; }
+      recog = new SR();
+      recog.lang = "zh-TW";
+      recog.continuous = false;
+      recog.interimResults = true;
+      micBtn.classList.add("chat-mic-active");
+      let finalText = "";
+      recog.onresult = (e) => {
+        let t = "";
+        for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+        t = L.normalizeSearchQuery ? L.normalizeSearchQuery(t) : t;
+        input.value = t;
+        autoResize();
+        if (e.results[e.results.length - 1].isFinal) finalText = t;
+      };
+      recog.onerror = () => { micBtn.classList.remove("chat-mic-active"); recog = null; };
+      recog.onend = () => {
+        micBtn.classList.remove("chat-mic-active");
+        recog = null;
+        if (finalText) {
+          input.value = finalText;
+          autoResize();
+          setTimeout(() => form.dispatchEvent(new Event("submit")), 200);
+        }
+      };
+      try { recog.start(); } catch { micBtn.classList.remove("chat-mic-active"); recog = null; }
+    });
+  }
+
+  /** 不支援語音輸入時的引導 modal */
+  function showVoiceUpsellModal(isIOSNonSafari) {
+    // 已有 modal 就 focus 它
+    if (document.getElementById("voiceUpsellModal")) return;
+    const ov = document.createElement("div");
+    ov.id = "voiceUpsellModal";
+    ov.className = "voice-upsell-overlay";
+    const stepsHTML = isIOSNonSafari
+      ? `
+        <div class="vu-option">
+          <div class="vu-opt-head">
+            <span class="vu-opt-num">1</span>
+            <strong>把領富 AI 加到主畫面（推薦）</strong>
+          </div>
+          <ol class="vu-steps">
+            <li>點瀏覽器右上角的「分享」<span class="vu-key">⎙</span></li>
+            <li>選「加到主畫面」</li>
+            <li>下次從主畫面打開 — <strong>就能用語音了</strong></li>
+          </ol>
+        </div>
+        <div class="vu-divider">或</div>
+        <div class="vu-option">
+          <div class="vu-opt-head">
+            <span class="vu-opt-num">2</span>
+            <strong>用 Safari 打開 leadfuai.com</strong>
+          </div>
+          <p class="vu-desc">Safari 是 iPhone 唯一支援網頁語音輸入的瀏覽器</p>
+        </div>`
+      : `
+        <p class="vu-generic">
+          您目前使用的瀏覽器不支援網頁語音輸入。
+          建議改用 <strong>Safari</strong>（iPhone）或 <strong>Chrome 桌面版</strong> 來使用語音功能。
+        </p>
+        <p class="vu-desc-2">
+          您仍然可以正常打字使用領富 AI 所有功能 — 只是少了語音的便利。
+        </p>`;
+    ov.innerHTML = `
+      <div class="voice-upsell-modal" role="dialog" aria-modal="true">
+        <button class="vu-close" aria-label="關閉" type="button">✕</button>
+        <div class="vu-icon">🎤</div>
+        <h3 class="vu-title">語音輸入需要 Safari</h3>
+        <p class="vu-sub">${isIOSNonSafari
+          ? "Apple 政策只允許 Safari 使用網頁語音 API，您現在用的瀏覽器不行。但有兩個簡單的解法："
+          : "您的瀏覽器不支援語音輸入。"}</p>
+        ${stepsHTML}
+        <div class="vu-foot">
+          <button class="vu-foot-btn" type="button" data-action="ok">我知道了</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(ov);
+    const close = () => ov.remove();
+    ov.addEventListener("click", (e) => { if (e.target === ov) close(); });
+    ov.querySelector(".vu-close").addEventListener("click", close);
+    ov.querySelector('[data-action="ok"]').addEventListener("click", close);
+  }
+
+  // 初始化：有歷史就 render，沒就 welcome
+  if (history.length === 0) {
+    showWelcome();
+  } else {
+    history.forEach(renderBubble);
+    scrollToBottom();
+  }
+
+  // 🎯 從 URL 讀取 ?ask= 參數（其他頁的「問 AI」按鈕導到首頁時用）
+  try {
+    const params = new URLSearchParams(location.search);
+    const askText = params.get("ask");
+    if (askText && askText.trim()) {
+      // 清掉 URL 上的參數避免重新整理重複觸發
+      const cleanUrl = location.pathname + location.hash;
+      window.history.replaceState({}, "", cleanUrl);
+      // 滾到對話框 + 自動送出問題（小延遲讓 welcome 先 render 完）
+      setTimeout(() => {
+        const heroChat = document.getElementById("aiChatEmbed");
+        if (heroChat) heroChat.scrollIntoView({ behavior: "smooth", block: "start" });
+        setTimeout(() => sendMessage(askText.trim()), 400);
+      }, 100);
+    }
+  } catch (e) { /* URL 解析失敗就 skip */ }
+});
+</script>
+
+<script>
+/* 動態更新首頁 hero「ChatGPT vs 領富 AI」對比區塊內的 2330 合理區間
+   讀 fair_value_live.json（已被 main.js 載入到 window.LeadFu.data.fairValue），
+   避免 hardcode 數字過時。失敗就保留 HTML fallback。 */
+(async () => {
+  try {
+    if (!window.LeadFu || !window.LeadFu.ready) return;
+    await window.LeadFu.ready;
+    const fv = window.LeadFu.data && window.LeadFu.data.fairValue && window.LeadFu.data.fairValue["2330"];
+    if (!fv) return;
+    const pos = Math.max(0, Math.min(100, fv.position * 100));
+    const fmt = n => Math.round(n).toLocaleString();
+    const $ = id => document.getElementById(id);
+    if ($("fvDemoMarker")) $("fvDemoMarker").style.left = pos.toFixed(1) + "%";
+    if ($("fvDemoLow"))    $("fvDemoLow").textContent   = "NT$ " + fmt(fv.low);
+    if ($("fvDemoHigh"))   $("fvDemoHigh").textContent  = "NT$ " + fmt(fv.high);
+    if ($("fvDemoMeta")) {
+      const stars = "⭐".repeat(Math.max(1, Math.min(5, Math.round(fv.confidence))));
+      $("fvDemoMeta").innerHTML =
+        `<span class="vs-mini-tag">位置</span> <strong>${fv.label} (${pos.toFixed(0)}%)</strong> · <span class="vs-mini-tag">強度</span> ${stars}`;
+    }
+    if ($("fvDemoNote")) {
+      const noteMap = {
+        "低於合理區間":  "位置已跌破合理區間下緣",
+        "合理區間下緣":  "位於合理區間下緣，仍需檢查基本面與流動性",
+        "合理偏低":      "位於合理區間偏低位置，仍需檢查基本面",
+        "合理區間中":    "落在中性配置區間，非偏低也非偏高",
+        "合理偏高":      "位於合理區間偏高位置，相對偏貴",
+        "合理區間上緣":  "位於合理區間上緣，相對偏貴",
+        "高於合理區間":  "位置已突破合理區間上緣，相對偏貴"
+      };
+      const desc = noteMap[fv.label] || "請參考合理區間判斷現價位置";
+      $("fvDemoNote").textContent = `目前股價 ${fv.price.toLocaleString()} 元，${desc}。`;
+    }
+  } catch (e) { /* 失敗就保留 HTML fallback */ }
+})();
+</script>
+
+<script>
+/* 首頁第一屏：範例風險卡(載入真實 2330) + 檢查框 → 買前檢查 */
+(async () => {
+  try {
+    if (!window.LeadFu || !window.LeadFu.ready) return;
+    await window.LeadFu.ready;
+    const L = window.LeadFu;
+
+    /* 範例卡：即時帶入 2330 真數字，與「買前檢查」同一份資料源 → 永遠一致、不會自打嘴巴。
+       取值與 check 頁同源：riskScore / instStreak / fairValue / sbl（皆以代號為 key）。 */
+    try {
+      const D = L.data || {};
+      const C = "2330";
+      const rs = (D.riskScore || {})[C] || {};
+      const st = (D.instStreak || {})[C] || {};
+      const fv = (D.fairValue || {})[C] || {};
+      const sb = (D.sbl || {})[C] || {};
+      const score = (rs.score != null) ? rs.score : null;
+      const level = rs.level || null;                       // 低 / 中 / 高 / 警示
+      const lots = (st.foreign != null) ? Math.abs(st.foreign) : null;
+      const dir = st.dir;                                   // buy / sell
+      const days = st.days || 0;
+      const fmtLots = n => n != null ? n.toLocaleString("en-US") : "—";
+      const levelClass = { "低": "ex-low", "中": "ex-mid", "高": "ex-high", "警示": "ex-high" };
+      const levelText = { "低": "低風險", "中": "中風險", "高": "高風險", "警示": "警示" };
+
+      // ── 卡片①：範例結果卡 ──
+      const setTxt = (sel, t) => { const e = document.querySelector(sel); if (e && t != null) e.textContent = t; };
+      if (level) {
+        const badge = document.querySelector("#exampleCard .ex-status");
+        if (badge) { badge.className = "ex-status " + (levelClass[level] || "ex-mid"); badge.textContent = levelText[level] || level; }
+      }
+      if (score != null) {
+        const sEl = document.querySelector("#exampleCard .ex-score strong"); if (sEl) sEl.textContent = score;
+        const bar = document.querySelector("#exampleCard .ex-bar-fill"); if (bar) bar.style.width = Math.min(100, score) + "%";
+      }
+      // 今日需注意：依即時資料重建（只列真實成立的項目）
+      const notes = [];
+      if (dir === "sell" && lots != null) notes.push(`外資今日賣超 ${fmtLots(lots)} 張`);
+      else if (dir === "buy" && lots != null) notes.push(`外資今日買超 ${fmtLots(lots)} 張`);
+      if (days >= 2 && dir) notes.push(`<b>是否連續${dir === "sell" ? "賣" : "買"}超：</b>是，已連 ${days} 日`);
+      if (sb.sbl_change > 0) notes.push("借券餘額增加");
+      else if (sb.sbl_change < 0) notes.push("借券餘額減少");
+      if (fv.label) notes.push(`股價位於${fv.label}`);
+      const ul = document.querySelector("#exampleCard .ex-notes");
+      if (ul && notes.length) ul.innerHTML = notes.map(n => `<li>${n}</li>`).join("");
+
+      // ── 卡片②：盤後複查範例卡 ──
+      const gcTag = document.querySelector(".guardian-card .gc-tag");
+      if (gcTag && level && score != null) gcTag.textContent = `${levelText[level] || level} ${score}`;
+      const gItems = [];
+      if (days >= 2 && dir) gItems.push(`🏦 外資連 ${days} 日${dir === "sell" ? "賣" : "買"}超`);
+      else if (dir && lots != null) gItems.push(`🏦 外資今日${dir === "sell" ? "賣" : "買"}超 ${fmtLots(lots)} 張`);
+      if (sb.sbl_change > 0) gItems.push("📉 借券餘額增加");
+      else if (sb.sbl_change < 0) gItems.push("📈 借券餘額減少");
+      if (fv.label) gItems.push(`${fv.position != null && fv.position < 0.5 ? "✅" : "📊"} 股價位於${fv.label}`);
+      const gul = document.querySelector(".guardian-card .gc-items");
+      if (gul && gItems.length) gul.innerHTML = gItems.map(n => `<li>${n}</li>`).join("");
+    } catch (e) { /* 取值失敗就保留 HTML 內靜態範例，不致命 */ }
+
+    // 檢查框：輸入 → 買前檢查
+    const input = document.getElementById("checkHeroInput");
+    const resolve = (v) => {
+      v = (v || "").trim(); if (!v) return null;
+      const m = v.match(/\b(00\d{2,4}[A-Z]?|\d{4})\b/); if (m) return m[1];
+      const st = (L.data.stocks || []).find(x => x.name && (v.includes(x.name) || x.name.includes(v)));
+      return st ? st.code : null;
+    };
+    const go = () => {
+      const code = resolve(input && input.value);
+      if (code) location.href = "pages/check.html?code=" + code;
+      else if (input) { input.style.borderColor = "#c0392b"; input.value = ""; input.placeholder = "找不到，請輸入代號（例如 2330）"; }
+    };
+    const btn = document.getElementById("checkHeroBtn");
+    if (btn) btn.addEventListener("click", go);
+    const form = document.getElementById("checkHeroForm");
+    if (form) form.addEventListener("submit", (e) => { e.preventDefault(); go(); });
+    // 麥克風：重用全站語音搜尋引擎；瀏覽器不支援語音則隱藏麥克風鍵
+    const mic = document.getElementById("checkHeroMic");
+    const searchBtn = document.getElementById("checkHeroSearchBtn");
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (mic && SR && typeof window.startVoiceRecognition === "function") {
+      mic.addEventListener("click", () => window.startVoiceRecognition(input, searchBtn));
+    } else if (mic) {
+      mic.style.display = "none";
+    }
+  } catch (e) {}
+})();
+</script>
+
+<script>
+/* 📡 輿情警示 chips（有警示才出現） */
+(function () {
+  fetch("/data/sentiment_live.json").then(r => r.json()).then(sj => {
+    const rows = Object.entries(sj.data || {}).filter(([c, v]) => v.heat_spike || v.heat_watch);
+    const el = document.getElementById("xrHeatStrip");
+    if (!el || !rows.length) return;
+    el.innerHTML = rows.slice(0, 4).map(([c, v]) =>
+      `<a href="/pages/check?code=${c}" style="display:inline-flex;align-items:center;gap:6px;background:${v.heat_spike ? "#fbeae8" : "#fdf2dd"};color:${v.heat_spike ? "#a13a2f" : "#a8731c"};border:1px solid ${v.heat_spike ? "#eccfc9" : "#ecd9b0"};font-size:12.5px;font-weight:900;padding:6px 13px;border-radius:999px;text-decoration:none;">📡 ${c} ${v.name} 輿情${v.heat_spike ? "異常" : "升溫"} →</a>`).join(" ");
+    el.style.display = "flex";
+  }).catch(function (e) {});
+})();
+</script>
+</body>
+</html>

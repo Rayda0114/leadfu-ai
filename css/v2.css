@@ -80,8 +80,6 @@ html.v2 .site-footer,html.v2 .site-footer a,html.v2 .site-footer p,html.v2 .site
 html.v2 .site-footer a:hover{color:var(--v2-gold2) !important;}
 html.v2 .site-footer h4,html.v2 .site-footer b,html.v2 .site-footer strong{color:#FAF8F2 !important;}
 
-/* ── 預覽角標 ── */
-html.v2::after{content:"2.0 預覽中・網址加 ?v2=0 關閉";position:fixed;left:14px;bottom:14px;z-index:1800;background:#B33A2E;color:#fff;font-size:11.5px;font-weight:900;padding:7px 13px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.3);opacity:.93;pointer-events:none;}
 
 /* ── 進階選股：熱門快選膠囊 2.0 ── */
 html.v2 .preset-pill{background:#fff !important;border:1.5px solid var(--v2-line) !important;border-radius:999px !important;color:var(--v2-soft) !important;font-weight:800 !important;box-shadow:none !important;transition:all .15s;}
