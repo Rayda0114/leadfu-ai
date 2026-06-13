@@ -2484,6 +2484,12 @@ export default {
       return Response.redirect(url.toString(), 301);
     }
 
+    // ── .html → 無 .html（統一網址，消除 .html/無.html 重複稀釋；ASSETS 對無.html 路徑自動解析實體檔）──
+    if (url.pathname.endsWith(".html")) {
+      url.pathname = url.pathname === "/index.html" ? "/" : url.pathname.slice(0, -5);
+      return Response.redirect(url.toString(), 301);
+    }
+
     // ── 個股 SEO 頁 /stock/{代號}：worker 伺服器端渲染（每檔獨特內容；出錯則往下走、不影響全站）──
     if (url.pathname.startsWith("/stock/") && request.method === "GET") {
       try { return await renderStockPage(url, env); } catch (e) { /* fall through to ASSETS */ }
