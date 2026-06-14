@@ -31,6 +31,9 @@ STATIC_PAGES = [
     ("/pages/value-stocks.html",       "daily",   0.85),
     ("/pages/etf.html",                "daily",   0.9),
     ("/pages/etf-compare.html",        "daily",   0.85),
+    ("/pages/us-market.html",          "daily",   0.85),   # 美股精選 100 專區
+    ("/pages/dividend-calendar.html",  "daily",   0.8),    # 除權息行事曆
+    ("/pages/stock-compare.html",      "weekly",  0.7),    # 個股並排比較
     ("/pages/etf-health",              "daily",   0.85),   # 高股息 ETF 健檢（每日更新）
     ("/pages/dividend-tax",            "weekly",  0.85),   # 股利所得稅試算（搜尋需求頁）
     ("/pages/start",                   "monthly", 0.8),    # 新手上路（轉換入口）
@@ -136,6 +139,15 @@ def main():
                 stock_urls.append(url_entry(
                     f"/stock/{code}", "daily", 0.6, today
                 ))
+
+    # 2b. 美股個股頁 /us/{ticker}（worker 伺服器渲染的 SEO 著陸頁）
+    us_meta = load_json(DATA_DIR / "us_stocks_meta.json")
+    if us_meta and us_meta.get("data"):
+        _ud = us_meta["data"]
+        _tickers = list(_ud.keys()) if isinstance(_ud, dict) else [x.get("ticker") for x in _ud]
+        for tk in _tickers:
+            if tk:
+                stock_urls.append(url_entry(f"/us/{tk}", "daily", 0.7, today))
 
     # 3. 新聞詳情頁 → 內容
     news_data = load_json(DATA_DIR / "news_live.json")

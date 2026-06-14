@@ -2575,6 +2575,207 @@ async function renderStockPage(url, env) {
   return new Response(html, { headers: { "content-type": "text/html;charset=utf-8", "cache-control": "public, max-age=1800" } });
 }
 
+/* ============================================================
+ * 美股個股 SEO 頁 /us/{ticker}：worker 伺服器端渲染（每檔獨特內容）
+ * 把已算好的 us_stocks_live + us_fair_value + us_stocks_meta render 成一頁，
+ * 解決「100 檔美股只有 AI 答得到、沒有可被 Google 收錄的著陸頁」。非投資建議。
+ * ============================================================ */
+let _US_DATA = null, _US_DATA_T = 0;
+async function loadUsStockData(env, origin) {
+  if (_US_DATA && Date.now() - _US_DATA_T < 3600000) return _US_DATA;
+  const j = async (p) => {
+    try { const r = await env.ASSETS.fetch(new Request(origin + p)); return r.ok ? await r.json() : null; }
+    catch (e) { return null; }
+  };
+  const [meta, live, fv] = await Promise.all([
+    j("/data/us_stocks_meta.json"), j("/data/us_stocks_live.json"), j("/data/us_fair_value_live.json"),
+  ]);
+  const m = {};
+  const md = (meta && meta.data) || {};
+  if (Array.isArray(md)) { for (const x of md) if (x && x.ticker) m[String(x.ticker).toUpperCase()] = { ...x }; }
+  else for (const k in md) m[String(k).toUpperCase()] = { ...md[k], ticker: md[k].ticker || k };
+  const merge = (src) => {
+    const d = (src && src.data) || {};
+    const arr = Array.isArray(d) ? d : Object.values(d);
+    for (const x of arr) { if (!x || !x.ticker) continue; const t = String(x.ticker).toUpperCase(); m[t] = { ...(m[t] || { ticker: t }), ...x }; }
+  };
+  merge(live); merge(fv);
+  _US_DATA = { map: m, updated: (live && live.updatedAt) || (fv && fv.updatedAt) || "" };
+  _US_DATA_T = Date.now();
+  return _US_DATA;
+}
+
+async function renderUsStockPage(url, env) {
+  let t = decodeURIComponent(url.pathname.slice(4)).replace(/\/+$/, "").trim().toUpperCase();
+  if (!t || !/^[A-Z][A-Z.\-]{0,6}$/.test(t)) return env.ASSETS.fetch(new Request(url.origin + "/pages/us-market"));
+  const D = await loadUsStockData(env, url.origin);
+  const s = D.map[t];
+  const today = (D.updated || "").slice(0, 10) || new Date().toISOString().slice(0, 10);
+
+  if (!s) {
+    const nf = `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>找不到 ${esc(t)} - 領富 AI 美股</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/css/style.css?v=3.23.9"></head><body><div style="max-width:600px;margin:80px auto;padding:24px;text-align:center;font-family:sans-serif;"><h1>「${esc(t)}」不在美股精選 100 範圍</h1><p style="color:#666;">領富 AI 目前精選 100 檔美股。<br><a href="/pages/us-market" style="color:#1B4332;">← 看美股清單</a></p></div></body></html>`;
+    return new Response(nf, { status: 404, headers: { "content-type": "text/html;charset=utf-8" } });
+  }
+
+  const nameZh = s.name_zh || t;
+  const nameEn = s.name_en || "";
+  const cat = s.category || "";
+  const industry = s.industry || s.yf_industry || "";
+  const price = (typeof s.price === "number") ? s.price : null;
+  const chg = (typeof s.change === "number") ? s.change : null;
+  const chgPct = (typeof s.change_pct === "number") ? s.change_pct : null;
+  const pe = (typeof s.pe_ratio === "number") ? s.pe_ratio : null;
+  const yld = (typeof s.yield_pct === "number") ? s.yield_pct : null;
+  const low = (typeof s.low === "number") ? s.low : (typeof s.w52_low === "number" ? s.w52_low : null);
+  const high = (typeof s.high === "number") ? s.high : (typeof s.w52_high === "number" ? s.w52_high : null);
+  const pos = (typeof s.position === "number") ? s.position : null;
+  const label = s.label || "";
+  const summary = s.summary || "";
+  const mcap = (typeof s.market_cap === "number") ? s.market_cap : null;
+
+  // 美股慣例：綠漲紅跌（跟台股相反）
+  const upColor = "#16A34A", downColor = "#EF4444";
+  const chgColor = chgPct == null ? "#6b7280" : chgPct > 0 ? upColor : chgPct < 0 ? downColor : "#6b7280";
+  const chgTxt = chgPct == null ? "—" : `${chg != null ? (chg >= 0 ? "+" : "") + chg.toFixed(2) : ""} (${chgPct >= 0 ? "+" : ""}${chgPct.toFixed(2)}%)`;
+  const mcapTxt = mcap == null ? "—" : mcap >= 1e12 ? `${(mcap / 1e12).toFixed(2)} 兆美元` : mcap >= 1e8 ? `${Math.round(mcap / 1e8).toLocaleString()} 億美元` : `${Math.round(mcap / 1e6).toLocaleString()} 百萬美元`;
+  const posTxt = pos == null ? null : Math.round(pos * 100) + "%";
+
+  // 合理區間卡
+  const fvLabelColor = /高/.test(label) ? downColor : /低|便宜/.test(label) ? upColor : "#C5A572";
+  const fvCard = (low != null && high != null)
+    ? `<div class="sd-stat"><span>領富 AI 合理區間</span><b style="font-size:18px;">$${low.toFixed(2)} – $${high.toFixed(2)}</b><small style="color:${fvLabelColor};font-weight:700;">${esc(label || "區間")}${posTxt ? "・位置 " + posTxt : ""}</small></div>`
+    : `<div class="sd-stat"><span>領富 AI 合理區間</span><b style="font-size:16px;">需更多資料</b><small>見完整分析</small></div>`;
+
+  // 決策摘要（規則化、白話、非建議）
+  const bullets = [];
+  if (summary) bullets.push(summary);
+  if (pe != null) bullets.push(pe >= 40 ? `本益比 ${pe.toFixed(1)} 偏高，市場給的成長期望不低，留意獲利能否跟上。` : pe >= 20 ? `本益比 ${pe.toFixed(1)}，屬成長型常見區間。` : `本益比 ${pe.toFixed(1)} 相對不高。`);
+  if (yld != null) bullets.push(yld >= 3 ? `殖利率約 ${yld.toFixed(2)}%，對美股算高，適合領息族留意。` : yld > 0.5 ? `殖利率約 ${yld.toFixed(2)}%，配息普通。` : `幾乎不配息（${yld.toFixed(2)}%），是典型成長股風格。`);
+  if (pos != null) bullets.push(pos >= 0.8 ? `股價位於 52 週區間 ${posTxt} 高位，追高前留意回檔風險。` : pos <= 0.3 ? `股價位於 52 週區間 ${posTxt} 低位，是否落難或趨勢轉弱需一併看。` : `股價位於 52 週區間 ${posTxt}，屬中段。`);
+  const bulletsHtml = bullets.length ? `<ul class="sd-reasons">${bullets.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p class="sd-muted">資料整理中。</p>`;
+
+  const aiQ = encodeURIComponent(`${t} ${nameZh} 現在適合買嗎？合理價與主要風險？`);
+  const desc = `${nameZh}（${t}）美股分析：領富 AI 合理區間估值${low != null && high != null ? " $" + low.toFixed(0) + "–$" + high.toFixed(0) : ""}、本益比${pe != null ? " " + pe.toFixed(1) : ""}、殖利率${yld != null ? " " + yld.toFixed(2) + "%" : ""}${posTxt ? "、52週位置 " + posTxt : ""}。${summary || ""} 每日更新，非投資建議。`;
+  const title = `${t} ${nameZh} 合理價・該不該買？PE 殖利率分析 - 領富 AI`;
+  const canon = `https://leadfuai.com/us/${encodeURIComponent(t)}`;
+
+  const jsonld = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebPage", "@id": canon + "#page", "name": title, "description": desc, "url": canon, "isPartOf": { "@id": "https://leadfuai.com/#website" }, "dateModified": today, "inLanguage": "zh-TW", "publisher": { "@id": "https://leadfuai.com/#organization" } },
+      { "@type": "BreadcrumbList", "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+        { "@type": "ListItem", "position": 2, "name": "美股專區", "item": "https://leadfuai.com/pages/us-market" },
+        { "@type": "ListItem", "position": 3, "name": `${t} ${nameZh}` },
+      ] },
+    ],
+  });
+
+  const html = `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(desc)}">
+<meta name="keywords" content="${esc(t)},${esc(nameZh)},${esc(nameZh)}股價,${esc(t)}合理價,${esc(t)}該買嗎,美股${esc(cat)},美股開戶">
+<link rel="canonical" href="${canon}">
+<meta property="og:title" content="${esc(t)} ${esc(nameZh)} 合理價分析 - 領富 AI">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${canon}">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta name="theme-color" content="#1B4332">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<script type="application/ld+json">${jsonld}</script>
+<link rel="stylesheet" href="/css/style.css?v=3.23.9">
+<style>
+  .sd-wrap{max-width:880px;margin:0 auto;padding:18px 12px 50px;}
+  .sd-bc{font-size:13px;color:#888;margin-bottom:10px;}
+  .sd-bc a{color:#1B4332;text-decoration:none;}
+  .sd-h1{font-size:27px;color:#1B4332;margin:0 0 4px;font-weight:800;}
+  .sd-h1 small{font-size:15px;color:#6b7280;font-weight:600;margin-left:8px;}
+  .sd-sub{font-size:14px;color:#666;margin:0 0 4px;}
+  .sd-price{font-size:15px;font-weight:800;}
+  .sd-src{font-size:12.5px;color:#999;margin:6px 0 18px;}
+  .sd-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 22px;}
+  .sd-stat{background:#f7faf8;border:1px solid #e8ece9;border-radius:14px;padding:15px 12px;text-align:center;}
+  .sd-stat span{display:block;font-size:12px;color:#777;}
+  .sd-stat b{display:block;font-size:22px;font-weight:800;line-height:1.2;margin-top:5px;color:#1B4332;font-variant-numeric:tabular-nums;}
+  .sd-stat small{display:block;font-size:11px;color:#9aa39d;margin-top:3px;}
+  .sd-sec{background:#fff;border:1px solid #e8ece9;border-radius:14px;padding:16px 18px;margin:14px 0;}
+  .sd-sec h2{font-size:17px;color:#1B4332;margin:0 0 8px;}
+  .sd-reasons{margin:6px 0 0;padding-left:18px;color:#444;font-size:14px;line-height:1.9;}
+  .sd-muted{color:#888;font-size:14px;}
+  .sd-tools{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0;}
+  .sd-tools a{background:#1B4332;color:#fff;padding:11px 18px;border-radius:999px;text-decoration:none;font-size:14px;font-weight:700;}
+  .sd-tools a.ghost{background:#eef7f1;color:#1B4332;}
+  .us-cta{background:linear-gradient(135deg,#C5A572 0%,#b8915c 100%);color:#1B4332;border-radius:16px;padding:22px;margin:18px 0;}
+  .us-cta h2{font-size:19px;margin:0 0 8px;color:#1B4332;}
+  .us-cta p{margin:0 0 14px;font-size:13.5px;line-height:1.7;color:#1B4332;opacity:.9;}
+  .us-cta-btns{display:flex;gap:10px;flex-wrap:wrap;}
+  .us-cta-btn{background:#1B4332;color:#C5A572;padding:11px 22px;border-radius:999px;text-decoration:none;font-weight:700;font-size:14px;}
+  .us-cta-btn.disabled{opacity:.55;cursor:not-allowed;pointer-events:none;}
+  .us-cta-note{font-size:11px;margin-top:12px;color:#1B4332;opacity:.7;}
+  .sd-disc{background:#fdf6ec;border:1px solid #f0e2c8;border-radius:12px;padding:14px 16px;font-size:13px;color:#7a6a4a;line-height:1.7;margin-top:20px;}
+</style>
+</head>
+<body>
+<header class="top-bar"><div class="container top-bar-inner"><div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div><div class="top-right"><a href="/pages/login">會員登入</a><a href="/pages/register">免費註冊</a><a href="https://line.me/R/ti/p/@130tqckv" class="line-cta" target="_blank" rel="noopener">LINE 客服</a></div></div></header>
+<div class="logo-bar"><div class="container logo-bar-inner"><a href="/" class="logo"><span class="logo-bi">領富</span><span class="logo-ai">AI</span><span class="logo-sub">LeadFu · 領先市場兩步</span></a><div class="search-box"><input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱"><button id="searchBtn">查詢</button></div></div></div>
+<nav class="main-nav"><div class="container"><ul><li><a href="/">首頁</a></li><li><a href="/pages/us-market">美股專區</a></li><li><a href="/pages/stocks">台股總覽</a></li><li><a href="/pages/check">買前檢查</a></li><li><a href="/pages/ai">AI 對話</a></li></ul></div></nav>
+
+<main class="sd-wrap">
+  <div class="sd-bc"><a href="/">首頁</a> ▸ <a href="/pages/us-market">美股專區</a>${cat ? " ▸ " + esc(cat) : ""} ▸ <span>${esc(t)} ${esc(nameZh)}</span></div>
+  <h1 class="sd-h1">${esc(t)}　${esc(nameZh)}${nameEn ? `<small>${esc(nameEn)}</small>` : ""}</h1>
+  <p class="sd-sub">${cat ? esc(cat) : ""}${industry ? "・" + esc(industry) : ""}${price != null ? `・<span class="sd-price">$${esc(price.toFixed(2))}</span> <span style="color:${chgColor};font-weight:700;">${esc(chgTxt)}</span>` : ""}</p>
+  <div class="sd-src">📅 更新日期：${esc(today)}（美股收盤後快照）　·　資料來源：Yahoo Finance（yfinance）。美股慣例綠漲紅跌。</div>
+
+  <div class="sd-stats">
+    ${fvCard}
+    <div class="sd-stat"><span>本益比 PE</span><b>${pe != null ? esc(pe.toFixed(1)) : "—"}</b><small>越低相對越便宜</small></div>
+    <div class="sd-stat"><span>殖利率</span><b>${yld != null ? esc(yld.toFixed(2)) + "%" : "—"}</b><small>美股普遍偏低</small></div>
+    <div class="sd-stat"><span>市值</span><b style="font-size:18px;">${esc(mcapTxt)}</b><small>${posTxt ? "52週位置 " + posTxt : "規模"}</small></div>
+  </div>
+
+  <div class="sd-sec">
+    <h2>💡 一眼判斷（領富 AI 整理，非買賣建議）</h2>
+    ${bulletsHtml}
+  </div>
+
+  <div class="sd-tools">
+    <a href="/pages/ai?q=${aiQ}">🤖 問 AI 這檔</a>
+    <a class="ghost" href="/pages/us-market">📊 看美股精選 100</a>
+    <a class="ghost" href="https://finance.yahoo.com/quote/${esc(t)}" target="_blank" rel="noopener nofollow">Yahoo Finance ↗</a>
+  </div>
+
+  <div class="us-cta">
+    <h2>想買 ${esc(t)}？美股這樣開戶</h2>
+    <p>台灣人買美股兩條路：① 國內券商「複委託」（中文介面、好上手、手續費較高）；② 海外券商 IB（盈透）/ Firstrade（手續費低、需自行電匯）。依交易頻率與金額挑選。</p>
+    <div class="us-cta-btns">
+      <!-- AFFILIATE: 拿到推薦連結後，把下面兩個 href="#" 換成連結並移除 disabled class -->
+      <a href="#" class="us-cta-btn disabled" title="IB 推薦連結準備中">🏛 IB 開戶（準備中）</a>
+      <a href="#" class="us-cta-btn disabled" title="Firstrade 推薦連結準備中">🟢 Firstrade 開戶（準備中）</a>
+    </div>
+    <p class="us-cta-note">領富 AI 不經手任何資金，開戶與下單請於券商官方完成；透過推薦連結開戶雙方享開戶禮。</p>
+  </div>
+
+  <div class="sd-disc">
+    <strong>免責聲明</strong><br>
+    本頁為「${esc(t)} ${esc(nameZh)}」之公開資料整理，僅供研究參考，<strong>不構成任何個股推薦或買賣建議</strong>。
+    合理區間、本益比、殖利率為領富 AI 依公開資料以系統化方式整理，非投資評等或目標價；美股報價為每日收盤後快照、非即時。
+    投資有風險，決定前請您自行評估或諮詢合法之投資顧問。
+  </div>
+</main>
+
+<footer class="site-footer"><div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. · 本網站所有資訊僅供參考，不構成投資建議。</div></div></footer>
+<script src="/js/main.js?v=3.26.0"></script>
+</body>
+</html>`;
+
+  return new Response(html, { headers: { "content-type": "text/html;charset=utf-8", "cache-control": "public, max-age=1800" } });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -2596,6 +2797,11 @@ export default {
     // ── 個股 SEO 頁 /stock/{代號}：worker 伺服器端渲染（每檔獨特內容；出錯則往下走、不影響全站）──
     if (url.pathname.startsWith("/stock/") && request.method === "GET") {
       try { return await renderStockPage(url, env); } catch (e) { /* fall through to ASSETS */ }
+    }
+
+    // ── 美股個股 SEO 頁 /us/{ticker}：worker 伺服器端渲染（每檔獨特內容；出錯則往下走）──
+    if (url.pathname.startsWith("/us/") && request.method === "GET") {
+      try { return await renderUsStockPage(url, env); } catch (e) { /* fall through to ASSETS */ }
     }
 
     // ── 手機 UA 開首頁 → 回手機版設計（桌機維持原版；同一網址、依裝置出不同內容，Vary 告知快取/Google）──
