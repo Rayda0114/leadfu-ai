@@ -3,37 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>高股息 ETF 比較 2026｜0056 00878 00919 00929 00940 規模/殖利率/配息 - 領富 AI</title>
-<meta name="description" content="台灣熱門高股息 ETF 一頁比較：0056、00878、00919、00929、00940、00713 規模、年化估算殖利率、配息頻率（月配/季配）、折溢價、近3月/近6月報酬、追蹤指數、前十大成分股。領富 AI 整理 TWSE 與各投信官方資料，非投資建議。">
-<link rel="canonical" href="https://leadfuai.com/pages/etf-compare">
-<meta property="og:title" content="高股息 ETF 比較 2026｜0056 vs 00878 vs 00919 vs 00929 vs 00940 - 領富 AI">
-<meta property="og:description" content="熱門高股息 ETF 規模、年化殖利率、配息頻率、折溢價、近期報酬一頁比。月配 vs 季配、0056 vs 00878 怎麼選。領富 AI 官方資料整理。">
+<title>個股並排比較｜2330 vs 2454 本益比/殖利率/營收 一頁對比 - 領富 AI</title>
+<meta name="description" content="台股個股並排比較工具：輸入 2～4 檔股票（例如 2330 台積電 vs 2454 聯發科），一次比較現價、漲跌、本益比 PE、殖利率、股價淨值比 PB、月營收年增、合理區間、風險分數與所屬產業。領富 AI 整理 TWSE 公開資料，非投資建議。">
+<link rel="canonical" href="https://leadfuai.com/pages/stock-compare">
+<meta property="og:title" content="個股並排比較｜2330 vs 2454 本益比/殖利率/營收一頁對比 - 領富 AI">
+<meta property="og:description" content="輸入 2～4 檔台股，一次比較現價、本益比、殖利率、股價淨值比、月營收年增、合理區間與風險分數。領富 AI 公開資料整理。">
 <meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://leadfuai.com/pages/etf-compare">
+<meta property="og:url" content="https://leadfuai.com/pages/stock-compare">
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="高股息 ETF 比較 2026 - 領富 AI">
-<meta name="twitter:description" content="0056/00878/00919/00929/00940 規模、殖利率、配息頻率、折溢價、報酬一頁比較。">
+<meta name="twitter:title" content="個股並排比較 - 領富 AI">
+<meta name="twitter:description" content="2～4 檔台股一頁比：本益比、殖利率、股價淨值比、月營收年增、合理區間、風險分數。">
 <meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
 <link rel="stylesheet" href="../css/style.css?v=3.23.9">
 <style>
   .cmp-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  table.cmp { border-collapse:collapse; width:100%; min-width:680px; font-size:13px; }
-  table.cmp th, table.cmp td { padding:9px 10px; border-bottom:1px solid #eef0f3; text-align:right; white-space:nowrap; }
+  table.cmp { border-collapse:collapse; width:100%; min-width:520px; font-size:13.5px; }
+  table.cmp th, table.cmp td { padding:11px 12px; border-bottom:1px solid #eef0f3; text-align:center; white-space:nowrap; }
   table.cmp thead th { background:#163A2E; color:#fff; font-weight:600; position:sticky; top:0; }
-  table.cmp td.etf, table.cmp th.etf { text-align:left; position:sticky; left:0; background:#fff; z-index:1; }
-  table.cmp thead th.etf { background:#163A2E; z-index:2; }
+  table.cmp td.metric, table.cmp th.metric { text-align:left; position:sticky; left:0; background:#fff; z-index:1; font-weight:600; color:#163A2E; }
+  table.cmp thead th.metric { background:#163A2E; color:#fff; z-index:2; }
   table.cmp tbody tr:nth-child(even) td { background:#fafbfc; }
-  table.cmp tbody tr:nth-child(even) td.etf { background:#fafbfc; }
-  table.cmp a { color:#1B4332; font-weight:700; }
-  .pill-m { font-size:11px; padding:1px 7px; border-radius:9px; background:#fde8e8; color:#c0392b; }
-  .pill-q { font-size:11px; padding:1px 7px; border-radius:9px; background:#e8f0fe; color:#2c5fb3; }
-  .up { color:#c0392b; } .down { color:#178a4c; }
-  .cmp-faq h3 { font-size:15px; color:#163A2E; margin:14px 0 4px; }
-  .cmp-faq p { font-size:13px; color:#444; line-height:1.7; margin:0 0 6px; }
+  table.cmp tbody tr:nth-child(even) td.metric { background:#fafbfc; }
+  table.cmp a { color:#1B4332; font-weight:700; text-decoration:none; }
+  table.cmp a:hover { text-decoration:underline; }
+  table.cmp td.best { background:#fbf3dc !important; }
+  .up { color:#C0392B; } .down { color:#0E8A5F; } .flat { color:#666; }
+  .metric-sub { font-size:11px; color:#8a8f96; font-weight:400; }
+  .cmp-pickers { display:flex; flex-wrap:wrap; gap:12px; }
+  .cmp-pick { flex:1 1 200px; min-width:160px; position:relative; }
+  .cmp-pick label { display:block; font-size:12px; color:#5a6660; margin-bottom:5px; font-weight:600; }
+  .cmp-pick input { width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #dde7e1; border-radius:10px; font-size:14.5px; color:#13211B; }
+  .cmp-pick input:focus { outline:none; border-color:#1B4332; box-shadow:0 0 0 3px rgba(27,67,50,.12); }
+  .cmp-pick .rm { position:absolute; right:8px; top:30px; border:none; background:transparent; color:#b04a4a; font-size:13px; cursor:pointer; padding:4px; }
+  .cmp-addbtn { align-self:flex-end; padding:10px 14px; border:1px dashed #c9a24b; background:#fffdf6; color:#9a7c2e; border-radius:10px; font-size:13.5px; cursor:pointer; font-weight:600; white-space:nowrap; }
+  .cmp-addbtn:disabled { opacity:.4; cursor:not-allowed; }
+  .cmp-quicklinks { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .cmp-quicklinks a { font-size:13px; padding:7px 13px; border-radius:20px; background:#eef3f0; color:#1B4332; font-weight:600; text-decoration:none; }
+  .cmp-quicklinks a:hover { background:#1B4332; color:#fff; }
+  .badge-risk { display:inline-block; font-size:11px; padding:1px 8px; border-radius:9px; font-weight:600; }
+  .risk-low { background:#e3f3ea; color:#0E8A5F; } .risk-mid { background:#fdf2e0; color:#b07d28; } .risk-high { background:#fde8e8; color:#C0392B; }
 </style>
 </head>
 <body>
@@ -77,8 +89,8 @@
 
 <div class="page-head">
   <div class="container">
-    <h1>💰 高股息 ETF 比較（2026）</h1>
-    <div class="breadcrumb">首頁 ▸ <a href="etf.html">ETF 專區</a> ▸ 高股息 ETF 比較</div>
+    <h1>📊 個股並排比較</h1>
+    <div class="breadcrumb">首頁 ▸ <a href="stocks.html">股價總覽</a> ▸ 個股並排比較</div>
   </div>
 </div>
 
@@ -86,38 +98,30 @@
 
   <div class="panel" style="margin-bottom:14px;">
     <div style="padding:14px 22px;font-size:13px;color:#555;line-height:1.7;">
-      把台灣最熱門的高股息 ETF —— <strong>0056、00878、00919、00929、00940、00713</strong> 等 —— 的<strong>規模、年化估算殖利率、配息頻率（月配／季配）、折溢價、近期報酬、追蹤指數</strong>放在同一張表，方便一次比較。資料每日盤後更新，來源為 TWSE 基本市況與各發行投信官方公告。<br>
-      <strong style="color:#c0392b;">⚠ 重點提醒</strong>：<strong>高股息 ≠ 總報酬高</strong>。配息可能包含本金（收益平準金），殖利率高不代表賺得多，請一起看「近3月／近6月報酬」與「規模（太小流動性差）」。本頁僅為公開資料整理，<strong>非投資建議、不推薦特定 ETF</strong>。
+      把你想比較的 <strong>2～4 檔台股</strong>（例如 <strong>2330 台積電 vs 2454 聯發科</strong>）放在同一張表，一次看清楚<strong>現價、漲跌、本益比、殖利率、股價淨值比、月營收年增、合理區間、風險分數與所屬產業</strong>，方便並排對比、做功課。<br>
+      <strong style="color:#C0392B;">⚠ 提醒</strong>：表格中淡金底色僅標示該指標「數字上較佳」的一欄（如殖利率較高、本益比較低），<strong>不代表推薦買進</strong>。各指標要一起看、配合自身狀況判斷。本頁為公開資料整理，<strong>非投資建議</strong>。
     </div>
   </div>
 
   <div class="panel" style="margin-bottom:16px;">
-    <div class="panel-head"><h2>📊 熱門高股息 ETF 比較</h2></div>
-    <div class="cmp-wrap"><table class="cmp" id="tblDiv"><tbody><tr><td style="padding:30px;text-align:center;color:#888;">載入中…</td></tr></tbody></table></div>
+    <div class="panel-head"><h2>🔎 選擇要比較的股票</h2></div>
+    <div style="padding:16px 22px;">
+      <div class="cmp-pickers" id="pickers"></div>
+      <div id="asOf" style="font-size:12px;color:#888;margin-top:12px;"></div>
+    </div>
   </div>
 
   <div class="panel" style="margin-bottom:16px;">
-    <div class="panel-head"><h2>📈 市值型 ETF 比較（大盤型）</h2></div>
-    <div class="cmp-wrap"><table class="cmp" id="tblMkt"><tbody><tr><td style="padding:30px;text-align:center;color:#888;">載入中…</td></tr></tbody></table></div>
-  </div>
-
-  <div class="panel cmp-faq" style="margin-bottom:16px;">
-    <div class="panel-head"><h2>🤔 高股息 ETF 怎麼挑？常見問題</h2></div>
-    <div style="padding:16px 22px;">
-      <h3>月配 vs 季配，哪個好？</h3>
-      <p>配息頻率只影響「拿到錢的時間」，不影響總報酬。月配（如 00929、00940）現金流較密、適合當生活費；季配（如 0056、00878、00919）則行政成本較低。重點仍是看總報酬與成分股，而非配息次數。</p>
-      <h3>0056 和 00878 差在哪？</h3>
-      <p>0056（元大高股息）成分偏電子權值與高息股、季配；00878（國泰永續高股息）採 MSCI ESG 永續高股息選股、成分較分散、波動相對低、季配。兩者選股邏輯不同，可看下表的近期報酬與前十大成分股比較。</p>
-      <h3>殖利率越高越好嗎？</h3>
-      <p>不一定。殖利率高有時是因為股價下跌（分母變小），或配息含本金（平準金）。建議「殖利率 + 近半年報酬 + 規模」一起看；規模太小（如低於 50 億）可能有流動性與下市風險。</p>
-      <h3>這裡的殖利率怎麼算？</h3>
-      <p>本頁殖利率主要採「<strong>近一年實際配息合計 ÷ 現價</strong>」（TTM，資料取自各發行投信配息公告）；上市未滿一年者，改以「最近一次配息 × 年配次數」年化估算。皆不含平準金佔比，僅供參考，實際依投信公告為準。</p>
+    <div class="panel-head"><h2>📋 並排比較表</h2></div>
+    <div class="cmp-wrap"><table class="cmp" id="cmpTable"><tbody><tr><td style="padding:30px;text-align:center;color:#888;">載入中…</td></tr></tbody></table></div>
+    <div style="padding:0 22px 18px;">
+      <div class="cmp-quicklinks" id="quickLinks"></div>
     </div>
   </div>
 
   <p style="text-align:center;color:#888;font-size:12px;margin-top:6px;line-height:1.7;">
-    ※ 規模 ＝ 受益單位數 × 淨值（TWSE 基本市況）；折溢價為投信揭露之預估值；殖利率為近一年實際配息合計 ÷ 現價（見上）；成分股來自發行投信每日 PCF。<br>
-    ※ 配息頻率為人工標註之常態頻率，實際以投信公告為準。本頁為公開資料整理，非投資建議。
+    ※ 本益比／殖利率／股價淨值比來源為 TWSE 個股日本益比、殖利率及股價淨值比（BWIBBU_d）；月營收年增為 TWSE／TPEx 月營收申報；合理區間與風險分數為領富 AI 自有演算法估算，僅供參考。<br>
+    ※ 台股紅漲綠跌。本頁為公開資料整理，非投資建議，投資前請審慎評估。
   </p>
 
 </main>
@@ -132,79 +136,257 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-{"@type":"Question","name":"高股息 ETF 月配與季配哪個好？","acceptedAnswer":{"@type":"Answer","text":"配息頻率只影響拿到錢的時間，不影響總報酬。月配（00929、00940）現金流較密；季配（0056、00878、00919）行政成本較低。重點看總報酬與成分股。"}},
-{"@type":"Question","name":"0056 和 00878 差在哪？","acceptedAnswer":{"@type":"Answer","text":"0056 元大高股息成分偏電子權值與高息股、季配；00878 國泰永續高股息採 MSCI ESG 永續高股息選股、成分較分散、波動相對低、季配。"}},
-{"@type":"Question","name":"高股息 ETF 殖利率越高越好嗎？","acceptedAnswer":{"@type":"Answer","text":"不一定。殖利率高有時因股價下跌或配息含本金（平準金）。建議殖利率、近半年報酬、規模一起看，規模太小可能有流動性風險。"}}
-]}
-</script>
-
 <script src="../js/main.js?v=3.26.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
   const L = window.LeadFu;
-  const base = location.pathname.includes("/pages/") ? "../" : "";
+  const D = L.data || {};
 
-  // 常態配息頻率（年配次數），人工標註
-  const FREQ = { "0056":4,"00878":4,"00919":4,"00929":12,"00940":12,"00713":4,"00731":4,"00934":12,"00936":4,"00918":4,"00701":2,"00772B":12 };
-  const FREQLBL = { 12:"月配", 4:"季配", 2:"半年配", 1:"年配" };
-  const DIV_LIST = ["0056","00878","00919","00929","00940","00713","00731","00918","00934","00936"];
-  const MKT_LIST = ["0050","006208","00692","00850","0051"];
+  const MAX = 4, MIN = 2;
+  const num = x => (typeof x === "number" && !isNaN(x)) ? x : null;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-  let div = {}, ret = {}, nav = {}, basic = {}, hold = {};
-  const grab = async (f) => { try { return (await (await fetch(base + "data/" + f, { cache: "no-cache" })).json()).data || {}; } catch (e) { return {}; } };
-  [div, ret, nav, basic, hold] = await Promise.all([
-    grab("etf_div_live.json"), grab("returns_live.json"), grab("etf_nav_live.json"),
-    grab("etf_basic_live.json"), grab("etf_holdings_live.json")
-  ]);
-  const byCode = {}; (L.data.stocks || []).forEach(s => { byCode[s.code] = s; });
+  // 讀取 ?codes= ，預設 2330,2454；支援 2～4 檔
+  function readCodes() {
+    const raw = new URLSearchParams(location.search).get("codes") || "";
+    let codes = raw.split(",").map(c => c.trim()).filter(Boolean);
+    // 去重複、保留順序
+    codes = codes.filter((c, i) => codes.indexOf(c) === i);
+    if (codes.length < MIN) codes = ["2330", "2454"];
+    return codes.slice(0, MAX);
+  }
+  let codes = readCodes();
 
-  const fmtAum = v => (typeof v === "number") ? (v >= 10000 ? (v/10000).toFixed(2)+" 兆" : Math.round(v).toLocaleString()+" 億") : "—";
-  const fmtPct = (v, sign) => (typeof v === "number") ? `<span class="${v>=0?'up':'down'}">${sign&&v>=0?'+':''}${v.toFixed(2)}%</span>` : "—";
-  const annYield = (code, price) => {
-    const d = div[code]; if (!d || !(price > 0)) return null;
-    const mature = d.firstDate && (Date.now() - new Date(d.firstDate).getTime()) >= 330 * 864e5;
-    if (mature && d.ttmCash > 0) return d.ttmCash / price * 100;          // 成熟：真實近一年配息合計
-    if (d.lastCash > 0 && FREQ[code]) return d.lastCash * FREQ[code] / price * 100;  // 新 ETF：年化估算
-    return null;
-  };
-
-  function buildTable(list, withYield) {
-    const rows = list.map(code => {
-      const s = byCode[code] || {}, nv = nav[code] || {}, r = ret[code] || {}, b = basic[code] || {}, h = hold[code];
-      const price = s.price;
-      const y = withYield ? annYield(code, price) : null;
-      const f = FREQ[code];
-      const top3 = (h && h.top) ? h.top.slice(0, 3).map(t => t.name).join("、") : "—";
-      return { code, name: s.name || code, price, aumYi: nv.aumYi, prem: nv.premium,
-               y, freq: f ? (FREQLBL[f] || "—") : "—", r3m: r.r3m, r6m: r.r6m,
-               idx: b.index || "—", top3 };
-    });
-    // 預設依規模排序
-    rows.sort((a, b) => (b.aumYi || 0) - (a.aumYi || 0));
-
-    const head = `<thead><tr>
-      <th class="etf">ETF</th><th>規模</th>${withYield ? '<th>殖利率*</th><th>配息</th>' : ''}
-      <th>折溢價</th><th>近3月</th><th>近6月</th><th style="text-align:left;">追蹤指數</th>${withYield ? '<th style="text-align:left;">前3大成分</th>' : ''}
-    </tr></thead>`;
-    const body = "<tbody>" + rows.map(x => `<tr>
-      <td class="etf"><a href="stock-detail?code=${x.code}">${x.code}</a><br><span style="font-size:11.5px;color:#555;">${x.name}</span></td>
-      <td>${fmtAum(x.aumYi)}</td>
-      ${withYield ? `<td>${x.y != null ? `<strong style="color:#c0392b;">${x.y.toFixed(1)}%</strong>` : "—"}</td>
-      <td>${x.freq === "月配" ? '<span class="pill-m">月配</span>' : (x.freq === "季配" ? '<span class="pill-q">季配</span>' : x.freq)}</td>` : ''}
-      <td>${fmtPct(x.prem, true)}</td>
-      <td>${fmtPct(x.r3m, true)}</td>
-      <td>${fmtPct(x.r6m, true)}</td>
-      <td style="text-align:left;font-size:12px;color:#555;">${x.idx}</td>
-      ${withYield ? `<td style="text-align:left;font-size:12px;color:#555;">${x.top3}</td>` : ''}
-    </tr>`).join("") + "</tbody>";
-    return head + body;
+  function syncUrl() {
+    const q = "codes=" + codes.join(",");
+    try { history.replaceState(null, "", location.pathname + "?" + q); } catch (e) {}
   }
 
-  document.getElementById("tblDiv").innerHTML = buildTable(DIV_LIST, true);
-  document.getElementById("tblMkt").innerHTML = buildTable(MKT_LIST, false);
+  // 安全取值
+  const stockOf = code => (L.findStock ? L.findStock(code) : null) || {};
+  const valOf = code => (D.valuation || {})[code] || {};
+  const revOf = code => (D.revenue || {})[code] || {};
+  const fvOf = code => (D.fairValue || {})[code] || {};
+  const rkOf = code => (D.riskScore || {})[code] || {};
+
+  // 漲跌% HTML（台股紅漲綠跌）
+  function changePctHtml(s) {
+    const price = num(s.price), change = num(s.change);
+    if (price == null || change == null) return "—";
+    const prev = price - change;
+    if (!(prev > 0)) return "—";
+    const pct = (change / prev) * 100;
+    const cls = pct > 0 ? "up" : (pct < 0 ? "down" : "flat");
+    const sign = pct > 0 ? "+" : "";
+    return `<span class="${cls}">${sign}${pct.toFixed(2)}%</span>`;
+  }
+
+  // 合理區間 position → 文字位置
+  function positionLabel(p) {
+    if (p == null) return "";
+    if (p <= 0.33) return "區間下緣";
+    if (p < 0.67) return "區間中段";
+    return "區間上緣";
+  }
+
+  function riskBadge(rk) {
+    const score = num(rk.score);
+    if (score == null) return "—";
+    const lvl = rk.level || "";
+    let cls = "risk-mid";
+    if (lvl === "低" || score < 30) cls = "risk-low";
+    else if (lvl === "高" || score >= 60) cls = "risk-high";
+    return `${score} <span class="badge-risk ${cls}">${esc(lvl || "")}</span>`;
+  }
+
+  /* ---- metric 定義：value(顯示 HTML)、raw(用來比較的數字或 null)、better("hi"|"lo"|null) ---- */
+  const METRICS = [
+    {
+      label: "現價", sub: "元",
+      cell: code => { const p = num(stockOf(code).price); return { html: p != null ? p.toFixed(2) : "—", raw: null }; }
+    },
+    {
+      label: "漲跌幅", sub: "今日",
+      cell: code => ({ html: changePctHtml(stockOf(code)), raw: null })
+    },
+    {
+      label: "本益比 PE", sub: "越低越便宜", better: "lo",
+      cell: code => { const v = num(valOf(code).pe_ratio); return { html: v != null ? v.toFixed(2) : "—", raw: (v != null && v > 0) ? v : null }; }
+    },
+    {
+      label: "殖利率", sub: "越高越多息", better: "hi",
+      cell: code => { const v = num(valOf(code).yield_pct); return { html: v != null ? v.toFixed(2) + "%" : "—", raw: v }; }
+    },
+    {
+      label: "股價淨值比 PB", sub: "越低越便宜", better: "lo",
+      cell: code => { const v = num(valOf(code).pb_ratio); return { html: v != null ? v.toFixed(2) : "—", raw: (v != null && v > 0) ? v : null }; }
+    },
+    {
+      label: "月營收年增", sub: "YoY", better: "hi",
+      cell: code => {
+        const v = num(revOf(code).yoy);
+        if (v == null) return { html: "—", raw: null };
+        const cls = v > 0 ? "up" : (v < 0 ? "down" : "flat");
+        const sign = v > 0 ? "+" : "";
+        return { html: `<span class="${cls}">${sign}${v.toFixed(2)}%</span>`, raw: v };
+      }
+    },
+    {
+      label: "合理區間", sub: "領富 AI 估算",
+      cell: code => {
+        const fv = fvOf(code);
+        const lbl = fv.label || "";
+        const pos = num(fv.position);
+        const posTxt = positionLabel(pos);
+        if (!lbl && !posTxt) return { html: "—", raw: null };
+        const main = lbl ? esc(lbl) : "—";
+        return { html: posTxt ? `${main}<br><span class="metric-sub">${posTxt}</span>` : main, raw: null };
+      }
+    },
+    {
+      label: "風險分數", sub: "越低越穩", better: "lo",
+      cell: code => { const rk = rkOf(code); const score = num(rk.score); return { html: riskBadge(rk), raw: score }; }
+    },
+    {
+      label: "產業", sub: "",
+      cell: code => ({ html: esc(stockOf(code).category || "—"), raw: null })
+    }
+  ];
+
+  function buildTable() {
+    // 欄位表頭：代號 + 名稱（連到個股詳情）
+    const head = `<thead><tr><th class="metric">指標</th>${codes.map(code => {
+      const s = stockOf(code);
+      const name = s.name || "";
+      return `<th><a href="stock-detail?code=${encodeURIComponent(code)}">${esc(code)}</a>` +
+             (name ? `<br><span style="font-size:11.5px;color:#cfe0d6;font-weight:400;">${esc(name)}</span>` : "") + `</th>`;
+    }).join("")}</tr></thead>`;
+
+    const body = "<tbody>" + METRICS.map(m => {
+      const cells = codes.map(code => m.cell(code));
+      // 找出「較佳」的欄位（僅在 better 有定義且有 ≥2 個有效數字時標示）
+      let bestIdx = -1;
+      if (m.better) {
+        const vals = cells.map(c => c.raw);
+        const valid = vals.filter(v => v != null);
+        if (valid.length >= 2) {
+          let bestVal = null;
+          vals.forEach((v, i) => {
+            if (v == null) return;
+            if (bestVal == null || (m.better === "hi" ? v > bestVal : v < bestVal)) { bestVal = v; bestIdx = i; }
+          });
+          // 若全部並列相同，不標示
+          if (valid.every(v => v === valid[0])) bestIdx = -1;
+        }
+      }
+      const tds = cells.map((c, i) => `<td${i === bestIdx ? ' class="best"' : ''}>${c.html}</td>`).join("");
+      const sub = m.sub ? `<br><span class="metric-sub">${esc(m.sub)}</span>` : "";
+      return `<tr><td class="metric">${esc(m.label)}${sub}</td>${tds}</tr>`;
+    }).join("") + "</tbody>";
+
+    document.getElementById("cmpTable").innerHTML = head + body;
+  }
+
+  function buildQuickLinks() {
+    const wrap = document.getElementById("quickLinks");
+    wrap.innerHTML = codes.map(code => {
+      const s = stockOf(code);
+      const name = s.name || code;
+      return `<a href="check.html?code=${encodeURIComponent(code)}">看 ${esc(code)} ${esc(name)} 買前檢查 →</a>`;
+    }).join("");
+  }
+
+  // 搜尋輸入框（每檔一個，含 typeahead）
+  function buildPickers() {
+    const wrap = document.getElementById("pickers");
+    wrap.innerHTML = "";
+    codes.forEach((code, idx) => {
+      const s = stockOf(code);
+      const cell = document.createElement("div");
+      cell.className = "cmp-pick";
+      const showRm = codes.length > MIN;
+      cell.innerHTML = `
+        <label>股票 ${idx + 1}</label>
+        <input type="text" autocomplete="off" placeholder="輸入代號 / 名稱" value="${esc(code + (s.name ? " " + s.name : ""))}">
+        <div class="lf-ta-box" style="display:none;"></div>
+        ${showRm ? '<button class="rm" title="移除這欄">移除</button>' : ''}`;
+      wrap.appendChild(cell);
+
+      const input = cell.querySelector("input");
+      const box = cell.querySelector(".lf-ta-box");
+
+      // 點欄位時清空，方便重新輸入
+      input.addEventListener("focus", () => { input.value = ""; });
+      // 失焦若沒選任何股票，還原顯示
+      input.addEventListener("blur", () => {
+        setTimeout(() => {
+          if (input.value.trim() === "") {
+            const cur = stockOf(codes[idx]);
+            input.value = codes[idx] + (cur.name ? " " + cur.name : "");
+          }
+        }, 200);
+      });
+
+      if (typeof L.attachTypeahead === "function") {
+        L.attachTypeahead({
+          input, box,
+          onPick: (st) => {
+            if (!st || !st.code) return;
+            // 同一檔已在比較中（且不是自己）→ 略過
+            if (codes.includes(st.code) && codes[idx] !== st.code) {
+              input.value = codes[idx] + ((stockOf(codes[idx]).name) ? " " + stockOf(codes[idx]).name : "");
+              return;
+            }
+            codes[idx] = st.code;
+            syncUrl();
+            renderAll();
+          }
+        });
+      }
+
+      const rm = cell.querySelector(".rm");
+      if (rm) rm.addEventListener("click", () => {
+        if (codes.length <= MIN) return;
+        codes.splice(idx, 1);
+        syncUrl();
+        renderAll();
+      });
+    });
+
+    // 新增一欄按鈕
+    if (codes.length < MAX) {
+      const addBtn = document.createElement("button");
+      addBtn.className = "cmp-addbtn";
+      addBtn.textContent = "＋ 加一檔比較";
+      addBtn.addEventListener("click", () => {
+        // 找一檔還沒在比較中的常見股當預設
+        const cands = ["2330", "2454", "2317", "2412", "0050", "2882"];
+        const next = cands.find(c => !codes.includes(c)) || "2330";
+        if (codes.length < MAX) {
+          codes.push(next);
+          syncUrl();
+          renderAll();
+        }
+      });
+      wrap.appendChild(addBtn);
+    }
+  }
+
+  function renderAll() {
+    buildPickers();
+    buildTable();
+    buildQuickLinks();
+  }
+
+  // 資料時間
+  try {
+    const asOf = document.getElementById("asOf");
+    if (asOf && typeof L.fmtAsOf === "function") asOf.textContent = L.fmtAsOf();
+  } catch (e) {}
+
+  syncUrl();
+  renderAll();
 });
 </script>
 </body>

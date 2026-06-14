@@ -129,11 +129,20 @@
   .chk-actions a, .chk-actions button { flex:1; min-width:130px; text-align:center; padding:11px; border-radius:8px; font-size:14px; text-decoration:none; cursor:pointer; border:1px solid #1B4332; color:#1B4332; background:#fff; }
   .chk-actions .primary { background:#1B4332; color:#fff; }
   .chk-foot { padding:12px 22px; font-size:11.5px; color:#aaa; line-height:1.7; }
+  /* 看完報告，下一步 */
+  .chk-next { padding:18px 22px; border-top:1px solid #eef0f3; background:#f7faf8; }
+  .chk-next-h { font-size:13.5px; font-weight:800; color:#1B4332; margin-bottom:12px; }
+  .chk-next-row { display:flex; gap:10px; flex-wrap:wrap; }
+  .chk-next-btn { flex:1; min-width:150px; display:flex; flex-direction:column; align-items:flex-start; gap:2px; padding:13px 15px; border-radius:11px; border:1px solid #d9e4dd; background:#fff; cursor:pointer; text-decoration:none; text-align:left; transition:all .15s; font-family:inherit; }
+  .chk-next-btn:hover { border-color:#C9A24B; box-shadow:0 6px 18px rgba(201,162,75,.14); transform:translateY(-1px); }
+  .chk-next-btn .ic { font-size:20px; }
+  .chk-next-btn b { font-size:14.5px; color:#1B4332; }
+  .chk-next-btn small { font-size:12px; color:#778; }
   /* 列印 / 下載 PDF：只留報告本體 */
   .print-only { display:none; }
   @media print {
     .top-bar, .logo-bar, .main-nav, .page-head, .site-footer,
-    .chk-search, #chkWelcome, .chk-actions, [class*="feedback"], [id*="feedback"], [class*="fab"] { display:none !important; }
+    .chk-search, #chkWelcome, .chk-actions, .chk-next, [class*="feedback"], [id*="feedback"], [class*="fab"] { display:none !important; }
     body { background:#fff !important; }
     main.container { max-width:100% !important; padding:0 !important; }
     .panel { box-shadow:none !important; border:none !important; margin:0 !important; }
@@ -145,7 +154,7 @@
     a[href]:after { content:""; }
   }
 </style>
-<script src="../js/main.js?v=3.25.9"></script>
+<script src="../js/main.js?v=3.26.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -330,6 +339,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         <button id="chkFav">${inWl ? "✓ 已在自選" : "＋ 加入自選股"}</button>
         <a href="stock-detail?code=${code}">看完整個股頁 →</a>
         <a href="risk-radar.html">看防錯雷達 →</a>
+      </div>
+      <div class="chk-next">
+        <div class="chk-next-h">看完報告，下一步 👇</div>
+        <div class="chk-next-row">
+          <a class="chk-next-btn" href="portfolio-health.html?code=${code}"><span class="ic">🛡️</span><b>加入持股守門</b><small>每天盤後幫你複查買進理由</small></a>
+          <a class="chk-next-btn" href="${L.aiQueryUrl(`${code} ${s.name} 現在適合買嗎？主要風險在哪？`)}"><span class="ic">💬</span><b>問 AI 這檔</b><small>白話再追問下去</small></a>
+          <button class="chk-next-btn" type="button" data-action="price-alert" data-code="${code}" data-name="${s.name}" data-price="${s.price != null ? s.price : ""}"><span class="ic">🔔</span><b>設到價提醒</b><small>到你的價位，LINE 通知</small></button>
+        </div>
       </div>
       <div class="chk-foot">※ 本檢查為公開資料（TWSE／TPEx 盤後）整理，僅供「買進前先看清楚」之參考，不構成買賣建議。<br>※ 「適合短線／長期」是依風險與基本面訊號的中立判斷，請依您自身投資目標與風險承受度決定。</div>
     </div>`;

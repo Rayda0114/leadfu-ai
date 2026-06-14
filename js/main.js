@@ -277,6 +277,7 @@ function addToWatchlist(code) {
     list.push(code);
     localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list));
     _pushWatchlistToCloud();   // 登入者才真的寫雲端（內部自行判斷）
+    try { promptSaveLogin("watch"); } catch (e) {}   // 匿名訪客：一次性「註冊可同步」軟引導
   }
 }
 function removeFromWatchlist(code) {
@@ -356,6 +357,7 @@ function setHolding(code, shares, cost) {
   else delete h[code];                 // 股數 0 視為移除
   localStorage.setItem(HOLDINGS_KEY, JSON.stringify(h));
   _pushHoldingsToCloud();
+  if (shares > 0) { try { promptSaveLogin("hold"); } catch (e) {} }   // 匿名訪客：一次性「註冊可同步」軟引導
 }
 function removeHolding(code) {
   const h = getHoldings();
@@ -1105,6 +1107,66 @@ function isNaturalLanguageQuery(text) {
   if (q.length < 3) return false;
   // 包含問句字眼 / 動作字眼 / 多市場詞彙
   return /找|哪|怎麼|誰|多少|幾|前 |最多|最少|最大|最小|漲|跌|熱門|活躍|教|新手|詐|騙|我的|上市|上櫃|興櫃|類股|股票/.test(q);
+}
+
+/* ============================================================
+ * 共用：股票搜尋 typeahead 下拉（首頁 hero / 清單頁 / nav 共用）
+ *   opts: { input, box, onPick(stock), limit=8 }
+ *   box：建議外層 position:relative，box 自身會吃 .lf-ta-box 樣式（absolute 在 input 下）
+ *   來源：window.LeadFu.data.stocks（code/name 子字串比對；代號/開頭優先）
+ * ============================================================ */
+function attachTypeahead({ input, box, onPick, limit = 8 }) {
+  if (!input || !box) return;
+  box.classList.add("lf-ta-box");
+  let items = [], active = -1;
+  const hide = () => { box.style.display = "none"; box.innerHTML = ""; active = -1; };
+  const pick = (st) => { if (st) { hide(); if (onPick) onPick(st); } };
+  const render = () => {
+    const q = (input.value || "").trim().toLowerCase();
+    if (!q) { hide(); return; }
+    const all = (window.LeadFu && window.LeadFu.data && window.LeadFu.data.stocks) || [];
+    const starts = [], incl = [];
+    for (const s of all) {
+      if (!s || !s.code) continue;
+      const cd = String(s.code).toLowerCase(), nm = String(s.name || "").toLowerCase();
+      if (cd === q || nm === q) { starts.unshift(s); continue; }
+      if (cd.startsWith(q) || nm.startsWith(q)) starts.push(s);
+      else if (cd.includes(q) || nm.includes(q)) incl.push(s);
+      if (starts.length + incl.length > 80) break;
+    }
+    items = starts.concat(incl).slice(0, limit);
+    if (!items.length) { hide(); return; }
+    active = -1;
+    box.innerHTML = items.map((s, i) => `
+      <div class="lf-ta-item" data-i="${i}"><b>${s.code}</b><span>${s.name || ""}</span><i class="num">${(s.price != null && !isNaN(s.price)) ? Number(s.price).toFixed(2) : ""}</i></div>`).join("");
+    box.style.display = "block";
+    box.querySelectorAll(".lf-ta-item").forEach(el => {
+      el.addEventListener("mousedown", (ev) => { ev.preventDefault(); pick(items[+el.dataset.i]); });
+    });
+  };
+  const setActive = (n) => {
+    const els = [...box.querySelectorAll(".lf-ta-item")];
+    if (!els.length) return;
+    active = (n + els.length) % els.length;
+    els.forEach((el, i) => el.classList.toggle("on", i === active));
+    els[active].scrollIntoView({ block: "nearest" });
+  };
+  input.addEventListener("input", render);
+  input.addEventListener("focus", () => { if (input.value.trim()) render(); });
+  input.addEventListener("keydown", (e) => {
+    if (box.style.display !== "block") return;
+    if (e.key === "ArrowDown") { e.preventDefault(); setActive(active + 1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setActive(active - 1); }
+    else if (e.key === "Enter") { if (active >= 0 && items[active]) { e.preventDefault(); pick(items[active]); } }
+    else if (e.key === "Escape") { hide(); }
+  });
+  document.addEventListener("click", (e) => { if (!box.contains(e.target) && e.target !== input) hide(); });
+  if (!document.getElementById("lf-ta-style")) {
+    const st = document.createElement("style");
+    st.id = "lf-ta-style";
+    st.textContent = ".lf-ta-box{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid #dde7e1;border-radius:12px;box-shadow:0 14px 40px rgba(19,33,27,.18);overflow:hidden;z-index:60;max-height:340px;overflow-y:auto;text-align:left;}.lf-ta-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;font-size:14.5px;color:#13211B;}.lf-ta-item:hover,.lf-ta-item.on{background:#f3f6f4;}.lf-ta-item b{color:#10402F;font-weight:800;min-width:52px;}.lf-ta-item span{color:#43544B;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.lf-ta-item i{color:#71807A;font-style:normal;font-size:13px;}";
+    document.head.appendChild(st);
+  }
 }
 
 function bindSearch() {
@@ -3021,6 +3083,154 @@ function trackLineConversion() {
   } catch (e) { /* 不影響功能 */ }
 }
 
+/* ============================================================
+ * 🪝 註冊軟引導 + 🔔 到價提醒（價格提醒）—— 全站共用
+ *   - 匿名訪客加自選/持股後：promptSaveLogin() 一次性提示「註冊可跨裝置同步 + LINE 提醒」
+ *   - 到價提醒：openPriceAlertModal()，存於 Supabase price_alerts（RLS），盤中 cron 比對→LINE 推播
+ * ============================================================ */
+function _onPagesPath() { return location.pathname.includes("/pages/"); }
+function _pageRel(file) { return (_onPagesPath() ? "" : "pages/") + file; }
+
+// 通用「登入/註冊」底部軟提示卡（置中下方、可關閉、不擋操作、12 秒自動收）
+function _loginNudge(innerHtml, opts) {
+  opts = opts || {};
+  try { const old = document.getElementById("leadfu-login-nudge"); if (old) old.remove(); } catch (e) {}
+  const href = opts.ctaHref || _pageRel("login.html");
+  const box = document.createElement("div");
+  box.id = "leadfu-login-nudge";
+  box.style.cssText = "position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9998;max-width:380px;width:calc(100% - 28px);background:#fff;border:1px solid #dde7e1;border-left:4px solid #C9A24B;border-radius:14px;box-shadow:0 10px 34px rgba(19,33,27,.18);padding:14px 16px;font-family:inherit;animation:lfNudgeIn .3s ease;";
+  box.innerHTML =
+    '<button aria-label="關閉" style="position:absolute;top:8px;right:10px;border:0;background:none;font-size:18px;color:#9aa7a0;cursor:pointer;line-height:1;">×</button>' +
+    '<div style="padding-right:14px;">' + innerHtml + '</div>' +
+    '<a href="' + href + '" style="display:inline-flex;margin-top:10px;background:linear-gradient(135deg,#E5C883,#C9A24B);color:#10402F;font-weight:800;font-size:13.5px;padding:8px 18px;border-radius:10px;text-decoration:none;">' + (opts.ctaText || "登入") + ' →</a>';
+  box.querySelector("button").addEventListener("click", () => box.remove());
+  if (!document.getElementById("lf-nudge-style")) {
+    const st = document.createElement("style"); st.id = "lf-nudge-style";
+    st.textContent = "@keyframes lfNudgeIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}";
+    document.head.appendChild(st);
+  }
+  document.body.appendChild(box);
+  setTimeout(() => { try { box.remove(); } catch (e) {} }, 12000);
+}
+
+// 匿名訪客加自選/持股後，一次性引導註冊（每瀏覽器一次）
+let _saveHookShown = false;
+function promptSaveLogin(kind) {
+  if (_hasSupabaseSession()) return;            // 已登入：免
+  if (_saveHookShown) return;
+  try { if (localStorage.getItem("leadfu_save_hook_seen")) return; } catch (e) {}
+  _saveHookShown = true;
+  try { localStorage.setItem("leadfu_save_hook_seen", "1"); } catch (e) {}
+  const what = kind === "hold" ? "持股" : "自選股";
+  _loginNudge(
+    '<b style="display:block;font-size:14.5px;margin-bottom:4px;">已存到這台裝置的' + what + ' ✓</b>' +
+    '<span style="font-size:13px;color:#5a6b62;">免費註冊可<b style="color:#10402F;">跨手機/電腦同步</b>，並開啟<b style="color:#10402F;">盤後 LINE 提醒</b> —— 換裝置也不怕弄丟。</span>',
+    { ctaText: "免費註冊", ctaHref: _pageRel("register.html") }
+  );
+}
+
+function _ensurePaStyle() {
+  if (document.getElementById("leadfu-pa-style")) return;
+  const s = document.createElement("style"); s.id = "leadfu-pa-style";
+  s.textContent =
+    "#leadfu-pa-ov{position:fixed;inset:0;z-index:10000;background:rgba(10,46,35,.55);display:flex;align-items:center;justify-content:center;padding:18px;}" +
+    "#leadfu-pa-card{background:#fff;border-radius:18px;max-width:420px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.3);overflow:hidden;font-family:inherit;max-height:90vh;overflow-y:auto;}" +
+    "#leadfu-pa-card .pa-h{background:linear-gradient(135deg,#10402F,#0A2E23);color:#fff;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;}" +
+    "#leadfu-pa-card .pa-h b{font-size:15.5px;}" +
+    "#leadfu-pa-card .pa-h button{border:0;background:none;color:rgba(255,255,255,.85);font-size:22px;cursor:pointer;line-height:1;flex:none;}" +
+    "#leadfu-pa-card .pa-bd{padding:18px 20px;}" +
+    "#leadfu-pa-card .pa-cur{font-size:13px;color:#6f7b84;margin-bottom:14px;}#leadfu-pa-card .pa-cur b{color:#13211B;font-size:15px;}" +
+    "#leadfu-pa-card .pa-row{display:flex;gap:8px;margin-bottom:10px;}" +
+    "#leadfu-pa-card select,#leadfu-pa-card input{font-family:inherit;font-size:15px;border:1.5px solid #dde7e1;border-radius:10px;padding:10px 12px;outline:0;}" +
+    "#leadfu-pa-card select.pa-dir{flex:0 0 96px;}#leadfu-pa-card input.pa-target{flex:1;width:100%;}#leadfu-pa-card input.pa-note{width:100%;margin-bottom:12px;}" +
+    "#leadfu-pa-card .pa-save{width:100%;border:0;background:linear-gradient(135deg,#E5C883,#C9A24B);color:#10402F;font-weight:800;font-size:15px;padding:12px;border-radius:11px;cursor:pointer;}" +
+    "#leadfu-pa-card .pa-list{margin-top:16px;border-top:1px solid #eef3f0;padding-top:8px;}" +
+    "#leadfu-pa-card .pa-item{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:8px 0;border-bottom:1px solid #f3f6f4;}" +
+    "#leadfu-pa-card .pa-item .x{margin-left:auto;border:0;background:none;color:#c0392b;cursor:pointer;font-size:13px;}" +
+    "#leadfu-pa-card .pa-empty{font-size:13px;color:#9aa7a0;padding:6px 0;}" +
+    "#leadfu-pa-card .pa-foot{font-size:11.5px;color:#9aa7a0;margin-top:12px;line-height:1.6;}";
+  document.head.appendChild(s);
+}
+
+async function openPriceAlertModal(code, name, curPrice) {
+  if (!code) return;
+  const s = findStock(code) || {};
+  name = name || s.name || "";
+  if (!_hasSupabaseSession()) {
+    _loginNudge(
+      '<b style="display:block;font-size:14.5px;margin-bottom:4px;">🔔 到價提醒需要登入</b>' +
+      '<span style="font-size:13px;color:#5a6b62;">登入並綁定 LINE，' + code + ' ' + name + ' 到價時我們會即時推播給你。</span>',
+      { ctaText: "登入 / 註冊", ctaHref: _pageRel("login.html") }
+    );
+    return;
+  }
+  let cur = Number(curPrice); if (!cur || isNaN(cur)) cur = Number(s.price) || 0;
+  _ensurePaStyle();
+  try { const o = document.getElementById("leadfu-pa-ov"); if (o) o.remove(); } catch (e) {}
+  const ov = document.createElement("div"); ov.id = "leadfu-pa-ov";
+  ov.innerHTML =
+    '<div id="leadfu-pa-card" role="dialog" aria-label="到價提醒設定">' +
+      '<div class="pa-h"><b>🔔 到價提醒 · ' + code + ' ' + name + '</b><button class="pa-close" aria-label="關閉">×</button></div>' +
+      '<div class="pa-bd">' +
+        '<div class="pa-cur">目前股價（盤後收盤）：<b class="num">' + (cur ? cur.toFixed(2) : "—") + '</b> 元</div>' +
+        '<div class="pa-row"><select class="pa-dir"><option value="below">跌到</option><option value="above">漲到</option></select>' +
+        '<input class="pa-target num" type="number" step="0.01" inputmode="decimal" placeholder="目標價" value="' + (cur ? cur.toFixed(2) : "") + '"></div>' +
+        '<input class="pa-note" type="text" maxlength="40" placeholder="備註（選填，例：跌破想加碼）">' +
+        '<button class="pa-save">新增到價提醒</button>' +
+        '<div class="pa-list"><div class="pa-empty">讀取中…</div></div>' +
+        '<div class="pa-foot">到價時透過 LINE 官方帳號推播（需已加好友）。盤中每約 5 分鐘比對一次，僅供參考、非投資建議。</div>' +
+      '</div></div>';
+  document.body.appendChild(ov);
+  const card = ov.querySelector("#leadfu-pa-card");
+  const close = () => ov.remove();
+  ov.addEventListener("click", (e) => { if (e.target === ov) close(); });
+  card.querySelector(".pa-close").addEventListener("click", close);
+
+  const auth = await _ensureAuth();
+  const listEl = card.querySelector(".pa-list");
+  async function refreshList() {
+    if (!auth || !auth.getPriceAlerts) { listEl.innerHTML = '<div class="pa-empty">無法載入提醒清單</div>'; return; }
+    const all = await auth.getPriceAlerts().catch(() => null);
+    const mine = (all || []).filter(a => String(a.code) === String(code));
+    if (!mine.length) { listEl.innerHTML = '<div class="pa-empty">這檔目前沒有設定提醒</div>'; return; }
+    listEl.innerHTML = mine.map(a =>
+      '<div class="pa-item" data-id="' + a.id + '"><span>' + (a.direction === "above" ? "漲到" : "跌到") +
+      ' <b class="num">' + Number(a.target).toFixed(2) + '</b> 元' +
+      (a.triggered_at ? ' · <span style="color:#1a8e3e;">已觸發</span>' : (a.active === false ? ' · <span style="color:#9aa7a0;">已停用</span>' : "")) +
+      '</span><button class="x">移除</button></div>').join("");
+    listEl.querySelectorAll(".pa-item .x").forEach(btn => btn.addEventListener("click", async () => {
+      const id = btn.closest(".pa-item").dataset.id;
+      try { await auth.deletePriceAlert(id); showToast("已移除提醒", "info"); refreshList(); }
+      catch (e) { showToast("移除失敗，請稍後再試", "error"); }
+    }));
+  }
+  refreshList();
+
+  card.querySelector(".pa-save").addEventListener("click", async () => {
+    const dir = card.querySelector(".pa-dir").value;
+    const target = Number(card.querySelector(".pa-target").value);
+    const note = card.querySelector(".pa-note").value.trim();
+    if (!target || isNaN(target) || target <= 0) { showToast("請輸入有效的目標價", "error"); return; }
+    const btn = card.querySelector(".pa-save"); btn.disabled = true; btn.textContent = "儲存中…";
+    try {
+      await auth.addPriceAlert({ code, direction: dir, target, note });
+      showToast("✓ 已設定：" + code + " " + (dir === "above" ? "漲到" : "跌到") + " " + target + " 通知你", "success");
+      try { trackEvent("price_alert_set", { code: code, direction: dir }); } catch (e) {}
+      card.querySelector(".pa-note").value = "";
+      refreshList();
+    } catch (e) { showToast("設定失敗：" + ((e && e.message) || "請稍後再試"), "error"); }
+    finally { btn.disabled = false; btn.textContent = "新增到價提醒"; }
+  });
+}
+
+// 全站「🔔 到價提醒」按鈕代理（data-action="price-alert" data-code data-name data-price）
+document.addEventListener("click", (e) => {
+  const t = e.target.closest('[data-action="price-alert"], .price-alert-btn');
+  if (!t) return;
+  e.preventDefault(); e.stopPropagation();
+  openPriceAlertModal(t.dataset.code, t.dataset.name || "", t.dataset.price);
+});
+
 window.LeadFu = {
   data: STOCK_DATA,
   fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow,
@@ -3031,6 +3241,8 @@ window.LeadFu = {
   mockAiResponse, startLivePriceSimulation, showToast,
   // 第 1 層 AI 問答工具（ai.html 用）
   parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
+  attachTypeahead, fmtAsOf, asOfBadge,         // 共用：搜尋下拉 + 統一資料時間標示
+  openPriceAlertModal, promptSaveLogin,         // 🔔 到價提醒 + 註冊軟引導
   startStockLive,  // 個股詳情頁即時報價 polling
   liveQuote: leadFuLiveQuote,  // 通用單檔即時報價（買前檢查等頁面用）
   loadKlines,      // 個股詳情頁延後載入 9.8MB K 線（不再全站每頁載）
@@ -3817,6 +4029,28 @@ function injectPriceFreshnessNote() {
     note.innerHTML = `📅 本頁股價為<b>盤後收盤</b>資料（更新 ${when}）、非盤中即時；<a href="check.html" style="color:#1B4332;font-weight:700;">買前檢查</a>與<a href="watchlist.html" style="color:#1B4332;font-weight:700;">自選股</a>為<b>即時報價</b>。`;
     head.appendChild(note);
   } catch (e) {}
+}
+
+/* ============================================================
+ * 統一「資料時間」標示 —— 全站一致，取代各頁各自亂寫的版本
+ *   fmtAsOf() 回傳如：資料時間 2026-06-12（盤後收盤）· 來源 TPEx
+ *   asOfBadge(el) 把字串填進指定元素（idempotent）
+ * ============================================================ */
+function fmtAsOf(meta, opts = {}) {
+  opts = opts || {};
+  meta = meta || (typeof STOCK_DATA !== "undefined" ? STOCK_DATA.stocksMeta : null) || {};
+  const date = (meta.sourceDate || (meta.updatedAt || "").slice(0, 10) || "").trim();
+  // 來源字串去重（資料層的 source 可能重複串接，如「TPEx … + TPEx …」）
+  const src = [...new Set(String(meta.source || "").split(/\s*\+\s*/).map(s => s.trim()).filter(Boolean))].join(" + ");
+  const tag = opts.realtime ? "即時報價" : "盤後收盤";
+  let s = "資料時間 " + (date || "近期") + "（" + tag + "）";
+  if (src && !opts.noSource) s += " · 來源 " + src;
+  return s;
+}
+function asOfBadge(el, opts) {
+  if (typeof el === "string") el = document.getElementById(el);
+  if (!el) return;
+  el.textContent = fmtAsOf(null, opts);
 }
 
 document.addEventListener("DOMContentLoaded", async () => {

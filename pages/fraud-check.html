@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投資邀約查證器｜有人報你明牌？3 步驟自己查清楚 - 領富 AI</title>
+<meta name="description" content="收到投資邀約、有人報你飆股、被拉進投資群？用領富 AI 投資邀約查證器：查這檔股票客觀風險、對照 5 大詐騙警訊、連官方查證管道，自己判斷真假。">
+<link rel="canonical" href="https://leadfuai.com/pages/fraud-check">
+<meta name="robots" content="index,follow">
+<link rel="stylesheet" href="../css/style.css?v=3.23.9">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "有人報我一檔會漲的股票，怎麼查是不是詐騙？",
+      "acceptedAnswer": { "@type": "Answer", "text": "三步驟自己查：(1) 用買前檢查看這檔股票的客觀風險分數、是否被列注意股；(2) 對照 5 大詐騙警訊（保證獲利、催促名額、匯款私人帳戶、下載非官方 APP、陌生人主動帶單）中了幾個；(3) 用金管會、公開資訊觀測站等官方管道查證對方身分。有疑慮撥 165。" } },
+    { "@type": "Question", "name": "買台股的錢會匯到個人帳戶嗎？",
+      "acceptedAnswer": { "@type": "Answer", "text": "不會。買台股的錢是進你自己在券商開戶綁定的證券交割銀行帳戶，絕不會匯到任何個人或公司帳戶。任何要你把錢匯到個人帳戶『買股票』的，都是詐騙。" } }
+  ]
+}
+</script>
+<style>
+  .fc-hero{background:linear-gradient(160deg,#0A2E23,#10402F);color:#f4ead2;border-radius:0 0 22px 22px;padding:34px 20px 30px;text-align:center;}
+  .fc-hero h1{font-size:26px;font-weight:900;line-height:1.5;margin:0 0 10px;}
+  .fc-hero h1 b{color:#ecd9ab;}
+  .fc-hero p{font-size:15px;line-height:1.8;color:rgba(244,234,210,.85);max-width:560px;margin:0 auto;}
+  .fc-wrap{max-width:780px;margin:0 auto;padding:0 16px;}
+  .fc-step{background:#fff;border:1px solid rgba(13,29,23,.1);border-radius:18px;padding:22px 22px 20px;margin:18px 0;box-shadow:0 8px 24px rgba(13,29,23,.06);}
+  .fc-step-no{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:900;letter-spacing:.08em;color:#b9914f;margin-bottom:10px;}
+  .fc-step-no span{display:inline-flex;width:26px;height:26px;border-radius:50%;background:#0b3328;color:#ecd9ab;align-items:center;justify-content:center;font-size:13px;}
+  .fc-step h2{font-size:19px;font-weight:900;color:#0d1d17;margin:0 0 8px;}
+  .fc-step p{font-size:14.5px;line-height:1.8;color:#46534b;margin:0 0 14px;}
+  .fc-search{display:flex;gap:8px;background:#f4f7f5;border:1.5px solid rgba(13,29,23,.12);border-radius:13px;padding:5px;}
+  .fc-search input{flex:1;border:0;background:transparent;outline:0;font-size:16px;padding:11px 14px;font-family:inherit;}
+  .fc-search button{border:0;cursor:pointer;background:#0b3328;color:#f4ead2;font-weight:900;font-size:15px;padding:0 22px;border-radius:10px;font-family:inherit;}
+  .fc-checklist{list-style:none;margin:0;padding:0;}
+  .fc-checklist li{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid rgba(13,29,23,.1);border-radius:12px;margin-bottom:9px;cursor:pointer;transition:background .12s;}
+  .fc-checklist li:hover{background:#faf6ec;}
+  .fc-checklist input{margin-top:3px;width:18px;height:18px;flex:none;accent-color:#a13a2f;cursor:pointer;}
+  .fc-checklist b{font-size:14.5px;color:#0d1d17;font-weight:800;}
+  .fc-checklist small{display:block;font-size:13px;color:#68736c;margin-top:2px;line-height:1.6;}
+  .fc-result{margin-top:14px;padding:14px 16px;border-radius:12px;font-size:14.5px;line-height:1.8;font-weight:700;display:none;}
+  .fc-result.ok{display:block;background:#e7f3e9;border:1px solid #cfe5d3;color:#0e5a3a;}
+  .fc-result.warn{display:block;background:#fcf0e8;border:1px solid #f0d3bf;color:#a13a2f;}
+  .fc-official{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .fc-official a{display:block;padding:13px 15px;border:1px solid rgba(13,29,23,.12);border-radius:12px;text-decoration:none;background:#fff;transition:border-color .12s;}
+  .fc-official a:hover{border-color:#b9914f;}
+  .fc-official b{display:block;font-size:14.5px;color:#0b3328;font-weight:900;}
+  .fc-official small{display:block;font-size:12.5px;color:#68736c;margin-top:2px;line-height:1.5;}
+  .fc-165{display:flex;align-items:center;justify-content:center;gap:10px;background:#7a2e26;color:#fff;border-radius:14px;padding:16px;margin:18px 0;font-size:17px;font-weight:900;text-decoration:none;}
+  .fc-vow{font-size:13px;color:#888;line-height:1.8;background:#fcfaf4;border:1px solid #eee4cf;border-radius:10px;padding:14px 16px;margin:14px 0 30px;}
+  .fc-articles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;}
+  .fc-articles a{font-size:14px;color:#1B4332;font-weight:700;text-decoration:none;padding:11px 14px;background:#f4f7f5;border-radius:10px;}
+  .fc-articles a:hover{background:#eae4d2;}
+  @media(max-width:640px){.fc-official,.fc-articles{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="bottom-tab-bar" style="display:none;"></div>
+
+<header class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left"><span id="todayDate"></span><span class="divider">|</span><span>台股全市場財經資訊網</span></div>
+  </div>
+</header>
+
+<div class="logo-bar">
+  <div class="container logo-bar-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-bi">領富</span><span class="logo-ai">AI</span>
+      <span class="logo-sub">LeadFu · 領先市場兩步</span>
+    </a>
+    <div class="search-box">
+      <input type="text" id="stockSearch" placeholder="輸入代號 / 公司名稱">
+      <button id="searchBtn">查詢</button>
+    </div>
+  </div>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="../index.html">首頁</a></li>
+      <li><a href="check">買前檢查</a></li>
+      <li><a href="fraud-alert" class="active">防詐中心</a></li>
+      <li><a href="risk-radar">防錯雷達</a></li>
+      <li><a href="ai">AI 對話</a></li>
+      <li><a href="vip">VIP</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="fc-hero">
+  <h1>有人報你明牌、拉你進群？<br><b>先花 3 分鐘自己查清楚</b></h1>
+  <p>別急著相信，也別急著否定。用這 3 步驟，自己判斷一個投資邀約可不可信——資料你來看，決定你來下。</p>
+</section>
+
+<main class="fc-wrap">
+
+  <div class="fc-step">
+    <div class="fc-step-no"><span>1</span>查這檔股票的「客觀體質」</div>
+    <h2>對方報的股票，數據說話</h2>
+    <p>有人推你一檔「會大漲」的股票？先看它的客觀資料——風險分數、是否被列注意股、估值是否過高、法人在買還在賣。輸入代號，領富 AI 一頁整理給你看（不報明牌、只給事實）。</p>
+    <form class="fc-search" onsubmit="event.preventDefault();var v=this.q.value.trim();if(v)location.href='check?code='+encodeURIComponent(v);">
+      <input name="q" type="text" placeholder="輸入股票代號 / 公司名，例如 2330" aria-label="股票代號">
+      <button type="submit">查體質 →</button>
+    </form>
+  </div>
+
+  <div class="fc-step">
+    <div class="fc-step-no"><span>2</span>對照「5 大詐騙警訊」</div>
+    <h2>對方的行為，中了幾個？</h2>
+    <p>下面 5 點是投資詐騙的共同特徵。誠實勾選對方有沒有這些行為——中越多越危險。</p>
+    <ul class="fc-checklist" id="fcCheck">
+      <li onclick="this.querySelector('input').click()"><input type="checkbox" onclick="event.stopPropagation();fcScore()"><span><b>① 保證獲利、穩賺不賠</b><small>合法投顧依法不得保證報酬，講這句的一定有問題。</small></span></li>
+      <li onclick="this.querySelector('input').click()"><input type="checkbox" onclick="event.stopPropagation();fcScore()"><span><b>② 催你「名額有限、立刻決定」</b><small>不給你查證時間，是詐騙的共同手法。</small></span></li>
+      <li onclick="this.querySelector('input').click()"><input type="checkbox" onclick="event.stopPropagation();fcScore()"><span><b>③ 要你匯款到個人／指定帳戶</b><small>買台股的錢只進你自己的證券交割帳戶，絕不會匯到個人帳戶。</small></span></li>
+      <li onclick="this.querySelector('input').click()"><input type="checkbox" onclick="event.stopPropagation();fcScore()"><span><b>④ 要你下載「專屬／內部」APP</b><small>合法買台股只透過你開戶券商的 APP，任何專屬平台都是假的。</small></span></li>
+      <li onclick="this.querySelector('input').click()"><input type="checkbox" onclick="event.stopPropagation();fcScore()"><span><b>⑤ 陌生人主動加 LINE／拉群帶單</b><small>合法投顧不會用陌生簡訊、交友軟體、亂入群組招攬。</small></span></li>
+    </ul>
+    <div class="fc-result" id="fcResult"></div>
+  </div>
+
+  <div class="fc-step">
+    <div class="fc-step-no"><span>3</span>用「官方管道」查證身分</div>
+    <h2>對方是誰，官方查得到嗎？</h2>
+    <p>合法券商、投顧、上市公司都受監理、有官方資料可查。用下面的官方管道核對對方身分——記得用官方網站，別用對方給你的連結。</p>
+    <div class="fc-official">
+      <a href="https://www.sfb.gov.tw/" target="_blank" rel="noopener"><b>金管會證期局</b><small>查證券商／投顧是否合法立案</small></a>
+      <a href="https://mops.twse.com.tw/" target="_blank" rel="noopener"><b>公開資訊觀測站</b><small>查上市櫃公司公告、財報</small></a>
+      <a href="https://www.twse.com.tw/" target="_blank" rel="noopener"><b>臺灣證券交易所</b><small>查上市股票公開資訊</small></a>
+      <a href="https://www.selfsales.org.tw/" target="_blank" rel="noopener"><b>證券投信投顧公會</b><small>查投顧會員與從業人員登錄</small></a>
+    </div>
+    <a href="tel:165" class="fc-165">📞 有任何疑慮，立即撥 165 反詐騙專線</a>
+  </div>
+
+  <div class="fc-vow">
+    <b>領富 AI 的承諾：</b>我們不報明牌、不代操、不收任何投資款，唯一官方網址為 leadfuai.com、唯一官方 LINE 為 @130tqckv。本工具僅協助你用公開資料與官方管道自行查證，不構成投資建議；任何投資決定與盈虧由你自行評估承擔。看到冒用領富名義拉群、要你匯款者，請撥 165 檢舉。
+  </div>
+
+  <div class="fc-step">
+    <div class="fc-step-no"><span>＋</span>想更了解詐騙手法？</div>
+    <h2>防詐知識，多看一篇少踩一個坑</h2>
+    <div class="fc-articles">
+      <a href="learn/stock-group-scam">飆股群組是詐騙嗎？6 個識別方法 →</a>
+      <a href="learn/guaranteed-profit-scam">「保證獲利」話術拆解 →</a>
+      <a href="learn/fake-advisor-check">假投顧怎麼分辨？查證合法券商 →</a>
+      <a href="learn/investment-scam-report">被詐騙怎麼辦？165 報案流程 →</a>
+      <a href="learn/impersonation-scam">假冒名人／上市公司詐騙 →</a>
+      <a href="learn/unlisted-stock-scam">未上市股票詐騙 5 大警訊 →</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid"></div>
+</footer>
+
+<script>
+function fcScore(){
+  var n=document.querySelectorAll('#fcCheck input:checked').length;
+  var r=document.getElementById('fcResult');
+  if(n===0){r.className='fc-result';r.style.display='none';return;}
+  if(n>=1){
+    r.className='fc-result warn';
+    r.innerHTML='⚠ 已中 '+n+' 項警訊。<b>只要中 1 項就高度可疑</b>——投資詐騙通常符合多項特徵。請停止匯款、保留證據，立即撥 165 查證。';
+  }
+}
+</script>
+<script src="../js/main.js?v=3.26.0"></script>
+</body>
+</html>

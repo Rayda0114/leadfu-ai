@@ -144,7 +144,7 @@ nav.main a.hot{color:var(--forest);}
   linear-gradient(168deg,#0A2E23 0%,#0D3829 58%,#0A2E23 100%);
   color:#FAF8F2;position:relative;overflow:hidden;}
 .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse at 30% 40%,#000 30%,transparent 75%);}
-.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:54px;padding-top:72px;padding-bottom:78px;align-items:center;}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.22fr .78fr;gap:48px;padding-top:72px;padding-bottom:78px;align-items:center;}
 .kicker{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:700;letter-spacing:.22em;color:var(--gold-2);margin-bottom:22px;}
 .kicker::before{content:"";width:26px;height:2px;background:var(--gold);}
 .hero h1{font-family:var(--serif);font-size:46px;line-height:1.32;font-weight:900;letter-spacing:.01em;margin-bottom:18px;}
@@ -175,6 +175,10 @@ nav.main a.hot{color:var(--forest);}
 .gauge-pin{position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--forest);box-shadow:0 2px 8px rgba(0,0,0,.4);transform:translateX(-8px);}
 .xline{font-size:13px;line-height:1.6;color:rgba(250,248,242,.85);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .xline b{color:var(--gold-2);}
+/* hero 範例卡（零動作真實範例）—— 拉成右側主角，金色點綴 */
+.bcard.hero-sample{border-color:rgba(229,200,131,.55);background:rgba(229,200,131,.09);box-shadow:0 14px 36px rgba(201,162,75,.16);}
+.bcard.hero-sample:hover{border-color:rgba(229,200,131,.7);background:rgba(229,200,131,.13);}
+.sample-hint{font-size:12px;color:var(--gold-2);margin-top:13px;font-weight:700;line-height:1.5;border-top:1px solid rgba(229,200,131,.22);padding-top:11px;}
 
 /* ── 數字帶 ── */
 .statband{background:var(--card);border-bottom:1px solid var(--line);}
@@ -498,12 +502,13 @@ footer.site .wrap{padding:54px 28px 40px;}
       <div class="kicker">PRE-TRADE CHECK・台股風險守門員</div>
       <h1>買股票之前，<br>先讓 <span class="hl" style="white-space:nowrap;">9 項紅旗</span><span style="white-space:nowrap;">替你把關。</span></h1>
       <p class="sub">輸入代號，領富 AI 把<b>估值、籌碼、營收、注意股與新聞風險</b>整理成一張看得懂的決策卡 —— 不報明牌，<b>決定永遠在你手上。</b></p>
-      <form class="search" onsubmit="event.preventDefault();var v=this.querySelector('input').value.trim();if(v)location.href='/pages/check?code='+encodeURIComponent(v);">
-        <input type="text" placeholder="輸入代號或公司名，例如 2330 台積電" aria-label="股票代號">
+      <form class="search" style="position:relative;" onsubmit="event.preventDefault();var v=this.querySelector('input').value.trim();if(v)location.href='/pages/check?code='+encodeURIComponent(v);">
+        <input id="heroSearch" type="text" placeholder="輸入代號或公司名，例如 2330 台積電" aria-label="股票代號" autocomplete="off">
         <button type="submit">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           免費檢查
         </button>
+        <div class="lf-ta-box" id="heroSugg" style="display:none;"></div>
       </form>
       <div class="quick">
         <span style="font-size:13px;color:rgba(250,248,242,.45);align-self:center;">熱門：</span>
@@ -516,6 +521,16 @@ footer.site .wrap{padding:54px 28px 40px;}
       </div>
     </div>
     <div class="bento">
+      <!-- 主角：0 動作真實範例 → 直接讓訪客看到「輸入代號會得到什麼」 -->
+      <div class="bcard wide hero-sample" style="cursor:pointer;" id="bSampleCard">
+        <div class="lab"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 11H4v9h5zM14.5 4h-5v16h5zM20 8h-5v12h5z"/></svg><span id="bScoreLab">今日警示實例</span></div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div class="big num" id="bScore">—<span style="font-size:14px;color:rgba(250,248,242,.5);font-weight:700;"> /100</span></div>
+          <div class="small" style="margin:0;" id="bScoreSub">風險分數・9 項紅旗逐項檢查 →</div>
+        </div>
+        <div class="sample-hint">👆 這就是你輸入代號後會看到的決策卡 —— 0 元、免註冊先試一檔</div>
+      </div>
+      <!-- 次要：今日市場脈動（與下方行情條/雙雷達同源，這裡只給一眼的脈絡）-->
       <div class="bcard">
         <div class="lab"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3a9 9 0 0 1 9 9h-4a5 5 0 0 0-5-5V3Z"/><circle cx="12" cy="12" r="9"/></svg>明日大盤波動風險</div>
         <div class="big num" id="bTemp">—</div>
@@ -531,13 +546,6 @@ footer.site .wrap{padding:54px 28px 40px;}
         <div class="lab"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg>X 快訊雷達・最新一則 <span class="dot" style="width:6px;height:6px;border-radius:50%;background:#E5C883;animation:pulse 1.6s infinite;"></span></div>
         <div class="xline" id="bX">載入中…</div>
         <div class="small" id="bXmeta"></div>
-      </div>
-      <div class="bcard wide" style="cursor:pointer;" id="bSampleCard">
-        <div class="lab"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 11H4v9h5zM14.5 4h-5v16h5zM20 8h-5v12h5z"/></svg><span id="bScoreLab">今日警示實例</span></div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <div class="big num" id="bScore">—<span style="font-size:14px;color:rgba(250,248,242,.5);font-weight:700;"> /100</span></div>
-          <div class="small" style="margin:0;" id="bScoreSub">風險分數・9 項紅旗逐項檢查 →</div>
-        </div>
       </div>
     </div>
   </div>
@@ -1089,6 +1097,38 @@ footer.site .wrap{padding:54px 28px 40px;}
   ]
 }
 </script>
-<script src="/js/main.js?v=3.25.9"></script>
+<script src="/js/main.js?v=3.26.0"></script>
+<script>
+/* Hero 搜尋框：打字即下拉(台積→2330) + 送出時 name→code 解析(修中文名送到空白檢查頁的 bug) */
+(async function () {
+  try { await (window.LeadFu && window.LeadFu.ready); } catch (e) {}
+  if (!window.LeadFu) return;
+  var input = document.getElementById("heroSearch");
+  var box = document.getElementById("heroSugg");
+  var form = input && input.closest("form");
+  if (!input || !box) return;
+  function go(code) { if (code) location.href = "/pages/check?code=" + encodeURIComponent(code); }
+  function resolve(v) {
+    v = (v || "").trim(); if (!v) return null;
+    var m = v.match(/(00\d{2,4}[A-Z]?|\d{4}[A-Z]?)/);
+    if (m) { var s = window.LeadFu.findStock ? window.LeadFu.findStock(m[1]) : null; return s ? s.code : m[1]; }
+    var all = (window.LeadFu.data && window.LeadFu.data.stocks) || [];
+    var hit = all.find(function (x) { return x.name === v; })
+      || all.find(function (x) { return x.name && (v.indexOf(x.name) >= 0 || x.name.indexOf(v) >= 0); });
+    return hit ? hit.code : null;
+  }
+  if (window.LeadFu.attachTypeahead) {
+    window.LeadFu.attachTypeahead({ input: input, box: box, onPick: function (s) { input.value = s.code + " " + (s.name || ""); go(s.code); } });
+  }
+  if (form) {
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      var code = resolve(input.value);
+      if (code) go(code);
+      else if (input.value.trim()) location.href = "/pages/search.html?q=" + encodeURIComponent(input.value.trim());
+    };
+  }
+})();
+</script>
 </body>
 </html>

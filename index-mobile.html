@@ -242,9 +242,10 @@
     <h1>買股票前，先看<br>風險值不值得承擔</h1>
     <p class="hero-copy">不是報明牌。領富 AI 把估值、籌碼、注意股與新聞風險，整理成一張看得懂的決策卡。</p>
     <form class="search-panel" id="checkHeroForm" autocomplete="off">
-      <div class="search-line">
-        <input id="checkHeroInput" type="search" inputmode="search" placeholder="輸入股票代號 / 公司名稱">
+      <div class="search-line" style="position:relative;">
+        <input id="checkHeroInput" type="search" inputmode="search" placeholder="輸入股票代號 / 公司名稱" autocomplete="off">
         <button id="checkHeroBtn" type="submit" aria-label="檢查">⌕</button>
+        <div class="lf-ta-box" id="heroSuggM" style="display:none;"></div>
       </div>
       <div class="quick">
         <a href="pages/check.html?code=2330"><small>快速檢查</small><b>2330 台積電</b></a>
@@ -297,11 +298,11 @@
   <div class="signal">Watchlist today</div>
   <h2 style="font-size:24px;">今日值得關注，點一下問 AI</h2>
 </section>
-<div class="scroller">
-  <a class="qc" href="pages/ai.html?q=2330"><small>AI 題材</small><b>台積電</b><div class="tk">2330</div><div class="pxx up">1,045 <em>▲1.2%</em></div></a>
-  <a class="qc" href="pages/ai.html?q=0056"><small>高股息</small><b>元大高股息</b><div class="tk">0056</div><div class="pxx dn">38.6 <em>▼0.5%</em></div></a>
-  <a class="qc" href="pages/ai.html?q=2603"><small>航運</small><b>長榮</b><div class="tk">2603</div><div class="pxx up">205 <em>▲2.1%</em></div></a>
-  <a class="qc" href="pages/ai.html?q=2882"><small>金融</small><b>國泰金</b><div class="tk">2882</div><div class="pxx up">62.4 <em>▲0.8%</em></div></a>
+<div class="scroller" id="todayScroller">
+  <a class="qc" href="pages/ai.html?q=2330"><small>AI 題材</small><b>台積電</b><div class="tk">2330</div><div class="pxx up">— <em></em></div></a>
+  <a class="qc" href="pages/ai.html?q=0056"><small>高股息</small><b>元大高股息</b><div class="tk">0056</div><div class="pxx up">— <em></em></div></a>
+  <a class="qc" href="pages/ai.html?q=2603"><small>航運</small><b>長榮</b><div class="tk">2603</div><div class="pxx up">— <em></em></div></a>
+  <a class="qc" href="pages/ai.html?q=2882"><small>金融</small><b>國泰金</b><div class="tk">2882</div><div class="pxx up">— <em></em></div></a>
 </div>
 
 <!-- ⚡ X 快訊雷達（VIP 賣點 + LIVE 試閱） -->
@@ -361,7 +362,7 @@
   台股全市場財經資訊網 · 本站資訊僅供參考，不構成投資建議<br>客服 LINE：<a href="https://line.me/R/ti/p/@130tqckv">@130tqckv</a> · 唯一官方網址 leadfuai.com
 </footer>
 
-<script src="js/main.js?v=3.25.9"></script>
+<script src="js/main.js?v=3.26.0"></script>
 <script>
 /* 首頁第一屏：檢查框 → 買前檢查（沿用原邏輯）*/
 (async () => {
@@ -385,9 +386,33 @@
     if (form) form.addEventListener("submit", (e) => { e.preventDefault(); go(); });
     const btn = document.getElementById("checkHeroBtn");
     if (btn) btn.addEventListener("click", (e) => { e.preventDefault(); go(); });
+    // 打字即下拉建議（台積→2330）；點選直接跳買前檢查
+    const sugg = document.getElementById("heroSuggM");
+    if (input && sugg && L.attachTypeahead) {
+      L.attachTypeahead({ input, box: sugg, onPick: (s) => { location.href = "pages/check.html?code=" + s.code; } });
+    }
     // 底部固定鍵：聚焦搜尋框
     const bottomBtn = document.getElementById("bottomCheckBtn");
     if (bottomBtn) bottomBtn.addEventListener("click", (e) => { e.preventDefault(); window.scrollTo({top:0,behavior:"smooth"}); setTimeout(()=>{ if(input) input.focus(); }, 350); });
+
+    // 「今日值得關注」改吃真資料（原為寫死假價，首訪會看起來像過期/假的）
+    try {
+      const all = (L.data && L.data.stocks) || [];
+      const box = document.getElementById("todayScroller");
+      if (box && all.length) {
+        const pct = (s) => (s.price && s.change != null) ? (s.change / (s.price - s.change)) * 100 : 0;
+        const liquid = all.filter(s => s.price > 0 && s.change != null && s.volume != null);
+        liquid.sort((a, b) => (b.volume || 0) - (a.volume || 0));
+        const pool = liquid.slice(0, 50);
+        pool.sort((a, b) => Math.abs(pct(b)) - Math.abs(pct(a)));
+        const pick = pool.slice(0, 8);
+        if (pick.length) box.innerHTML = pick.map(s => {
+          const p = pct(s), up = p >= 0;
+          const cat = (s.category || "熱門").slice(0, 5);
+          return '<a class="qc" href="pages/ai.html?q=' + s.code + '"><small>' + cat + '</small><b>' + (s.name || "") + '</b><div class="tk">' + s.code + '</div><div class="pxx ' + (up ? "up" : "dn") + '">' + Number(s.price).toFixed(2) + ' <em>' + (up ? "▲" : "▼") + Math.abs(p).toFixed(1) + '%</em></div></a>';
+        }).join("");
+      }
+    } catch (e2) {}
   } catch (e) {}
 })();
 </script>

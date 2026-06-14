@@ -60,6 +60,11 @@
 <main class="container main-grid">
   <section class="col-main">
 
+    <div class="panel" id="dailyBriefPanel">
+      <div class="panel-head"><h2>📊 我的每日盤後簡報</h2><span id="dbDate" style="font-size:12px;color:#888;font-weight:400;"></span></div>
+      <div id="dbBody"><div style="padding:16px;color:#888;font-size:13px;">整理中…</div></div>
+    </div>
+
     <div class="panel">
       <div class="panel-head"><h2>個人資料</h2></div>
       <div class="info-grid" id="profileGrid"></div>
@@ -71,6 +76,14 @@
         <a href="watchlist.html" class="more">完整列表 ▸</a>
       </div>
       <div id="favPreview" style="padding:0;"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>我的持股</h2>
+        <a href="portfolio-health.html" class="more">完整健診 ▸</a>
+      </div>
+      <div id="holdPreview" style="padding:0;"></div>
     </div>
 
     <div id="x-radar" class="panel">
@@ -132,13 +145,34 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.25.9"></script>
+<style>
+  /* 每日盤後簡報卡 */
+  #dailyBriefPanel .db-wrap{padding:4px 0;}
+  #dailyBriefPanel .db-row{display:flex;gap:12px;padding:12px 20px;border-bottom:1px solid #f1f4f2;align-items:flex-start;}
+  #dailyBriefPanel .db-row:last-child{border-bottom:0;}
+  #dailyBriefPanel .db-ic{font-size:19px;flex:none;line-height:1.45;}
+  #dailyBriefPanel .db-row b{font-size:13.5px;color:#1B4332;}
+  #dailyBriefPanel .db-main{font-size:21px;font-weight:800;margin-top:2px;}
+  #dailyBriefPanel .db-sub{font-size:13px;color:#667;margin-top:3px;line-height:1.7;}
+  /* 首登 3 步驟引導 */
+  #obPanel .ob-list{padding:4px 0;}
+  #obPanel .ob-step{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid #f1f4f2;}
+  #obPanel .ob-step:last-child{border-bottom:0;}
+  #obPanel .ob-n{width:26px;height:26px;border-radius:50%;background:#1B4332;color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none;}
+  #obPanel .ob-step.done .ob-n{background:#1a8e3e;}
+  #obPanel .ob-tx{flex:1;min-width:0;}
+  #obPanel .ob-tx b{display:block;font-size:14px;color:#1B4332;}
+  #obPanel .ob-tx span{font-size:12.5px;color:#778;}
+  #obPanel .ob-step a{background:#C9A24B;color:#10402F;font-weight:800;font-size:12.5px;padding:7px 14px;border-radius:8px;text-decoration:none;white-space:nowrap;}
+  #obPanel .ob-ok{font-size:12.5px;color:#1a8e3e;font-weight:700;white-space:nowrap;}
+</style>
+<script src="../js/main.js?v=3.26.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/auth.js?v=3.24.3"></script>
+<script src="../js/auth.js?v=3.26.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
-  const { data, findStock, getWatchlist, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, pageHref } = window.LeadFu;
+  const { data, findStock, getWatchlist, getHoldings, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, pageHref } = window.LeadFu;
 
   // 取得真實會員資料（Supabase）
   const user = await window.LeadFuAuth.getProfile();
@@ -458,6 +492,118 @@ document.addEventListener("DOMContentLoaded", async () => {
           }).join("")}
         </tbody>
       </table>`;
+  }
+
+  // 我的持股面板
+  renderHoldingsPanel();
+  function renderHoldingsPanel() {
+    const body = document.getElementById("holdPreview");
+    if (!body) return;
+    const holdings = (getHoldings && getHoldings()) || {};
+    const codes = Object.keys(holdings);
+    if (!codes.length) {
+      body.innerHTML = `<div style="padding:26px;text-align:center;color:#999;">尚無持股 ・ <a href="portfolio-health.html" style="color:#1B4332;font-weight:700;">建立持股清單 →</a><br><span style="font-size:12.5px;">記下持股，每天盤後幫你複查買進理由還在不在。</span></div>`;
+      return;
+    }
+    const rows = codes.slice(0, 6).map(c => {
+      const s = findStock(c) || { code: c, name: c, status: "" };
+      const h = holdings[c];
+      return `<tr><td class="code"><a href="${pageHref('stock-detail?code=' + c)}">${c}</a></td><td>${s.name || ""}</td><td class="num">${(Number(h.shares) || 0).toLocaleString()}</td><td class="num">${h.cost ? fmtPrice(h.cost) : "—"}</td></tr>`;
+    }).join("");
+    body.innerHTML = `<table class="stock-table"><thead><tr><th>代號</th><th>名稱</th><th class="num">股數</th><th class="num">成本</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  // 我的每日盤後簡報（持股今日損益 + 大盤溫度 + 紅旗 + 相關新聞 + X 輿情）
+  renderDailyBrief(user);
+  async function renderDailyBrief() {
+    const body = document.getElementById("dbBody");
+    if (!body) return;
+    const L = window.LeadFu;
+    const holdings = (getHoldings && getHoldings()) || {};
+    const codes = Object.keys(holdings);
+    const dateEl = document.getElementById("dbDate");
+    if (dateEl && L.fmtAsOf) dateEl.textContent = L.fmtAsOf(null, { noSource: true });
+    if (!codes.length) {
+      body.innerHTML = `<div style="padding:24px;text-align:center;color:#888;font-size:13.5px;line-height:1.9;">還沒有持股，無法產生每日簡報。<br><a href="portfolio-health.html" style="color:#1B4332;font-weight:700;">先建立持股清單 →</a><br>之後每天盤後幫你把「今天賺賠 / 持股紅旗 / 相關消息」整理成一張卡。</div>`;
+      return;
+    }
+    const byCode = {}; (data.stocks || []).forEach(s => byCode[s.code] = s);
+    let totVal = 0, totToday = 0, valid = 0, best = null, worst = null;
+    codes.forEach(c => {
+      const s = byCode[c], h = holdings[c]; if (!s || !h) return;
+      const sh = Number(h.shares) || 0, px = Number(s.price) || 0, ch = Number(s.change) || 0;
+      totVal += sh * px; totToday += sh * ch; valid++;
+      const pc = (px && px !== ch) ? (ch / (px - ch)) * 100 : 0;
+      if (best === null || pc > best.pc) best = { name: s.name, pc };
+      if (worst === null || pc < worst.pc) worst = { name: s.name, pc };
+    });
+    const todayPct = (totVal - totToday) ? (totToday / (totVal - totToday)) * 100 : 0;
+    const col = v => v > 0 ? "#C0392B" : v < 0 ? "#0E8A5F" : "#666";
+    const sgn = v => v >= 0 ? "+" : "";
+    const arr = v => v > 0 ? "▲" : v < 0 ? "▼" : "–";
+    const hcodes = new Set(codes);
+    const lines = [];
+    lines.push(`<div class="db-row"><span class="db-ic">💰</span><div><b>今日持股損益</b><div class="db-main" style="color:${col(totToday)};">${sgn(totToday)}${Math.round(totToday).toLocaleString()} 元（${sgn(todayPct)}${todayPct.toFixed(2)}%）</div><div class="db-sub">總市值約 ${Math.round(totVal).toLocaleString()} 元 ・ ${valid} 檔持股（盤後收盤）</div></div></div>`);
+    if (best && worst && best.name !== worst.name) {
+      lines.push(`<div class="db-row"><span class="db-ic">📈</span><div><b>最強 / 最弱</b><div class="db-sub"><b style="color:${col(best.pc)};">${best.name} ${arr(best.pc)}${best.pc.toFixed(1)}%</b>　|　<b style="color:${col(worst.pc)};">${worst.name} ${arr(worst.pc)}${worst.pc.toFixed(1)}%</b></div></div></div>`);
+    }
+    const flags = [];
+    codes.forEach(c => {
+      const s = byCode[c]; if (!s) return;
+      const rk = (data.riskScore || {})[c], fv = (data.fairValue || {})[c], att = (data.attention || {})[c];
+      const rs = [];
+      if (att) rs.push("主管機關" + (att.type || "注意/處置"));
+      if (rk && rk.score >= 60) rs.push("風險分數 " + rk.score);
+      if (fv && fv.position != null && fv.position >= 0.8) rs.push("估值達區間上緣");
+      if (rs.length) flags.push((s.name || c) + "：" + rs.join("、"));
+    });
+    if (flags.length) lines.push(`<div class="db-row"><span class="db-ic">🚩</span><div><b>持股紅旗（${flags.length}）</b><div class="db-sub">${flags.slice(0, 4).map(f => "• " + f).join("<br>")}</div></div></div>`);
+    else lines.push(`<div class="db-row"><span class="db-ic">✅</span><div><b>持股紅旗</b><div class="db-sub">今日持股無重大警示。</div></div></div>`);
+    const relNews = (data.news || []).filter(n => (n.ai_related || []).some(c => hcodes.has(c))).slice(0, 3);
+    if (relNews.length) lines.push(`<div class="db-row"><span class="db-ic">📰</span><div><b>持股相關新聞</b><div class="db-sub">${relNews.map(n => "• " + (n.title || "").slice(0, 38) + (n.ai_sentiment ? ` <span style="color:${n.ai_sentiment === "利多" ? "#C0392B" : n.ai_sentiment === "利空" ? "#0E8A5F" : "#888"};">[${n.ai_sentiment}]</span>` : "")).join("<br>")}</div></div></div>`);
+    lines.push(`<div class="db-row" id="dbMkt"><span class="db-ic">🌡️</span><div><b>大盤溫度</b><div class="db-sub">讀取中…</div></div></div>`);
+    body.innerHTML = `<div class="db-wrap">${lines.join("")}</div><div style="padding:10px 18px 16px;display:flex;gap:14px;flex-wrap:wrap;"><a href="portfolio-health.html" style="font-size:13px;font-weight:700;color:#1B4332;">完整持股健診 ▸</a><a href="risk-radar.html" style="font-size:13px;font-weight:700;color:#1B4332;">防錯雷達 ▸</a></div>`;
+    try {
+      const base = location.pathname.includes("/pages/") ? "../" : "";
+      const tf = await (await fetch(base + "data/taifex_live.json", { cache: "no-cache" })).json();
+      const mkt = document.getElementById("dbMkt");
+      if (mkt && tf && tf.risk) {
+        const lvl = tf.risk.level, c = lvl === "高" ? "#C0392B" : lvl === "低" ? "#0E8A5F" : "#B97D1F";
+        mkt.querySelector(".db-sub").innerHTML = `<b style="color:${c};">【${lvl}】</b> ${(tf.risk.reasons && tf.risk.reasons[0]) || "台指期・選擇權避險情緒"}`;
+      }
+    } catch (e) { const mkt = document.getElementById("dbMkt"); if (mkt) mkt.querySelector(".db-sub").textContent = "暫無資料"; }
+    try {
+      const xr = await (await fetch("/api/market/x-alerts")).json();
+      const hits = ((xr && xr.alerts) || []).filter(a => (a.symbols || []).some(c => hcodes.has(String(c)))).slice(0, 2);
+      if (hits.length) {
+        const div = document.createElement("div"); div.className = "db-row";
+        div.innerHTML = `<span class="db-ic">📡</span><div><b>持股相關 X 快訊</b><div class="db-sub">${hits.map(a => "• @" + (a.author || "") + "：" + (a.summary_zh || "").slice(0, 46)).join("<br>")}</div></div>`;
+        const wrap = body.querySelector(".db-wrap"); if (wrap) wrap.appendChild(div);
+      }
+    } catch (e) {}
+  }
+
+  // 首次登入 3 步驟引導（全部完成或按略過後不再顯示）
+  renderOnboarding(user);
+  function renderOnboarding(u) {
+    try { if (localStorage.getItem("leadfu_member_onboarded_v1")) return; } catch (e) {}
+    const hasWatch = getWatchlist().length > 0;
+    const hasHold = Object.keys((getHoldings && getHoldings()) || {}).length > 0;
+    const hasLine = !!(u && u.line_user_id);
+    if (hasWatch && hasHold && hasLine) return;
+    const step = (done, n, title, desc, href, cta, ext) =>
+      `<div class="ob-step ${done ? "done" : ""}"><div class="ob-n">${done ? "✓" : n}</div><div class="ob-tx"><b>${title}</b><span>${desc}</span></div>${done ? '<span class="ob-ok">已完成</span>' : `<a href="${href}"${ext ? ' target="_blank" rel="noopener"' : ""}>${cta}</a>`}</div>`;
+    const panel = document.createElement("div");
+    panel.className = "panel"; panel.id = "obPanel"; panel.style.cssText = "border:2px solid #C5A572;";
+    panel.innerHTML = `<div class="panel-head"><h2>👋 3 步驟啟用你的守門員</h2><a href="#" id="obSkip" class="more">略過</a></div>` +
+      `<div class="ob-list">` +
+      step(hasWatch, 1, "加一檔自選股", "先挑一檔你關注的股票", "stocks.html", "去加自選") +
+      step(hasHold, 2, "記一筆持股", "系統才能每天幫你複查買進理由", "portfolio-health.html", "記持股") +
+      step(hasLine, 3, "開啟 LINE 提醒", hasLine ? "已綁定 LINE，盤後會推播給你" : "綁定 LINE，盤後紅旗即時通知你", "https://line.me/R/ti/p/@130tqckv", "加 LINE", true) +
+      `</div>`;
+    const mainCol = document.querySelector(".col-main");
+    mainCol.insertBefore(panel, mainCol.firstElementChild);
+    document.getElementById("obSkip").addEventListener("click", (e) => { e.preventDefault(); try { localStorage.setItem("leadfu_member_onboarded_v1", "1"); } catch (e2) {} panel.remove(); });
   }
 });
 </script>

@@ -282,6 +282,37 @@ window.LeadFuAuth = {
     if (error) console.warn("[領富 AI] 寫雲端新聞訂閱失敗:", error.message);
   },
 
+  /* ── 🔔 到價提醒（price_alerts 表，RLS：本人 CRUD）──
+     欄位：id / user_id / code / direction('above'|'below') / target(numeric) / note / active / triggered_at / created_at
+     盤中 cron（worker.js runPriceAlertCheck）比對現價→LINE 推播，觸發後寫 triggered_at 去重。*/
+  async getPriceAlerts() {
+    const user = await this.getUser();
+    if (!user) return null;
+    const { data, error } = await _sb.from("price_alerts").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
+    if (error) { console.warn("[領富 AI] 讀到價提醒失敗:", error.message); return null; }
+    return data || [];
+  },
+  async addPriceAlert({ code, direction, target, note }) {
+    const user = await this.getUser();
+    if (!user) throw new Error("尚未登入");
+    const row = { user_id: user.id, code: String(code), direction: (direction === "above" ? "above" : "below"), target: Number(target), note: note || null, active: true };
+    const { data, error } = await _sb.from("price_alerts").insert(row).select().single();
+    if (error) throw error;
+    return data;
+  },
+  async deletePriceAlert(id) {
+    const user = await this.getUser();
+    if (!user) throw new Error("尚未登入");
+    const { error } = await _sb.from("price_alerts").delete().eq("id", id).eq("user_id", user.id);
+    if (error) throw error;
+  },
+  async setPriceAlertActive(id, active) {
+    const user = await this.getUser();
+    if (!user) throw new Error("尚未登入");
+    const { error } = await _sb.from("price_alerts").update({ active: !!active }).eq("id", id).eq("user_id", user.id);
+    if (error) throw error;
+  },
+
   /* 把 Supabase 錯誤碼轉成中文（給 45-75 歲族群看得懂）*/
   zhError(error) {
     const msg = (error && error.message) || String(error);

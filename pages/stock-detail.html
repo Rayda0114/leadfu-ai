@@ -272,6 +272,7 @@
           <button class="btn-primary" id="favBtn">＋ 加入自選</button>
           <a id="checkLink" href="check.html" style="display:inline-flex;align-items:center;justify-content:center;padding:8px 14px;border:1px solid #1B4332;border-radius:4px;color:#1B4332;text-decoration:none;font-size:14px;font-weight:600;"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M192,112a80,80,0,1,1-80-80A80,80,0,0,1,192,112Z" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34,179.6,168.28a88.21,88.21,0,1,0-11.32,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>買前檢查</a>
           <button id="shareBtn">🔗 分享</button>
+          <button id="alertBtn" type="button" data-action="price-alert" style="display:inline-flex;align-items:center;justify-content:center;padding:8px 14px;border:1px solid #C9A24B;border-radius:4px;color:#a8730a;background:#fff;cursor:pointer;font-size:14px;font-weight:600;">🔔 到價提醒</button>
         </div>
       </div>
       <div>
@@ -421,6 +422,8 @@
     <button data-section="sec-ai">AI 智能分析</button>
   </div>
 
+  <div id="sdAsOf" style="padding:8px 18px 0;font-size:12px;color:#8a958e;"></div>
+
   <!-- 基本資料 -->
   <div class="detail-section active" id="sec-info">
     <div class="info-grid" id="infoGrid"></div>
@@ -513,11 +516,23 @@
 
 </div>
 
+<style>
+  #nextStepSection .ns-wrap{background:#fff;border:1px solid #e0e3e8;border-radius:10px;padding:18px 20px;}
+  #nextStepSection .ns-h{font-size:14px;font-weight:800;color:#1B4332;margin-bottom:12px;}
+  #nextStepSection .ns-row{display:flex;gap:10px;flex-wrap:wrap;}
+  #nextStepSection .ns-btn{flex:1;min-width:150px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:13px 15px;border-radius:11px;border:1px solid #d9e4dd;background:#f7faf8;cursor:pointer;text-decoration:none;text-align:left;transition:all .15s;font-family:inherit;}
+  #nextStepSection .ns-btn:hover{border-color:#C9A24B;box-shadow:0 6px 18px rgba(201,162,75,.14);transform:translateY(-1px);}
+  #nextStepSection .ns-btn .ic{font-size:20px;}
+  #nextStepSection .ns-btn b{font-size:14.5px;color:#1B4332;}
+  #nextStepSection .ns-btn small{font-size:12px;color:#778;}
+</style>
+<section class="container" id="nextStepSection" style="display:none;margin-top:18px;"></section>
+
 <footer class="site-footer" style="margin-top:40px;">
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.25.9"></script>
+<script src="../js/main.js?v=3.26.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -615,7 +630,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (wasIn) removeFromWatchlist(code);
     else addToWatchlist(code);
     syncFavBtn();
-    if (!wasIn) maybePromptFavLogin();   // 剛加入 → 匿名訪客軟提示登入
+    // 匿名訪客登入軟提示：由 main.js addToWatchlist → promptSaveLogin 全站統一處理（避免雙卡）
   });
   syncFavBtn();
 
@@ -882,7 +897,37 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ★ AI 個股摘要自動載入（sessionStorage 快取，同 session 不重複呼叫）
   setupStockAiSummary(code, s);
+
+  // ★ 到價提醒按鈕帶上本檔代號/名稱/現價（main.js 全站 delegate 開 modal）
+  const alertBtn = document.getElementById("alertBtn");
+  if (alertBtn) { alertBtn.dataset.code = code; alertBtn.dataset.name = s.name || ""; if (s.price != null) alertBtn.dataset.price = s.price; }
+
+  // ★ 統一「資料時間」標示（基本面/籌碼/估值為盤後；上方價格區另標即時）
+  try { if (window.LeadFu.asOfBadge) window.LeadFu.asOfBadge("sdAsOf", { noSource: true }); } catch (e) {}
+
+  // ★ 看完這檔，下一步（加持股守門 / 問 AI / 設到價提醒）
+  renderNextStep(code, s);
 });
+
+function renderNextStep(code, s) {
+  const sec = document.getElementById("nextStepSection");
+  if (!sec || !s) return;
+  const L = window.LeadFu;
+  const hasHold = L.getHoldings && L.getHoldings()[code];
+  const holdLabel = hasHold ? "查看持股守門" : "加入持股守門";
+  const aiHref = L.aiQueryUrl(`${code} ${s.name} 現在適合買嗎？主要風險在哪？`);
+  sec.innerHTML = `
+    <div class="ns-wrap">
+      <div class="ns-h">看完這檔，下一步 👇</div>
+      <div class="ns-row">
+        <a class="ns-btn" href="portfolio-health.html?code=${code}"><span class="ic">🛡️</span><b>${holdLabel}</b><small>每天盤後幫你複查買進理由</small></a>
+        <a class="ns-btn" href="${aiHref}"><span class="ic">💬</span><b>問 AI 這檔</b><small>白話再追問下去</small></a>
+        <button class="ns-btn" type="button" data-action="price-alert" data-code="${code}" data-name="${s.name || ""}" data-price="${s.price != null ? s.price : ""}"><span class="ic">🔔</span><b>設到價提醒</b><small>到你的價位，LINE 通知</small></button>
+        <a class="ns-btn" href="stock-compare.html?codes=${code}"><span class="ic">📊</span><b>並排比較</b><small>跟另一檔一次對照</small></a>
+      </div>
+    </div>`;
+  sec.style.display = "";
+}
 
 function renderRiskAlert(code, stock) {
   const L = window.LeadFu;

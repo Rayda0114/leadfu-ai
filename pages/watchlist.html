@@ -71,10 +71,12 @@
 
 <main class="container" style="padding:20px 12px 40px;">
 
+  <div id="favSyncBanner"></div>
+
   <div class="panel">
     <div class="panel-head">
       <h2>自選清單</h2>
-      <div style="font-size:12px;color:#666;">共 <span id="favCount">0</span> 檔・<span id="favStore">資料儲存於本機瀏覽器</span></div>
+      <div style="font-size:12px;color:#666;">共 <span id="favCount">0</span> 檔・<span id="favStore">資料儲存於本機瀏覽器</span><span id="favAttn"></span></div>
     </div>
     <table class="stock-table">
       <thead>
@@ -84,7 +86,7 @@
           <th class="num">漲跌</th>
           <th class="num">漲跌幅</th>
           <th class="num">成交量(張)</th>
-          <th>類別</th><th>狀態</th><th></th>
+          <th>類別</th><th>狀態</th><th>健診</th><th></th>
         </tr>
       </thead>
       <tbody id="favTbody"></tbody>
@@ -115,7 +117,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.25.9"></script>
+<script src="../js/main.js?v=3.26.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -127,6 +129,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     catch (e) { return false; }
   };
   let synced = false;   // 雲端同步是否已完成（登入者）
+
+  // 每檔健診標籤（與手機版同源：risk_score_live + attention_live）
+  function diagnose(code) {
+    const rk = (data.riskScore || {})[code];
+    const att = (data.attention || {})[code];
+    if (att) return { tag: "需注意", cls: "warn", reason: "主管機關" + (att.type || "注意/處置") };
+    if (rk) {
+      if (rk.level === "高" || rk.level === "極高" || rk.score >= 60) return { tag: "需注意", cls: "warn", reason: "風險分數 " + rk.score };
+      if (rk.level === "中" || rk.score >= 40) return { tag: "觀察", cls: "watch", reason: "風險分數 " + rk.score };
+    }
+    return { tag: "低風險", cls: "ok", reason: "" };
+  }
 
   function render() {
     const codes = getWatchlist();
@@ -141,32 +155,43 @@ document.addEventListener("DOMContentLoaded", async () => {
       // 1) 未登入 → 你的自選股在雲端，引導登入（從 LINE 內建瀏覽器點進來最常見）
       if (!loggedIn) {
         tbody.innerHTML = `
-          <tr><td colspan="9" style="text-align:center;padding:40px 20px;color:#555;">
-            <div style="font-size:16px;font-weight:700;color:#1B4332;margin-bottom:6px;">🔒 你的自選股存放在雲端</div>
-            <div style="color:#777;font-size:13px;line-height:1.7;margin-bottom:18px;">請先登入，即可看到你跨裝置同步的自選股清單。</div>
-            <a href="${pageHref('login.html')}" style="display:inline-block;background:#1B4332;color:#fff;font-weight:700;padding:11px 28px;border-radius:8px;text-decoration:none;">會員登入 →</a>
-            <div style="margin-top:14px;"><a href="${pageHref('stocks.html')}" style="color:#1B4332;font-size:13px;">或前往股價列表加入自選 →</a></div>
+          <tr><td colspan="10" style="text-align:center;padding:40px 20px;color:#555;">
+            <div style="font-size:16px;font-weight:700;color:#1B4332;margin-bottom:6px;">還沒有自選股</div>
+            <div style="color:#777;font-size:13px;line-height:1.8;margin-bottom:18px;">先去股價列表挑幾檔加入。<b>免費註冊</b>後可跨裝置同步、並開啟盤後 LINE 提醒；<br>已經有帳號？登入即可看到你的雲端清單。</div>
+            <a href="${pageHref('stocks.html')}" style="display:inline-block;background:#1B4332;color:#fff;font-weight:700;padding:11px 28px;border-radius:8px;text-decoration:none;">前往加入自選 →</a>
+            <div style="margin-top:14px;"><a href="${pageHref('login.html')}" style="color:#1B4332;font-size:13px;">會員登入看雲端清單 →</a></div>
           </td></tr>`;
         return;
       }
       // 2) 已登入但雲端還沒同步回來 → 載入中（避免「自選股瞬間消失」的錯覺）
       if (!synced) {
         tbody.innerHTML = `
-          <tr><td colspan="9" style="text-align:center;padding:40px;color:#999;">⏳ 載入你的自選股…</td></tr>`;
+          <tr><td colspan="10" style="text-align:center;padding:40px;color:#999;">⏳ 載入你的自選股…</td></tr>`;
         return;
       }
       // 3) 已登入且同步完成、確實沒有 → 真的空
       tbody.innerHTML = `
-        <tr><td colspan="9" style="text-align:center;padding:40px;color:#999;">
+        <tr><td colspan="10" style="text-align:center;padding:40px;color:#999;">
           目前尚無自選股<br>
           <a href="${pageHref('stocks.html')}" style="display:inline-block;margin-top:12px;color:#1B4332;">前往股價列表加入自選 →</a>
         </td></tr>`;
       return;
     }
 
+    // 匿名 + 有本機清單 → 提示「只存本機，註冊可同步」
+    const bannerHost = document.getElementById("favSyncBanner");
+    if (bannerHost) bannerHost.innerHTML = (!loggedIn && list.length)
+      ? `<div style="margin:0 0 12px;padding:11px 14px;border-radius:10px;background:#fff7e6;border:1px solid #f0dcae;font-size:13px;color:#7a5a18;line-height:1.7;">⚠️ 這些自選股<b>只存在這台裝置的瀏覽器</b>。<a href="${pageHref('register.html')}" style="color:#1B4332;font-weight:800;">免費註冊</a>即可雲端同步、換手機也不怕弄丟，還能開啟盤後 LINE 提醒。</div>`
+      : "";
+
+    let attn = 0;
     tbody.innerHTML = list.map(s => {
       const pct = pctChange(s.price, s.change);
       const cls = changeClass(s.change);
+      const dg = diagnose(s.code);
+      if (dg.tag === "需注意") attn++;
+      const dgColor = dg.cls === "warn" ? "#c0392b" : dg.cls === "watch" ? "#a8690a" : "#1a7a45";
+      const dgBg = dg.cls === "warn" ? "#fbeae8" : dg.cls === "watch" ? "#fdf2dd" : "#e9f7ee";
       return `<tr data-code="${s.code}">
         <td class="code"><a href="${pageHref('stock-detail?code=' + s.code)}">${s.code}</a></td>
         <td class="name"><a href="${pageHref('stock-detail?code=' + s.code)}" style="color:inherit;">${s.name}</a></td>
@@ -176,9 +201,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td class="num">${s.volume.toLocaleString("zh-TW")}</td>
         <td>${s.category}</td>
         <td><span class="status-pill status-${s.status}">${s.status}</span></td>
+        <td><span title="${dg.reason}" style="font-size:12px;font-weight:700;padding:3px 9px;border-radius:10px;color:${dgColor};background:${dgBg};white-space:nowrap;">${dg.tag}</span></td>
         <td><button class="add-btn" data-rm="${s.code}" style="border-color:#1B4332;color:#1B4332;">移除</button></td>
       </tr>`;
     }).join("");
+    const attnEl = document.getElementById("favAttn");
+    if (attnEl) attnEl.innerHTML = attn ? ` ・ <b style="color:#c0392b;">今日 ${attn} 檔需注意</b>` : (list.length ? ` ・ <span style="color:#1a7a45;">今日無重大警示</span>` : "");
   }
 
   document.addEventListener("click", e => {

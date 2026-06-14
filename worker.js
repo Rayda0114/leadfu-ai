@@ -1181,6 +1181,109 @@ async function handleXPushToggle(request, env) {
   return new Response(JSON.stringify({ ok: true, x_push: enabled }), { headers: { "Content-Type": "application/json; charset=utf-8" } });
 }
 
+/* ── 🔔 到價提醒檢查（price_alerts）──
+   盤中 cron（每 5 分鐘，01–05 UTC = 09:00–13:55 台北）撈待觸發的提醒，用 TWSE MIS 即時報價
+   （上市 tse_ / 上櫃 otc_；興櫃或 MIS 沒回的退 stocks_live 盤後收盤）比對目標價，
+   到價就推 LINE 給該會員（需 line_user_id），並寫 triggered_at + active=false 去重。
+   前端 CRUD 走 supabase-js（RLS），這裡只負責「比價 + 推播」。 */
+async function runPriceAlertCheck(env, opts) {
+  opts = opts || {};
+  if (!env.SUPABASE_SERVICE_ROLE_KEY || !env.LINE_CHANNEL_ACCESS_TOKEN) return { sent: 0, error: "not configured" };
+  const tpe = new Date(Date.now() + 8 * 3600 * 1000);
+  const tpeMin = tpe.getUTCHours() * 60 + tpe.getUTCMinutes();
+  // 只在台股盤中前後比對（08:55–13:40）；盤後價格不動、避免重複/誤觸。force 可忽略。
+  if (!opts.force && (tpeMin < 535 || tpeMin > 820)) return { sent: 0, note: "非盤中時段" };
+
+  // 1) 待觸發的提醒
+  let alerts = [];
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/price_alerts?select=id,user_id,code,direction,target,note&active=eq.true&triggered_at=is.null&limit=1000`, { headers: ecpayAdmin(env) });
+    if (!r.ok) return { sent: 0, error: `price_alerts ${r.status}（表還沒建？先跑 scripts/sql/price_alerts.sql）` };
+    alerts = await r.json();
+  } catch (e) { return { sent: 0, error: "supabase" }; }
+  if (!Array.isArray(alerts) || !alerts.length) return { sent: 0, note: "無待觸發提醒" };
+
+  // 2) 現價：MIS 盤中批次（上市/上櫃）+ stocks_live 盤後收盤備援
+  const codes = [...new Set(alerts.map(a => String(a.code)))];
+  const meta = (await _assetJson(env, "stocks_live.json")) || {};
+  const mkt = {}, closePx = {}, nameOf = {};
+  (meta.stocks || []).forEach(s => { mkt[s.code] = s.market; nameOf[s.code] = s.name; if (s.price != null) closePx[s.code] = Number(s.price); });
+  const exFor = c => mkt[c] === "otc" ? `otc_${c}.tw` : (mkt[c] === "listed" || mkt[c] == null) ? `tse_${c}.tw` : null;  // 興櫃→null（用備援）
+  const price = {};
+  const batch = codes.filter(exFor);
+  for (let i = 0; i < batch.length; i += 30) {
+    const exch = batch.slice(i, i + 30).map(exFor).join("|");
+    try {
+      const mr = await fetch(`https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=${encodeURIComponent(exch)}&json=1&delay=0&_=${Math.floor(Date.now() / 5000)}`, {
+        headers: { "User-Agent": "Mozilla/5.0 LeadFuAI/1.0", "Accept": "application/json", "Referer": "https://mis.twse.com.tw/stock/fibest.jsp" }
+      });
+      const mj = await mr.json();
+      (mj.msgArray || []).forEach(q => { let z = parseFloat(q.z); if (!(z > 0)) z = parseFloat(q.pz); if (z > 0) price[q.c] = z; });
+    } catch (e) {}
+  }
+  codes.forEach(c => { if (price[c] == null && closePx[c] != null) price[c] = closePx[c]; });
+
+  // 3) 判斷到價
+  const fired = [];
+  for (const a of alerts) {
+    const px = price[String(a.code)];
+    if (px == null) continue;
+    const t = Number(a.target);
+    if (a.direction === "above" && px >= t) fired.push({ a, px });
+    else if (a.direction === "below" && px <= t) fired.push({ a, px });
+  }
+  if (!fired.length) return { sent: 0, checked: alerts.length, note: "無到價" };
+
+  // 4) 收件人 line_user_id
+  const userIds = [...new Set(fired.map(f => f.a.user_id))];
+  let profiles = [];
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?select=id,line_user_id&id=in.(${userIds.join(",")})&line_user_id=not.is.null`, { headers: ecpayAdmin(env) });
+    if (r.ok) profiles = await r.json();
+  } catch (e) {}
+  const lineById = {};
+  (Array.isArray(profiles) ? profiles : []).forEach(p => { if (p.line_user_id) lineById[p.id] = p.line_user_id; });
+
+  // 5) 逐筆推播 + 標記（沒綁 LINE 的也標記 triggered，避免一直重撈；只是不算 sent）
+  let sent = 0;
+  for (const f of fired) {
+    const a = f.a, lineId = lineById[a.user_id];
+    if (lineId && !opts.dry) {
+      const lt = await makeLoginToken(env, a.user_id);
+      const link = lt
+        ? `https://leadfuai.com/pages/stock-detail?code=${a.code}&lt=${lt}&openExternalBrowser=1`
+        : `https://leadfuai.com/pages/stock-detail?code=${a.code}`;
+      const dirTxt = a.direction === "above" ? "漲到" : "跌到";
+      const text = `🔔 到價提醒｜${a.code} ${nameOf[a.code] || ""}\n━━━━━━━━━━\n已${dirTxt}你設定的 ${Number(a.target).toFixed(2)} 元（目前 ${f.px.toFixed(2)} 元）${a.note ? "\n備註：" + a.note : ""}\n━━━━━━━━━━\n僅為到價通知、非投資建議。\n看個股 → ${link}`;
+      if (await _linePush(env, lineId, text)) sent++;
+    }
+    if (!opts.dry) {
+      try {
+        await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/price_alerts?id=eq.${a.id}`, {
+          method: "PATCH",
+          headers: { ...ecpayAdmin(env), "Prefer": "return=minimal" },
+          body: JSON.stringify({ triggered_at: new Date().toISOString(), active: false })
+        });
+      } catch (e) {}
+    }
+  }
+  return opts.dry
+    ? { dry: true, checked: alerts.length, wouldFire: fired.length }
+    : { sent, fired: fired.length, checked: alerts.length };
+}
+
+/* 手動觸發到價檢查（站長限定；?dry=1 試跑、?force=1 忽略盤中時段限制） */
+async function handleManualPriceCheck(request, env) {
+  const url = new URL(request.url);
+  const token = (request.headers.get("Authorization") || "").replace(/^Bearer /, "") || url.searchParams.get("access_token") || "";
+  const user = await ecpayUser(token);
+  if (!user || !OWNER_UIDS.includes(user.id)) {
+    return new Response(JSON.stringify({ error: "owner only" }), { status: 403, headers: { "Content-Type": "application/json" } });
+  }
+  const res = await runPriceAlertCheck(env, { dry: url.searchParams.get("dry") === "1", force: url.searchParams.get("force") === "1" });
+  return new Response(JSON.stringify(res), { headers: { "Content-Type": "application/json; charset=utf-8" } });
+}
+
 /* ── ⚡ AI 對話注入：X 快訊雷達 context（「川普最近說什麼？」→ 真實貼文摘要）──
    點名帳號 → 近 72h 該帳號快訊；泛問（推特上有什麼大事）→ 近 24h 重要度 ≥7。 */
 async function getXAlertsContext(env, q) {
@@ -2512,6 +2615,7 @@ export default {
     if (url.pathname === "/api/quote")          return handleQuote(request);
     if (url.pathname === "/api/market/x-alerts") return handleXAlertsFeed(request, env, ctx);
     if (url.pathname === "/api/cron-x-push")    return handleManualXPush(request, env);
+    if (url.pathname === "/api/cron-price-check") return handleManualPriceCheck(request, env);
     if (url.pathname === "/api/x-push-toggle")  return handleXPushToggle(request, env);
     if (url.pathname === "/api/line-auth")      return handleLineAuth(request, env);
     if (url.pathname === "/api/line-handoff")   return handleLineHandoff(request, env);
@@ -2531,6 +2635,8 @@ export default {
   // Cloudflare Cron Triggers：準時跑每日新聞推播（不受 GitHub Actions 排程延遲）
   async scheduled(event, env, ctx) {
     const cron = (event && event.cron) || "";
+    // */5 1-5 = 盤中（09:00–13:55 台北）到價提醒檢查（每 5 分鐘）
+    if (cron.startsWith("*/5 ")) { ctx.waitUntil(runPriceAlertCheck(env)); return; }
     // */10 = X 快訊雷達重大快訊推播（每 10 分鐘）
     if (cron.startsWith("*/10")) { ctx.waitUntil(runXAlertPush(env)); return; }
     // 00:30 UTC = 08:30 台北（盤前，開盤前）；07:50 UTC = 15:50 台北（盤後）。

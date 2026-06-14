@@ -112,6 +112,9 @@
 
   <div id="phContent" style="display:none;">
 
+    <!-- 今日盤後快照（以「今天賺賠」開頭的留存鉤子）-->
+    <div id="phTodayBrief"></div>
+
     <!-- 摘要儀表 -->
     <div class="ph-summary">
       <div class="ph-summary-card">
@@ -320,7 +323,7 @@
     .pf-table .pt-w-bar { display:none; }
   }
 </style>
-<script src="../js/main.js?v=3.25.9"></script>
+<script src="../js/main.js?v=3.26.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -389,6 +392,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       unreal:    totalCost > 0 ? totalValue - totalCost : null,
       unrealPct: totalCost > 0 ? (totalValue - totalCost) / totalCost * 100 : null,
       todayPct:  yValue > 0 ? todayGain / yValue * 100 : null };
+  }
+
+  /* ===== 今日盤後快照（以「今天賺賠多少」開頭，留存鉤子）===== */
+  function renderTodayBrief(m){
+    const el = document.getElementById("phTodayBrief");
+    if (!el) return;
+    const col = v => v > 0 ? "#FF8A7A" : v < 0 ? "#7BE0B4" : "rgba(255,255,255,.85)";
+    const sgn = v => v >= 0 ? "+" : "";
+    let best = null, worst = null;
+    m.valid.forEach(it => {
+      const pc = it.yValue > 0 ? it.todayGain / it.yValue * 100 : 0;
+      const nm = (it.s && it.s.name) || it.code;
+      if (best === null || pc > best.pc) best = { name: nm, pc };
+      if (worst === null || pc < worst.pc) worst = { name: nm, pc };
+    });
+    const tg = m.todayGain, tp = m.todayPct;
+    const movers = (best && worst && best.name !== worst.name)
+      ? ` ・ <span style="color:${col(best.pc)};">${best.name} ${sgn(best.pc)}${best.pc.toFixed(1)}%</span> / <span style="color:${col(worst.pc)};">${worst.name} ${sgn(worst.pc)}${worst.pc.toFixed(1)}%</span>` : "";
+    el.innerHTML = `<div style="background:linear-gradient(135deg,#10402F,#0A2E23);color:#fff;border-radius:14px;padding:18px 22px;margin-bottom:16px;">
+      <div style="font-size:12.5px;color:rgba(255,255,255,.7);font-weight:700;letter-spacing:.04em;">📊 今日盤後快照 ・ ${m.valid.length} 檔持股</div>
+      <div style="font-size:30px;font-weight:900;margin-top:6px;color:${col(tg)};">${sgn(tg)}${money(tg)}${tp != null ? ` <span style="font-size:16px;font-weight:700;">（${sgn(tp)}${tp.toFixed(2)}%）</span>` : ""}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.78);margin-top:6px;">今日損益・總市值約 ${money(m.totalValue)}${movers}</div>
+    </div>`;
   }
 
   /* ===== 摘要 ===== */
@@ -735,6 +761,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     document.getElementById("phEmpty").style.display = "none";
     document.getElementById("phContent").style.display = "block";
+    renderTodayBrief(m);
     renderSummary(m);
     const risk = renderRisk(m);
     renderDividend(m);
@@ -806,6 +833,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     costIn.placeholder = "現價 " + L.fmtPrice(s.price);
     sharesIn.focus();
   });
+
+  // 帶 ?code= 預填新增持股表單（買前檢查／個股頁「加入持股守門」CTA 導過來，不再落空白表單）
+  try {
+    const initCode = new URLSearchParams(location.search).get("code");
+    if (initCode && byCode[initCode]) {
+      const s = byCode[initCode];
+      picked = initCode;
+      search.value = `${s.code} ${s.name}`;
+      costIn.placeholder = "現價 " + L.fmtPrice(s.price);
+      setTimeout(() => { try { search.scrollIntoView({ behavior: "smooth", block: "center" }); sharesIn.focus(); } catch (e2) {} }, 350);
+    }
+  } catch (e) {}
 
   /* ===== 明細表：改股數/成本 + 刪除 ===== */
   document.getElementById("holdTable").addEventListener("change", (e) => {
