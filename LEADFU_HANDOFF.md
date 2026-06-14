@@ -2,8 +2,8 @@
 
 > **這份檔案的用途**：另一台 Claude 透過 OneDrive 拿到專案後,**讀這份就能立刻接手目前進度**。
 > 上次更新：2026-06-14（這台 Claude 寫的，請以最新 git log 為準）
-> 目前版本：**v3.26.0**（資產 cache-bust `?v=`；⚠ `sw.js` 現為 0 byte = SW 已停用，不再有 `VERSION` 常數，改 JS/CSS 只需 bump `?v=`）
-> 🆕 最近一次大改版見下方「## 🆕 2026-06-14 · 6 點 UX 優化大改版」段。
+> 目前版本：**v3.27.0**（資產 cache-bust `?v=`；⚠ `sw.js` 現為 0 byte = SW 已停用，不再有 `VERSION` 常數，改 JS/CSS 只需 bump `?v=`）
+> 🆕 2026-06-14 一天做了三大塊，見下方：①「6 點 UX 優化大改版」②「美股個股 SEO 著陸頁 /us/」③「美股接進守門員（自選/持股/到價/買前檢查/儀表板+匯率）」。
 
 ---
 
@@ -43,7 +43,27 @@
 
 **🔔 到價提醒（唯一真新後端）**
 - 前端 modal 走 supabase-js 直接 CRUD（RLS）；後端 `worker.js` 新增 `runPriceAlertCheck(env)`（撈 active+未觸發 → MIS 盤中報價：上市 `tse_`/上櫃 `otc_`，興櫃或失敗退 `stocks_live` 盤後 → 比 target → `_linePush` 含 `makeLoginToken` 深連結 → 寫 `triggered_at`+`active=false` 去重）+ `handleManualPriceCheck`（`/api/cron-price-check`，owner only，`?dry=1&force=1`）。`wrangler.toml` 加 cron `*/5 1-5 * * 1-5`（盤中每 5 分），`scheduled()` 用 `cron.startsWith("*/5 ")` 分派。
-- ⏳ **待用戶做（重要！沒做的話到價提醒儲存會失敗，其他功能正常）**：到 Supabase SQL Editor 跑一次 `scripts/sql/price_alerts.sql`（建表 + RLS）。跑完即生效。
+- ⏳ **待用戶做（重要！沒做的話到價提醒儲存會失敗，其他功能正常）**：到 Supabase SQL Editor 跑一次 `scripts/sql/price_alerts.sql`（建表 + RLS）。✅ 用戶已於 2026-06-14 執行（Success, no rows returned）→ 到價提醒已可用。
+
+---
+
+## 🌎 2026-06-14 · 美股專區強化（v3.26→3.27，已上線）
+
+掃描發現美股資料層其實很完整（`us_stocks_live.json` 報價/PE/殖利/52週/市值、`us_fair_value_live.json` **美股版合理區間 v1** low/high/position/label/summary、`us_stocks_meta.json` 中英文名/分類/logo_domain，每天 cron `fetch_us_snapshot`+`calc_us_fair_value`；worker.js AI 早就會答美股），**破口是沒有「每檔一頁」也沒接進守門員**。分兩步補上：
+
+### 第一步：美股個股 SEO 著陸頁 `/us/{ticker}`（worker 伺服器渲染，仿 `/stock/`）
+- `worker.js` 新增 `renderUsStockPage` + `loadUsStockData`（合併 meta/live/fv by ticker）+ 路由 `if (url.pathname.startsWith("/us/"))`（try/catch 包住、出錯 fall through 不影響全站）。內容：中文名/分類/現價（**美股綠漲紅跌** up #16A34A、down #EF4444）/市值、領富 AI 合理區間卡、PE/殖利率/52週位置、✅/⚠️ 紅旗 checklist、開戶 CTA、問AI/清單/Yahoo、JSON-LD+canonical `/us/{ticker}`。
+- us-market 卡片主動作改連 `/us/{ticker}`（取代 Yahoo dead-end）；首頁桌機 nav+footer+手機 accordion 加「美股」入口（原孤兒頁）；`generate_sitemap.py` 納入 us-market/dividend-calendar/stock-compare + **100 檔 `/us/{ticker}`**。
+- ⏳ **待用戶**：IB/Firstrade 開戶推薦連結未到 → CTA 占位「準備中」；`renderUsStockPage` 內有 `<!-- AFFILIATE: ... -->` 標記，拿到連結把兩個 `href="#"` 換掉並移除 disabled 即可。
+
+### 第二步：美股接進守門員（自選/持股/到價/買前檢查/儀表板）
+- **地基（最重要）**：`main.js` loadLiveData 載 3 個 us_*.json → `STOCK_DATA.usMap`（正規化 ticker→`{name=name_zh, price(USD), change, change_pct, fv, pe_ratio, yield_pct, market:'us'}`）+ `usList` + `usdtwd`。**`findStock()` 找不到台股時退而查 usMap** ⇒ 自選/持股/到價/儀表板的台股機制自動認得美股。新增 `isUsTicker()`/`usdToTwd()`（全 export 到 window.LeadFu）。**美股與台股共用同一** `berich_watchlist` 陣列 / `leadfu_holdings` dict（字母=美股、數字=台股）。`fetch_us_snapshot.py` 加抓 `TWD=X` 寫 `us_stocks_live.usdtwd`（沒抓到前端退 32.0）。
+- **自選/到價**：watchlist 美股列（USD $ 報價、美股綠漲紅跌、連 /us/、健診改用合理區間 position）；`openPriceAlertModal` 幣別自動切美元；**worker `runPriceAlertCheck` 用 `usSet`/`us_stocks_live` 收盤價比美股**（美股無 MIS 盤中；推播改美元+連 /us/）。
+- **買前檢查認得美股**：`attachTypeahead` 加 `includeUs` 參數（🇺🇸標記、可搜 name_en）；首頁/手機/check 的買前檢查框打美股 ticker/中英文名 → 導 /us/ 決策卡。
+- **儀表板+匯率曝險**：portfolio `model()` 解析美股持股、`FX=usdtwd||32` 把 USD 價/成本換台幣計總（市值/損益/集中度全 TWD）；新增「🌎 匯率曝險」旗標、市場別圖加美股桶（marketLabel/Color 加 `us`）、明細表美股列、股息用美股殖利率、`alertsFor` 美股走合理區間分支；新增持股表單/?code= 預填接受美股；member 每日盤後簡報含美股（FX 換算）。
+- ⏳ **待**：`usdtwd` 要等下次美股 cron 跑新版 `fetch_us_snapshot` 才有值（在那之前匯率顯示約 32.00，不影響功能）。
+
+> 🧰 美股查 ticker→中文名/合理區間：`window.LeadFu.data.usMap["AAPL"]`；`window.LeadFu.isUsTicker(code)` 判台股/美股；`window.LeadFu.usdToTwd(usd)` 換台幣。
 
 ---
 
