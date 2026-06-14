@@ -105,6 +105,16 @@
 .us-broker-cta .us-broker-btn:hover { background: #0A1F18; transform: translateY(-1px); }
 .us-broker-cta .us-broker-btn.disabled { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
 .us-broker-cta .us-broker-note { font-size: 11px; margin-top: 12px; color: #1B4332; opacity: 0.7; }
+/* 美股精選 100 全清單（內部連結索引）*/
+.us-index { margin: 28px 0 8px; padding: 22px; background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; }
+.us-index > h2 { font-size: 18px; color: #1B4332; margin: 0 0 4px; }
+.us-index-sub { font-size: 13px; color: #6b7280; margin: 0 0 16px; }
+.us-idx-group { margin-bottom: 14px; }
+.us-idx-group h3 { font-size: 13.5px; color: #C5A572; font-weight: 800; margin: 0 0 7px; border-bottom: 1px solid #f0e6cf; padding-bottom: 5px; }
+.us-idx-links { display: flex; flex-wrap: wrap; gap: 7px 14px; }
+.us-idx-links a { font-size: 13.5px; color: #1B4332; text-decoration: none; }
+.us-idx-links a:hover { color: #C5A572; text-decoration: underline; }
+.us-idx-links a b { font-weight: 800; }
 
 /* Bottom CTA */
 .us-bottom-cta { background: #1B4332; color: #fff; padding: 36px 24px; border-radius: 16px; text-align: center; margin: 32px 0; }
@@ -238,6 +248,25 @@
       <a href="vip.html" class="us-cta-ghost">💎 看 VIP 方案</a>
     </div>
     <p class="us-disclaimer">※ 領富 AI 整理公開資料，不構成投資建議。美股投資涉及匯率與海外市場風險，請審慎評估。即時報價請依各券商或交易所為準。</p>
+  </section>
+
+  <!-- 美股精選 100 ・全清單（純文字內部連結，爬蟲友善；內容由 scripts/gen_us_index.py 從 us_stocks_meta.json 產生）-->
+  <section class="us-index">
+    <h2>美股精選 100 ・ 全部清單</h2>
+    <p class="us-index-sub">依分類整理，點代號看該檔「領富 AI 合理區間 + 一眼判斷」決策卡。</p>
+    <!-- US-INDEX:start -->
+    <div class="us-idx-group"><h3>七巨頭（7）</h3><div class="us-idx-links"><a href="/us/AAPL"><b>AAPL</b> 蘋果</a><a href="/us/AMZN"><b>AMZN</b> 亞馬遜</a><a href="/us/GOOGL"><b>GOOGL</b> 字母（Google）</a><a href="/us/META"><b>META</b> Meta</a><a href="/us/MSFT"><b>MSFT</b> 微軟</a><a href="/us/NVDA"><b>NVDA</b> 輝達</a><a href="/us/TSLA"><b>TSLA</b> 特斯拉</a></div></div>
+    <div class="us-idx-group"><h3>半導體（10）</h3><div class="us-idx-links"><a href="/us/AMD"><b>AMD</b> 超微</a><a href="/us/ARM"><b>ARM</b> 安謀</a><a href="/us/ASML"><b>ASML</b> 艾司摩爾</a><a href="/us/AVGO"><b>AVGO</b> 博通</a><a href="/us/CRWD"><b>CRWD</b> CrowdStrike</a><a href="/us/MU"><b>MU</b> 美光</a><a href="/us/PLTR"><b>PLTR</b> Palantir</a><a href="/us/QCOM"><b>QCOM</b> 高通</a><a href="/us/SMCI"><b>SMCI</b> 美超微</a><a href="/us/TSM"><b>TSM</b> 台積電 ADR</a></div></div>
+    <div class="us-idx-group"><h3>大盤 ETF（8）</h3><div class="us-idx-links"><a href="/us/DIA"><b>DIA</b> 道瓊 ETF</a><a href="/us/IWM"><b>IWM</b> 羅素 2000</a><a href="/us/QQQ"><b>QQQ</b> 那斯達克 100</a><a href="/us/SPY"><b>SPY</b> SPY</a><a href="/us/VEA"><b>VEA</b> 已開發國家 ETF</a><a href="/us/VOO"><b>VOO</b> 標普 500 ETF</a><a href="/us/VTI"><b>VTI</b> 全美股市 ETF</a><a href="/us/VXUS"><b>VXUS</b> 全球非美 ETF</a></div></div>
+    <div class="us-idx-group"><h3>配息 ETF（12）</h3><div class="us-idx-links"><a href="/us/DGRO"><b>DGRO</b> DGRO</a><a href="/us/DIVO"><b>DIVO</b> DIVO</a><a href="/us/HDV"><b>HDV</b> HDV</a><a href="/us/JEPI"><b>JEPI</b> JEPI</a><a href="/us/JEPQ"><b>JEPQ</b> JEPQ</a><a href="/us/PFF"><b>PFF</b> PFF</a><a href="/us/QQQI"><b>QQQI</b> QQQI</a><a href="/us/SCHD"><b>SCHD</b> SCHD</a><a href="/us/SDIV"><b>SDIV</b> SDIV</a><a href="/us/SPHD"><b>SPHD</b> SPHD</a><a href="/us/SPYI"><b>SPYI</b> SPYI</a><a href="/us/VYM"><b>VYM</b> VYM</a></div></div>
+    <div class="us-idx-group"><h3>行業 ETF（10）</h3><div class="us-idx-links"><a href="/us/IBB"><b>IBB</b> 生技 ETF</a><a href="/us/SMH"><b>SMH</b> SMH</a><a href="/us/SOXX"><b>SOXX</b> 半導體 ETF</a><a href="/us/XLE"><b>XLE</b> 能源類股 ETF</a><a href="/us/XLF"><b>XLF</b> 金融類股 ETF</a><a href="/us/XLK"><b>XLK</b> 科技類股 ETF</a><a href="/us/XLP"><b>XLP</b> 民生消費 ETF</a><a href="/us/XLU"><b>XLU</b> 公用事業 ETF</a><a href="/us/XLV"><b>XLV</b> 醫療類股 ETF</a><a href="/us/XLY"><b>XLY</b> 非必需消費 ETF</a></div></div>
+    <div class="us-idx-group"><h3>道瓊藍籌（15）</h3><div class="us-idx-links"><a href="/us/BRK-B"><b>BRK-B</b> 波克夏 B</a><a href="/us/CVX"><b>CVX</b> 雪佛龍</a><a href="/us/DIS"><b>DIS</b> 迪士尼</a><a href="/us/HD"><b>HD</b> 家得寶</a><a href="/us/JNJ"><b>JNJ</b> 嬌生</a><a href="/us/JPM"><b>JPM</b> 摩根大通</a><a href="/us/KO"><b>KO</b> 可口可樂</a><a href="/us/MA"><b>MA</b> 萬事達</a><a href="/us/MCD"><b>MCD</b> 麥當勞</a><a href="/us/PEP"><b>PEP</b> 百事</a><a href="/us/PG"><b>PG</b> 寶僑</a><a href="/us/UNH"><b>UNH</b> 聯合健康</a><a href="/us/V"><b>V</b> Visa</a><a href="/us/WMT"><b>WMT</b> 沃爾瑪</a><a href="/us/XOM"><b>XOM</b> 艾克森美孚</a></div></div>
+    <div class="us-idx-group"><h3>配息個股（12）</h3><div class="us-idx-links"><a href="/us/ABBV"><b>ABBV</b> 艾伯維</a><a href="/us/ABT"><b>ABT</b> 亞培</a><a href="/us/IBM"><b>IBM</b> IBM</a><a href="/us/LLY"><b>LLY</b> 禮來</a><a href="/us/MDT"><b>MDT</b> 美敦力</a><a href="/us/MO"><b>MO</b> 奧馳亞</a><a href="/us/MRK"><b>MRK</b> 默克</a><a href="/us/O"><b>O</b> Realty Income</a><a href="/us/PFE"><b>PFE</b> 輝瑞</a><a href="/us/PM"><b>PM</b> 菲利普莫里斯</a><a href="/us/T"><b>T</b> AT&amp;T</a><a href="/us/VZ"><b>VZ</b> Verizon</a></div></div>
+    <div class="us-idx-group"><h3>中概 ADR（6）</h3><div class="us-idx-links"><a href="/us/BABA"><b>BABA</b> 阿里巴巴</a><a href="/us/BIDU"><b>BIDU</b> 百度</a><a href="/us/JD"><b>JD</b> 京東</a><a href="/us/NIO"><b>NIO</b> 蔚來汽車</a><a href="/us/PDD"><b>PDD</b> 拼多多/Temu</a><a href="/us/TM"><b>TM</b> 豐田汽車</a></div></div>
+    <div class="us-idx-group"><h3>加密/主題（5）</h3><div class="us-idx-links"><a href="/us/COIN"><b>COIN</b> Coinbase</a><a href="/us/FBTC"><b>FBTC</b> FBTC</a><a href="/us/IBIT"><b>IBIT</b> IBIT</a><a href="/us/MSTR"><b>MSTR</b> MicroStrategy</a><a href="/us/RIOT"><b>RIOT</b> Riot</a></div></div>
+    <div class="us-idx-group"><h3>退休防禦（8）</h3><div class="us-idx-links"><a href="/us/GLD"><b>GLD</b> 黃金 ETF</a><a href="/us/GLDM"><b>GLDM</b> GLDM</a><a href="/us/IEF"><b>IEF</b> IEF</a><a href="/us/SHY"><b>SHY</b> SHY</a><a href="/us/SLV"><b>SLV</b> 白銀 ETF</a><a href="/us/TLT"><b>TLT</b> TLT</a><a href="/us/USFR"><b>USFR</b> USFR</a><a href="/us/VNQ"><b>VNQ</b> 美國 REIT ETF</a></div></div>
+    <div class="us-idx-group"><h3>其他熱門（7）</h3><div class="us-idx-links"><a href="/us/ADBE"><b>ADBE</b> Adobe</a><a href="/us/CRM"><b>CRM</b> Salesforce</a><a href="/us/CSCO"><b>CSCO</b> 思科</a><a href="/us/INTC"><b>INTC</b> 英特爾</a><a href="/us/NFLX"><b>NFLX</b> Netflix</a><a href="/us/ORCL"><b>ORCL</b> 甲骨文</a><a href="/us/SHOP"><b>SHOP</b> Shopify</a></div></div>
+    <!-- US-INDEX:end -->
   </section>
 
 </main>
