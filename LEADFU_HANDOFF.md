@@ -1,8 +1,9 @@
 # 領富 AI / LeadFu — Claude 跨機接手指引
 
 > **這份檔案的用途**：另一台 Claude 透過 OneDrive 拿到專案後,**讀這份就能立刻接手目前進度**。
-> 上次更新：2026-06-02（這台 Claude 寫的，請以最新 git log 為準）
-> 目前版本：**v3.19.0**（sw.js 內 `VERSION` 常數）
+> 上次更新：2026-06-14（這台 Claude 寫的，請以最新 git log 為準）
+> 目前版本：**v3.26.0**（資產 cache-bust `?v=`；⚠ `sw.js` 現為 0 byte = SW 已停用，不再有 `VERSION` 常數，改 JS/CSS 只需 bump `?v=`）
+> 🆕 最近一次大改版見下方「## 🆕 2026-06-14 · 6 點 UX 優化大改版」段。
 
 ---
 
@@ -15,6 +16,34 @@
    - Windows（不再用）：`C:\Users\rayda\OneDrive\Microsoft File Share\code\berich\`
 4. **GitHub**：https://github.com/Rayda0114/leadfu-ai
 5. **目前主要卡點**：**綠界 ECPay 個人會員被拒**（AI 內容政策），用戶在打藍新/PayUni 金流電話找替代
+
+---
+
+## 🆕 2026-06-14 · 6 點 UX 優化大改版（v3.26.0，已上線）
+
+用戶給了一份 6 點 UX 審查清單（發現/首次價值/轉換/留存/缺的功能/專業度），一次做完並 push 上線。掃描全站後發現「多數其實已 80% 建好、只差組裝」，所以多為接線 + 重新擺位 + 補鉤子。
+
+**共用層（先看這個，後面很多頁靠它）**
+- `js/main.js` 新增並 export 到 `window.LeadFu`：
+  - `attachTypeahead({input, box, onPick})` — 股票搜尋下拉（code/name 子字串，鍵盤上下/Enter/Esc，樣式 `.lf-ta-box`/`.lf-ta-item` 自動注入）。box 需在 `position:relative` 容器內。
+  - `fmtAsOf(meta?, {realtime,noSource}?)` / `asOfBadge(el, opts?)` — **全站統一「資料時間 YYYY-MM-DD（盤後收盤）· 來源 …」**，會自動去重 source 字串（資料層 source 有重複串接）。
+  - `promptSaveLogin(kind)` — 匿名訪客加自選/持股後彈一次性「免費註冊可跨裝置同步 + LINE 提醒」底部軟卡（gate：`localStorage.leadfu_save_hook_seen`）。已內嵌進 `addToWatchlist()`/`setHolding()`，所以全站任何加入點都會觸發（**stock-detail 舊的 `maybePromptFavLogin` 呼叫已移除避免雙卡**）。
+  - `openPriceAlertModal(code,name,price)` + 全站 `[data-action="price-alert"]` 點擊代理 → 到價提醒 modal（未登入→提示登入）。
+- `js/auth.js` 新增：`getPriceAlerts / addPriceAlert / deletePriceAlert / setPriceAlertActive`（走 supabase-js 在 RLS 下直接 CRUD `price_alerts` 表）。
+
+**各頁改動**
+- **index.html / index-mobile.html（①②）**：hero 加寬左欄聚焦搜尋框；桌機 bento 把 `#bSampleCard`（當日最高風險股範例卡）提到最上 + 金框 + 框語；搜尋框接 typeahead + name→code 解析（**修「打中文名 → check 頁空白」bug**，解析不到 → `search.html?q=`）；手機「今日值得關注」改吃真資料（原寫死假價）。
+- **pages/check.html、pages/stock-detail.html（②）**：報告尾新增「下一步」卡（加持股守門→`portfolio-health?code=` / 問 AI 這檔→`aiQueryUrl` / 🔔到價提醒 / 並排比較）。stock-detail 動作列加 🔔到價提醒、資料面板加 `asOfBadge` caption。
+- **pages/portfolio-health.html（②④）**：新增持股表單支援 `?code=` 預填；頂部加「今日盤後快照」深色卡（`renderTodayBrief`，以今日損益+對標開頭）。
+- **pages/member.html（③④）**：新增「📊 我的每日盤後簡報」卡（`renderDailyBrief`：今日損益/最強最弱/持股紅旗/相關新聞/大盤溫度 taifex/持股相關 X 快訊，**全用已載入資料零後端**）+「我的持股」面板 + 首登 3 步引導卡（`renderOnboarding`，gate `localStorage.leadfu_member_onboarded_v1`）。
+- **pages/watchlist.html（③④）**：桌面版加「健診」欄（需注意/觀察/低風險，與手機同源 risk_score+attention）+ 誠實空狀態 + 匿名「只存本機，註冊可同步」banner。
+- **pages/register.html（③）**：移除沒在發放的「30 天 VIP 試用」承諾 → 改誠實免費權益文案。
+- **新頁（⑤）**：`pages/dividend-calendar.html`（除權息行事曆：有持股→今年領多少/何時+月份分布+未來60天；訪客→全市場除息月曆）、`pages/stock-compare.html`（個股並排比較 `?codes=2330,2454`，轉置表 PE/殖利/PB/YoY/合理區間/風險）。dividends.html 修 `#divDate` 顯示今天→改資料盤後日（⑥）。
+- 全站 `main.js`/`auth.js` 的 `?v=` 用 bulk perl 一次 bump 3.25.9→**3.26.0**（CSS 沒動故 `style.css?v=3.23.9` 不變）。
+
+**🔔 到價提醒（唯一真新後端）**
+- 前端 modal 走 supabase-js 直接 CRUD（RLS）；後端 `worker.js` 新增 `runPriceAlertCheck(env)`（撈 active+未觸發 → MIS 盤中報價：上市 `tse_`/上櫃 `otc_`，興櫃或失敗退 `stocks_live` 盤後 → 比 target → `_linePush` 含 `makeLoginToken` 深連結 → 寫 `triggered_at`+`active=false` 去重）+ `handleManualPriceCheck`（`/api/cron-price-check`，owner only，`?dry=1&force=1`）。`wrangler.toml` 加 cron `*/5 1-5 * * 1-5`（盤中每 5 分），`scheduled()` 用 `cron.startsWith("*/5 ")` 分派。
+- ⏳ **待用戶做（重要！沒做的話到價提醒儲存會失敗，其他功能正常）**：到 Supabase SQL Editor 跑一次 `scripts/sql/price_alerts.sql`（建表 + RLS）。跑完即生效。
 
 ---
 
@@ -117,7 +146,7 @@
 
 ### 5. 資產版本 cache-bust
 - `<link rel="stylesheet" href="css/style.css?v=3.x.y">` 跟 `<script src="js/main.js?v=3.x.y">`
-- 每次改 CSS/JS 必須 bump 版本號（連同 sw.js VERSION 一起）
+- 每次改 CSS/JS 必須 bump 版本號（`sw.js` 已是 0 byte=停用，**不用**再改 VERSION 常數）。全站 bulk bump 最快用：`find . -maxdepth 2 -name '*.html' | xargs perl -pi -e 's/(main\.js\?v=)[0-9.]+/${1}NEW/g; s/(auth\.js\?v=)[0-9.]+/${1}NEW/g;'`（2026-06-14 即這樣 bump 到 3.26.0）
 - ⚠️ us-market.html 內也有 `?v=` 引用 fetch metadata JSON、要同步 bump
 
 ### 6. ⭐ 首頁 hero「ChatGPT vs 領富 AI」對比區塊動態化（新 2026-06-02）
