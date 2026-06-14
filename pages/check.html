@@ -154,13 +154,17 @@
     a[href]:after { content:""; }
   }
 </style>
-<script src="../js/main.js?v=3.26.0"></script>
+<script src="../js/main.js?v=3.27.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
   const L = window.LeadFu;
   const all = L.data.stocks || [];
   const byCode = {}; all.forEach(s => byCode[s.code] = s);
+
+  // 美股 ticker → 導向 /us/ 決策卡（買前檢查本體是台股；美股的「買前檢查」就是 /us/ 頁）
+  const _ic0 = new URLSearchParams(location.search).get("code");
+  if (_ic0 && L.isUsTicker && L.isUsTicker(_ic0)) { location.replace("/us/" + String(_ic0).toUpperCase()); return; }
 
   // 公告（非全域，另抓）
   let annMap = {};
@@ -372,14 +376,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   input.addEventListener("input", () => {
     const q = input.value.trim().toLowerCase(); picked = null;
     if (!q) { sugg.style.display = "none"; return; }
-    const m = all.filter(s => s.code.toLowerCase().includes(q) || (s.name && s.name.toLowerCase().includes(q))).slice(0, 8);
-    sugg.innerHTML = m.map(s => `<div class="ta-item" data-code="${s.code}"><b>${s.code}</b> ${s.name} <span style="color:#888;">${L.fmtPrice(s.price)}</span></div>`).join("");
+    const pool = all.concat(L.data.usList || []);
+    const m = pool.filter(s => s.code.toLowerCase().includes(q) || (s.name && s.name.toLowerCase().includes(q)) || (s.name_en && s.name_en.toLowerCase().includes(q))).slice(0, 8);
+    sugg.innerHTML = m.map(s => `<div class="ta-item" data-code="${s.code}" data-us="${s.market === "us" ? 1 : 0}"><b>${s.code}</b> ${s.name} <span style="color:#888;">${s.market === "us" ? "🇺🇸 美股" : L.fmtPrice(s.price)}</span></div>`).join("");
     sugg.style.display = m.length ? "block" : "none";
   });
   sugg.addEventListener("click", (e) => {
     const it = e.target.closest(".ta-item"); if (!it) return;
-    picked = it.dataset.code; input.value = `${picked} ${byCode[picked].name}`; sugg.style.display = "none";
-    render(picked);
+    const c = it.dataset.code;
+    if (it.dataset.us === "1") { location.href = "/us/" + String(c).toUpperCase(); return; }   // 美股 → 決策卡
+    picked = c; input.value = `${c} ${byCode[c].name}`; sugg.style.display = "none";
+    render(c);
   });
   document.addEventListener("click", (e) => { if (!e.target.closest(".chk-search")) sugg.style.display = "none"; });
   function go() {
@@ -389,8 +396,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const m = all.find(s => s.code === q || s.name === q || `${s.code} ${s.name}` === q)
              || all.find(s => s.code.toLowerCase() === q.toLowerCase());
       code = m ? m.code : null;
+      if (!code) {   // 美股 ticker / 中英文名 → /us/ 決策卡
+        const uq = q.toUpperCase(), lv = q.toLowerCase(), us = (L.data.usList || []);
+        const uh = us.find(x => x.code === uq) || us.find(x => x.name === q || (x.name_en && x.name_en.toLowerCase() === lv));
+        if (uh) { location.href = "/us/" + uh.code; return; }
+      }
     }
     if (!code) { showHint("找不到這檔股票，請從建議清單選擇。"); return; }
+    if (L.isUsTicker && L.isUsTicker(code)) { location.href = "/us/" + String(code).toUpperCase(); return; }
     render(code);
   }
   document.getElementById("chkBtn").addEventListener("click", go);

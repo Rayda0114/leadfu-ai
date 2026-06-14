@@ -110,10 +110,21 @@ def main():
         # 不要太快，避免 Yahoo rate limit
         time.sleep(0.15)
 
+    # USD/TWD 匯率（投資儀表板「匯率曝險」+ 美股持股換算台幣用）
+    usdtwd = None
+    try:
+        fx = fetch_one("TWD=X")
+        if fx and fx.get("price"):
+            usdtwd = round(float(fx["price"]), 3)
+            print(f"USD/TWD = {usdtwd}")
+    except Exception as e:
+        print(f"匯率抓取失敗（前端會退約略值）：{e}")
+
     payload = {
         "updatedAt": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "source": "Yahoo Finance via yfinance",
         "yfinance_version": yf.__version__,
+        "usdtwd": usdtwd,
         "count": len(results),
         "expected": len(tickers),
         "errors": errors,

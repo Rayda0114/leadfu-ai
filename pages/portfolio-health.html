@@ -323,7 +323,7 @@
     .pf-table .pt-w-bar { display:none; }
   }
 </style>
-<script src="../js/main.js?v=3.26.0"></script>
+<script src="../js/main.js?v=3.27.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -345,8 +345,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const EMERGING_WARN = 25; // 興櫃部位 >25%
   const FOREIGN_SELL = 3000;// 外資當日淨賣 ≥3000 張 = 大賣
 
-  const marketLabel = { listed:"🟢 上市", otc:"🟡 上櫃", emerging:"🟠 興櫃" };
-  const marketColor = { listed:"#16A34A", otc:"#C5A572", emerging:"#EF4444" };
+  const marketLabel = { listed:"🟢 上市", otc:"🟡 上櫃", emerging:"🟠 興櫃", us:"🌎 美股" };
+  const marketColor = { listed:"#16A34A", otc:"#C5A572", emerging:"#EF4444", us:"#1B4332" };
 
   const ud = v => v > 0 ? "up" : v < 0 ? "down" : "flat";
   const money = v => (v < 0 ? "-" : "") + Math.abs(Math.round(v)).toLocaleString("zh-TW");
@@ -358,28 +358,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /* ===== 組合模型（市值加權）===== */
+  const FX = (L.data && L.data.usdtwd > 0) ? L.data.usdtwd : 32.0;   // 美股換台幣（每日快照匯率，否則退約略值）
   function model(){
     const holdings = L.getHoldings ? L.getHoldings() : {};
     const items = Object.keys(holdings).map(c => {
       const h = holdings[c];
       if (!(h.shares > 0)) return null;
-      const s = byCode[c] || null;
-      const price = s ? s.price : 0;
+      const s = byCode[c] || (L.findStock ? L.findStock(c) : null);   // 退而查美股
+      const isUs = !!(s && s.market === "us");
+      const fx = isUs ? FX : 1;
+      const priceLocal = s ? (s.price || 0) : 0;      // 原幣（美股=USD）
+      const changeLocal = s ? (s.change || 0) : 0;
+      const price = priceLocal * fx;                  // 一律換算台幣計總
       const value = s ? h.shares * price : 0;
-      const cost  = h.cost > 0 ? h.shares * h.cost : 0;
-      return { code:c, s, h, price, value, cost,
-        change: s ? (s.change || 0) : 0,
-        todayGain: s ? h.shares * (s.change || 0) : 0,
-        yValue: s ? h.shares * (price - (s.change || 0)) : 0 };
+      const cost  = h.cost > 0 ? h.shares * h.cost * fx : 0;   // 成本也是原幣輸入 → ×fx
+      return { code:c, s, h, isUs, fx, priceLocal, changeLocal, price, value, cost,
+        change: changeLocal * fx,
+        todayGain: s ? h.shares * changeLocal * fx : 0,
+        yValue: s ? h.shares * (price - changeLocal * fx) : 0 };
     }).filter(Boolean);
     const valid = items.filter(it => it.s);
     const totalValue = valid.reduce((a,b) => a + b.value, 0);
     const totalCost  = valid.reduce((a,b) => a + b.cost, 0);
     const todayGain  = valid.reduce((a,b) => a + b.todayGain, 0);
     const yValue     = valid.reduce((a,b) => a + b.yValue, 0);
+    const usValue    = valid.filter(it => it.isUs).reduce((a,b) => a + b.value, 0);   // 美元資產(台幣計)→ 匯率曝險
     let annualDiv = 0, nhiFee = 0;
     valid.forEach(it => {
-      const y = (valuation[it.code] || {}).yield_pct;
+      const y = it.isUs ? (it.s.yield_pct) : (valuation[it.code] || {}).yield_pct;   // 美股殖利率取自 usMap
       if (y) {
         const dv = it.value * y / 100;
         annualDiv += dv;
@@ -388,7 +394,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     valid.forEach(it => it.weight = totalValue > 0 ? it.value / totalValue : 0);
     valid.sort((a,b) => b.value - a.value);
-    return { items, valid, totalValue, totalCost, todayGain, yValue, annualDiv, nhiFee,
+    return { items, valid, totalValue, totalCost, todayGain, yValue, annualDiv, nhiFee, usValue, fx: FX,
+      usPct:     totalValue > 0 ? usValue / totalValue * 100 : 0,
       unreal:    totalCost > 0 ? totalValue - totalCost : null,
       unrealPct: totalCost > 0 ? (totalValue - totalCost) / totalCost * 100 : null,
       todayPct:  yValue > 0 ? todayGain / yValue * 100 : null };
@@ -448,8 +455,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     m.valid.forEach(it => { const c = it.s.category || "其他"; indMap[c] = (indMap[c] || 0) + it.weight; });
     const indSorted = Object.entries(indMap).sort((a,b) => b[1] - a[1]);
     const top3 = indSorted.slice(0,3).reduce((a,[,w]) => a + w, 0) * 100;
-    // 市場別（加權）
-    const mkt = { listed:0, otc:0, emerging:0 };
+    // 市場別（加權；含美股）
+    const mkt = { listed:0, otc:0, emerging:0, us:0 };
     m.valid.forEach(it => { if (mkt[it.s.market] !== undefined) mkt[it.s.market] += it.weight; });
     // 最大單一持股
     const maxHold = m.valid[0] || null;
@@ -484,11 +491,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       flags.push({ lv:"warn", i:"📈", h:`高波動部位偏高`, d:`高波動股票（近期振幅大）約佔 <b>${hiVolPct.toFixed(0)}%</b>，整體淨值起伏會比較大。` });
     else
       flags.push({ lv:"ok", i:"📈", h:`波動度可控`, d:`高波動部位約 ${hiVolPct.toFixed(0)}%${coveredW < 0.99 ? "（部分標的無波動資料）" : ""}。` });
+    // 匯率曝險（持有美股才出現）
+    if (m.usPct > 0)
+      flags.push({ lv: m.usPct >= 50 ? "warn" : "ok", i:"🌎", h:`匯率曝險：美元資產約 ${m.usPct.toFixed(0)}%`,
+        d:`美股部位（以台幣計）約佔 <b>${m.usPct.toFixed(0)}%</b>，台幣升貶會直接影響這塊的台幣損益（目前匯率約 NT$${(m.fx || 32).toFixed(2)}/美元）。` });
     document.getElementById("riskFlags").innerHTML = flags.map(f =>
       `<div class="pf-flag ${f.lv}"><span class="fi">${f.i}</span><div><b>${f.h}</b>　${f.d}</div></div>`).join("");
 
     // 市場別 bar
-    document.getElementById("marketChart").innerHTML = ["listed","otc","emerging"].filter(k => mkt[k] > 0).map(k => {
+    document.getElementById("marketChart").innerHTML = ["listed","otc","emerging","us"].filter(k => mkt[k] > 0).map(k => {
       const pct = (mkt[k] * 100).toFixed(0);
       return `<div class="ph-bar-row"><div class="ph-bar-label">${marketLabel[k]}</div>
         <div class="ph-bar-track"><div class="ph-bar-fill" style="width:${pct}%;background:${marketColor[k]};"></div></div>
@@ -508,6 +519,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   /* ===== 今日持股警示 ===== */
   function alertsFor(it){
     const s = it.s, out = [];
+    // 美股：用美股合理區間位置 + 今日漲跌（無台股法人/技術/財報資料）
+    if (it.isUs) {
+      const f = s.fv, pl = it.priceLocal, cl = it.changeLocal;
+      const pc = (pl && pl !== cl) ? (cl / (pl - cl)) * 100 : 0;
+      if (f && f.position != null && f.position >= 0.85) out.push({ lv:"info", t:`接近合理區間上緣`, d:`位置 ${Math.round(f.position * 100)}%（追高留意）` });
+      else if (f && f.position != null && f.position <= 0.2) out.push({ lv:"info", t:`接近合理區間下緣`, d:`位置 ${Math.round(f.position * 100)}%（留意是否趨勢轉弱）` });
+      if (pc <= -5) out.push({ lv:"warn", t:`今日重挫`, d:`${pc.toFixed(1)}%` });
+      return out;
+    }
     const ind = indicators[it.code] || {}, fv = fairValue[it.code], inst = institutional[it.code] || {}, fin = financials[it.code];
     const pct = L.pctChange(s.price, s.change);
     if (fv && fv.low && s.price < fv.low)
@@ -665,13 +685,31 @@ document.addEventListener("DOMContentLoaded", async () => {
       <th>股票</th><th>現價/漲跌</th><th>股數</th><th>成本</th><th>市值</th><th>佔比</th><th>風險</th><th>損益</th><th></th>
     </tr></thead>`;
     const rows = m.valid.map(it => {
-      const s = it.s, pct = L.pctChange(s.price, s.change), cls = L.changeClass(s.change);
+      const s = it.s;
       const w = (it.weight * 100);
       let pnlCell = `<span class="pt-flat">—</span>`;
       if (it.cost > 0) {
-        const pnl = it.value - it.cost, pp = (s.price - it.h.cost) / it.h.cost * 100;
+        const pnl = it.value - it.cost, pp = (it.priceLocal && it.h.cost) ? (it.priceLocal - it.h.cost) / it.h.cost * 100 : 0;
         pnlCell = `<span class="pt-${ud(pnl)}">${pnl >= 0 ? "+" : ""}${money(pnl)}<br><small>${pp >= 0 ? "+" : ""}${pp.toFixed(1)}%</small></span>`;
       }
+      // 美股列：USD 報價、美股綠漲紅跌、連 /us/、風險改用合理區間 label；市值/損益已換算台幣
+      if (it.isUs) {
+        const pl = it.priceLocal, cl = it.changeLocal;
+        const pc = (pl && pl !== cl) ? (cl / (pl - cl)) * 100 : 0;
+        const uc = pc > 0 ? "#16A34A" : pc < 0 ? "#EF4444" : "#6b7280";
+        return `<tr data-code="${it.code}">
+          <td class="pt-name"><a href="/us/${it.code}"><b>${it.code}</b> ${s.name}</a><br><small>🌎 美股 ${s.category || ""}</small></td>
+          <td data-label="現價／漲跌" style="color:${uc};">$${pl != null ? Number(pl).toFixed(2) : "—"}<br><small>${pc > 0 ? "▲+" : pc < 0 ? "▼" : ""}${Math.abs(pc).toFixed(1)}%</small></td>
+          <td data-label="股數"><input type="number" class="pt-shares" min="0" step="1" value="${it.h.shares}"></td>
+          <td data-label="成本"><input type="number" class="pt-cost" min="0" step="0.01" value="${it.h.cost > 0 ? it.h.cost : ""}" placeholder="USD"></td>
+          <td data-label="市值">${money(it.value)}</td>
+          <td data-label="佔比">${w.toFixed(0)}%<span class="pt-w-bar" style="width:${Math.max(4, Math.min(w,100)*0.5)}px;"></span></td>
+          <td data-label="風險"><small style="color:#1B4332;font-weight:700;">${(s.fv && s.fv.label) || "美股"}</small></td>
+          <td data-label="損益">${pnlCell}</td>
+          <td class="pt-delcell"><button class="pt-del" title="刪除">✕</button></td>
+        </tr>`;
+      }
+      const pct = L.pctChange(s.price, s.change), cls = L.changeClass(s.change);
       const rk = riskScore[it.code];
       const rkCell = rk
         ? `<span style="font-weight:800;color:${rkColor(rk.level)};">${rk.score}</span><br><small style="color:${rkColor(rk.level)};">${rk.level}</small>`
@@ -783,17 +821,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   search.addEventListener("input", () => {
     const q = search.value.trim().toLowerCase(); picked = null;
     if (!q) { sugg.style.display = "none"; return; }
-    const matches = allStocks.filter(s => s.code.toLowerCase().includes(q) || (s.name && s.name.toLowerCase().includes(q))).slice(0, 8);
-    sugg.innerHTML = matches.map(s => `<div class="ta-item" data-code="${s.code}"><b>${s.code}</b> ${s.name} <span style="color:#888;">${L.fmtPrice(s.price)}</span></div>`).join("");
+    const pool = allStocks.concat(L.data.usList || []);   // 台股 + 美股
+    const matches = pool.filter(s => s.code.toLowerCase().includes(q) || (s.name && s.name.toLowerCase().includes(q)) || (s.name_en && s.name_en.toLowerCase().includes(q))).slice(0, 8);
+    sugg.innerHTML = matches.map(s => `<div class="ta-item" data-code="${s.code}"><b>${s.code}</b> ${s.name} <span style="color:#888;">${s.market === "us" ? "🇺🇸 $" + (s.price != null ? Number(s.price).toFixed(2) : "—") : L.fmtPrice(s.price)}</span></div>`).join("");
     sugg.style.display = matches.length ? "block" : "none";
   });
   sugg.addEventListener("click", (e) => {
     const it = e.target.closest(".ta-item"); if (!it) return;
     picked = it.dataset.code;
-    const s = byCode[picked];
+    const s = L.findStock(picked) || byCode[picked];
+    if (!s) return;
     search.value = `${s.code} ${s.name}`;
     sugg.style.display = "none";
-    costIn.placeholder = "現價 " + L.fmtPrice(s.price);
+    costIn.placeholder = s.market === "us" ? ("成本 $" + (s.price != null ? Number(s.price).toFixed(2) : "") + "（美元）") : ("現價 " + L.fmtPrice(s.price));
     sharesIn.focus();
     showHint("");
   });
@@ -807,7 +847,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (m) return m.code;
     const low = q.toLowerCase();
     const part = allStocks.filter(s => s.code.toLowerCase() === low || (s.name && s.name.toLowerCase() === low));
-    return part.length === 1 ? part[0].code : null;
+    if (part.length === 1) return part[0].code;
+    // 美股：ticker / 中英文名
+    const us = (L.data.usList || []), uq = q.toUpperCase();
+    const uh = us.find(x => x.code === uq) || us.find(x => x.name === q || (x.name_en && x.name_en.toLowerCase() === low));
+    return uh ? uh.code : null;
   }
   function doAdd(){
     const code = resolveCode();
@@ -820,7 +864,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     search.value = ""; sharesIn.value = ""; costIn.value = ""; costIn.placeholder = "買入均價"; picked = null;
     showHint("");
     renderAll();
-    L.showToast && L.showToast(`已加入 ${code} ${byCode[code] ? byCode[code].name : ""}`, "success");
+    const _nm = (L.findStock(code) || byCode[code] || {}).name || "";
+    L.showToast && L.showToast(`已加入 ${code} ${_nm}`, "success");
   }
   document.getElementById("addBtn").addEventListener("click", doAdd);
   costIn.addEventListener("keydown", (e) => { if (e.key === "Enter") doAdd(); });
@@ -834,14 +879,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     sharesIn.focus();
   });
 
-  // 帶 ?code= 預填新增持股表單（買前檢查／個股頁「加入持股守門」CTA 導過來，不再落空白表單）
+  // 帶 ?code= 預填新增持股表單（買前檢查／個股頁／美股頁「加入持股」CTA 導過來，不再落空白表單）
   try {
     const initCode = new URLSearchParams(location.search).get("code");
-    if (initCode && byCode[initCode]) {
-      const s = byCode[initCode];
-      picked = initCode;
-      search.value = `${s.code} ${s.name}`;
-      costIn.placeholder = "現價 " + L.fmtPrice(s.price);
+    const s0 = initCode ? (byCode[initCode] || L.findStock(initCode)) : null;
+    if (s0) {
+      picked = s0.code;
+      search.value = `${s0.code} ${s0.name}`;
+      costIn.placeholder = s0.market === "us" ? ("成本 $" + (s0.price != null ? Number(s0.price).toFixed(2) : "") + "（美元）") : ("現價 " + L.fmtPrice(s0.price));
       setTimeout(() => { try { search.scrollIntoView({ behavior: "smooth", block: "center" }); sharesIn.focus(); } catch (e2) {} }, 350);
     }
   } catch (e) {}

@@ -1099,7 +1099,7 @@ footer.site .wrap{padding:54px 28px 40px;}
   ]
 }
 </script>
-<script src="/js/main.js?v=3.26.0"></script>
+<script src="/js/main.js?v=3.27.0"></script>
 <script>
 /* Hero 搜尋框：打字即下拉(台積→2330) + 送出時 name→code 解析(修中文名送到空白檢查頁的 bug) */
 (async function () {
@@ -1109,7 +1109,12 @@ footer.site .wrap{padding:54px 28px 40px;}
   var box = document.getElementById("heroSugg");
   var form = input && input.closest("form");
   if (!input || !box) return;
-  function go(code) { if (code) location.href = "/pages/check?code=" + encodeURIComponent(code); }
+  // 台股 → 買前檢查；美股 → /us/ 決策卡
+  function goStock(code) {
+    if (!code) return;
+    if (window.LeadFu.isUsTicker && window.LeadFu.isUsTicker(code)) location.href = "/us/" + encodeURIComponent(String(code).toUpperCase());
+    else location.href = "/pages/check?code=" + encodeURIComponent(code);
+  }
   function resolve(v) {
     v = (v || "").trim(); if (!v) return null;
     var m = v.match(/(00\d{2,4}[A-Z]?|\d{4}[A-Z]?)/);
@@ -1117,16 +1122,22 @@ footer.site .wrap{padding:54px 28px 40px;}
     var all = (window.LeadFu.data && window.LeadFu.data.stocks) || [];
     var hit = all.find(function (x) { return x.name === v; })
       || all.find(function (x) { return x.name && (v.indexOf(x.name) >= 0 || x.name.indexOf(v) >= 0); });
-    return hit ? hit.code : null;
+    if (hit) return hit.code;
+    // 美股：英文 ticker / 中文名 / 英文名
+    var us = (window.LeadFu.data && window.LeadFu.data.usList) || [], uq = v.toUpperCase(), lv = v.toLowerCase();
+    var uh = us.find(function (x) { return x.code === uq; })
+      || us.find(function (x) { return x.name === v || (x.name_en && x.name_en.toLowerCase() === lv); })
+      || us.find(function (x) { return (x.name && v.indexOf(x.name) >= 0) || (x.name_en && x.name_en.toLowerCase().indexOf(lv) >= 0); });
+    return uh ? uh.code : null;
   }
   if (window.LeadFu.attachTypeahead) {
-    window.LeadFu.attachTypeahead({ input: input, box: box, onPick: function (s) { input.value = s.code + " " + (s.name || ""); go(s.code); } });
+    window.LeadFu.attachTypeahead({ input: input, box: box, includeUs: true, onPick: function (s) { input.value = s.code + " " + (s.name || ""); goStock(s.code); } });
   }
   if (form) {
     form.onsubmit = function (e) {
       e.preventDefault();
       var code = resolve(input.value);
-      if (code) go(code);
+      if (code) goStock(code);
       else if (input.value.trim()) location.href = "/pages/search.html?q=" + encodeURIComponent(input.value.trim());
     };
   }

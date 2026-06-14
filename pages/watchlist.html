@@ -117,7 +117,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. ・本網站所有資訊僅供參考，不構成投資建議，投資前請審慎評估。</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.26.0"></script>
+<script src="../js/main.js?v=3.27.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -130,8 +130,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
   let synced = false;   // 雲端同步是否已完成（登入者）
 
-  // 每檔健診標籤（與手機版同源：risk_score_live + attention_live）
+  // 每檔健診標籤（台股：risk_score_live + attention_live；美股：用合理區間位置）
   function diagnose(code) {
+    const st = findStock(code);
+    if (st && st.market === "us") {
+      const p = st.fv && st.fv.position;
+      if (p != null && p >= 0.8) return { tag: "偏貴", cls: "watch", reason: (st.fv && st.fv.label) || "高於合理區間" };
+      if (p != null && p <= 0.3) return { tag: "偏低", cls: "ok", reason: (st.fv && st.fv.label) || "低於合理區間" };
+      return { tag: "合理", cls: "ok", reason: (st.fv && st.fv.label) || "美股" };
+    }
     const rk = (data.riskScore || {})[code];
     const att = (data.attention || {})[code];
     if (att) return { tag: "需注意", cls: "warn", reason: "主管機關" + (att.type || "注意/處置") };
@@ -186,23 +193,41 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let attn = 0;
     tbody.innerHTML = list.map(s => {
-      const pct = pctChange(s.price, s.change);
-      const cls = changeClass(s.change);
       const dg = diagnose(s.code);
       if (dg.tag === "需注意") attn++;
       const dgColor = dg.cls === "warn" ? "#c0392b" : dg.cls === "watch" ? "#a8690a" : "#1a7a45";
       const dgBg = dg.cls === "warn" ? "#fbeae8" : dg.cls === "watch" ? "#fdf2dd" : "#e9f7ee";
+      const dgCell = `<td><span title="${dg.reason}" style="font-size:12px;font-weight:700;padding:3px 9px;border-radius:10px;color:${dgColor};background:${dgBg};white-space:nowrap;">${dg.tag}</span></td>`;
+      const rmCell = `<td><button class="add-btn" data-rm="${s.code}" style="border-color:#1B4332;color:#1B4332;">移除</button></td>`;
+      // 美股列（USD 報價、美股慣例綠漲紅跌、連 /us/、無成交量/台股狀態）
+      if (s.market === "us") {
+        const p = (s.change_pct != null) ? s.change_pct : pctChange(s.price, s.change);
+        const uc = p > 0 ? "#16A34A" : p < 0 ? "#EF4444" : "#6b7280";
+        const arr = p > 0 ? "▲" : p < 0 ? "▼" : "－";
+        return `<tr data-code="${s.code}">
+          <td class="code"><a href="/us/${s.code}">${s.code}</a></td>
+          <td class="name"><a href="/us/${s.code}" style="color:inherit;">${s.name}</a></td>
+          <td class="num">${s.price != null ? "$" + Number(s.price).toFixed(2) : "—"}</td>
+          <td class="num" style="color:${uc};">${s.change != null ? (s.change >= 0 ? "+" : "") + Number(s.change).toFixed(2) : "—"}</td>
+          <td class="num" style="color:${uc};">${arr} ${p != null ? (p >= 0 ? "+" : "") + Number(p).toFixed(2) + "%" : "—"}</td>
+          <td class="num" style="color:#9aa39c;">美股</td>
+          <td>${s.category || "美股"}</td>
+          <td><span class="status-pill" style="background:#eef3f0;color:#1B4332;">美股</span></td>
+          ${dgCell}${rmCell}
+        </tr>`;
+      }
+      const pct = pctChange(s.price, s.change);
+      const cls = changeClass(s.change);
       return `<tr data-code="${s.code}">
         <td class="code"><a href="${pageHref('stock-detail?code=' + s.code)}">${s.code}</a></td>
         <td class="name"><a href="${pageHref('stock-detail?code=' + s.code)}" style="color:inherit;">${s.name}</a></td>
         <td class="num ${cls}">${fmtPrice(s.price)}</td>
         <td class="num ${cls}">${arrow(s.change)} ${fmtChange(s.change)}</td>
         <td class="num ${cls}">${fmtPct(pct)}</td>
-        <td class="num">${s.volume.toLocaleString("zh-TW")}</td>
+        <td class="num">${(s.volume || 0).toLocaleString("zh-TW")}</td>
         <td>${s.category}</td>
         <td><span class="status-pill status-${s.status}">${s.status}</span></td>
-        <td><span title="${dg.reason}" style="font-size:12px;font-weight:700;padding:3px 9px;border-radius:10px;color:${dgColor};background:${dgBg};white-space:nowrap;">${dg.tag}</span></td>
-        <td><button class="add-btn" data-rm="${s.code}" style="border-color:#1B4332;color:#1B4332;">移除</button></td>
+        ${dgCell}${rmCell}
       </tr>`;
     }).join("");
     const attnEl = document.getElementById("favAttn");

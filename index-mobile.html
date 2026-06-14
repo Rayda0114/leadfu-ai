@@ -364,7 +364,7 @@
   台股全市場財經資訊網 · 本站資訊僅供參考，不構成投資建議<br>客服 LINE：<a href="https://line.me/R/ti/p/@130tqckv">@130tqckv</a> · 唯一官方網址 leadfuai.com
 </footer>
 
-<script src="js/main.js?v=3.26.0"></script>
+<script src="js/main.js?v=3.27.0"></script>
 <script>
 /* 首頁第一屏：檢查框 → 買前檢查（沿用原邏輯）*/
 (async () => {
@@ -373,16 +373,26 @@
     await window.LeadFu.ready;
     const L = window.LeadFu;
     const input = document.getElementById("checkHeroInput");
+    const goStock = (code) => {
+      if (!code) return false;
+      if (L.isUsTicker && L.isUsTicker(code)) location.href = "/us/" + String(code).toUpperCase();
+      else location.href = "pages/check.html?code=" + code;
+      return true;
+    };
     const resolve = (v) => {
       v = (v || "").trim(); if (!v) return null;
       const m = v.match(/\b(00\d{2,4}[A-Z]?|\d{4})\b/); if (m) return m[1];
       const st = (L.data.stocks || []).find(x => x.name && (v.includes(x.name) || x.name.includes(v)));
-      return st ? st.code : null;
+      if (st) return st.code;
+      const us = (L.data.usList || []), uq = v.toUpperCase(), lv = v.toLowerCase();
+      const uh = us.find(x => x.code === uq) || us.find(x => x.name === v || (x.name_en && x.name_en.toLowerCase() === lv))
+        || us.find(x => (x.name && v.includes(x.name)) || (x.name_en && x.name_en.toLowerCase().includes(lv)));
+      return uh ? uh.code : null;
     };
     const go = () => {
       const code = resolve(input && input.value);
-      if (code) location.href = "pages/check.html?code=" + code;
-      else if (input) { input.style.color = "#ffd9c4"; input.value = ""; input.placeholder = "找不到，請輸入代號（例如 2330）"; }
+      if (code) goStock(code);
+      else if (input) { input.style.color = "#ffd9c4"; input.value = ""; input.placeholder = "找不到，請輸入代號（例如 2330 / AAPL）"; }
     };
     const form = document.getElementById("checkHeroForm");
     if (form) form.addEventListener("submit", (e) => { e.preventDefault(); go(); });
@@ -391,7 +401,7 @@
     // 打字即下拉建議（台積→2330）；點選直接跳買前檢查
     const sugg = document.getElementById("heroSuggM");
     if (input && sugg && L.attachTypeahead) {
-      L.attachTypeahead({ input, box: sugg, onPick: (s) => { location.href = "pages/check.html?code=" + s.code; } });
+      L.attachTypeahead({ input, box: sugg, includeUs: true, onPick: (s) => { goStock(s.code); } });
     }
     // 底部固定鍵：聚焦搜尋框
     const bottomBtn = document.getElementById("bottomCheckBtn");

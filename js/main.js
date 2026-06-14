@@ -249,7 +249,20 @@ function arrow(c) {
   return "－";
 }
 function findStock(code) {
-  return STOCK_DATA.stocks.find(s => s.code === code);
+  const tw = STOCK_DATA.stocks.find(s => s.code === code);
+  if (tw) return tw;
+  // 退而查美股（ticker 大寫）—— 讓自選/持股/到價/儀表板等台股機制也認得美股
+  const us = STOCK_DATA.usMap && STOCK_DATA.usMap[String(code).toUpperCase()];
+  return us || undefined;
+}
+// 是否為美股 ticker（在美股精選 100 範圍內）
+function isUsTicker(code) {
+  return !!(STOCK_DATA.usMap && STOCK_DATA.usMap[String(code).toUpperCase()]);
+}
+// 美元換台幣（匯率優先用每日快照的 usdtwd，否則退約略值）
+function usdToTwd(usd) {
+  const rate = (STOCK_DATA.usdtwd && STOCK_DATA.usdtwd > 0) ? STOCK_DATA.usdtwd : 32.0;
+  return (Number(usd) || 0) * rate;
 }
 function relativePath(file) {
   // 根據目前頁面位置回傳正確相對路徑（首頁 vs pages/）
@@ -1115,7 +1128,7 @@ function isNaturalLanguageQuery(text) {
  *   box：建議外層 position:relative，box 自身會吃 .lf-ta-box 樣式（absolute 在 input 下）
  *   來源：window.LeadFu.data.stocks（code/name 子字串比對；代號/開頭優先）
  * ============================================================ */
-function attachTypeahead({ input, box, onPick, limit = 8 }) {
+function attachTypeahead({ input, box, onPick, limit = 8, includeUs = false }) {
   if (!input || !box) return;
   box.classList.add("lf-ta-box");
   let items = [], active = -1;
@@ -1124,21 +1137,22 @@ function attachTypeahead({ input, box, onPick, limit = 8 }) {
   const render = () => {
     const q = (input.value || "").trim().toLowerCase();
     if (!q) { hide(); return; }
-    const all = (window.LeadFu && window.LeadFu.data && window.LeadFu.data.stocks) || [];
+    let all = (window.LeadFu && window.LeadFu.data && window.LeadFu.data.stocks) || [];
+    if (includeUs && window.LeadFu.data && window.LeadFu.data.usList) all = all.concat(window.LeadFu.data.usList);
     const starts = [], incl = [];
     for (const s of all) {
       if (!s || !s.code) continue;
-      const cd = String(s.code).toLowerCase(), nm = String(s.name || "").toLowerCase();
+      const cd = String(s.code).toLowerCase(), nm = String(s.name || "").toLowerCase(), en = String(s.name_en || "").toLowerCase();
       if (cd === q || nm === q) { starts.unshift(s); continue; }
       if (cd.startsWith(q) || nm.startsWith(q)) starts.push(s);
-      else if (cd.includes(q) || nm.includes(q)) incl.push(s);
+      else if (cd.includes(q) || nm.includes(q) || (en && en.includes(q))) incl.push(s);
       if (starts.length + incl.length > 80) break;
     }
     items = starts.concat(incl).slice(0, limit);
     if (!items.length) { hide(); return; }
     active = -1;
     box.innerHTML = items.map((s, i) => `
-      <div class="lf-ta-item" data-i="${i}"><b>${s.code}</b><span>${s.name || ""}</span><i class="num">${(s.price != null && !isNaN(s.price)) ? Number(s.price).toFixed(2) : ""}</i></div>`).join("");
+      <div class="lf-ta-item" data-i="${i}"><b>${s.code}</b><span>${s.name || ""}</span><i class="num">${s.market === "us" ? "🇺🇸 美股" : ((s.price != null && !isNaN(s.price)) ? Number(s.price).toFixed(2) : "")}</i></div>`).join("");
     box.style.display = "block";
     box.querySelectorAll(".lf-ta-item").forEach(el => {
       el.addEventListener("mousedown", (ev) => { ev.preventDefault(); pick(items[+el.dataset.i]); });
@@ -3165,6 +3179,10 @@ async function openPriceAlertModal(code, name, curPrice) {
     return;
   }
   let cur = Number(curPrice); if (!cur || isNaN(cur)) cur = Number(s.price) || 0;
+  const _us = isUsTicker(code);
+  const _unit = _us ? "美元" : "元";
+  const _freshTxt = _us ? "美股每日收盤" : "盤後收盤";
+  const _checkTxt = _us ? "美股每日收盤後比對（隔日台北早上）" : "盤中每約 5 分鐘比對一次";
   _ensurePaStyle();
   try { const o = document.getElementById("leadfu-pa-ov"); if (o) o.remove(); } catch (e) {}
   const ov = document.createElement("div"); ov.id = "leadfu-pa-ov";
@@ -3172,13 +3190,13 @@ async function openPriceAlertModal(code, name, curPrice) {
     '<div id="leadfu-pa-card" role="dialog" aria-label="到價提醒設定">' +
       '<div class="pa-h"><b>🔔 到價提醒 · ' + code + ' ' + name + '</b><button class="pa-close" aria-label="關閉">×</button></div>' +
       '<div class="pa-bd">' +
-        '<div class="pa-cur">目前股價（盤後收盤）：<b class="num">' + (cur ? cur.toFixed(2) : "—") + '</b> 元</div>' +
+        '<div class="pa-cur">目前股價（' + _freshTxt + '）：<b class="num">' + (cur ? cur.toFixed(2) : "—") + '</b> ' + _unit + '</div>' +
         '<div class="pa-row"><select class="pa-dir"><option value="below">跌到</option><option value="above">漲到</option></select>' +
         '<input class="pa-target num" type="number" step="0.01" inputmode="decimal" placeholder="目標價" value="' + (cur ? cur.toFixed(2) : "") + '"></div>' +
         '<input class="pa-note" type="text" maxlength="40" placeholder="備註（選填，例：跌破想加碼）">' +
         '<button class="pa-save">新增到價提醒</button>' +
         '<div class="pa-list"><div class="pa-empty">讀取中…</div></div>' +
-        '<div class="pa-foot">到價時透過 LINE 官方帳號推播（需已加好友）。盤中每約 5 分鐘比對一次，僅供參考、非投資建議。</div>' +
+        '<div class="pa-foot">到價時透過 LINE 官方帳號推播（需已加好友）。' + _checkTxt + '，僅供參考、非投資建議。</div>' +
       '</div></div>';
   document.body.appendChild(ov);
   const card = ov.querySelector("#leadfu-pa-card");
@@ -3195,7 +3213,7 @@ async function openPriceAlertModal(code, name, curPrice) {
     if (!mine.length) { listEl.innerHTML = '<div class="pa-empty">這檔目前沒有設定提醒</div>'; return; }
     listEl.innerHTML = mine.map(a =>
       '<div class="pa-item" data-id="' + a.id + '"><span>' + (a.direction === "above" ? "漲到" : "跌到") +
-      ' <b class="num">' + Number(a.target).toFixed(2) + '</b> 元' +
+      ' <b class="num">' + Number(a.target).toFixed(2) + '</b> ' + _unit +
       (a.triggered_at ? ' · <span style="color:#1a8e3e;">已觸發</span>' : (a.active === false ? ' · <span style="color:#9aa7a0;">已停用</span>' : "")) +
       '</span><button class="x">移除</button></div>').join("");
     listEl.querySelectorAll(".pa-item .x").forEach(btn => btn.addEventListener("click", async () => {
@@ -3243,6 +3261,7 @@ window.LeadFu = {
   parseAiQuery, aiQueryUrl, isNaturalLanguageQuery, normalizeSearchQuery,
   attachTypeahead, fmtAsOf, asOfBadge,         // 共用：搜尋下拉 + 統一資料時間標示
   openPriceAlertModal, promptSaveLogin,         // 🔔 到價提醒 + 註冊軟引導
+  isUsTicker, usdToTwd,                          // 🌎 美股整合：判斷美股 ticker + 美元換台幣
   startStockLive,  // 個股詳情頁即時報價 polling
   liveQuote: leadFuLiveQuote,  // 通用單檔即時報價（買前檢查等頁面用）
   loadKlines,      // 個股詳情頁延後載入 9.8MB K 線（不再全站每頁載）
@@ -3775,6 +3794,7 @@ async function loadLiveData() {
     "margin_live.json", "margin_tpex_live.json", "sbl_live.json", "indicators_live.json",
     "insider_live.json", "fair_value_live.json", "attention_live.json", "risk_score_live.json",
     "inst_streak_live.json", "dividend_live.json", "ipo_live.json",
+    "us_stocks_live.json", "us_fair_value_live.json", "us_stocks_meta.json",
   ].forEach(f => { fetchJson(f).catch(() => {}); });
 
   // 1. 個股報價（含 metadata：updatedAt / source / stockCount / marketBreakdown）
@@ -4010,6 +4030,53 @@ async function loadLiveData() {
     }
   } catch (e) {
     console.log(`[領富 AI] ℹ️ IPO 資料未載入 (${e.message})`);
+  }
+
+  // 16. 美股精選 100：report 報價 + 合理區間 + metadata → 正規化進 usMap
+  //     讓自選股/持股/到價提醒/買前檢查/投資儀表板等「台股機制」也認得美股（findStock 退而查 usMap）。
+  try {
+    const [uLive, uFv, uMeta] = await Promise.all([
+      fetchJson("us_stocks_live.json").catch(() => null),
+      fetchJson("us_fair_value_live.json").catch(() => null),
+      fetchJson("us_stocks_meta.json").catch(() => null),
+    ]);
+    const usMap = {};
+    const asArr = (o) => o && o.data ? (Array.isArray(o.data) ? o.data : Object.values(o.data)) : [];
+    asArr(uLive).forEach(s => {
+      if (!s || !s.ticker) return;
+      const t = String(s.ticker).toUpperCase();
+      usMap[t] = {
+        code: t, name: t, market: "us", status: "", volume: 0,
+        price: s.price, change: s.change, change_pct: s.change_pct,
+        pe_ratio: s.pe_ratio, yield_pct: s.yield_pct, market_cap: s.market_cap,
+        w52_high: s.w52_high, w52_low: s.w52_low, sector: s.sector, industry: s.yf_industry || "",
+      };
+    });
+    asArr(uFv).forEach(x => {
+      if (!x || !x.ticker) return;
+      const t = String(x.ticker).toUpperCase();
+      const e = usMap[t] || (usMap[t] = { code: t, name: t, market: "us", status: "", volume: 0 });
+      e.name = x.name_zh || e.name; e.category = x.category || e.category;
+      e.fv = { low: x.low, high: x.high, position: x.position, label: x.label, summary: x.summary, confidence: x.confidence };
+      if (e.price == null) e.price = x.price;
+      if (e.pe_ratio == null) e.pe_ratio = x.pe_ratio;
+      if (e.yield_pct == null) e.yield_pct = x.yield_pct;
+    });
+    const md = (uMeta && uMeta.data) || {};
+    (Array.isArray(md) ? md.map(x => [x && x.ticker, x]) : Object.entries(md)).forEach(([k, x]) => {
+      if (!x) return;
+      const t = String(x.ticker || k).toUpperCase();
+      const e = usMap[t] || (usMap[t] = { code: t, name: t, market: "us", status: "", volume: 0 });
+      e.name = x.name_zh || e.name; e.name_en = x.name_en || ""; e.category = e.category || x.category;
+      e.industry = e.industry || x.industry; e.desc = x.description || ""; e.logo_domain = x.logo_domain || "";
+    });
+    STOCK_DATA.usMap = usMap;
+    STOCK_DATA.usList = Object.values(usMap);
+    STOCK_DATA.usUpdatedAt = (uLive && uLive.updatedAt) || (uFv && uFv.updatedAt) || "";
+    STOCK_DATA.usdtwd = (uLive && (uLive.usdtwd || uLive.usd_twd)) || (uFv && uFv.usdtwd) || null;
+    console.log(`[領富 AI] ✅ 美股 ${Object.keys(usMap).length} 檔載入（usMap・匯率 ${STOCK_DATA.usdtwd || "n/a"}）`);
+  } catch (e) {
+    console.log(`[領富 AI] ℹ️ 美股資料未載入 (${e.message})`);
   }
 }
 

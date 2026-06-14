@@ -1203,12 +1203,18 @@ async function runPriceAlertCheck(env, opts) {
   } catch (e) { return { sent: 0, error: "supabase" }; }
   if (!Array.isArray(alerts) || !alerts.length) return { sent: 0, note: "無待觸發提醒" };
 
-  // 2) 現價：MIS 盤中批次（上市/上櫃）+ stocks_live 盤後收盤備援
+  // 2) 現價：台股用 MIS 盤中批次（上市/上櫃）+ stocks_live 盤後備援；美股用 us_stocks_live 每日收盤
   const codes = [...new Set(alerts.map(a => String(a.code)))];
   const meta = (await _assetJson(env, "stocks_live.json")) || {};
   const mkt = {}, closePx = {}, nameOf = {};
   (meta.stocks || []).forEach(s => { mkt[s.code] = s.market; nameOf[s.code] = s.name; if (s.price != null) closePx[s.code] = Number(s.price); });
-  const exFor = c => mkt[c] === "otc" ? `otc_${c}.tw` : (mkt[c] === "listed" || mkt[c] == null) ? `tse_${c}.tw` : null;  // 興櫃→null（用備援）
+  // 美股：us_stocks_live 收盤價（美股無 MIS 盤中；資料每天美股收盤後 cron 更新一次）
+  const us = (await _assetJson(env, "us_stocks_live.json")) || {};
+  const usPx = {}, usSet = new Set();
+  ((us.data && (Array.isArray(us.data) ? us.data : Object.values(us.data))) || []).forEach(x => {
+    if (x && x.ticker && x.price != null) { const u = String(x.ticker).toUpperCase(); usPx[u] = Number(x.price); usSet.add(u); }
+  });
+  const exFor = c => usSet.has(String(c).toUpperCase()) ? null : (mkt[c] === "otc" ? `otc_${c}.tw` : mkt[c] === "listed" ? `tse_${c}.tw` : null);
   const price = {};
   const batch = codes.filter(exFor);
   for (let i = 0; i < batch.length; i += 30) {
@@ -1221,7 +1227,11 @@ async function runPriceAlertCheck(env, opts) {
       (mj.msgArray || []).forEach(q => { let z = parseFloat(q.z); if (!(z > 0)) z = parseFloat(q.pz); if (z > 0) price[q.c] = z; });
     } catch (e) {}
   }
-  codes.forEach(c => { if (price[c] == null && closePx[c] != null) price[c] = closePx[c]; });
+  codes.forEach(c => {
+    const u = String(c).toUpperCase();
+    if (usSet.has(u)) price[c] = usPx[u];
+    else if (price[c] == null && closePx[c] != null) price[c] = closePx[c];
+  });
 
   // 3) 判斷到價
   const fired = [];
@@ -1249,12 +1259,13 @@ async function runPriceAlertCheck(env, opts) {
   for (const f of fired) {
     const a = f.a, lineId = lineById[a.user_id];
     if (lineId && !opts.dry) {
+      const isUs = usSet.has(String(a.code).toUpperCase());
+      const unit = isUs ? "美元" : "元";
       const lt = await makeLoginToken(env, a.user_id);
-      const link = lt
-        ? `https://leadfuai.com/pages/stock-detail?code=${a.code}&lt=${lt}&openExternalBrowser=1`
-        : `https://leadfuai.com/pages/stock-detail?code=${a.code}`;
+      const base = isUs ? `https://leadfuai.com/us/${a.code}` : `https://leadfuai.com/pages/stock-detail?code=${a.code}`;
+      const link = lt ? `${base}${isUs ? "?" : "&"}lt=${lt}&openExternalBrowser=1` : base;
       const dirTxt = a.direction === "above" ? "漲到" : "跌到";
-      const text = `🔔 到價提醒｜${a.code} ${nameOf[a.code] || ""}\n━━━━━━━━━━\n已${dirTxt}你設定的 ${Number(a.target).toFixed(2)} 元（目前 ${f.px.toFixed(2)} 元）${a.note ? "\n備註：" + a.note : ""}\n━━━━━━━━━━\n僅為到價通知、非投資建議。\n看個股 → ${link}`;
+      const text = `🔔 到價提醒｜${a.code} ${isUs ? "" : (nameOf[a.code] || "")}\n━━━━━━━━━━\n已${dirTxt}你設定的 ${Number(a.target).toFixed(2)} ${unit}（目前 ${f.px.toFixed(2)} ${unit}）${a.note ? "\n備註：" + a.note : ""}\n━━━━━━━━━━\n僅為到價通知、非投資建議。\n看個股 → ${link}`;
       if (await _linePush(env, lineId, text)) sent++;
     }
     if (!opts.dry) {
@@ -2646,13 +2657,15 @@ async function renderUsStockPage(url, env) {
     ? `<div class="sd-stat"><span>領富 AI 合理區間</span><b style="font-size:18px;">$${low.toFixed(2)} – $${high.toFixed(2)}</b><small style="color:${fvLabelColor};font-weight:700;">${esc(label || "區間")}${posTxt ? "・位置 " + posTxt : ""}</small></div>`
     : `<div class="sd-stat"><span>領富 AI 合理區間</span><b style="font-size:16px;">需更多資料</b><small>見完整分析</small></div>`;
 
-  // 決策摘要（規則化、白話、非建議）
-  const bullets = [];
-  if (summary) bullets.push(summary);
-  if (pe != null) bullets.push(pe >= 40 ? `本益比 ${pe.toFixed(1)} 偏高，市場給的成長期望不低，留意獲利能否跟上。` : pe >= 20 ? `本益比 ${pe.toFixed(1)}，屬成長型常見區間。` : `本益比 ${pe.toFixed(1)} 相對不高。`);
-  if (yld != null) bullets.push(yld >= 3 ? `殖利率約 ${yld.toFixed(2)}%，對美股算高，適合領息族留意。` : yld > 0.5 ? `殖利率約 ${yld.toFixed(2)}%，配息普通。` : `幾乎不配息（${yld.toFixed(2)}%），是典型成長股風格。`);
-  if (pos != null) bullets.push(pos >= 0.8 ? `股價位於 52 週區間 ${posTxt} 高位，追高前留意回檔風險。` : pos <= 0.3 ? `股價位於 52 週區間 ${posTxt} 低位，是否落難或趨勢轉弱需一併看。` : `股價位於 52 週區間 ${posTxt}，屬中段。`);
-  const bulletsHtml = bullets.length ? `<ul class="sd-reasons">${bullets.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p class="sd-muted">資料整理中。</p>`;
+  // 決策摘要（規則化紅旗 checklist、白話、非建議）
+  const flags = [];
+  if (label) flags.push({ ok: !/高/.test(label), t: `領富 AI 合理區間：${label}${posTxt ? "（位置 " + posTxt + "）" : ""}` });
+  if (pe != null) flags.push({ ok: pe < 40, t: pe >= 40 ? `本益比 ${pe.toFixed(1)} 偏高，市場期望不低，留意獲利能否跟上` : `本益比 ${pe.toFixed(1)}，估值不算貴` });
+  if (pos != null) flags.push({ ok: pos < 0.8, t: pos >= 0.8 ? `股價在 52 週 ${posTxt} 高位，追高前留意回檔` : pos <= 0.3 ? `股價在 52 週 ${posTxt} 低位，留意是否趨勢轉弱` : `股價在 52 週 ${posTxt} 中段` });
+  if (yld != null) flags.push({ ok: true, t: yld >= 3 ? `殖利率 ${yld.toFixed(2)}%，對美股算高、適合領息` : yld > 0.5 ? `殖利率 ${yld.toFixed(2)}%，配息普通` : `幾乎不配息（${yld.toFixed(2)}%），成長股風格` });
+  const bulletsHtml = flags.length
+    ? `<ul class="sd-reasons" style="list-style:none;padding-left:0;">${flags.map(f => `<li>${f.ok ? "✅" : "⚠️"} ${esc(f.t)}</li>`).join("")}${summary ? `<li style="color:#888;margin-top:6px;">${esc(summary)}</li>` : ""}</ul>`
+    : `<p class="sd-muted">資料整理中。</p>`;
 
   const aiQ = encodeURIComponent(`${t} ${nameZh} 現在適合買嗎？合理價與主要風險？`);
   const desc = `${nameZh}（${t}）美股分析：領富 AI 合理區間估值${low != null && high != null ? " $" + low.toFixed(0) + "–$" + high.toFixed(0) : ""}、本益比${pe != null ? " " + pe.toFixed(1) : ""}、殖利率${yld != null ? " " + yld.toFixed(2) + "%" : ""}${posTxt ? "、52週位置 " + posTxt : ""}。${summary || ""} 每日更新，非投資建議。`;
@@ -2744,6 +2757,9 @@ async function renderUsStockPage(url, env) {
   </div>
 
   <div class="sd-tools">
+    <button class="add-btn" data-code="${esc(t)}" style="background:#1B4332;color:#fff;border:0;padding:11px 18px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">＋ 加入自選</button>
+    <button data-action="price-alert" data-code="${esc(t)}" data-name="${esc(nameZh)}" data-price="${price != null ? esc(price) : ""}" style="background:#eef7f1;color:#1B4332;border:0;padding:11px 18px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">🔔 到價提醒</button>
+    <a class="ghost" href="/pages/portfolio-health?code=${esc(t)}">🛡️ 加入持股</a>
     <a href="/pages/ai?q=${aiQ}">🤖 問 AI 這檔</a>
     <a class="ghost" href="/pages/us-market">📊 看美股精選 100</a>
     <a class="ghost" href="https://finance.yahoo.com/quote/${esc(t)}" target="_blank" rel="noopener nofollow">Yahoo Finance ↗</a>
@@ -2769,7 +2785,7 @@ async function renderUsStockPage(url, env) {
 </main>
 
 <footer class="site-footer"><div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. · 本網站所有資訊僅供參考，不構成投資建議。</div></div></footer>
-<script src="/js/main.js?v=3.26.0"></script>
+<script src="/js/main.js?v=3.27.0"></script>
 </body>
 </html>`;
 
