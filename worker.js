@@ -2485,6 +2485,11 @@ async function renderStockPage(url, env) {
     { q: `${name}（${code}）是注意股或處置股嗎？`, a: attYes
         ? `是，${name} 目前列入證交所／櫃買中心的「注意股或處置股」名單，交易可能採分盤撮合或預收款券，請特別留意；實際狀態以官方每日公告為準。`
         : `截至 ${today}，${name} 未列入注意股／處置股名單。注意股狀態每日變動，請以證交所、櫃買中心公告為準。` },
+    { q: `${name}（${code}）是興櫃、上櫃還是上市股票？`, a: market
+        ? (market === "興櫃"
+            ? `${name}（${code}）目前為「興櫃」股票。興櫃是股票正式轉上櫃或上市前的交易市場，需符合條件並經櫃買中心（TPEx）審查通過才會轉上櫃／上市；是否已提出申請、進度為何，以 TPEx 櫃買中心與 MOPS 公開資訊觀測站的公告為準。`
+            : `${name}（${code}）目前為「${market}」股票，交易資訊以證交所 TWSE、櫃買中心 TPEx 每日公告為準。`)
+        : `${name}（${code}）的交易市場別整理中，請以證交所、櫃買中心公告為準。` },
     { q: `${name} 的合理股價區間大概是多少？`, a: (fvLow != null && fvHigh != null)
         ? `領富 AI 以系統化方式估算 ${name} 的合理區間約為 ${fvLow}–${fvHigh} 元（LeadFu Fair Value Range™，依公開資料整理、非目標價）。${price != null ? "目前參考價約 " + price + " 元。" : ""}`
         : `${name} 的合理區間資料整理中，可到完整分析頁查看最新估值與依據。` },
@@ -2495,7 +2500,7 @@ async function renderStockPage(url, env) {
   ];
   const faqHtml = `<div class="sd-sec"><h2>❓ ${esc(name)}（${esc(code)}）常見問題</h2>${faqs.map(f => `<div class="sd-faq"><p class="sd-faq-q">${esc(f.q)}</p><p class="sd-faq-a">${esc(f.a)}</p></div>`).join("")}</div>`;
 
-  const desc = `${name}（${code}）AI 股票分析：${level ? "風險等級" + level : "風險等級整理中"}${score != null ? "（風險分數 " + score + "/100）" : ""}、是否為注意股／處置股、${cat ? cat + "類股、" : ""}${(fvLow != null && fvHigh != null) ? "合理股價區間約 " + fvLow + "–" + fvHigh + " 元" : "合理股價區間估值"}與籌碼摘要，一頁看懂該不該買。領富 AI 系統化每日更新，資料來源 TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站。非投資建議。`;
+  const desc = `${name}（${code}）AI 股票分析${market ? "（" + market + "）" : ""}：${level ? "風險等級" + level : "風險等級整理中"}${score != null ? "（風險分數 " + score + "/100）" : ""}、是否為注意股／處置股、${cat ? cat + "類股、" : ""}${(fvLow != null && fvHigh != null) ? "合理股價區間約 " + fvLow + "–" + fvHigh + " 元" : "合理股價區間估值"}與籌碼摘要，一頁看懂該不該買。領富 AI 系統化每日更新，資料來源 TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站。非投資建議。`;
   const title = `${name} AI 分析｜${code}${(name.length + code.length) <= 9 ? ` ${level ? "風險" + level : "風險評估"}・合理價・注意股` : ((name.length + code.length) <= 12 ? ` ${level ? "風險" + level : "風險評估"}・合理價` : "")} - 領富 AI`;
   const canon = `https://leadfuai.com/stock/${encodeURIComponent(code)}`;
 
