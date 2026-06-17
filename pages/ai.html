@@ -94,7 +94,7 @@
   </div>
 </main>
 
-<script src="../js/main.js?v=3.27.0"></script>
+<script src="../js/main.js?v=3.28.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   // 🛡 ready 失敗/卡住不可拖垮整頁（白屏主因）：最多等 8 秒、出錯照常往下走
@@ -291,6 +291,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   let _pending = false;   // 防止重複送
+  // 💎 AI 每日額度（前端鉤子：VIP 無限 / 免費 10 次 / 匿名 3 次）
+  async function aiQuotaGate() {
+    const L = window.LeadFu;
+    let vs = { loggedIn: false, isVip: false };
+    try { if (L && L.getVipState) vs = await L.getVipState(); } catch (e) {}
+    if (vs.isVip) return { ok: true };   // VIP / 試用 → 無限
+    const LIMIT = vs.loggedIn ? 10 : 3;
+    const today = new Date().toISOString().slice(0, 10);
+    let rec = { day: today, n: 0 };
+    try { const r = JSON.parse(localStorage.getItem("leadfu_ai_uses") || "{}"); if (r && r.day === today) rec = r; } catch (e) {}
+    if (rec.n >= LIMIT) return { ok: false, loggedIn: vs.loggedIn };
+    rec.n += 1;
+    try { localStorage.setItem("leadfu_ai_uses", JSON.stringify(rec)); } catch (e) {}
+    return { ok: true };
+  }
+
   async function sendMessage(text) {
     text = (text || "").trim();
     if (!text) return;
@@ -305,6 +321,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderBubble(userMsg);
     saveHistory();
     scrollToBottom();
+
+    // 💎 AI 額度：VIP/試用無限;免費會員每天 10 次、匿名每天 3 次 → 觸發升級/登入鉤子
+    const _gate = await aiQuotaGate();
+    if (!_gate.ok) {
+      const isLi = _gate.loggedIn;
+      const msg = isLi
+        ? "你今天的免費 AI 對話額度（每天 10 次）用完了 🙏\nVIP 可以無限暢聊，而且每天盤後還會主動幫你盯持股、有狀況 LINE 通知你。"
+        : "免費 AI 對話每天 3 次，今天用完了 🙏\n免費登入就再送你每天 10 次，還能把自選股/持股雲端存起來、設到價提醒。";
+      const aiMsg = { role: "assistant", content: msg, ts: Date.now() };
+      history.push(aiMsg); renderBubble(aiMsg); saveHistory();
+      const cta = document.createElement("div");
+      cta.style.cssText = "text-align:center;margin:4px 0 14px;";
+      cta.innerHTML = `<a href="${isLi ? "vip.html" : "login.html"}" style="display:inline-block;background:linear-gradient(135deg,#E5C883,#C9A24B);color:#10402F;font-weight:800;padding:10px 22px;border-radius:10px;text-decoration:none;">${isLi ? "看 VIP 方案（新會員送 7 天試用）→" : "免費登入 / 註冊 →"}</a>`;
+      chatList.appendChild(cta); scrollToBottom();
+      _pending = false;
+      return;
+    }
 
     sendBtn.disabled = true;
     sendBtn.textContent = "...";

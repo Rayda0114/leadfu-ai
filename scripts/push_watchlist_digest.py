@@ -57,7 +57,7 @@ def fetch_members():
         print("[error] 缺 SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY，無法讀會員")
         sys.exit(1)
     url = (f"{SUPABASE_URL}/rest/v1/profiles"
-           "?select=id,name,watchlist,holdings,line_user_id,push_optin"
+           "?select=id,name,watchlist,holdings,line_user_id,push_optin,vip_until"
            "&line_user_id=not.is.null&push_optin=eq.true")
     req = urllib.request.Request(url, headers={
         "apikey": SERVICE_KEY,
@@ -65,7 +65,23 @@ def fetch_members():
         "Accept": "application/json",
     })
     with urllib.request.urlopen(req, timeout=20) as r:
-        return json.loads(r.read().decode("utf-8"))
+        rows = json.loads(r.read().decode("utf-8"))
+    # 每日即時 LINE 守門推播 = VIP / 試用中 專屬（免費會員登入站上仍可看每日簡報，但不主動推）
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+
+    def _vip(m):
+        t = m.get("vip_until")
+        if not t:
+            return False
+        try:
+            return datetime.fromisoformat(str(t).replace("Z", "+00:00")) > now
+        except Exception:
+            return False
+
+    members = [m for m in rows if _vip(m)]
+    print(f"[X 守門摘要] 可推會員 {len(rows)} → VIP/試用 {len(members)}（免費不主動推）")
+    return members
 
 
 def push_message(to, text):

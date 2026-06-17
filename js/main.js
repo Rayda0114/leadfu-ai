@@ -3249,6 +3249,55 @@ document.addEventListener("click", (e) => {
   openPriceAlertModal(t.dataset.code, t.dataset.name || "", t.dataset.price);
 });
 
+/* ============================================================
+ * 💎 VIP 狀態（付費牆/試用判斷的共用地基）
+ *   getVipState() → { loggedIn, isVip, isTrial, daysLeft, vipUntil, level }
+ *   匿名零負擔（不載 Supabase）；登入者懶載 profile 讀 vip_until，結果快取。
+ * ============================================================ */
+let _vipStateCache = null, _vipStatePromise = null;
+async function getVipState() {
+  if (_vipStateCache) return _vipStateCache;
+  if (!_hasSupabaseSession()) { _vipStateCache = { loggedIn: false, isVip: false, isTrial: false, daysLeft: 0, vipUntil: null, level: "" }; return _vipStateCache; }
+  if (_vipStatePromise) return _vipStatePromise;
+  _vipStatePromise = (async () => {
+    const st = { loggedIn: true, isVip: false, isTrial: false, daysLeft: 0, vipUntil: null, level: "" };
+    try {
+      const auth = await _ensureAuth();
+      if (auth && auth.getProfile) {
+        const p = await auth.getProfile();
+        if (p) {
+          st.level = p.vip_level || "";
+          const until = p.vip_until ? new Date(p.vip_until) : null;
+          if (until && until.getTime() > Date.now()) {
+            st.isVip = true; st.vipUntil = until;
+            st.daysLeft = Math.max(1, Math.ceil((until.getTime() - Date.now()) / 86400000));
+            st.isTrial = /試用|trial/i.test(p.vip_level || "");
+          }
+        }
+      }
+    } catch (e) {}
+    _vipStateCache = st;
+    return st;
+  })();
+  return _vipStatePromise;
+}
+
+/* 共用「🔒 此功能需要 VIP / 登入」鎖卡 HTML（pages 用 getVipState 後決定要不要塞）*/
+function vipLockHtml(opts) {
+  opts = opts || {};
+  const loggedIn = opts.loggedIn !== false;
+  const title = opts.title || "這是 VIP 功能";
+  const desc = opts.desc || "";
+  const href = loggedIn ? _pageRel("vip.html") : _pageRel("login.html");
+  const cta = loggedIn ? (opts.cta || "看 VIP 方案 · 7 天免費試用") : "免費登入解鎖";
+  if (!document.getElementById("lf-viplock-style")) {
+    const s = document.createElement("style"); s.id = "lf-viplock-style";
+    s.textContent = ".lf-vip-lock{text-align:center;padding:26px 20px;background:linear-gradient(135deg,#f7faf8,#eef3f0);border:1px dashed #C9A24B;border-radius:14px;}.lf-vip-lock .ic{font-size:30px;}.lf-vip-lock b{display:block;font-size:16px;color:#1B4332;margin:8px 0 4px;}.lf-vip-lock p{font-size:13.5px;color:#667;margin:0 0 14px;line-height:1.7;}.lf-vip-lock a{display:inline-block;background:linear-gradient(135deg,#E5C883,#C9A24B);color:#10402F;font-weight:800;font-size:14px;padding:10px 22px;border-radius:10px;text-decoration:none;}";
+    document.head.appendChild(s);
+  }
+  return `<div class="lf-vip-lock"><div class="ic">🔒</div><b>${title}</b><p>${desc}</p><a href="${href}">${cta} →</a></div>`;
+}
+
 window.LeadFu = {
   data: STOCK_DATA,
   fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow,
@@ -3262,6 +3311,7 @@ window.LeadFu = {
   attachTypeahead, fmtAsOf, asOfBadge,         // 共用：搜尋下拉 + 統一資料時間標示
   openPriceAlertModal, promptSaveLogin,         // 🔔 到價提醒 + 註冊軟引導
   isUsTicker, usdToTwd,                          // 🌎 美股整合：判斷美股 ticker + 美元換台幣
+  getVipState, vipLockHtml,                      // 💎 VIP 狀態 + 鎖卡 UI（付費牆/試用）
   startStockLive,  // 個股詳情頁即時報價 polling
   liveQuote: leadFuLiveQuote,  // 通用單檔即時報價（買前檢查等頁面用）
   loadKlines,      // 個股詳情頁延後載入 9.8MB K 線（不再全站每頁載）

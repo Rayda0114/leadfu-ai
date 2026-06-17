@@ -112,11 +112,27 @@ def fetch_members():
     if not (SUPABASE_URL and SERVICE_KEY):
         print("[error] 缺 SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY")
         sys.exit(1)
-    url = f"{SUPABASE_URL}/rest/v1/profiles?select=id,name,line_user_id,holdings&line_user_id=not.is.null"
+    url = f"{SUPABASE_URL}/rest/v1/profiles?select=id,name,line_user_id,holdings,vip_until&line_user_id=not.is.null"
     req = urllib.request.Request(url, headers={
         "apikey": SERVICE_KEY, "Authorization": f"Bearer {SERVICE_KEY}", "Accept": "application/json"})
     with urllib.request.urlopen(req, timeout=20) as r:
-        return json.loads(r.read().decode("utf-8"))
+        rows = json.loads(r.read().decode("utf-8"))
+    # 持股守門即時推播 = VIP / 試用中 專屬
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+
+    def _vip(m):
+        t = m.get("vip_until")
+        if not t:
+            return False
+        try:
+            return datetime.fromisoformat(str(t).replace("Z", "+00:00")) > now
+        except Exception:
+            return False
+
+    members = [m for m in rows if _vip(m)]
+    print(f"[持股守門] 可推會員 {len(rows)} → VIP/試用 {len(members)}")
+    return members
 
 
 def save_holdings(uid, holdings):
