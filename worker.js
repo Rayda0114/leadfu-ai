@@ -2564,6 +2564,12 @@ async function renderStockPage(url, env) {
   .sd-faq:first-of-type{border-top:0;padding-top:2px;}
   .sd-faq-q{font-size:14.5px;font-weight:700;color:#1B4332;margin:0 0 4px;}
   .sd-faq-a{font-size:13.5px;color:#555;line-height:1.8;margin:0;}
+  .sd-cta{background:linear-gradient(135deg,#10402F,#0A2E23);border-radius:16px;padding:18px 20px;margin:16px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 12px 30px rgba(10,46,35,.22);}
+  .sd-cta-txt{flex:1;min-width:210px;}
+  .sd-cta-txt b{display:block;color:#FAF8F2;font-size:16px;line-height:1.42;margin-bottom:5px;}
+  .sd-cta-txt span{display:block;color:rgba(250,248,242,.72);font-size:13px;line-height:1.65;}
+  .sd-cta-btn{flex:none;background:linear-gradient(135deg,#E5C883,#C9A24B);color:#10402F;font-weight:800;font-size:15px;border:0;padding:13px 24px;border-radius:999px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+  .sd-cta-btn:hover{filter:brightness(1.06);}
 </style>
 </head>
 <body>
@@ -2588,6 +2594,14 @@ async function renderStockPage(url, env) {
     <h2><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M216,56v56c0,96-88,120-88,120S40,208,40,112V56a8,8,0,0,1,8-8H208A8,8,0,0,1,216,56Z" fill="#c9a24b" opacity=".9"/><path d="M120,136V96a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,48a12,12,0,1,0-12-12A12,12,0,0,0,128,184ZM224,56v56c0,52.72-25.52,84.67-46.93,102.19-23.06,18.86-46,25.27-47,25.53a8,8,0,0,1-4.2,0c-1-.26-23.91-6.67-47-25.53C57.52,196.67,32,164.72,32,112V56A16,16,0,0,1,48,40H208A16,16,0,0,1,224,56Zm-16,0L48,56l0,56c0,37.3,13.82,67.51,41.07,89.81A128.25,128.25,0,0,0,128,223.62a129.3,129.3,0,0,0,39.41-22.2C194.34,179.16,208,149.07,208,112Z"/></svg>風險摘要</h2>
     <p class="sd-att">${esc(attLine)}</p>
     ${reasonsHtml}
+  </div>
+
+  <div class="sd-cta">
+    <div class="sd-cta-txt">
+      <b>🔔 想在「${esc(name)}」到你心中的價位時，第一時間知道？</b>
+      <span>免費註冊 → 設定到價提醒，${esc(name)} 一到價就用 LINE 通知你；還會每天盤後幫你盯它的風險與法人動向。Google／LINE 一鍵、30 秒。</span>
+    </div>
+    <button class="sd-cta-btn" data-action="price-alert" data-code="${esc(code)}" data-name="${esc(name)}" data-price="${price != null ? esc(price) : ""}">🔔 免費設到價提醒 →</button>
   </div>
 
   <div class="sd-tools">
@@ -2769,6 +2783,12 @@ async function renderUsStockPage(url, env) {
   .us-cta-btn{background:#1B4332;color:#C5A572;padding:11px 22px;border-radius:999px;text-decoration:none;font-weight:700;font-size:14px;}
   .us-cta-btn.disabled{opacity:.55;cursor:not-allowed;pointer-events:none;}
   .us-cta-note{font-size:11px;margin-top:12px;color:#1B4332;opacity:.7;}
+  .sd-cta{background:linear-gradient(135deg,#10402F,#0A2E23);border-radius:16px;padding:18px 20px;margin:16px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 12px 30px rgba(10,46,35,.22);}
+  .sd-cta-txt{flex:1;min-width:210px;}
+  .sd-cta-txt b{display:block;color:#FAF8F2;font-size:16px;line-height:1.42;margin-bottom:5px;}
+  .sd-cta-txt span{display:block;color:rgba(250,248,242,.72);font-size:13px;line-height:1.65;}
+  .sd-cta-btn{flex:none;background:linear-gradient(135deg,#E5C883,#C9A24B);color:#10402F;font-weight:800;font-size:15px;border:0;padding:13px 24px;border-radius:999px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+  .sd-cta-btn:hover{filter:brightness(1.06);}
   .sd-disc{background:#fdf6ec;border:1px solid #f0e2c8;border-radius:12px;padding:14px 16px;font-size:13px;color:#7a6a4a;line-height:1.7;margin-top:20px;}
 </style>
 </head>
@@ -2793,6 +2813,14 @@ async function renderUsStockPage(url, env) {
   <div class="sd-sec">
     <h2>💡 一眼判斷（領富 AI 整理，非買賣建議）</h2>
     ${bulletsHtml}
+  </div>
+
+  <div class="sd-cta">
+    <div class="sd-cta-txt">
+      <b>🔔 想在「${esc(nameZh)}」到你心中的價位時，第一時間知道？</b>
+      <span>免費註冊 → 設定到價提醒，${esc(nameZh)}（${esc(t)}）一到價就用 LINE 通知你。美股每日收盤後自動比對。Google／LINE 一鍵、30 秒。</span>
+    </div>
+    <button class="sd-cta-btn" data-action="price-alert" data-code="${esc(t)}" data-name="${esc(nameZh)}" data-price="${price != null ? esc(price) : ""}">🔔 免費設到價提醒 →</button>
   </div>
 
   <div class="sd-tools">
