@@ -78,6 +78,7 @@ STATIC_PAGES = [
     ("/pages/learn/margin-trading.html",            "monthly", 0.8),
     ("/pages/learn/warning-stocks.html",            "monthly", 0.85),
     ("/pages/learn/spacex-stock.html",              "weekly",  0.9),
+    ("/pages/learn/spacex-concept-stocks.html",     "weekly",  0.9),
 ]
 
 
