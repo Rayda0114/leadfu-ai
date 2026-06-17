@@ -2474,6 +2474,27 @@ async function renderStockPage(url, env) {
 
   const indLink = slug ? `/pages/industries/${slug}` : `/pages/industries`;
 
+  // 🔗 同產業相關個股（內部連結：助收錄/權重，並留住讀者）
+  const related = Object.values(D.map).filter(x => x && x.category === cat && String(x.code) !== code).slice(0, 8);
+  const relatedHtml = (cat && related.length)
+    ? `<div class="sd-sec"><h2>🏭 ${esc(cat)}・同產業相關個股</h2><div class="sd-related">${related.map(x => `<a href="/stock/${encodeURIComponent(x.code)}"><b>${esc(x.code)}</b> ${esc(x.name || "")}</a>`).join("")}</div></div>`
+    : "";
+
+  // ❓ 常見問題（資料驅動、每檔內容不同 → 命中長尾搜尋 + 爭取 FAQ 精選摘要）
+  const faqs = [
+    { q: `${name}（${code}）是注意股或處置股嗎？`, a: attYes
+        ? `是，${name} 目前列入證交所／櫃買中心的「注意股或處置股」名單，交易可能採分盤撮合或預收款券，請特別留意；實際狀態以官方每日公告為準。`
+        : `截至 ${today}，${name} 未列入注意股／處置股名單。注意股狀態每日變動，請以證交所、櫃買中心公告為準。` },
+    { q: `${name} 的合理股價區間大概是多少？`, a: (fvLow != null && fvHigh != null)
+        ? `領富 AI 以系統化方式估算 ${name} 的合理區間約為 ${fvLow}–${fvHigh} 元（LeadFu Fair Value Range™，依公開資料整理、非目標價）。${price != null ? "目前參考價約 " + price + " 元。" : ""}`
+        : `${name} 的合理區間資料整理中，可到完整分析頁查看最新估值與依據。` },
+    { q: `${name} 的投資風險高不高？`, a: `領富 AI 風險評估顯示 ${name} 風險等級為「${level || "整理中"}」${score != null ? "（風險分數 " + score + "/100）" : ""}。${reasons.length ? "主要觀察點：" + reasons.slice(0, 2).join("、") + "。" : ""}以上為公開資料的系統化整理，非投資建議。` },
+    { q: `${name} 屬於哪個產業？`, a: cat
+        ? `${name}（${code}）屬於「${cat}」類股，可在同產業頁面比較同類個股的估值與籌碼。`
+        : `${name}（${code}）的產業分類整理中。` },
+  ];
+  const faqHtml = `<div class="sd-sec"><h2>❓ ${esc(name)}（${esc(code)}）常見問題</h2>${faqs.map(f => `<div class="sd-faq"><p class="sd-faq-q">${esc(f.q)}</p><p class="sd-faq-a">${esc(f.a)}</p></div>`).join("")}</div>`;
+
   const desc = `${name}（${code}）股票分析：風險等級${level ? " " + level : "整理"}、注意股狀態、${cat ? cat + "產業、" : ""}合理區間估值與籌碼摘要。資料來源 TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站，每日更新。非投資建議。`;
   const title = `${code} ${name} 股票分析：風險・注意股・合理區間 - 領富 AI`;
   const canon = `https://leadfuai.com/stock/${encodeURIComponent(code)}`;
@@ -2487,6 +2508,7 @@ async function renderStockPage(url, env) {
         { "@type": "ListItem", "position": 2, "name": "股價總覽", "item": "https://leadfuai.com/pages/stocks" },
         { "@type": "ListItem", "position": 3, "name": `${code} ${name}` },
       ] },
+      { "@type": "FAQPage", "mainEntity": faqs.map(f => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } })) },
     ],
   });
 
@@ -2529,6 +2551,14 @@ async function renderStockPage(url, env) {
   .sd-tools a{background:#1B4332;color:#fff;padding:11px 18px;border-radius:999px;text-decoration:none;font-size:14px;font-weight:700;}
   .sd-tools a.ghost{background:#eef7f1;color:#1B4332;}
   .sd-disc{background:#fdf6ec;border:1px solid #f0e2c8;border-radius:12px;padding:14px 16px;font-size:13px;color:#7a6a4a;line-height:1.7;margin-top:20px;}
+  .sd-related{display:flex;flex-wrap:wrap;gap:8px 18px;}
+  .sd-related a{font-size:14px;color:#1B4332;text-decoration:none;}
+  .sd-related a:hover{color:#C9A24B;}
+  .sd-related a b{font-weight:800;}
+  .sd-faq{border-top:1px solid #f0f3f1;padding:11px 0;}
+  .sd-faq:first-of-type{border-top:0;padding-top:2px;}
+  .sd-faq-q{font-size:14.5px;font-weight:700;color:#1B4332;margin:0 0 4px;}
+  .sd-faq-a{font-size:13.5px;color:#555;line-height:1.8;margin:0;}
 </style>
 </head>
 <body>
@@ -2560,6 +2590,9 @@ async function renderStockPage(url, env) {
     <a class="ghost" href="/pages/check?code=${esc(code)}"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M192,112a80,80,0,1,1-80-80A80,80,0,0,1,192,112Z" fill="#c9a24b" opacity=".9"/><path d="M229.66,218.34,179.6,168.28a88.21,88.21,0,1,0-11.32,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>買前檢查</a>
     <a class="ghost" href="${indLink}">🏭 ${cat ? esc(cat) : "產業"}類股</a>
   </div>
+
+  ${faqHtml}
+  ${relatedHtml}
 
   <div class="sd-sec">
     <h2><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M232,56V200H160a32,32,0,0,0-32,32,32,32,0,0,0-32-32H24V56H96a32,32,0,0,1,32,32,32,32,0,0,1,32-32Z" fill="#c9a24b" opacity=".9"/><path d="M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z"/></svg>延伸閱讀</h2>
