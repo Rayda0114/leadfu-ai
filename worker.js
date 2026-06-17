@@ -2675,8 +2675,8 @@ async function renderUsStockPage(url, env) {
   const chgPct = (typeof s.change_pct === "number") ? s.change_pct : null;
   const pe = (typeof s.pe_ratio === "number") ? s.pe_ratio : null;
   const yld = (typeof s.yield_pct === "number") ? s.yield_pct : null;
-  const low = (typeof s.low === "number") ? s.low : (typeof s.w52_low === "number" ? s.w52_low : null);
-  const high = (typeof s.high === "number") ? s.high : (typeof s.w52_high === "number" ? s.w52_high : null);
+  const low = (typeof s.low === "number") ? s.low : null;
+  const high = (typeof s.high === "number") ? s.high : null;
   const pos = (typeof s.position === "number") ? s.position : null;
   const label = s.label || "";
   const summary = s.summary || "";

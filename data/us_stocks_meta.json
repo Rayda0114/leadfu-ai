@@ -1,7 +1,7 @@
 {
   "updatedAt": "2026-05-24",
   "source": "領富 AI · 美股精選 100（首波）",
-  "count": 100,
+  "count": 101,
   "categories": [
     "七巨頭",
     "半導體",
@@ -16,115 +16,914 @@
     "其他熱門"
   ],
   "data": {
-    "AAPL":  { "ticker": "AAPL",  "name_en": "Apple Inc.",                    "name_zh": "蘋果",         "category": "七巨頭",  "industry": "消費電子",     "description": "iPhone、Mac、服務生態系，全球最大市值公司",                "logo_domain": "apple.com" },
-    "MSFT":  { "ticker": "MSFT",  "name_en": "Microsoft Corp.",                "name_zh": "微軟",         "category": "七巨頭",  "industry": "軟體/雲端",   "description": "Windows、Office、Azure 雲端、OpenAI 大股東",                "logo_domain": "microsoft.com" },
-    "NVDA":  { "ticker": "NVDA",  "name_en": "NVIDIA Corp.",                   "name_zh": "輝達",         "category": "七巨頭",  "industry": "半導體",       "description": "AI 加速 GPU 龍頭，全球資料中心 AI 算力霸主",                  "logo_domain": "nvidia.com" },
-    "GOOGL": { "ticker": "GOOGL", "name_en": "Alphabet Inc. (Class A)",        "name_zh": "字母（Google）","category": "七巨頭",  "industry": "搜尋/廣告",   "description": "Google 搜尋、YouTube、Android、雲端、Waymo",                  "logo_domain": "abc.xyz" },
-    "AMZN":  { "ticker": "AMZN",  "name_en": "Amazon.com Inc.",                "name_zh": "亞馬遜",       "category": "七巨頭",  "industry": "電商/雲端",   "description": "全球最大電商 + AWS 雲端 + 廣告 + 物流",                       "logo_domain": "amazon.com" },
-    "META":  { "ticker": "META",  "name_en": "Meta Platforms Inc.",            "name_zh": "Meta",         "category": "七巨頭",  "industry": "社群/廣告",   "description": "Facebook、Instagram、WhatsApp、AI 與 VR 投資",                "logo_domain": "meta.com" },
-    "TSLA":  { "ticker": "TSLA",  "name_en": "Tesla Inc.",                     "name_zh": "特斯拉",       "category": "七巨頭",  "industry": "電動車",       "description": "全球電動車與儲能領導者，自駕與機器人布局",                    "logo_domain": "tesla.com" },
-
-    "TSM":   { "ticker": "TSM",   "name_en": "Taiwan Semiconductor (ADR)",     "name_zh": "台積電 ADR",   "category": "半導體",  "industry": "晶圓代工",     "description": "台積電美國存託憑證，全球先進製程龍頭",                        "logo_domain": "tsmc.com" },
-    "AVGO":  { "ticker": "AVGO",  "name_en": "Broadcom Inc.",                  "name_zh": "博通",         "category": "半導體",  "industry": "IC 設計",       "description": "網通晶片 + AI ASIC + 企業軟體（VMware）",                     "logo_domain": "broadcom.com" },
-    "AMD":   { "ticker": "AMD",   "name_en": "Advanced Micro Devices",         "name_zh": "超微",         "category": "半導體",  "industry": "CPU/GPU",      "description": "PC/伺服器 CPU 與 GPU，AI 加速器追趕 NVDA",                    "logo_domain": "amd.com" },
-    "ASML":  { "ticker": "ASML",  "name_en": "ASML Holding (ADR)",             "name_zh": "艾司摩爾",     "category": "半導體",  "industry": "半導體設備",   "description": "全球唯一 EUV 微影設備供應商，先進製程關鍵",                  "logo_domain": "asml.com" },
-    "QCOM":  { "ticker": "QCOM",  "name_en": "Qualcomm Inc.",                  "name_zh": "高通",         "category": "半導體",  "industry": "通訊晶片",     "description": "手機 SoC（Snapdragon）、5G 數據機、車用平台",                "logo_domain": "qualcomm.com" },
-    "MU":    { "ticker": "MU",    "name_en": "Micron Technology",              "name_zh": "美光",         "category": "半導體",  "industry": "記憶體",       "description": "DRAM/NAND 記憶體大廠，HBM 受惠 AI 需求",                       "logo_domain": "micron.com" },
-    "ARM":   { "ticker": "ARM",   "name_en": "Arm Holdings (ADR)",             "name_zh": "安謀",         "category": "半導體",  "industry": "IP 授權",       "description": "全球手機與行動 CPU 架構授權商",                                "logo_domain": "arm.com" },
-    "PLTR":  { "ticker": "PLTR",  "name_en": "Palantir Technologies",          "name_zh": "Palantir",     "category": "半導體",  "industry": "AI 軟體",       "description": "政府與企業 AI 資料平台（Gotham/Foundry）",                     "logo_domain": "palantir.com" },
-    "CRWD":  { "ticker": "CRWD",  "name_en": "CrowdStrike Holdings",           "name_zh": "CrowdStrike",  "category": "半導體",  "industry": "資安",         "description": "雲端 AI 端點資安（Falcon 平台）",                              "logo_domain": "crowdstrike.com" },
-    "SMCI":  { "ticker": "SMCI",  "name_en": "Super Micro Computer",           "name_zh": "美超微",       "category": "半導體",  "industry": "AI 伺服器",    "description": "AI 伺服器系統整合商，NVDA 主要合作夥伴",                       "logo_domain": "supermicro.com" },
-
-    "VOO":   { "ticker": "VOO",   "name_en": "Vanguard S&P 500 ETF",           "name_zh": "標普 500 ETF", "category": "大盤 ETF","industry": "美股大盤",     "description": "追蹤 S&P 500 指數，費用率 0.03%，最便宜大盤 ETF",              "logo_domain": "vanguard.com" },
-    "SPY":   { "ticker": "SPY",   "name_en": "SPDR S&P 500 ETF Trust",         "name_zh": "SPY",          "category": "大盤 ETF","industry": "美股大盤",     "description": "全球最大 ETF，流動性最佳，適合短線交易",                       "logo_domain": "ssga.com" },
-    "QQQ":   { "ticker": "QQQ",   "name_en": "Invesco QQQ Trust",              "name_zh": "那斯達克 100", "category": "大盤 ETF","industry": "科技大盤",     "description": "追蹤那斯達克 100，重壓科技股，AI 主軸首選",                    "logo_domain": "invesco.com" },
-    "VTI":   { "ticker": "VTI",   "name_en": "Vanguard Total Stock Market",    "name_zh": "全美股市 ETF", "category": "大盤 ETF","industry": "全美股市",     "description": "涵蓋約 4,000 檔美股全市場，含大中小型",                        "logo_domain": "vanguard.com" },
-    "DIA":   { "ticker": "DIA",   "name_en": "SPDR Dow Jones Industrial ETF",  "name_zh": "道瓊 ETF",     "category": "大盤 ETF","industry": "道瓊指數",     "description": "追蹤道瓊工業指數 30 檔藍籌股",                                  "logo_domain": "ssga.com" },
-    "IWM":   { "ticker": "IWM",   "name_en": "iShares Russell 2000 ETF",       "name_zh": "羅素 2000",    "category": "大盤 ETF","industry": "美股小型股",   "description": "追蹤羅素 2000 小型股指數，景氣循環敏感",                       "logo_domain": "ishares.com" },
-    "VXUS":  { "ticker": "VXUS",  "name_en": "Vanguard Total International",   "name_zh": "全球非美 ETF", "category": "大盤 ETF","industry": "全球股市",     "description": "美國以外全球股市，分散美股集中度",                              "logo_domain": "vanguard.com" },
-    "VEA":   { "ticker": "VEA",   "name_en": "Vanguard FTSE Developed Mkts",   "name_zh": "已開發國家 ETF","category": "大盤 ETF","industry": "已開發市場",   "description": "歐洲、日本、英國等已開發國家股市",                              "logo_domain": "vanguard.com" },
-
-    "SCHD":  { "ticker": "SCHD",  "name_en": "Schwab US Dividend Equity ETF",  "name_zh": "SCHD",         "category": "配息 ETF","industry": "高息成長",     "description": "高股息 + 股息成長，退休族最愛長期配息",                        "logo_domain": "schwab.com" },
-    "JEPI":  { "ticker": "JEPI",  "name_en": "JPMorgan Equity Premium Income", "name_zh": "JEPI",         "category": "配息 ETF","industry": "Covered Call", "description": "賣 S&P 500 covered call 月配息，年化約 7-9%",                  "logo_domain": "jpmorgan.com" },
-    "JEPQ":  { "ticker": "JEPQ",  "name_en": "JPMorgan Nasdaq Equity Premium", "name_zh": "JEPQ",         "category": "配息 ETF","industry": "Covered Call", "description": "那斯達克版 JEPI，月配息更高（年化 9-11%）",                   "logo_domain": "jpmorgan.com" },
-    "DIVO":  { "ticker": "DIVO",  "name_en": "Amplify CWP Enhanced Dividend",  "name_zh": "DIVO",         "category": "配息 ETF","industry": "藍籌高息",     "description": "精選藍籌 + covered call 月配，主動式管理",                     "logo_domain": "amplifyetfs.com" },
-    "SPYI":  { "ticker": "SPYI",  "name_en": "NEOS S&P 500 High Income ETF",   "name_zh": "SPYI",         "category": "配息 ETF","industry": "Covered Call", "description": "S&P 500 covered call 月配，年化約 12%（含稅優）",             "logo_domain": "neosfunds.com" },
-    "QQQI":  { "ticker": "QQQI",  "name_en": "NEOS Nasdaq-100 High Income",    "name_zh": "QQQI",         "category": "配息 ETF","industry": "Covered Call", "description": "那斯達克 covered call 月配，年化約 14%",                       "logo_domain": "neosfunds.com" },
-    "VYM":   { "ticker": "VYM",   "name_en": "Vanguard High Dividend Yield",   "name_zh": "VYM",          "category": "配息 ETF","industry": "高息大型股",   "description": "美股高股息大型股 ETF，費用率 0.06%",                            "logo_domain": "vanguard.com" },
-    "HDV":   { "ticker": "HDV",   "name_en": "iShares Core High Dividend",     "name_zh": "HDV",          "category": "配息 ETF","industry": "高息防禦",     "description": "嚴選高息 + 防禦型大型股（能源/醫療/民生）",                   "logo_domain": "ishares.com" },
-    "SPHD":  { "ticker": "SPHD",  "name_en": "Invesco S&P 500 High Div Low Vol","name_zh": "SPHD",        "category": "配息 ETF","industry": "高息低波",     "description": "S&P 500 內高股息 + 低波動 50 檔，月配息",                      "logo_domain": "invesco.com" },
-    "DGRO":  { "ticker": "DGRO",  "name_en": "iShares Core Dividend Growth",   "name_zh": "DGRO",         "category": "配息 ETF","industry": "股息成長",     "description": "連續 5 年以上增息個股，長線殖利率提升",                        "logo_domain": "ishares.com" },
-    "PFF":   { "ticker": "PFF",   "name_en": "iShares Preferred & Income",     "name_zh": "PFF",          "category": "配息 ETF","industry": "特別股",       "description": "美國特別股 ETF，類債券高息（年化 6%+）",                       "logo_domain": "ishares.com" },
-    "SDIV":  { "ticker": "SDIV",  "name_en": "Global X SuperDividend ETF",     "name_zh": "SDIV",         "category": "配息 ETF","industry": "全球超高息",   "description": "全球 100 檔最高股息個股月配（年化 10%+，波動大）",            "logo_domain": "globalxetfs.com" },
-
-    "XLK":   { "ticker": "XLK",   "name_en": "Tech Select Sector SPDR",        "name_zh": "科技類股 ETF", "category": "行業 ETF","industry": "科技",         "description": "S&P 500 科技類股，重壓 AAPL/MSFT/NVDA",                       "logo_domain": "ssga.com" },
-    "XLV":   { "ticker": "XLV",   "name_en": "Health Care Select SPDR",        "name_zh": "醫療類股 ETF", "category": "行業 ETF","industry": "醫療",         "description": "S&P 500 醫療類股，含藥廠/保險/設備",                          "logo_domain": "ssga.com" },
-    "XLF":   { "ticker": "XLF",   "name_en": "Financial Select SPDR",          "name_zh": "金融類股 ETF", "category": "行業 ETF","industry": "金融",         "description": "S&P 500 金融類股，含銀行/保險/券商",                          "logo_domain": "ssga.com" },
-    "XLE":   { "ticker": "XLE",   "name_en": "Energy Select SPDR",             "name_zh": "能源類股 ETF", "category": "行業 ETF","industry": "能源",         "description": "S&P 500 能源類股，重壓 XOM/CVX，油價曝險",                    "logo_domain": "ssga.com" },
-    "XLP":   { "ticker": "XLP",   "name_en": "Consumer Staples SPDR",          "name_zh": "民生消費 ETF", "category": "行業 ETF","industry": "民生消費",     "description": "S&P 500 民生必需品（PG/KO/PEP/WMT）",                          "logo_domain": "ssga.com" },
-    "XLY":   { "ticker": "XLY",   "name_en": "Consumer Discretionary SPDR",    "name_zh": "非必需消費 ETF","category": "行業 ETF","industry": "非必需消費",   "description": "S&P 500 非必需消費（AMZN/TSLA/HD/MCD）",                       "logo_domain": "ssga.com" },
-    "XLU":   { "ticker": "XLU",   "name_en": "Utilities Select SPDR",          "name_zh": "公用事業 ETF", "category": "行業 ETF","industry": "公用事業",     "description": "S&P 500 公用事業（電力/水/天然氣），防禦型",                  "logo_domain": "ssga.com" },
-    "SOXX":  { "ticker": "SOXX",  "name_en": "iShares Semiconductor ETF",      "name_zh": "半導體 ETF",   "category": "行業 ETF","industry": "半導體",       "description": "美股半導體 30 檔（含 NVDA/AVGO/TSM）",                         "logo_domain": "ishares.com" },
-    "SMH":   { "ticker": "SMH",   "name_en": "VanEck Semiconductor ETF",       "name_zh": "SMH",          "category": "行業 ETF","industry": "半導體",       "description": "全球半導體 25 檔，集中度比 SOXX 高",                            "logo_domain": "vaneck.com" },
-    "IBB":   { "ticker": "IBB",   "name_en": "iShares Biotechnology ETF",      "name_zh": "生技 ETF",     "category": "行業 ETF","industry": "生技醫藥",     "description": "那斯達克生技指數，新藥開發曝險",                                "logo_domain": "ishares.com" },
-
-    "JPM":    { "ticker": "JPM",    "name_en": "JPMorgan Chase & Co.",         "name_zh": "摩根大通",     "category": "道瓊藍籌","industry": "銀行",         "description": "美國最大銀行，投行/消金/資管全方位",                            "logo_domain": "jpmorganchase.com" },
-    "V":      { "ticker": "V",      "name_en": "Visa Inc.",                    "name_zh": "Visa",         "category": "道瓊藍籌","industry": "支付網絡",     "description": "全球最大信用卡支付網絡",                                          "logo_domain": "visa.com" },
-    "MA":     { "ticker": "MA",     "name_en": "Mastercard Inc.",              "name_zh": "萬事達",       "category": "道瓊藍籌","industry": "支付網絡",     "description": "全球第二大信用卡支付網絡",                                        "logo_domain": "mastercard.com" },
-    "JNJ":    { "ticker": "JNJ",    "name_en": "Johnson & Johnson",            "name_zh": "嬌生",         "category": "道瓊藍籌","industry": "醫療藥廠",     "description": "醫療設備、製藥、消費品三大事業",                                  "logo_domain": "jnj.com" },
-    "PG":     { "ticker": "PG",     "name_en": "Procter & Gamble",             "name_zh": "寶僑",         "category": "道瓊藍籌","industry": "民生消費",     "description": "全球最大日用消費品（汰漬/吉列/幫寶適）",                        "logo_domain": "pg.com" },
-    "KO":     { "ticker": "KO",     "name_en": "Coca-Cola Company",            "name_zh": "可口可樂",     "category": "道瓊藍籌","industry": "飲料",         "description": "全球飲料龍頭，巴菲特長期持股",                                    "logo_domain": "coca-colacompany.com" },
-    "PEP":    { "ticker": "PEP",    "name_en": "PepsiCo Inc.",                 "name_zh": "百事",         "category": "道瓊藍籌","industry": "飲料/零食",   "description": "飲料 + Frito-Lay 零食雙引擎",                                     "logo_domain": "pepsico.com" },
-    "WMT":    { "ticker": "WMT",    "name_en": "Walmart Inc.",                 "name_zh": "沃爾瑪",       "category": "道瓊藍籌","industry": "零售",         "description": "全球最大零售商，實體 + 電商雙軌",                                 "logo_domain": "walmart.com" },
-    "HD":     { "ticker": "HD",     "name_en": "Home Depot Inc.",              "name_zh": "家得寶",       "category": "道瓊藍籌","industry": "居家零售",     "description": "全美最大居家修繕零售商",                                          "logo_domain": "homedepot.com" },
-    "UNH":    { "ticker": "UNH",    "name_en": "UnitedHealth Group",           "name_zh": "聯合健康",     "category": "道瓊藍籌","industry": "醫療保險",     "description": "全美最大醫療保險與健康照護集團",                                  "logo_domain": "unitedhealthgroup.com" },
-    "XOM":    { "ticker": "XOM",    "name_en": "Exxon Mobil Corp.",            "name_zh": "艾克森美孚",   "category": "道瓊藍籌","industry": "石油",         "description": "美國最大石油公司，上中下游一條龍",                                "logo_domain": "exxonmobil.com" },
-    "CVX":    { "ticker": "CVX",    "name_en": "Chevron Corp.",                "name_zh": "雪佛龍",       "category": "道瓊藍籌","industry": "石油",         "description": "美國第二大石油公司，巴菲特持股",                                  "logo_domain": "chevron.com" },
-    "BRK-B":  { "ticker": "BRK-B",  "name_en": "Berkshire Hathaway B",         "name_zh": "波克夏 B",     "category": "道瓊藍籌","industry": "綜合控股",     "description": "巴菲特控股集團，保險 + 鐵路 + 能源 + 投資",                     "logo_domain": "berkshirehathaway.com" },
-    "MCD":    { "ticker": "MCD",    "name_en": "McDonald's Corp.",             "name_zh": "麥當勞",       "category": "道瓊藍籌","industry": "餐飲",         "description": "全球最大連鎖速食，房地產收租模式",                                "logo_domain": "mcdonalds.com" },
-    "DIS":    { "ticker": "DIS",    "name_en": "Walt Disney Company",          "name_zh": "迪士尼",       "category": "道瓊藍籌","industry": "媒體娛樂",     "description": "影視/主題樂園/串流（Disney+）",                                   "logo_domain": "disney.com" },
-
-    "T":     { "ticker": "T",     "name_en": "AT&T Inc.",                      "name_zh": "AT&T",         "category": "配息個股","industry": "電信",         "description": "美國電信大廠，高股息防禦型（5%+）",                            "logo_domain": "att.com" },
-    "VZ":    { "ticker": "VZ",    "name_en": "Verizon Communications",         "name_zh": "Verizon",      "category": "配息個股","industry": "電信",         "description": "美國最大無線通訊商，高股息（6%+）",                            "logo_domain": "verizon.com" },
-    "O":     { "ticker": "O",     "name_en": "Realty Income Corp.",            "name_zh": "Realty Income","category": "配息個股","industry": "REIT",         "description": "月配息 REIT 王者，連續 600+ 個月配息",                          "logo_domain": "realtyincome.com" },
-    "PFE":   { "ticker": "PFE",   "name_en": "Pfizer Inc.",                    "name_zh": "輝瑞",         "category": "配息個股","industry": "製藥",         "description": "美國大型藥廠，COVID 疫苗代表，高股息",                          "logo_domain": "pfizer.com" },
-    "ABBV":  { "ticker": "ABBV",  "name_en": "AbbVie Inc.",                    "name_zh": "艾伯維",       "category": "配息個股","industry": "製藥",         "description": "免疫 + 神經科藥廠（修美樂），股息成長 5%+",                    "logo_domain": "abbvie.com" },
-    "MRK":   { "ticker": "MRK",   "name_en": "Merck & Co.",                    "name_zh": "默克",         "category": "配息個股","industry": "製藥",         "description": "腫瘤 + 疫苗 + 動物保健，Keytruda 王者",                         "logo_domain": "merck.com" },
-    "LLY":   { "ticker": "LLY",   "name_en": "Eli Lilly and Company",          "name_zh": "禮來",         "category": "配息個股","industry": "製藥",         "description": "減重藥（Mounjaro/Zepbound）王者，市值飆升",                     "logo_domain": "lilly.com" },
-    "ABT":   { "ticker": "ABT",   "name_en": "Abbott Laboratories",            "name_zh": "亞培",         "category": "配息個股","industry": "醫療設備",     "description": "醫療設備 + 診斷 + 嬰兒營養品",                                   "logo_domain": "abbott.com" },
-    "MDT":   { "ticker": "MDT",   "name_en": "Medtronic plc",                  "name_zh": "美敦力",       "category": "配息個股","industry": "醫療設備",     "description": "全球最大醫療設備（心臟/糖尿病/外科）",                          "logo_domain": "medtronic.com" },
-    "MO":    { "ticker": "MO",    "name_en": "Altria Group",                   "name_zh": "奧馳亞",       "category": "配息個股","industry": "菸草",         "description": "美國菸草巨擘（萬寶路），股息 7%+",                              "logo_domain": "altria.com" },
-    "PM":    { "ticker": "PM",    "name_en": "Philip Morris International",    "name_zh": "菲利普莫里斯", "category": "配息個股","industry": "菸草",         "description": "國際菸草（IQOS），股息 4-5%",                                   "logo_domain": "pmi.com" },
-    "IBM":   { "ticker": "IBM",   "name_en": "International Business Machines","name_zh": "IBM",          "category": "配息個股","industry": "企業 IT",     "description": "企業 IT + AI（Watson）+ 雲端（Red Hat），股息 3-4%",          "logo_domain": "ibm.com" },
-
-    "BABA":  { "ticker": "BABA",  "name_en": "Alibaba Group (ADR)",            "name_zh": "阿里巴巴",     "category": "中概 ADR","industry": "電商/雲端",   "description": "中國最大電商 + 雲端 ADR",                                       "logo_domain": "alibabagroup.com" },
-    "JD":    { "ticker": "JD",    "name_en": "JD.com Inc. (ADR)",              "name_zh": "京東",         "category": "中概 ADR","industry": "電商物流",     "description": "中國 B2C 電商 + 自營物流 ADR",                                  "logo_domain": "jd.com" },
-    "PDD":   { "ticker": "PDD",   "name_en": "PDD Holdings (Pinduoduo/Temu)",  "name_zh": "拼多多/Temu",  "category": "中概 ADR","industry": "電商",         "description": "拼多多 + Temu 跨境電商，成長最快",                              "logo_domain": "pddholdings.com" },
-    "BIDU":  { "ticker": "BIDU",  "name_en": "Baidu Inc. (ADR)",               "name_zh": "百度",         "category": "中概 ADR","industry": "搜尋/AI",     "description": "中國搜尋龍頭 + 文心一言 AI + 自駕（Apollo）",                  "logo_domain": "baidu.com" },
-    "NIO":   { "ticker": "NIO",   "name_en": "NIO Inc. (ADR)",                 "name_zh": "蔚來汽車",     "category": "中概 ADR","industry": "電動車",       "description": "中國電動車新勢力（換電商業模式）",                              "logo_domain": "nio.com" },
-    "TM":    { "ticker": "TM",    "name_en": "Toyota Motor Corp. (ADR)",       "name_zh": "豐田汽車",     "category": "中概 ADR","industry": "汽車",         "description": "日本豐田 ADR，全球最大車廠（油電霸主）",                        "logo_domain": "toyota.com" },
-
-    "IBIT":  { "ticker": "IBIT",  "name_en": "iShares Bitcoin Trust",          "name_zh": "IBIT",         "category": "加密/主題","industry": "Bitcoin ETF","description": "BlackRock 比特幣現貨 ETF，主流首選",                            "logo_domain": "ishares.com" },
-    "FBTC":  { "ticker": "FBTC",  "name_en": "Fidelity Wise Origin Bitcoin",   "name_zh": "FBTC",         "category": "加密/主題","industry": "Bitcoin ETF","description": "Fidelity 比特幣現貨 ETF，費率低",                                "logo_domain": "fidelity.com" },
-    "MSTR":  { "ticker": "MSTR",  "name_en": "MicroStrategy Inc.",             "name_zh": "MicroStrategy","category": "加密/主題","industry": "BTC 持倉股", "description": "全球最大企業比特幣持倉（>40 萬枚 BTC）",                        "logo_domain": "microstrategy.com" },
-    "COIN":  { "ticker": "COIN",  "name_en": "Coinbase Global",                "name_zh": "Coinbase",     "category": "加密/主題","industry": "加密交易所","description": "美國最大加密貨幣交易所，受惠加密牛市",                          "logo_domain": "coinbase.com" },
-    "RIOT":  { "ticker": "RIOT",  "name_en": "Riot Platforms",                 "name_zh": "Riot",         "category": "加密/主題","industry": "BTC 礦業",    "description": "比特幣挖礦上市公司，價格隨 BTC 波動",                          "logo_domain": "riotplatforms.com" },
-
-    "GLD":   { "ticker": "GLD",   "name_en": "SPDR Gold Shares",               "name_zh": "黃金 ETF",     "category": "退休防禦","industry": "黃金",         "description": "全球最大黃金 ETF，避險資產代表",                                "logo_domain": "ssga.com" },
-    "SLV":   { "ticker": "SLV",   "name_en": "iShares Silver Trust",           "name_zh": "白銀 ETF",     "category": "退休防禦","industry": "白銀",         "description": "白銀現貨 ETF，工業 + 貴金屬雙屬性",                            "logo_domain": "ishares.com" },
-    "TLT":   { "ticker": "TLT",   "name_en": "iShares 20+ Year Treasury Bond", "name_zh": "TLT",          "category": "退休防禦","industry": "美國公債",     "description": "長天期美國公債 ETF，利率敏感",                                  "logo_domain": "ishares.com" },
-    "IEF":   { "ticker": "IEF",   "name_en": "iShares 7-10 Year Treasury",     "name_zh": "IEF",          "category": "退休防禦","industry": "美國公債",     "description": "中天期美國公債 ETF，波動較小",                                  "logo_domain": "ishares.com" },
-    "SHY":   { "ticker": "SHY",   "name_en": "iShares 1-3 Year Treasury",      "name_zh": "SHY",          "category": "退休防禦","industry": "美國公債",     "description": "短天期美國公債 ETF，類現金停泊",                                "logo_domain": "ishares.com" },
-    "VNQ":   { "ticker": "VNQ",   "name_en": "Vanguard Real Estate ETF",       "name_zh": "美國 REIT ETF","category": "退休防禦","industry": "REIT",         "description": "美國不動產投資信託 ETF，配息穩定",                              "logo_domain": "vanguard.com" },
-    "GLDM":  { "ticker": "GLDM",  "name_en": "SPDR Gold MiniShares",           "name_zh": "GLDM",         "category": "退休防禦","industry": "黃金",         "description": "GLD 迷你版，費率更低（0.10%），小資族首選",                    "logo_domain": "ssga.com" },
-    "USFR":  { "ticker": "USFR",  "name_en": "WisdomTree Floating Rate Treas.","name_zh": "USFR",         "category": "退休防禦","industry": "浮動利率公債","description": "浮動利率美國公債 ETF，類貨幣市場基金",                          "logo_domain": "wisdomtree.com" },
-
-    "NFLX":  { "ticker": "NFLX",  "name_en": "Netflix Inc.",                   "name_zh": "Netflix",      "category": "其他熱門","industry": "串流媒體",     "description": "全球最大串流平台，廣告版 + 體育布局",                          "logo_domain": "netflix.com" },
-    "SHOP":  { "ticker": "SHOP",  "name_en": "Shopify Inc.",                   "name_zh": "Shopify",      "category": "其他熱門","industry": "電商 SaaS",   "description": "全球第二大電商平台（D2C 開店 SaaS）",                          "logo_domain": "shopify.com" },
-    "ADBE":  { "ticker": "ADBE",  "name_en": "Adobe Inc.",                     "name_zh": "Adobe",        "category": "其他熱門","industry": "創意軟體",     "description": "Photoshop/Illustrator 雲端訂閱龍頭 + Firefly AI",              "logo_domain": "adobe.com" },
-    "CRM":   { "ticker": "CRM",   "name_en": "Salesforce Inc.",                "name_zh": "Salesforce",   "category": "其他熱門","industry": "CRM SaaS",   "description": "全球最大 CRM 雲端平台 + Agentforce AI",                         "logo_domain": "salesforce.com" },
-    "ORCL":  { "ticker": "ORCL",  "name_en": "Oracle Corp.",                   "name_zh": "甲骨文",       "category": "其他熱門","industry": "資料庫/雲端","description": "企業資料庫龍頭 + OCI 雲端（OpenAI 合作）",                     "logo_domain": "oracle.com" },
-    "CSCO":  { "ticker": "CSCO",  "name_en": "Cisco Systems",                  "name_zh": "思科",         "category": "其他熱門","industry": "網通設備",     "description": "全球最大網通設備商，企業網路與資安",                            "logo_domain": "cisco.com" },
-    "INTC":  { "ticker": "INTC",  "name_en": "Intel Corp.",                    "name_zh": "英特爾",       "category": "其他熱門","industry": "半導體",       "description": "美國 CPU 老大（轉型代工中），政策受惠（CHIPS Act）",          "logo_domain": "intel.com" }
+    "AAPL": {
+      "ticker": "AAPL",
+      "name_en": "Apple Inc.",
+      "name_zh": "蘋果",
+      "category": "七巨頭",
+      "industry": "消費電子",
+      "description": "iPhone、Mac、服務生態系，全球最大市值公司",
+      "logo_domain": "apple.com"
+    },
+    "MSFT": {
+      "ticker": "MSFT",
+      "name_en": "Microsoft Corp.",
+      "name_zh": "微軟",
+      "category": "七巨頭",
+      "industry": "軟體/雲端",
+      "description": "Windows、Office、Azure 雲端、OpenAI 大股東",
+      "logo_domain": "microsoft.com"
+    },
+    "NVDA": {
+      "ticker": "NVDA",
+      "name_en": "NVIDIA Corp.",
+      "name_zh": "輝達",
+      "category": "七巨頭",
+      "industry": "半導體",
+      "description": "AI 加速 GPU 龍頭，全球資料中心 AI 算力霸主",
+      "logo_domain": "nvidia.com"
+    },
+    "GOOGL": {
+      "ticker": "GOOGL",
+      "name_en": "Alphabet Inc. (Class A)",
+      "name_zh": "字母（Google）",
+      "category": "七巨頭",
+      "industry": "搜尋/廣告",
+      "description": "Google 搜尋、YouTube、Android、雲端、Waymo",
+      "logo_domain": "abc.xyz"
+    },
+    "AMZN": {
+      "ticker": "AMZN",
+      "name_en": "Amazon.com Inc.",
+      "name_zh": "亞馬遜",
+      "category": "七巨頭",
+      "industry": "電商/雲端",
+      "description": "全球最大電商 + AWS 雲端 + 廣告 + 物流",
+      "logo_domain": "amazon.com"
+    },
+    "META": {
+      "ticker": "META",
+      "name_en": "Meta Platforms Inc.",
+      "name_zh": "Meta",
+      "category": "七巨頭",
+      "industry": "社群/廣告",
+      "description": "Facebook、Instagram、WhatsApp、AI 與 VR 投資",
+      "logo_domain": "meta.com"
+    },
+    "TSLA": {
+      "ticker": "TSLA",
+      "name_en": "Tesla Inc.",
+      "name_zh": "特斯拉",
+      "category": "七巨頭",
+      "industry": "電動車",
+      "description": "全球電動車與儲能領導者，自駕與機器人布局",
+      "logo_domain": "tesla.com"
+    },
+    "TSM": {
+      "ticker": "TSM",
+      "name_en": "Taiwan Semiconductor (ADR)",
+      "name_zh": "台積電 ADR",
+      "category": "半導體",
+      "industry": "晶圓代工",
+      "description": "台積電美國存託憑證，全球先進製程龍頭",
+      "logo_domain": "tsmc.com"
+    },
+    "AVGO": {
+      "ticker": "AVGO",
+      "name_en": "Broadcom Inc.",
+      "name_zh": "博通",
+      "category": "半導體",
+      "industry": "IC 設計",
+      "description": "網通晶片 + AI ASIC + 企業軟體（VMware）",
+      "logo_domain": "broadcom.com"
+    },
+    "AMD": {
+      "ticker": "AMD",
+      "name_en": "Advanced Micro Devices",
+      "name_zh": "超微",
+      "category": "半導體",
+      "industry": "CPU/GPU",
+      "description": "PC/伺服器 CPU 與 GPU，AI 加速器追趕 NVDA",
+      "logo_domain": "amd.com"
+    },
+    "ASML": {
+      "ticker": "ASML",
+      "name_en": "ASML Holding (ADR)",
+      "name_zh": "艾司摩爾",
+      "category": "半導體",
+      "industry": "半導體設備",
+      "description": "全球唯一 EUV 微影設備供應商，先進製程關鍵",
+      "logo_domain": "asml.com"
+    },
+    "QCOM": {
+      "ticker": "QCOM",
+      "name_en": "Qualcomm Inc.",
+      "name_zh": "高通",
+      "category": "半導體",
+      "industry": "通訊晶片",
+      "description": "手機 SoC（Snapdragon）、5G 數據機、車用平台",
+      "logo_domain": "qualcomm.com"
+    },
+    "MU": {
+      "ticker": "MU",
+      "name_en": "Micron Technology",
+      "name_zh": "美光",
+      "category": "半導體",
+      "industry": "記憶體",
+      "description": "DRAM/NAND 記憶體大廠，HBM 受惠 AI 需求",
+      "logo_domain": "micron.com"
+    },
+    "ARM": {
+      "ticker": "ARM",
+      "name_en": "Arm Holdings (ADR)",
+      "name_zh": "安謀",
+      "category": "半導體",
+      "industry": "IP 授權",
+      "description": "全球手機與行動 CPU 架構授權商",
+      "logo_domain": "arm.com"
+    },
+    "PLTR": {
+      "ticker": "PLTR",
+      "name_en": "Palantir Technologies",
+      "name_zh": "Palantir",
+      "category": "半導體",
+      "industry": "AI 軟體",
+      "description": "政府與企業 AI 資料平台（Gotham/Foundry）",
+      "logo_domain": "palantir.com"
+    },
+    "CRWD": {
+      "ticker": "CRWD",
+      "name_en": "CrowdStrike Holdings",
+      "name_zh": "CrowdStrike",
+      "category": "半導體",
+      "industry": "資安",
+      "description": "雲端 AI 端點資安（Falcon 平台）",
+      "logo_domain": "crowdstrike.com"
+    },
+    "SMCI": {
+      "ticker": "SMCI",
+      "name_en": "Super Micro Computer",
+      "name_zh": "美超微",
+      "category": "半導體",
+      "industry": "AI 伺服器",
+      "description": "AI 伺服器系統整合商，NVDA 主要合作夥伴",
+      "logo_domain": "supermicro.com"
+    },
+    "VOO": {
+      "ticker": "VOO",
+      "name_en": "Vanguard S&P 500 ETF",
+      "name_zh": "標普 500 ETF",
+      "category": "大盤 ETF",
+      "industry": "美股大盤",
+      "description": "追蹤 S&P 500 指數，費用率 0.03%，最便宜大盤 ETF",
+      "logo_domain": "vanguard.com"
+    },
+    "SPY": {
+      "ticker": "SPY",
+      "name_en": "SPDR S&P 500 ETF Trust",
+      "name_zh": "SPY",
+      "category": "大盤 ETF",
+      "industry": "美股大盤",
+      "description": "全球最大 ETF，流動性最佳，適合短線交易",
+      "logo_domain": "ssga.com"
+    },
+    "QQQ": {
+      "ticker": "QQQ",
+      "name_en": "Invesco QQQ Trust",
+      "name_zh": "那斯達克 100",
+      "category": "大盤 ETF",
+      "industry": "科技大盤",
+      "description": "追蹤那斯達克 100，重壓科技股，AI 主軸首選",
+      "logo_domain": "invesco.com"
+    },
+    "VTI": {
+      "ticker": "VTI",
+      "name_en": "Vanguard Total Stock Market",
+      "name_zh": "全美股市 ETF",
+      "category": "大盤 ETF",
+      "industry": "全美股市",
+      "description": "涵蓋約 4,000 檔美股全市場，含大中小型",
+      "logo_domain": "vanguard.com"
+    },
+    "DIA": {
+      "ticker": "DIA",
+      "name_en": "SPDR Dow Jones Industrial ETF",
+      "name_zh": "道瓊 ETF",
+      "category": "大盤 ETF",
+      "industry": "道瓊指數",
+      "description": "追蹤道瓊工業指數 30 檔藍籌股",
+      "logo_domain": "ssga.com"
+    },
+    "IWM": {
+      "ticker": "IWM",
+      "name_en": "iShares Russell 2000 ETF",
+      "name_zh": "羅素 2000",
+      "category": "大盤 ETF",
+      "industry": "美股小型股",
+      "description": "追蹤羅素 2000 小型股指數，景氣循環敏感",
+      "logo_domain": "ishares.com"
+    },
+    "VXUS": {
+      "ticker": "VXUS",
+      "name_en": "Vanguard Total International",
+      "name_zh": "全球非美 ETF",
+      "category": "大盤 ETF",
+      "industry": "全球股市",
+      "description": "美國以外全球股市，分散美股集中度",
+      "logo_domain": "vanguard.com"
+    },
+    "VEA": {
+      "ticker": "VEA",
+      "name_en": "Vanguard FTSE Developed Mkts",
+      "name_zh": "已開發國家 ETF",
+      "category": "大盤 ETF",
+      "industry": "已開發市場",
+      "description": "歐洲、日本、英國等已開發國家股市",
+      "logo_domain": "vanguard.com"
+    },
+    "SCHD": {
+      "ticker": "SCHD",
+      "name_en": "Schwab US Dividend Equity ETF",
+      "name_zh": "SCHD",
+      "category": "配息 ETF",
+      "industry": "高息成長",
+      "description": "高股息 + 股息成長，退休族最愛長期配息",
+      "logo_domain": "schwab.com"
+    },
+    "JEPI": {
+      "ticker": "JEPI",
+      "name_en": "JPMorgan Equity Premium Income",
+      "name_zh": "JEPI",
+      "category": "配息 ETF",
+      "industry": "Covered Call",
+      "description": "賣 S&P 500 covered call 月配息，年化約 7-9%",
+      "logo_domain": "jpmorgan.com"
+    },
+    "JEPQ": {
+      "ticker": "JEPQ",
+      "name_en": "JPMorgan Nasdaq Equity Premium",
+      "name_zh": "JEPQ",
+      "category": "配息 ETF",
+      "industry": "Covered Call",
+      "description": "那斯達克版 JEPI，月配息更高（年化 9-11%）",
+      "logo_domain": "jpmorgan.com"
+    },
+    "DIVO": {
+      "ticker": "DIVO",
+      "name_en": "Amplify CWP Enhanced Dividend",
+      "name_zh": "DIVO",
+      "category": "配息 ETF",
+      "industry": "藍籌高息",
+      "description": "精選藍籌 + covered call 月配，主動式管理",
+      "logo_domain": "amplifyetfs.com"
+    },
+    "SPYI": {
+      "ticker": "SPYI",
+      "name_en": "NEOS S&P 500 High Income ETF",
+      "name_zh": "SPYI",
+      "category": "配息 ETF",
+      "industry": "Covered Call",
+      "description": "S&P 500 covered call 月配，年化約 12%（含稅優）",
+      "logo_domain": "neosfunds.com"
+    },
+    "QQQI": {
+      "ticker": "QQQI",
+      "name_en": "NEOS Nasdaq-100 High Income",
+      "name_zh": "QQQI",
+      "category": "配息 ETF",
+      "industry": "Covered Call",
+      "description": "那斯達克 covered call 月配，年化約 14%",
+      "logo_domain": "neosfunds.com"
+    },
+    "VYM": {
+      "ticker": "VYM",
+      "name_en": "Vanguard High Dividend Yield",
+      "name_zh": "VYM",
+      "category": "配息 ETF",
+      "industry": "高息大型股",
+      "description": "美股高股息大型股 ETF，費用率 0.06%",
+      "logo_domain": "vanguard.com"
+    },
+    "HDV": {
+      "ticker": "HDV",
+      "name_en": "iShares Core High Dividend",
+      "name_zh": "HDV",
+      "category": "配息 ETF",
+      "industry": "高息防禦",
+      "description": "嚴選高息 + 防禦型大型股（能源/醫療/民生）",
+      "logo_domain": "ishares.com"
+    },
+    "SPHD": {
+      "ticker": "SPHD",
+      "name_en": "Invesco S&P 500 High Div Low Vol",
+      "name_zh": "SPHD",
+      "category": "配息 ETF",
+      "industry": "高息低波",
+      "description": "S&P 500 內高股息 + 低波動 50 檔，月配息",
+      "logo_domain": "invesco.com"
+    },
+    "DGRO": {
+      "ticker": "DGRO",
+      "name_en": "iShares Core Dividend Growth",
+      "name_zh": "DGRO",
+      "category": "配息 ETF",
+      "industry": "股息成長",
+      "description": "連續 5 年以上增息個股，長線殖利率提升",
+      "logo_domain": "ishares.com"
+    },
+    "PFF": {
+      "ticker": "PFF",
+      "name_en": "iShares Preferred & Income",
+      "name_zh": "PFF",
+      "category": "配息 ETF",
+      "industry": "特別股",
+      "description": "美國特別股 ETF，類債券高息（年化 6%+）",
+      "logo_domain": "ishares.com"
+    },
+    "SDIV": {
+      "ticker": "SDIV",
+      "name_en": "Global X SuperDividend ETF",
+      "name_zh": "SDIV",
+      "category": "配息 ETF",
+      "industry": "全球超高息",
+      "description": "全球 100 檔最高股息個股月配（年化 10%+，波動大）",
+      "logo_domain": "globalxetfs.com"
+    },
+    "XLK": {
+      "ticker": "XLK",
+      "name_en": "Tech Select Sector SPDR",
+      "name_zh": "科技類股 ETF",
+      "category": "行業 ETF",
+      "industry": "科技",
+      "description": "S&P 500 科技類股，重壓 AAPL/MSFT/NVDA",
+      "logo_domain": "ssga.com"
+    },
+    "XLV": {
+      "ticker": "XLV",
+      "name_en": "Health Care Select SPDR",
+      "name_zh": "醫療類股 ETF",
+      "category": "行業 ETF",
+      "industry": "醫療",
+      "description": "S&P 500 醫療類股，含藥廠/保險/設備",
+      "logo_domain": "ssga.com"
+    },
+    "XLF": {
+      "ticker": "XLF",
+      "name_en": "Financial Select SPDR",
+      "name_zh": "金融類股 ETF",
+      "category": "行業 ETF",
+      "industry": "金融",
+      "description": "S&P 500 金融類股，含銀行/保險/券商",
+      "logo_domain": "ssga.com"
+    },
+    "XLE": {
+      "ticker": "XLE",
+      "name_en": "Energy Select SPDR",
+      "name_zh": "能源類股 ETF",
+      "category": "行業 ETF",
+      "industry": "能源",
+      "description": "S&P 500 能源類股，重壓 XOM/CVX，油價曝險",
+      "logo_domain": "ssga.com"
+    },
+    "XLP": {
+      "ticker": "XLP",
+      "name_en": "Consumer Staples SPDR",
+      "name_zh": "民生消費 ETF",
+      "category": "行業 ETF",
+      "industry": "民生消費",
+      "description": "S&P 500 民生必需品（PG/KO/PEP/WMT）",
+      "logo_domain": "ssga.com"
+    },
+    "XLY": {
+      "ticker": "XLY",
+      "name_en": "Consumer Discretionary SPDR",
+      "name_zh": "非必需消費 ETF",
+      "category": "行業 ETF",
+      "industry": "非必需消費",
+      "description": "S&P 500 非必需消費（AMZN/TSLA/HD/MCD）",
+      "logo_domain": "ssga.com"
+    },
+    "XLU": {
+      "ticker": "XLU",
+      "name_en": "Utilities Select SPDR",
+      "name_zh": "公用事業 ETF",
+      "category": "行業 ETF",
+      "industry": "公用事業",
+      "description": "S&P 500 公用事業（電力/水/天然氣），防禦型",
+      "logo_domain": "ssga.com"
+    },
+    "SOXX": {
+      "ticker": "SOXX",
+      "name_en": "iShares Semiconductor ETF",
+      "name_zh": "半導體 ETF",
+      "category": "行業 ETF",
+      "industry": "半導體",
+      "description": "美股半導體 30 檔（含 NVDA/AVGO/TSM）",
+      "logo_domain": "ishares.com"
+    },
+    "SMH": {
+      "ticker": "SMH",
+      "name_en": "VanEck Semiconductor ETF",
+      "name_zh": "SMH",
+      "category": "行業 ETF",
+      "industry": "半導體",
+      "description": "全球半導體 25 檔，集中度比 SOXX 高",
+      "logo_domain": "vaneck.com"
+    },
+    "IBB": {
+      "ticker": "IBB",
+      "name_en": "iShares Biotechnology ETF",
+      "name_zh": "生技 ETF",
+      "category": "行業 ETF",
+      "industry": "生技醫藥",
+      "description": "那斯達克生技指數，新藥開發曝險",
+      "logo_domain": "ishares.com"
+    },
+    "JPM": {
+      "ticker": "JPM",
+      "name_en": "JPMorgan Chase & Co.",
+      "name_zh": "摩根大通",
+      "category": "道瓊藍籌",
+      "industry": "銀行",
+      "description": "美國最大銀行，投行/消金/資管全方位",
+      "logo_domain": "jpmorganchase.com"
+    },
+    "V": {
+      "ticker": "V",
+      "name_en": "Visa Inc.",
+      "name_zh": "Visa",
+      "category": "道瓊藍籌",
+      "industry": "支付網絡",
+      "description": "全球最大信用卡支付網絡",
+      "logo_domain": "visa.com"
+    },
+    "MA": {
+      "ticker": "MA",
+      "name_en": "Mastercard Inc.",
+      "name_zh": "萬事達",
+      "category": "道瓊藍籌",
+      "industry": "支付網絡",
+      "description": "全球第二大信用卡支付網絡",
+      "logo_domain": "mastercard.com"
+    },
+    "JNJ": {
+      "ticker": "JNJ",
+      "name_en": "Johnson & Johnson",
+      "name_zh": "嬌生",
+      "category": "道瓊藍籌",
+      "industry": "醫療藥廠",
+      "description": "醫療設備、製藥、消費品三大事業",
+      "logo_domain": "jnj.com"
+    },
+    "PG": {
+      "ticker": "PG",
+      "name_en": "Procter & Gamble",
+      "name_zh": "寶僑",
+      "category": "道瓊藍籌",
+      "industry": "民生消費",
+      "description": "全球最大日用消費品（汰漬/吉列/幫寶適）",
+      "logo_domain": "pg.com"
+    },
+    "KO": {
+      "ticker": "KO",
+      "name_en": "Coca-Cola Company",
+      "name_zh": "可口可樂",
+      "category": "道瓊藍籌",
+      "industry": "飲料",
+      "description": "全球飲料龍頭，巴菲特長期持股",
+      "logo_domain": "coca-colacompany.com"
+    },
+    "PEP": {
+      "ticker": "PEP",
+      "name_en": "PepsiCo Inc.",
+      "name_zh": "百事",
+      "category": "道瓊藍籌",
+      "industry": "飲料/零食",
+      "description": "飲料 + Frito-Lay 零食雙引擎",
+      "logo_domain": "pepsico.com"
+    },
+    "WMT": {
+      "ticker": "WMT",
+      "name_en": "Walmart Inc.",
+      "name_zh": "沃爾瑪",
+      "category": "道瓊藍籌",
+      "industry": "零售",
+      "description": "全球最大零售商，實體 + 電商雙軌",
+      "logo_domain": "walmart.com"
+    },
+    "HD": {
+      "ticker": "HD",
+      "name_en": "Home Depot Inc.",
+      "name_zh": "家得寶",
+      "category": "道瓊藍籌",
+      "industry": "居家零售",
+      "description": "全美最大居家修繕零售商",
+      "logo_domain": "homedepot.com"
+    },
+    "UNH": {
+      "ticker": "UNH",
+      "name_en": "UnitedHealth Group",
+      "name_zh": "聯合健康",
+      "category": "道瓊藍籌",
+      "industry": "醫療保險",
+      "description": "全美最大醫療保險與健康照護集團",
+      "logo_domain": "unitedhealthgroup.com"
+    },
+    "XOM": {
+      "ticker": "XOM",
+      "name_en": "Exxon Mobil Corp.",
+      "name_zh": "艾克森美孚",
+      "category": "道瓊藍籌",
+      "industry": "石油",
+      "description": "美國最大石油公司，上中下游一條龍",
+      "logo_domain": "exxonmobil.com"
+    },
+    "CVX": {
+      "ticker": "CVX",
+      "name_en": "Chevron Corp.",
+      "name_zh": "雪佛龍",
+      "category": "道瓊藍籌",
+      "industry": "石油",
+      "description": "美國第二大石油公司，巴菲特持股",
+      "logo_domain": "chevron.com"
+    },
+    "BRK-B": {
+      "ticker": "BRK-B",
+      "name_en": "Berkshire Hathaway B",
+      "name_zh": "波克夏 B",
+      "category": "道瓊藍籌",
+      "industry": "綜合控股",
+      "description": "巴菲特控股集團，保險 + 鐵路 + 能源 + 投資",
+      "logo_domain": "berkshirehathaway.com"
+    },
+    "MCD": {
+      "ticker": "MCD",
+      "name_en": "McDonald's Corp.",
+      "name_zh": "麥當勞",
+      "category": "道瓊藍籌",
+      "industry": "餐飲",
+      "description": "全球最大連鎖速食，房地產收租模式",
+      "logo_domain": "mcdonalds.com"
+    },
+    "DIS": {
+      "ticker": "DIS",
+      "name_en": "Walt Disney Company",
+      "name_zh": "迪士尼",
+      "category": "道瓊藍籌",
+      "industry": "媒體娛樂",
+      "description": "影視/主題樂園/串流（Disney+）",
+      "logo_domain": "disney.com"
+    },
+    "T": {
+      "ticker": "T",
+      "name_en": "AT&T Inc.",
+      "name_zh": "AT&T",
+      "category": "配息個股",
+      "industry": "電信",
+      "description": "美國電信大廠，高股息防禦型（5%+）",
+      "logo_domain": "att.com"
+    },
+    "VZ": {
+      "ticker": "VZ",
+      "name_en": "Verizon Communications",
+      "name_zh": "Verizon",
+      "category": "配息個股",
+      "industry": "電信",
+      "description": "美國最大無線通訊商，高股息（6%+）",
+      "logo_domain": "verizon.com"
+    },
+    "O": {
+      "ticker": "O",
+      "name_en": "Realty Income Corp.",
+      "name_zh": "Realty Income",
+      "category": "配息個股",
+      "industry": "REIT",
+      "description": "月配息 REIT 王者，連續 600+ 個月配息",
+      "logo_domain": "realtyincome.com"
+    },
+    "PFE": {
+      "ticker": "PFE",
+      "name_en": "Pfizer Inc.",
+      "name_zh": "輝瑞",
+      "category": "配息個股",
+      "industry": "製藥",
+      "description": "美國大型藥廠，COVID 疫苗代表，高股息",
+      "logo_domain": "pfizer.com"
+    },
+    "ABBV": {
+      "ticker": "ABBV",
+      "name_en": "AbbVie Inc.",
+      "name_zh": "艾伯維",
+      "category": "配息個股",
+      "industry": "製藥",
+      "description": "免疫 + 神經科藥廠（修美樂），股息成長 5%+",
+      "logo_domain": "abbvie.com"
+    },
+    "MRK": {
+      "ticker": "MRK",
+      "name_en": "Merck & Co.",
+      "name_zh": "默克",
+      "category": "配息個股",
+      "industry": "製藥",
+      "description": "腫瘤 + 疫苗 + 動物保健，Keytruda 王者",
+      "logo_domain": "merck.com"
+    },
+    "LLY": {
+      "ticker": "LLY",
+      "name_en": "Eli Lilly and Company",
+      "name_zh": "禮來",
+      "category": "配息個股",
+      "industry": "製藥",
+      "description": "減重藥（Mounjaro/Zepbound）王者，市值飆升",
+      "logo_domain": "lilly.com"
+    },
+    "ABT": {
+      "ticker": "ABT",
+      "name_en": "Abbott Laboratories",
+      "name_zh": "亞培",
+      "category": "配息個股",
+      "industry": "醫療設備",
+      "description": "醫療設備 + 診斷 + 嬰兒營養品",
+      "logo_domain": "abbott.com"
+    },
+    "MDT": {
+      "ticker": "MDT",
+      "name_en": "Medtronic plc",
+      "name_zh": "美敦力",
+      "category": "配息個股",
+      "industry": "醫療設備",
+      "description": "全球最大醫療設備（心臟/糖尿病/外科）",
+      "logo_domain": "medtronic.com"
+    },
+    "MO": {
+      "ticker": "MO",
+      "name_en": "Altria Group",
+      "name_zh": "奧馳亞",
+      "category": "配息個股",
+      "industry": "菸草",
+      "description": "美國菸草巨擘（萬寶路），股息 7%+",
+      "logo_domain": "altria.com"
+    },
+    "PM": {
+      "ticker": "PM",
+      "name_en": "Philip Morris International",
+      "name_zh": "菲利普莫里斯",
+      "category": "配息個股",
+      "industry": "菸草",
+      "description": "國際菸草（IQOS），股息 4-5%",
+      "logo_domain": "pmi.com"
+    },
+    "IBM": {
+      "ticker": "IBM",
+      "name_en": "International Business Machines",
+      "name_zh": "IBM",
+      "category": "配息個股",
+      "industry": "企業 IT",
+      "description": "企業 IT + AI（Watson）+ 雲端（Red Hat），股息 3-4%",
+      "logo_domain": "ibm.com"
+    },
+    "BABA": {
+      "ticker": "BABA",
+      "name_en": "Alibaba Group (ADR)",
+      "name_zh": "阿里巴巴",
+      "category": "中概 ADR",
+      "industry": "電商/雲端",
+      "description": "中國最大電商 + 雲端 ADR",
+      "logo_domain": "alibabagroup.com"
+    },
+    "JD": {
+      "ticker": "JD",
+      "name_en": "JD.com Inc. (ADR)",
+      "name_zh": "京東",
+      "category": "中概 ADR",
+      "industry": "電商物流",
+      "description": "中國 B2C 電商 + 自營物流 ADR",
+      "logo_domain": "jd.com"
+    },
+    "PDD": {
+      "ticker": "PDD",
+      "name_en": "PDD Holdings (Pinduoduo/Temu)",
+      "name_zh": "拼多多/Temu",
+      "category": "中概 ADR",
+      "industry": "電商",
+      "description": "拼多多 + Temu 跨境電商，成長最快",
+      "logo_domain": "pddholdings.com"
+    },
+    "BIDU": {
+      "ticker": "BIDU",
+      "name_en": "Baidu Inc. (ADR)",
+      "name_zh": "百度",
+      "category": "中概 ADR",
+      "industry": "搜尋/AI",
+      "description": "中國搜尋龍頭 + 文心一言 AI + 自駕（Apollo）",
+      "logo_domain": "baidu.com"
+    },
+    "NIO": {
+      "ticker": "NIO",
+      "name_en": "NIO Inc. (ADR)",
+      "name_zh": "蔚來汽車",
+      "category": "中概 ADR",
+      "industry": "電動車",
+      "description": "中國電動車新勢力（換電商業模式）",
+      "logo_domain": "nio.com"
+    },
+    "TM": {
+      "ticker": "TM",
+      "name_en": "Toyota Motor Corp. (ADR)",
+      "name_zh": "豐田汽車",
+      "category": "中概 ADR",
+      "industry": "汽車",
+      "description": "日本豐田 ADR，全球最大車廠（油電霸主）",
+      "logo_domain": "toyota.com"
+    },
+    "IBIT": {
+      "ticker": "IBIT",
+      "name_en": "iShares Bitcoin Trust",
+      "name_zh": "IBIT",
+      "category": "加密/主題",
+      "industry": "Bitcoin ETF",
+      "description": "BlackRock 比特幣現貨 ETF，主流首選",
+      "logo_domain": "ishares.com"
+    },
+    "FBTC": {
+      "ticker": "FBTC",
+      "name_en": "Fidelity Wise Origin Bitcoin",
+      "name_zh": "FBTC",
+      "category": "加密/主題",
+      "industry": "Bitcoin ETF",
+      "description": "Fidelity 比特幣現貨 ETF，費率低",
+      "logo_domain": "fidelity.com"
+    },
+    "MSTR": {
+      "ticker": "MSTR",
+      "name_en": "MicroStrategy Inc.",
+      "name_zh": "MicroStrategy",
+      "category": "加密/主題",
+      "industry": "BTC 持倉股",
+      "description": "全球最大企業比特幣持倉（>40 萬枚 BTC）",
+      "logo_domain": "microstrategy.com"
+    },
+    "COIN": {
+      "ticker": "COIN",
+      "name_en": "Coinbase Global",
+      "name_zh": "Coinbase",
+      "category": "加密/主題",
+      "industry": "加密交易所",
+      "description": "美國最大加密貨幣交易所，受惠加密牛市",
+      "logo_domain": "coinbase.com"
+    },
+    "RIOT": {
+      "ticker": "RIOT",
+      "name_en": "Riot Platforms",
+      "name_zh": "Riot",
+      "category": "加密/主題",
+      "industry": "BTC 礦業",
+      "description": "比特幣挖礦上市公司，價格隨 BTC 波動",
+      "logo_domain": "riotplatforms.com"
+    },
+    "GLD": {
+      "ticker": "GLD",
+      "name_en": "SPDR Gold Shares",
+      "name_zh": "黃金 ETF",
+      "category": "退休防禦",
+      "industry": "黃金",
+      "description": "全球最大黃金 ETF，避險資產代表",
+      "logo_domain": "ssga.com"
+    },
+    "SLV": {
+      "ticker": "SLV",
+      "name_en": "iShares Silver Trust",
+      "name_zh": "白銀 ETF",
+      "category": "退休防禦",
+      "industry": "白銀",
+      "description": "白銀現貨 ETF，工業 + 貴金屬雙屬性",
+      "logo_domain": "ishares.com"
+    },
+    "TLT": {
+      "ticker": "TLT",
+      "name_en": "iShares 20+ Year Treasury Bond",
+      "name_zh": "TLT",
+      "category": "退休防禦",
+      "industry": "美國公債",
+      "description": "長天期美國公債 ETF，利率敏感",
+      "logo_domain": "ishares.com"
+    },
+    "IEF": {
+      "ticker": "IEF",
+      "name_en": "iShares 7-10 Year Treasury",
+      "name_zh": "IEF",
+      "category": "退休防禦",
+      "industry": "美國公債",
+      "description": "中天期美國公債 ETF，波動較小",
+      "logo_domain": "ishares.com"
+    },
+    "SHY": {
+      "ticker": "SHY",
+      "name_en": "iShares 1-3 Year Treasury",
+      "name_zh": "SHY",
+      "category": "退休防禦",
+      "industry": "美國公債",
+      "description": "短天期美國公債 ETF，類現金停泊",
+      "logo_domain": "ishares.com"
+    },
+    "VNQ": {
+      "ticker": "VNQ",
+      "name_en": "Vanguard Real Estate ETF",
+      "name_zh": "美國 REIT ETF",
+      "category": "退休防禦",
+      "industry": "REIT",
+      "description": "美國不動產投資信託 ETF，配息穩定",
+      "logo_domain": "vanguard.com"
+    },
+    "GLDM": {
+      "ticker": "GLDM",
+      "name_en": "SPDR Gold MiniShares",
+      "name_zh": "GLDM",
+      "category": "退休防禦",
+      "industry": "黃金",
+      "description": "GLD 迷你版，費率更低（0.10%），小資族首選",
+      "logo_domain": "ssga.com"
+    },
+    "USFR": {
+      "ticker": "USFR",
+      "name_en": "WisdomTree Floating Rate Treas.",
+      "name_zh": "USFR",
+      "category": "退休防禦",
+      "industry": "浮動利率公債",
+      "description": "浮動利率美國公債 ETF，類貨幣市場基金",
+      "logo_domain": "wisdomtree.com"
+    },
+    "NFLX": {
+      "ticker": "NFLX",
+      "name_en": "Netflix Inc.",
+      "name_zh": "Netflix",
+      "category": "其他熱門",
+      "industry": "串流媒體",
+      "description": "全球最大串流平台，廣告版 + 體育布局",
+      "logo_domain": "netflix.com"
+    },
+    "SHOP": {
+      "ticker": "SHOP",
+      "name_en": "Shopify Inc.",
+      "name_zh": "Shopify",
+      "category": "其他熱門",
+      "industry": "電商 SaaS",
+      "description": "全球第二大電商平台（D2C 開店 SaaS）",
+      "logo_domain": "shopify.com"
+    },
+    "ADBE": {
+      "ticker": "ADBE",
+      "name_en": "Adobe Inc.",
+      "name_zh": "Adobe",
+      "category": "其他熱門",
+      "industry": "創意軟體",
+      "description": "Photoshop/Illustrator 雲端訂閱龍頭 + Firefly AI",
+      "logo_domain": "adobe.com"
+    },
+    "CRM": {
+      "ticker": "CRM",
+      "name_en": "Salesforce Inc.",
+      "name_zh": "Salesforce",
+      "category": "其他熱門",
+      "industry": "CRM SaaS",
+      "description": "全球最大 CRM 雲端平台 + Agentforce AI",
+      "logo_domain": "salesforce.com"
+    },
+    "ORCL": {
+      "ticker": "ORCL",
+      "name_en": "Oracle Corp.",
+      "name_zh": "甲骨文",
+      "category": "其他熱門",
+      "industry": "資料庫/雲端",
+      "description": "企業資料庫龍頭 + OCI 雲端（OpenAI 合作）",
+      "logo_domain": "oracle.com"
+    },
+    "CSCO": {
+      "ticker": "CSCO",
+      "name_en": "Cisco Systems",
+      "name_zh": "思科",
+      "category": "其他熱門",
+      "industry": "網通設備",
+      "description": "全球最大網通設備商，企業網路與資安",
+      "logo_domain": "cisco.com"
+    },
+    "INTC": {
+      "ticker": "INTC",
+      "name_en": "Intel Corp.",
+      "name_zh": "英特爾",
+      "category": "其他熱門",
+      "industry": "半導體",
+      "description": "美國 CPU 老大（轉型代工中），政策受惠（CHIPS Act）",
+      "logo_domain": "intel.com"
+    },
+    "SPCX": {
+      "ticker": "SPCX",
+      "name_en": "Space Exploration Technologies Corp.",
+      "name_zh": "SpaceX",
+      "category": "其他熱門",
+      "industry": "航太・衛星網路",
+      "description": "獵鷹/星艦火箭發射＋Starlink 衛星網路；2026/6 於 Nasdaq 上市，史上最大 IPO",
+      "logo_domain": "spacex.com"
+    }
   }
 }
