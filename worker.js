@@ -2730,6 +2730,7 @@ async function renderUsStockPage(url, env) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <meta name="keywords" content="${esc(t)},${esc(nameZh)},${esc(nameZh)}股價,${esc(t)}合理價,${esc(t)}該買嗎,美股${esc(cat)},美股開戶">
+<meta name="impact-site-verification" value="10d0ed2d-b1f6-45f6-b703-a6c096a31696">
 <link rel="canonical" href="${canon}">
 <meta property="og:title" content="${esc(t)} ${esc(nameZh)} 合理價分析 - 領富 AI">
 <meta property="og:description" content="${esc(desc)}">
