@@ -2495,8 +2495,8 @@ async function renderStockPage(url, env) {
   ];
   const faqHtml = `<div class="sd-sec"><h2>❓ ${esc(name)}（${esc(code)}）常見問題</h2>${faqs.map(f => `<div class="sd-faq"><p class="sd-faq-q">${esc(f.q)}</p><p class="sd-faq-a">${esc(f.a)}</p></div>`).join("")}</div>`;
 
-  const desc = `${name}（${code}）股票分析：風險等級${level ? " " + level : "整理"}、注意股狀態、${cat ? cat + "產業、" : ""}合理區間估值與籌碼摘要。資料來源 TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站，每日更新。非投資建議。`;
-  const title = `${code} ${name} 股票分析：風險・注意股・合理區間 - 領富 AI`;
+  const desc = `${name}（${code}）AI 股票分析：${level ? "風險等級" + level : "風險等級整理中"}${score != null ? "（風險分數 " + score + "/100）" : ""}、是否為注意股／處置股、${cat ? cat + "類股、" : ""}${(fvLow != null && fvHigh != null) ? "合理股價區間約 " + fvLow + "–" + fvHigh + " 元" : "合理股價區間估值"}與籌碼摘要，一頁看懂該不該買。領富 AI 系統化每日更新，資料來源 TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站。非投資建議。`;
+  const title = `${name} AI 分析｜${code}${(name.length + code.length) <= 9 ? ` ${level ? "風險" + level : "風險評估"}・合理價・注意股` : ((name.length + code.length) <= 12 ? ` ${level ? "風險" + level : "風險評估"}・合理價` : "")} - 領富 AI`;
   const canon = `https://leadfuai.com/stock/${encodeURIComponent(code)}`;
 
   const jsonld = JSON.stringify({
@@ -2519,9 +2519,9 @@ async function renderStockPage(url, env) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="keywords" content="${esc(code)},${esc(name)},${esc(name)}股價,${esc(name)}風險,${esc(code)}注意股,${esc(cat)}">
+<meta name="keywords" content="${esc(name)} AI,${esc(name)}AI分析,${esc(name)} ai,${esc(code)} ${esc(name)},${esc(name)}股價,${esc(name)}合理股價,${esc(name)}風險,${esc(code)}注意股${cat ? "," + esc(cat) + "ai" : ""}">
 <link rel="canonical" href="${canon}">
-<meta property="og:title" content="${esc(code)} ${esc(name)} 股票分析 - 領富 AI">
+<meta property="og:title" content="${esc(name)} AI 分析｜${esc(code)} 合理價與風險評估 - 領富 AI">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canon}">
@@ -2568,7 +2568,7 @@ async function renderStockPage(url, env) {
 
 <main class="sd-wrap">
   <div class="sd-bc"><a href="/">首頁</a> ▸ <a href="/pages/stocks">股價總覽</a>${cat ? ` ▸ <a href="${indLink}">${esc(cat)}</a>` : ""} ▸ <span>${esc(code)} ${esc(name)}</span></div>
-  <h1 class="sd-h1">${esc(code)}　${esc(name)}</h1>
+  <h1 class="sd-h1">${esc(name)}　AI 分析｜${esc(code)}</h1>
   <p class="sd-sub">${market ? esc(market) : ""}${cat ? "・" + esc(cat) : ""} 類股${price != null ? "・參考價 " + esc(price) + " 元" : ""}</p>
   <div class="sd-src"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M216,48V88H40V48a8,8,0,0,1,8-8H208A8,8,0,0,1,216,48Z" fill="#c9a24b" opacity=".9"/><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-68-76a12,12,0,1,1-12-12A12,12,0,0,1,140,132Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,132ZM96,172a12,12,0,1,1-12-12A12,12,0,0,1,96,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,140,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,172Z"/></svg>更新日期：${esc(today)}　·　資料來源：TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站</div>
 
