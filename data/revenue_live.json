@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-06-16 12:18",
+  "updatedAt": "2026-06-17 11:56",
   "source": "TWSE + TPEx OpenAPI (t187ap05_L/_O/_R)",
-  "count": 2313,
+  "count": 2321,
   "marketBreakdown": {
-    "listed": 1076,
-    "otc": 889,
-    "emerging": 348
+    "listed": 1082,
+    "otc": 890,
+    "emerging": 349
   },
   "revenue": {
     "1260": {
@@ -125,23 +125,6 @@
       "cumRevenueFmt": "1.96 億",
       "cumLastYear": 189499,
       "cumYoy": 3.57,
-      "market": "emerging"
-    },
-    "1780": {
-      "code": "1780",
-      "name": "立弘",
-      "industry": "生技醫療業",
-      "period": "2026/05",
-      "monthRevenue": 92237,
-      "monthRevenueFmt": "92.2 千萬",
-      "lastMonth": 103179,
-      "lastYear": 58732,
-      "mom": -10.6,
-      "yoy": 57.05,
-      "cumRevenue": 435669,
-      "cumRevenueFmt": "4.36 億",
-      "cumLastYear": 358365,
-      "cumYoy": 21.57,
       "market": "emerging"
     },
     "2071": {
@@ -3374,6 +3357,23 @@
       "cumYoy": 5.15,
       "market": "emerging"
     },
+    "7415": {
+      "code": "7415",
+      "name": "元澄半導體",
+      "industry": "半導體業",
+      "period": "2026/05",
+      "monthRevenue": 267,
+      "monthRevenueFmt": "267 千",
+      "lastMonth": 0,
+      "lastYear": 533,
+      "mom": 0.0,
+      "yoy": -49.91,
+      "cumRevenue": 60976,
+      "cumRevenueFmt": "61.0 千萬",
+      "cumLastYear": 64121,
+      "cumYoy": -4.9,
+      "market": "emerging"
+    },
     "7419": {
       "code": "7419",
       "name": "達勝",
@@ -5754,6 +5754,23 @@
       "cumYoy": 85.86,
       "market": "emerging"
     },
+    "7927": {
+      "code": "7927",
+      "name": "連距電機",
+      "industry": "電機機械",
+      "period": "2026/05",
+      "monthRevenue": 241502,
+      "monthRevenueFmt": "2.42 億",
+      "lastMonth": 0,
+      "lastYear": 258375,
+      "mom": 0.0,
+      "yoy": -6.53,
+      "cumRevenue": 1084671,
+      "cumRevenueFmt": "10.85 億",
+      "cumLastYear": 952022,
+      "cumYoy": 13.93,
+      "market": "emerging"
+    },
     "8058": {
       "code": "8058",
       "name": "耐特",
@@ -6245,6 +6262,23 @@
       "cumRevenueFmt": "4.86 億",
       "cumLastYear": 542414,
       "cumYoy": -10.38,
+      "market": "otc"
+    },
+    "1780": {
+      "code": "1780",
+      "name": "立弘",
+      "industry": "食品工業",
+      "period": "2026/05",
+      "monthRevenue": 92237,
+      "monthRevenueFmt": "92.2 千萬",
+      "lastMonth": 103179,
+      "lastYear": 58732,
+      "mom": -10.6,
+      "yoy": 57.05,
+      "cumRevenue": 435669,
+      "cumRevenueFmt": "4.36 億",
+      "cumLastYear": 358365,
+      "cumYoy": 21.57,
       "market": "otc"
     },
     "1781": {
@@ -28993,6 +29027,23 @@
       "cumYoy": 23.88,
       "market": "listed"
     },
+    "2816": {
+      "code": "2816",
+      "name": "旺旺保",
+      "industry": "金融保險業",
+      "period": "2026/05",
+      "monthRevenue": 1450517,
+      "monthRevenueFmt": "14.51 億",
+      "lastMonth": 1920778,
+      "lastYear": 1187271,
+      "mom": -24.48,
+      "yoy": 22.17,
+      "cumRevenue": 7190540,
+      "cumRevenueFmt": "71.91 億",
+      "cumLastYear": 5622876,
+      "cumYoy": 27.88,
+      "market": "listed"
+    },
     "2820": {
       "code": "2820",
       "name": "華票",
@@ -29112,6 +29163,40 @@
       "cumYoy": 18.77,
       "market": "listed"
     },
+    "2850": {
+      "code": "2850",
+      "name": "新產",
+      "industry": "金融保險業",
+      "period": "2026/05",
+      "monthRevenue": 2558059,
+      "monthRevenueFmt": "25.58 億",
+      "lastMonth": 2791092,
+      "lastYear": 2505687,
+      "mom": -8.35,
+      "yoy": 2.09,
+      "cumRevenue": 12272699,
+      "cumRevenueFmt": "122.73 億",
+      "cumLastYear": 10493658,
+      "cumYoy": 16.95,
+      "market": "listed"
+    },
+    "2851": {
+      "code": "2851",
+      "name": "中再保",
+      "industry": "金融保險業",
+      "period": "2026/05",
+      "monthRevenue": 3084054,
+      "monthRevenueFmt": "30.84 億",
+      "lastMonth": 3681428,
+      "lastYear": 254219,
+      "mom": -16.23,
+      "yoy": 1113.15,
+      "cumRevenue": 11673199,
+      "cumRevenueFmt": "116.73 億",
+      "cumLastYear": 3843334,
+      "cumYoy": 203.73,
+      "market": "listed"
+    },
     "2852": {
       "code": "2852",
       "name": "第一保",
@@ -29163,6 +29248,23 @@
       "cumYoy": 414.23,
       "market": "listed"
     },
+    "2880": {
+      "code": "2880",
+      "name": "華南金",
+      "industry": "金融保險業",
+      "period": "2026/05",
+      "monthRevenue": 7272247,
+      "monthRevenueFmt": "72.72 億",
+      "lastMonth": 7232756,
+      "lastYear": 4215080,
+      "mom": 0.55,
+      "yoy": 72.53,
+      "cumRevenue": 33230891,
+      "cumRevenueFmt": "332.31 億",
+      "cumLastYear": 24101185,
+      "cumYoy": 37.88,
+      "market": "listed"
+    },
     "2881": {
       "code": "2881",
       "name": "富邦金",
@@ -29197,6 +29299,23 @@
       "cumYoy": 223.54,
       "market": "listed"
     },
+    "2883": {
+      "code": "2883",
+      "name": "凱基金",
+      "industry": "金融保險業",
+      "period": "2026/05",
+      "monthRevenue": 11583656,
+      "monthRevenueFmt": "115.84 億",
+      "lastMonth": 13466790,
+      "lastYear": -44398082,
+      "mom": -13.98,
+      "yoy": 126.09,
+      "cumRevenue": 48617013,
+      "cumRevenueFmt": "486.17 億",
+      "cumLastYear": -61260402,
+      "cumYoy": 179.36,
+      "market": "listed"
+    },
     "2884": {
       "code": "2884",
       "name": "玉山金",
@@ -29212,6 +29331,23 @@
       "cumRevenueFmt": "444.72 億",
       "cumLastYear": 35649353,
       "cumYoy": 24.75,
+      "market": "listed"
+    },
+    "2885": {
+      "code": "2885",
+      "name": "元大金",
+      "industry": "金融保險業",
+      "period": "2026/05",
+      "monthRevenue": 21261028,
+      "monthRevenueFmt": "212.61 億",
+      "lastMonth": 17253767,
+      "lastYear": 2067344,
+      "mom": 23.23,
+      "yoy": 928.42,
+      "cumRevenue": 82023414,
+      "cumRevenueFmt": "820.23 億",
+      "cumLastYear": 30613610,
+      "cumYoy": 167.93,
       "market": "listed"
     },
     "2886": {
