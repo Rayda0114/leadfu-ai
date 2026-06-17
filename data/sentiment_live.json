@@ -1,19 +1,19 @@
 {
- "updatedAt": "2026-06-16 15:40",
+ "updatedAt": "2026-06-17 15:40",
  "ptt_ok": true,
  "source": "PTT Stock 板 + Google News + YouTube + X 快訊雷達（四源熱度統計）；僅輿情整理、非投資建議",
  "window_days": 30,
  "count": 53,
  "data": {
-  "2303": {
-   "name": "聯電",
+  "2344": {
+   "name": "華邦電",
    "ptt_week": 0,
-   "ptt_baseline": 1.7,
+   "ptt_baseline": 2.7,
    "ptt_ratio": 0.0,
    "ptt_trend": [
-    2,
     1,
-    2,
+    6,
+    1,
     0
    ],
    "ptt_push_week": 0,
@@ -21,9 +21,9 @@
     100,
     100,
     100,
-    102
+    100
    ],
-   "gn_week": 102,
+   "gn_week": 100,
    "gn_base": 100.0,
    "gn_ratio": 1.0,
    "gn_saturated": true,
@@ -37,19 +37,127 @@
    "yt_week": 50,
    "yt_ratio": 99.0,
    "yt_saturated": true,
-   "yt_views_30d": 234497,
+   "yt_views_30d": 206551,
+   "yt_top": [
+    {
+     "t": "IG帳號無預警被停用!申訴中...華邦電200元了!旺宏出獄後會噴嗎? #台股 #華邦電 #投資 #記憶體 #國巨",
+     "ch": "一綺聊股",
+     "views": 48882,
+     "url": "https://www.youtube.com/watch?v=bcuJYBS3jvs"
+    },
+    {
+     "t": "【南亞科.華邦電.旺宏.力積電.國巨.日電貿.禾伸堂.信昌電聯發科.鴻海.台積電 明天結算別做一件事?】2026.06.16(有CC字幕)",
+     "ch": "楊育華分析師-摩爾證券投顧",
+     "views": 45021,
+     "url": "https://www.youtube.com/watch?v=JxkdL96h3iI"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "6770": {
+   "name": "力積電",
+   "ptt_week": 0,
+   "ptt_baseline": 2.3,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    1,
+    4,
+    2,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    100,
+    100,
+    100,
+    100
+   ],
+   "gn_week": 100,
+   "gn_base": 100.0,
+   "gn_ratio": 1.0,
+   "gn_saturated": true,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    0,
+    50
+   ],
+   "yt_week": 50,
+   "yt_ratio": 99.0,
+   "yt_saturated": true,
+   "yt_views_30d": 423993,
+   "yt_top": [
+    {
+     "t": "【簽協議大漲千點 明天千萬別買!? 聯發科.台積電.鴻海.南亞科.華邦電.力積電.旺宏.國巨.華新科】2026.06.15(有CC字幕)",
+     "ch": "楊育華分析師-摩爾證券投顧",
+     "views": 131265,
+     "url": "https://www.youtube.com/watch?v=sfb1pdXBG-4"
+    },
+    {
+     "t": "【8檔亮燈漲停】美伊落幕兩天狂噴2200點！上週不敢買的，接下來還有機會嗎？慶龍老師再抓起漲！2026.06.15 蔡慶龍分析師#價值型投資 #蔡慶龍 分析師",
+     "ch": "蔡慶龍分析師-價值型投資 ",
+     "views": 48395,
+     "url": "https://www.youtube.com/watch?v=PTYQlOi3GEQ"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "2303": {
+   "name": "聯電",
+   "ptt_week": 0,
+   "ptt_baseline": 1.3,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    2,
+    0,
+    2,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    100,
+    100,
+    100,
+    103
+   ],
+   "gn_week": 103,
+   "gn_base": 100.0,
+   "gn_ratio": 1.0,
+   "gn_saturated": true,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    0,
+    50
+   ],
+   "yt_week": 50,
+   "yt_ratio": 99.0,
+   "yt_saturated": true,
+   "yt_views_30d": 342890,
    "yt_top": [
     {
      "t": "端午變盤? 小心這2變數 |股票|聯電|友達|華邦電|南亞科|希華|美光|升息|記憶體|台積電|輝達|美債|股票|財經|投資理財|台幣|美元| 06/15/26【宏爺講股】",
      "ch": "宏爺講股",
-     "views": 49886,
+     "views": 55920,
      "url": "https://www.youtube.com/watch?v=kQUd9_MBjoo"
     },
     {
-     "t": "聯電、華邦電、盟立、禾伸堂，專注型態美+業績佳的起漲股｜價差看弘哥 周弘分析師 2026.06.15",
-     "ch": " 價差看弘哥",
-     "views": 31613,
-     "url": "https://www.youtube.com/watch?v=MK4Beqj_9X0"
+     "t": "【美伊達成協議？台股暴漲比你想的還多！小心還有變數？國巨* 台積電 聯電】飆股控盤術 陳俊言分析師 2026.06.15",
+     "ch": "陳俊言分析師-摩爾證券投顧",
+     "views": 41870,
+     "url": "https://www.youtube.com/watch?v=O9vIyDlMv48"
     }
    ],
    "ptt_spike": false,
@@ -75,11 +183,11 @@
     100,
     100,
     100,
-    78
+    71
    ],
-   "gn_week": 78,
+   "gn_week": 71,
    "gn_base": 100.0,
-   "gn_ratio": 0.8,
+   "gn_ratio": 0.7,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
@@ -91,73 +199,19 @@
    "yt_week": 50,
    "yt_ratio": 99.0,
    "yt_saturated": true,
-   "yt_views_30d": 740756,
+   "yt_views_30d": 303331,
    "yt_top": [
     {
-     "t": "ゲームなの？告白なの？友達終了1分前",
-     "ch": "オードリー",
-     "views": 295112,
-     "url": "https://www.youtube.com/watch?v=F7e7LJ_qYtc"
+     "t": "お友達と下校していたら知らないおじさんに声をかけられた！？",
+     "ch": "にごちゃんch",
+     "views": 82525,
+     "url": "https://www.youtube.com/watch?v=izSUztl4HDI"
     },
     {
-     "t": "友達を紹介して寂しくなった叔父さん",
-     "ch": "絆タイム",
-     "views": 124894,
-     "url": "https://www.youtube.com/watch?v=_UFxj54GBRQ"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "2344": {
-   "name": "華邦電",
-   "ptt_week": 0,
-   "ptt_baseline": 2.7,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    6,
-    2,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    100,
-    100,
-    100,
-    100
-   ],
-   "gn_week": 100,
-   "gn_base": 100.0,
-   "gn_ratio": 1.0,
-   "gn_saturated": true,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    0,
-    50
-   ],
-   "yt_week": 50,
-   "yt_ratio": 99.0,
-   "yt_saturated": true,
-   "yt_views_30d": 984564,
-   "yt_top": [
-    {
-     "t": "國巨、華邦電、環球晶，油門踩到底 !｜金錢道 蔡正華分析師 2026.06.15",
-     "ch": "蔡正華金錢道",
-     "views": 244276,
-     "url": "https://www.youtube.com/watch?v=b47b8HrB6c4"
-    },
-    {
-     "t": "【誘多警告】美伊停戰暴漲1200點！主力出貨4大核彈引爆，不想破產「這件事」快做！(字幕版) 2026.06.15 台股盤後 #仁者無敵 #陳昆仁",
-     "ch": "陳昆仁分析師-摩爾證券投顧",
-     "views": 170890,
-     "url": "https://www.youtube.com/watch?v=mjboXp2-9N0"
+     "t": "寝ている友達に飲み物を飲ませてみた",
+     "ch": "兎に角ショート",
+     "views": 34812,
+     "url": "https://www.youtube.com/watch?v=Yc8cDCcQAP0"
     }
    ],
    "ptt_spike": false,
@@ -169,16 +223,16 @@
   },
   "2408": {
    "name": "南亞科",
-   "ptt_week": 1,
-   "ptt_baseline": 4.3,
-   "ptt_ratio": 0.2,
+   "ptt_week": 2,
+   "ptt_baseline": 4.0,
+   "ptt_ratio": 0.5,
    "ptt_trend": [
-    4,
-    7,
-    2,
-    1
+    3,
+    8,
+    1,
+    2
    ],
-   "ptt_push_week": 20,
+   "ptt_push_week": 32,
    "gn_trend": [
     100,
     100,
@@ -199,19 +253,19 @@
    "yt_week": 50,
    "yt_ratio": 99.0,
    "yt_saturated": true,
-   "yt_views_30d": 711425,
+   "yt_views_30d": 417433,
    "yt_top": [
     {
-     "t": "【誘多警告】美伊停戰暴漲1200點！主力出貨4大核彈引爆，不想破產「這件事」快做！(字幕版) 2026.06.15 台股盤後 #仁者無敵 #陳昆仁",
-     "ch": "陳昆仁分析師-摩爾證券投顧",
-     "views": 170890,
-     "url": "https://www.youtube.com/watch?v=mjboXp2-9N0"
+     "t": "【明天FED會議 定台股生死】2026/6/16(直播)",
+     "ch": "郭哲榮分析師-摩爾證券投顧",
+     "views": 91527,
+     "url": "https://www.youtube.com/watch?v=Od-oOEqsT-c"
     },
     {
-     "t": "【軋爆外資6.5萬口空單！ 周一先漲500點?!】#決勝關鍵周末特別版 2026.06.13",
-     "ch": "林漢偉分析師-摩爾證券投顧",
-     "views": 154109,
-     "url": "https://www.youtube.com/watch?v=3tzrPQjLehU"
+     "t": "【斷頭警告】4大核彈將引爆，超過1200檔下跌，主力引爆殺機，逃命前必做「這件事」！(字幕版) 2026.06.16 台股盤後 #仁者無敵 #陳昆仁",
+     "ch": "陳昆仁分析師-摩爾證券投顧",
+     "views": 72400,
+     "url": "https://www.youtube.com/watch?v=kFnQ5pTdwVo"
     }
    ],
    "ptt_spike": false,
@@ -224,88 +278,33 @@
      "t": "[情報] 2323 中環 賣南亞科(賠)，辦理現金減資",
      "push": 20,
      "url": "https://www.ptt.cc/bbs/Stock/M.1781172438.A.D8E.html"
-    }
-   ]
-  },
-  "2887": {
-   "name": "台新新光金",
-   "ptt_week": 1,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    1
-   ],
-   "ptt_push_week": 29,
-   "gn_trend": [
-    68,
-    85,
-    100,
-    100
-   ],
-   "gn_week": 100,
-   "gn_base": 84.3,
-   "gn_ratio": 1.2,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    13,
-    3,
-    13,
-    12
-   ],
-   "yt_week": 12,
-   "yt_ratio": 1.2,
-   "yt_saturated": false,
-   "yt_views_30d": 697958,
-   "yt_top": [
-    {
-     "t": "【台新Richart陪你十年】感恩回饋最高2.2%新臺幣優利定存，每月領息最高約3,600元",
-     "ch": "台新新光金控 TS Holdings",
-     "views": 267580,
-     "url": "https://www.youtube.com/watch?v=t4HcaOUG5jM"
     },
     {
-     "t": "【台新Richart過生日！】回饋新戶完成任務送底片相機，邀你一同收藏生活中的美好回憶",
-     "ch": "台新新光金控 TS Holdings",
-     "views": 168099,
-     "url": "https://www.youtube.com/watch?v=PyrUDNvpZ2E"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[情報] 2887 台新新光金 5月自結 0.24 累計 1.36",
-     "push": 29,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781173522.A.166.html"
+     "t": "[情報] 2323 中環買華通,聯亞,聯發科,賣南亞科賺",
+     "push": 12,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781606820.A.046.html"
     }
    ]
   },
   "3481": {
    "name": "群創",
    "ptt_week": 2,
-   "ptt_baseline": 3.3,
-   "ptt_ratio": 0.6,
+   "ptt_baseline": 3.7,
+   "ptt_ratio": 0.5,
    "ptt_trend": [
     5,
-    2,
+    3,
     3,
     2
    ],
-   "ptt_push_week": 120,
+   "ptt_push_week": 55,
    "gn_trend": [
     100,
     100,
     100,
-    100
+    103
    ],
-   "gn_week": 100,
+   "gn_week": 103,
    "gn_base": 100.0,
    "gn_ratio": 1.0,
    "gn_saturated": true,
@@ -319,19 +318,19 @@
    "yt_week": 50,
    "yt_ratio": 99.0,
    "yt_saturated": true,
-   "yt_views_30d": 666876,
+   "yt_views_30d": 961638,
    "yt_top": [
     {
      "t": "【股票】重返45000是最後逃命波？杜金龍緊盯2大崩盤訊號：台股恐回測38000點！ft. 杜金龍｜下班經濟學739｜謝哲青、蔡尚樺",
      "ch": "風傳媒 The Storm Media",
-     "views": 521780,
+     "views": 650683,
      "url": "https://www.youtube.com/watch?v=lp5kAdC_TsQ"
     },
     {
-     "t": "今天創高的股票會是下一波主流嗎？｜股市擺渡人 #陳玠儒分析師 2026.06.12 #台股 #股票 #投資 #AI #JJ大叔 #抄底 #技術分析 #美股",
-     "ch": "股市擺渡人-陳玠儒分析師",
-     "views": 28156,
-     "url": "https://www.youtube.com/watch?v=5dBHTQlNKN4"
+     "t": "【斷頭警告】4大核彈將引爆，超過1200檔下跌，主力引爆殺機，逃命前必做「這件事」！(字幕版) 2026.06.16 台股盤後 #仁者無敵 #陳昆仁",
+     "ch": "陳昆仁分析師-摩爾證券投顧",
+     "views": 72400,
+     "url": "https://www.youtube.com/watch?v=kFnQ5pTdwVo"
     }
    ],
    "ptt_spike": false,
@@ -340,413 +339,17 @@
    "heat_spike": false,
    "heat_watch": false,
    "hot_titles": [
-    {
-     "t": "[情報] 3481群創  5月營收",
-     "push": 65,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781078710.A.B43.html"
-    },
     {
      "t": "[新聞] 台積攜Ibiden、群創猛攻CoPoS   傳出玻",
      "push": 55,
      "url": "https://www.ptt.cc/bbs/Stock/M.1781571183.A.703.html"
+    },
+    {
+     "t": "[新聞]世足賽＋台積電PLP題材點火　面板三虎群創",
+     "push": 0,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781680257.A.692.html"
     }
    ]
-  },
-  "2610": {
-   "name": "華航",
-   "ptt_week": 1,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    1
-   ],
-   "ptt_push_week": 15,
-   "gn_trend": [
-    36,
-    100,
-    97,
-    100
-   ],
-   "gn_week": 100,
-   "gn_base": 77.7,
-   "gn_ratio": 1.3,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    15,
-    35
-   ],
-   "yt_week": 35,
-   "yt_ratio": 7.0,
-   "yt_saturated": true,
-   "yt_views_30d": 172117,
-   "yt_top": [
-    {
-     "t": "不是業配，很OK #COMPUTEX #華航 #ChinaAirlines",
-     "ch": "EN Studio",
-     "views": 51467,
-     "url": "https://www.youtube.com/watch?v=iI6WQewXJo0"
-    },
-    {
-     "t": "客機在3.5萬英尺高空突然解體｜225人罹難｜華航CI611澎湖空難",
-     "ch": "GlobalEye全球奇觀錄",
-     "views": 47249,
-     "url": "https://www.youtube.com/watch?v=yGuFDBYfUwE"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[情報] 2610 華航 5月營收",
-     "push": 15,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781081107.A.00F.html"
-    }
-   ]
-  },
-  "2484": {
-   "name": "希華",
-   "ptt_week": 0,
-   "ptt_baseline": 0.3,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    1,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    21,
-    24,
-    17,
-    23
-   ],
-   "gn_week": 23,
-   "gn_base": 20.7,
-   "gn_ratio": 1.1,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    16,
-    34
-   ],
-   "yt_week": 34,
-   "yt_ratio": 6.4,
-   "yt_saturated": true,
-   "yt_views_30d": 172906,
-   "yt_top": [
-    {
-     "t": "端午變盤? 小心這2變數 |股票|聯電|友達|華邦電|南亞科|希華|美光|升息|記憶體|台積電|輝達|美債|股票|財經|投資理財|台幣|美元| 06/15/26【宏爺講股】",
-     "ch": "宏爺講股",
-     "views": 49886,
-     "url": "https://www.youtube.com/watch?v=kQUd9_MBjoo"
-    },
-    {
-     "t": "跌時重質!台積電,玉晶光,希華,立敦,凌巨｜20260608｜涂敏峰 分析師｜超越巔峰",
-     "ch": "超越巔峰 涂敏峰分析師-永誠國際投顧",
-     "views": 29233,
-     "url": "https://www.youtube.com/watch?v=svWqvi-orNU"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "6770": {
-   "name": "力積電",
-   "ptt_week": 1,
-   "ptt_baseline": 2.0,
-   "ptt_ratio": 0.5,
-   "ptt_trend": [
-    1,
-    4,
-    1,
-    1
-   ],
-   "ptt_push_week": 84,
-   "gn_trend": [
-    100,
-    100,
-    100,
-    100
-   ],
-   "gn_week": 100,
-   "gn_base": 100.0,
-   "gn_ratio": 1.0,
-   "gn_saturated": true,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    0,
-    50
-   ],
-   "yt_week": 50,
-   "yt_ratio": 99.0,
-   "yt_saturated": true,
-   "yt_views_30d": 828797,
-   "yt_top": [
-    {
-     "t": "記憶體.被動元件.再漲一倍？鴻海.緯創.廣達.何時漲.大漲是逃命波?下週還有未爆彈║林漢偉、林鈺凱、楊惠宇║2026.06.12",
-     "ch": "瘋狂股市福利社Free Free Free!",
-     "views": 188452,
-     "url": "https://www.youtube.com/watch?v=FjdoudkPHQQ"
-    },
-    {
-     "t": "聯電鎖不住要賣？華邦電靠它？低軌衛星漲不動？2026/06/12【老王不只三分鐘】",
-     "ch": "老王愛說笑",
-     "views": 121422,
-     "url": "https://www.youtube.com/watch?v=KfcsOh52PhM"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[情報] 6770力積電 現增參與發行GDR 66.68元",
-     "push": 84,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781060951.A.13E.html"
-    }
-   ]
-  },
-  "3576": {
-   "name": "聯合再生",
-   "ptt_week": 0,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    57,
-    34,
-    29,
-    56
-   ],
-   "gn_week": 56,
-   "gn_base": 40.0,
-   "gn_ratio": 1.4,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    9,
-    3,
-    2,
-    22
-   ],
-   "yt_week": 22,
-   "yt_ratio": 4.7,
-   "yt_saturated": false,
-   "yt_views_30d": 184737,
-   "yt_top": [
-    {
-     "t": "2026.05.19【台股驚天回檔！【3576聯合再生】漲停、【8064東捷】狂飆77%【7709榮田】漲停⊕再創新高!會員大賺+43%!隱藏殘酷真相，這是最後逃命波，還是散戶翻身的唯一買點？】",
-     "ch": "股市期皇后-莊佳螢",
-     "views": 45676,
-     "url": "https://www.youtube.com/watch?v=0zD1alnOjzc"
-    },
-    {
-     "t": "川普TACO！千點反攻剛開始？下周4變數一次攤牌？首富戰！日月光慶祝行情發動？國巨陳泰銘不能輸 SpaceX今夜升空！空降美股7強？馬斯克抵7個黃仁勳？《57股市同學會》葉子菁 吳岳展 吳曉松 鄧尚維",
-     "ch": "57東森財經新聞",
-     "views": 22606,
-     "url": "https://www.youtube.com/watch?v=ejSfT7zjUYM"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": true,
-   "heat_spike": false,
-   "heat_watch": true,
-   "hot_titles": []
-  },
-  "1303": {
-   "name": "南亞",
-   "ptt_week": 1,
-   "ptt_baseline": 5.3,
-   "ptt_ratio": 0.2,
-   "ptt_trend": [
-    5,
-    8,
-    3,
-    1
-   ],
-   "ptt_push_week": 20,
-   "gn_trend": [
-    100,
-    100,
-    100,
-    99
-   ],
-   "gn_week": 99,
-   "gn_base": 100.0,
-   "gn_ratio": 1.0,
-   "gn_saturated": true,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    0,
-    50
-   ],
-   "yt_week": 50,
-   "yt_ratio": 99.0,
-   "yt_saturated": true,
-   "yt_views_30d": 214951,
-   "yt_top": [
-    {
-     "t": "【簽協議大漲千點 明天千萬別買!? 聯發科.台積電.鴻海.南亞科.華邦電.力積電.旺宏.國巨.華新科】2026.06.15(有CC字幕)",
-     "ch": "楊育華分析師-摩爾證券投顧",
-     "views": 76004,
-     "url": "https://www.youtube.com/watch?v=sfb1pdXBG-4"
-    },
-    {
-     "t": "端午變盤? 小心這2變數 |股票|聯電|友達|華邦電|南亞科|希華|美光|升息|記憶體|台積電|輝達|美債|股票|財經|投資理財|台幣|美元| 06/15/26【宏爺講股】",
-     "ch": "宏爺講股",
-     "views": 49886,
-     "url": "https://www.youtube.com/watch?v=kQUd9_MBjoo"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[情報] 2323 中環 賣南亞科(賠)，辦理現金減資",
-     "push": 20,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781172438.A.D8E.html"
-    }
-   ]
-  },
-  "9105": {
-   "name": "泰金寶-DR",
-   "ptt_week": 0,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    76,
-    62,
-    45,
-    13
-   ],
-   "gn_week": 13,
-   "gn_base": 61.0,
-   "gn_ratio": 0.2,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    3,
-    3,
-    5,
-    0
-   ],
-   "yt_week": 0,
-   "yt_ratio": 0.0,
-   "yt_saturated": false,
-   "yt_views_30d": 56671,
-   "yt_top": [
-    {
-     "t": "輝達量子電腦夥伴金寶跳空漲停 康舒漲半根！量子運算初期開發技術瓶頸大 長線具備潛力｜非凡財經新聞｜20260522",
-     "ch": "USTV 非凡電視",
-     "views": 25869,
-     "url": "https://www.youtube.com/watch?v=hPjsQhHPqGo"
-    },
-    {
-     "t": "GIS奪Coherent大單 今年將在CPO領域大放異彩!入股SEEQC,卡位量子電腦 金寶2周大漲近50%,還有戲可看?｜20260604(第6/8段)股市現場*鄭明娟(李冠嶔)",
-     "ch": "非凡 股市現場",
-     "views": 15921,
-     "url": "https://www.youtube.com/watch?v=UHAF3-vOpdY"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "1802": {
-   "name": "台玻",
-   "ptt_week": 0,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    56,
-    58,
-    44,
-    81
-   ],
-   "gn_week": 81,
-   "gn_base": 52.7,
-   "gn_ratio": 1.5,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    22,
-    14,
-    14
-   ],
-   "yt_week": 14,
-   "yt_ratio": 1.2,
-   "yt_saturated": true,
-   "yt_views_30d": 803256,
-   "yt_top": [
-    {
-     "t": "【台股大震盪！】週一開盤這件事千萬別做！記憶體、被動元件、老AI還能追？00981A買鴻海，下週主力卡位「這一檔」大公開！｜ 楊惠宇 分析師 ｜ 2026.05.30(六)",
-     "ch": "楊惠宇分析師",
-     "views": 160112,
-     "url": "https://www.youtube.com/watch?v=GdXVmFPS7Vk"
-    },
-    {
-     "t": "群創、華邦電漲到瘋！鴻海抱到400？2026/06/01【老王不只三分鐘】",
-     "ch": "老王愛說笑",
-     "views": 144538,
-     "url": "https://www.youtube.com/watch?v=wjopVtaab1g"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
   },
   "2883": {
    "name": "凱基金",
@@ -755,43 +358,43 @@
    "ptt_ratio": 3.0,
    "ptt_trend": [
     0,
-    0,
-    2,
+    1,
+    1,
     2
    ],
    "ptt_push_week": 46,
    "gn_trend": [
-    46,
-    56,
+    44,
+    97,
     100,
     100
    ],
    "gn_week": 100,
-   "gn_base": 67.3,
-   "gn_ratio": 1.5,
+   "gn_base": 80.3,
+   "gn_ratio": 1.2,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
-    1,
-    5,
-    40,
-    1
+    0,
+    20,
+    26,
+    2
    ],
-   "yt_week": 1,
+   "yt_week": 2,
    "yt_ratio": 0.1,
    "yt_saturated": false,
-   "yt_views_30d": 644169,
+   "yt_views_30d": 640471,
    "yt_top": [
     {
      "t": "群創翻身將飆8字頭？聯電、力積電更勝世界先進？ 金融股3檔大吃資金行情先卡位《鈔錢部署》盧燕俐 ft.謝明哲 20260604",
      "ch": "鈔錢部署–華視優選",
-     "views": 202805,
+     "views": 203383,
      "url": "https://www.youtube.com/watch?v=iqOhdBbGUWs"
     },
     {
      "t": "外資狂殺，散戶傻接刀? 科技股大逃殺? 股票|聯電|凱基金|華邦電|南亞科|記憶體|台積電|輝達|美債|股票|財經|投資理財|台幣|美元| 06/10/26【宏爺講股】",
      "ch": "宏爺講股",
-     "views": 78010,
+     "views": 78074,
      "url": "https://www.youtube.com/watch?v=wuROhteat_U"
     }
    ],
@@ -813,8 +416,8 @@
     }
    ]
   },
-  "2618": {
-   "name": "長榮航",
+  "2887": {
+   "name": "台新新光金",
    "ptt_week": 1,
    "ptt_baseline": 0.0,
    "ptt_ratio": 0.0,
@@ -824,154 +427,40 @@
     0,
     1
    ],
-   "ptt_push_week": 12,
+   "ptt_push_week": 29,
    "gn_trend": [
-    63,
-    79,
-    55,
-    80
-   ],
-   "gn_week": 80,
-   "gn_base": 65.7,
-   "gn_ratio": 1.2,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    10,
-    14,
-    11,
-    9
-   ],
-   "yt_week": 9,
-   "yt_ratio": 0.8,
-   "yt_saturated": false,
-   "yt_views_30d": 517951,
-   "yt_top": [
-    {
-     "t": "台指期崩跌3000點，出大事了? 就業亮眼，美股大跌，美光重挫13%，科技股大逃殺? |股票|記憶體|台積電|輝達|美債|股票|財經|投資理財|台幣|美元| 06/06/26【宏爺講股】",
-     "ch": "宏爺講股",
-     "views": 87668,
-     "url": "https://www.youtube.com/watch?v=7w_8ZvHIcK0"
-    },
-    {
-     "t": "外資狂殺，散戶傻接刀? 科技股大逃殺? 股票|聯電|凱基金|華邦電|南亞科|記憶體|台積電|輝達|美債|股票|財經|投資理財|台幣|美元| 06/10/26【宏爺講股】",
-     "ch": "宏爺講股",
-     "views": 78010,
-     "url": "https://www.youtube.com/watch?v=wuROhteat_U"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[情報] 2618 長榮航 5月營收",
-     "push": 12,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781102916.A.E54.html"
-    }
-   ]
-  },
-  "2324": {
-   "name": "仁寶",
-   "ptt_week": 0,
-   "ptt_baseline": 0.7,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    1,
-    1,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
+    66,
     100,
-    100,
-    100,
-    68
+    99,
+    100
    ],
-   "gn_week": 68,
-   "gn_base": 100.0,
-   "gn_ratio": 0.7,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    36,
-    14
-   ],
-   "yt_week": 14,
-   "yt_ratio": 1.2,
-   "yt_saturated": true,
-   "yt_views_30d": 1393172,
-   "yt_top": [
-    {
-     "t": "台股大跌別害怕 到這價位杜金龍卯起來買 1招卡位00981A息利雙收《鈔錢部署》盧燕俐 ft.杜金龍 20260609",
-     "ch": "鈔錢部署–華視優選",
-     "views": 389395,
-     "url": "https://www.youtube.com/watch?v=FCwHSDQsSYk"
-    },
-    {
-     "t": "暴漲暴跌是空頭?被動元件.記憶體.老AI.全面殺║陳昆仁、何基鼎、陳唯泰║2026.06.10",
-     "ch": "瘋狂股市福利社Free Free Free!",
-     "views": 124497,
-     "url": "https://www.youtube.com/watch?v=TnQWIZswc-c"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "1605": {
-   "name": "華新",
-   "ptt_week": 1,
-   "ptt_baseline": 1.3,
-   "ptt_ratio": 0.8,
-   "ptt_trend": [
-    1,
-    0,
-    3,
-    1
-   ],
-   "ptt_push_week": 100,
-   "gn_trend": [
-    84,
-    30,
-    70,
-    68
-   ],
-   "gn_week": 68,
-   "gn_base": 61.3,
+   "gn_week": 100,
+   "gn_base": 88.3,
    "gn_ratio": 1.1,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
-    0,
-    0,
-    21,
-    29
+    9,
+    7,
+    9,
+    13
    ],
-   "yt_week": 29,
-   "yt_ratio": 4.1,
-   "yt_saturated": true,
-   "yt_views_30d": 986749,
+   "yt_week": 13,
+   "yt_ratio": 1.6,
+   "yt_saturated": false,
+   "yt_views_30d": 668381,
    "yt_top": [
     {
-     "t": "反轉時刻趕快賣？記憶體趕快砍？2026/06/05【老王不只三分鐘】",
-     "ch": "老王愛說笑",
-     "views": 160010,
-     "url": "https://www.youtube.com/watch?v=pIgoJ8_Qe2Q"
+     "t": "【台新Richart陪你十年】感恩回饋最高2.2%新臺幣優利定存，每月領息最高約3,600元",
+     "ch": "台新新光金控 TS Holdings",
+     "views": 288029,
+     "url": "https://www.youtube.com/watch?v=t4HcaOUG5jM"
     },
     {
-     "t": "【兆華艾綸說】台股高檔不算貴 買漲價概念就對？台積電最會漲的時間快到？最新電力.CoPoS寶藏股？CPO時代來了 電腦展新亮點？｜李兆華、艾綸、程正樺2026.06.03【網路獨播版】",
-     "ch": "理財達人秀 EBCmoneyshow",
-     "views": 108394,
-     "url": "https://www.youtube.com/watch?v=6M6riHy3vfk"
+     "t": "【台新Richart過生日！】回饋新戶完成任務送底片相機，邀你一同收藏生活中的美好回憶",
+     "ch": "台新新光金控 TS Holdings",
+     "views": 176430,
+     "url": "https://www.youtube.com/watch?v=PyrUDNvpZ2E"
     }
    ],
    "ptt_spike": false,
@@ -981,33 +470,33 @@
    "heat_watch": false,
    "hot_titles": [
     {
-     "t": "[新聞] 被動元件史上最長缺貨潮來了！華新科表",
-     "push": 100,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781429118.A.2C5.html"
+     "t": "[情報] 2887 台新新光金 5月自結 0.24 累計 1.36",
+     "push": 29,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781173522.A.166.html"
     }
    ]
   },
-  "2313": {
-   "name": "華通",
-   "ptt_week": 0,
-   "ptt_baseline": 1.0,
-   "ptt_ratio": 0.0,
+  "1303": {
+   "name": "南亞",
+   "ptt_week": 2,
+   "ptt_baseline": 5.0,
+   "ptt_ratio": 0.4,
    "ptt_trend": [
-    1,
-    0,
+    4,
+    9,
     2,
-    0
+    2
    ],
-   "ptt_push_week": 0,
+   "ptt_push_week": 32,
    "gn_trend": [
-    84,
-    94,
+    100,
     0,
-    99
+    100,
+    100
    ],
-   "gn_week": 99,
-   "gn_base": 59.3,
-   "gn_ratio": 1.7,
+   "gn_week": 100,
+   "gn_base": 66.7,
+   "gn_ratio": 1.5,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
@@ -1019,19 +508,19 @@
    "yt_week": 50,
    "yt_ratio": 99.0,
    "yt_saturated": true,
-   "yt_views_30d": 999819,
+   "yt_views_30d": 222499,
    "yt_top": [
     {
-     "t": "【誘多警告】美伊停戰暴漲1200點！主力出貨4大核彈引爆，不想破產「這件事」快做！(字幕版) 2026.06.15 台股盤後 #仁者無敵 #陳昆仁",
-     "ch": "陳昆仁分析師-摩爾證券投顧",
-     "views": 171496,
-     "url": "https://www.youtube.com/watch?v=mjboXp2-9N0"
+     "t": "【南亞科.華邦電.旺宏.力積電.國巨.日電貿.禾伸堂.信昌電聯發科.鴻海.台積電 明天結算別做一件事?】2026.06.16(有CC字幕)",
+     "ch": "楊育華分析師-摩爾證券投顧",
+     "views": 45021,
+     "url": "https://www.youtube.com/watch?v=JxkdL96h3iI"
     },
     {
-     "t": "【軋爆外資6.5萬口空單！ 周一先漲500點?!】#決勝關鍵周末特別版 2026.06.13",
-     "ch": "林漢偉分析師-摩爾證券投顧",
-     "views": 154109,
-     "url": "https://www.youtube.com/watch?v=3tzrPQjLehU"
+     "t": "南亞科、華邦電、大立光、矽力，想拚翻倍，不只重押，還要它！｜價差看弘哥 周弘分析師 2026.06.16",
+     "ch": " 價差看弘哥",
+     "views": 42269,
+     "url": "https://www.youtube.com/watch?v=pi138Lqh2H4"
     }
    ],
    "ptt_spike": false,
@@ -1039,52 +528,63 @@
    "yt_spike": false,
    "heat_spike": false,
    "heat_watch": false,
-   "hot_titles": []
+   "hot_titles": [
+    {
+     "t": "[情報] 2323 中環 賣南亞科(賠)，辦理現金減資",
+     "push": 20,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781172438.A.D8E.html"
+    },
+    {
+     "t": "[情報] 2323 中環買華通,聯亞,聯發科,賣南亞科賺",
+     "push": 12,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781606820.A.046.html"
+    }
+   ]
   },
-  "2002": {
-   "name": "中鋼",
+  "1802": {
+   "name": "台玻",
    "ptt_week": 0,
-   "ptt_baseline": 3.3,
+   "ptt_baseline": 0.0,
    "ptt_ratio": 0.0,
    "ptt_trend": [
-    7,
-    1,
-    2,
+    0,
+    0,
+    0,
     0
    ],
    "ptt_push_week": 0,
    "gn_trend": [
-    100,
-    79,
-    96,
-    54
+    53,
+    49,
+    35,
+    85
    ],
-   "gn_week": 54,
-   "gn_base": 91.7,
-   "gn_ratio": 0.6,
+   "gn_week": 85,
+   "gn_base": 45.7,
+   "gn_ratio": 1.9,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
-    20,
-    16,
-    7,
-    7
+    0,
+    26,
+    9,
+    15
    ],
-   "yt_week": 7,
-   "yt_ratio": 0.5,
+   "yt_week": 15,
+   "yt_ratio": 1.3,
    "yt_saturated": true,
-   "yt_views_30d": 1110285,
+   "yt_views_30d": 793178,
    "yt_top": [
     {
-     "t": "2026/5/26(二)ETF資金海嘯 AI全民借貸潮!5月台股衝五萬?【早晨財經速解讀】",
-     "ch": "游庭皓的財經皓角",
-     "views": 163253,
-     "url": "https://www.youtube.com/watch?v=zRBJKmx5yhc"
+     "t": "【台股大震盪！】週一開盤這件事千萬別做！記憶體、被動元件、老AI還能追？00981A買鴻海，下週主力卡位「這一檔」大公開！｜ 楊惠宇 分析師 ｜ 2026.05.30(六)",
+     "ch": "楊惠宇分析師",
+     "views": 160122,
+     "url": "https://www.youtube.com/watch?v=GdXVmFPS7Vk"
     },
     {
      "t": "群創、華邦電漲到瘋！鴻海抱到400？2026/06/01【老王不只三分鐘】",
      "ch": "老王愛說笑",
-     "views": 144538,
+     "views": 144634,
      "url": "https://www.youtube.com/watch?v=wjopVtaab1g"
     }
    ],
@@ -1094,964 +594,6 @@
    "heat_spike": false,
    "heat_watch": false,
    "hot_titles": []
-  },
-  "4938": {
-   "name": "和碩",
-   "ptt_week": 0,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    39,
-    100,
-    74,
-    63
-   ],
-   "gn_week": 63,
-   "gn_base": 71.0,
-   "gn_ratio": 0.9,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    18,
-    22,
-    10
-   ],
-   "yt_week": 10,
-   "yt_ratio": 0.8,
-   "yt_saturated": true,
-   "yt_views_30d": 950200,
-   "yt_top": [
-    {
-     "t": "台股大跌別害怕 到這價位杜金龍卯起來買 1招卡位00981A息利雙收《鈔錢部署》盧燕俐 ft.杜金龍 20260609",
-     "ch": "鈔錢部署–華視優選",
-     "views": 389395,
-     "url": "https://www.youtube.com/watch?v=FCwHSDQsSYk"
-    },
-    {
-     "t": "【黃仁勳背板股曝光！下一檔換誰噴？廣達、緯創漲停！台股主升段才剛開始？】何基鼎分析師 2026.06.01",
-     "ch": "何基鼎分析師-摩爾證券投顧",
-     "views": 170188,
-     "url": "https://www.youtube.com/watch?v=QVhtASpNdo8"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "2353": {
-   "name": "宏碁",
-   "ptt_week": 0,
-   "ptt_baseline": 0.7,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    1,
-    1,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    62,
-    100,
-    100,
-    95
-   ],
-   "gn_week": 95,
-   "gn_base": 87.3,
-   "gn_ratio": 1.1,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    39,
-    11
-   ],
-   "yt_week": 11,
-   "yt_ratio": 0.8,
-   "yt_saturated": true,
-   "yt_views_30d": 129278,
-   "yt_top": [
-    {
-     "t": "電腦展必看飆漲股!緯創.鴻海.宏碁.微星.雙鴻到底在做什麼?遇到黃仁勳.蔡力行.潘健成...  #台股 #computex #黃仁勳 #電腦展 #緯創 #鴻海 #聯發科 #宏碁 #仁寶",
-     "ch": "一綺聊股",
-     "views": 63747,
-     "url": "https://www.youtube.com/watch?v=Zv6_EWytjAc"
-    },
-    {
-     "t": "台股殺尾盤! 跌781點...仁寶.宏碁跌停 重電接棒? 魏哲家喊「繼續買股」20260604｜#主播張蕙纖 #分析師王榮旭｜T台最錢線 PODCAST｜TVBS新聞 @TVBSNEWS01",
-     "ch": "TVBS NEWS",
-     "views": 13786,
-     "url": "https://www.youtube.com/watch?v=fCvrsK83ZWk"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "2890": {
-   "name": "永豐金",
-   "ptt_week": 1,
-   "ptt_baseline": 0.7,
-   "ptt_ratio": 1.5,
-   "ptt_trend": [
-    0,
-    1,
-    1,
-    1
-   ],
-   "ptt_push_week": 9,
-   "gn_trend": [
-    96,
-    100,
-    100,
-    100
-   ],
-   "gn_week": 100,
-   "gn_base": 98.7,
-   "gn_ratio": 1.0,
-   "gn_saturated": true,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    8,
-    16,
-    21,
-    5
-   ],
-   "yt_week": 5,
-   "yt_ratio": 0.3,
-   "yt_saturated": true,
-   "yt_views_30d": 304752,
-   "yt_top": [
-    {
-     "t": "醫療業與畜牧業的完美結合！海昌生技(7814)透過獨家脫細胞技術，打造再生醫療新版圖｜《企業家觀點》EP19｜海昌生技 蔡國田董事長 何信裕總經理",
-     "ch": "永豐金證券",
-     "views": 80608,
-     "url": "https://www.youtube.com/watch?v=6fSkYWOyAIs"
-    },
-    {
-     "t": "中國晶片自主突破? AI股成長神話要破滅了? 為了克服「這技術」連台積電也有壓力?  ｜《雅筑會客室》EP39｜曲博、張雅筑",
-     "ch": "永豐金證券",
-     "views": 39001,
-     "url": "https://www.youtube.com/watch?v=U-9M7EPBoIA"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[新聞] 同期新高！玉山金、永豐金 前五月獲利猛",
-     "push": 9,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781076248.A.FD8.html"
-    }
-   ]
-  },
-  "2317": {
-   "name": "鴻海",
-   "ptt_week": 1,
-   "ptt_baseline": 1.7,
-   "ptt_ratio": 0.6,
-   "ptt_trend": [
-    1,
-    2,
-    2,
-    1
-   ],
-   "ptt_push_week": 48,
-   "gn_trend": [
-    100,
-    100,
-    100,
-    100
-   ],
-   "gn_week": 100,
-   "gn_base": 100.0,
-   "gn_ratio": 1.0,
-   "gn_saturated": true,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    0,
-    50
-   ],
-   "yt_week": 50,
-   "yt_ratio": 99.0,
-   "yt_saturated": true,
-   "yt_views_30d": 373441,
-   "yt_top": [
-    {
-     "t": "【簽協議大漲千點 明天千萬別買!? 聯發科.台積電.鴻海.南亞科.華邦電.力積電.旺宏.國巨.華新科】2026.06.15(有CC字幕)",
-     "ch": "楊育華分析師-摩爾證券投顧",
-     "views": 76004,
-     "url": "https://www.youtube.com/watch?v=sfb1pdXBG-4"
-    },
-    {
-     "t": "請你跟我這樣算：鴻海（2317）會漲到多少？",
-     "ch": "孫慶龍之財報魔法師",
-     "views": 47694,
-     "url": "https://www.youtube.com/watch?v=L6KbKRY2kFo"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[新聞] 塔塔 iPhone 零組件廠出包 鴻海有望迎印",
-     "push": 48,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781475974.A.67F.html"
-    }
-   ]
-  },
-  "6239": {
-   "name": "力成",
-   "ptt_week": 0,
-   "ptt_baseline": 0.7,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    1,
-    0,
-    1,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    100,
-    99,
-    65,
-    49
-   ],
-   "gn_week": 49,
-   "gn_base": 88.0,
-   "gn_ratio": 0.6,
-   "gn_saturated": false,
-   "x_mentions_30d": 2,
-   "yt_trend": [
-    0,
-    6,
-    18,
-    26
-   ],
-   "yt_week": 26,
-   "yt_ratio": 3.2,
-   "yt_saturated": true,
-   "yt_views_30d": 879676,
-   "yt_top": [
-    {
-     "t": "力成、聯一光、日電貿，把握洗完再上 !｜金錢道 蔡正華分析師 2026.06.11",
-     "ch": "蔡正華金錢道",
-     "views": 168315,
-     "url": "https://www.youtube.com/watch?v=IH_4R8jczZI"
-    },
-    {
-     "t": "聯電鎖不住要賣？華邦電靠它？低軌衛星漲不動？2026/06/12【老王不只三分鐘】",
-     "ch": "老王愛說笑",
-     "views": 121422,
-     "url": "https://www.youtube.com/watch?v=KfcsOh52PhM"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "1714": {
-   "name": "和桐",
-   "ptt_week": 0,
-   "ptt_baseline": 0.7,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    2,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    10,
-    18,
-    41,
-    39
-   ],
-   "gn_week": 39,
-   "gn_base": 23.0,
-   "gn_ratio": 1.7,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    7,
-    12,
-    8,
-    11
-   ],
-   "yt_week": 11,
-   "yt_ratio": 1.2,
-   "yt_saturated": false,
-   "yt_views_30d": 130065,
-   "yt_top": [
-    {
-     "t": "2026/06/04 股市杰帥 曾英杰 一試成主顧！當沖攻擊班！1714和桐，3615安可，8926台汽電",
-     "ch": "曾英杰分析師",
-     "views": 46301,
-     "url": "https://www.youtube.com/watch?v=gDXaC6iQIw8"
-    },
-    {
-     "t": "高中和桐桐妹妹一起跳舞啦#小太阳闫乐桐 姐妹唱跳#原创视频 #热门",
-     "ch": "小太阳",
-     "views": 26833,
-     "url": "https://www.youtube.com/watch?v=q5FAndbxTNA"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "4958": {
-   "name": "臻鼎-KY",
-   "ptt_week": 0,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    98,
-    99,
-    85,
-    88
-   ],
-   "gn_week": 88,
-   "gn_base": 94.0,
-   "gn_ratio": 0.9,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    22,
-    28
-   ],
-   "yt_week": 28,
-   "yt_ratio": 3.8,
-   "yt_saturated": true,
-   "yt_views_30d": 864254,
-   "yt_top": [
-    {
-     "t": "【斷頭警告】台股V轉是誘多陷阱！主力趁反彈無情出貨，「這幾檔」散戶最愛，現在買就是接刀？(字幕版) 2026.06.08 台股盤後 #仁者無敵 #陳昆仁",
-     "ch": "陳昆仁分析師-摩爾證券投顧",
-     "views": 164525,
-     "url": "https://www.youtube.com/watch?v=0MpG-Q7w1MM"
-    },
-    {
-     "t": "【逃命警告】升息未爆彈，主力倒貨大逃殺！下週保命關鍵，這「2件事」一定要做！(字幕版) 2026.06.13 台股解盤 #仁者無敵 #陳昆仁",
-     "ch": "陳昆仁分析師-摩爾證券投顧",
-     "views": 114949,
-     "url": "https://www.youtube.com/watch?v=MpYZ_ClE6fs"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "3042": {
-   "name": "晶技",
-   "ptt_week": 0,
-   "ptt_baseline": 0.3,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    1,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    42,
-    35,
-    32,
-    53
-   ],
-   "gn_week": 53,
-   "gn_base": 36.3,
-   "gn_ratio": 1.5,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    12,
-    38
-   ],
-   "yt_week": 38,
-   "yt_ratio": 9.5,
-   "yt_saturated": true,
-   "yt_views_30d": 824516,
-   "yt_top": [
-    {
-     "t": "【美伊停火台股暴漲千點！最後的逃命波？國巨、華邦電漲停！下檔換誰噴？】何基鼎分析師 2026.06.15",
-     "ch": "何基鼎分析師-摩爾證券投顧",
-     "views": 263097,
-     "url": "https://www.youtube.com/watch?v=05Exx2uKDUA"
-    },
-    {
-     "t": "二日V轉！華邦電還能漲？英業達、仁寶還有救？2026/06/09【老王不只三分鐘】",
-     "ch": "老王愛說笑",
-     "views": 96542,
-     "url": "https://www.youtube.com/watch?v=M4ucYCVbi94"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "2834": {
-   "name": "臺企銀",
-   "ptt_week": 0,
-   "ptt_baseline": 0.7,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    2,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    9,
-    23,
-    22,
-    21
-   ],
-   "gn_week": 21,
-   "gn_base": 18.0,
-   "gn_ratio": 1.2,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    3,
-    2,
-    0
-   ],
-   "yt_week": 0,
-   "yt_ratio": 0.0,
-   "yt_saturated": false,
-   "yt_views_30d": 91478,
-   "yt_top": [
-    {
-     "t": "台指期崩跌3000點，出大事了? 就業亮眼，美股大跌，美光重挫13%，科技股大逃殺? |股票|記憶體|台積電|輝達|美債|股票|財經|投資理財|台幣|美元| 06/06/26【宏爺講股】",
-     "ch": "宏爺講股",
-     "views": 87668,
-     "url": "https://www.youtube.com/watch?v=7w_8ZvHIcK0"
-    },
-    {
-     "t": "銀行外搶案！男欲借款反遭搶10萬 嚇報警@newsebc",
-     "ch": "東森新聞 CH51",
-     "views": 1786,
-     "url": "https://www.youtube.com/watch?v=6UuOZXWg1XI"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "3231": {
-   "name": "緯創",
-   "ptt_week": 0,
-   "ptt_baseline": 1.7,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    2,
-    3,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    85,
-    100,
-    100,
-    76
-   ],
-   "gn_week": 76,
-   "gn_base": 95.0,
-   "gn_ratio": 0.8,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    17,
-    33
-   ],
-   "yt_week": 33,
-   "yt_ratio": 5.8,
-   "yt_saturated": true,
-   "yt_views_30d": 2586133,
-   "yt_top": [
-    {
-     "t": "台股大跌別害怕 到這價位杜金龍卯起來買 1招卡位00981A息利雙收《鈔錢部署》盧燕俐 ft.杜金龍 20260609",
-     "ch": "鈔錢部署–華視優選",
-     "views": 389395,
-     "url": "https://www.youtube.com/watch?v=FCwHSDQsSYk"
-    },
-    {
-     "t": "【誘多陷阱】狂漲1600點是逃命波？主力拉高出貨！避免套牢斷頭，「唯一動作」快跟上！(字幕版) 2026.06.12 台股盤後 #仁者無敵 #陳昆仁",
-     "ch": "陳昆仁分析師-摩爾證券投顧",
-     "views": 303616,
-     "url": "https://www.youtube.com/watch?v=mRVkBPzryZA"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "8150": {
-   "name": "南茂",
-   "ptt_week": 0,
-   "ptt_baseline": 0.7,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    1,
-    1,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    35,
-    47,
-    45,
-    43
-   ],
-   "gn_week": 43,
-   "gn_base": 42.3,
-   "gn_ratio": 1.0,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    9,
-    19,
-    22
-   ],
-   "yt_week": 22,
-   "yt_ratio": 2.4,
-   "yt_saturated": true,
-   "yt_views_30d": 954198,
-   "yt_top": [
-    {
-     "t": "華邦電、禾伸堂、台勝科，恐慌釋放後的甜蜜反攻  !｜金錢道 蔡正華分析師 2026.06.12",
-     "ch": "蔡正華金錢道",
-     "views": 244966,
-     "url": "https://www.youtube.com/watch?v=6kniKTFKyc0"
-    },
-    {
-     "t": "力成、聯一光、日電貿，把握洗完再上 !｜金錢道 蔡正華分析師 2026.06.11",
-     "ch": "蔡正華金錢道",
-     "views": 168315,
-     "url": "https://www.youtube.com/watch?v=IH_4R8jczZI"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "2891": {
-   "name": "中信金",
-   "ptt_week": 2,
-   "ptt_baseline": 1.7,
-   "ptt_ratio": 1.2,
-   "ptt_trend": [
-    1,
-    0,
-    4,
-    2
-   ],
-   "ptt_push_week": 57,
-   "gn_trend": [
-    100,
-    57,
-    55,
-    100
-   ],
-   "gn_week": 100,
-   "gn_base": 70.7,
-   "gn_ratio": 1.4,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    3,
-    9,
-    33,
-    5
-   ],
-   "yt_week": 5,
-   "yt_ratio": 0.3,
-   "yt_saturated": true,
-   "yt_views_30d": 702969,
-   "yt_top": [
-    {
-     "t": "【歡慶中國信託60週年】開戶交易享好禮，送你入住日月行館  |  中國信託證券",
-     "ch": "中國信託證券",
-     "views": 386656,
-     "url": "https://www.youtube.com/watch?v=8Nt-hjPC9uY"
-    },
-    {
-     "t": "00878、0056別再加碼了！存股老手謝富旭「高檔逃頂」戰法：怒砍富邦金、中信金，重押這2檔低基期黑馬！《股民想知道》ft. 謝富旭.俞璘",
-     "ch": "投資優我罩—優分析",
-     "views": 141059,
-     "url": "https://www.youtube.com/watch?v=PyzgSxJfYKE"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[情報] 2891 中信金 5月自結 0.32 累計 1.78",
-     "push": 31,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781168934.A.073.html"
-    },
-    {
-     "t": "[新聞] 中信金控獲利再創新高！董座顏文隆",
-     "push": 26,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781244192.A.8FD.html"
-    }
-   ]
-  },
-  "2406": {
-   "name": "國碩",
-   "ptt_week": 0,
-   "ptt_baseline": 0.3,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    1,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    18,
-    14,
-    18,
-    27
-   ],
-   "gn_week": 27,
-   "gn_base": 16.7,
-   "gn_ratio": 1.6,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    4,
-    3,
-    14,
-    18
-   ],
-   "yt_week": 18,
-   "yt_ratio": 2.6,
-   "yt_saturated": false,
-   "yt_views_30d": 556802,
-   "yt_top": [
-    {
-     "t": "華邦電、禾伸堂、台勝科，恐慌釋放後的甜蜜反攻  !｜金錢道 蔡正華分析師 2026.06.12",
-     "ch": "蔡正華金錢道",
-     "views": 244966,
-     "url": "https://www.youtube.com/watch?v=6kniKTFKyc0"
-    },
-    {
-     "t": "聯電鎖不住要賣？華邦電靠它？低軌衛星漲不動？2026/06/12【老王不只三分鐘】",
-     "ch": "老王愛說笑",
-     "views": 121422,
-     "url": "https://www.youtube.com/watch?v=KfcsOh52PhM"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": true,
-   "heat_spike": false,
-   "heat_watch": true,
-   "hot_titles": []
-  },
-  "2301": {
-   "name": "光寶科",
-   "ptt_week": 0,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    62,
-    55,
-    86,
-    63
-   ],
-   "gn_week": 63,
-   "gn_base": 67.7,
-   "gn_ratio": 0.9,
-   "gn_saturated": false,
-   "x_mentions_30d": 1,
-   "yt_trend": [
-    0,
-    0,
-    30,
-    20
-   ],
-   "yt_week": 20,
-   "yt_ratio": 2.0,
-   "yt_saturated": true,
-   "yt_views_30d": 1543538,
-   "yt_top": [
-    {
-     "t": "【史詩級崩盤!周一台股暴跌3000點!學會這招，抄底爽賺翻倍股!】#決勝關鍵周末特別版 2026.06.06",
-     "ch": "林漢偉分析師-摩爾證券投顧",
-     "views": 399392,
-     "url": "https://www.youtube.com/watch?v=j71SIEv1hbo"
-    },
-    {
-     "t": "【這是我看過最爛的台股】2026/6/10哲哲只有60秒 #shorts",
-     "ch": "郭哲榮分析師-摩爾證券投顧",
-     "views": 206761,
-     "url": "https://www.youtube.com/watch?v=F5HvfLpzXsM"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "2884": {
-   "name": "玉山金",
-   "ptt_week": 2,
-   "ptt_baseline": 0.3,
-   "ptt_ratio": 6.0,
-   "ptt_trend": [
-    0,
-    0,
-    1,
-    2
-   ],
-   "ptt_push_week": 14,
-   "gn_trend": [
-    41,
-    38,
-    49,
-    47
-   ],
-   "gn_week": 47,
-   "gn_base": 42.7,
-   "gn_ratio": 1.1,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    4,
-    7,
-    11,
-    11
-   ],
-   "yt_week": 11,
-   "yt_ratio": 1.5,
-   "yt_saturated": false,
-   "yt_views_30d": 22576,
-   "yt_top": [
-    {
-     "t": "【天下45週年】AI重組全球秩序！台灣供應鏈如何從「執行者」躍升「規格制定者」？緯穎、SEMI、玉山金控解析 50 年一遇的技術革命｜廣編企劃",
-     "ch": "天下雜誌 video",
-     "views": 14244,
-     "url": "https://www.youtube.com/watch?v=hsOsmscjpkc"
-    },
-    {
-     "t": "均線價位觀察#玉山金#台股 #投資理財 #投資 #林老師課堂",
-     "ch": "Tim提姆報報",
-     "views": 1117,
-     "url": "https://www.youtube.com/watch?v=KXJA2ecNsmg"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[新聞] 同期新高！玉山金、永豐金 前五月獲利猛",
-     "push": 9,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781076248.A.FD8.html"
-    },
-    {
-     "t": "[情報] 換股比例調整:三商壽1股換0.2596股玉山金",
-     "push": 5,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781254239.A.FC2.html"
-    }
-   ]
-  },
-  "1101": {
-   "name": "台泥",
-   "ptt_week": 0,
-   "ptt_baseline": 1.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    2,
-    0,
-    1,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    100,
-    36,
-    50,
-    92
-   ],
-   "gn_week": 92,
-   "gn_base": 62.0,
-   "gn_ratio": 1.5,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    19,
-    6,
-    12,
-    13
-   ],
-   "yt_week": 13,
-   "yt_ratio": 1.1,
-   "yt_saturated": true,
-   "yt_views_30d": 377558,
-   "yt_top": [
-    {
-     "t": "台泥遭罪，搭档背罪！ #台球 #中式八球#是时候展现真正的技术了 #高手过招 #棵棵台球",
-     "ch": "Ajayda Ajayyy",
-     "views": 176581,
-     "url": "https://www.youtube.com/watch?v=HijszSRy1OQ"
-    },
-    {
-     "t": "【SpaceX大漲19%！台股恐遭外資大逃殺？馬斯克身價超台灣GDP！概念股誰將起飛？】何基鼎分析師 2026.6.13",
-     "ch": "何基鼎分析師-摩爾證券投顧",
-     "views": 57798,
-     "url": "https://www.youtube.com/watch?v=c8HCuNMalg8"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "5425": {
-   "name": "台半",
-   "ptt_week": 1,
-   "ptt_baseline": 0.3,
-   "ptt_ratio": 3.0,
-   "ptt_trend": [
-    0,
-    0,
-    1,
-    1
-   ],
-   "ptt_push_week": 57,
-   "gn_trend": [
-    27,
-    37,
-    15,
-    19
-   ],
-   "gn_week": 19,
-   "gn_base": 26.3,
-   "gn_ratio": 0.7,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    28,
-    11,
-    11
-   ],
-   "yt_week": 11,
-   "yt_ratio": 0.8,
-   "yt_saturated": true,
-   "yt_views_30d": 1138626,
-   "yt_top": [
-    {
-     "t": "AI泡沫破了？費半崩10%、台指期跌4400點！週一台股要逃命還是撿便宜？",
-     "ch": "辣個分析師-黎志建(Vic)",
-     "views": 384926,
-     "url": "https://www.youtube.com/watch?v=NS4wEsUN15Q"
-    },
-    {
-     "t": "南茂、台半、晶焱，誰在亂箭中瀟灑？｜金錢道 蔡正華分析師 2026.05.28",
-     "ch": "蔡正華金錢道",
-     "views": 229818,
-     "url": "https://www.youtube.com/watch?v=RRZFXKfzhpo"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[新聞] 美商白皮書 台半導體、AI有缺電風險",
-     "push": 57,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1749647880.A.A67.html"
-    }
-   ]
   },
   "2327": {
    "name": "國巨*",
@@ -2085,19 +627,19 @@
    "yt_week": 50,
    "yt_ratio": 99.0,
    "yt_saturated": true,
-   "yt_views_30d": 562968,
+   "yt_views_30d": 358532,
    "yt_top": [
     {
-     "t": "國巨、華邦電、環球晶，油門踩到底 !｜金錢道 蔡正華分析師 2026.06.15",
-     "ch": "蔡正華金錢道",
-     "views": 244278,
-     "url": "https://www.youtube.com/watch?v=b47b8HrB6c4"
+     "t": "【小心端午變盤！先跑再說？國巨衝千元！被動元件下一檔是誰？】何基鼎分析師 2026.06.16",
+     "ch": "何基鼎分析師-摩爾證券投顧",
+     "views": 55157,
+     "url": "https://www.youtube.com/watch?v=akWClisak-0"
     },
     {
-     "t": "【簽協議大漲千點 明天千萬別買!? 聯發科.台積電.鴻海.南亞科.華邦電.力積電.旺宏.國巨.華新科】2026.06.15(有CC字幕)",
-     "ch": "楊育華分析師-摩爾證券投顧",
-     "views": 76004,
-     "url": "https://www.youtube.com/watch?v=sfb1pdXBG-4"
+     "t": "0616 #國巨 #禾伸堂 #聯發科 被動元件接下來看這一組 AI大升級  新機會才剛開始",
+     "ch": "阮蕙慈分析師-大華國際投顧-金融阮實力",
+     "views": 49038,
+     "url": "https://www.youtube.com/watch?v=KCJV7yNyfSU"
     }
    ],
    "ptt_spike": false,
@@ -2107,51 +649,51 @@
    "heat_watch": false,
    "hot_titles": []
   },
-  "2609": {
-   "name": "陽明",
-   "ptt_week": 1,
+  "2484": {
+   "name": "希華",
+   "ptt_week": 0,
    "ptt_baseline": 0.3,
-   "ptt_ratio": 3.0,
+   "ptt_ratio": 0.0,
    "ptt_trend": [
     0,
     0,
     1,
-    1
+    0
    ],
-   "ptt_push_week": 17,
+   "ptt_push_week": 0,
    "gn_trend": [
-    91,
-    100,
-    100,
-    99
+    23,
+    18,
+    18,
+    0
    ],
-   "gn_week": 99,
-   "gn_base": 97.0,
-   "gn_ratio": 1.0,
+   "gn_week": 0,
+   "gn_base": 19.7,
+   "gn_ratio": 0.0,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
     0,
     0,
-    0,
-    50
+    18,
+    32
    ],
-   "yt_week": 50,
-   "yt_ratio": 99.0,
+   "yt_week": 32,
+   "yt_ratio": 5.3,
    "yt_saturated": true,
-   "yt_views_30d": 45433,
+   "yt_views_30d": 148100,
    "yt_top": [
     {
-     "t": "近百輛機車 夜衝陽明山 警逮「IG號召者」｜TVBS新聞 @TVBSNEWS01",
-     "ch": "TVBS NEWS",
-     "views": 17891,
-     "url": "https://www.youtube.com/watch?v=EKHtv6HQpXs"
+     "t": "端午變盤? 小心這2變數 |股票|聯電|友達|華邦電|南亞科|希華|美光|升息|記憶體|台積電|輝達|美債|股票|財經|投資理財|台幣|美元| 06/15/26【宏爺講股】",
+     "ch": "宏爺講股",
+     "views": 55920,
+     "url": "https://www.youtube.com/watch?v=kQUd9_MBjoo"
     },
     {
-     "t": "陽明山上玩水好開心",
-     "ch": "歐宛樺&榮榮的媽媽&阿展的老婆",
-     "views": 10280,
-     "url": "https://www.youtube.com/watch?v=i7QVNTEZcAE"
+     "t": "希華,玉晶光,聯一光大毅,華容,美琪瑪亞翔,國統,普安這些股票你都知道!｜20260615｜涂敏峰 分析師｜超越巔峰",
+     "ch": "超越巔峰 涂敏峰分析師-永誠國際投顧",
+     "views": 20896,
+     "url": "https://www.youtube.com/watch?v=fjTLrbbVjyg"
     }
    ],
    "ptt_spike": false,
@@ -2159,149 +701,83 @@
    "yt_spike": false,
    "heat_spike": false,
    "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[情報] 2636 台驊控股買長榮1,371張,陽明5,000張",
-     "push": 17,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781083304.A.6BC.html"
-    }
-   ]
+   "hot_titles": []
   },
-  "2892": {
-   "name": "第一金",
+  "9105": {
+   "name": "泰金寶-DR",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    95,
+    61,
+    37,
+    35
+   ],
+   "gn_week": 35,
+   "gn_base": 64.3,
+   "gn_ratio": 0.5,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    3,
+    4,
+    4,
+    0
+   ],
+   "yt_week": 0,
+   "yt_ratio": 0.0,
+   "yt_saturated": false,
+   "yt_views_30d": 56822,
+   "yt_top": [
+    {
+     "t": "輝達量子電腦夥伴金寶跳空漲停 康舒漲半根！量子運算初期開發技術瓶頸大 長線具備潛力｜非凡財經新聞｜20260522",
+     "ch": "USTV 非凡電視",
+     "views": 25904,
+     "url": "https://www.youtube.com/watch?v=hPjsQhHPqGo"
+    },
+    {
+     "t": "GIS奪Coherent大單 今年將在CPO領域大放異彩!入股SEEQC,卡位量子電腦 金寶2周大漲近50%,還有戲可看?｜20260604(第6/8段)股市現場*鄭明娟(李冠嶔)",
+     "ch": "非凡 股市現場",
+     "views": 15944,
+     "url": "https://www.youtube.com/watch?v=UHAF3-vOpdY"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "2313": {
+   "name": "華通",
    "ptt_week": 1,
    "ptt_baseline": 1.0,
    "ptt_ratio": 1.0,
    "ptt_trend": [
-    2,
-    0,
     1,
-    1
-   ],
-   "ptt_push_week": 18,
-   "gn_trend": [
-    100,
-    58,
-    69,
-    87
-   ],
-   "gn_week": 87,
-   "gn_base": 75.7,
-   "gn_ratio": 1.1,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    13,
+    0,
     2,
-    8,
-    12
-   ],
-   "yt_week": 12,
-   "yt_ratio": 1.6,
-   "yt_saturated": false,
-   "yt_views_30d": 93235,
-   "yt_top": [
-    {
-     "t": "赶海第一天激活系统，鱼群疯狂自投罗网！【别人赶海靠运气，我靠系统报点发家致富】#系统流 #赶海 #重生 #逆袭 #漫剧 #燃漫领域 #燃漫领域123",
-     "ch": "燃漫领域",
-     "views": 37040,
-     "url": "https://www.youtube.com/watch?v=42P6jtIGBw0"
-    },
-    {
-     "t": "【主動控盤 雙收合奏】#00408A #第一金台股趨勢優股息主動式ETF基金 (本基金並無保證收益及配息且配息來源可能為收益平準金)",
-     "ch": "第一金投信",
-     "views": 14311,
-     "url": "https://www.youtube.com/watch?v=0R_m5lBN1GA"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": [
-    {
-     "t": "[情報] 2892 第一金 5月自結 0.24 累計 1.03",
-     "push": 18,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781245646.A.F7B.html"
-    }
-   ]
-  },
-  "3236": {
-   "name": "千如",
-   "ptt_week": 0,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    35,
-    28,
-    31,
-    41
-   ],
-   "gn_week": 41,
-   "gn_base": 31.3,
-   "gn_ratio": 1.3,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    17,
-    8,
-    5,
-    20
-   ],
-   "yt_week": 20,
-   "yt_ratio": 2.0,
-   "yt_saturated": true,
-   "yt_views_30d": 357698,
-   "yt_top": [
-    {
-     "t": "3個魔王級變數會讓台股反轉走空？華邦電、被動狂噴→誰將接棒？ (開字幕好幸福) 2026.06.15",
-     "ch": "江國中分析師-摩爾證券投顧",
-     "views": 130290,
-     "url": "https://www.youtube.com/watch?v=sNLQLqnFpYE"
-    },
-    {
-     "t": "光銅並進｜【浦男搜股】EP.311",
-     "ch": "老王愛說笑",
-     "views": 45731,
-     "url": "https://www.youtube.com/watch?v=SP5dvmLYKbM"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "8112": {
-   "name": "至上",
-   "ptt_week": 1,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
     1
    ],
-   "ptt_push_week": 16,
+   "ptt_push_week": 12,
    "gn_trend": [
-    39,
-    42,
-    48,
-    41
+    73,
+    82,
+    76,
+    100
    ],
-   "gn_week": 41,
-   "gn_base": 43.0,
-   "gn_ratio": 1.0,
+   "gn_week": 100,
+   "gn_base": 77.0,
+   "gn_ratio": 1.3,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
@@ -2313,19 +789,19 @@
    "yt_week": 50,
    "yt_ratio": 99.0,
    "yt_saturated": true,
-   "yt_views_30d": 226861,
+   "yt_views_30d": 813466,
    "yt_top": [
     {
-     "t": "【メイドカフェの日常？】売上至上主義のコンカフェ  #日常 #shorts #バイト",
-     "ch": "マジカルロリポップ 魔法少女メイドカフェ",
-     "views": 190203,
-     "url": "https://www.youtube.com/watch?v=W4TUfbOw09g"
+     "t": "【誘多警告】美伊停戰暴漲1200點！主力出貨4大核彈引爆，不想破產「這件事」快做！(字幕版) 2026.06.15 台股盤後 #仁者無敵 #陳昆仁",
+     "ch": "陳昆仁分析師-摩爾證券投顧",
+     "views": 379133,
+     "url": "https://www.youtube.com/watch?v=mjboXp2-9N0"
     },
     {
-     "t": "真跳出了少年的模樣 #舞出童年活力 #感覺至上 #熱門舞蹈",
-     "ch": "terry stewartberg",
-     "views": 5048,
-     "url": "https://www.youtube.com/watch?v=0SanGIMNB2g"
+     "t": "【SPCX市值超台積電！太空概念股昇達科 華通 利不足？費半 挑戰新高！台股跟進 該搶誰？記憶體 CPO 設備半導體！漲價缺貨從誰看起？】決戰金融家 葉俊敏分析師 20260615",
+     "ch": "葉俊敏分析師-摩爾證券投顧",
+     "views": 100113,
+     "url": "https://www.youtube.com/watch?v=0OH7_XW4syU"
     }
    ],
    "ptt_spike": false,
@@ -2335,14 +811,14 @@
    "heat_watch": false,
    "hot_titles": [
     {
-     "t": "[情報] 8112至上 5月營收",
-     "push": 16,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781085202.A.072.html"
+     "t": "[情報] 2323 中環買華通,聯亞,聯發科,賣南亞科賺",
+     "push": 12,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781606820.A.046.html"
     }
    ]
   },
-  "6443": {
-   "name": "元晶",
+  "2489": {
+   "name": "瑞軒",
    "ptt_week": 0,
    "ptt_baseline": 0.0,
    "ptt_ratio": 0.0,
@@ -2354,38 +830,38 @@
    ],
    "ptt_push_week": 0,
    "gn_trend": [
-    36,
-    23,
-    29,
-    36
+    42,
+    19,
+    15,
+    7
    ],
-   "gn_week": 36,
-   "gn_base": 29.3,
-   "gn_ratio": 1.2,
+   "gn_week": 7,
+   "gn_base": 25.3,
+   "gn_ratio": 0.3,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
-    8,
-    10,
-    8,
+    22,
+    14,
+    5,
     7
    ],
    "yt_week": 7,
-   "yt_ratio": 0.8,
+   "yt_ratio": 0.5,
    "yt_saturated": false,
-   "yt_views_30d": 534053,
+   "yt_views_30d": 524520,
    "yt_top": [
     {
-     "t": "敬鵬、台半、TPK，記憶體為何被大賣？｜金錢道 蔡正華分析師 2026.05.19",
-     "ch": "蔡正華金錢道",
-     "views": 147807,
-     "url": "https://www.youtube.com/watch?v=6De7ykWgoek"
+     "t": "【台股大震盪！】週一開盤這件事千萬別做！記憶體、被動元件、老AI還能追？00981A買鴻海，下週主力卡位「這一檔」大公開！｜ 楊惠宇 分析師 ｜ 2026.05.30(六)",
+     "ch": "楊惠宇分析師",
+     "views": 160122,
+     "url": "https://www.youtube.com/watch?v=GdXVmFPS7Vk"
     },
     {
-     "t": "【2400點大V轉! 還有撿便宜的機會?!】#決勝關鍵 2026.06.09",
-     "ch": "林漢偉分析師-摩爾證券投顧",
-     "views": 79122,
-     "url": "https://www.youtube.com/watch?v=xLIaQ_SXD0M"
+     "t": "華邦電漲了！群創跌了！2026/05/26【老王不只三分鐘】",
+     "ch": "老王愛說笑",
+     "views": 110582,
+     "url": "https://www.youtube.com/watch?v=D_xibvO-zME"
     }
    ],
    "ptt_spike": false,
@@ -2395,8 +871,116 @@
    "heat_watch": false,
    "hot_titles": []
   },
-  "1301": {
-   "name": "台塑",
+  "2002": {
+   "name": "中鋼",
+   "ptt_week": 0,
+   "ptt_baseline": 3.3,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    8,
+    0,
+    2,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    0,
+    65,
+    93,
+    66
+   ],
+   "gn_week": 66,
+   "gn_base": 52.7,
+   "gn_ratio": 1.3,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    26,
+    12,
+    8,
+    4
+   ],
+   "yt_week": 4,
+   "yt_ratio": 0.3,
+   "yt_saturated": true,
+   "yt_views_30d": 1089722,
+   "yt_top": [
+    {
+     "t": "2026/5/26(二)ETF資金海嘯 AI全民借貸潮!5月台股衝五萬?【早晨財經速解讀】",
+     "ch": "游庭皓的財經皓角",
+     "views": 163284,
+     "url": "https://www.youtube.com/watch?v=zRBJKmx5yhc"
+    },
+    {
+     "t": "群創、華邦電漲到瘋！鴻海抱到400？2026/06/01【老王不只三分鐘】",
+     "ch": "老王愛說笑",
+     "views": 144634,
+     "url": "https://www.youtube.com/watch?v=wjopVtaab1g"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "3576": {
+   "name": "聯合再生",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    41,
+    30,
+    0,
+    44
+   ],
+   "gn_week": 44,
+   "gn_base": 23.7,
+   "gn_ratio": 1.9,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    4,
+    2,
+    6,
+    19
+   ],
+   "yt_week": 19,
+   "yt_ratio": 4.8,
+   "yt_saturated": false,
+   "yt_views_30d": 131712,
+   "yt_top": [
+    {
+     "t": "川普TACO！千點反攻剛開始？下周4變數一次攤牌？首富戰！日月光慶祝行情發動？國巨陳泰銘不能輸 SpaceX今夜升空！空降美股7強？馬斯克抵7個黃仁勳？《57股市同學會》葉子菁 吳岳展 吳曉松 鄧尚維",
+     "ch": "57東森財經新聞",
+     "views": 22756,
+     "url": "https://www.youtube.com/watch?v=ejSfT7zjUYM"
+    },
+    {
+     "t": "馬斯克砸錢搶太空發電第一人 「元晶、國碩、聯合再生、茂迪」搭非紅宇宙商機！？@TaiwanLBJnews   #shorts",
+     "ch": "寶傑點兵／寶傑怎麼說",
+     "views": 21588,
+     "url": "https://www.youtube.com/watch?v=GoA2DrexSxQ"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": true,
+   "heat_spike": false,
+   "heat_watch": true,
+   "hot_titles": []
+  },
+  "2324": {
+   "name": "仁寶",
    "ptt_week": 0,
    "ptt_baseline": 0.7,
    "ptt_ratio": 0.0,
@@ -2408,146 +992,38 @@
    ],
    "ptt_push_week": 0,
    "gn_trend": [
-    87,
     100,
     100,
-    100
+    100,
+    51
    ],
-   "gn_week": 100,
-   "gn_base": 95.7,
-   "gn_ratio": 1.0,
+   "gn_week": 51,
+   "gn_base": 100.0,
+   "gn_ratio": 0.5,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
     0,
     0,
-    11,
-    39
+    33,
+    17
    ],
-   "yt_week": 39,
-   "yt_ratio": 10.6,
+   "yt_week": 17,
+   "yt_ratio": 1.5,
    "yt_saturated": true,
-   "yt_views_30d": 789470,
-   "yt_top": [
-    {
-     "t": "【美伊停火台股暴漲千點！最後的逃命波？國巨、華邦電漲停！下檔換誰噴？】何基鼎分析師 2026.06.15",
-     "ch": "何基鼎分析師-摩爾證券投顧",
-     "views": 263097,
-     "url": "https://www.youtube.com/watch?v=05Exx2uKDUA"
-    },
-    {
-     "t": "台塑生醫醫之方益生菌PLUS~益生菌不白吃  好菌直達體內  順暢好輕鬆!",
-     "ch": "台塑生醫醫之方",
-     "views": 106376,
-     "url": "https://www.youtube.com/watch?v=atVl6CNoFd8"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "8105": {
-   "name": "凌巨",
-   "ptt_week": 0,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    6,
-    7,
-    9,
-    11
-   ],
-   "gn_week": 11,
-   "gn_base": 7.3,
-   "gn_ratio": 1.5,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    5,
-    10,
-    1
-   ],
-   "yt_week": 1,
-   "yt_ratio": 0.2,
-   "yt_saturated": false,
-   "yt_views_30d": 77427,
-   "yt_top": [
-    {
-     "t": "跌時重質!台積電,玉晶光,希華,立敦,凌巨｜20260608｜涂敏峰 分析師｜超越巔峰",
-     "ch": "超越巔峰 涂敏峰分析師-永誠國際投顧",
-     "views": 29233,
-     "url": "https://www.youtube.com/watch?v=svWqvi-orNU"
-    },
-    {
-     "t": "台灣偷偷做著全世界看不見的螢幕，你每天都在盯著它",
-     "ch": "皮超丘",
-     "views": 11910,
-     "url": "https://www.youtube.com/watch?v=HamhLWmp8JA"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "2356": {
-   "name": "英業達",
-   "ptt_week": 0,
-   "ptt_baseline": 0.3,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    1,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    100,
-    100,
-    73,
-    38
-   ],
-   "gn_week": 38,
-   "gn_base": 91.0,
-   "gn_ratio": 0.4,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    30,
-    20
-   ],
-   "yt_week": 20,
-   "yt_ratio": 2.0,
-   "yt_saturated": true,
-   "yt_views_30d": 1116609,
+   "yt_views_30d": 1295781,
    "yt_top": [
     {
      "t": "台股大跌別害怕 到這價位杜金龍卯起來買 1招卡位00981A息利雙收《鈔錢部署》盧燕俐 ft.杜金龍 20260609",
      "ch": "鈔錢部署–華視優選",
-     "views": 389404,
+     "views": 390915,
      "url": "https://www.youtube.com/watch?v=FCwHSDQsSYk"
     },
     {
-     "t": "反轉時刻趕快賣？記憶體趕快砍？2026/06/05【老王不只三分鐘】",
-     "ch": "老王愛說笑",
-     "views": 160010,
-     "url": "https://www.youtube.com/watch?v=pIgoJ8_Qe2Q"
+     "t": "暴漲暴跌是空頭?被動元件.記憶體.老AI.全面殺║陳昆仁、何基鼎、陳唯泰║2026.06.10",
+     "ch": "瘋狂股市福利社Free Free Free!",
+     "views": 124555,
+     "url": "https://www.youtube.com/watch?v=TnQWIZswc-c"
     }
    ],
    "ptt_spike": false,
@@ -2557,159 +1033,51 @@
    "heat_watch": false,
    "hot_titles": []
   },
-  "2312": {
-   "name": "金寶",
-   "ptt_week": 0,
-   "ptt_baseline": 0.3,
-   "ptt_ratio": 0.0,
+  "2884": {
+   "name": "玉山金",
+   "ptt_week": 1,
+   "ptt_baseline": 0.7,
+   "ptt_ratio": 1.5,
    "ptt_trend": [
     0,
     0,
-    1,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    100,
-    98,
-    73,
-    33
-   ],
-   "gn_week": 33,
-   "gn_base": 90.3,
-   "gn_ratio": 0.4,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    0,
-    25,
-    25
-   ],
-   "yt_week": 25,
-   "yt_ratio": 3.0,
-   "yt_saturated": true,
-   "yt_views_30d": 458152,
-   "yt_top": [
-    {
-     "t": "女朋友的爸媽要來台北看寶哥，寶哥急的來搬救兵！#日久生情#阿拉斯加雪橇犬 #alaskanmalamute #cutedog #pets #kimbo #puppy #cute #金寶",
-     "ch": "金寶銀寶の日常",
-     "views": 36788,
-     "url": "https://www.youtube.com/watch?v=yWYhmwGi3zc"
-    },
-    {
-     "t": "直男葛格不講風情，還是妹妹善解人意！#親親要找妹妹#阿拉斯加雪橇犬 #alaskanmalamute #pets #kimbo #萌寵 #cute #金寶",
-     "ch": "金寶銀寶の日常",
-     "views": 28752,
-     "url": "https://www.youtube.com/watch?v=DJJPZXWJg1g"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "4939": {
-   "name": "亞電",
-   "ptt_week": 0,
-   "ptt_baseline": 0.0,
-   "ptt_ratio": 0.0,
-   "ptt_trend": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "ptt_push_week": 0,
-   "gn_trend": [
-    16,
-    25,
-    27,
-    33
-   ],
-   "gn_week": 33,
-   "gn_base": 22.7,
-   "gn_ratio": 1.5,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    7,
-    31,
-    12
-   ],
-   "yt_week": 12,
-   "yt_ratio": 0.9,
-   "yt_saturated": true,
-   "yt_views_30d": 2111128,
-   "yt_top": [
-    {
-     "t": "亞電、國巨、廣達，誰先誰後？｜金錢道 蔡正華分析師 2026.06.05",
-     "ch": "蔡正華金錢道",
-     "views": 528662,
-     "url": "https://www.youtube.com/watch?v=Fpn1IZ-fZCQ"
-    },
-    {
-     "t": "0605 #國巨 #臺慶科 #頎邦 #亞電 #蜜望實 #華邦電 #南亞科   晚上這數據見轉折 記憶體假利空 被動下周噴出    #阮蕙慈 #阮惠慈 阮蕙慈 金融阮實力",
-     "ch": "阮蕙慈分析師-大華國際投顧-金融阮實力",
-     "views": 243480,
-     "url": "https://www.youtube.com/watch?v=_YTw8JcTq4Q"
-    }
-   ],
-   "ptt_spike": false,
-   "gn_spike": false,
-   "yt_spike": false,
-   "heat_spike": false,
-   "heat_watch": false,
-   "hot_titles": []
-  },
-  "2801": {
-   "name": "彰銀",
-   "ptt_week": 2,
-   "ptt_baseline": 0.3,
-   "ptt_ratio": 6.0,
-   "ptt_trend": [
-    0,
-    0,
-    1,
-    2
-   ],
-   "ptt_push_week": 7,
-   "gn_trend": [
-    34,
-    31,
-    35,
-    38
-   ],
-   "gn_week": 38,
-   "gn_base": 33.3,
-   "gn_ratio": 1.1,
-   "gn_saturated": false,
-   "x_mentions_30d": 0,
-   "yt_trend": [
-    0,
-    4,
-    3,
+    2,
     1
    ],
-   "yt_week": 1,
-   "yt_ratio": 0.4,
+   "ptt_push_week": 5,
+   "gn_trend": [
+    39,
+    43,
+    48,
+    88
+   ],
+   "gn_week": 88,
+   "gn_base": 43.3,
+   "gn_ratio": 2.0,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    5,
+    8,
+    10,
+    10
+   ],
+   "yt_week": 10,
+   "yt_ratio": 1.3,
    "yt_saturated": false,
-   "yt_views_30d": 1594,
+   "yt_views_30d": 22856,
    "yt_top": [
     {
-     "t": "【#彰銀Fun心卡】入手啦！完整開箱給你看！",
-     "ch": "寶可孟の理財大作戰",
-     "views": 606,
-     "url": "https://www.youtube.com/watch?v=06soB1O1eOQ"
+     "t": "【天下45週年】AI重組全球秩序！台灣供應鏈如何從「執行者」躍升「規格制定者」？緯穎、SEMI、玉山金控解析 50 年一遇的技術革命｜廣編企劃",
+     "ch": "天下雜誌 video",
+     "views": 14251,
+     "url": "https://www.youtube.com/watch?v=hsOsmscjpkc"
     },
     {
-     "t": "【彰銀雙周報｜ChaiBo APP－ 最強阿嬤PRO理財術！】",
-     "ch": "彰化銀行",
-     "views": 425,
-     "url": "https://www.youtube.com/watch?v=Dj6uSiuqO2I"
+     "t": "均線價位觀察#玉山金#台股 #投資理財 #投資 #林老師課堂",
+     "ch": "Tim提姆報報",
+     "views": 1117,
+     "url": "https://www.youtube.com/watch?v=KXJA2ecNsmg"
     }
    ],
    "ptt_spike": false,
@@ -2719,19 +1087,421 @@
    "heat_watch": false,
    "hot_titles": [
     {
-     "t": "[情報] 5880合庫&amp;2801彰銀&amp;2883聯邦銀 五月營收",
-     "push": 4,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781333875.A.936.html"
-    },
-    {
-     "t": "Re: [情報] 2801 彰銀 114年股利 0.8+0.25",
-     "push": 3,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781257251.A.EF8.html"
+     "t": "[情報] 換股比例調整:三商壽1股換0.2596股玉山金",
+     "push": 5,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781254239.A.FC2.html"
     }
    ]
   },
-  "1815": {
-   "name": "富喬",
+  "2610": {
+   "name": "華航",
+   "ptt_week": 0,
+   "ptt_baseline": 0.3,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    39,
+    100,
+    75,
+    100
+   ],
+   "gn_week": 100,
+   "gn_base": 71.3,
+   "gn_ratio": 1.4,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    14,
+    36
+   ],
+   "yt_week": 36,
+   "yt_ratio": 7.7,
+   "yt_saturated": true,
+   "yt_views_30d": 130913,
+   "yt_top": [
+    {
+     "t": "客機在3.5萬英尺高空突然解體｜225人罹難｜華航CI611澎湖空難",
+     "ch": "GlobalEye全球奇觀錄",
+     "views": 48153,
+     "url": "https://www.youtube.com/watch?v=yGuFDBYfUwE"
+    },
+    {
+     "t": "[真實錄音]華航358航班空難，兩顆引擎脫落，真實錄音 #空難模擬 #automobile #automobile #航空調查 #aviation #emas #ntsb #faa",
+     "ch": "Google小姐機長",
+     "views": 32621,
+     "url": "https://www.youtube.com/watch?v=4JJKFBnUVW4"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "2317": {
+   "name": "鴻海",
+   "ptt_week": 1,
+   "ptt_baseline": 1.7,
+   "ptt_ratio": 0.6,
+   "ptt_trend": [
+    1,
+    2,
+    2,
+    1
+   ],
+   "ptt_push_week": 48,
+   "gn_trend": [
+    100,
+    100,
+    100,
+    102
+   ],
+   "gn_week": 102,
+   "gn_base": 100.0,
+   "gn_ratio": 1.0,
+   "gn_saturated": true,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    0,
+    50
+   ],
+   "yt_week": 50,
+   "yt_ratio": 99.0,
+   "yt_saturated": true,
+   "yt_views_30d": 275833,
+   "yt_top": [
+    {
+     "t": "【兆華艾綸說】台積奔3500最新報告 鴻海.廣達.英業達機會到？台股ETF寫9兆奇蹟 主被動如何選？ETF教父獨家組合策略！｜李兆華、艾綸、黃昭棠2026.06.16【網路獨播版】",
+     "ch": "理財達人秀 EBCmoneyshow",
+     "views": 50292,
+     "url": "https://www.youtube.com/watch?v=5K5JoVp98Sg"
+    },
+    {
+     "t": "【國巨* 環球晶新科千金股 端午最後倒數 被動元件我開賣！台積電 聯發科 鴻海】飆股控盤術 陳俊言分析師 2026.06.16",
+     "ch": "陳俊言分析師-摩爾證券投顧",
+     "views": 48312,
+     "url": "https://www.youtube.com/watch?v=ngt5mFoQeO8"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": [
+    {
+     "t": "[新聞] 塔塔 iPhone 零組件廠出包 鴻海有望迎印",
+     "push": 48,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781475974.A.67F.html"
+    }
+   ]
+  },
+  "2882": {
+   "name": "國泰金",
+   "ptt_week": 2,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    2
+   ],
+   "ptt_push_week": 39,
+   "gn_trend": [
+    56,
+    100,
+    100,
+    100
+   ],
+   "gn_week": 100,
+   "gn_base": 85.3,
+   "gn_ratio": 1.2,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    6,
+    12,
+    18,
+    14
+   ],
+   "yt_week": 14,
+   "yt_ratio": 1.2,
+   "yt_saturated": true,
+   "yt_views_30d": 1540019,
+   "yt_top": [
+    {
+     "t": "不只台積電、更有輝達供應鏈！00400A主動國泰動能高息(#基金之配息來源可能為收益平準金且無保證收益及配息)",
+     "ch": "大樹下學投資",
+     "views": 703749,
+     "url": "https://www.youtube.com/watch?v=1ec-PTuxmDk"
+    },
+    {
+     "t": "覺得股市太亂看不懂？國泰首席建議：不如手機關掉別看了！認清這兩個結構，才是財富增值的關鍵！🧘‍♂️｜資產配置 股市焦慮  #市場觀測站",
+     "ch": "工商時報",
+     "views": 262446,
+     "url": "https://www.youtube.com/watch?v=1_YXg7UIhBw"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 2882 國泰金 5月自結 0.95 累計 4.07",
+     "push": 21,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781167700.A.8CD.html"
+    },
+    {
+     "t": "[新聞] 股票海賺！ 國泰金5月調整後獲利逾450億",
+     "push": 18,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781170296.A.5A0.html"
+    }
+   ]
+  },
+  "6239": {
+   "name": "力成",
+   "ptt_week": 0,
+   "ptt_baseline": 0.7,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    100,
+    0,
+    15,
+    56
+   ],
+   "gn_week": 56,
+   "gn_base": 38.3,
+   "gn_ratio": 1.5,
+   "gn_saturated": false,
+   "x_mentions_30d": 2,
+   "yt_trend": [
+    0,
+    11,
+    5,
+    34
+   ],
+   "yt_week": 34,
+   "yt_ratio": 6.4,
+   "yt_saturated": true,
+   "yt_views_30d": 944853,
+   "yt_top": [
+    {
+     "t": "力成、聯一光、日電貿，把握洗完再上 !｜金錢道 蔡正華分析師 2026.06.11",
+     "ch": "蔡正華金錢道",
+     "views": 168351,
+     "url": "https://www.youtube.com/watch?v=IH_4R8jczZI"
+    },
+    {
+     "t": "聯電鎖不住要賣？華邦電靠它？低軌衛星漲不動？2026/06/12【老王不只三分鐘】",
+     "ch": "老王愛說笑",
+     "views": 123785,
+     "url": "https://www.youtube.com/watch?v=KfcsOh52PhM"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "2892": {
+   "name": "第一金",
+   "ptt_week": 1,
+   "ptt_baseline": 0.7,
+   "ptt_ratio": 1.5,
+   "ptt_trend": [
+    1,
+    0,
+    1,
+    1
+   ],
+   "ptt_push_week": 19,
+   "gn_trend": [
+    100,
+    70,
+    59,
+    90
+   ],
+   "gn_week": 90,
+   "gn_base": 76.3,
+   "gn_ratio": 1.2,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    13,
+    3,
+    9,
+    11
+   ],
+   "yt_week": 11,
+   "yt_ratio": 1.3,
+   "yt_saturated": false,
+   "yt_views_30d": 98813,
+   "yt_top": [
+    {
+     "t": "赶海第一天激活系统，鱼群疯狂自投罗网！【别人赶海靠运气，我靠系统报点发家致富】#系统流 #赶海 #重生 #逆袭 #漫剧 #燃漫领域 #燃漫领域123",
+     "ch": "燃漫领域",
+     "views": 37717,
+     "url": "https://www.youtube.com/watch?v=42P6jtIGBw0"
+    },
+    {
+     "t": "【主動控盤 雙收合奏】#00408A #第一金台股趨勢優股息主動式ETF基金 (本基金並無保證收益及配息且配息來源可能為收益平準金)",
+     "ch": "第一金投信",
+     "views": 18472,
+     "url": "https://www.youtube.com/watch?v=0R_m5lBN1GA"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 2892 第一金 5月自結 0.24 累計 1.03",
+     "push": 19,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781245646.A.F7B.html"
+    }
+   ]
+  },
+  "6209": {
+   "name": "今國光",
+   "ptt_week": 0,
+   "ptt_baseline": 0.3,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    1,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    37,
+    23,
+    33,
+    39
+   ],
+   "gn_week": 39,
+   "gn_base": 31.0,
+   "gn_ratio": 1.3,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    27,
+    23
+   ],
+   "yt_week": 23,
+   "yt_ratio": 2.6,
+   "yt_saturated": true,
+   "yt_views_30d": 641858,
+   "yt_top": [
+    {
+     "t": "【出大事了】融資殺乾淨了 這檔不買對不起自己 2026.06.11 蔡慶龍分析師#價值型投資 #蔡慶龍 分析師",
+     "ch": "蔡慶龍分析師-價值型投資 ",
+     "views": 116697,
+     "url": "https://www.youtube.com/watch?v=zABph4RLbzE"
+    },
+    {
+     "t": "【平盤變殺盤！還會再跌一根大的？】20260610 雷老闆《股市電電電》EP14",
+     "ch": "⚡️雷老闆 Remus⚡",
+     "views": 81352,
+     "url": "https://www.youtube.com/watch?v=4Ul3-wg1kqY"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "1605": {
+   "name": "華新",
+   "ptt_week": 1,
+   "ptt_baseline": 1.3,
+   "ptt_ratio": 0.8,
+   "ptt_trend": [
+    1,
+    1,
+    2,
+    1
+   ],
+   "ptt_push_week": 100,
+   "gn_trend": [
+    0,
+    79,
+    58,
+    68
+   ],
+   "gn_week": 68,
+   "gn_base": 45.7,
+   "gn_ratio": 1.5,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    20,
+    30
+   ],
+   "yt_week": 30,
+   "yt_ratio": 4.5,
+   "yt_saturated": true,
+   "yt_views_30d": 782629,
+   "yt_top": [
+    {
+     "t": "反轉時刻趕快賣？記憶體趕快砍？2026/06/05【老王不只三分鐘】",
+     "ch": "老王愛說笑",
+     "views": 160076,
+     "url": "https://www.youtube.com/watch?v=pIgoJ8_Qe2Q"
+    },
+    {
+     "t": "二日V轉！華邦電還能漲？英業達、仁寶還有救？2026/06/09【老王不只三分鐘】",
+     "ch": "老王愛說笑",
+     "views": 96772,
+     "url": "https://www.youtube.com/watch?v=M4ucYCVbi94"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": [
+    {
+     "t": "[新聞] 被動元件史上最長缺貨潮來了！華新科表",
+     "push": 100,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781429118.A.2C5.html"
+    }
+   ]
+  },
+  "6153": {
+   "name": "嘉聯益",
    "ptt_week": 0,
    "ptt_baseline": 0.0,
    "ptt_ratio": 0.0,
@@ -2743,38 +1513,470 @@
    ],
    "ptt_push_week": 0,
    "gn_trend": [
-    42,
-    29,
-    39,
-    29
+    8,
+    8,
+    11,
+    18
    ],
-   "gn_week": 29,
-   "gn_base": 36.7,
+   "gn_week": 18,
+   "gn_base": 9.0,
+   "gn_ratio": 2.0,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    1,
+    8,
+    4
+   ],
+   "yt_week": 4,
+   "yt_ratio": 1.3,
+   "yt_saturated": false,
+   "yt_views_30d": 28272,
+   "yt_top": [
+    {
+     "t": "【全集】台股年中慶來了！台積電「買賣節奏」曝光？國巨明出關被動元件能撿？ - 封開平 杜金龍 徐紹軒 蔡侑達《股動錢潮》2026.06.08",
+     "ch": "股動錢潮",
+     "views": 13386,
+     "url": "https://www.youtube.com/watch?v=bjRTaVZO09A"
+    },
+    {
+     "t": "【全集】台積廠務噴 漢唐、矽科宏晟能進場？國巨領軍被動逾10檔亮燈 漲勢未完？ - 陳威良 封開平 陳唯泰 蔡侑達《股動錢潮》2026.06.15",
+     "ch": "57東森財經新聞",
+     "views": 6144,
+     "url": "https://www.youtube.com/watch?v=ZkuRnOeYccw"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "8150": {
+   "name": "南茂",
+   "ptt_week": 0,
+   "ptt_baseline": 0.7,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    38,
+    45,
+    40,
+    36
+   ],
+   "gn_week": 36,
+   "gn_base": 41.0,
+   "gn_ratio": 0.9,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    14,
+    17,
+    19
+   ],
+   "yt_week": 19,
+   "yt_ratio": 1.8,
+   "yt_saturated": true,
+   "yt_views_30d": 782283,
+   "yt_top": [
+    {
+     "t": "華邦電、禾伸堂、台勝科，恐慌釋放後的甜蜜反攻  !｜金錢道 蔡正華分析師 2026.06.12",
+     "ch": "蔡正華金錢道",
+     "views": 245000,
+     "url": "https://www.youtube.com/watch?v=6kniKTFKyc0"
+    },
+    {
+     "t": "群創、華邦電漲到瘋！鴻海抱到400？2026/06/01【老王不只三分鐘】",
+     "ch": "老王愛說笑",
+     "views": 144634,
+     "url": "https://www.youtube.com/watch?v=wjopVtaab1g"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "2890": {
+   "name": "永豐金",
+   "ptt_week": 0,
+   "ptt_baseline": 1.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    1,
+    0,
+    2,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    100,
+    85,
+    100,
+    94
+   ],
+   "gn_week": 94,
+   "gn_base": 95.0,
+   "gn_ratio": 1.0,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    10,
+    19,
+    18,
+    3
+   ],
+   "yt_week": 3,
+   "yt_ratio": 0.2,
+   "yt_saturated": true,
+   "yt_views_30d": 318038,
+   "yt_top": [
+    {
+     "t": "醫療業與畜牧業的完美結合！海昌生技(7814)透過獨家脫細胞技術，打造再生醫療新版圖｜《企業家觀點》EP19｜海昌生技 蔡國田董事長 何信裕總經理",
+     "ch": "永豐金證券",
+     "views": 80614,
+     "url": "https://www.youtube.com/watch?v=6fSkYWOyAIs"
+    },
+    {
+     "t": "中國晶片自主突破? AI股成長神話要破滅了? 為了克服「這技術」連台積電也有壓力?  ｜《雅筑會客室》EP39｜曲博、張雅筑",
+     "ch": "永豐金證券",
+     "views": 48235,
+     "url": "https://www.youtube.com/watch?v=U-9M7EPBoIA"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "5483": {
+   "name": "中美晶",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    51,
+    50,
+    35,
+    39
+   ],
+   "gn_week": 39,
+   "gn_base": 45.3,
+   "gn_ratio": 0.9,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    7,
+    12,
+    31
+   ],
+   "yt_week": 31,
+   "yt_ratio": 4.9,
+   "yt_saturated": true,
+   "yt_views_30d": 477973,
+   "yt_top": [
+    {
+     "t": "【盤後】端午變盤倒數48小時！台指壓低結算？四巫日前先賣一趟？ 2026.06.16",
+     "ch": "鐘崑禎分析師_摩爾證券投顧",
+     "views": 80861,
+     "url": "https://www.youtube.com/watch?v=3LsIxHi4wnA"
+    },
+    {
+     "t": "南亞科 國巨 聯茂⊕ 20260601 趨勢指標 郭憲政分析師",
+     "ch": "趨勢指標 郭憲政分析師",
+     "views": 45253,
+     "url": "https://www.youtube.com/watch?v=hOc9ayJY4Gw"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "3624": {
+   "name": "光頡",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    30,
+    16,
+    20,
+    35
+   ],
+   "gn_week": 35,
+   "gn_base": 22.0,
+   "gn_ratio": 1.6,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    11,
+    10,
+    12,
+    15
+   ],
+   "yt_week": 15,
+   "yt_ratio": 1.4,
+   "yt_saturated": false,
+   "yt_views_30d": 575642,
+   "yt_top": [
+    {
+     "t": "國巨、蜜望實、鈞寶、九豪、光頡逆勢大漲 被動元件缺貨漲價的故事才剛開始!!!｜20260605｜鄭瑞宗分析師｜股市達人",
+     "ch": "股市達人 鄭瑞宗分析師-永誠國際投顧",
+     "views": 234985,
+     "url": "https://www.youtube.com/watch?v=aIUF92I7bQI"
+    },
+    {
+     "t": "台股衝全球No5 環球晶點燃矽晶圓燈火 低價封測轉多頭｜記憶體復活 盟立再創高 隱藏版機器人更威｜國巨入獄 KD高檔鈍化抱還跑？《股市情報局》丁士芬 徐照興 許豐祿 楊少凱",
+     "ch": "57東森財經新聞",
+     "views": 45665,
+     "url": "https://www.youtube.com/watch?v=g3-7WwEv-BQ"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "2353": {
+   "name": "宏碁",
+   "ptt_week": 0,
+   "ptt_baseline": 0.7,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    1,
+    1,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    78,
+    100,
+    100,
+    76
+   ],
+   "gn_week": 76,
+   "gn_base": 92.7,
    "gn_ratio": 0.8,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
-    1,
-    26,
-    13,
+    0,
+    6,
+    34,
     10
    ],
    "yt_week": 10,
    "yt_ratio": 0.8,
    "yt_saturated": true,
-   "yt_views_30d": 1922595,
+   "yt_views_30d": 133561,
    "yt_top": [
     {
-     "t": "國巨、蜜望實、鈞寶、九豪、光頡逆勢大漲 被動元件缺貨漲價的故事才剛開始!!!｜20260605｜鄭瑞宗分析師｜股市達人",
-     "ch": "股市達人 鄭瑞宗分析師-永誠國際投顧",
-     "views": 234965,
-     "url": "https://www.youtube.com/watch?v=aIUF92I7bQI"
+     "t": "電腦展必看飆漲股!緯創.鴻海.宏碁.微星.雙鴻到底在做什麼?遇到黃仁勳.蔡力行.潘健成...  #台股 #computex #黃仁勳 #電腦展 #緯創 #鴻海 #聯發科 #宏碁 #仁寶",
+     "ch": "一綺聊股",
+     "views": 63782,
+     "url": "https://www.youtube.com/watch?v=Zv6_EWytjAc"
     },
     {
-     "t": "馬斯克繞過台積電慘破功！自建廠趕不上Intel A14急了！回頭跪求聯發科「補製程救火」想抽雪茄根本夢話，沒台灣Know How全毀！ - 張禹宣 王榮旭 劉寶傑《寶傑點兵》20260529-2",
-     "ch": "寶傑點兵／寶傑怎麼說",
-     "views": 199615,
-     "url": "https://www.youtube.com/watch?v=g7CSk2gIgu8"
+     "t": "台股殺尾盤! 跌781點...仁寶.宏碁跌停 重電接棒? 魏哲家喊「繼續買股」20260604｜#主播張蕙纖 #分析師王榮旭｜T台最錢線 PODCAST｜TVBS新聞 @TVBSNEWS01",
+     "ch": "TVBS NEWS",
+     "views": 13801,
+     "url": "https://www.youtube.com/watch?v=fCvrsK83ZWk"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "2618": {
+   "name": "長榮航",
+   "ptt_week": 0,
+   "ptt_baseline": 0.3,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    62,
+    70,
+    43,
+    98
+   ],
+   "gn_week": 98,
+   "gn_base": 58.3,
+   "gn_ratio": 1.7,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    11,
+    13,
+    26
+   ],
+   "yt_week": 26,
+   "yt_ratio": 3.2,
+   "yt_saturated": true,
+   "yt_views_30d": 346736,
+   "yt_top": [
+    {
+     "t": "台指期崩跌3000點，出大事了? 就業亮眼，美股大跌，美光重挫13%，科技股大逃殺? |股票|記憶體|台積電|輝達|美債|股票|財經|投資理財|台幣|美元| 06/06/26【宏爺講股】",
+     "ch": "宏爺講股",
+     "views": 87686,
+     "url": "https://www.youtube.com/watch?v=7w_8ZvHIcK0"
+    },
+    {
+     "t": "外資狂殺，散戶傻接刀? 科技股大逃殺? 股票|聯電|凱基金|華邦電|南亞科|記憶體|台積電|輝達|美債|股票|財經|投資理財|台幣|美元| 06/10/26【宏爺講股】",
+     "ch": "宏爺講股",
+     "views": 78074,
+     "url": "https://www.youtube.com/watch?v=wuROhteat_U"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "4958": {
+   "name": "臻鼎-KY",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    88,
+    93,
+    84,
+    0
+   ],
+   "gn_week": 0,
+   "gn_base": 88.3,
+   "gn_ratio": 0.0,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    23,
+    27
+   ],
+   "yt_week": 27,
+   "yt_ratio": 3.5,
+   "yt_saturated": true,
+   "yt_views_30d": 901134,
+   "yt_top": [
+    {
+     "t": "【斷頭警告】台股V轉是誘多陷阱！主力趁反彈無情出貨，「這幾檔」散戶最愛，現在買就是接刀？(字幕版) 2026.06.08 台股盤後 #仁者無敵 #陳昆仁",
+     "ch": "陳昆仁分析師-摩爾證券投顧",
+     "views": 164538,
+     "url": "https://www.youtube.com/watch?v=0MpG-Q7w1MM"
+    },
+    {
+     "t": "【崩盤倒數】V轉狂漲2400點是逃命波？明晚CPI通膨引爆，不跑等著斷頭？(字幕版) 2026.06.09 台股盤後 #仁者無敵 #陳昆仁",
+     "ch": "陳昆仁分析師-摩爾證券投顧",
+     "views": 112620,
+     "url": "https://www.youtube.com/watch?v=TIwtzCCDzfI"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "8043": {
+   "name": "蜜望實",
+   "ptt_week": 0,
+   "ptt_baseline": 0.3,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    24,
+    21,
+    43,
+    31
+   ],
+   "gn_week": 31,
+   "gn_base": 29.3,
+   "gn_ratio": 1.1,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    39,
+    11
+   ],
+   "yt_week": 11,
+   "yt_ratio": 0.8,
+   "yt_saturated": true,
+   "yt_views_30d": 702363,
+   "yt_top": [
+    {
+     "t": "亞電、國巨、蜜望實，盤勢沒有你想像的弱！｜金錢道 蔡正華分析師 2026.06.08",
+     "ch": "蔡正華金錢道",
+     "views": 205890,
+     "url": "https://www.youtube.com/watch?v=RmXLWtvPmxc"
+    },
+    {
+     "t": "【股市生存法則】一早砍股超崩潰，是您嗎？不怕瘋跌，高手靠這招「活下來」！主力瘋搶「這五檔」！被動元件要走第二波？｜ 楊惠宇 分析師 ｜ 2026.06.08(一)",
+     "ch": "楊惠宇分析師",
+     "views": 105298,
+     "url": "https://www.youtube.com/watch?v=qQ9PoE99ycA"
     }
    ],
    "ptt_spike": false,
@@ -2797,37 +1999,37 @@
    ],
    "ptt_push_week": 3,
    "gn_trend": [
-    30,
-    27,
-    51,
-    27
+    31,
+    25,
+    47,
+    23
    ],
-   "gn_week": 27,
-   "gn_base": 36.0,
-   "gn_ratio": 0.8,
+   "gn_week": 23,
+   "gn_base": 34.3,
+   "gn_ratio": 0.7,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
-    9,
-    18,
-    17,
-    6
+    10,
+    19,
+    14,
+    7
    ],
-   "yt_week": 6,
-   "yt_ratio": 0.4,
+   "yt_week": 7,
+   "yt_ratio": 0.5,
    "yt_saturated": true,
-   "yt_views_30d": 2319872,
+   "yt_views_30d": 2236966,
    "yt_top": [
     {
      "t": "群創、友達能破百？2026/05/22【老王不只三分鐘】",
      "ch": "老王愛說笑",
-     "views": 231542,
+     "views": 232018,
      "url": "https://www.youtube.com/watch?v=0Nq4pd6nY-4"
     },
     {
      "t": "老AI狂潮再起!鴻海400元.廣達500元.緯創300元.記憶體.被動元件.誰該賣?║何基鼎、莊佳螢、陳唯泰║2026.06.03",
      "ch": "瘋狂股市福利社Free Free Free!",
-     "views": 168417,
+     "views": 168426,
      "url": "https://www.youtube.com/watch?v=UfFUhhCQpxI"
     }
    ],
@@ -2844,51 +2046,785 @@
     }
    ]
   },
-  "5443": {
-   "name": "均豪",
+  "2337": {
+   "name": "旺宏",
    "ptt_week": 0,
    "ptt_baseline": 0.7,
    "ptt_ratio": 0.0,
    "ptt_trend": [
-    2,
+    0,
+    1,
+    1,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    100,
+    100,
+    100,
+    78
+   ],
+   "gn_week": 78,
+   "gn_base": 100.0,
+   "gn_ratio": 0.8,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    0,
+    50
+   ],
+   "yt_week": 50,
+   "yt_ratio": 99.0,
+   "yt_saturated": true,
+   "yt_views_30d": 894123,
+   "yt_top": [
+    {
+     "t": "【簽協議大漲千點 明天千萬別買!? 聯發科.台積電.鴻海.南亞科.華邦電.力積電.旺宏.國巨.華新科】2026.06.15(有CC字幕)",
+     "ch": "楊育華分析師-摩爾證券投顧",
+     "views": 131271,
+     "url": "https://www.youtube.com/watch?v=sfb1pdXBG-4"
+    },
+    {
+     "t": "聯電鎖不住要賣？華邦電靠它？低軌衛星漲不動？2026/06/12【老王不只三分鐘】",
+     "ch": "老王愛說笑",
+     "views": 123785,
+     "url": "https://www.youtube.com/watch?v=KfcsOh52PhM"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "5880": {
+   "name": "合庫金",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
     0,
     0,
     0
    ],
    "ptt_push_week": 0,
    "gn_trend": [
-    20,
+    28,
+    28,
     19,
-    17,
-    18
+    29
    ],
-   "gn_week": 18,
-   "gn_base": 18.7,
+   "gn_week": 29,
+   "gn_base": 25.0,
+   "gn_ratio": 1.2,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    2,
+    1,
+    1,
+    0
+   ],
+   "yt_week": 0,
+   "yt_ratio": 0.0,
+   "yt_saturated": false,
+   "yt_views_30d": 27438,
+   "yt_top": [
+    {
+     "t": "公股投信「四合一」發酵！第一金暴10萬張巨量　急發聲明護盤｜華視新聞 20260521 @CtsTw",
+     "ch": "華視新聞 CH52",
+     "views": 11925,
+     "url": "https://www.youtube.com/watch?v=lhxYDo1TTzI"
+    },
+    {
+     "t": "【金融股】金融股4月獲利破千億！看起來很香，但真正便宜的是誰？5檔一次看",
+     "ch": "股海老牛",
+     "views": 7531,
+     "url": "https://www.youtube.com/watch?v=tkl-BPnWiCw"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "1326": {
+   "name": "台化",
+   "ptt_week": 0,
+   "ptt_baseline": 0.7,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    1,
+    1,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    65,
+    99,
+    74,
+    29
+   ],
+   "gn_week": 29,
+   "gn_base": 79.3,
+   "gn_ratio": 0.4,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    30,
+    14,
+    6
+   ],
+   "yt_week": 6,
+   "yt_ratio": 0.4,
+   "yt_saturated": true,
+   "yt_views_30d": 875820,
+   "yt_top": [
+    {
+     "t": "可憐的18歲韓國小學妹😂 被阿勇小南學姊們聯手台化! #李雅英 #이아영 #南珉貞 #崔誌元 #최지원 #阿崔 #Travis",
+     "ch": "Angel Wings",
+     "views": 361996,
+     "url": "https://www.youtube.com/watch?v=u1wp5E6FnNY"
+    },
+    {
+     "t": "【理財達人秀】台股狂洗千點 大行情還有機會？鴻海.緯創.記憶體 大戶轉買輝鏈？被動.機器人洗完誰上？傳產翻身 下檔台化?｜李兆華、蔡明翰、高憲容、陳唯泰2026.06.02【電視完整版】",
+     "ch": "理財達人秀 EBCmoneyshow",
+     "views": 132617,
+     "url": "https://www.youtube.com/watch?v=Vl8dEH3VuWo"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "2891": {
+   "name": "中信金",
+   "ptt_week": 2,
+   "ptt_baseline": 1.3,
+   "ptt_ratio": 1.5,
+   "ptt_trend": [
+    0,
+    4,
+    0,
+    2
+   ],
+   "ptt_push_week": 57,
+   "gn_trend": [
+    99,
+    71,
+    53,
+    100
+   ],
+   "gn_week": 100,
+   "gn_base": 74.3,
+   "gn_ratio": 1.3,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    3,
+    24,
+    18,
+    5
+   ],
+   "yt_week": 5,
+   "yt_ratio": 0.3,
+   "yt_saturated": true,
+   "yt_views_30d": 729770,
+   "yt_top": [
+    {
+     "t": "【歡慶中國信託60週年】開戶交易享好禮，送你入住日月行館  |  中國信託證券",
+     "ch": "中國信託證券",
+     "views": 409276,
+     "url": "https://www.youtube.com/watch?v=8Nt-hjPC9uY"
+    },
+    {
+     "t": "00878、0056別再加碼了！存股老手謝富旭「高檔逃頂」戰法：怒砍富邦金、中信金，重押這2檔低基期黑馬！《股民想知道》ft. 謝富旭.俞璘",
+     "ch": "投資優我罩—優分析",
+     "views": 144909,
+     "url": "https://www.youtube.com/watch?v=PyzgSxJfYKE"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 2891 中信金 5月自結 0.32 累計 1.78",
+     "push": 31,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781168934.A.073.html"
+    },
+    {
+     "t": "[新聞] 中信金控獲利再創新高！董座顏文隆",
+     "push": 26,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781244192.A.8FD.html"
+    }
+   ]
+  },
+  "1402": {
+   "name": "遠東新",
+   "ptt_week": 1,
+   "ptt_baseline": 1.3,
+   "ptt_ratio": 0.8,
+   "ptt_trend": [
+    1,
+    2,
+    1,
+    1
+   ],
+   "ptt_push_week": 12,
+   "gn_trend": [
+    50,
+    98,
+    39,
+    44
+   ],
+   "gn_week": 44,
+   "gn_base": 62.3,
+   "gn_ratio": 0.7,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    6,
+    8,
+    3,
+    1
+   ],
+   "yt_week": 1,
+   "yt_ratio": 0.2,
+   "yt_saturated": false,
+   "yt_views_30d": 263482,
+   "yt_top": [
+    {
+     "t": "【台股衝4萬5！逃命倒數？聯發科、聯電漲停，主力倒貨還是軋空再噴！】何基鼎分析師 2026.05.27",
+     "ch": "何基鼎分析師-摩爾證券投顧",
+     "views": 216556,
+     "url": "https://www.youtube.com/watch?v=zkfAuTb2fTE"
+    },
+    {
+     "t": "COMPUTEX驚天大變局，台化化身「半導體續命仙丹」！沒它EUV直接癱瘓，黑科技狂咬AI最肥肉！ - 張禹宣 姚惠珍 周佳和  劉寶傑《寶傑點兵》20260528-3",
+     "ch": "寶傑點兵／寶傑怎麼說",
+     "views": 23416,
+     "url": "https://www.youtube.com/watch?v=WmMFNPUwYyY"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 1402遠東新 5月",
+     "push": 12,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781178286.A.097.html"
+    }
+   ]
+  },
+  "2881": {
+   "name": "富邦金",
+   "ptt_week": 3,
+   "ptt_baseline": 1.7,
+   "ptt_ratio": 1.8,
+   "ptt_trend": [
+    4,
+    0,
+    1,
+    3
+   ],
+   "ptt_push_week": 136,
+   "gn_trend": [
+    100,
+    76,
+    100,
+    95
+   ],
+   "gn_week": 95,
+   "gn_base": 92.0,
    "gn_ratio": 1.0,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
-    4,
-    5,
-    2,
-    3
+    0,
+    0,
+    13,
+    37
    ],
-   "yt_week": 3,
-   "yt_ratio": 0.8,
-   "yt_saturated": false,
-   "yt_views_30d": 52748,
+   "yt_week": 37,
+   "yt_ratio": 8.5,
+   "yt_saturated": true,
+   "yt_views_30d": 822622,
    "yt_top": [
     {
-     "t": "股東會看門道 誰是黑馬股?台積電打造COUPE生態系 四大梁柱缺一不可?不再是圓的?AI晶片年底要變方形!｜20260604(周四)股市現場(完整版)*鄭明娟(黃靖哲×李冠嶔×謝晨彥)",
-     "ch": "非凡 股市現場",
-     "views": 15508,
-     "url": "https://www.youtube.com/watch?v=CoR8TdCbj1M"
+     "t": "【股票】重返45000是最後逃命波？杜金龍緊盯2大崩盤訊號：台股恐回測38000點！ft. 杜金龍｜下班經濟學739｜謝哲青、蔡尚樺",
+     "ch": "風傳媒 The Storm Media",
+     "views": 650802,
+     "url": "https://www.youtube.com/watch?v=lp5kAdC_TsQ"
     },
     {
-     "t": "晶圓廠自動化大升級!盟立Q1轉盈 4廠同步擴廠 看好AI未來3~5年非常好｜非凡財經新聞｜20260528",
+     "t": "2026.06.06【AI遭血洗崩10%，台指夜盤崩3044點 !下週一千萬別做的事】 #財富密碼 陳柏宏分析師",
+     "ch": "陳柏宏分析師-摩爾證券投顧",
+     "views": 56247,
+     "url": "https://www.youtube.com/watch?v=0NTluQxjcno"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 2881 富邦金 人壽買SPCX---補充公告",
+     "push": 71,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781327312.A.0A5.html"
+    },
+    {
+     "t": "[新聞] 「我們股價還滿低的」 富邦金衝129元創",
+     "push": 35,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781239368.A.DEF.html"
+    },
+    {
+     "t": "[新聞] 富邦金董座蔡明興：看好台股續創高 但別",
+     "push": 30,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781253812.A.C75.html"
+    }
+   ]
+  },
+  "2375": {
+   "name": "凱美",
+   "ptt_week": 0,
+   "ptt_baseline": 0.7,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    47,
+    37,
+    33,
+    34
+   ],
+   "gn_week": 34,
+   "gn_base": 39.0,
+   "gn_ratio": 0.9,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    11,
+    19,
+    20
+   ],
+   "yt_week": 20,
+   "yt_ratio": 2.0,
+   "yt_saturated": true,
+   "yt_views_30d": 1383317,
+   "yt_top": [
+    {
+     "t": "國巨、華邦電、環球晶，油門踩到底 !｜金錢道 蔡正華分析師 2026.06.15",
+     "ch": "蔡正華金錢道",
+     "views": 243943,
+     "url": "https://www.youtube.com/watch?v=b47b8HrB6c4"
+    },
+    {
+     "t": "【盤後】「老AI」、「記憶體」同時大漲！不合理！小心背後真相？？ 2026.06.02",
+     "ch": "鐘崑禎分析師_摩爾證券投顧",
+     "views": 137850,
+     "url": "https://www.youtube.com/watch?v=CWY0gP9vryc"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "3042": {
+   "name": "晶技",
+   "ptt_week": 0,
+   "ptt_baseline": 0.3,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    1,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    41,
+    36,
+    33,
+    52
+   ],
+   "gn_week": 52,
+   "gn_base": 36.7,
+   "gn_ratio": 1.4,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    15,
+    35
+   ],
+   "yt_week": 35,
+   "yt_ratio": 7.0,
+   "yt_saturated": true,
+   "yt_views_30d": 885141,
+   "yt_top": [
+    {
+     "t": "【美伊停火台股暴漲千點！最後的逃命波？國巨、華邦電漲停！下檔換誰噴？】何基鼎分析師 2026.06.15",
+     "ch": "何基鼎分析師-摩爾證券投顧",
+     "views": 330124,
+     "url": "https://www.youtube.com/watch?v=05Exx2uKDUA"
+    },
+    {
+     "t": "【SPCX市值超台積電！太空概念股昇達科 華通 利不足？費半 挑戰新高！台股跟進 該搶誰？記憶體 CPO 設備半導體！漲價缺貨從誰看起？】決戰金融家 葉俊敏分析師 20260615",
+     "ch": "葉俊敏分析師-摩爾證券投顧",
+     "views": 100113,
+     "url": "https://www.youtube.com/watch?v=0OH7_XW4syU"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "2867": {
+   "name": "三商壽",
+   "ptt_week": 1,
+   "ptt_baseline": 0.3,
+   "ptt_ratio": 3.0,
+   "ptt_trend": [
+    1,
+    0,
+    0,
+    1
+   ],
+   "ptt_push_week": 5,
+   "gn_trend": [
+    29,
+    23,
+    30,
+    35
+   ],
+   "gn_week": 35,
+   "gn_base": 27.3,
+   "gn_ratio": 1.3,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "yt_week": 0,
+   "yt_ratio": 0.0,
+   "yt_saturated": false,
+   "yt_views_30d": 0,
+   "yt_top": [],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 換股比例調整:三商壽1股換0.2596股玉山金",
+     "push": 5,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781254239.A.FC2.html"
+    }
+   ]
+  },
+  "5328": {
+   "name": "華容",
+   "ptt_week": 1,
+   "ptt_baseline": 0.3,
+   "ptt_ratio": 3.0,
+   "ptt_trend": [
+    1,
+    0,
+    0,
+    1
+   ],
+   "ptt_push_week": 31,
+   "gn_trend": [
+    14,
+    13,
+    13,
+    29
+   ],
+   "gn_week": 29,
+   "gn_base": 13.3,
+   "gn_ratio": 2.2,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    3,
+    9,
+    14,
+    24
+   ],
+   "yt_week": 24,
+   "yt_ratio": 2.8,
+   "yt_saturated": true,
+   "yt_views_30d": 148674,
+   "yt_top": [
+    {
+     "t": "玉晶光,聯一光,映泰大毅,華容這些股票你也都知道!下檔股票要做誰?｜20260616｜涂敏峰 分析師｜超越巔峰",
+     "ch": "超越巔峰 涂敏峰分析師-永誠國際投顧",
+     "views": 23302,
+     "url": "https://www.youtube.com/watch?v=rgQPloMQUBI"
+    },
+    {
+     "t": "希華,玉晶光,聯一光大毅,華容,美琪瑪亞翔,國統,普安這些股票你都知道!｜20260615｜涂敏峰 分析師｜超越巔峰",
+     "ch": "超越巔峰 涂敏峰分析師-永誠國際投顧",
+     "views": 20896,
+     "url": "https://www.youtube.com/watch?v=fjTLrbbVjyg"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": [
+    {
+     "t": "[情報] 5328 華容 5月自結:0 今日漲停",
+     "push": 31,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781507443.A.7C2.html"
+    }
+   ]
+  },
+  "3090": {
+   "name": "日電貿",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    100,
+    40,
+    50,
+    54
+   ],
+   "gn_week": 54,
+   "gn_base": 63.3,
+   "gn_ratio": 0.9,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    0,
+    11,
+    39
+   ],
+   "yt_week": 39,
+   "yt_ratio": 10.6,
+   "yt_saturated": true,
+   "yt_views_30d": 870956,
+   "yt_top": [
+    {
+     "t": "【誘多警告】美伊停戰暴漲1200點！主力出貨4大核彈引爆，不想破產「這件事」快做！(字幕版) 2026.06.15 台股盤後 #仁者無敵 #陳昆仁",
+     "ch": "陳昆仁分析師-摩爾證券投顧",
+     "views": 379573,
+     "url": "https://www.youtube.com/watch?v=mjboXp2-9N0"
+    },
+    {
+     "t": "力成、聯一光、日電貿，把握洗完再上 !｜金錢道 蔡正華分析師 2026.06.11",
+     "ch": "蔡正華金錢道",
+     "views": 168351,
+     "url": "https://www.youtube.com/watch?v=IH_4R8jczZI"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "6155": {
+   "name": "鈞寶",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    17,
+    0,
+    16,
+    39
+   ],
+   "gn_week": 39,
+   "gn_base": 11.0,
+   "gn_ratio": 3.5,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    0,
+    9,
+    17,
+    11
+   ],
+   "yt_week": 11,
+   "yt_ratio": 1.3,
+   "yt_saturated": false,
+   "yt_views_30d": 351961,
+   "yt_top": [
+    {
+     "t": "國巨、蜜望實、鈞寶、九豪、光頡逆勢大漲 被動元件缺貨漲價的故事才剛開始!!!｜20260605｜鄭瑞宗分析師｜股市達人",
+     "ch": "股市達人 鄭瑞宗分析師-永誠國際投顧",
+     "views": 234985,
+     "url": "https://www.youtube.com/watch?v=aIUF92I7bQI"
+    },
+    {
+     "t": "2026.06.08【被動元件【8043蜜望實】漲停⊕再創高!+94%【6155鈞寶】+9%【2484希華】大賺+16%，台股暴跌後唯一的活路在這裡！財富重分配，跟著【撿鑽石】】#股市期皇后 #莊佳螢",
+     "ch": "股市期皇后-莊佳螢",
+     "views": 37413,
+     "url": "https://www.youtube.com/watch?v=YeJ6_reYdpc"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": true,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": true,
+   "hot_titles": []
+  },
+  "2027": {
+   "name": "大成鋼",
+   "ptt_week": 0,
+   "ptt_baseline": 0.7,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    1,
+    1,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    28,
+    37,
+    40,
+    33
+   ],
+   "gn_week": 33,
+   "gn_base": 35.0,
+   "gn_ratio": 0.9,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    6,
+    7,
+    6,
+    7
+   ],
+   "yt_week": 7,
+   "yt_ratio": 1.1,
+   "yt_saturated": false,
+   "yt_views_30d": 35936,
+   "yt_top": [
+    {
+     "t": "《傳產開始喊委屈! 低基期族群要翻身了?》【錢線百分百】20260522-10│非凡財經新聞│",
      "ch": "USTV 非凡電視",
-     "views": 12990,
-     "url": "https://www.youtube.com/watch?v=Hr9GGjIJ0Ow"
+     "views": 16358,
+     "url": "https://www.youtube.com/watch?v=UoPJM0YNgpw"
+    },
+    {
+     "t": "《激勵老AI股奔向新生? 法人布局藏6月飆股?》【錢線百分百】20260602-7│非凡財經新聞│",
+     "ch": "USTV 非凡電視",
+     "views": 3991,
+     "url": "https://www.youtube.com/watch?v=vnKwSzhhU08"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
+  },
+  "3236": {
+   "name": "千如",
+   "ptt_week": 0,
+   "ptt_baseline": 0.0,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    40,
+    28,
+    34,
+    46
+   ],
+   "gn_week": 46,
+   "gn_base": 34.0,
+   "gn_ratio": 1.4,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    14,
+    9,
+    3,
+    24
+   ],
+   "yt_week": 24,
+   "yt_ratio": 2.8,
+   "yt_saturated": true,
+   "yt_views_30d": 424427,
+   "yt_top": [
+    {
+     "t": "3個魔王級變數會讓台股反轉走空？華邦電、被動狂噴→誰將接棒？ (開字幕好幸福) 2026.06.15",
+     "ch": "江國中分析師-摩爾證券投顧",
+     "views": 133478,
+     "url": "https://www.youtube.com/watch?v=sNLQLqnFpYE"
+    },
+    {
+     "t": "光銅並進｜【浦男搜股】EP.311",
+     "ch": "老王愛說笑",
+     "views": 45747,
+     "url": "https://www.youtube.com/watch?v=SP5dvmLYKbM"
     }
    ],
    "ptt_spike": false,
@@ -2911,31 +2847,31 @@
    ],
    "ptt_push_week": 0,
    "gn_trend": [
-    8,
-    13,
     10,
-    11
+    12,
+    15,
+    8
    ],
-   "gn_week": 11,
-   "gn_base": 10.3,
-   "gn_ratio": 1.1,
+   "gn_week": 8,
+   "gn_base": 12.3,
+   "gn_ratio": 0.6,
    "gn_saturated": false,
    "x_mentions_30d": 0,
    "yt_trend": [
     0,
-    3,
-    5,
+    6,
+    2,
     0
    ],
    "yt_week": 0,
    "yt_ratio": 0.0,
    "yt_saturated": false,
-   "yt_views_30d": 124758,
+   "yt_views_30d": 124778,
    "yt_top": [
     {
      "t": "壓回好買點 20260608 趨勢指標 郭憲政分析師",
      "ch": "趨勢指標 郭憲政分析師",
-     "views": 42144,
+     "views": 42149,
      "url": "https://www.youtube.com/watch?v=YMOC-YDCJgU"
     },
     {
@@ -2954,16 +2890,16 @@
   },
   "2330": {
    "name": "台積電",
-   "ptt_week": 13,
-   "ptt_baseline": 14.0,
-   "ptt_ratio": 0.9,
+   "ptt_week": 10,
+   "ptt_baseline": 16.0,
+   "ptt_ratio": 0.6,
    "ptt_trend": [
-    13,
-    21,
-    8,
-    13
+    20,
+    16,
+    12,
+    10
    ],
-   "ptt_push_week": 665,
+   "ptt_push_week": 419,
    "gn_trend": [
     100,
     100,
@@ -2984,19 +2920,19 @@
    "yt_week": 50,
    "yt_ratio": 99.0,
    "yt_saturated": true,
-   "yt_views_30d": 239849,
+   "yt_views_30d": 135447,
    "yt_top": [
     {
-     "t": "台積電的一天! 超爆肝作息表大公開 網全看傻：真做不來 #台積電 #TSMC #爆肝",
-     "ch": "台視新聞 TTV NEWS",
-     "views": 43653,
-     "url": "https://www.youtube.com/watch?v=s2z_w97A-sA"
+     "t": "台積電拉尾盤！台股收最高漲412點藏「貓膩」？！散戶對決外資「史詩級軋空行情」明上演？！ - 黃世聰 封開平 謝晨彥 林友銘 劉寶傑《寶傑點兵》20260616-1",
+     "ch": "寶傑點兵／寶傑怎麼說",
+     "views": 29658,
+     "url": "https://www.youtube.com/watch?v=qd-Sx6lFrvs"
     },
     {
-     "t": "製造量子晶片不需要台積電先進製程？專家曝：28奈米就夠用！未來量子電腦得像「樂高積木」，這項技術將成台灣新王牌！🧩｜先進封裝 量子晶片 #財經相對論",
-     "ch": "工商時報",
-     "views": 40451,
-     "url": "https://www.youtube.com/watch?v=8-N_sUJOvNY"
+     "t": "台灣再增40座、美國翻倍！台積電大擴廠 「廠務工程與無塵室」台廠股價集體噴！？@TaiwanLBJnews #shorts",
+     "ch": "寶傑點兵／寶傑怎麼說",
+     "views": 20219,
+     "url": "https://www.youtube.com/watch?v=FMNj6HUoB9g"
     }
    ],
    "ptt_spike": false,
@@ -3011,16 +2947,70 @@
      "url": "https://www.ptt.cc/bbs/Stock/M.1781145013.A.8DF.html"
     },
     {
-     "t": "[情報] 台積電 外資持股比例跌破70%",
-     "push": 100,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781083953.A.BB0.html"
+     "t": "[新聞] 台積電與南市府簽約南科A區22筆專案地上",
+     "push": 75,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781139344.A.977.html"
     },
     {
-     "t": "[情報] 2330台積電5月營收 mom+1.5% yoy+30.1%",
-     "push": 100,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1781069901.A.1FC.html"
+     "t": "[新聞] 法說會前先調價 外資喊台積電目標價3,500",
+     "push": 64,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1781655553.A.9A9.html"
     }
    ]
+  },
+  "5443": {
+   "name": "均豪",
+   "ptt_week": 0,
+   "ptt_baseline": 0.7,
+   "ptt_ratio": 0.0,
+   "ptt_trend": [
+    2,
+    0,
+    0,
+    0
+   ],
+   "ptt_push_week": 0,
+   "gn_trend": [
+    16,
+    13,
+    9,
+    15
+   ],
+   "gn_week": 15,
+   "gn_base": 12.7,
+   "gn_ratio": 1.2,
+   "gn_saturated": false,
+   "x_mentions_30d": 0,
+   "yt_trend": [
+    3,
+    5,
+    2,
+    3
+   ],
+   "yt_week": 3,
+   "yt_ratio": 0.9,
+   "yt_saturated": false,
+   "yt_views_30d": 49702,
+   "yt_top": [
+    {
+     "t": "股東會看門道 誰是黑馬股?台積電打造COUPE生態系 四大梁柱缺一不可?不再是圓的?AI晶片年底要變方形!｜20260604(周四)股市現場(完整版)*鄭明娟(黃靖哲×李冠嶔×謝晨彥)",
+     "ch": "非凡 股市現場",
+     "views": 15517,
+     "url": "https://www.youtube.com/watch?v=CoR8TdCbj1M"
+    },
+    {
+     "t": "晶圓廠自動化大升級!盟立Q1轉盈 4廠同步擴廠 看好AI未來3~5年非常好｜非凡財經新聞｜20260528",
+     "ch": "USTV 非凡電視",
+     "views": 13142,
+     "url": "https://www.youtube.com/watch?v=Hr9GGjIJ0Ow"
+    }
+   ],
+   "ptt_spike": false,
+   "gn_spike": false,
+   "yt_spike": false,
+   "heat_spike": false,
+   "heat_watch": false,
+   "hot_titles": []
   }
  }
 }
