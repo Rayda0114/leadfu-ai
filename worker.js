@@ -2464,9 +2464,17 @@ async function renderStockPage(url, env) {
     ? "⚠ 目前列為證交所/櫃買「注意股或處置股」，交易可能採分盤撮合、預收款券，請特別留意。"
     : "目前未列入注意股／處置股名單（以證交所、櫃買中心每日公告為準）。";
 
+  // 無風險評分（約半數個股）：別只顯示「整理中」空殼，用市場別/產業/參考價/合理區間/注意股
+  // 等可得欄位組出每檔不同的敘述，降低薄內容與近重複度。
+  const _fbBits = [];
+  _fbBits.push(`${name}（${code}）為${market || "上市櫃"}的${cat ? cat + "類股" : "個股"}${price != null ? "，目前參考價約 " + price + " 元" : ""}`);
+  if (fvLow != null && fvHigh != null) _fbBits.push(`領富 AI 合理區間估值約 ${fvLow}–${fvHigh} 元`);
+  _fbBits.push(attYes ? "且目前列入「注意股／處置股」，交易請特別留意" : "且目前未列入注意股／處置股名單");
   const reasonsHtml = reasons.length
     ? `<ul class="sd-reasons">${reasons.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
-    : `<p class="sd-muted">目前無明顯風險警示項目。</p>`;
+    : (level
+        ? `<p class="sd-muted">領富 AI 風險評分顯示 ${esc(name)} 目前無明顯風險警示項目（風險等級「${esc(level)}」${score != null ? "、分數 " + esc(score) + "/100" : ""}）。</p>`
+        : `<p class="sd-att">${esc(_fbBits.join("，"))}。${esc(name)} 的 0–100 風險評分待資料累積足夠後提供；建議搭配買前檢查與同產業比較一起看。以上為公開資料整理、非投資建議。</p>`);
 
   const fvCard = (fvLow != null && fvHigh != null)
     ? `<div class="sd-stat"><span>合理區間估值</span><b>${esc(fvLow)} – ${esc(fvHigh)}</b><small>領富 AI Fair Value Range™</small></div>`
@@ -2500,7 +2508,7 @@ async function renderStockPage(url, env) {
   ];
   const faqHtml = `<div class="sd-sec"><h2>❓ ${esc(name)}（${esc(code)}）常見問題</h2>${faqs.map(f => `<div class="sd-faq"><p class="sd-faq-q">${esc(f.q)}</p><p class="sd-faq-a">${esc(f.a)}</p></div>`).join("")}</div>`;
 
-  const desc = `${name}（${code}）AI 股票分析${market ? "（" + market + "）" : ""}：${level ? "風險等級" + level : "風險等級整理中"}${score != null ? "（風險分數 " + score + "/100）" : ""}、是否為注意股／處置股、${cat ? cat + "類股、" : ""}${(fvLow != null && fvHigh != null) ? "合理股價區間約 " + fvLow + "–" + fvHigh + " 元" : "合理股價區間估值"}與籌碼摘要，一頁看懂該不該買。領富 AI 系統化每日更新，資料來源 TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站。非投資建議。`;
+  const desc = `${name}（${code}）AI 股票分析${market ? "（" + market + "）" : ""}：${level ? "風險等級" + level : "風險等級整理中"}${score != null ? "（風險分數 " + score + "/100）" : ""}、是否為注意股／處置股、${cat ? cat + "類股、" : ""}${(fvLow != null && fvHigh != null) ? "合理股價區間約 " + fvLow + "–" + fvHigh + " 元" : "合理股價區間估值"}與籌碼摘要，一頁看懂該不該買。資料每日更新（TWSE/TPEx/MOPS），非投資建議。`;
   const title = `${name} AI 分析｜${code}${(name.length + code.length) <= 9 ? ` ${level ? "風險" + level : "風險評估"}・合理價・注意股` : ((name.length + code.length) <= 12 ? ` ${level ? "風險" + level : "風險評估"}・合理價` : "")} - 領富 AI`;
   const canon = `https://leadfuai.com/stock/${encodeURIComponent(code)}`;
 
@@ -2728,10 +2736,26 @@ async function renderUsStockPage(url, env) {
   const title = `${t} ${nameZh} 合理價・該不該買？PE 殖利率分析 - 領富 AI`;
   const canon = `https://leadfuai.com/us/${encodeURIComponent(t)}`;
 
+  // 🌎 同產業美股 peer（內鏈：US leaf 之間互鏈，傳遞同類權重 + 留住讀者）
+  const usPeers = Object.values(D.map).filter(x => x && x.category && x.category === cat && String(x.ticker || "").toUpperCase() !== t).slice(0, 8);
+  const usPeersHtml = (cat && usPeers.length)
+    ? `<div class="sd-sec"><h2>🌎 ${esc(cat)}・同類美股</h2><div class="sd-related">${usPeers.map(x => `<a href="/us/${encodeURIComponent(x.ticker)}"><b>${esc(x.ticker)}</b> ${esc(x.name_zh || "")}</a>`).join("")}</div></div>`
+    : "";
+
+  // ❓ 資料驅動 FAQ（與 /stock 對稱，命中「{ticker} 怎麼買/貴嗎」長尾 + 爭取 FAQ 精選摘要）
+  const usFaqs = [
+    { q: `${nameZh}（${t}）要去哪買？台灣人可以買嗎？`, a: `${nameZh}（${t}）是美股，台灣投資人可透過國內券商「複委託」，或受監管的海外券商（如 Firstrade、Interactive Brokers）買賣。複委託為中文介面、受台灣金管會監管但成本通常較高；海外券商成本低但需自辦美元國際電匯。以上為管道整理、非推薦特定券商、非投資建議。` },
+    { q: `${nameZh} 現在貴不貴？合理價大概多少？`, a: (low != null && high != null) ? `領富 AI 以系統化方式估算 ${nameZh} 的合理區間約為 $${low.toFixed(2)}–$${high.toFixed(2)}（LeadFu Fair Value Range™，依公開資料整理、非目標價）。${label ? "目前估值屬「" + label + "」。" : ""}${price != null ? "現價約 $" + price.toFixed(2) + "。" : ""}非投資建議。` : `${nameZh} 的合理區間資料整理中，可到完整分析查看最新估值與依據。` },
+    { q: `${nameZh} 的本益比與殖利率怎麼看？`, a: `${pe != null ? "本益比約 " + pe.toFixed(1) + (pe >= 40 ? "（偏高，市場期望不低、留意獲利能否跟上）" : "（估值不算貴）") + "；" : "本益比資料整理中；"}${yld != null ? "殖利率約 " + yld.toFixed(2) + "%" + (yld >= 3 ? "（對美股算高、偏領息型）" : yld > 0.5 ? "（普通）" : "（幾乎不配息、屬成長股風格）") + "。" : "配息資料整理中。"}以上為公開資料的系統化整理，非投資建議。` },
+    { q: `${nameZh} 屬於什麼產業？市值多少？`, a: `${nameZh}（${t}）${cat ? "屬於「" + cat + "」" + (industry ? "（" + industry + "）" : "") + "類股" : "的產業分類整理中"}${mcap != null ? "，市值約 " + mcapTxt : ""}。${nameEn ? "英文名稱 " + nameEn + "。" : ""}可在美股專區比較同類個股。` },
+  ];
+  const usFaqHtml = `<style>.sd-faq{border-top:1px solid #f0f3f1;padding:11px 0;}.sd-faq:first-of-type{border-top:0;padding-top:2px;}.sd-faq-q{font-size:14.5px;font-weight:700;color:#1B4332;margin:0 0 4px;}.sd-faq-a{font-size:13.5px;color:#555;line-height:1.8;margin:0;}.sd-related{display:flex;flex-wrap:wrap;gap:8px 18px;}.sd-related a{font-size:14px;color:#1B4332;text-decoration:none;}.sd-related a:hover{color:#C9A24B;}.sd-related a b{font-weight:800;}</style><div class="sd-sec"><h2>❓ ${esc(nameZh)}（${esc(t)}）常見問題</h2>${usFaqs.map(f => `<div class="sd-faq"><p class="sd-faq-q">${esc(f.q)}</p><p class="sd-faq-a">${esc(f.a)}</p></div>`).join("")}</div>`;
+
   const jsonld = JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
       { "@type": "WebPage", "@id": canon + "#page", "name": title, "description": desc, "url": canon, "isPartOf": { "@id": "https://leadfuai.com/#website" }, "dateModified": today, "inLanguage": "zh-TW", "publisher": { "@id": "https://leadfuai.com/#organization" } },
+      { "@type": "FAQPage", "mainEntity": usFaqs.map(f => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } })) },
       { "@type": "BreadcrumbList", "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
         { "@type": "ListItem", "position": 2, "name": "美股專區", "item": "https://leadfuai.com/pages/us-market" },
@@ -2822,6 +2846,9 @@ async function renderUsStockPage(url, env) {
     <h2>💡 一眼判斷（領富 AI 整理，非買賣建議）</h2>
     ${bulletsHtml}
   </div>
+
+  ${usFaqHtml}
+  ${usPeersHtml}
 
   <div class="sd-cta">
     <div class="sd-cta-txt">
