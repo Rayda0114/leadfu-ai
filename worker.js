@@ -2635,7 +2635,7 @@ async function renderStockPage(url, env) {
 </main>
 
 <footer class="site-footer"><div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. · 本網站所有資訊僅供參考，不構成投資建議。</div></div></footer>
-<script src="/js/main.js?v=3.25.9"></script>
+<script src="/js/main.js?v=3.29.0"></script>
 </body>
 </html>`;
 
@@ -2860,7 +2860,7 @@ async function renderUsStockPage(url, env) {
 </main>
 
 <footer class="site-footer"><div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved. · 本網站所有資訊僅供參考，不構成投資建議。</div></div></footer>
-<script src="/js/main.js?v=3.28.0"></script>
+<script src="/js/main.js?v=3.29.0"></script>
 </body>
 </html>`;
 
