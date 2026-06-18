@@ -11,6 +11,10 @@ ECPAY_MERCHANT_ID = "3501534"
 [assets]
 directory = "."
 binding = "ASSETS"
+# worker 先跑（fetch handler 已設計好：.html→301 乾淨網址、手機 UA 出行動版、
+# 其餘 return env.ASSETS.fetch(request) 交還資產層）。讓 worker.js 的 301 真正生效
+# （原本資產層先跑、用 307 暫時重導剝 .html，worker 的 301 永遠沒執行）。
+run_worker_first = true
 
 # Cloudflare 定時觸發（準時，不受 GitHub Actions 排程延遲）：
 #   00:30 UTC = 08:30 台北 → 盤前新聞推播（開盤前送達）；新聞由 GitHub 清晨先抓好並部署到站。
