@@ -151,16 +151,9 @@ def main():
             if tk:
                 stock_urls.append(url_entry(f"/us/{tk}", "daily", 0.7, today))
 
-    # 3. 新聞詳情頁 → 內容
-    news_data = load_json(DATA_DIR / "news_live.json")
-    if news_data and news_data.get("news"):
-        for n in news_data["news"]:
-            nid = n.get("id")
-            date = n.get("date") or today
-            if nid:
-                content_urls.append(url_entry(
-                    f"/pages/news-detail.html?id={nid}", "monthly", 0.5, date
-                ))
+    # 3. 新聞詳情頁：news-detail 為 noindex（前端 robots meta），故「不」列入 sitemap
+    #    （把 noindex 頁列進 sitemap 是矛盾信號、又浪費抓取預算）。若日後要讓新聞被索引，
+    #    需先在 news-detail 改成伺服器端各自 canonical + 拿掉 noindex，再放回 sitemap。
 
     # 寫出 3 個子 sitemap
     write_urlset("sitemap-pages.xml", page_urls)       # 首頁 + 工具頁

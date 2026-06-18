@@ -2527,6 +2527,10 @@ async function renderStockPage(url, env) {
 <meta name="keywords" content="${esc(name)} AI,${esc(name)}AI分析,${esc(name)} ai,${esc(code)} ${esc(name)},${esc(name)}股價,${esc(name)}合理股價,${esc(name)}風險,${esc(code)}注意股${cat ? "," + esc(cat) + "ai" : ""}">
 <link rel="canonical" href="${canon}">
 <meta property="og:title" content="${esc(name)} AI 分析｜${esc(code)} 合理價與風險評估 - 領富 AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(name)} AI 分析｜${esc(code)} 合理價與風險評估 - 領富 AI">
+<meta name="twitter:description" content="${esc(desc)}">
+<meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canon}">
@@ -2747,6 +2751,10 @@ async function renderUsStockPage(url, env) {
 <meta name="impact-site-verification" value="10d0ed2d-b1f6-45f6-b703-a6c096a31696">
 <link rel="canonical" href="${canon}">
 <meta property="og:title" content="${esc(t)} ${esc(nameZh)} 合理價分析 - 領富 AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(t)} ${esc(nameZh)} 合理價分析 - 領富 AI">
+<meta name="twitter:description" content="${esc(desc)}">
+<meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canon}">
