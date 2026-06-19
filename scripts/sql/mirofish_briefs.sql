@@ -34,6 +34,7 @@ create table if not exists public.mirofish_briefs (
   status        text not null default 'draft'
                 check (status in ('draft','pending_review','published','rejected')),
   quality_flags jsonb,                         -- 自動品質閘門結果（供主編參考）
+  verify_report jsonb,                          -- L3 AI 查證清單：[{claim, basis, source, verdict, ...}]（供主編逐條核可）
 
   created_by    uuid references auth.users(id),
   reviewed_by   uuid references auth.users(id),
@@ -66,6 +67,9 @@ create trigger trg_touch_mirofish_briefs
   execute function public.touch_mirofish_briefs_updated_at();
 
 -- ── RLS ──
+-- 既有安裝補欄位（L3 查證清單；新建的表上面已含此欄，這行只為舊表升級用，冪等）
+alter table public.mirofish_briefs add column if not exists verify_report jsonb;
+
 alter table public.mirofish_briefs enable row level security;
 
 -- 站長白名單可全 CRUD（沿用 worker.js OWNER_UIDS 的三個 id）。

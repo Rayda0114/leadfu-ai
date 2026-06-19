@@ -228,7 +228,12 @@ def main():
     ap.add_argument("brief", help="brief 檔（.md 或 .json）")
     ap.add_argument("--token", default=os.environ.get("LEADFU_OWNER_JWT", ""),
                     help="owner Supabase access token（預設讀 $LEADFU_OWNER_JWT）")
+    ap.add_argument("--ingest-key", default=os.environ.get("LEADFU_INGEST_KEY", ""),
+                    help="機器人密鑰（排程無人送稿用；預設讀 $LEADFU_INGEST_KEY）。給了就走機器人路徑，不需 owner JWT")
     ap.add_argument("--endpoint", default=DEFAULT_ENDPOINT, help="ingest 端點 URL")
+    ap.add_argument("--no-verify", action="store_true", help="略過 L3 查證清單（預設會自動產生並附上）")
+    ap.add_argument("--data-dir", default=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data"),
+                    help="L3 查證比對用的 data/ 目錄")
     ap.add_argument("--dry-run", action="store_true", help="只印 payload，不 POST")
     args = ap.parse_args()
 
@@ -249,6 +254,23 @@ def main():
         print("✗ 品質閘門擋下，未送出：", "；".join(reasons), file=sys.stderr)
         print(json.dumps(flags, ensure_ascii=False, indent=2), file=sys.stderr)
         sys.exit(2)
+
+    # L3 AI 查證清單（比對 data/ 官方資料；失敗不擋送稿，只記錯誤供主編知道）
+    if not args.no_verify:
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            import verify_brief
+            rep = verify_brief.build_verify_report(brief, data_dir=args.data_dir)
+            brief["verify_report"] = rep
+            c = rep.get("ticker_summary", {})
+            print(f"  L3 查證：核對 {rep.get('ticker_total',0)} 檔代號"
+                  f"（配錯 {c.get('mismatch',0)}、查無 {c.get('not_found',0)}）、"
+                  f"具體數字 {rep.get('numbers',{}).get('count',0)} 處待人工核對")
+            if c.get("mismatch") or c.get("not_found"):
+                print("  ⚠ 有代號配錯/查無，主編務必在審核頁逐條確認。")
+        except Exception as e:
+            brief["verify_report"] = {"error": "verify skipped: " + str(e)}
+            print(f"  ⚠ L3 查證略過（{e}）")
 
     # 端點不接受 article_md / status；本地先移除以免誤會
     brief.pop("article_md", None)
@@ -272,18 +294,20 @@ def main():
         print(json.dumps(brief, ensure_ascii=False, indent=2))
         return
 
-    if not args.token:
-        print("\n✗ 缺 owner JWT。請設 $LEADFU_OWNER_JWT 或用 --token。", file=sys.stderr)
+    headers = {"Content-Type": "application/json"}
+    if args.ingest_key:
+        headers["X-Ingest-Key"] = args.ingest_key          # 機器人路徑（排程用）
+    elif args.token:
+        headers["Authorization"] = "Bearer " + args.token   # owner 登入路徑
+    else:
+        print("\n✗ 缺憑證：請設 $LEADFU_OWNER_JWT（owner）或 $LEADFU_INGEST_KEY（機器人）。", file=sys.stderr)
         sys.exit(1)
 
     req = urllib.request.Request(
         args.endpoint,
         data=payload.encode("utf-8"),
         method="POST",
-        headers={
-            "Authorization": "Bearer " + args.token,
-            "Content-Type": "application/json",
-        },
+        headers=headers,
     )
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
