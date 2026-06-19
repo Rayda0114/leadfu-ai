@@ -2134,6 +2134,85 @@ async function handleAdminFeedback(request, env) {
   }
 }
 
+/* ============================================================
+ * MiroFish/選題引擎 → 領富 內容橋：brief 接收端點（owner-only）
+ *   路由：POST /api/mirofish-ingest
+ *
+ * ⚠️ YMYL 財經內容硬性鐵則：
+ *   1. 只有 OWNER_UIDS 白名單能呼叫（驗 Supabase access token）。
+ *   2. 伺服器端強制 status='draft'——即使 body 帶其他值也覆蓋。
+ *      published 只能由主編在審核 UI 人工操作；本端點無任何自動發佈路徑。
+ *   3. 端點絕不接受 article_md（正式稿）——那是主編查證後才寫的，
+ *      防止「塞一篇成品直接上架」繞過人工關卡。
+ *   4. 只白名單欄位寫入（不盲目展開 body），擋掉 id/published_at/reviewed_by 等注入。
+ *   5. 最後一道防線：scrubStockCalls 砍掉殘留的個股喊單/目標價/報酬承諾字樣。
+ * 寫入沿用 service_role REST（ecpayAdmin），與 x_alerts 寫法一致。
+ * ============================================================ */
+
+// 伺服器端最後防線：移除明顯的喊單字樣（brief 端應已過濾，這是 defense-in-depth）。
+// 只砍最不該出現、移除也不傷語意的：帶數字的目標價、報酬保證。買賣等教學用語不動，交給人工審核。
+function scrubStockCalls(s) {
+  if (s == null) return s;
+  return String(s)
+    .replace(/目標價\s*[:：]?\s*[0-9][0-9.,]*\s*元?/g, "（目標價已移除）")
+    .replace(/(保證獲利|穩賺不賠|穩賺|包賺|報酬保證|保證賺錢|保證賺|必賺)/g, "（報酬承諾已移除）");
+}
+
+async function handleMirofishIngest(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders() });
+  const jerr = (m, s) => new Response(JSON.stringify({ error: m }), { status: s || 400, headers: { "Content-Type": "application/json", ...corsHeaders() } });
+  if (request.method !== "POST") return jerr("POST only", 405);
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return jerr("server not configured", 500);
+
+  // 1) owner 驗證（沿用 ecpayUser 驗 token + OWNER_UIDS 白名單）
+  const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
+  if (!token) return jerr("缺少登入憑證", 401);
+  const user = await ecpayUser(token);
+  if (!user || !OWNER_UIDS.includes(user.id)) return jerr("owner only", 403);
+
+  // 2) 收 brief
+  let b;
+  try { b = await request.json(); } catch { return jerr("invalid JSON body"); }
+  if (!b || typeof b !== "object" || Array.isArray(b)) return jerr("invalid body");
+  const title_hint = String(b.title_hint || "").trim();
+  const thesis = String(b.thesis || "").trim();
+  if (!title_hint || !thesis) return jerr("title_hint 與 thesis 為必填");
+
+  // 3) 伺服器端防呆：只白名單欄位、強制 draft、絕不收 article_md / 狀態 / 時間戳
+  const asArr = (v) => Array.isArray(v) ? v : (v == null ? null : [String(v)]);
+  const row = {
+    title_hint: scrubStockCalls(title_hint).slice(0, 300),
+    thesis: scrubStockCalls(thesis),
+    points: (b.points && typeof b.points === "object") ? b.points : null,
+    seo_keywords: asArr(b.seo_keywords),
+    sectors: (b.sectors && typeof b.sectors === "object") ? b.sectors : null,
+    risk_notes: asArr(b.risk_notes),
+    source_meta: (b.source_meta && typeof b.source_meta === "object") ? b.source_meta : null,
+    quality_flags: (b.quality_flags && typeof b.quality_flags === "object") ? b.quality_flags : null,
+    status: "draft",          // 強制；忽略 body.status，杜絕繞過人工關卡
+    created_by: user.id
+    // 明確不寫入：article_md / reviewed_by / published_at / id / created_at / updated_at
+  };
+
+  // 4) service_role REST 寫入，回傳新列
+  let r;
+  try {
+    r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs`, {
+      method: "POST",
+      headers: { ...ecpayAdmin(env), "Prefer": "return=representation" },
+      body: JSON.stringify(row)
+    });
+  } catch (e) {
+    return jerr("supabase 連線失敗: " + String(e), 502);
+  }
+  const text = await r.text();
+  if (!r.ok) return jerr("supabase " + r.status + " " + text.slice(0, 200), 502);
+  return new Response(text, {
+    status: 201,
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...corsHeaders() }
+  });
+}
+
 
 // ════════════════════════════════════════════════════════════
 // LINE 官方帳號 AI 客服 webhook
@@ -2508,8 +2587,17 @@ async function renderStockPage(url, env) {
   ];
   const faqHtml = `<div class="sd-sec"><h2>❓ ${esc(name)}（${esc(code)}）常見問題</h2>${faqs.map(f => `<div class="sd-faq"><p class="sd-faq-q">${esc(f.q)}</p><p class="sd-faq-a">${esc(f.a)}</p></div>`).join("")}</div>`;
 
-  const desc = `${name}（${code}）AI 股票分析${market ? "（" + market + "）" : ""}：${level ? "風險等級" + level : "風險等級整理中"}${score != null ? "（風險分數 " + score + "/100）" : ""}、是否為注意股／處置股、${cat ? cat + "類股、" : ""}${(fvLow != null && fvHigh != null) ? "合理股價區間約 " + fvLow + "–" + fvHigh + " 元" : "合理股價區間估值"}與籌碼摘要，一頁看懂該不該買。資料每日更新（TWSE/TPEx/MOPS），非投資建議。`;
-  const title = `${name} AI 分析｜${code}${(name.length + code.length) <= 9 ? ` ${level ? "風險" + level : "風險評估"}・合理價・注意股` : ((name.length + code.length) <= 12 ? ` ${level ? "風險" + level : "風險評估"}・合理價` : "")} - 領富 AI`;
+  // SEO title/desc（2026-06-19 #2 改寫）：股名+代號+「市場別」(命中「{股}興櫃」高曝光零點擊字)
+  //   + 反詐意圖詞(買前/9 紅旗/能不能買) + 達叔具名背書(E-E-A-T)。
+  //   數據依據：意圖/反詐型字 CTR 遠高於乾股名（高準精密詐騙 10.3% vs 個股頁 0.2%），故把意圖詞寫進 title。
+  //   desc 首句用「能不能買」疑問句勾搜尋意圖，但全句維持「不喊明牌、非投資建議」合規底線。
+  const mkt = market || "股價";
+  const titleHook = name.length <= 3 ? "買前 9 紅旗風險檢查" : "買前風險檢查";
+  const title = `${name} ${code} ${mkt}｜${titleHook}・達叔 領富AI`;
+  const askQ = market === "興櫃"
+    ? `${name}（${code}）興櫃能不能買、會不會轉上櫃？`
+    : `${name}（${code}）現在能不能買、風險高不高？`;
+  const desc = `${askQ}領富 AI 主編達叔帶你買前檢查 9 大紅旗：防錯雷達 ${score != null ? score + "/100 " : ""}風險分（等級${level || "整理中"}）、是否注意股／處置股${(fvLow != null && fvHigh != null) ? "、合理股價區間約 " + fvLow + "–" + fvHigh + " 元" : ""}${cat ? "、" + cat + "類股籌碼" : ""}。每日更新、免費，不喊明牌、非投資建議。`;
   const canon = `https://leadfuai.com/stock/${encodeURIComponent(code)}`;
 
   const jsonld = JSON.stringify({
@@ -2534,9 +2622,9 @@ async function renderStockPage(url, env) {
 <meta name="description" content="${esc(desc)}">
 <meta name="keywords" content="${esc(name)} AI,${esc(name)}AI分析,${esc(name)} ai,${esc(code)} ${esc(name)},${esc(name)}股價,${esc(name)}合理股價,${esc(name)}風險,${esc(code)}注意股${cat ? "," + esc(cat) + "ai" : ""}">
 <link rel="canonical" href="${canon}">
-<meta property="og:title" content="${esc(name)} AI 分析｜${esc(code)} 合理價與風險評估 - 領富 AI">
+<meta property="og:title" content="${esc(title)}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="${esc(name)} AI 分析｜${esc(code)} 合理價與風險評估 - 領富 AI">
+<meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}">
 <meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
 <meta property="og:description" content="${esc(desc)}">
@@ -2934,6 +3022,11 @@ export default {
       }
     }
 
+    // ── /insights 乾淨網址 → 取 /pages/insights 實體檔（市場洞察公開頁，讀 published 草稿）──
+    if (url.pathname === "/insights" && request.method === "GET") {
+      return env.ASSETS.fetch(new Request(new URL("/pages/insights", url).toString(), request));
+    }
+
     if (url.pathname === "/api/ask")            return handleAsk(request, env);
     if (url.pathname === "/api/health")         return handleHealth(env);
     if (url.pathname === "/api/quote")          return handleQuote(request);
@@ -2952,6 +3045,7 @@ export default {
     if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
     if (url.pathname === "/api/cron-news")      return handleManualNewsPush(request, env);
     if (url.pathname === "/api/login-token")    return handleLoginToken(request, env);
+    if (url.pathname === "/api/mirofish-ingest") return handleMirofishIngest(request, env);
 
     // 其他 path → 交給 ASSETS binding 處理（保留所有原本的靜態行為）
     return env.ASSETS.fetch(request);
