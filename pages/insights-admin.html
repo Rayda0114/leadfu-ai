@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>站長後台 · 選題草稿審核 - 領富 AI</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
+<link rel="stylesheet" href="../css/style.css?v=3.23.9">
+<style>
+  .ad-wrap{max-width:980px;margin:0 auto;padding:24px 16px 80px;}
+  .ad-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px;}
+  .ad-title{font-size:22px;font-weight:800;color:#1B4332;}
+  .ad-title .ai{color:#B08D57;}
+  .ad-sub{color:#777;font-size:13px;margin-bottom:18px;line-height:1.6;}
+  .ad-warn{background:#fdf3e7;border:1px solid #e8c99a;color:#8a5a1b;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:18px;line-height:1.6;}
+  .ad-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
+  .ad-chip{border:1px solid #d9d5cc;background:#fff;color:#555;border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;}
+  .ad-chip.on{background:#1B4332;color:#fff;border-color:#1B4332;}
+  .ad-refresh{margin-left:auto;border:1px solid #d9d5cc;background:#fff;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;color:#1B4332;}
+  .ad-card{background:#fff;border:1px solid #e8e4db;border-radius:12px;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(27,67,50,.04);}
+  .ad-row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+  .ad-th{font-weight:800;font-size:17px;color:#1B4332;flex:1;min-width:200px;}
+  .ad-id{color:#aaa;font-size:12px;}
+  .ad-st{font-size:12px;border-radius:6px;padding:3px 10px;font-weight:700;}
+  .ad-st.draft{background:#eef1f4;color:#5a6b7a;}
+  .ad-st.pending_review{background:#fff4e0;color:#9a6b1b;}
+  .ad-st.published{background:#e6f4ea;color:#1e7e34;}
+  .ad-st.rejected{background:#fbeaea;color:#b23b3b;}
+  .ad-thesis{color:#333;font-size:14px;line-height:1.7;margin-bottom:12px;white-space:pre-wrap;}
+  .ad-sec{font-size:12px;color:#666;margin-bottom:6px;}
+  .ad-sec b{color:#1B4332;}
+  .ad-tag{display:inline-block;background:#f3f0e8;color:#7a6a44;border-radius:5px;padding:1px 7px;margin:2px 3px 2px 0;font-size:11px;}
+  .ad-tag.risk{background:#fbeaea;color:#a23;}
+  .ad-tag.nv{background:#fff4e0;color:#9a6b1b;}
+  .ad-flags{font-size:11px;color:#888;background:#fafafa;border:1px dashed #ddd;border-radius:6px;padding:6px 10px;margin:8px 0;}
+  details.ad-brief{margin:10px 0;border:1px solid #eee;border-radius:8px;}
+  details.ad-brief>summary{cursor:pointer;padding:8px 12px;font-size:13px;color:#1B4332;background:#f8f7f3;border-radius:8px;}
+  .ad-briefbody{padding:8px 16px;font-size:13px;line-height:1.7;max-height:380px;overflow:auto;color:#444;}
+  .ad-briefbody table{border-collapse:collapse;width:100%;font-size:12px;}
+  .ad-briefbody th,.ad-briefbody td{border:1px solid #e3e0d8;padding:4px 8px;text-align:left;}
+  .ad-lbl{font-size:12px;color:#777;margin:12px 0 4px;font-weight:700;}
+  textarea.ad-art{width:100%;min-height:240px;border:1px solid #cfd6cf;border-radius:8px;padding:12px;font-size:14px;line-height:1.7;font-family:inherit;resize:vertical;box-sizing:border-box;}
+  .ad-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center;}
+  .ad-b{border:0;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;}
+  .ad-b.save{background:#3a6b50;color:#fff;}
+  .ad-b.pub{background:#1B4332;color:#fff;}
+  .ad-b.rej{background:#fff;color:#b23b3b;border:1px solid #e3b3b3;}
+  .ad-b.prev{background:#fff;color:#1B4332;border:1px solid #cfd6cf;}
+  .ad-b:disabled{opacity:.5;cursor:not-allowed;}
+  .ad-msg2{font-size:12px;color:#1e7e34;margin-left:6px;}
+  .ad-msg2.err{color:#b23b3b;}
+  .ad-state{text-align:center;padding:60px 20px;color:#888;}
+  .ad-state .ad-icon{font-size:42px;margin-bottom:14px;}
+  .ad-btn{display:inline-block;background:#1B4332;color:#fff;font-weight:700;padding:11px 26px;border-radius:8px;text-decoration:none;margin-top:8px;}
+  .ad-link{display:inline-block;margin-top:12px;color:#1B4332;font-size:13px;}
+  .ad-prevbox{border:1px solid #e3e0d8;border-radius:8px;padding:12px 16px;margin-top:10px;font-size:14px;line-height:1.8;background:#fffdf8;display:none;}
+</style>
+</head>
+<body>
+<div class="ad-wrap">
+  <div class="ad-head">
+    <div class="ad-title">領富 <span class="ai">AI</span> · 選題草稿審核</div>
+    <a href="../index.html" style="color:#1B4332;font-size:13px;">← 回首頁</a>
+  </div>
+  <div class="ad-sub">選題引擎送進來的「題材方向」一律是草稿。請用真實來源（公司法說會、重訊、財報）查證後，把正式文章寫進 <code>article_md</code>，再人工發佈。僅站長本人可見。</div>
+  <div class="ad-warn">⚠️ <b>YMYL 財經內容硬性規則</b>：brief 只是方向探勘，不可當事實照抄。每個 <span class="ad-tag nv">needs_verify</span> 與數字都要逐一核對來源；發佈的文章須標「AI 輔助選題、經編輯查證」並附免責聲明。</div>
+
+  <div id="adBody">
+    <div class="ad-state"><div class="ad-icon">⏳</div>載入中…</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="../js/auth.js?v=3.30.0"></script>
+<script>
+(async () => {
+  const body = document.getElementById("adBody");
+  const sb = window.LeadFuAuth.client;
+  // worker.js OWNER_UIDS（純前端友善訊息用；真正權限由 Supabase RLS owner_all 把關）
+  const OWNER_UIDS = [
+    "5f5a8d9a-4fa6-4b38-a110-8211edc970e0",
+    "1f5502ba-7d0a-427f-936f-bbc8b445b03e",
+    "697c1764-e500-42e5-9266-c844fb587890"
+  ];
+
+  const esc = (s) => (s == null ? "" : String(s).replace(/[&<>"']/g, c => (
+    { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c])));
+  const md2html = (s) => { try { return window.marked ? window.marked.parse(String(s||"")) : esc(s).replace(/\n/g,"<br>"); } catch(e){ return esc(s); } };
+  const stateHtml = (icon, msg, extra) =>
+    `<div class="ad-state"><div class="ad-icon">${icon}</div><div>${msg}</div>${extra || ""}</div>`;
+
+  // 1) 登入 + owner 檢查（友善訊息；資料層仍由 RLS 保護）
+  let user = null;
+  try { user = (await sb.auth.getUser()).data.user; } catch (e) {}
+  if (!user) {
+    body.innerHTML = stateHtml("🔒", "請先用<strong>站長帳號</strong>登入。",
+      `<div><a class="ad-btn" href="login.html">會員登入 →</a></div>`);
+    return;
+  }
+  if (!OWNER_UIDS.includes(user.id)) {
+    body.innerHTML = stateHtml("🚫", "此帳號無權限（請用站長帳號登入）。",
+      `<div><a class="ad-link" href="#" id="adLogout">登出，改用其他帳號 →</a></div>`);
+    const lo = document.getElementById("adLogout");
+    if (lo) lo.addEventListener("click", async (e) => { e.preventDefault(); try { await sb.auth.signOut(); } catch (e2) {} location.href = "login.html"; });
+    return;
+  }
+
+  let filter = "todo";  // todo = draft + pending_review
+  const FILTERS = { todo:"待處理", draft:"草稿", pending_review:"待覆核", published:"已發佈", rejected:"已退回" };
+
+  async function load() {
+    body.innerHTML = stateHtml("⏳", "載入草稿中…");
+    let q = sb.from("mirofish_briefs").select("*").order("created_at", { ascending: false });
+    if (filter === "todo") q = q.in("status", ["draft", "pending_review"]);
+    else q = q.eq("status", filter);
+    const { data, error } = await q;
+    if (error) {
+      body.innerHTML = stateHtml("😕", "讀取失敗：" + esc(error.message),
+        `<div><a class="ad-link" href="#" onclick="location.reload();return false;">重新整理</a></div>`);
+      return;
+    }
+    render(data || []);
+  }
+
+  function render(rows) {
+    const chips = Object.keys(FILTERS).map(k =>
+      `<button class="ad-chip ${k===filter?"on":""}" data-f="${k}">${FILTERS[k]}</button>`).join("");
+    const list = rows.length === 0
+      ? `<div class="ad-state"><div class="ad-icon">📭</div>此分類目前沒有資料。</div>`
+      : rows.map(cardHtml).join("");
+    body.innerHTML =
+      `<div class="ad-bar">${chips}<button class="ad-refresh" id="adRefresh">↻ 重新整理</button></div>` +
+      `<div style="color:#999;font-size:12px;margin-bottom:10px;">共 ${rows.length} 筆</div>` + list;
+
+    body.querySelectorAll(".ad-chip").forEach(ch =>
+      ch.addEventListener("click", () => { filter = ch.dataset.f; load(); }));
+    document.getElementById("adRefresh").addEventListener("click", load);
+    rows.forEach(wireCard);
+  }
+
+  function cardHtml(r) {
+    const sm = r.source_meta || {};
+    const secs = Array.isArray(r.sectors) ? r.sectors : [];
+    const risks = Array.isArray(r.risk_notes) ? r.risk_notes : [];
+    const kws = Array.isArray(r.seo_keywords) ? r.seo_keywords : [];
+    const pts = Array.isArray(r.points) ? r.points : [];
+    const when = r.created_at ? new Date(r.created_at).toLocaleString("zh-TW") : "";
+
+    const secHtml = secs.length ? `<div class="ad-sec"><b>代表族群（待查證）</b>：` +
+      secs.map(s => `<span class="ad-tag">${esc(s.sector||"")}${(s.sample_tickers||[]).length?"："+esc((s.sample_tickers||[]).join("/")):""}</span>`).join("") + `</div>` : "";
+    const ptHtml = pts.length ? `<div class="ad-sec"><b>論點</b>：` +
+      pts.map(p => `<span class="ad-tag ${p&&p.needs_verify?"nv":""}">${esc((p&&p.point)||p||"")}${p&&p.needs_verify?" ⚠":""}</span>`).join("") + `</div>` : "";
+    const riskHtml = risks.length ? `<div class="ad-sec"><b>反方/風險</b>：` +
+      risks.map(x => `<span class="ad-tag risk">${esc(x)}</span>`).join("") + `</div>` : "";
+    const kwHtml = kws.length ? `<div class="ad-sec"><b>SEO</b>：` +
+      kws.map(k => `<span class="ad-tag">${esc(k)}</span>`).join("") + `</div>` : "";
+    const flags = r.quality_flags ? `<div class="ad-flags">品質旗標：${esc(JSON.stringify(r.quality_flags))}</div>` : "";
+    const briefMd = sm.brief_md ? `<details class="ad-brief"><summary>📄 展開原始 brief（選題引擎輸出，僅供方向參考）</summary><div class="ad-briefbody">${md2html(sm.brief_md)}</div></details>` : "";
+
+    return `
+      <div class="ad-card" data-id="${esc(r.id)}">
+        <div class="ad-row1">
+          <div class="ad-th">${esc(r.title_hint || "（無標題）")}</div>
+          <span class="ad-st ${esc(r.status)}">${esc(r.status)}</span>
+          <span class="ad-id">${when}</span>
+        </div>
+        <div class="ad-thesis">${esc(r.thesis || "")}</div>
+        ${ptHtml}${secHtml}${riskHtml}${kwHtml}${flags}${briefMd}
+        <div class="ad-lbl">正式文章 article_md（主編查證後重寫；繁中、文末附免責）</div>
+        <textarea class="ad-art" placeholder="用真實來源（法說會／重訊／財報）把上面的方向重寫成正式文章…">${esc(r.article_md || "")}</textarea>
+        <div class="ad-acts">
+          <button class="ad-b prev" data-act="preview">預覽</button>
+          <button class="ad-b save" data-act="save">存草稿（→待覆核）</button>
+          <button class="ad-b pub" data-act="publish">發佈（人工最後一步）</button>
+          <button class="ad-b rej" data-act="reject">退回</button>
+          <span class="ad-msg2" data-role="msg"></span>
+        </div>
+        <div class="ad-prevbox" data-role="prev"></div>
+      </div>`;
+  }
+
+  function wireCard(r) {
+    const card = body.querySelector(`.ad-card[data-id="${CSS.escape(r.id)}"]`);
+    if (!card) return;
+    const ta = card.querySelector(".ad-art");
+    const msg = card.querySelector('[data-role="msg"]');
+    const prev = card.querySelector('[data-role="prev"]');
+    const setMsg = (t, err) => { msg.textContent = t; msg.className = "ad-msg2" + (err ? " err" : ""); };
+    const busy = (b) => card.querySelectorAll(".ad-b").forEach(x => x.disabled = b);
+
+    card.querySelector('[data-act="preview"]').addEventListener("click", () => {
+      if (prev.style.display === "block") { prev.style.display = "none"; return; }
+      prev.innerHTML = md2html(ta.value || "（尚未撰寫 article_md）");
+      prev.style.display = "block";
+    });
+
+    card.querySelector('[data-act="save"]').addEventListener("click", async () => {
+      busy(true); setMsg("儲存中…");
+      const { error } = await sb.from("mirofish_briefs")
+        .update({ article_md: ta.value, status: "pending_review", reviewed_by: user.id })
+        .eq("id", r.id);
+      busy(false);
+      if (error) return setMsg("儲存失敗：" + error.message, true);
+      setMsg("已存為待覆核 ✓");
+    });
+
+    card.querySelector('[data-act="publish"]').addEventListener("click", async () => {
+      const txt = (ta.value || "").trim();
+      if (txt.length < 200) { if (!confirm("article_md 內容偏少（<200 字），確定要發佈？")) return; }
+      if (!/免責|非投資建議/.test(txt)) { if (!confirm("文章未偵測到免責聲明，仍要發佈？")) return; }
+      if (!confirm("確定要『發佈』這篇？發佈後會公開可讀。")) return;
+      busy(true); setMsg("發佈中…");
+      const { error } = await sb.from("mirofish_briefs")
+        .update({ article_md: ta.value, status: "published", reviewed_by: user.id, published_at: new Date().toISOString() })
+        .eq("id", r.id);
+      busy(false);
+      if (error) return setMsg("發佈失敗：" + error.message, true);
+      setMsg("已發佈 ✓");
+      setTimeout(load, 700);
+    });
+
+    card.querySelector('[data-act="reject"]').addEventListener("click", async () => {
+      if (!confirm("確定要退回（rejected）？")) return;
+      busy(true); setMsg("處理中…");
+      const { error } = await sb.from("mirofish_briefs")
+        .update({ status: "rejected", reviewed_by: user.id })
+        .eq("id", r.id);
+      busy(false);
+      if (error) return setMsg("失敗：" + error.message, true);
+      setMsg("已退回 ✓");
+      setTimeout(load, 700);
+    });
+  }
+
+  await load();
+})();
+</script>
+</body>
+</html>

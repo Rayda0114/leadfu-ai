@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>(function(){try{if(!/[?&]full=1/.test(location.search)&&/iphone|ipod|android.*mobile|windows phone|blackberry|iemobile|opera mini/i.test(navigator.userAgent)){location.replace("/pages/member-m"+location.search+location.hash);}}catch(e){}})();</script>
+<!-- GA4 登入漏斗：在 supabase-js 清掉 URL 前，先記下這次是不是剛從 Google OAuth 回站（?code= / #access_token）-->
+<script>try{window.__lfReturn=/[?&](code|access_token)=/.test(location.search+location.hash);}catch(e){}</script>
 <title>會員中心 - 領富 AI</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="stylesheet" href="../css/style.css?v=3.23.9">
@@ -168,15 +170,20 @@
 </style>
 <script src="../js/main.js?v=3.29.0"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/auth.js?v=3.26.0"></script>
+<script src="../js/auth.js?v=3.30.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
   const { data, findStock, getWatchlist, getHoldings, fmtPrice, fmtChange, fmtPct, pctChange, changeClass, arrow, pageHref } = window.LeadFu;
 
+  // GA4 登入漏斗：剛從 Google OAuth 回站（②回站事件，不論成敗都先記）
+  if (window.__lfReturn) { try { window.LeadFuAuth._ga("login_return", { method: "google" }); } catch (e) {} }
+
   // 取得真實會員資料（Supabase）
   const user = await window.LeadFuAuth.getProfile();
   if (!user) {
+    // 從 OAuth 回站卻沒拿到 session = Google 路徑死在「回站建用戶」這跳
+    if (window.__lfReturn) { try { window.LeadFuAuth._ga("login_fail", { method: "google", stage: "no_session" }); } catch (e) {} }
     document.querySelector("main").innerHTML = `
       <div class="form-card" style="text-align:center;">
         <h2>請先登入</h2>
@@ -186,6 +193,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>`;
     return;
   }
+  // ③ Google 回站且 session 建立成功 → 送 sign_up(新)/login(回訪) 轉換事件
+  if (window.__lfReturn) { try { await window.LeadFuAuth._gaAuthDone("google"); } catch (e) {} }
 
   async function doLogout(e) {
     e.preventDefault();

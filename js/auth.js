@@ -15,6 +15,36 @@ const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 window.LeadFuAuth = {
   client: _sb,
 
+  /* ── GA4 登入漏斗事件（診斷 form_start→註冊 0 斷在哪一跳）──
+     用 transport_type:beacon → 跳轉/重導前也能送出（navigator.sendBeacon）。
+     gtag 由各頁 main.js 載入；line-callback 不載 main.js 故自帶 gtag snippet。 */
+  _ga(name, params) {
+    try {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", name, Object.assign({ transport_type: "beacon" }, params || {}));
+      }
+    } catch (e) { /* 追蹤失敗不影響登入 */ }
+  },
+  /* 登入完成（session 已建立）→ 判斷新註冊 vs 回訪，送 sign_up / login。
+     created_at ≈ last_sign_in_at（差 < 8 秒）視為首次＝新註冊；用伺服器兩個時間比，
+     不吃使用者端時鐘誤差。沒 session 視為失敗(login_fail/no_session)。
+     供 member.html(Google) 與 line-callback(LINE) 共用。回傳是否成功。 */
+  async _gaAuthDone(method) {
+    try {
+      const { data } = await _sb.auth.getUser();
+      const u = data && data.user;
+      if (!u) { this._ga("login_fail", { method: method, stage: "no_session" }); return false; }
+      const c = new Date(u.created_at).getTime();
+      const l = new Date(u.last_sign_in_at || u.created_at).getTime();
+      const isNew = Math.abs(l - c) < 8000;
+      this._ga(isNew ? "sign_up" : "login", { method: method, is_new: isNew });
+      return true;
+    } catch (e) {
+      this._ga("login", { method: method });   // 拿不到 user 細節仍記一筆登入
+      return true;
+    }
+  },
+
   /* 註冊：email/密碼 + 額外 profile 資料（name/phone/experience）
      額外資料用 user_metadata 帶進去，Postgres trigger 會自動建 profiles 列 */
   async signUp({ email, password, name, phone, experience }) {
@@ -46,6 +76,7 @@ window.LeadFuAuth = {
   /* 社群一鍵登入（Google / LINE）
      會跳轉到第三方授權頁，授權後自動導回 member.html */
   async signInWithProvider(provider) {
+    this._ga("login_start", { method: provider });   // ① 按鈕：開始登入（跳轉前）
     const { data, error } = await _sb.auth.signInWithOAuth({
       provider,
       options: {
@@ -116,6 +147,7 @@ window.LeadFuAuth = {
     //   使用者回 App 會看到反白且回不去原頁。改用 location 後：外部瀏覽器完成授權，
     //   App 仍停在本頁（或回前景重載），由 _startHandoffPolling / 載入時的恢復把 session 接回。
     if (handoff) this._startHandoffPolling();
+    this._ga("login_start", { method: "line" });   // ① 按鈕：開始 LINE 登入（跳轉前）
     window.location.href = authUrl;
   },
 
@@ -137,6 +169,7 @@ window.LeadFuAuth = {
       const { error } = await _sb.auth.verifyOtp({ token_hash: data.token_hash, type: "magiclink" });
       if (!error) {
         this._stopHandoffPolling();
+        try { await this._gaAuthDone("line"); } catch (e) {}   // ③ PWA 接力建 session 成功
         window.location.replace("/pages/member.html");
         return true;
       }

@@ -8,6 +8,12 @@
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
 <link rel="stylesheet" href="../css/style.css?v=3.23.9">
+<!-- GA4（本頁不載 main.js，自帶 gtag 以追蹤 LINE 登入漏斗：回站/Worker/建 session 各階段失敗點）-->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FM7DSZ7V2R"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-FM7DSZ7V2R',{page_path:location.pathname});
+</script>
 <style>
   .lc-wrap{max-width:440px;margin:8vh auto;padding:0 20px;text-align:center;}
   .lc-card{background:#fff;border:1px solid #e5e0d5;border-radius:14px;padding:40px 28px;box-shadow:0 8px 30px rgba(27,67,50,.07);}
@@ -32,29 +38,34 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/auth.js?v=3.26.0"></script>
+<script src="../js/auth.js?v=3.30.0"></script>
 <script>
 (async () => {
   const bodyEl = document.getElementById("lcBody");
-  const fail = (msg) => {
+  // GA4 登入漏斗事件（用 LeadFuAuth._ga；本頁 gtag 已在 head 自帶）
+  const ga = (n, p) => { try { window.LeadFuAuth._ga(n, p); } catch (e) {} };
+  const fail = (msg, stage) => {
+    ga("login_fail", { method: "line", stage: stage || "unknown" });   // 失敗：記下死在哪一階段
     bodyEl.innerHTML =
       '<div class="lc-err">😕 ' + msg + '</div>' +
       '<a class="lc-btn" href="login.html">回登入頁重試</a>';
   };
 
   try {
+    ga("login_return", { method: "line" });   // ② 回站：使用者從 LINE 授權頁回到 callback
+
     const params = new URLSearchParams(window.location.search);
     const err = params.get("error");
     if (err) {
       // 使用者在 LINE 端取消授權，或 LINE 回傳錯誤
       return fail(err === "access_denied"
         ? "你取消了 LINE 授權。"
-        : "LINE 授權未完成（" + err + "）。");
+        : "LINE 授權未完成（" + err + "）。", "line_denied");
     }
 
     const code = params.get("code");
     const state = params.get("state") || "";
-    if (!code) return fail("沒有收到授權碼，請重新登入。");
+    if (!code) return fail("沒有收到授權碼，請重新登入。", "no_code");
 
     // state 格式：csrf  或  csrf~handoffToken（PWA 登入接力）
     const tilde = state.indexOf("~");
@@ -65,7 +76,7 @@
     let expected = null;
     try { expected = sessionStorage.getItem("line_login_state"); } catch (e) {}
     if (expected && csrf && expected !== csrf) {
-      return fail("登入驗證碼不符，為安全起見已中止，請重新登入。");
+      return fail("登入驗證碼不符，為安全起見已中止，請重新登入。", "csrf");
     }
 
     // 把 code 交給 Worker 換 token_hash（同源 /api/line-auth）
@@ -76,8 +87,11 @@
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.token_hash) {
-      return fail("登入處理失敗" + (data.error ? "：" + data.error : "") + "，請稍後再試。");
+      // 最可疑點：Worker /api/line-auth 換 token 失敗（LINE channel secret / Supabase admin / 建用戶）
+      return fail("登入處理失敗" + (data.error ? "：" + data.error : "") + "，請稍後再試。",
+        "worker_" + (res.status || "err"));
     }
+    ga("line_worker_ok", { method: "line" });   // Worker 換到 token_hash（用戶已在 Supabase 建好）
 
     // === PWA 登入接力：不在這個瀏覽器登入，把 token_hash 交回 App ===
     if (handoff) {
@@ -87,7 +101,7 @@
         body: JSON.stringify({ token: handoff, token_hash: data.token_hash })
       });
       if (!hr.ok) {
-        return fail("登入接力暫存失敗，請改用網頁版登入或稍後再試。");
+        return fail("登入接力暫存失敗，請改用網頁版登入或稍後再試。", "handoff");
       }
       bodyEl.innerHTML =
         '<div style="font-size:46px;margin-bottom:10px;">✅</div>' +
@@ -103,8 +117,12 @@
       type: "magiclink"
     });
     if (voErr) {
-      return fail("建立登入狀態失敗（" + (voErr.message || voErr) + "），請重新登入。");
+      // 第二可疑點：verifyOtp 把 token_hash 換成 session 失敗
+      return fail("建立登入狀態失敗（" + (voErr.message || voErr) + "），請重新登入。", "verify_otp");
     }
+
+    // ③ 建 session 成功 → 送 sign_up(新)/login(回訪) 轉換事件
+    try { await window.LeadFuAuth._gaAuthDone("line"); } catch (e) {}
 
     // 成功 → 清掉 state，導去目的頁
     let next = "/pages/member.html";
@@ -113,9 +131,10 @@
       sessionStorage.removeItem("line_login_state");
       sessionStorage.removeItem("line_login_next");
     } catch (e) {}
-    window.location.replace(next);
+    // 延遲 350ms 再導，確保 beacon 事件送出（_gaAuthDone 內已 await getUser，多半已送）
+    setTimeout(() => window.location.replace(next), 350);
   } catch (e) {
-    fail("發生未預期錯誤（" + (e && e.message ? e.message : e) + "）。");
+    fail("發生未預期錯誤（" + (e && e.message ? e.message : e) + "）。", "exception");
   }
 })();
 </script>
