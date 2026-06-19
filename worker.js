@@ -2139,7 +2139,8 @@ async function handleAdminFeedback(request, env) {
  *   路由：POST /api/mirofish-ingest
  *
  * ⚠️ YMYL 財經內容硬性鐵則：
- *   1. 只有 OWNER_UIDS 白名單能呼叫（驗 Supabase access token）。
+ *   1. 只有 owner 能呼叫——(a) OWNER_UIDS 白名單（驗 Supabase access token），或
+ *      (b) 機器人密鑰 X-Ingest-Key == env.INGEST_SECRET（供排程無人送稿；仍強制 draft）。
  *   2. 伺服器端強制 status='draft'——即使 body 帶其他值也覆蓋。
  *      published 只能由主編在審核 UI 人工操作；本端點無任何自動發佈路徑。
  *   3. 端點絕不接受 article_md（正式稿）——那是主編查證後才寫的，
@@ -2164,11 +2165,17 @@ async function handleMirofishIngest(request, env) {
   if (request.method !== "POST") return jerr("POST only", 405);
   if (!env.SUPABASE_SERVICE_ROLE_KEY) return jerr("server not configured", 500);
 
-  // 1) owner 驗證（沿用 ecpayUser 驗 token + OWNER_UIDS 白名單）
-  const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
-  if (!token) return jerr("缺少登入憑證", 401);
-  const user = await ecpayUser(token);
-  if (!user || !OWNER_UIDS.includes(user.id)) return jerr("owner only", 403);
+  // 1) 驗證：兩條路擇一——(a) owner 登入 token；(b) 機器人密鑰 X-Ingest-Key（供排程無人送稿）。
+  //    兩條路都一樣往下強制 status='draft'，都無法繞過人工發佈關卡。
+  const ingestKey = (request.headers.get("X-Ingest-Key") || "").trim();
+  const robotOk = !!(env.INGEST_SECRET && ingestKey && ingestKey === env.INGEST_SECRET);
+  let user = null;
+  if (!robotOk) {
+    const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
+    if (!token) return jerr("缺少登入憑證或機器人密鑰", 401);
+    user = await ecpayUser(token);
+    if (!user || !OWNER_UIDS.includes(user.id)) return jerr("owner only", 403);
+  }
 
   // 2) 收 brief
   let b;
@@ -2180,6 +2187,8 @@ async function handleMirofishIngest(request, env) {
 
   // 3) 伺服器端防呆：只白名單欄位、強制 draft、絕不收 article_md / 狀態 / 時間戳
   const asArr = (v) => Array.isArray(v) ? v : (v == null ? null : [String(v)]);
+  const sourceMeta = (b.source_meta && typeof b.source_meta === "object" && !Array.isArray(b.source_meta)) ? b.source_meta : {};
+  sourceMeta.ingested_via = robotOk ? "robot-key" : "owner-ui";   // 稽核：這列從哪條路進來
   const row = {
     title_hint: scrubStockCalls(title_hint).slice(0, 300),
     thesis: scrubStockCalls(thesis),
@@ -2187,10 +2196,11 @@ async function handleMirofishIngest(request, env) {
     seo_keywords: asArr(b.seo_keywords),
     sectors: (b.sectors && typeof b.sectors === "object") ? b.sectors : null,
     risk_notes: asArr(b.risk_notes),
-    source_meta: (b.source_meta && typeof b.source_meta === "object") ? b.source_meta : null,
+    source_meta: sourceMeta,
     quality_flags: (b.quality_flags && typeof b.quality_flags === "object") ? b.quality_flags : null,
+    verify_report: (b.verify_report && typeof b.verify_report === "object") ? b.verify_report : null,  // L3：AI 查證清單（供主編核可）
     status: "draft",          // 強制；忽略 body.status，杜絕繞過人工關卡
-    created_by: user.id
+    created_by: user ? user.id : null   // 機器人路徑無登入者 → null
     // 明確不寫入：article_md / reviewed_by / published_at / id / created_at / updated_at
   };
 
