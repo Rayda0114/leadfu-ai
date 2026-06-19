@@ -34,6 +34,18 @@
   .ad-tag.risk{background:#fbeaea;color:#a23;}
   .ad-tag.nv{background:#fff4e0;color:#9a6b1b;}
   .ad-flags{font-size:11px;color:#888;background:#fafafa;border:1px dashed #ddd;border-radius:6px;padding:6px 10px;margin:8px 0;}
+  details.ad-vr{margin:10px 0;border:1px solid #d9e3dc;border-radius:8px;background:#fbfcfb;}
+  details.ad-vr>summary{cursor:pointer;padding:9px 12px;font-size:13px;color:#1B4332;font-weight:700;}
+  details.ad-vr>summary b.bad{color:#b23b3b;}
+  .ad-vrmuted{color:#999;font-weight:400;font-size:11px;margin-left:6px;}
+  .ad-vrbody{padding:2px 12px 10px;}
+  .ad-vrow{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.6;padding:4px 6px;border-top:1px solid #f0eee8;border-radius:4px;}
+  .ad-vrow.bad{background:#fdecec;}
+  .ad-vrow.num{background:#fff7e6;}
+  .ad-vck{flex:0 0 auto;}
+  .ad-vmain{flex:1;color:#444;}
+  .ad-vrow a{flex:0 0 auto;color:#1B4332;font-size:11px;white-space:nowrap;}
+  .ad-vrbasis{color:#aaa;font-size:11px;margin-top:8px;line-height:1.5;}
   details.ad-brief{margin:10px 0;border:1px solid #eee;border-radius:8px;}
   details.ad-brief>summary{cursor:pointer;padding:8px 12px;font-size:13px;color:#1B4332;background:#f8f7f3;border-radius:8px;}
   .ad-briefbody{padding:8px 16px;font-size:13px;line-height:1.7;max-height:380px;overflow:auto;color:#444;}
@@ -140,6 +152,28 @@
     rows.forEach(wireCard);
   }
 
+  function verifyReportHtml(vr) {
+    if (!vr || typeof vr !== "object") return "";
+    if (vr.error) return `<details class="ad-vr"><summary class="ad-vrhead">🔍 AI 查證清單</summary><div class="ad-vrbody"><div class="ad-vrbasis">查證未產生：${esc(vr.error)}</div></div></details>`;
+    const c = vr.ticker_summary || {};
+    const items = Array.isArray(vr.items) ? vr.items : [];
+    const icon = (v) => v === "ok" ? "✅" : v === "ok_name_unknown" ? "☑️" : v === "mismatch" ? "⚠️" : v === "not_found" ? "❓" : "•";
+    const rows = items.map(it => {
+      const bad = it.verdict === "mismatch" || it.verdict === "not_found";
+      const code = esc(it.code || "");
+      const link = code ? `<a href="/stock/${code}" target="_blank" rel="noopener">查官方資料 ↗</a>` : "";
+      const val = it.valuation_label ? `　估值:${esc(it.valuation_label)}` : "";
+      const f = it.financials;
+      const fin = (f && (f.gross_margin != null || f.net_margin != null))
+        ? `　毛利${esc(f.gross_margin)}%／淨利${esc(f.net_margin)}%（${esc(f.year)}Q${esc(f.quarter)}）` : "";
+      return `<div class="ad-vrow ${bad ? "bad" : ""}"><span class="ad-vck">${icon(it.verdict)}</span><span class="ad-vmain">${esc(it.note || "")}${val}${fin}</span>${link}</div>`;
+    }).join("");
+    const nums = vr.numbers || {};
+    const numRow = nums.count ? `<div class="ad-vrow num"><span class="ad-vck">🔢</span><span class="ad-vmain"><b>${nums.count} 處具體數字需人工核對來源</b>：${esc((nums.samples || []).join("、"))}<br>${esc(nums.note || "")}</span></div>` : "";
+    const badN = (c.mismatch || 0) + (c.not_found || 0);
+    return `<details class="ad-vr" open><summary class="ad-vrhead">🔍 AI 查證清單 · 核對 ${vr.ticker_total || 0} 檔（<b class="${badN ? "bad" : ""}">配錯 ${c.mismatch || 0}、查無 ${c.not_found || 0}</b>、數字 ${nums.count || 0} 處待核）<span class="ad-vrmuted">逐條以官方來源確認後再採用，非背書</span></summary><div class="ad-vrbody">${rows}${numRow}<div class="ad-vrbasis">${esc(vr.basis || "")}<br>${esc(vr.disclaimer || "")}</div></div></details>`;
+  }
+
   function cardHtml(r) {
     const sm = r.source_meta || {};
     const secs = Array.isArray(r.sectors) ? r.sectors : [];
@@ -157,6 +191,7 @@
     const kwHtml = kws.length ? `<div class="ad-sec"><b>SEO</b>：` +
       kws.map(k => `<span class="ad-tag">${esc(k)}</span>`).join("") + `</div>` : "";
     const flags = r.quality_flags ? `<div class="ad-flags">品質旗標：${esc(JSON.stringify(r.quality_flags))}</div>` : "";
+    const verifyHtml = verifyReportHtml(r.verify_report);
     const briefMd = sm.brief_md ? `<details class="ad-brief"><summary>📄 展開原始 brief（選題引擎輸出，僅供方向參考）</summary><div class="ad-briefbody">${md2html(sm.brief_md)}</div></details>` : "";
 
     return `
@@ -167,7 +202,7 @@
           <span class="ad-id">${when}</span>
         </div>
         <div class="ad-thesis">${esc(r.thesis || "")}</div>
-        ${ptHtml}${secHtml}${riskHtml}${kwHtml}${flags}${briefMd}
+        ${ptHtml}${secHtml}${riskHtml}${kwHtml}${verifyHtml}${flags}${briefMd}
         <div class="ad-lbl">正式文章 article_md（主編查證後重寫；繁中、文末附免責）</div>
         <textarea class="ad-art" placeholder="用真實來源（法說會／重訊／財報）把上面的方向重寫成正式文章…">${esc(r.article_md || "")}</textarea>
         <div class="ad-acts">
