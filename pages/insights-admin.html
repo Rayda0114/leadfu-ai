@@ -46,6 +46,7 @@
   .ad-vmain{flex:1;color:#444;}
   .ad-vrow a{flex:0 0 auto;color:#1B4332;font-size:11px;white-space:nowrap;}
   .ad-vrbasis{color:#aaa;font-size:11px;margin-top:8px;line-height:1.5;}
+  .ad-vchips{color:#5a6b7a;font-size:11px;margin-top:2px;background:#eef2f6;border-radius:4px;padding:1px 6px;display:inline-block;}
   details.ad-brief{margin:10px 0;border:1px solid #eee;border-radius:8px;}
   details.ad-brief>summary{cursor:pointer;padding:8px 12px;font-size:13px;color:#1B4332;background:#f8f7f3;border-radius:8px;}
   .ad-briefbody{padding:8px 16px;font-size:13px;line-height:1.7;max-height:380px;overflow:auto;color:#444;}
@@ -166,7 +167,8 @@
       const f = it.financials;
       const fin = (f && (f.gross_margin != null || f.net_margin != null))
         ? `　毛利${esc(f.gross_margin)}%／淨利${esc(f.net_margin)}%（${esc(f.year)}Q${esc(f.quarter)}）` : "";
-      return `<div class="ad-vrow ${bad ? "bad" : ""}"><span class="ad-vck">${icon(it.verdict)}</span><span class="ad-vmain">${esc(it.note || "")}${val}${fin}</span>${link}</div>`;
+      const chips = (it.chips && it.chips.summary) ? `<div class="ad-vchips">📊 籌碼：${esc(it.chips.summary)}</div>` : "";
+      return `<div class="ad-vrow ${bad ? "bad" : ""}"><span class="ad-vck">${icon(it.verdict)}</span><span class="ad-vmain">${esc(it.note || "")}${val}${fin}${chips}</span>${link}</div>`;
     }).join("");
     const nums = vr.numbers || {};
     const numRow = nums.count ? `<div class="ad-vrow num"><span class="ad-vck">🔢</span><span class="ad-vmain"><b>${nums.count} 處具體數字需人工核對來源</b>：${esc((nums.samples || []).join("、"))}<br>${esc(nums.note || "")}</span></div>` : "";

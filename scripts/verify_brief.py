@@ -72,6 +72,30 @@ def _financials(data_dir):
     return rows if isinstance(rows, dict) else {}
 
 
+def _rows_and_date(data_dir, fn):
+    """回傳 (code->row dict, sourceDate)。"""
+    d = _load(data_dir, fn) or {}
+    rows = d.get("data", {}) if isinstance(d, dict) else {}
+    date = (d.get("sourceDate") or d.get("updatedAt") or "") if isinstance(d, dict) else ""
+    return (rows if isinstance(rows, dict) else {}), date
+
+
+def _fmt(n):
+    """整數加千分位；非數字原樣回傳。"""
+    try:
+        return f"{int(round(float(n))):,}"
+    except Exception:
+        return str(n)
+
+
+def _signed(n):
+    try:
+        v = int(round(float(n)))
+        return f"+{v:,}" if v > 0 else f"{v:,}"
+    except Exception:
+        return str(n)
+
+
 def _norm(s):
     return re.sub(r"\s+", "", str(s or ""))
 
@@ -87,8 +111,9 @@ def _name_matches(claimed, official_name, official_abbrev):
     return False
 
 
-def _check_code(code, claimed_name, comp, fv, fin):
+def _check_code(code, claimed_name, comp, fv, fin, inst=None, streak=None, margin=None):
     """對單一代號做查證,回一個 item。"""
+    inst = inst or {}; streak = streak or {}; margin = margin or {}
     item = {"type": "ticker", "code": code, "claim_name": claimed_name or None, "source": "data/companies_live.json"}
     info = comp.get(code)
     if not info:
@@ -125,6 +150,37 @@ def _check_code(code, claimed_name, comp, fv, fin):
     f = fin.get(code)
     if isinstance(f, dict):
         item["financials"] = {k: f.get(k) for k in ("year", "quarter", "revenue_m", "gross_margin", "net_margin") if k in f}
+
+    # 附籌碼(供「外資撤退/融資過熱」類主張直接對照,免人工再查;單位:張)
+    chips = {}
+    ii = inst.get(code)
+    if isinstance(ii, dict):
+        for k in ("foreign_net_lots", "trust_net_lots", "dealer_net_lots", "total_net_lots"):
+            if ii.get(k) is not None:
+                chips[k] = ii.get(k)
+    st = streak.get(code)
+    if isinstance(st, dict) and st.get("days"):
+        chips["inst_streak"] = {"dir": st.get("dir"), "days": st.get("days")}
+    mg = margin.get(code)
+    if isinstance(mg, dict):
+        for k in ("margin_balance", "margin_change"):
+            if mg.get(k) is not None:
+                chips[k] = mg.get(k)
+    if chips:
+        # 給 UI 直接顯示的一行摘要
+        parts = []
+        if "foreign_net_lots" in chips:
+            parts.append(f"外資 {_signed(chips['foreign_net_lots'])} 張")
+        if "total_net_lots" in chips:
+            parts.append(f"三大法人 {_signed(chips['total_net_lots'])} 張")
+        if "inst_streak" in chips:
+            parts.append(f"連{chips['inst_streak']['days']}{'買' if chips['inst_streak']['dir']=='buy' else '賣'}")
+        if "margin_balance" in chips:
+            mc = f"（{_signed(chips['margin_change'])}）" if "margin_change" in chips else ""
+            parts.append(f"融資餘額 {_fmt(chips['margin_balance'])}{mc}")
+        chips["summary"] = "、".join(parts)
+        item["chips"] = chips
+        item["source"] = item["source"] + " + institutional/margin_live.json"
     return item
 
 
@@ -132,6 +188,9 @@ def build_verify_report(brief, data_dir="data"):
     comp = _companies(data_dir)
     fv = _fair_value(data_dir)
     fin = _financials(data_dir)
+    inst, inst_date = _rows_and_date(data_dir, "institutional_live.json")
+    streak, _ = _rows_and_date(data_dir, "inst_streak_live.json")
+    margin, margin_date = _rows_and_date(data_dir, "margin_live.json")
 
     text_blob = "\n".join([
         str(brief.get("title_hint") or ""),
@@ -157,7 +216,7 @@ def build_verify_report(brief, data_dir="data"):
             continue
         if code in seen:
             continue
-        it = _check_code(code, name, comp, fv, fin)
+        it = _check_code(code, name, comp, fv, fin, inst, streak, margin)
         # 防誤報:名稱對不上、且 brief 沒把它列為個股 → 多半是年份/價格(如「放量在 2027」),跳過不報
         if it["verdict"] == "mismatch" and code not in declared:
             continue
@@ -171,7 +230,7 @@ def build_verify_report(brief, data_dir="data"):
             if code in seen or not re.fullmatch(r"\d{4}", code):
                 continue
             seen.add(code)
-            it = _check_code(code, None, comp, fv, fin)
+            it = _check_code(code, None, comp, fv, fin, inst, streak, margin)
             it["sector_hint"] = s.get("sector")
             items.append(it)
 
@@ -191,7 +250,7 @@ def build_verify_report(brief, data_dir="data"):
         counts[it["verdict"]] = counts.get(it["verdict"], 0) + 1
 
     return {
-        "basis": "比對站上官方資料:companies_live(名冊/產業) + fair_value_live(估值標籤) + financials_live(財報)",
+        "basis": "比對站上官方資料:companies_live(名冊/產業) + fair_value_live(估值標籤) + financials_live(財報) + 籌碼(法人買賣超/融資餘額" + (("，資料日 " + str(inst_date or margin_date)) if (inst_date or margin_date) else "") + ")",
         "disclaimer": "本清單僅做『資料比對』,非查證背書;數字與口頭主張須人工核對官方來源,發佈與否由編輯決定。",
         "ticker_summary": counts,
         "ticker_total": len(items),
