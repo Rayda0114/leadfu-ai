@@ -47,6 +47,7 @@
   .ad-vrow a{flex:0 0 auto;color:#1B4332;font-size:11px;white-space:nowrap;}
   .ad-vrbasis{color:#aaa;font-size:11px;margin-top:8px;line-height:1.5;}
   .ad-vchips{color:#5a6b7a;font-size:11px;margin-top:2px;background:#eef2f6;border-radius:4px;padding:1px 6px;display:inline-block;}
+  .ad-vref{color:#1B4332;font-weight:600;}
   details.ad-brief{margin:10px 0;border:1px solid #eee;border-radius:8px;}
   details.ad-brief>summary{cursor:pointer;padding:8px 12px;font-size:13px;color:#1B4332;background:#f8f7f3;border-radius:8px;}
   .ad-briefbody{padding:8px 16px;font-size:13px;line-height:1.7;max-height:380px;overflow:auto;color:#444;}
@@ -171,9 +172,32 @@
       return `<div class="ad-vrow ${bad ? "bad" : ""}"><span class="ad-vck">${icon(it.verdict)}</span><span class="ad-vmain">${esc(it.note || "")}${val}${fin}${chips}</span>${link}</div>`;
     }).join("");
     const nums = vr.numbers || {};
-    const numRow = nums.count ? `<div class="ad-vrow num"><span class="ad-vck">🔢</span><span class="ad-vmain"><b>${nums.count} 處具體數字需人工核對來源</b>：${esc((nums.samples || []).join("、"))}<br>${esc(nums.note || "")}</span></div>` : "";
-    const badN = (c.mismatch || 0) + (c.not_found || 0);
-    return `<details class="ad-vr" open><summary class="ad-vrhead">🔍 AI 查證清單 · 核對 ${vr.ticker_total || 0} 檔（<b class="${badN ? "bad" : ""}">配錯 ${c.mismatch || 0}、查無 ${c.not_found || 0}</b>、數字 ${nums.count || 0} 處待核）<span class="ad-vrmuted">逐條以官方來源確認後再採用，非背書</span></summary><div class="ad-vrbody">${rows}${numRow}<div class="ad-vrbasis">${esc(vr.basis || "")}<br>${esc(vr.disclaimer || "")}</div></div></details>`;
+    const ns = nums.summary || {};
+    const KIND_LABEL = {
+      current_price: "現價", margin_ratio: "財報比率", historical_price: "歷史股價",
+      index_move: "指數漲跌", pe_multiple: "本益比/評價", share_pct: "佔比/市佔",
+      market_convention: "市場慣例", forecast: "未來預估", inst_chips: "籌碼", unknown: "具體數字",
+    };
+    const nIcon = (v) => v === "match" ? "✅" : v === "mismatch" ? "⚠️" : v === "route" ? "🔗" : "✋";
+    let numRows;
+    if (Array.isArray(nums.details) && nums.details.length) {
+      // 新版:逐個數字 → 分類 + 本地比對值 + 該查的官方來源連結
+      numRows = nums.details.map(d => {
+        const bad = d.verdict === "mismatch";
+        const src = d.suggested_source || {};
+        const link = src.url ? `<a href="${esc(src.url)}" target="_blank" rel="noopener">${esc(src.name || "官方來源")} ↗</a>`
+          : (src.name ? `<span class="ad-vrmuted">查：${esc(src.name)}</span>` : "");
+        const ref = d.local_ref ? `　<span class="ad-vref">站上${esc(d.local_ref.field)}：${esc(d.local_ref.value)}</span>` : "";
+        return `<div class="ad-vrow num ${bad ? "bad" : ""}"><span class="ad-vck">${nIcon(d.verdict)}</span><span class="ad-vmain"><b>${esc(d.raw)}</b><span class="ad-vrmuted">[${esc(KIND_LABEL[d.kind] || d.kind)}]</span>　${esc(d.note || "")}${ref}</span>${link}</div>`;
+      }).join("");
+    } else {
+      // 舊報告(無 details)→ 沿用原本單行摘要,不致空白
+      numRows = nums.count ? `<div class="ad-vrow num"><span class="ad-vck">🔢</span><span class="ad-vmain"><b>${nums.count} 處具體數字需人工核對來源</b>：${esc((nums.samples || []).join("、"))}<br>${esc(nums.note || "")}</span></div>` : "";
+    }
+    const numBad = ns.mismatch || 0;
+    const numHead = nums.count ? `、數字 ${nums.count} 處（<b class="${numBad ? "bad" : ""}">相符 ${ns.match || 0}、不符 ${numBad}</b>、待查 ${(ns.route || 0) + (ns.need_human || 0)}）` : "";
+    const badN = (c.mismatch || 0) + (c.not_found || 0) + numBad;
+    return `<details class="ad-vr" open><summary class="ad-vrhead">🔍 AI 查證清單 · 核對 ${vr.ticker_total || 0} 檔（<b class="${badN ? "bad" : ""}">配錯 ${c.mismatch || 0}、查無 ${c.not_found || 0}</b>${numHead}）<span class="ad-vrmuted">逐條以官方來源確認後再採用，非背書</span></summary><div class="ad-vrbody">${rows}${numRows}<div class="ad-vrbasis">${esc(vr.basis || "")}<br>${esc(vr.disclaimer || "")}</div></div></details>`;
   }
 
   function cardHtml(r) {
