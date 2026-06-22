@@ -184,6 +184,131 @@ def _check_code(code, claimed_name, comp, fv, fin, inst=None, streak=None, margi
     return item
 
 
+# ───────────────────────── 數字審查:分類 + 本地比對 + 來源路由 ─────────────────────────
+# 站上即時資料的基準年(跨年時更新,或日後改讀各檔 sourceDate)。早於此年的股價 = 歷史價,本地查不到。
+CURRENT_YEAR = 2026
+_YEAR_RE = re.compile(r"(?:19|20)\d{2}")
+
+
+def _num_val(raw):
+    """從 '1310 元' / '15 倍' / '10%' 抽出數值;抽不到回 None。"""
+    m = re.search(r"\d+(?:\.\d+)?", raw)
+    return float(m.group(0)) if m else None
+
+
+def _years_in(ctx):
+    return [int(y) for y in _YEAR_RE.findall(ctx)]
+
+
+def _src(name, url=None):
+    return {"name": name, "url": url}
+
+
+# 官方來源路由表:只回「該去哪查 + 連結」,不下結論。{code} 會填入上下文抓到的代號。
+def _route_for(kind, code):
+    g = (lambda path: f"https://goodinfo.tw/tw/{path}?STOCK_ID={code}") if code else (lambda path: None)
+    table = {
+        "historical_price": ("route", "歷史股價:站上只有即時資料,請查官方歷史行情核對。",
+                             _src("證交所 個股日成交歷史 / Goodinfo K線", g("ShowK_Chart.asp"))),
+        "index_move":       ("route", "指數漲跌:非台股個股,站上無此指數,請查指數行情來源核對日期與幅度。",
+                             _src("指數行情(費半 SOX/台指/美股大盤)", "https://invest.cnyes.com/index/GI/SOX")),
+        "pe_multiple":      ("route", "本益比/評價倍數:站上無 PE 欄位(只有合理價區間),且常為族群概化 → 建議抽樣數檔個股 PE 佐證,勿寫成全族群定論。",
+                             _src("Goodinfo 個股本益比 / 證交所 PE 殖利率 PB", g("StockBzPerformance.asp"))),
+        "share_pct":        ("route", "佔比/市佔:屬公司或產業聚合數,請以公司財報、法說會簡報或產業報告核對原始出處。",
+                             _src("公開資訊觀測站 MOPS(財報/法說會)", "https://mops.twse.com.tw/mops/web/t100sb02_1")),
+        "market_convention":("need_human", "市場慣例/門檻(如『常用 X% 為界』):屬主觀判斷,無單一官方來源 → 主編自行斟酌措辭,避免寫成事實。", None),
+        "forecast":         ("need_human", "未來預估/時程:屬預測值,無法事前查證 → 請標清楚預估機構與發布日,勿寫成定論。", None),
+        "unknown":          ("need_human", "具體數字:站上無對應 → 請以公司法說會、重訊、財報核對原始出處;查不到者勿寫成定論。",
+                             _src("公開資訊觀測站 MOPS(重訊 t05st01 / 財報 t164sb04)", "https://mops.twse.com.tw/mops/web/t05st01")),
+    }
+    verdict, note, source = table.get(kind, table["unknown"])
+    return {"verdict": verdict, "note": note, "suggested_source": source}
+
+
+def _classify_number(raw, ctx):
+    has = lambda *ws: any(w in ctx for w in ws)
+    is_pct = ("%" in raw or "％" in raw)
+    is_mult = ("倍" in raw)
+    is_money = ("元" in raw)
+    years = _years_in(ctx)
+
+    if has("外資", "投信", "自營", "三大法人", "買賣超", "賣超", "買超", "融資", "融券") or raw.endswith("張"):
+        return "inst_chips"
+    if is_pct and has("毛利", "淨利", "營益", "利益率", "利潤率"):
+        return "margin_ratio"
+    if is_pct and has("費半", "費城", "SOX", "台指", "加權", "那斯達克", "道瓊", "標普", "指數", "夜盤"):
+        return "index_move"
+    if is_mult or has("本益比", "ＰＥ", "PE", "評價", "重估"):
+        return "pe_multiple"
+    if has("市場常用", "慣例", "業界", "為界", "門檻", "通常", "一般認為", "普遍"):
+        return "market_convention"
+    if has("預估", "上看", "看到", "目標", "CAGR", "年複合", "可望", "預計", "上修", "下修", "未來") \
+            or any(y > CURRENT_YEAR for y in years):
+        return "forecast"
+    if is_pct and has("佔比", "占比", "比重", "市佔", "佔率", "營收佔"):
+        return "share_pct"
+    if is_money and any(y < CURRENT_YEAR for y in years):
+        return "historical_price"
+    if is_money and has("股價", "收盤", "現價", "報價", "目前", "現在", "今日"):
+        return "current_price"
+    return "unknown"
+
+
+def _audit_number(raw, ctx, comp, fv, fin, num_span=None):
+    """對單一數字:分類 → 能對本地就比對(✅/⚠️),對不到就路由官方來源。
+    num_span:(lo,hi) 數字本身在 ctx 的位置,掃代號時要跳過,免得數字(如 1310)被當成台股代號。"""
+    kind = _classify_number(raw, ctx)
+    item = {"raw": raw, "kind": kind, "context": re.sub(r"\s+", " ", ctx).strip()[:140]}
+
+    # 上下文裡的台股代號(供本地比對 / 路由連結帶代號);跳過數字自己,避免 1310 元 被當成代號 1310
+    code = None
+    for m in re.finditer(r"(?<!\d)(\d{4})(?!\d)", ctx):
+        if num_span and not (m.end() <= num_span[0] or m.start() >= num_span[1]):
+            continue
+        if m.group(1) in comp or m.group(1) in fv:
+            code = m.group(1)
+            break
+
+    # ── 本地可比對:現價 ──
+    if kind == "current_price" and code and isinstance(fv.get(code), dict) and fv[code].get("price") is not None:
+        official, claimed = float(fv[code]["price"]), _num_val(raw)
+        item["local_ref"] = {"field": "現價", "value": official, "source": "fair_value_live.json"}
+        if claimed is not None and official:
+            ok = abs(claimed - official) / official <= 0.02  # 容差 2%
+            item["verdict"] = "match" if ok else "mismatch"
+            item["note"] = f"文中 {raw} vs 站上現價 {official} 元 → {'相符' if ok else '不符,請確認'}"
+            return item
+
+    # ── 本地可比對:毛利率/淨利率 ──
+    if kind == "margin_ratio" and code and isinstance(fin.get(code), dict):
+        claimed = _num_val(raw)
+        cands = {"毛利率": fin[code].get("gross_margin"), "淨利率": fin[code].get("net_margin"),
+                 "營益率": fin[code].get("op_margin")}
+        best = min(((abs(claimed - v), k, v) for k, v in cands.items() if v is not None and claimed is not None),
+                   default=None)
+        if best is not None:
+            diff, fld, v = best
+            item["local_ref"] = {"field": fld, "value": v, "source": "financials_live.json"}
+            item["verdict"] = "match" if diff <= 0.5 else "mismatch"  # 容差 0.5 個百分點
+            item["note"] = f"文中 {raw} vs 站上{fld} {v}% → {'相符' if diff <= 0.5 else '不符或非同一指標,請確認'}"
+            return item
+
+    # ── 籌碼類:指出本地有逐檔數據可對(細節在上方 ticker items 的 chips) ──
+    if kind == "inst_chips":
+        item["verdict"] = "need_human"
+        item["note"] = "籌碼數字(法人買賣超/融資):本地有逐檔資料,請對照上方該代號的『籌碼』欄位核對(單位:張)。"
+        item["suggested_source"] = _src("站上 institutional_live / margin_live(逐檔)", None)
+        if code:
+            item["code"] = code
+        return item
+
+    # ── 對不到本地 → 路由官方來源 ──
+    item.update(_route_for(kind, code))
+    if code:
+        item["code"] = code
+    return item
+
+
 def build_verify_report(brief, data_dir="data"):
     comp = _companies(data_dir)
     fv = _fair_value(data_dir)
@@ -234,15 +359,33 @@ def build_verify_report(brief, data_dir="data"):
             it["sector_hint"] = s.get("sector")
             items.append(it)
 
-    # (3) 具體數字 → 一律提醒人工核對原始出處(站上資料多半沒有這類聚合/估值數字)
-    nums = sorted(set(m.group(0).strip() for m in _NUM_RE.finditer(text_blob)))
+    # (3) 具體數字 → 逐個分類:能對站上資料就比對(✅/⚠️),對不到就路由「該查的官方來源」
+    audits, seen = [], set()
+    for m in _NUM_RE.finditer(text_blob):
+        raw = m.group(0).strip()
+        ctx_start = max(0, m.start() - 30)
+        ctx = text_blob[ctx_start: m.end() + 30]  # ±30 字上下文供分類
+        a = _audit_number(raw, ctx, comp, fv, fin, num_span=(m.start() - ctx_start, m.end() - ctx_start))
+        dedupe_key = (raw, a["kind"])  # 同數字+同類型只留一筆,避免清單灌水
+        if dedupe_key in seen:
+            continue
+        seen.add(dedupe_key)
+        audits.append(a)
+
+    summary = {}
+    for a in audits:
+        summary[a["verdict"]] = summary.get(a["verdict"], 0) + 1
     number_item = {
         "type": "numbers",
-        "verdict": "need_human",
-        "count": len(nums),
-        "samples": nums[:25],
-        "note": "具體數字(本益比/佔比/金額/時程)站上多無原始出處,請逐一以公司法說會、重訊、財報核對;查不到者勿寫成定論。",
-        "source": None,
+        # 整體 verdict 仍以「是否還需人工」為準:有不符→mismatch;全部本地相符→ok;否則 need_human
+        "verdict": ("mismatch" if summary.get("mismatch") else
+                    "ok" if audits and set(summary) <= {"match"} else "need_human"),
+        "count": len(audits),
+        "samples": [a["raw"] for a in audits][:25],  # 保留舊欄位,UI 不致 break
+        "summary": summary,                           # 各 verdict 計數:match/mismatch/route/need_human
+        "details": audits,                            # 逐數字審查結果(分類+本地比對+來源路由)
+        "note": "每個數字已分類:current_price/margin_ratio 可對站上資料自動比對;historical_price/index_move/pe_multiple/share_pct 已附『該查的官方來源』;market_convention/forecast 屬主觀或未來值,以主編判斷為準。",
+        "source": "本地比對 data/(現價/財報/籌碼) + 官方來源路由",
     }
 
     counts = {"ok": 0, "ok_name_unknown": 0, "mismatch": 0, "not_found": 0}
@@ -278,7 +421,10 @@ if __name__ == "__main__":
     brief = _load_brief(sys.argv[1])
     report = build_verify_report(brief, data_dir=data_dir)
     c = report["ticker_summary"]
+    s = report["numbers"]["summary"]
     print(f"查證了 {report['ticker_total']} 檔代號 → 相符 {c.get('ok',0)+c.get('ok_name_unknown',0)}"
-          f"、配錯 {c.get('mismatch',0)}、查無 {c.get('not_found',0)}；具體數字 {report['numbers']['count']} 處需人工核對",
+          f"、配錯 {c.get('mismatch',0)}、查無 {c.get('not_found',0)}；"
+          f"數字 {report['numbers']['count']} 處 → 本地相符 {s.get('match',0)}、不符 {s.get('mismatch',0)}、"
+          f"路由官方來源 {s.get('route',0)}、人工判斷 {s.get('need_human',0)}",
           file=sys.stderr)
     print(json.dumps(report, ensure_ascii=False, indent=2))
