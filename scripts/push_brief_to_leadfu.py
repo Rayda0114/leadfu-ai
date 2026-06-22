@@ -45,6 +45,9 @@ import urllib.request
 DEFAULT_ENDPOINT = os.environ.get(
     "LEADFU_INGEST_URL", "https://leadfuai.com/api/mirofish-ingest"
 )
+# 機器人鑰匙的本機檔案後備位置：沒給 --ingest-key、也沒 $LEADFU_INGEST_KEY 時，自動讀這個檔。
+# 排程/兩台機器都能用，鑰匙不必進命令列或環境變數。權限建議 600。
+DEFAULT_KEY_FILE = os.path.expanduser("~/.config/leadfu/ingest_key")
 
 # 股票代號樣式：台股 4 碼、美股 1-5 英文字母（粗略，僅供 sectors 萃取參考，仍標待查證）
 _TICKER_RE = re.compile(r"\b\d{4}\b|\b[A-Z]{1,5}\b")
@@ -301,12 +304,23 @@ def main():
                       "AppleWebKit/537.36 (KHTML, like Gecko) "
                       "Chrome/124.0.0.0 Safari/537.36",
     }
+    # 都沒給憑證時，自動 fallback 讀本機鑰匙檔（排程/兩台機器免設環境變數）
+    if not args.ingest_key and not args.token and os.path.exists(DEFAULT_KEY_FILE):
+        try:
+            with open(DEFAULT_KEY_FILE, encoding="utf-8") as f:
+                args.ingest_key = f.read().strip()
+            if args.ingest_key:
+                print(f"  （已從 {DEFAULT_KEY_FILE} 讀取機器人鑰匙）")
+        except Exception as e:
+            print(f"  ⚠ 讀取鑰匙檔失敗（{e}）", file=sys.stderr)
+
     if args.ingest_key:
         headers["X-Ingest-Key"] = args.ingest_key          # 機器人路徑（排程用）
     elif args.token:
         headers["Authorization"] = "Bearer " + args.token   # owner 登入路徑
     else:
-        print("\n✗ 缺憑證：請設 $LEADFU_OWNER_JWT（owner）或 $LEADFU_INGEST_KEY（機器人）。", file=sys.stderr)
+        print(f"\n✗ 缺憑證：請設 $LEADFU_OWNER_JWT（owner）、$LEADFU_INGEST_KEY（機器人），"
+              f"或建立鑰匙檔 {DEFAULT_KEY_FILE}。", file=sys.stderr)
         sys.exit(1)
 
     req = urllib.request.Request(
