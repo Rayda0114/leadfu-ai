@@ -19,6 +19,10 @@
   .in-h{font-size:19px;font-weight:800;color:#1B4332;margin:0 0 4px;}
   .in-h a{color:inherit;text-decoration:none;}
   .in-date{color:#aaa;font-size:12px;margin-bottom:10px;}
+  .in-h a:hover{text-decoration:underline;}
+  .in-excerpt{font-size:14.5px;line-height:1.8;color:#555;margin:0 0 10px;}
+  .in-readmore{display:inline-block;color:#1B4332;font-weight:700;font-size:14px;text-decoration:none;}
+  .in-readmore:hover{text-decoration:underline;}
   .in-body{font-size:15px;line-height:1.85;color:#333;}
   .in-body h1,.in-body h2,.in-body h3{color:#1B4332;line-height:1.4;}
   .in-body table{border-collapse:collapse;width:100%;font-size:13px;margin:10px 0;}
@@ -51,7 +55,7 @@
   const md2html = (s) => { try { return window.marked ? window.marked.parse(String(s||"")) : esc(s); } catch(e){ return esc(s); } };
 
   const { data, error } = await sb.from("mirofish_briefs")
-    .select("id,title_hint,article_md,published_at")
+    .select("id,slug,title_hint,thesis,meta_description,article_md,published_at")
     .eq("status", "published")
     .order("published_at", { ascending: false })
     .limit(50);
@@ -65,13 +69,21 @@
     el.innerHTML = `<div class="in-state"><div class="ic">📭</div>洞察文章即將上線，敬請期待。</div>`;
     return;
   }
+  // 摘要：優先 meta_description → thesis →（去掉 markdown 符號的）article_md 開頭
+  const excerpt = (r) => {
+    const raw = r.meta_description || r.thesis ||
+      String(r.article_md || "").replace(/[#>*`_\-\[\]()!]/g, " ").replace(/\s+/g, " ").trim();
+    return String(raw).replace(/\s+/g, " ").trim().slice(0, 110);
+  };
+  // 每篇連到獨立 SEO 網址 /insights/{slug}（沒填 slug 用 id）
   el.innerHTML = rows.map(r => {
     const when = r.published_at ? new Date(r.published_at).toLocaleDateString("zh-TW") : "";
+    const href = `/insights/${encodeURIComponent(r.slug || r.id)}`;
     return `<article class="in-card">
-      <h2 class="in-h">${esc(r.title_hint || "市場洞察")}</h2>
+      <h2 class="in-h"><a href="${href}">${esc(r.title_hint || "市場洞察")}</a></h2>
       <div class="in-date">${when}</div>
-      <div class="in-body">${md2html(r.article_md)}</div>
-      <div class="in-foot">⚠️ AI 輔助選題、經編輯查證；本文為資訊整理，非投資建議。</div>
+      <p class="in-excerpt">${esc(excerpt(r))}…</p>
+      <a class="in-readmore" href="${href}">閱讀全文 →</a>
     </article>`;
   }).join("");
 })();

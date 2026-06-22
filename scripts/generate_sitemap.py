@@ -161,9 +161,11 @@ def main():
     write_urlset("sitemap-stocks.xml", stock_urls)     # 個股頁（2,500+）
     write_urlset("sitemap-content.xml", content_urls)  # 教學文章 + 新聞
 
-    # 4. sitemap.xml 改為「索引檔」，指向 3 個子 sitemap（robots / GSC 已指向它）
+    # 4. sitemap.xml 改為「索引檔」，指向子 sitemap（robots / GSC 已指向它）
+    #    sitemap-insights.xml 由 worker.js 動態生成（即時查 Supabase published 文章），
+    #    這裡只在索引列出 URL，不寫實體檔。
     refs = []
-    for fn in ("sitemap-pages.xml", "sitemap-stocks.xml", "sitemap-content.xml"):
+    for fn in ("sitemap-pages.xml", "sitemap-stocks.xml", "sitemap-content.xml", "sitemap-insights.xml"):
         refs.append(
             f"  <sitemap>\n    <loc>{BASE_URL}/{fn}</loc>\n"
             f"    <lastmod>{today}</lastmod>\n  </sitemap>"
@@ -175,7 +177,7 @@ def main():
     SITEMAP.write_text(idx, encoding="utf-8")
 
     print(
-        f"✅ sitemap 索引 + 3 子檔已更新："
+        f"✅ sitemap 索引 + 3 靜態子檔已更新（另 +1 動態 sitemap-insights.xml 由 worker 服務）："
         f"首頁/工具 {len(page_urls)}、個股 {len(stock_urls)}、內容 {len(content_urls)}"
     )
 

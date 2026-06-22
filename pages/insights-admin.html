@@ -55,6 +55,9 @@
   .ad-briefbody th,.ad-briefbody td{border:1px solid #e3e0d8;padding:4px 8px;text-align:left;}
   .ad-lbl{font-size:12px;color:#777;margin:12px 0 4px;font-weight:700;}
   textarea.ad-art{width:100%;min-height:240px;border:1px solid #cfd6cf;border-radius:8px;padding:12px;font-size:14px;line-height:1.7;font-family:inherit;resize:vertical;box-sizing:border-box;}
+  input.ad-slug,input.ad-metadesc{width:100%;border:1px solid #cfd6cf;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;box-sizing:border-box;}
+  .ad-pub-url{color:#1B6b40;font-weight:600;text-decoration:none;}
+  .ad-pub-url:hover{text-decoration:underline;}
   .ad-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center;}
   .ad-b{border:0;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;}
   .ad-b.save{background:#3a6b50;color:#fff;}
@@ -229,6 +232,10 @@
         </div>
         <div class="ad-thesis">${esc(r.thesis || "")}</div>
         ${ptHtml}${secHtml}${riskHtml}${kwHtml}${verifyHtml}${flags}${briefMd}
+        <div class="ad-lbl">網址 slug（選填；留空自動用編號）· 公開網址：<a class="ad-pub-url" href="/insights/${esc(r.slug || r.id)}" target="_blank" rel="noopener">/insights/${esc(r.slug || r.id)}</a></div>
+        <input class="ad-slug" type="text" value="${esc(r.slug || "")}" placeholder="例：ai-compute-bottleneck（小寫英文 + 連字號，SEO 最佳；中文亦可）">
+        <div class="ad-lbl">SEO 描述 meta_description（選填；留空自動用 thesis，建議 ≤155 字）</div>
+        <input class="ad-metadesc" type="text" maxlength="160" value="${esc(r.meta_description || "")}" placeholder="一句話描述本文，會顯示在 Google 搜尋結果與分享卡片">
         <div class="ad-lbl">正式文章 article_md（主編查證後重寫；繁中、文末附免責）</div>
         <textarea class="ad-art" placeholder="用真實來源（法說會／重訊／財報）把上面的方向重寫成正式文章…">${esc(r.article_md || "")}</textarea>
         <div class="ad-acts">
@@ -246,10 +253,17 @@
     const card = body.querySelector(`.ad-card[data-id="${CSS.escape(r.id)}"]`);
     if (!card) return;
     const ta = card.querySelector(".ad-art");
+    const slugIn = card.querySelector(".ad-slug");
+    const metaIn = card.querySelector(".ad-metadesc");
     const msg = card.querySelector('[data-role="msg"]');
     const prev = card.querySelector('[data-role="prev"]');
     const setMsg = (t, err) => { msg.textContent = t; msg.className = "ad-msg2" + (err ? " err" : ""); };
     const busy = (b) => card.querySelectorAll(".ad-b").forEach(x => x.disabled = b);
+    // slug 正規化：去頭尾空白、轉小寫、空白→連字號、只留 字母/數字/連字號/中日韓字（留空 = 用 id）
+    const normSlug = (s) => String(s || "").trim().toLowerCase().replace(/\s+/g, "-")
+      .replace(/[^a-z0-9一-鿿-]/g, "").replace(/-+/g, "-").replace(/^-|-$/g, "");
+    // slug + meta_description 一起帶進 update（slug 留空存 null → Worker 用 id 當網址）
+    const seoFields = () => ({ slug: normSlug(slugIn.value) || null, meta_description: (metaIn.value || "").trim() || null });
 
     card.querySelector('[data-act="preview"]').addEventListener("click", () => {
       if (prev.style.display === "block") { prev.style.display = "none"; return; }
@@ -260,10 +274,10 @@
     card.querySelector('[data-act="save"]').addEventListener("click", async () => {
       busy(true); setMsg("儲存中…");
       const { error } = await sb.from("mirofish_briefs")
-        .update({ article_md: ta.value, status: "pending_review", reviewed_by: user.id })
+        .update({ article_md: ta.value, status: "pending_review", reviewed_by: user.id, ...seoFields() })
         .eq("id", r.id);
       busy(false);
-      if (error) return setMsg("儲存失敗：" + error.message, true);
+      if (error) return setMsg(/duplicate|unique/i.test(error.message) ? "儲存失敗：這個 slug 已被其他文章用了，請換一個" : "儲存失敗：" + error.message, true);
       setMsg("已存為待覆核 ✓");
     });
 
@@ -274,10 +288,10 @@
       if (!confirm("確定要『發佈』這篇？發佈後會公開可讀。")) return;
       busy(true); setMsg("發佈中…");
       const { error } = await sb.from("mirofish_briefs")
-        .update({ article_md: ta.value, status: "published", reviewed_by: user.id, published_at: new Date().toISOString() })
+        .update({ article_md: ta.value, status: "published", reviewed_by: user.id, published_at: new Date().toISOString(), ...seoFields() })
         .eq("id", r.id);
       busy(false);
-      if (error) return setMsg("發佈失敗：" + error.message, true);
+      if (error) return setMsg(/duplicate|unique/i.test(error.message) ? "發佈失敗：這個 slug 已被其他文章用了，請換一個" : "發佈失敗：" + error.message, true);
       setMsg("已發佈 ✓");
       setTimeout(load, 700);
     });

@@ -2992,6 +2992,167 @@ async function renderUsStockPage(url, env) {
   return new Response(html, { headers: { "content-type": "text/html;charset=utf-8", "cache-control": "public, max-age=1800" } });
 }
 
+// ───────────────────────── 市場洞察 SEO 頁 /insights/{slug}（Worker SSR）─────────────────────────
+// 文章存 Supabase mirofish_briefs（status=published）。有填 slug 用 slug 當網址，沒填則退回用 id（uuid）。
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const INSIGHT_SELECT = "id,slug,title_hint,thesis,article_md,seo_keywords,meta_description,published_at,updated_at";
+const insightSlug = (row) => row.slug || row.id;
+
+// 極簡 markdown → HTML（Worker 端，先 escape 再套語法，無外部依賴）。article_md 由站長主編撰寫。
+function mdToHtml(md) {
+  const lines = String(md || "").replace(/\r\n/g, "\n").split("\n");
+  const out = [];
+  let inUl = false, inOl = false, para = [];
+  const inline = (t) => esc(t)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>")
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/[^\s)]*)\)/g, '<a href="$2" rel="noopener">$1</a>');
+  const flushPara = () => { if (para.length) { out.push("<p>" + para.join("<br>") + "</p>"); para = []; } };
+  const closeLists = () => { if (inUl) { out.push("</ul>"); inUl = false; } if (inOl) { out.push("</ol>"); inOl = false; } };
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) { flushPara(); closeLists(); continue; }
+    let m;
+    if ((m = line.match(/^(#{1,4})\s+(.*)$/))) { flushPara(); closeLists(); out.push(`<h${Math.min(m[1].length + 1, 4)}>${inline(m[2])}</h${Math.min(m[1].length + 1, 4)}>`); continue; }
+    if ((m = line.match(/^[-*]\s+(.*)$/))) { flushPara(); if (inOl) { out.push("</ol>"); inOl = false; } if (!inUl) { out.push("<ul>"); inUl = true; } out.push(`<li>${inline(m[1])}</li>`); continue; }
+    if ((m = line.match(/^\d+[.)]\s+(.*)$/))) { flushPara(); if (inUl) { out.push("</ul>"); inUl = false; } if (!inOl) { out.push("<ol>"); inOl = true; } out.push(`<li>${inline(m[1])}</li>`); continue; }
+    if (/^(---+|\*\*\*+)$/.test(line)) { flushPara(); closeLists(); out.push("<hr>"); continue; }
+    para.push(inline(line));
+  }
+  flushPara(); closeLists();
+  return out.join("\n");
+}
+
+async function renderInsightArticle(url, env) {
+  const fallback = () => env.ASSETS.fetch(new Request(new URL("/pages/insights", url).toString()));
+  const p = decodeURIComponent(url.pathname.replace(/^\/insights\//, "").replace(/\/$/, ""));
+  if (!p || !env.SUPABASE_SERVICE_ROLE_KEY) return fallback();
+
+  const filter = UUID_RE.test(p) ? `id=eq.${p}` : `slug=eq.${encodeURIComponent(p)}`;
+  const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?${filter}&status=eq.published&select=${INSIGHT_SELECT}&limit=1`, { headers: ecpayAdmin(env) });
+  if (!r.ok) throw new Error("supabase " + r.status);
+  const a = (await r.json())[0];
+  if (!a) return fallback();  // 未發佈/不存在 → 交還靜態頁，維持原行為，不 500
+
+  const slug = insightSlug(a);
+  const canon = `https://leadfuai.com/insights/${encodeURIComponent(slug)}`;
+  const title = `${a.title_hint}｜領富 AI 市場洞察`;
+  const desc = String(a.meta_description || a.thesis || a.title_hint).replace(/\s+/g, " ").trim().slice(0, 155);
+  const pub = a.published_at || a.updated_at, mod = a.updated_at || a.published_at;
+  const dateLabel = String(pub || "").slice(0, 10);
+  const kws = Array.isArray(a.seo_keywords) ? a.seo_keywords.join(",") : "";
+  const bodyHtml = mdToHtml(a.article_md || a.thesis || "");
+
+  const jsonld = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "NewsArticle", "@id": canon + "#article", "headline": String(a.title_hint).slice(0, 110), "description": desc, "url": canon, "mainEntityOfPage": canon,
+        "datePublished": pub, "dateModified": mod, "inLanguage": "zh-TW",
+        "author": { "@type": "Organization", "name": "領富編輯台", "url": "https://leadfuai.com/insights" },
+        "publisher": { "@type": "Organization", "name": "領富 AI", "logo": { "@type": "ImageObject", "url": "https://leadfuai.com/icons/icon-512.png" } },
+        "image": ["https://leadfuai.com/icons/icon-512.png"] },
+      { "@type": "BreadcrumbList", "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
+        { "@type": "ListItem", "position": 2, "name": "市場洞察", "item": "https://leadfuai.com/insights" },
+        { "@type": "ListItem", "position": 3, "name": a.title_hint },
+      ] },
+    ],
+  });
+
+  // 其他洞察（內鏈，有助 SEO 與停留時間）：最近 published、排除本篇、取 5 篇
+  let moreHtml = "";
+  try {
+    const mr = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.published&select=id,slug,title_hint&order=published_at.desc&limit=6`, { headers: ecpayAdmin(env) });
+    if (mr.ok) {
+      const more = (await mr.json()).filter(x => x.id !== a.id).slice(0, 5);
+      if (more.length) moreHtml = `<div class="in-sec"><h2>更多市場洞察</h2><ul class="in-more">${more.map(x => `<li><a href="/insights/${encodeURIComponent(x.slug || x.id)}">${esc(x.title_hint)}</a></li>`).join("")}</ul></div>`;
+    }
+  } catch (e) {}
+
+  const html = `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(desc)}">
+${kws ? `<meta name="keywords" content="${esc(kws)}">` : ""}
+<link rel="canonical" href="${canon}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:url" content="${canon}">
+<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta property="article:published_time" content="${esc(pub || "")}">
+<meta property="article:modified_time" content="${esc(mod || "")}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(title)}">
+<meta name="twitter:description" content="${esc(desc)}">
+<meta name="twitter:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta name="theme-color" content="#1B4332">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<script type="application/ld+json">${jsonld}</script>
+<link rel="stylesheet" href="/css/style.css?v=3.23.9">
+<style>
+  .in-wrap{max-width:760px;margin:0 auto;padding:18px 14px 60px;}
+  .in-bc{font-size:13px;color:#888;margin-bottom:12px;}
+  .in-bc a{color:#1B4332;text-decoration:none;}
+  .in-h1{font-size:28px;line-height:1.3;color:#1B4332;margin:0 0 8px;font-weight:800;}
+  .in-meta{font-size:13px;color:#999;margin:0 0 6px;}
+  .in-lead{font-size:15.5px;color:#444;line-height:1.8;background:#f7faf8;border-left:3px solid #1B4332;border-radius:8px;padding:12px 16px;margin:14px 0 22px;}
+  .in-body{font-size:16px;line-height:1.95;color:#2b2b2b;}
+  .in-body h2{font-size:20px;color:#1B4332;margin:28px 0 10px;}
+  .in-body h3{font-size:17px;color:#1B4332;margin:22px 0 8px;}
+  .in-body ul,.in-body ol{padding-left:22px;line-height:1.9;}
+  .in-body a{color:#1B6b40;}
+  .in-body code{background:#eef2ef;border-radius:4px;padding:1px 5px;font-size:14px;}
+  .in-body hr{border:none;border-top:1px solid #e8ece9;margin:22px 0;}
+  .in-sec{margin-top:34px;border-top:1px solid #eee;padding-top:18px;}
+  .in-sec h2{font-size:17px;color:#1B4332;margin:0 0 10px;}
+  .in-more{list-style:none;padding:0;margin:0;}
+  .in-more li{margin:0 0 8px;}
+  .in-more a{color:#1B4332;text-decoration:none;font-size:15px;}
+  .in-more a:hover{text-decoration:underline;}
+  .in-disc{background:#fdf6ec;border:1px solid #f0e2c8;border-radius:12px;padding:14px 16px;font-size:13px;color:#7a6a4a;line-height:1.75;margin-top:26px;}
+  .in-back{display:inline-block;margin-top:22px;color:#1B4332;text-decoration:none;font-weight:700;}
+</style>
+</head>
+<body>
+<div class="in-wrap">
+  <nav class="in-bc"><a href="/">首頁</a> › <a href="/insights">市場洞察</a> › ${esc(a.title_hint)}</nav>
+  <article>
+    <h1 class="in-h1">${esc(a.title_hint)}</h1>
+    <p class="in-meta">領富編輯台${dateLabel ? "・" + esc(dateLabel) + " 發佈" : ""}・經 AI 輔助選題、編輯查證</p>
+    ${a.thesis ? `<p class="in-lead">${esc(a.thesis)}</p>` : ""}
+    <div class="in-body">${bodyHtml}</div>
+  </article>
+  ${moreHtml}
+  <div class="in-disc">⚠️ 本文由領富編輯台整理，內容經 AI 輔助選題並由編輯查證，僅供研究與資訊參考，<b>不構成任何投資建議或買賣依據</b>。投資有風險，請依公開資訊觀測站、公司財報與法說會等官方來源自行查證，並為自身決策負責。</div>
+  <a class="in-back" href="/insights">← 看更多市場洞察</a>
+</div>
+</body>
+</html>`;
+  return new Response(html, { headers: { "content-type": "text/html;charset=utf-8", "cache-control": "public, max-age=600" } });
+}
+
+// 市場洞察動態 sitemap：即時列出所有 published 文章，新文章發佈隔天即被 Google 發現。
+async function renderInsightsSitemap(env) {
+  let rows = [];
+  if (env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.published&select=id,slug,updated_at,published_at&order=published_at.desc&limit=1000`, { headers: ecpayAdmin(env) });
+      if (r.ok) rows = await r.json();
+    } catch (e) {}
+  }
+  const urls = rows.map(a => {
+    const lastmod = String(a.updated_at || a.published_at || "").slice(0, 10);
+    return `  <url>\n    <loc>https://leadfuai.com/insights/${encodeURIComponent(a.slug || a.id)}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}\n    <changefreq>weekly</changefreq>\n  </url>`;
+  }).join("\n");
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`;
+  return new Response(xml, { headers: { "content-type": "application/xml;charset=utf-8", "cache-control": "public, max-age=3600" } });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -3018,6 +3179,15 @@ export default {
     // ── 美股個股 SEO 頁 /us/{ticker}：worker 伺服器端渲染（每檔獨特內容；出錯則往下走）──
     if (url.pathname.startsWith("/us/") && request.method === "GET") {
       try { return await renderUsStockPage(url, env); } catch (e) { /* fall through to ASSETS */ }
+    }
+
+    // ── 市場洞察單篇 SEO 頁 /insights/{slug}：worker SSR（每篇獨特內容 + NewsArticle JSON-LD；出錯則往下走）──
+    if (url.pathname.startsWith("/insights/") && request.method === "GET") {
+      try { return await renderInsightArticle(url, env); } catch (e) { /* fall through to ASSETS */ }
+    }
+    // ── 市場洞察動態 sitemap：即時列出所有 published 文章 ──
+    if (url.pathname === "/sitemap-insights.xml" && request.method === "GET") {
+      try { return await renderInsightsSitemap(env); } catch (e) { /* fall through to ASSETS */ }
     }
 
     // ── 手機 UA 開首頁 → 回手機版設計（桌機維持原版；同一網址、依裝置出不同內容，Vary 告知快取/Google）──
