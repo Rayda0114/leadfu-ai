@@ -294,7 +294,13 @@ def main():
         print(json.dumps(brief, ensure_ascii=False, indent=2))
         return
 
-    headers = {"Content-Type": "application/json"}
+    headers = {
+        "Content-Type": "application/json",
+        # Cloudflare 1010 會擋預設的 Python-urllib UA，需偽裝成正常瀏覽器
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                      "AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/124.0.0.0 Safari/537.36",
+    }
     if args.ingest_key:
         headers["X-Ingest-Key"] = args.ingest_key          # 機器人路徑（排程用）
     elif args.token:
