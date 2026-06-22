@@ -114,7 +114,7 @@
     </div>
 
     <div class="panel" id="editorPickPanel">
-      <div class="panel-head"><h2 id="editorPickTitle">本週產業觀察</h2></div>
+      <div class="panel-head"><h2 id="editorPickTitle">上週產業觀察</h2></div>
       <div id="editorPick" style="padding: 16px 20px; line-height: 1.9; color: #333;">
         <p style="color:#999;">載入中…</p>
       </div>
@@ -305,7 +305,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     var m = d.market || {};
     if (!m.summary) throw new Error("no summary");
     var ti = document.getElementById("editorPickTitle");
-    if (ti) ti.textContent = "本週產業觀察（第 " + d.weekNum + " 週）";
+    if (ti) ti.textContent = "上週產業觀察（第 " + d.weekNum + " 週）";
     var esc = function (s) { var e = document.createElement("span"); e.textContent = s || ""; return e.innerHTML; };
     box.innerHTML =
       '<p style="color:#666;font-size:12px;margin-bottom:14px;">' + esc(d.weekStart) + " ~ " + esc(d.weekEnd) + ' ・ 領富 AI 依公開資料自動彙整</p>' +
