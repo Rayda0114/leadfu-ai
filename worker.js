@@ -3033,12 +3033,18 @@ async function renderInsightArticle(url, env) {
   const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?${filter}&status=eq.published&select=${INSIGHT_SELECT}&limit=1`, { headers: ecpayAdmin(env) });
   if (!r.ok) throw new Error("supabase " + r.status);
   const a = (await r.json())[0];
-  if (!a) return fallback();  // 未發佈/不存在 → 交還靜態頁，維持原行為，不 500
+  // 未發佈/不存在 → 交還靜態頁，不 500。YMYL：沒有主編重寫的 article_md（只有自動 brief）
+  // 不生成「已查證文章」SEO 頁，避免未查證內容被當成已查證公開索引（與 hub 列表過濾一致）。
+  if (!a || !(a.article_md || "").trim()) return fallback();
 
   const slug = insightSlug(a);
   const canon = `https://leadfuai.com/insights/${encodeURIComponent(slug)}`;
   const title = `${a.title_hint}｜領富 AI 市場洞察`;
-  const desc = String(a.meta_description || a.thesis || a.title_hint).replace(/\s+/g, " ").trim().slice(0, 155);
+  // 描述清掉 markdown 符號（連結→純文字、去 *_`#> 等），避免 Google 搜尋結果出現生硬標記
+  const desc = String(a.meta_description || a.thesis || a.title_hint)
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[*_`#>]/g, "")
+    .replace(/\s+/g, " ").trim().slice(0, 155);
   const pub = a.published_at || a.updated_at, mod = a.updated_at || a.published_at;
   const dateLabel = String(pub || "").slice(0, 10);
   const kws = Array.isArray(a.seo_keywords) ? a.seo_keywords.join(",") : "";
@@ -3141,7 +3147,7 @@ async function renderInsightsSitemap(env) {
   let rows = [];
   if (env.SUPABASE_SERVICE_ROLE_KEY) {
     try {
-      const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.published&select=id,slug,updated_at,published_at&order=published_at.desc&limit=1000`, { headers: ecpayAdmin(env) });
+      const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.published&article_md=not.is.null&select=id,slug,updated_at,published_at&order=published_at.desc&limit=1000`, { headers: ecpayAdmin(env) });
       if (r.ok) rows = await r.json();
     } catch (e) {}
   }
