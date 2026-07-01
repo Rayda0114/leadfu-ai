@@ -278,12 +278,16 @@ function pageHref(file) {
 
 // SEO 個股頁連結：台股→/stock/{code}、美股→/us/{ticker}（canonical 伺服器渲染頁，
 // 取代舊的 /pages/stock-detail?code=（query-string 重複頁），讓內鏈權重灌到 SEO 頁）
+// 有效台股代號：4-6 位數字 + 選擇性單一字母（2330 / 00878 / 00631L / 1101B）。
+// 擋掉 ETF 持股裡的外國/彭博碼（「688256 CH」「AAPL US」「5801 JP」帶空格或國別後綴），
+// 否則會被連成 /stock/{外國碼} → 伺服器 404（GSC 曾累積 848 個此類 404）。
+function _isTwCode(code) { return /^\d{4,6}[A-Za-z]?$/.test(String(code == null ? "" : code).trim()); }
 function _seoHref(code) {
   try {
-    return (typeof isUsTicker === "function" && isUsTicker(code))
-      ? "/us/" + encodeURIComponent(code)
-      : "/stock/" + encodeURIComponent(code);
-  } catch (e) { return "/stock/" + encodeURIComponent(code); }
+    if (typeof isUsTicker === "function" && isUsTicker(code)) return "/us/" + encodeURIComponent(code);
+    if (_isTwCode(code)) return "/stock/" + encodeURIComponent(String(code).trim());
+    return "#";   // 非台股非美股（外國/彭博碼等）→ 不連結，避免 /stock/ 404
+  } catch (e) { return _isTwCode(code) ? "/stock/" + encodeURIComponent(String(code).trim()) : "#"; }
 }
 
 /* ============================================================
