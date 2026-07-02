@@ -1,33 +1,84 @@
 {
-  "updatedAt": "2026-07-01 22:20",
+  "updatedAt": "2026-07-02 22:10",
   "source": "Google News RSS（聚合台灣財經媒體）",
-  "newsCount": 30,
+  "newsCount": 29,
   "news": [
     {
-      "title": "世禾衝半導體 - UDN",
-      "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9PUHNrTXJva09xVGNLMUFEYVFRbTFjRk5fTWduaEpKVTdVRjZYc2tpTjFrekdRTmUtSmtha3J3M2Q4T08zU1M2OEhhYklXLUNW0gFWQVVfeXFMUHQxd0lhMTdkOWtCR3hzOVdlQ1FONFpSSkl4aWV5cG9VeXFzUEEwU1RfajRicnN5QmJPcEV1dFBBMWs0UW50XzhEUms1QUZULWR2S1RMZHc?oc=5",
-      "date": "2026-07-01",
-      "time": "21:20",
+      "title": "台半 二檔有底氣 - UDN",
+      "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFB6aFBncUJidGpUbm13YXVRN3RpYVJicTZRbG1rMEdkUkQtblNrRWx3Vm4yb25jdmlGYXFUdWxmbUNRdnJkSFJKZnJrM1pwMWF20gFWQVVfeXFMTmNQN21XUUx6eS16SWszWU41UE9aV0EzTEMwUGRraktSeWNtaDFzNnpjT1BWNXlMcTFGYWQ3MGN0N3pNR2dqbWlXUktvcVdsbkI4UEhsZUE?oc=5",
+      "date": "2026-07-02",
+      "time": "21:07",
       "tag": "個股",
       "source": "",
-      "summary": "世禾衝半導體 UDN",
+      "summary": "台半 二檔有底氣 UDN",
       "id": 1,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "5425"
+      ],
+      "ai_note": "台半被提及具備底氣，未明確說明原因或影響"
+    },
+    {
+      "title": "5檔上市股明起被關禁閉！雷虎首度列處置「這些飆股」漲太兇第二次被關- 證券 - 工商時報",
+      "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9uQWFVNnhpNU13TXA4Q2p4Z2VNQ0RYdWVDSnVsSi1VUXZQSGczbzlTTy1KM3hMdzFhbm5EcWFtWnVFVnRva2o5Xzd0QTlvdDcxSUFyUHBySVY1MVBxZjBF?oc=5",
+      "date": "2026-07-02",
+      "time": "10:14",
+      "tag": "焦點",
+      "source": "工商時報",
+      "summary": "5檔上市股明起被關禁閉！雷虎首度列處置「這些飆股」漲太兇第二次被關- 證券 工商時報",
+      "id": 2,
+      "ai_sentiment": "利空",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "8033"
+      ],
+      "ai_note": "雷虎因漲勢過猛被列為處置股，可能影響短期交易"
+    },
+    {
+      "title": "《興櫃股》台鎔科技初次上市前現金增資 暫定承銷價66元 - 富聯網",
+      "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxORGUxbzR2RGxSQmlBZEZkeDR0V2pMeDhTd1hyUG9lN0lNZnJ2M3ZJSVNveTM1WkU3TDlBc3Q2cHl0c09PNmlHeFNueTlvSXB2SDVDaWI5dlZWSTZWa1hDVG41VDY1N0N6OTd5cTVMdWFTWk5SdF9wVi05TkJoVHlNWnNfZlQ3RDJi?oc=5",
+      "date": "2026-07-02",
+      "time": "07:56",
+      "tag": "個股",
+      "source": "",
+      "summary": "《興櫃股》台鎔科技初次上市前現金增資 暫定承銷價66元 富聯網",
+      "id": 3,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [
+        "6947"
+      ],
+      "ai_note": "台鎔科技進行現金增資，為上市前準備，影響待觀察"
+    },
+    {
+      "title": "陸廠帶頭！功率半導體Q3再漲25％ 德微、強茂、穩得、台半...4小龍選誰好？法人標的、目標價全曝光：這檔進逼「5字頭」 - 旺得富理財網",
+      "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9tU3RpbjN2NjBpd0IzZVotNE9Ia2t1T1VPa0doaDRnWWlraDhZcDdvcGx0OGxzb1UyVVBGLVlMaEpvc0M4cE9rRnNWUGtXQllnQ2RFNVFrVGctRlEybXN3TmFpR2Q2VXlxeFE?oc=5",
+      "date": "2026-07-02",
+      "time": "07:23",
+      "tag": "個股",
+      "source": "",
+      "summary": "陸廠帶頭！功率半導體Q3再漲25％ 德微、強茂、穩得、台半...4小龍選誰好？法人標的、目標價全曝光：這檔進逼「5字頭」 旺得富理財網",
+      "id": 4,
       "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [
-        "3551"
+        "3675",
+        "2481",
+        "6761",
+        "5425"
       ],
-      "ai_note": "世禾獲半導體產業關注，營運動能提升"
+      "ai_note": "功率半導體價格上漲，相關廠商可能受惠"
     },
     {
-      "title": "近一年執行庫藏股低於50%上市公司榮成、永擎、台表科等9檔上榜| 股市要聞| 股市 - UDN",
-      "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5PTW1LYlRUZWo5MTI5bk5wYzl4ZHp2SE9KUk51UzNnTHE3QlNjbHplSHJHWUN5ZXliRVB1cHJfVVdXMDFTcmdtTUdNSFVwVGtT?oc=5",
+      "title": "近一年執行庫藏股低於50%上市公司 榮成、永擎、台表科等9檔上榜 - UDN",
+      "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5PTW1LYlRUZWo5MTI5bk5wYzl4ZHp2SE9KUk51UzNnTHE3QlNjbHplSHJHWUN5ZXliRVB1cHJfVVdXMDFTcmdtTUdNSFVwVGtT0gFWQVVfeXFMTUFTR2hTcUhab1dSVktxRjZKbll0b1g4MTR6eFJCbzJsVEx0RTBtTlpiZkVFMTl1QW1Uc0FZeGFQb2dKRUMzMlhiZW1jcHlhampFUlVoTXc?oc=5",
       "date": "2026-07-01",
       "time": "11:09",
       "tag": "焦點",
       "source": "",
-      "summary": "近一年執行庫藏股低於50%上市公司榮成、永擎、台表科等9檔上榜| 股市要聞| 股市 UDN",
-      "id": 2,
+      "summary": "近一年執行庫藏股低於50%上市公司 榮成、永擎、台表科等9檔上榜 UDN",
+      "id": 5,
       "ai_sentiment": "中性",
       "ai_horizon": "長期",
       "ai_related": [
@@ -35,71 +86,28 @@
         "7711",
         "6278"
       ],
-      "ai_note": "9檔公司近一年庫藏股執行率低於50%"
+      "ai_note": "九檔公司庫藏股執行率低於50%，屬營運策略差異"
     },
     {
-      "title": "上市公司員工薪資中位數出爐！半導體業包辦前 10、台積電僅排第 4 - 經理人",
-      "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBPRHpxeThnSGJ2LUNBcnd0M0NCeWhYbzV0blQ0TVpxRDZKa1VqQXppU29HdlBNY3pGTVdEamtxTXdGWWI3SHNzQ2t3UVVVd0pqOHZEU25MQlFVQ2I2MWpMcw?oc=5",
+      "title": "中環:公告本公司取得有價證券 - news.cnyes.com",
+      "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9jLWxlNlRHRDZtZ0l4QW1DZnBBT2doVEZGY2xnRk1ncmtWZkd2MHlzaDdYMFdtSXhFRGpURGhuWmxRb2NCRzh6S2tzTUxXVG8?oc=5",
       "date": "2026-07-01",
-      "time": "02:49",
-      "tag": "個股",
-      "source": "",
-      "summary": "上市公司員工薪資中位數出爐！半導體業包辦前 10、台積電僅排第 4 經理人",
-      "id": 3,
-      "ai_sentiment": "中性",
-      "ai_horizon": "長期",
-      "ai_related": [],
-      "ai_note": "半導體業員工薪資中位數居前，無具體公司名"
-    },
-    {
-      "title": "台股衝4萬7...記憶體跌爛原因找到了！陸龍頭一紙公告釀殺機法人看「5大風險」：跟這2家最有關- 上市櫃 - 旺得富理財網",
-      "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9PY24xcHpsY1VzMHhTZmtsNUIyMC10VUE0VTVPMi1oVlpxeVFncFQ5anVaeGZncUt0NXZTclFfdmJ3aXBFNXRhem5yYzBMdUlFZnhqNGxPVXZWSVpPNlFJTHJrZ3MtNjc1NUE?oc=5",
-      "date": "2026-07-01",
-      "time": "02:44",
+      "time": "09:41",
       "tag": "公告",
       "source": "",
-      "summary": "台股衝4萬7...記憶體跌爛原因找到了！陸龍頭一紙公告釀殺機法人看「5大風險」：跟這2家最有關- 上市櫃 旺得富理財網",
-      "id": 4,
-      "ai_sentiment": "利空",
-      "ai_horizon": "短期",
-      "ai_related": [
-        "2303",
-        "6770"
-      ],
-      "ai_note": "記憶體市場受陸廠公告影響，兩廠被點名風險關聯"
-    },
-    {
-      "title": "2025上市公司薪資排行榜出爐 前10名全是半導體業 台積電擠不進前3名 - MSN",
-      "link": "https://news.google.com/rss/articles/CBMisgNBVV95cUxOQkpCSjBNVUdaeDFQQ2hyYm5ra0swblJXZkVfa1lDZGdTaUpiSGFjTThkemRVQ3JwOHhNenZkaHl3RGNMYy1jUWZvbVVLbm5aNHFJaE13ZWxGVEthWFotYVVMYTJNZnJKdUp6Z0JUY201U25uODlmYzR6XzVxTnhVUzUwS1pscDM2YXNpY0FKOUpUZG9lVTlka0tBSS10dHllWlpHVTlieTF4MXVNZmZQUmdfTWc2VHFtTTdwek9uY0VCSncwamlmX0ZCY192alk3QXczYlQzdGl2c2h4OVdQMDZ5dklLR0g3X2pNZlY0NndHNWZQaW5pSUNIMXJHOFhxNVFURjRCclI3LURoWU9ScmlhYWloQXhZUTJYVzlRZnhwc0UxcS1Sb2tiZkR6ZTJRTkk5eGtNM2MwVFNWOGtBWERyRngwVFgwSmhMUlhRTlF5UC02cUpOcXJkT3AyZ0Ntak1hbG5OemtnVTl2LThmaV91MTZueEV5bjVESGNoTTR4UEpsUFQwOGptVU42RVpha1RMdDhaaWM3UFlVeFg0Y1BBYk81MXFXU2kyLXZ1QTlKdw?oc=5",
-      "date": "2026-06-30",
-      "time": "21:56",
-      "tag": "個股",
-      "source": "",
-      "summary": "2025上市公司薪資排行榜出爐 前10名全是半導體業 台積電擠不進前3名 MSN",
-      "id": 5,
-      "ai_sentiment": "中性",
-      "ai_horizon": "長期",
-      "ai_related": [],
-      "ai_note": "半導體業薪資排行前10，未提具體公司名"
-    },
-    {
-      "title": "【新股IPO】基本半導體9971招股集資最多8.7億、碳化硅功率器件商 入場費6388元、未有引入基投 - 香港經濟日報HKET",
-      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTFAtN0NiSEFIVlJXRFk4dVN6WHBxMFZ6RDVwWl94N0dmRENCT0tmLXgwTzdoN3VjTEVjZ3UwQUdabzBxeDFjYVdwbGVnV0JDdWVEdjhHcTNhdUpGTUFMZEhWbkl4ZnE3Y0x6RFpBMDhpZ2hXOWpKT0E?oc=5",
-      "date": "2026-06-30",
-      "time": "13:02",
-      "tag": "個股",
-      "source": "經濟日報HKET",
-      "summary": "【新股IPO】基本半導體9971招股集資最多8.7億、碳化硅功率器件商 入場費6388元、未有引入基投 香港經濟日報HKET",
+      "summary": "中環:公告本公司取得有價證券 news.cnyes.com",
       "id": 6,
       "ai_sentiment": "中性",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "基本半導體啟動IPO，集資額8.7億"
+      "ai_horizon": "不明",
+      "ai_related": [
+        "2323"
+      ],
+      "ai_note": "公告取得有價證券，未說明具體內容與影響"
     },
     {
       "title": "生技業母以子貴獲利豐收 鑽石投資醣基股價大漲 - 經濟日報",
       "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5SWHM5MGFnTU5ucFl5M1Y5RnZUNk1teEN0X0RYckZob1JybGxfeFFpT0E1Uk1YNXpPR0pWZzUxQ0hZYVBZNWl3RFhLakR3cVVBUVhyT3R0S3UyZ9IBX0FVX3lxTFA2eXlwTTdoWjZSVTA2dTdEdFAwci16d0JZN2F4SXFoTkRkdWZ3aElDWVdGYm1md1JsalZNOGQxWWktODVXX0J1eFBBdlFUcmpFcVVQUXJmX0FoRHcydXQ4?oc=5",
-      "date": "2026-06-30",
+      "date": "2026-07-01",
       "time": "09:00",
       "tag": "個股",
       "source": "經濟日報",
@@ -110,68 +118,127 @@
       "ai_related": [
         "6901"
       ],
-      "ai_note": "鑽石投資因糖基股獲利表現股價上漲"
+      "ai_note": "鑽石投資因旗下糖基股價上漲而獲利提升"
     },
     {
-      "title": "SpaceX股票怎麼買？SPCX概念股、台廠供應鏈、ETF一次看－商周頭條｜商周 - 商周",
-      "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE84QmZ1c3lpb2hpU09mcTduUVhjZ2ZVSGctZEV4MFlzeWFFYUZpbW5PTUhKZTlyYTFsUkdBcFRVY0c4d2MwZWpEeGV4YmZBSGwtUWstMGZrUERfaC1wX1VPUHVjbmxnUQ?oc=5",
+      "title": "上市公司員工薪資中位數出爐！半導體業包辦前 10、台積電僅排第 4 - 經理人",
+      "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBPRHpxeThnSGJ2LUNBcnd0M0NCeWhYbzV0blQ0TVpxRDZKa1VqQXppU29HdlBNY3pGTVdEamtxTXdGWWI3SHNzQ2t3UVVVd0pqOHZEU25MQlFVQ2I2MWpMcw?oc=5",
+      "date": "2026-07-01",
+      "time": "02:49",
+      "tag": "個股",
+      "source": "",
+      "summary": "上市公司員工薪資中位數出爐！半導體業包辦前 10、台積電僅排第 4 經理人",
+      "id": 8,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [],
+      "ai_note": "半導體業薪資中位數居前，屬產業結構現象"
+    },
+    {
+      "title": "台股衝4萬7...記憶體跌爛原因找到了！陸龍頭一紙公告釀殺機法人看「5大風險」：跟這2家最有關- 上市櫃 - 旺得富理財網",
+      "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9PY24xcHpsY1VzMHhTZmtsNUIyMC10VUE0VTVPMi1oVlpxeVFncFQ5anVaeGZncUt0NXZTclFfdmJ3aXBFNXRhem5yYzBMdUlFZnhqNGxPVXZWSVpPNlFJTHJrZ3MtNjc1NUE?oc=5",
+      "date": "2026-07-01",
+      "time": "02:44",
+      "tag": "公告",
+      "source": "",
+      "summary": "台股衝4萬7...記憶體跌爛原因找到了！陸龍頭一紙公告釀殺機法人看「5大風險」：跟這2家最有關- 上市櫃 旺得富理財網",
+      "id": 9,
+      "ai_sentiment": "利空",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "記憶體市場受陸廠公告影響，未指明具體公司"
+    },
+    {
+      "title": "2025上市公司薪資排行榜出爐 前10名全是半導體業 台積電擠不進前3名 | 黃振剛 | 新聞 - 風傳媒",
+      "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9tNTB3cThlWFhSUnFuMldPTFliWVhtZmVRNUhxeV9POUFmTXlXZ1VxRHU1S1NWNFJLTFFpWGlqNFdEOUVkZTRqX0Vwc2ZqZw?oc=5",
+      "date": "2026-06-30",
+      "time": "14:05",
+      "tag": "個股",
+      "source": "",
+      "summary": "2025上市公司薪資排行榜出爐 前10名全是半導體業 台積電擠不進前3名 | 黃振剛 | 新聞 風傳媒",
+      "id": 10,
+      "ai_sentiment": "中性",
+      "ai_horizon": "長期",
+      "ai_related": [],
+      "ai_note": "半導體業薪資排行前10，反映產業人力競爭"
+    },
+    {
+      "title": "上市非主管均薪前十強清一色半導體 聯發科446萬元奪冠、台積電第三 - Yahoo股市",
+      "link": "https://news.google.com/rss/articles/CBMipwNBVV95cUxOdkt1TnNENGJERVBSRzF2cEVFTWRLNGRJZzZNOTBSRGp0NGpnMEZZRkZXbEViZFI2ODY3dlhqUEJxU29nZERWTmlldHBFY0NRVWl5Zm52dThLN3JWTEYtci1ScmxJSnhKalFlNzRhLXoyRFg3OTVhTndFUGExNncxQVdYR25LSlFlUkw3QllxN1FKb0RiOE5ucDJ5OTFiTmhlTUpkZ3lMa2xKa3Rvc1QzNnFOYS1BQjE3UTBHVjUyUWwwQ1JPRW5mYnU4VWxQdjlJMTc1Smd1Zy0tRlU4X2l2blBrbVA5dkNsYUNpczRJcE1QMklxZzZyWnV3aTFFeVhHdDdVOEk2djh1d2RyQ3R2dFdrTDdUcU5uZHNiU3A0M250X1E1bmZaaEpneG1IMkd0NDUxcnhuQ0tNVldfWVZIampfR0tHeU9JLUt5TGdTNTNzZmdSRWJPVXRId1k0ZVgzdVY2MEdnVXJpeHAtMzFwWDlaZzEyVEpVVHRJc1hzZjZETnZGNGVXNGR5UFdPaV90Ul83eXZLd2gtSTQ1NlFNSUtnWFB3R1k?oc=5",
+      "date": "2026-06-30",
+      "time": "13:06",
+      "tag": "個股",
+      "source": "",
+      "summary": "上市非主管均薪前十強清一色半導體 聯發科446萬元奪冠、台積電第三 Yahoo股市",
+      "id": 11,
+      "ai_sentiment": "利多",
+      "ai_horizon": "長期",
+      "ai_related": [
+        "2454",
+        "2330"
+      ],
+      "ai_note": "半導體高管均薪領先，反映產業高價值人才競爭"
+    },
+    {
+      "title": "SpaceX 懶人包：SPCX值得投資嗎？ ETF納入時間、台灣投資人買法全攻略！｜豐雲學堂2026 年 07 月 - sinotrade.com.tw",
+      "link": "https://news.google.com/rss/articles/CBMingNBVV95cUxPRGJDN29pSjVDWWRWaGtleENnaUx0ZWF3OENyWjJKaldQaURSUlNNcDBHZFZUMnptQXVLZVBLRnN2cDhyTFdOMUR2Vm1zZGpHSWRnUkVkemZ5N3E1UHhiX0RWYWdxeVl1YlZtZHRhSGlLZ3U5MnJkRXJyNkhwaVdIUklralFRelBCcVAwaHNsUnlwREVNdU5vbXVVdFV5Nl9fY1dLUTFEeGgzWE1zTllObXpRSzB5V3piNFVTYWhISm9nRTdUNkhoNG1zNWJIcXN3UmFZYnJLZlFaSkdrN1lQakRxS0xDZFVvV1gwNmd2bFVNM2ExMkVIV0dZVEkwV05xQ2FkUC13N01feWNFME5ZdnBFSWZVc05rcjlmZEsyLWZtNmNRR1hKR3ROenJ0Sk9rWlo2RmFUeWF4THk5WkNhVUgzMmVJSkg1UWxya3RzZHFjMWxhdVJwT0FtVGlsQmJoa3d4WUUwRkVEVThXVjhLYVBJdl9STWs1WnlRUmxlaDhEbEFoa3Y4MFZKVDRIbjZWZ3M3VW1oVUVyMl9ZT1E?oc=5",
       "date": "2026-06-30",
       "time": "07:00",
-      "tag": "焦點",
+      "tag": "抽籤",
       "source": "",
-      "summary": "SpaceX股票怎麼買？SPCX概念股、台廠供應鏈、ETF一次看－商周頭條｜商周 商周",
-      "id": 8,
+      "summary": "SpaceX 懶人包：SPCX值得投資嗎？ ETF納入時間、台灣投資人買法全攻略！｜豐雲學堂2026 年 07 月 sinotrade.com.tw",
+      "id": 12,
       "ai_sentiment": "中性",
       "ai_horizon": "不明",
       "ai_related": [],
-      "ai_note": "提及SpaceX概念股與台廠供應鏈，未指明具體公司"
+      "ai_note": "SpaceX投資攻略內容為資訊整理，未提及具體台灣公司"
+    },
+    {
+      "title": "SpaceX股票怎麼買？SPCX概念股、台廠供應鏈、ETF一次看 - 商周",
+      "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE84QmZ1c3lpb2hpU09mcTduUVhjZ2ZVSGctZEV4MFlzeWFFYUZpbW5PTUhKZTlyYTFsUkdBcFRVY0c4d2MwZWpEeGV4YmZBSGwtUWstMGZrUERfaC1wX1VPUHVjbmxnUQ?oc=5",
+      "date": "2026-06-30",
+      "time": "06:57",
+      "tag": "焦點",
+      "source": "",
+      "summary": "SpaceX股票怎麼買？SPCX概念股、台廠供應鏈、ETF一次看 商周",
+      "id": 13,
+      "ai_sentiment": "中性",
+      "ai_horizon": "不明",
+      "ai_related": [],
+      "ai_note": "討論SpaceX股票與供應鏈，未明確點名台灣上市櫃公司"
     },
     {
       "title": "【上半年台股風雲榜】上市20大衰股出爐！衛星營運商隴華慘跌7成 電支龍頭LINEPAY也入榜 - Yahoo股市",
       "link": "https://news.google.com/rss/articles/CBMijgRBVV95cUxORHgxZEFjV1VEa1ZCVzJqNmdJMzF5TjBSZGlibmFWZ2R3ODFrck9pWm1CYm8zUEZFdWc1VWZlQzhrWnRweVgyTldKeFMzUFNid3FzZkJIN2JpM3lsTTYydU55cUNnM2Z4aXFtcWg5c2RKcEoxcmdMUnlYbm1VVkhQYTJqX0QzTWtheWhYZU1rR1I0ZzRLeXZUUVBMYS03UWs1Yy1tNHh0bFNNR1BWSG0zT1UtTjhtMmV3TlZDYkdCTWtRcUNWRDF5VlI2UVFWak1BZThJLVNLY1pPX01BcDJzYlUwZGhxemNQRURCLUo5cUxOVDBqWTdPZS1mUzd1SjVrWjBCaGtkRFhRd0xlRnphYVE3dksyN19FWUUtZkxFTHNKNUlOaC1WME56YUJnTWg0UUdmSVUycVZfUnZtWXR5RkNwTmRVY290ZWNVMVBBNHhibFR1RVV1N1c3VUFRZDFfQnlKOXdxZ1JNYVdybnBkdXJqUlhwYnc1NnJpTklxVkEtTUxKZVZ6YUVXQ1htdEZtRDlHSmptVGxnMGFEZHpsa2ZqS2FhcU9WSFNGRFpSN3Bxb2dMT0o2RDZLNGpfcGRnNFhOMnZkcmtWcWhvOWl0Mk54OVA0Szc2azl0TVFfcmdUdUJEaXdvRWVSLWhPVDM5cURMdzY2bDl6VlhWbE1MeGgyVHVqRm04ZGxveE93?oc=5",
       "date": "2026-06-30",
-      "time": "06:32",
+      "time": "06:36",
       "tag": "焦點",
       "source": "",
       "summary": "【上半年台股風雲榜】上市20大衰股出爐！衛星營運商隴華慘跌7成 電支龍頭LINEPAY也入榜 Yahoo股市",
-      "id": 9,
+      "id": 14,
       "ai_sentiment": "利空",
       "ai_horizon": "短期",
       "ai_related": [
         "2424",
         "7722"
       ],
-      "ai_note": "隴華與LINEPAY入選上半年台股20大衰股"
-    },
-    {
-      "title": "【上市薪資排行】台積電僅排第4！聯發科年薪中位數355萬元奪冠 前10名全是半導體業 - Yahoo股市",
-      "link": "https://news.google.com/rss/articles/CBMiiARBVV95cUxOZXItRDhVMEJaV3J3eVZJSjA0TWluVjVsZWhyYm9jVWpYSTFZYzNJWFREb0dTSnQyV3BHUF85bXNrdlMzeDVkc3J3XzJicHVsTFpvUTE5R1ZHTFV6VVUyS1FjZ3plWVU1WFRHLVBfWVpmLUphUElGYVNuM2RPY2k2NVFGNVhSZHR3cFJ3RUx6VF91eFhpRWx5S3dDSFdZSGlzRVdGSllEWVQ4QmxaenYyN1J2LWhJWXFKdVhSVmJDSTdjamlVMEd2OVp4ZWRFeDk5R3J1Smx3WWQ3OG4xRm5yaG9ubnB2dm9vVTdUaU9zTDVMQ05wdnpoSThDVEdJUXpmbm9uOUtIQjJ5Sm5wdEt2QlIwRFRNME8tVFVld2txTDUxNHlPRnVtY092N2NzVXkwV296Y2piZVFscEJTc0F6bjdUNUxxYnNBa2tjMXpGSVpJRnMzNzc3ZldMTnBjYVVjd0lpN0VNWjhCN215dHJlRDQyM0VwWXdpQWM5bnE2MDdaa19DZjI1LWdxRVFGVWV4Z3c1cWZfeVFNazFPS0d2Zm1OdlJjZ1FiVFdmVTJMZWd6dEh6NEF0Z2wxNFo1ZDh5RXo4UDdmak8yd2lnb0M4dzlqSWE2TlFJSTU1UXhqMVRhc1VYYzFJOWpxVUc5TGp1Tl9yR0I1Uy1yM3BNc2ZEdlh2MG5MbkJs?oc=5",
-      "date": "2026-06-30",
-      "time": "02:09",
-      "tag": "個股",
-      "source": "",
-      "summary": "【上市薪資排行】台積電僅排第4！聯發科年薪中位數355萬元奪冠 前10名全是半導體業 Yahoo股市",
-      "id": 10,
-      "ai_sentiment": "中性",
-      "ai_horizon": "長期",
-      "ai_related": [],
-      "ai_note": "半導體業薪資前10名，未明確列出具體公司名"
+      "ai_note": "衛星與電支股上半年表現疲弱，股價大幅下跌"
     },
     {
       "title": "遠東生技股東會通過提上櫃申請 去年EPS1.89元 配發1.5元股利 - news.cnyes.com",
-      "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBTdVdWTG01QU5nbTVfbm15TkRybnJmcE9TQzREU1BORWZnV05BVk02UjBsNjhYQjR3OFRSRWVIWWdnYU05cXdfbW1MQQ?oc=5",
+      "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBtUEcwSlFRMlFkbnR1YzVoUVp0N1dYal90T1l5RmFyUFh5ckt3Vm53UUhOVy1HSExhUE5YT3Bjd2VmdDRRaTB1dTdIQ250N1E?oc=5",
       "date": "2026-06-29",
       "time": "09:57",
       "tag": "個股",
       "source": "",
       "summary": "遠東生技股東會通過提上櫃申請 去年EPS1.89元 配發1.5元股利 news.cnyes.com",
-      "id": 11,
+      "id": 15,
       "ai_sentiment": "利多",
       "ai_horizon": "長期",
       "ai_related": [
         "6886"
       ],
-      "ai_note": "申請上櫃且配發高股利，反映財務狀況穩定"
+      "ai_note": "遠東生技股東會通過上櫃申請，具備轉板潛力"
     },
     {
       "title": "SpaceX IPO 申購超額兩倍 投顧：蜜月行情後、三大風險待觀察 - Yahoo新聞",
@@ -181,11 +248,11 @@
       "tag": "抽籤",
       "source": "",
       "summary": "SpaceX IPO 申購超額兩倍 投顧：蜜月行情後、三大風險待觀察 Yahoo新聞",
-      "id": 12,
+      "id": 16,
       "ai_sentiment": "中性",
-      "ai_horizon": "長期",
+      "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "SpaceX IPO新聞提及投顧風險提醒，無台灣公司直接關聯"
+      "ai_note": "SpaceX IPO申購熱絡，但風險評估未涉及台灣公司"
     },
     {
       "title": "報酬率9%？永捷(4714)現金增資公開申購，股票抽籤該注意什麼？ - 鏈新聞 ABMedia",
@@ -195,13 +262,13 @@
       "tag": "抽籤",
       "source": "",
       "summary": "報酬率9%？永捷(4714)現金增資公開申購，股票抽籤該注意什麼？ 鏈新聞 ABMedia",
-      "id": 13,
+      "id": 17,
       "ai_sentiment": "中性",
       "ai_horizon": "短期",
       "ai_related": [
         "4714"
       ],
-      "ai_note": "現金增資申購，股價處合理區間下緣，市場關注抽籤機制"
+      "ai_note": "永捷現金增資申購，股價處合理區間下緣"
     },
     {
       "title": "台股洗盤變崩盤？不是台積電專家揭「這1檔」是指標示警3訊號：全亮就快跑- 上市櫃 - 旺得富理財網",
@@ -211,53 +278,11 @@
       "tag": "焦點",
       "source": "",
       "summary": "台股洗盤變崩盤？不是台積電專家揭「這1檔」是指標示警3訊號：全亮就快跑- 上市櫃 旺得富理財網",
-      "id": 14,
+      "id": 18,
       "ai_sentiment": "中性",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "泛稱指標股警示，未明確提及具體公司"
-    },
-    {
-      "title": "盤勢震盪 環保、生技股點亮興櫃 - 中時新聞網",
-      "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE53RUVPT0QtN25ZSEJVV283TlE5OTE3NlZFeFQ4Tm1kMXNzOGFMdnplS1NQOGxCdXlEVDFsdGdRLW5YVTAtRVRfa3JTZkVWaXI3RVA0elF4TTd2aVZBaDdkUkRFNjd5djgzODI0?oc=5",
-      "date": "2026-06-26",
-      "time": "20:10",
-      "tag": "個股",
-      "source": "中時新聞網",
-      "summary": "盤勢震盪 環保、生技股點亮興櫃 中時新聞網",
-      "id": 15,
-      "ai_sentiment": "利多",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "環保與生技股點亮興櫃，屬產業整體表現描述"
-    },
-    {
-      "title": "興櫃一周回顧／旭東環保漲逾35% 稱冠 - 經濟日報",
-      "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5KYUl6N3JXY2ZudDZXdzY4ZGktWDFvTlBFdWJVY0VON3ZJV3FpLXJtanFNVXRFSDlkWXktNERFUHlLeGx5UXpydzlGWldEZjhqS254c1hNeTRfdEnSAWBBVV95cUxPWFFvTk1GLThrdXFtNzhZN2VyRUVaNFhVNEY1ZjhRaFpaTnZzUzhZRkwyQ0NIR3d0ajlvLVEtenh0Ukt6V24wMWM0TFZKYUk2WndMenhtcW1EaDBfYjlQUUM?oc=5",
-      "date": "2026-06-26",
-      "time": "16:05",
-      "tag": "個股",
-      "source": "經濟日報",
-      "summary": "興櫃一周回顧／旭東環保漲逾35% 稱冠 經濟日報",
-      "id": 16,
-      "ai_sentiment": "利多",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "興櫃個股漲幅表現，未指明具體公司名稱"
-    },
-    {
-      "title": "台股週跌1893點上市公司市值縮水逾6兆元| 證券 - 中央社 CNA",
-      "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE14OEJWRjJvOFM0bjF6aVlFNlpITTNfbnBhNzJLZWxvLTdlaWxiS2x6Nm9FeGx5VTVycUowTnFUZzMweEdVdjN4ZVhVVjZVQzhrcDRTYVhFc2J5NEtVUHc?oc=5",
-      "date": "2026-06-26",
-      "time": "13:35",
-      "tag": "焦點",
-      "source": "中央社",
-      "summary": "台股週跌1893點上市公司市值縮水逾6兆元| 證券 中央社 CNA",
-      "id": 17,
-      "ai_sentiment": "利空",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "台股指數下跌與市值縮水，反映市場整體負面情緒"
+      "ai_note": "泛稱指標股警示，未明確指出具體公司名稱"
     },
     {
       "title": "「炸雞股」香繼光首登興櫃 股價飄「香」漲破百元大關 - ETtoday財經雲",
@@ -267,11 +292,11 @@
       "tag": "個股",
       "source": "",
       "summary": "「炸雞股」香繼光首登興櫃 股價飄「香」漲破百元大關 ETtoday財經雲",
-      "id": 18,
+      "id": 19,
       "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "興櫃登場股價突破百元，反映市場對該公司關注度高"
+      "ai_note": "香繼光登興櫃，股價突破百元，反映市場熱度"
     },
     {
       "title": "【06/26處置股公告】台半(5425) 06/26到07/09列入處置股，約每5分鐘撮合一次 - CMoney",
@@ -281,13 +306,27 @@
       "tag": "公告",
       "source": "",
       "summary": "【06/26處置股公告】台半(5425) 06/26到07/09列入處置股，約每5分鐘撮合一次 CMoney",
-      "id": 19,
+      "id": 20,
       "ai_sentiment": "利空",
       "ai_horizon": "短期",
       "ai_related": [
         "5425"
       ],
-      "ai_note": "列入處置股，交易頻率降低，市場流動性受影響"
+      "ai_note": "台半被列入處置股，交易頻率受限，市場流動性受影響"
+    },
+    {
+      "title": "台微體改名 TLC-KY 重新登興櫃 每股參考價200元 創今年生技股掛牌新高 - 經濟日報",
+      "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5IWEI2aFJVWEdGLXJmd3VDOGxlcXAxWFo1TkNqWHJKN2Z1Q2czTldiQnlnMHFCQVJnSERReG9RRXplMm9pcTVkZXBVLWdxcnNtTmVxc2lhWHJRMkHSAWBBVV95cUxNMWtOLUlHODcwU0l0Vi15dDdleDVyWndWakRaUDIwUkVQb3hYNjZhdEJvbVpSak5iRlhYZGVUUXNuMDFHYjlLSmV1Zm1NeWJZM0g5bkltTVhnc0hmdmhlVXg?oc=5",
+      "date": "2026-06-25",
+      "time": "20:01",
+      "tag": "個股",
+      "source": "經濟日報",
+      "summary": "台微體改名 TLC-KY 重新登興櫃 每股參考價200元 創今年生技股掛牌新高 經濟日報",
+      "id": 21,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "台微體改名TLC-KY並以200元參考價登興櫃，創今年生技股新高。"
     },
     {
       "title": "TLC 今200元登興櫃- 日報 - 工商時報",
@@ -297,11 +336,11 @@
       "tag": "個股",
       "source": "工商時報",
       "summary": "TLC 今200元登興櫃- 日報 工商時報",
-      "id": 20,
+      "id": 22,
       "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "登記興櫃股價200元，反映市場對該公司初始估值樂觀"
+      "ai_note": "TLC以200元價格登興櫃，反映市場對其挂牌表現關注。"
     },
     {
       "title": "興櫃明添新兵悍將 碩通去年賺近2個股本 已打入散熱模組大廠供應鏈 - news.cnyes.com",
@@ -311,11 +350,11 @@
       "tag": "個股",
       "source": "",
       "summary": "興櫃明添新兵悍將 碩通去年賺近2個股本 已打入散熱模組大廠供應鏈 news.cnyes.com",
-      "id": 21,
+      "id": 23,
       "ai_sentiment": "利多",
-      "ai_horizon": "短期",
+      "ai_horizon": "長期",
       "ai_related": [],
-      "ai_note": "碩通去年盈利近兩個股本，打入散熱模組大廠供應鏈"
+      "ai_note": "碩通去年賺近兩股本，進入散熱模組大廠供應鏈。"
     },
     {
       "title": "期交所公告調整臺股等多檔期貨保證金 - 經濟日報",
@@ -325,11 +364,11 @@
       "tag": "公告",
       "source": "經濟日報",
       "summary": "期交所公告調整臺股等多檔期貨保證金 經濟日報",
-      "id": 22,
+      "id": 24,
       "ai_sentiment": "中性",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "期交所調整多檔期貨保證金，屬市場機制例行調整"
+      "ai_note": "期交所調整多檔期貨保證金，屬常規風險管理措施。"
     },
     {
       "title": "SpaceX IPO 申購熱烈 卻恐引爆逾500億美元股市賣壓 - 經濟日報",
@@ -339,11 +378,11 @@
       "tag": "抽籤",
       "source": "經濟日報",
       "summary": "SpaceX IPO 申購熱烈 卻恐引爆逾500億美元股市賣壓 經濟日報",
-      "id": 23,
+      "id": 25,
       "ai_sentiment": "中性",
       "ai_horizon": "長期",
       "ai_related": [],
-      "ai_note": "SpaceX IPO申購熱絡，但可能引發大規模賣壓"
+      "ai_note": "SpaceX IPO申購熱絡，但可能引發市場賣壓。"
     },
     {
       "title": "SpaceX拚史上最大IPO 開放申購國家包含台灣| 國際 - 中央社 CNA",
@@ -353,11 +392,11 @@
       "tag": "抽籤",
       "source": "中央社",
       "summary": "SpaceX拚史上最大IPO 開放申購國家包含台灣| 國際 中央社 CNA",
-      "id": 24,
+      "id": 26,
       "ai_sentiment": "中性",
       "ai_horizon": "長期",
       "ai_related": [],
-      "ai_note": "SpaceX IPO開放台灣申購，屬國際資本市場動態"
+      "ai_note": "SpaceX擬進行史上最大IPO，台灣投資人可參與申購。"
     },
     {
       "title": "台股高檔震盪！興櫃飆股前十名出爐 「生技黑馬」週漲119%奪下股王寶座 - Yahoo股市",
@@ -367,25 +406,11 @@
       "tag": "個股",
       "source": "",
       "summary": "台股高檔震盪！興櫃飆股前十名出爐 「生技黑馬」週漲119%奪下股王寶座 Yahoo股市",
-      "id": 25,
-      "ai_sentiment": "中性",
+      "id": 27,
+      "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "興櫃飆股前十名出爐，生技股週漲119%為個股表現"
-    },
-    {
-      "title": "SpaceX IPO 路演6大觀察整理！帶你看懂法人看法、散戶申購、xAI虧損與Nasdaq納入題材｜美股觀察 - sinotrade.com.tw",
-      "link": "https://news.google.com/rss/articles/CBMi9AJBVV95cUxNQXpxWXlUTU1HNG55Z0ZXLWY5bTFFNkNGUGV3OFpJQ3JFT0ZXZVAtcDdvNFp6WVNxOVd1ZWduQXowX0FFNFBpZGZTR2tFWEdSN1BGbXliNVVDRnlNZ1U1SFpKbkp3azZ1YUc0bTVScmNXZWU3UW5CM3hObTB3OWRBX3laZDJHNTJNTnlFQ0tzTU9aSF9tRFZmN0o4dV9nSk11ZUFZSEF0SFhXY05GdVNVSFhnZWlsXzVFWktUSTJ4clhlV01pQ0Q4VlBRUWtzTUdtcEFGUk8xWFBkc0YzV1hLbS0xYjctNkFnRFF4OWJ0QW5iNGo2SGZRbnRQMFA4Y1k0dmN3QUhmYmdxRmVPVl8tcFlpTXp6RG5uVVkzY0NHTmhuRFFobzltamkxa3dLVmI3Tmp1TEVidXE5eEowV00yTzQ3eTlnWDk1ZzdyVEl5cDFCOFFXNS1mdVBmOV9kbUdZRXJMdEhKNW91UFVIMEJEcmRoTGQ?oc=5",
-      "date": "2026-06-05",
-      "time": "07:00",
-      "tag": "抽籤",
-      "source": "",
-      "summary": "SpaceX IPO 路演6大觀察整理！帶你看懂法人看法、散戶申購、xAI虧損與Nasdaq納入題材｜美股觀察 sinotrade.com.tw",
-      "id": 26,
-      "ai_sentiment": "中性",
-      "ai_horizon": "長期",
-      "ai_related": [],
-      "ai_note": "SpaceX IPO路演分析聚焦法人與散戶參與情況"
+      "ai_note": "興櫃飆股前十名出爐，生技股週漲119%居首，但未指明具體公司。"
     },
     {
       "title": "群創、長科*6/4起打入處置 大立光、南亞科等83檔列注意股 - 自由財經",
@@ -395,7 +420,7 @@
       "tag": "公告",
       "source": "自由財經",
       "summary": "群創、長科*6/4起打入處置 大立光、南亞科等83檔列注意股 自由財經",
-      "id": 27,
+      "id": 28,
       "ai_sentiment": "利空",
       "ai_horizon": "短期",
       "ai_related": [
@@ -403,51 +428,21 @@
         "3008",
         "2408"
       ],
-      "ai_note": "群創遭列處置股，大立光與南亞科等83檔列注意股"
+      "ai_note": "群創、長科遭列處置股，大立光、南亞科等83檔列注意股。"
     },
     {
-      "title": "AMAX-KY遭列注意股 公告2月自結獲利2100萬元EPS 0.49元 - news.cnyes.com",
-      "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5COGYxSGxmUlNPVHN0RlBsXzV2cy1TMF9LYUhlcE8zdEtfeVNwUXVXdWpnYVlZSzRrTnpUM1U3WVl1aTZ4dTk5SE5HbUM4MUk?oc=5",
-      "date": "2026-04-13",
-      "time": "07:00",
-      "tag": "公告",
-      "source": "",
-      "summary": "AMAX-KY遭列注意股 公告2月自結獲利2100萬元EPS 0.49元 news.cnyes.com",
-      "id": 28,
-      "ai_sentiment": "利空",
-      "ai_horizon": "短期",
-      "ai_related": [
-        "6933"
-      ],
-      "ai_note": "AMAX-KY遭列注意股，公告2月自結獲利2100萬元"
-    },
-    {
-      "title": "台股新制今上路！零股、興櫃也能當抵押品 - 熱門話題 - 理財網 - linebank.com.tw",
-      "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE00X3R5dGpQNlZkT1QtLTN2aUtIYU8xd2Fva1JkNU1ra0RubUVPMVpGNE1QckVZLWJKY2FPVHM1RTZxVmxsTnByNk9rZ0xUdnhkMEtRdF9EVlRwVm1NYjRPbjJzNDN0QmtH?oc=5",
-      "date": "2026-03-30",
+      "title": "2025年度生技股財報出爐！誰是獲利英雄？淨值排行又如何？(更新興櫃數據) - 環球生技月刊",
+      "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE92YzJtdG5FOXBZMTdUZFZ0WFhkZmZCYU95c2d3M2c4cTZZYTNHWDFJWHhBRnV3UzJjN0tLS3ZnVkZiYnp4RDBMYTJuazEycHQ0SFpSc1dZR3NQLXAyNWFySndmMnBlbXhh?oc=5",
+      "date": "2026-04-01",
       "time": "07:00",
       "tag": "個股",
       "source": "",
-      "summary": "台股新制今上路！零股、興櫃也能當抵押品 - 熱門話題 - 理財網 linebank.com.tw",
+      "summary": "2025年度生技股財報出爐！誰是獲利英雄？淨值排行又如何？(更新興櫃數據) 環球生技月刊",
       "id": 29,
       "ai_sentiment": "中性",
-      "ai_horizon": "短期",
+      "ai_horizon": "長期",
       "ai_related": [],
-      "ai_note": "台股新制允許零股與興櫃當抵押品，屬制度擴充"
-    },
-    {
-      "title": "生技新兵！新藥股安立璽榮1月13日登興櫃 - Yahoo股市",
-      "link": "https://news.google.com/rss/articles/CBMiqwJBVV95cUxNNDQxbkVNY1JmWEdNZ09Sd0Jvakl2Zi1oY0NwTE9jM25YZXlONmZocXJyVWRlRm5WQ3NTRkVqaTVuUmFSMnhzME9yXzRTZUZKVGRHMnF2dkVneVlTWVJrMkkxV1dCbEE0bUtUelk5RzBFTzZBNHVobUV1NEIyYzZVVGFrSjZmT3M1RGlPSW83QWotOG1iVHVnTFh6Vm5mc0RwMi1NWW5aeDN4RnFOeUlNRjJoeDJhczZzdlpwWW5maGROdk1JU3RRUldUeDh0RDFEZmUyaVQ4dGh6QXZrNkFDVDBQOUtfSXpCNGdhSy12VWViNVd1cWd3WG1jZHpPaENucks1cEZTVWgzVkxSbG1LUk5QdFZnQ01qR3VHLXVUSTdSN3Vvbm51N3J6MA?oc=5",
-      "date": "2026-01-06",
-      "time": "08:00",
-      "tag": "個股",
-      "source": "",
-      "summary": "生技新兵！新藥股安立璽榮1月13日登興櫃 Yahoo股市",
-      "id": 30,
-      "ai_sentiment": "利多",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "新藥股安立璽榮於1月13日登興櫃，進入新市場階段"
+      "ai_note": "2025年度生技股財報出爐，涵蓋興櫃數據，未提具體公司名稱。"
     }
   ]
 }
