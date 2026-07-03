@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-02 22:35",
+  "updatedAt": "2026-07-03 22:32",
   "source": "LeadFu US Fair Value Range™ v1（52 週區間位置 + sector PE 帶 + yield）",
   "algorithm_version": "v1",
   "count": 101,
@@ -15,7 +15,7 @@
       "label": "高於合理區間",
       "confidence": 5.0,
       "pe_ratio": 37.3,
-      "yield_pct": 0.37,
+      "yield_pct": 0.35,
       "summary": "PE 37.3（估值偏高）；52 週區間位於 92% 位置"
     },
     "MSFT": {
@@ -27,9 +27,9 @@
       "high": 555.45,
       "position": 0.2,
       "label": "合理偏低",
-      "confidence": 4.5,
+      "confidence": 5.0,
       "pe_ratio": 23.3,
-      "yield_pct": null,
+      "yield_pct": 0.93,
       "summary": "PE 23.3（估值合理）；52 週區間位於 20% 位置"
     },
     "NVDA": {
@@ -42,9 +42,9 @@
       "position": 0.473,
       "label": "合理區間中",
       "confidence": 5.0,
-      "pe_ratio": 29.9,
+      "pe_ratio": 29.8,
       "yield_pct": 0.51,
-      "summary": "PE 29.9（估值合理）；52 週區間位於 47% 位置"
+      "summary": "PE 29.8（估值合理）；52 週區間位於 47% 位置"
     },
     "GOOGL": {
       "ticker": "GOOGL",
@@ -70,9 +70,9 @@
       "position": 0.565,
       "label": "合理區間上緣",
       "confidence": 4.5,
-      "pe_ratio": 31.8,
+      "pe_ratio": 31.6,
       "yield_pct": null,
-      "summary": "PE 31.8（估值偏高）；52 週區間位於 57% 位置"
+      "summary": "PE 31.6（估值偏高）；52 週區間位於 57% 位置"
     },
     "META": {
       "ticker": "META",
@@ -85,7 +85,7 @@
       "label": "合理偏低",
       "confidence": 5.0,
       "pe_ratio": 21.2,
-      "yield_pct": 0.34,
+      "yield_pct": 0.36,
       "summary": "PE 21.2（估值合理）；52 週區間位於 23% 位置"
     },
     "TSLA": {
@@ -98,9 +98,9 @@
       "position": 0.498,
       "label": "合理區間上緣",
       "confidence": 4.5,
-      "pe_ratio": 354.5,
+      "pe_ratio": 357.7,
       "yield_pct": null,
-      "summary": "PE 354.5（估值偏貴）；52 週區間位於 50% 位置"
+      "summary": "PE 357.7（估值偏貴）；52 週區間位於 50% 位置"
     },
     "TSM": {
       "ticker": "TSM",
@@ -113,7 +113,7 @@
       "label": "高於合理區間",
       "confidence": 5.0,
       "pe_ratio": 37.7,
-      "yield_pct": 0.86,
+      "yield_pct": 0.88,
       "summary": "PE 37.7（估值偏高）；52 週區間位於 82% 位置"
     },
     "AVGO": {
@@ -127,7 +127,7 @@
       "label": "合理區間上緣",
       "confidence": 5.0,
       "pe_ratio": 59.9,
-      "yield_pct": 0.7,
+      "yield_pct": 0.72,
       "summary": "PE 59.9（估值偏貴）；52 週區間位於 40% 位置"
     },
     "AMD": {
@@ -140,9 +140,9 @@
       "position": 0.852,
       "label": "高於合理區間",
       "confidence": 4.5,
-      "pe_ratio": 174.4,
+      "pe_ratio": 172.6,
       "yield_pct": null,
-      "summary": "PE 174.4（估值偏貴）；52 週區間位於 85% 位置"
+      "summary": "PE 172.6（估值偏貴）；52 週區間位於 85% 位置"
     },
     "ASML": {
       "ticker": "ASML",
@@ -154,9 +154,9 @@
       "position": 0.825,
       "label": "高於合理區間",
       "confidence": 5.0,
-      "pe_ratio": 60.0,
-      "yield_pct": 0.48,
-      "summary": "PE 60.0（估值偏貴）；52 週區間位於 82% 位置"
+      "pe_ratio": 60.2,
+      "yield_pct": 0.5,
+      "summary": "PE 60.2（估值偏貴）；52 週區間位於 82% 位置"
     },
     "QCOM": {
       "ticker": "QCOM",
@@ -168,9 +168,9 @@
       "position": 0.393,
       "label": "合理區間中",
       "confidence": 5.0,
-      "pe_ratio": 19.0,
-      "yield_pct": 2.02,
-      "summary": "PE 19.0（估值合理）；52 週區間位於 39% 位置"
+      "pe_ratio": 18.9,
+      "yield_pct": 2.09,
+      "summary": "PE 18.9（估值合理）；52 週區間位於 39% 位置"
     },
     "MU": {
       "ticker": "MU",
@@ -182,9 +182,9 @@
       "position": 0.757,
       "label": "合理區間上緣",
       "confidence": 5.0,
-      "pe_ratio": 22.0,
+      "pe_ratio": 22.1,
       "yield_pct": 0.05,
-      "summary": "PE 22.0（估值合理）；52 週區間位於 76% 位置"
+      "summary": "PE 22.1（估值合理）；52 週區間位於 76% 位置"
     },
     "ARM": {
       "ticker": "ARM",
@@ -196,9 +196,9 @@
       "position": 0.61,
       "label": "高於合理區間",
       "confidence": 4.5,
-      "pe_ratio": 375.3,
+      "pe_ratio": 370.9,
       "yield_pct": null,
-      "summary": "PE 375.3（估值偏貴）；52 週區間位於 61% 位置"
+      "summary": "PE 370.9（估值偏貴）；52 週區間位於 61% 位置"
     },
     "PLTR": {
       "ticker": "PLTR",
@@ -304,7 +304,7 @@
       "category": "大盤 ETF",
       "price": 527.88,
       "low": 433.4,
-      "high": 528.25,
+      "high": 528.26,
       "position": 0.996,
       "label": "合理區間上緣",
       "confidence": 4.5,
@@ -486,8 +486,8 @@
       "category": "配息 ETF",
       "price": 77.26,
       "low": 63.76,
-      "high": 77.29,
-      "position": 0.998,
+      "high": 77.3,
+      "position": 0.997,
       "label": "合理區間上緣",
       "confidence": 4.5,
       "pe_ratio": 23.8,
@@ -654,8 +654,8 @@
       "category": "行業 ETF",
       "price": 195.7,
       "low": 127.11,
-      "high": 195.81,
-      "position": 0.998,
+      "high": 195.99,
+      "position": 0.996,
       "label": "合理區間上緣",
       "confidence": 4.5,
       "pe_ratio": 25.3,
@@ -673,7 +673,7 @@
       "label": "合理區間上緣",
       "confidence": 5.0,
       "pe_ratio": 16.0,
-      "yield_pct": 1.8,
+      "yield_pct": 1.79,
       "summary": "PE 16.0（估值合理）；52 週區間位於 86% 位置"
     },
     "V": {
@@ -687,7 +687,7 @@
       "label": "高於合理區間",
       "confidence": 5.0,
       "pe_ratio": 31.5,
-      "yield_pct": 0.76,
+      "yield_pct": 0.74,
       "summary": "PE 31.5（估值偏貴）；52 週區間位於 100% 位置"
     },
     "MA": {
@@ -699,10 +699,10 @@
       "high": 601.77,
       "position": 0.546,
       "label": "合理區間上緣",
-      "confidence": 4.5,
-      "pe_ratio": 31.2,
-      "yield_pct": null,
-      "summary": "PE 31.2（估值偏貴）；52 週區間位於 55% 位置"
+      "confidence": 5.0,
+      "pe_ratio": 31.3,
+      "yield_pct": 0.65,
+      "summary": "PE 31.3（估值偏貴）；52 週區間位於 55% 位置"
     },
     "JNJ": {
       "ticker": "JNJ",
@@ -710,13 +710,13 @@
       "category": "道瓊藍籌",
       "price": 263.04,
       "low": 154.21,
-      "high": 263.09,
-      "position": 1.0,
+      "high": 263.1,
+      "position": 0.999,
       "label": "高於合理區間",
       "confidence": 5.0,
-      "pe_ratio": 30.4,
-      "yield_pct": 2.11,
-      "summary": "PE 30.4（估值偏高）；52 週區間位於 100% 位置"
+      "pe_ratio": 30.5,
+      "yield_pct": 2.04,
+      "summary": "PE 30.5（估值偏高）；52 週區間位於 100% 位置"
     },
     "PG": {
       "ticker": "PG",
@@ -729,7 +729,7 @@
       "label": "合理區間中",
       "confidence": 5.0,
       "pe_ratio": 22.1,
-      "yield_pct": 2.89,
+      "yield_pct": 2.81,
       "summary": "PE 22.1（估值合理）；52 週區間位於 47% 位置"
     },
     "KO": {
@@ -743,7 +743,7 @@
       "label": "高於合理區間",
       "confidence": 5.0,
       "pe_ratio": 26.5,
-      "yield_pct": 2.61,
+      "yield_pct": 2.52,
       "summary": "PE 26.5（估值偏高）；52 週區間位於 100% 位置"
     },
     "PEP": {
@@ -757,7 +757,7 @@
       "label": "合理偏低",
       "confidence": 5.0,
       "pe_ratio": 22.6,
-      "yield_pct": 4.19,
+      "yield_pct": 4.1,
       "summary": "PE 22.6（估值合理）；52 週區間位於 29% 位置"
     },
     "WMT": {
@@ -769,9 +769,9 @@
       "high": 135.16,
       "position": 0.43,
       "label": "合理區間上緣",
-      "confidence": 4.5,
+      "confidence": 5.0,
       "pe_ratio": 39.4,
-      "yield_pct": null,
+      "yield_pct": 0.89,
       "summary": "PE 39.4（估值偏貴）；52 週區間位於 43% 位置"
     },
     "HD": {
@@ -785,7 +785,7 @@
       "label": "合理區間中",
       "confidence": 5.0,
       "pe_ratio": 25.4,
-      "yield_pct": 2.66,
+      "yield_pct": 2.6,
       "summary": "PE 25.4（估值合理）；52 週區間位於 50% 位置"
     },
     "UNH": {
@@ -811,9 +811,9 @@
       "high": 176.41,
       "position": 0.445,
       "label": "合理偏高",
-      "confidence": 4.5,
+      "confidence": 5.0,
       "pe_ratio": 23.1,
-      "yield_pct": null,
+      "yield_pct": 3.01,
       "summary": "PE 23.1（估值偏高）；52 週區間位於 45% 位置"
     },
     "CVX": {
@@ -825,9 +825,9 @@
       "high": 214.71,
       "position": 0.342,
       "label": "合理區間中",
-      "confidence": 4.5,
+      "confidence": 5.0,
       "pe_ratio": 29.5,
-      "yield_pct": null,
+      "yield_pct": 4.21,
       "summary": "PE 29.5（估值偏高）；52 週區間位於 34% 位置"
     },
     "BRK-B": {
@@ -855,7 +855,7 @@
       "label": "合理偏低",
       "confidence": 5.0,
       "pe_ratio": 23.2,
-      "yield_pct": 2.76,
+      "yield_pct": 2.65,
       "summary": "PE 23.2（估值合理）；52 週區間位於 21% 位置"
     },
     "DIS": {
@@ -867,9 +867,9 @@
       "high": 124.61,
       "position": 0.225,
       "label": "合理偏低",
-      "confidence": 4.5,
+      "confidence": 5.0,
       "pe_ratio": 15.9,
-      "yield_pct": null,
+      "yield_pct": 1.51,
       "summary": "PE 15.9（估值合理）；52 週區間位於 23% 位置"
     },
     "T": {
@@ -883,7 +883,7 @@
       "label": "低於合理區間",
       "confidence": 5.0,
       "pe_ratio": 6.9,
-      "yield_pct": 5.42,
+      "yield_pct": 5.39,
       "summary": "PE 6.9（估值偏低）；52 週區間位於 7% 位置"
     },
     "VZ": {
@@ -897,7 +897,7 @@
       "label": "低於合理區間",
       "confidence": 5.0,
       "pe_ratio": 10.4,
-      "yield_pct": 6.74,
+      "yield_pct": 6.65,
       "summary": "PE 10.4（估值偏低）；52 週區間位於 31% 位置"
     },
     "O": {
@@ -911,7 +911,7 @@
       "label": "高於合理區間",
       "confidence": 5.0,
       "pe_ratio": 52.3,
-      "yield_pct": 5.26,
+      "yield_pct": 5.09,
       "summary": "PE 52.3（估值偏貴）；52 週區間位於 66% 位置"
     },
     "PFE": {
@@ -923,9 +923,9 @@
       "high": 28.75,
       "position": 0.215,
       "label": "合理偏低",
-      "confidence": 4.5,
+      "confidence": 5.0,
       "pe_ratio": 18.6,
-      "yield_pct": null,
+      "yield_pct": 7.07,
       "summary": "PE 18.6（估值合理）；52 週區間位於 21% 位置"
     },
     "ABBV": {
@@ -934,13 +934,13 @@
       "category": "配息個股",
       "price": 261.07,
       "low": 184.63,
-      "high": 261.63,
+      "high": 261.64,
       "position": 0.993,
       "label": "高於合理區間",
-      "confidence": 4.5,
-      "pe_ratio": 128.6,
-      "yield_pct": null,
-      "summary": "PE 128.6（估值偏貴）；52 週區間位於 99% 位置"
+      "confidence": 5.0,
+      "pe_ratio": 128.0,
+      "yield_pct": 2.65,
+      "summary": "PE 128.0（估值偏貴）；52 週區間位於 99% 位置"
     },
     "MRK": {
       "ticker": "MRK",
@@ -953,7 +953,7 @@
       "label": "高於合理區間",
       "confidence": 5.0,
       "pe_ratio": 36.5,
-      "yield_pct": 2.71,
+      "yield_pct": 2.62,
       "summary": "PE 36.5（估值偏高）；52 週區間位於 99% 位置"
     },
     "LLY": {
@@ -966,9 +966,9 @@
       "position": 0.961,
       "label": "高於合理區間",
       "confidence": 5.0,
-      "pe_ratio": 43.2,
-      "yield_pct": 0.58,
-      "summary": "PE 43.2（估值偏高）；52 週區間位於 96% 位置"
+      "pe_ratio": 43.1,
+      "yield_pct": 0.57,
+      "summary": "PE 43.1（估值偏高）；52 週區間位於 96% 位置"
     },
     "ABT": {
       "ticker": "ABT",
@@ -981,7 +981,7 @@
       "label": "合理偏低",
       "confidence": 5.0,
       "pe_ratio": 26.7,
-      "yield_pct": 2.73,
+      "yield_pct": 2.64,
       "summary": "PE 26.7（估值合理）；52 週區間位於 24% 位置"
     },
     "MDT": {
@@ -993,9 +993,9 @@
       "high": 106.33,
       "position": 0.299,
       "label": "合理偏低",
-      "confidence": 4.5,
+      "confidence": 5.0,
       "pe_ratio": 22.3,
-      "yield_pct": null,
+      "yield_pct": 3.46,
       "summary": "PE 22.3（估值合理）；52 週區間位於 30% 位置"
     },
     "MO": {
@@ -1009,7 +1009,7 @@
       "label": "合理區間上緣",
       "confidence": 5.0,
       "pe_ratio": 15.2,
-      "yield_pct": 5.93,
+      "yield_pct": 5.83,
       "summary": "PE 15.2（估值合理）；52 週區間位於 91% 位置"
     },
     "PM": {
@@ -1023,7 +1023,7 @@
       "label": "高於合理區間",
       "confidence": 5.0,
       "pe_ratio": 25.6,
-      "yield_pct": 3.31,
+      "yield_pct": 3.23,
       "summary": "PE 25.6（估值偏高）；52 週區間位於 79% 位置"
     },
     "IBM": {
@@ -1037,7 +1037,7 @@
       "label": "合理偏高",
       "confidence": 5.0,
       "pe_ratio": 25.6,
-      "yield_pct": 2.36,
+      "yield_pct": 2.33,
       "summary": "PE 25.6（估值合理）；52 週區間位於 64% 位置"
     },
     "BABA": {
@@ -1051,7 +1051,7 @@
       "label": "低於合理區間",
       "confidence": 5.0,
       "pe_ratio": 14.9,
-      "yield_pct": 1.07,
+      "yield_pct": 1.09,
       "summary": "PE 14.9（估值略低）；52 週區間位於 4% 位置"
     },
     "JD": {
@@ -1065,7 +1065,7 @@
       "label": "合理偏低",
       "confidence": 5.0,
       "pe_ratio": 19.6,
-      "yield_pct": 3.8,
+      "yield_pct": 3.76,
       "summary": "PE 19.6（估值合理）；52 週區間位於 17% 位置"
     },
     "PDD": {
@@ -1121,7 +1121,7 @@
       "label": "低於合理區間",
       "confidence": 5.0,
       "pe_ratio": 9.6,
-      "yield_pct": 3.69,
+      "yield_pct": 3.59,
       "summary": "PE 9.6（估值偏低）；52 週區間位於 10% 位置"
     },
     "IBIT": {
@@ -1176,7 +1176,7 @@
       "position": 0.086,
       "label": "合理區間下緣",
       "confidence": 4.5,
-      "pe_ratio": 60.8,
+      "pe_ratio": 61.1,
       "yield_pct": null,
       "summary": "成長型 ETF（殖利率 0.0%）；52 週區間位於 9% 位置"
     },
@@ -1312,13 +1312,13 @@
       "category": "其他熱門",
       "price": 77.65,
       "low": 70.86,
-      "high": 130.23,
-      "position": 0.114,
+      "high": 129.5,
+      "position": 0.116,
       "label": "合理區間下緣",
       "confidence": 4.5,
       "pe_ratio": 25.0,
       "yield_pct": null,
-      "summary": "PE 25.0（估值合理）；52 週區間位於 11% 位置"
+      "summary": "PE 25.0（估值合理）；52 週區間位於 12% 位置"
     },
     "SHOP": {
       "ticker": "SHOP",
@@ -1359,7 +1359,7 @@
       "label": "合理偏低",
       "confidence": 5.0,
       "pe_ratio": 19.2,
-      "yield_pct": 1.08,
+      "yield_pct": 1.06,
       "summary": "PE 19.2（估值合理）；52 週區間位於 15% 位置"
     },
     "ORCL": {
@@ -1372,9 +1372,9 @@
       "position": 0.027,
       "label": "合理區間下緣",
       "confidence": 5.0,
-      "pe_ratio": 24.1,
-      "yield_pct": 1.4,
-      "summary": "PE 24.1（估值合理）；52 週區間位於 3% 位置"
+      "pe_ratio": 24.0,
+      "yield_pct": 1.43,
+      "summary": "PE 24.0（估值合理）；52 週區間位於 3% 位置"
     },
     "CSCO": {
       "ticker": "CSCO",
@@ -1387,7 +1387,7 @@
       "label": "合理區間上緣",
       "confidence": 5.0,
       "pe_ratio": 37.6,
-      "yield_pct": 1.44,
+      "yield_pct": 1.49,
       "summary": "PE 37.6（估值偏高）；52 週區間位於 73% 位置"
     },
     "INTC": {
