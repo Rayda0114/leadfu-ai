@@ -1,37 +1,145 @@
 {
-  "updatedAt": "2026-07-22 22:06",
+  "updatedAt": "2026-07-23 22:07",
   "source": "Google News RSS（聚合台灣財經媒體）",
-  "newsCount": 30,
+  "newsCount": 29,
   "news": [
     {
-      "title": "美光中國最強對手要上市！98億美元IPO恐抽乾晶片股 - news.cnyes.com",
-      "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE16WFVNZXZpbzBabVJ4b3RzUFp6c2hETllVREQxUzBjNU10Rko4Rzl0YnVNUDNDdnFKd3VNdHBILTRrT0VpaGZOM3A4S0lFejg?oc=5",
-      "date": "2026-07-22",
-      "time": "18:59",
+      "title": "鴻林堂生技 7／24登錄興櫃 - 中時新聞網",
+      "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTFB4bHB6WUNyN0cyWGJrQTlTbnBkY2NwSmFiemFRdjZ5SGh0c2FtcWdhbW9QRzdRTTdJRzNtSW5rdHhIeVBta29kdDJ6eE1nMkl4U00taHZlUkdZbFRCNTQteFlmaUd2SlJBT0ZV?oc=5",
+      "date": "2026-07-23",
+      "time": "20:10",
       "tag": "個股",
-      "source": "",
-      "summary": "美光中國最強對手要上市！98億美元IPO恐抽乾晶片股 news.cnyes.com",
+      "source": "中時新聞網",
+      "summary": "鴻林堂生技 7／24登錄興櫃 中時新聞網",
       "id": 1,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "鴻林堂生技登錄興櫃，首日交易可能帶動市場關注"
+    },
+    {
+      "title": "00403A是什麼？成分股、配息、優缺點，和00981A、0050差別一次看 - 商周",
+      "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE0yMkdWTnlacFVoLVZZZVotV191YzN5Q3hiQVhGaDEyQkc2WnZQekZ0Z1BTbVo4aEJaTU1vaUp1cE96Qmw3Sl93QWdYcnZWM2dlTmo2NE5wbFZybmlBWHQ3SE80UGpiUQ?oc=5",
+      "date": "2026-07-23",
+      "time": "16:06",
+      "tag": "焦點",
+      "source": "",
+      "summary": "00403A是什麼？成分股、配息、優缺點，和00981A、0050差別一次看 商周",
+      "id": 2,
       "ai_sentiment": "中性",
       "ai_horizon": "長期",
       "ai_related": [],
-      "ai_note": "提及美光中國對手IPO，未指明具體公司名稱"
+      "ai_note": "比較ETF成分與配息，屬投資知識解析"
     },
     {
-      "title": "宏普上市來首次執行買回庫藏股提前買齊6000張每股均價19.53元 - news.cnyes.com",
-      "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5Dc2dISFpwWmxWUkZLaE5pUjR4dTF1czd5bXA1azNRVEk2YVMxcUtzVGpwbko2MjlwVzZnSXRRLThqTjZlSk5qaWtBeFpjMFk?oc=5",
-      "date": "2026-07-22",
-      "time": "09:46",
-      "tag": "焦點",
-      "source": "",
-      "summary": "宏普上市來首次執行買回庫藏股提前買齊6000張每股均價19.53元 news.cnyes.com",
-      "id": 2,
+      "title": "AI淨零／ 台鎔科技看好半導體廢液處理 上市首日收漲近2成 - 中央社 CNA",
+      "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBjdmFRblpTVnd2cVNIV3luZjk4b3hRbWtXWlJfTkxiZWR0LW93UHVlTXM2NlgtbWprMjQ2MnNGMTU1TkVhV2tfUVJsWnl4ZzZ0OXlTakZqRGtDWEp0RVE?oc=5",
+      "date": "2026-07-23",
+      "time": "07:58",
+      "tag": "個股",
+      "source": "中央社",
+      "summary": "AI淨零／ 台鎔科技看好半導體廢液處理 上市首日收漲近2成 中央社 CNA",
+      "id": 3,
       "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [
-        "2536"
+        "6947"
       ],
-      "ai_note": "宏普執行買回庫藏股，每股均價19.53元"
+      "ai_note": "台鎔科技上市首日收漲近20%，市場反應積極"
+    },
+    {
+      "title": "半導體廢棄物處理廠台鎔科技上市首日爆量 盤中漲逾20% - 經濟日報",
+      "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9CY0xiNWt2anF3c3Fwakx2c0dIeWJiNnFCa2YwNmxlNHctVV8tR1B5OU4yT2U3aUZCSURSZWpCRFZtbldnTTY2Z0lTaFhiYVg2RWt2dFVJcmZPUdIBX0FVX3lxTE52N1R4NXVOOXJPLVRFRW9TWGdpd0pBMVVGSnFrbnAxUXJWVzd6alRLamc3di1Dck9PZ2NjWlYxaWpHQzVhTGNpZTlycTVtNTQ5eHIxLWRDaXhmeUJlZnhv?oc=5",
+      "date": "2026-07-23",
+      "time": "05:14",
+      "tag": "個股",
+      "source": "經濟日報",
+      "summary": "半導體廢棄物處理廠台鎔科技上市首日爆量 盤中漲逾20% 經濟日報",
+      "id": 4,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "6947"
+      ],
+      "ai_note": "台鎔科技上市首日爆量，盤中漲逾20%"
+    },
+    {
+      "title": "半導體廢液處理廠台鎔上市 首日強漲23%蜜月行情甜 - Yahoo股市",
+      "link": "https://news.google.com/rss/articles/CBMi2wJBVV95cUxOcnlSYzRtcWdVYWdoQlc1M09Ubm5DcExLX2tvS0FieXZkLTFwbjBIbTdVUjJNRFNjSDRXSURTOV85SWx3eGNnMEFId19CZTdRRFB5dE5OdHFNTFNkSHh4LXR2N05QRlRWcFpaeVZUcHRtUEJqcER2d0I4d2JIRDBUdVpiTktVSG0xOElNWURwazJDTG5HdDBXZjhiQVRvcDNSTnZoa1BjM0lodkwyOEJoZXRGUmloTHBLNDhQMWlKejA1cGhqejhfMXY3UTg5WUtzV1I1OXNQZ2JaUWFWZTZzWHhXamtMTERiT3o0dkJuQkhoVjI2cmd2emQ4U1k4dGxlbFF1aHJDM1RhZnBkQ3lfSGJPVW1Ndy1SZ0JBMWdieGFWSEtfRkpWazBRTk1ZUjNwSHBiVXR2YjdKYnRrd21zUlZRODcwczlaQWhpbkYzV3lndDRSU1Foc0xaOA?oc=5",
+      "date": "2026-07-23",
+      "time": "02:29",
+      "tag": "個股",
+      "source": "",
+      "summary": "半導體廢液處理廠台鎔上市 首日強漲23%蜜月行情甜 Yahoo股市",
+      "id": 5,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "6947"
+      ],
+      "ai_note": "台鎔科技上市首日強漲23%，市場熱絡"
+    },
+    {
+      "title": "AI半導體廢棄物點石成金 台鎔上市加速產能擴充 - DIGITIMES",
+      "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOUjJNN1dWVklNcUpLTFRpMnZaN0tRREtmMU50dHdlajFSaTB1ODBFV0pwZGtKdlpkeXNrRmpfOFpESmNwejZ0LUgybWZJdmliSUZ6Mkd3X0xYajlqV3MzYmttdnNVQm1yWEV6RkpxanVpUnVadDFNb1pOOUstRndyMkhxNHYtRGg3cm9iejJB?oc=5",
+      "date": "2026-07-23",
+      "time": "02:28",
+      "tag": "個股",
+      "source": "",
+      "summary": "AI半導體廢棄物點石成金 台鎔上市加速產能擴充 DIGITIMES",
+      "id": 6,
+      "ai_sentiment": "利多",
+      "ai_horizon": "長期",
+      "ai_related": [
+        "6947"
+      ],
+      "ai_note": "台鎔科技上市將加速半導體廢棄物處理產能擴充"
+    },
+    {
+      "title": "台鎔科技今上市掛牌交易歡度蜜月 早盤最高上漲近2成 - news.cnyes.com",
+      "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1TTUd4bmVYaU9OV094WXRxS0VIZFVMMlQwemxTaGo4OGtJZmdob09tREZaNzAtZ3hiRGJhVDZFd3BUaDZXTU03eXhZUFFzd00?oc=5",
+      "date": "2026-07-23",
+      "time": "01:26",
+      "tag": "焦點",
+      "source": "",
+      "summary": "台鎔科技今上市掛牌交易歡度蜜月 早盤最高上漲近2成 news.cnyes.com",
+      "id": 7,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "6947"
+      ],
+      "ai_note": "台鎔科技上市首日早盤最高漲近20%"
+    },
+    {
+      "title": "台股5萬點等「這時」！國巨、聯電上下車價老手全說了：操作策略曝光- 上市櫃 - 旺得富理財網",
+      "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1qUW9WdVUzZk03d3JjLVVKa0JCeTJLX1VPOTRoWFFweXE5SDhWN2d4ZFNCTVUtZEw4WnJQM05NakZyeGp3b1lEc0xVNWxSOHQ5QlVtTGIzcC1RTFEtdGlGTF9hRFpGMGd2ZHc?oc=5",
+      "date": "2026-07-23",
+      "time": "00:43",
+      "tag": "焦點",
+      "source": "",
+      "summary": "台股5萬點等「這時」！國巨、聯電上下車價老手全說了：操作策略曝光- 上市櫃 旺得富理財網",
+      "id": 8,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "2303"
+      ],
+      "ai_note": "提及國巨與聯電操作策略，無具體價格或事件"
+    },
+    {
+      "title": "《台北股市》注意股：23日23檔入列信昌電記點之王- 上市櫃 - 旺得富理財網",
+      "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBLQ0VuaEV3ME9ISG91aWVsYTJpYWZYdHAtUXJjcG1rV2podjFvTXhvT0FTMjI2NXFpNnFQbU1OWC1tbkJQa1JMTUYzeGNNRUNSZkZ2NFZfUVg5WjFURjdleUczNU8ycUJoTkE?oc=5",
+      "date": "2026-07-22",
+      "time": "23:53",
+      "tag": "個股",
+      "source": "",
+      "summary": "《台北股市》注意股：23日23檔入列信昌電記點之王- 上市櫃 旺得富理財網",
+      "id": 9,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [],
+      "ai_note": "列出注意股名單，無具體公司事件或財務影響"
     },
     {
       "title": "台股勁揚助攻！鴻海豪配7.2元創上市以來新高 拚14天成功填息「股息這天入帳」 - Yahoo股市",
@@ -41,13 +149,13 @@
       "tag": "焦點",
       "source": "",
       "summary": "台股勁揚助攻！鴻海豪配7.2元創上市以來新高 拚14天成功填息「股息這天入帳」 Yahoo股市",
-      "id": 3,
+      "id": 10,
       "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [
         "2317"
       ],
-      "ai_note": "鴻海配發7.2元股息，創上市以來新高"
+      "ai_note": "鴻海豪配7.2元創上市以來新高，填息動作受關注"
     },
     {
       "title": "技嘉小金雞技宸7/27登興櫃 訂單能見度高今年營運看增 - news.cnyes.com",
@@ -57,119 +165,27 @@
       "tag": "個股",
       "source": "",
       "summary": "技嘉小金雞技宸7/27登興櫃 訂單能見度高今年營運看增 news.cnyes.com",
-      "id": 4,
-      "ai_sentiment": "中性",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "技嘉旗下技宸將於7/27登興櫃"
-    },
-    {
-      "title": "《上市類股資金流向4-1》半導體類股比重(37.27%) - 富聯網",
-      "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxORzllclZBTXBHZ1hYVmxCVWFXc2V5M2NENWdOTzYzWWZ0c1VDZWtaRTlXT0FyVmlzTVdXN2wxNU8wdmpsSnlQRXhwMVVCcTlnQlVEWHA3LWVUTlRiemlkd3FBZmZmRG1ZcUJHQ3ZvVk9SMjVBMWVhNTBiS1ljcHlaS1V5TjE3TVRu?oc=5",
-      "date": "2026-07-22",
-      "time": "06:27",
-      "tag": "個股",
-      "source": "",
-      "summary": "《上市類股資金流向4-1》半導體類股比重(37.27%) 富聯網",
-      "id": 5,
-      "ai_sentiment": "中性",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "半導體類股佔台股資金比重37.27%"
-    },
-    {
-      "title": "打臉專家震盪說！台股不懼反壓盤中又漲千點「被動元件、光通訊強攻漲停」誰用錢砸出軋空行情？ - 上市櫃 - 旺得富理財網",
-      "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1WaDZlSkFhcGJPRFN1ZEoxQm9DaGRnMXZrQm9PUFhzaUJWeW5OLUFLblVSNDBLN0E1bUE2QW1HdFIycGM3Y09US2dRdjR5bkQ1T2xGTnJhNHBFdHBlV0dDX3EwQlFIM3AzT2c?oc=5",
-      "date": "2026-07-22",
-      "time": "04:38",
-      "tag": "焦點",
-      "source": "",
-      "summary": "打臉專家震盪說！台股不懼反壓盤中又漲千點「被動元件、光通訊強攻漲停」誰用錢砸出軋空行情？ - 上市櫃 旺得富理財網",
-      "id": 6,
+      "id": 11,
       "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "台股盤中漲千點，被動元件與光通訊強漲"
+      "ai_note": "技宸將於7/27登興櫃，訂單能見度高，營運展望樂觀"
     },
     {
-      "title": "聯鈞旗下源傑7/29登興櫃；搶攻佈局3.2T光模組 - Yahoo股市",
-      "link": "https://news.google.com/rss/articles/CBMipwJBVV95cUxPRG83RWMzeHhRS3oxdVFjNlBtQmxoYU5rYTdhUlpad2RLaHBFN20wQVh6TDBZQzRObVkyRFl2YkRhd05hM0Y4RGc2MkVRb040dmE4dFBiVDB0aGF0UGs3Sl9JcnRIR2hYS2RSUHZvMzAzcVdWVUZ3clpsczJZTnhEOFlIVFc0WEVJSXJOZmgzbERaTktod2hwZzdvWTU2ZFlrM3lLSktBTm0wd2xXSTFFaVVCMXp1LTdiNVBHaUxEOXBRcmt1OVVmTHJKOFYyN0Rmb2MySUowUFdiUDdQUzFodUZHV0FHRWJvTzZuSmtHN2hjdXpjUUhveDc2WFBHR2taV1BSY2Q4VTBoNlhDdmdIb2pWNmk0bnhoa09OR0RyUWs1UWVXTXY4?oc=5",
-      "date": "2026-07-22",
-      "time": "03:35",
-      "tag": "個股",
-      "source": "",
-      "summary": "聯鈞旗下源傑7/29登興櫃；搶攻佈局3.2T光模組 Yahoo股市",
-      "id": 7,
-      "ai_sentiment": "中性",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "聯鈞旗下源傑將於7/29登興櫃"
-    },
-    {
-      "title": "SK海力士美股上市後韓股暴跌 KOSPI重挫引發市場恐慌 - 商傳媒",
-      "link": "https://news.google.com/rss/articles/CBMi3AJBVV95cUxPWWx5dVYxZUhfMnJENDFaTXJsbXZ1VGtOUUdGYVA0Rk54VkNjc2t0ZkxpN3NlYXFsZlNfeVk3QmhlUHpCOUFyVGltYWpYYlRJMDQxdlZXTk5TbzZ2cFRWVkxiYzI2ZFpkbklYN0RsQldsTzFoNF83UUo0RWpDc0VJUThXbVR3ZHRyQmRlN2MzNFU4R1Q0aHBFMjlLZTVwR2Y1cXg0TGEyT1k3UWpObjVvQnhVbk5YWUlMRGV6T0lVTG04WUl0aE1rYlF0cEJMSElmQjBFeHJQOERQVUJFbG90TkRjQURsR1UxaWxMclNub1JLaDhJSTJBMUlveTRabnBMeFpheTJiQzZTWS1KN1RLTjcxUGhscEdxS29XR2tlQlVXRnBvbWpJeGNKMS1uWFowTHRGWjZ4UGEtQkRzNHVZeGpOclZWd2IzNjlIQkxOcklldWhCalRwWWhGVzM?oc=5",
-      "date": "2026-07-22",
-      "time": "02:50",
-      "tag": "個股",
-      "source": "",
-      "summary": "SK海力士美股上市後韓股暴跌 KOSPI重挫引發市場恐慌 商傳媒",
-      "id": 8,
-      "ai_sentiment": "利空",
-      "ai_horizon": "短期",
-      "ai_related": [
-        "4923"
-      ],
-      "ai_note": "SK海力士美股上市後韓股重挫"
-    },
-    {
-      "title": "《台北股市》注意股：22日40檔信驊.健策.華新科.禾伸堂.環球晶等- 上市櫃 - 旺得富理財網",
-      "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5zSERlYVIybEJQQUFJV3JzR2ZwVk1COGFrbDZHQ2kyRVVyR1o2SjRMUWxaSUFCV2FNRVoxRlZSSjNHTDNFSVhrVElhUTM5Tl9qQ281TlNLM1hwZ3V1QU5zSXdXeU9GLXNsWEE?oc=5",
-      "date": "2026-07-22",
-      "time": "00:03",
-      "tag": "個股",
-      "source": "",
-      "summary": "《台北股市》注意股：22日40檔信驊.健策.華新科.禾伸堂.環球晶等- 上市櫃 旺得富理財網",
-      "id": 9,
-      "ai_sentiment": "中性",
-      "ai_horizon": "短期",
-      "ai_related": [
-        "5274",
-        "3653",
-        "2492",
-        "3026",
-        "6488"
-      ],
-      "ai_note": "公告40檔注意股，含信驊、健策等"
-    },
-    {
-      "title": "記憶體巨頭SK海力士赴美上市在即，你需要了解的一些關鍵資訊 - TradingKey",
-      "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNdGcwZEUwbFIwbFVWTXZ3ampvMUZuX205NzN2RnNIUzg0QmhMZGlfb3AzenRPa3dUSmdmTUIzZHBHM2NCWUFOeXNtX19wSXRXbE9HMDBfTkcxSDNjb29qakJlT1BIN1Zhem9kbDVwcm1lRWg3NXNhUWFQbkdDc1luWlYxdURvc1pUWi1qZW5Ib1lqYTl4c2pBWlJiX3RZYUE1NldJT1l5NC1GQS1oM2VHWjhtUEFUWXUzLVNOcA?oc=5",
+      "title": "海昌生技上櫃 四天漲19.5% - 經濟日報",
+      "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE0zYWRWS0ZsOFVkQ3FxTUpVZHlQTlZyX0pCam9KWkNQOTA0dzFZX1RTQ0dROUw3NFN2YWhGSk8tRjkwdmxVQ1pRMmFOX3kzY2J4NUQ3bFA4MHdDYmfSAWBBVV95cUxQUFlfeFlnXzRrVGtMdE5XSzQyQTFiV1oyenNWeU5WX1NCMm1ONGZYOEZUM1NiVXhfMHRLd2xfUWJCTm5wY1ZwV2IzN05TMm9VV2JLQ2R6Zk9pbFVDR09ETDU?oc=5",
       "date": "2026-07-21",
-      "time": "22:39",
-      "tag": "個股",
-      "source": "",
-      "summary": "記憶體巨頭SK海力士赴美上市在即，你需要了解的一些關鍵資訊 TradingKey",
-      "id": 10,
-      "ai_sentiment": "中性",
-      "ai_horizon": "長期",
-      "ai_related": [
-        "4923"
-      ],
-      "ai_note": "SK海力士擬赴美上市，提及關鍵資訊"
-    },
-    {
-      "title": "富邦證券攜手櫃買中心舉辦生技產業論壇 聚焦產業趨勢與創新商機 - 經濟日報",
-      "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBtOEQzbWVjTnRaNHV5YVlmbmlBWGNPaERxcDlvVFdmWjFfakRQRVNFMFJhbjhkMmwwT3YwWGdCMTlfTF83M0ZHcE1vRzE3aXJOMjJzcmFvaWtDZ9IBX0FVX3lxTFBkZFFGQzV1U2xMb0hGSkJTWWthQ091Q3VMbWsyQU9IWGZiNm9fdk5WcVB4Y1UzY2hPVjJGb05xQkV5OXVLTVBDRDlZMUhqYzRMWmRXV1ZqZl81TmlsbEJv?oc=5",
-      "date": "2026-07-21",
-      "time": "09:00",
+      "time": "15:56",
       "tag": "個股",
       "source": "經濟日報",
-      "summary": "富邦證券攜手櫃買中心舉辦生技產業論壇 聚焦產業趨勢與創新商機 經濟日報",
-      "id": 11,
-      "ai_sentiment": "中性",
-      "ai_horizon": "長期",
-      "ai_related": [],
-      "ai_note": "金融機構舉辦產業論壇，無具體公司名稱"
+      "summary": "海昌生技上櫃 四天漲19.5% 經濟日報",
+      "id": 12,
+      "ai_sentiment": "利多",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "7814"
+      ],
+      "ai_note": "海昌生技上櫃四天漲19.5%，市場熱絡"
     },
     {
       "title": "ETF IPO可以買嗎？專家點破2優點2缺點：本來就要買則利大於弊| 存股族愛ETF | 股市 - UDN",
@@ -179,11 +195,11 @@
       "tag": "抽籤",
       "source": "",
       "summary": "ETF IPO可以買嗎？專家點破2優點2缺點：本來就要買則利大於弊| 存股族愛ETF | 股市 UDN",
-      "id": 12,
+      "id": 13,
       "ai_sentiment": "中性",
-      "ai_horizon": "長期",
+      "ai_horizon": "不明",
       "ai_related": [],
-      "ai_note": "ETF投資分析，未提及具體公司"
+      "ai_note": "ETF IPO評析，討論優缺點，未提具體公司"
     },
     {
       "title": "鴻林堂7/24登興櫃攜手茂林光電打造生技材料新平台| 證券 - 中央社 CNA",
@@ -193,11 +209,11 @@
       "tag": "個股",
       "source": "中央社",
       "summary": "鴻林堂7/24登興櫃攜手茂林光電打造生技材料新平台| 證券 中央社 CNA",
-      "id": 13,
+      "id": 14,
       "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "鴻林堂與茂林光電將登興櫃，拓展生技材料業務"
+      "ai_note": "鴻林堂登興櫃，與茂林光電合作生技材料平台"
     },
     {
       "title": "鴻林堂7月24日登興櫃攜茂林光電打造生技材料量產新平台- 商情 - 工商時報",
@@ -207,55 +223,27 @@
       "tag": "個股",
       "source": "工商時報",
       "summary": "鴻林堂7月24日登興櫃攜茂林光電打造生技材料量產新平台- 商情 工商時報",
-      "id": 14,
+      "id": 15,
       "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "鴻林堂與茂林光電將登興櫃，拓展生技材料業務"
+      "ai_note": "鴻林堂登興櫃，與茂林光電合作生技材料平台"
     },
     {
-      "title": "上市公司員工薪酬台積電只排第七 這半導體廠平均薪資衝破620萬元奪冠 - 經濟日報",
-      "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE41TXpzRG1HbTRBQkpQZDZ5OXJpSjMwSEVEZGRsTTZmUlJzdXJUMXRmTW1hYlZZMlNBbzV2ZlhjQUt2Zm9jWGlRREF3QzFNU0pucmpkNFNGaU8zd9IBX0FVX3lxTE92TnhCUTF2TEhwRXpxS1c5a2hYUV9BOEt3UGpySkEtWTlEMk9oU25IWHRrTENBWURUaTRTeDhMa29Ibm5qME04a3ZfaXYydnlSMGd4UmZRZzIyWG5JTVFj?oc=5",
+      "title": "華爾街為長鑫科技IPO瘋狂！雙重定價撕裂市場：科創板僅5792億外資卻借道加密合約3.9兆爆炒 - Yahoo 財經",
+      "link": "https://news.google.com/rss/articles/CBMikwRBVV95cUxOczdNQlgzbXlaenpMVUNOQjVTX2FyeVRhVGdkaVZkRmkzclEtYjd0MHM1RVo5Q3JodVE4RDlmdllhMzg2cUJPbHQwVzA0N2E1eEpwSDlBald4Nkd5YjRNcXh3Yjk1WVpHRDJuMnNnTS1mRXdRNzNLWTVSLVliOVNEZU56NDBTa2w1Ym9CRjZJNmowY1NVZUlQemRFT1RGaUdKZVl4VGZxRHBVTk9ySDYtR2pkaDVyTnNpNUNYdVp1STk3LWFSNDNZTmt0MHc5QVdLV2Joa0RzV2Z0dG5rakI2VDZ1RVVWTzlybUhXQkNkcVB4UnV2QmVYcHc2RVZyaEUzai1YOVN4TEJjMlYzVFhOTGpYVWlqcGtXdzczaWZVc2xxUFJ2cXhSdFJFQk5JMkJ0N2FiQ3U5TVl4SzZfbThhRGw0aGJHSHlSenNMTDRyQnhvcWxKMDBhcXhIR3ZybGFiTC1rMTE5SEJvTGRxWThmNnJsX3hFLWJqTVdoSmEtRmttY1lpdlBpS3M5amdSci1nRXVGQ3JFbzh2YjhCMkZKaFpNS0tkYXVFb2k0LTZrTjVLcmp6dFp5LUhhc1ZMZVZTWEhkWWFYLWJNa09vS2RTWDNQZGoybTJWOFJWdDNRSVpSZXpoUmQ0a1FKUi1xeGJsbDhoM085R1I4b1dBZ2F6dkZJNVI3YW1ZeUhNRWE3bEVRWUE?oc=5",
       "date": "2026-07-20",
-      "time": "09:00",
-      "tag": "個股",
-      "source": "經濟日報",
-      "summary": "上市公司員工薪酬台積電只排第七 這半導體廠平均薪資衝破620萬元奪冠 經濟日報",
-      "id": 15,
-      "ai_sentiment": "中性",
-      "ai_horizon": "長期",
-      "ai_related": [
-        "2330"
-      ],
-      "ai_note": "台積電員工薪酬排第七，非最高薪半導體廠"
-    },
-    {
-      "title": "「航太大廠」17日突發宣布終止興櫃！8月31日召開股東臨時會進行投票 - Yahoo股市",
-      "link": "https://news.google.com/rss/articles/CBMinANBVV95cUxNSXNlbFI3dG1ZQUZLdGhfeDJxNGJmYVVuY3RGRVBDNnh5bmpUNmoyT1lWYW9ucmFtWW16ek1MSnFIaWktdDdZR0JkVHVnZkxsODR5Q09zdGlSbEdnb182RC03QTl4Nk1wZnpaVWNZSFg5NU91QWlXUHVka2JyODdGQ3V4Yjl1WEV1bVNjSTRfd1JvbDRCTlhwajFkdERreloyMU9GS3dmbk9OaHV2T2hIVVBWc2FGNkFleWszal9WNDJQVFE0ZDl6MVpUeXNZdlZraEhNYkZwQTcycG9VUU9IZFBzYzhUaEtWdnhqWldBMlNvcXJhR0NJTWpuZWlRV0FtbkcwN1hKR2RWTkVvNHp5MnpqanlSRzk0cjFkRzVMNkphSlluSU5sMDctS2tKS0ZEV01TeTJPV2M1bGFiVVg4V3FwZ204ZUp0WjdjUmlqV0RjaTNaM3Z6N2I4NE9sQVh3Y2NhWlJoLXpEM3VSTU94SFlETUdjSjRVLXQwc3hOMVY5YllJQ0FKX2oycjM3cXQ4NUFiVjNnQjRGdmlH?oc=5",
-      "date": "2026-07-19",
-      "time": "10:40",
-      "tag": "個股",
-      "source": "",
-      "summary": "「航太大廠」17日突發宣布終止興櫃！8月31日召開股東臨時會進行投票 Yahoo股市",
-      "id": 16,
-      "ai_sentiment": "利空",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "航太大廠終止興櫃，未指明具體公司"
-    },
-    {
-      "title": "中國記憶體大廠擴產！ IPO有望成為亞洲規模第一 | 財經 | CTWANT - CTWANT",
-      "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1qWFJMeFFpdS1mT3B3NlFZVGlBSXRiSXN3THl6QUdUejc2TU9YbWU3Nm1nMDduMDAwYlM4MlVZaHBTeFcxbkw2LVVvbGRpZ0nSAVRBVV95cUxOWnR3U3F4RnJSWmxvcEtxWWViYnVpMmNrb2lFdUxUbHNGMHN5TjUwTXBpSkhvUkNkZ3VNZlQ5bVg1R0N3UEdLaVVzVmZWeVprczBCNFg?oc=5",
-      "date": "2026-07-19",
-      "time": "06:35",
+      "time": "02:03",
       "tag": "抽籤",
       "source": "",
-      "summary": "中國記憶體大廠擴產！ IPO有望成為亞洲規模第一 | 財經 | CTWANT CTWANT",
-      "id": 17,
+      "summary": "華爾街為長鑫科技IPO瘋狂！雙重定價撕裂市場：科創板僅5792億外資卻借道加密合約3.9兆爆炒 Yahoo 財經",
+      "id": 16,
       "ai_sentiment": "中性",
-      "ai_horizon": "長期",
-      "ai_related": [],
-      "ai_note": "中國記憶體廠擴產，未提具體公司名稱"
+      "ai_horizon": "短期",
+      "ai_related": [
+        "3663"
+      ],
+      "ai_note": "長鑫科技IPO引發外資熱議，定價分歧"
     },
     {
       "title": "長亨發布重訊！ 宣布終止興櫃 - ETtoday財經雲",
@@ -265,13 +253,13 @@
       "tag": "個股",
       "source": "",
       "summary": "長亨發布重訊！ 宣布終止興櫃 ETtoday財經雲",
-      "id": 18,
+      "id": 17,
       "ai_sentiment": "利空",
       "ai_horizon": "短期",
       "ai_related": [
         "4546"
       ],
-      "ai_note": "長亨宣布終止興櫃，影響短期籌資計畫"
+      "ai_note": "長亨宣布終止興櫃，計畫中止"
     },
     {
       "title": "盤點07/13-07/17興櫃人氣股－瀚陽*、華上生醫、亞果生醫；漲幅王－亞果生醫、華上生醫、三鼎生技 - 環球生技月刊",
@@ -281,15 +269,15 @@
       "tag": "個股",
       "source": "",
       "summary": "盤點07/13-07/17興櫃人氣股－瀚陽*、華上生醫、亞果生醫；漲幅王－亞果生醫、華上生醫、三鼎生技 環球生技月刊",
-      "id": 19,
-      "ai_sentiment": "利多",
+      "id": 18,
+      "ai_sentiment": "中性",
       "ai_horizon": "短期",
       "ai_related": [
         "7427",
         "6748",
         "6808"
       ],
-      "ai_note": "四檔生技興櫃股近期人氣與漲幅居前"
+      "ai_note": "列出興櫃人氣股，含多檔生技公司"
     },
     {
       "title": "台股暴跌近3千點 上市櫃融資單日大減416億元 - 自由財經",
@@ -299,25 +287,11 @@
       "tag": "焦點",
       "source": "自由財經",
       "summary": "台股暴跌近3千點 上市櫃融資單日大減416億元 自由財經",
-      "id": 20,
+      "id": 19,
       "ai_sentiment": "利空",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "台股大跌致上市櫃融資額大減，無具體公司"
-    },
-    {
-      "title": "台股本週跌2683點 上市股票總市值減逾8兆元 - 經濟日報",
-      "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1WakxwTVJ3eG1kVFdhckQ1STZ4NTFfWGtidkFMa2lUNm1vem5UUnlPSG9KZzhGdkF5U2hTOThaSHdYVmlkUV9IcWxaeUt2V2dZQUZyUlFCTWhGd9IBX0FVX3lxTE9MbHZUM2pZV0RodkRZVng1NHd0LUZJMWpmNjQ0bVI2dGZGWUx0STNWNW05VEg3YXFndXdhYWRoSndSaGxlN1VtNnVFMUM3MjQtajRxbV9EUGFDTnpfRndV?oc=5",
-      "date": "2026-07-17",
-      "time": "12:54",
-      "tag": "焦點",
-      "source": "經濟日報",
-      "summary": "台股本週跌2683點 上市股票總市值減逾8兆元 經濟日報",
-      "id": 21,
-      "ai_sentiment": "利空",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "台股指數下跌與市值縮減，未提具體公司"
+      "ai_note": "台股大跌，上市櫃融資單日減少416億元"
     },
     {
       "title": "中國貨幣市場：稅期走款啟動資金緊勢未緩，長鑫科技IPO申購增擾動 - TradingView",
@@ -327,13 +301,29 @@
       "tag": "抽籤",
       "source": "",
       "summary": "中國貨幣市場：稅期走款啟動資金緊勢未緩，長鑫科技IPO申購增擾動 TradingView",
-      "id": 22,
+      "id": 20,
       "ai_sentiment": "中性",
       "ai_horizon": "短期",
       "ai_related": [
         "3663"
       ],
-      "ai_note": "中國稅期與長鑫科技IPO申購影響資金面"
+      "ai_note": "中國貨幣市場受稅期與長鑫IPO申購影響"
+    },
+    {
+      "title": "興櫃一周回顧／雷虎生漲逾50% 稱冠 - 經濟日報",
+      "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBfRDV1RGZ0eE9pa1dfWXJ6RlJIS0ZQWGE2bjRvbi1KTG1pZ2ttVndldmNOR1JDdWl3VFQxVk0zMENIa2h1cW1WSHRYblNWc3JPZGZCYXhTSUtvZmvSAWBBVV95cUxQZzFYMkNRM0l1ellJWUxLZEptS21XbU5SaU9BaFRyNFp3bTZJZGZHMVkwNjJKT1Y2ekZiOHp2SUp2VU15LXB6dE9pQ2pnZzVuLWFmenI5R3F6Z09yV0xGRU8?oc=5",
+      "date": "2026-07-11",
+      "time": "07:00",
+      "tag": "個股",
+      "source": "經濟日報",
+      "summary": "興櫃一周回顧／雷虎生漲逾50% 稱冠 經濟日報",
+      "id": 21,
+      "ai_sentiment": "中性",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "6493"
+      ],
+      "ai_note": "興櫃股價波動大，漲幅未反映基本面變化"
     },
     {
       "title": "沒開信託帳戶也能參與ETF 募集（IPO）！大戶豐申購、匯款流程一文看懂｜豐雲學堂2026 年 07 月 - sinotrade.com.tw",
@@ -343,11 +333,11 @@
       "tag": "抽籤",
       "source": "",
       "summary": "沒開信託帳戶也能參與ETF 募集（IPO）！大戶豐申購、匯款流程一文看懂｜豐雲學堂2026 年 07 月 sinotrade.com.tw",
-      "id": 23,
+      "id": 22,
       "ai_sentiment": "中性",
       "ai_horizon": "長期",
       "ai_related": [],
-      "ai_note": "ETF申購流程簡化，未涉及具體公司"
+      "ai_note": "ETF申購機制調整，提升參與便利性"
     },
     {
       "title": "【06/26處置股公告】台半(5425) 06/26到07/09列入處置股，約每5分鐘撮合一次 - CMoney",
@@ -357,13 +347,30 @@
       "tag": "公告",
       "source": "",
       "summary": "【06/26處置股公告】台半(5425) 06/26到07/09列入處置股，約每5分鐘撮合一次 CMoney",
-      "id": 24,
+      "id": 23,
       "ai_sentiment": "利空",
       "ai_horizon": "短期",
       "ai_related": [
         "5425"
       ],
-      "ai_note": "台半被列為處置股，交易頻率降低"
+      "ai_note": "台半被列入處置股，交易頻率受限"
+    },
+    {
+      "title": "南亞等19檔6/24起打入處置股票 聯電等77檔列注意股 - 自由財經",
+      "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBiVWs4d1NJRFdaR2NwMjlMbGhtNlIzTm9LajFMMGZORm9NTnpVSW02ZTlnelhNUGhCUzAtbmxLaFZLLXp5TWg2aVRkTGtBMWh0U0k3TkdYTzdpS21FVnRJ0gFkQVVfeXFMUEtDTnJFbWJ2bVd6cjFmNVh4V0VMcjZEQzR5OWpsZ1B1bGYtaGVDbXZHbGprVkRNOXpINEtOdkEyRVE3Q0FIdUotLWVzMzJ4SmM0ME5vSmlVenl6eTZXRXZaN0w5Qg?oc=5",
+      "date": "2026-06-23",
+      "time": "07:00",
+      "tag": "公告",
+      "source": "自由財經",
+      "summary": "南亞等19檔6/24起打入處置股票 聯電等77檔列注意股 自由財經",
+      "id": 24,
+      "ai_sentiment": "利空",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "1303",
+        "2303"
+      ],
+      "ai_note": "多檔股票被列為處置或注意股，市場關注風險"
     },
     {
       "title": "SpaceX拚史上最大IPO 開放申購國家包含台灣| 國際 - 中央社 CNA",
@@ -377,7 +384,7 @@
       "ai_sentiment": "中性",
       "ai_horizon": "長期",
       "ai_related": [],
-      "ai_note": "SpaceX擬進行史上最大IPO，含台灣投資人"
+      "ai_note": "SpaceX擬進行IPO，台灣投資人可參與，但非台股標的"
     },
     {
       "title": "台股高檔震盪！興櫃飆股前十名出爐 「生技黑馬」週漲119%奪下股王寶座 - Yahoo股市",
@@ -388,10 +395,26 @@
       "source": "",
       "summary": "台股高檔震盪！興櫃飆股前十名出爐 「生技黑馬」週漲119%奪下股王寶座 Yahoo股市",
       "id": 26,
-      "ai_sentiment": "利多",
+      "ai_sentiment": "中性",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "興櫃股漲幅領先，未明確指出具體公司名稱"
+      "ai_note": "興櫃漲幅榜反映個股短期熱度，非市場指標"
+    },
+    {
+      "title": "台股3檔「抓去關」 記憶體旺宏明起處置到6／16 - ETtoday財經雲",
+      "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1ZblZia2EzelFNdUQzeks0UENyV2xMXzNJcDB1NjNYbjFYbEJwMzVQY2VKVWd6c2czSl9qZGU5RDlJTVdQMkpMY1k2V28xNVVfTUHSAW5BVV95cUxNQTNDdGl3NXM5VUVTakcySHVWdzRWM2JTcE9tQVpXMWp5eDdObTJXM1J1cDJ3dE0xbHYzV0FDSFVhS1JWWEU1MTdHT1RzYzhVTnRHQ01mdmZRQjl4UnhoR2ZUTjI2VHB1dDFGd0VlQQ?oc=5",
+      "date": "2026-06-02",
+      "time": "07:00",
+      "tag": "公告",
+      "source": "",
+      "summary": "台股3檔「抓去關」 記憶體旺宏明起處置到6／16 ETtoday財經雲",
+      "id": 27,
+      "ai_sentiment": "利空",
+      "ai_horizon": "短期",
+      "ai_related": [
+        "2337"
+      ],
+      "ai_note": "兩檔記憶體股被列處置股，交易受限"
     },
     {
       "title": "快訊》台股抓去關新名單曝！這15檔個股遭列處置股，明起處置至6月10日 - 風傳媒",
@@ -401,25 +424,11 @@
       "tag": "公告",
       "source": "",
       "summary": "快訊》台股抓去關新名單曝！這15檔個股遭列處置股，明起處置至6月10日 風傳媒",
-      "id": 27,
-      "ai_sentiment": "利空",
-      "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "15檔個股遭列處置股，未具體列出名稱"
-    },
-    {
-      "title": "2台股將下櫃 櫃買中心公告最後交易日 - 東森新聞",
-      "link": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE1xVkZKU190R0NEdHNGd0ZYOHoyMWlkajY2WGwyTm5WTlhCbENlRlBYZVpWTDFjNThEMm1JY01iN3dUV1pPdUlHXzBrQ2VzQmpta3VadF9HSQ?oc=5",
-      "date": "2026-04-25",
-      "time": "07:00",
-      "tag": "公告",
-      "source": "",
-      "summary": "2台股將下櫃 櫃買中心公告最後交易日 東森新聞",
       "id": 28,
       "ai_sentiment": "利空",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "兩檔台股將下櫃，未說明具體公司名稱"
+      "ai_note": "15檔股票新列處置股，市場流動性受影響"
     },
     {
       "title": "AMAX-KY遭列注意股 公告2月自結獲利2100萬元EPS 0.49元 - news.cnyes.com",
@@ -435,23 +444,7 @@
       "ai_related": [
         "6933"
       ],
-      "ai_note": "AMAX-KY被列注意股，公布2月自結獲利"
-    },
-    {
-      "title": "證交所公告33檔有價證券遭列注意股 台積電入列 - 經濟日報",
-      "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9IQk54Z3hzcndKMVpESk1VV2lIa1F4S3JEeWpTc3NGWU9mYlItbnQ2VS1ZdFEzOUp2aTlLSTV1cy14d0xaTnJHMm44eVR1eXpXZU9jeVFTS19HUdIBX0FVX3lxTE5JdHZHSzJ3S3hqUUdUcFQzZFRKX1RtMl9lZWlybXlaTk9FN2lXWks4eVlfMmo2NHBFQ2xkNmJnUnhBZC1qTVh3dkctby0ybG1QOXMtYnJvcFBxVThyRTRR?oc=5",
-      "date": "2026-04-09",
-      "time": "07:00",
-      "tag": "公告",
-      "source": "經濟日報",
-      "summary": "證交所公告33檔有價證券遭列注意股 台積電入列 經濟日報",
-      "id": 30,
-      "ai_sentiment": "中性",
-      "ai_horizon": "短期",
-      "ai_related": [
-        "2330"
-      ],
-      "ai_note": "台積電被證交所公告列為注意股"
+      "ai_note": "AMAX-KY遭列注意股，2月獲利數據已公布"
     }
   ]
 }
