@@ -2590,6 +2590,7 @@ async function renderStockPage(url, env) {
     { q: `${name} 的合理股價區間大概是多少？`, a: (fvLow != null && fvHigh != null)
         ? `領富 AI 以系統化方式估算 ${name} 的合理區間約為 ${fvLow}–${fvHigh} 元（LeadFu Fair Value Range™，依公開資料整理、非目標價）。${price != null ? "目前參考價約 " + price + " 元。" : ""}`
         : `${name} 的合理區間資料整理中，可到完整分析頁查看最新估值與依據。` },
+    { q: `${name}（${code}）的目標價是多少？`, a: `領富 AI 不提供分析師式「目標價」——目標價常因人而異、時常失準，也是投顧／詐騙群組最愛用的話術。領富改用系統化的「合理股價區間」${(fvLow != null && fvHigh != null) ? `，${name} 約 ${fvLow}–${fvHigh} 元` : "（資料整理中）"}，並搭配 0–100 風險分與買前 9 大紅旗，幫你判斷「該不該買」而非「喊一個數字」。依公開資料整理、非投資建議。` },
     { q: `${name} 的投資風險高不高？`, a: `領富 AI 風險評估顯示 ${name} 風險等級為「${level || "整理中"}」${score != null ? "（風險分數 " + score + "/100）" : ""}。${reasons.length ? "主要觀察點：" + reasons.slice(0, 2).join("、") + "。" : ""}以上為公開資料的系統化整理，非投資建議。` },
     { q: `${name} 屬於哪個產業？`, a: cat
         ? `${name}（${code}）屬於「${cat}」類股，可在同產業頁面比較同類個股的估值與籌碼。`
@@ -2597,17 +2598,16 @@ async function renderStockPage(url, env) {
   ];
   const faqHtml = `<div class="sd-sec"><h2>❓ ${esc(name)}（${esc(code)}）常見問題</h2>${faqs.map(f => `<div class="sd-faq"><p class="sd-faq-q">${esc(f.q)}</p><p class="sd-faq-a">${esc(f.a)}</p></div>`).join("")}</div>`;
 
-  // SEO title/desc（2026-06-19 #2 改寫）：股名+代號+「市場別」(命中「{股}興櫃」高曝光零點擊字)
-  //   + 反詐意圖詞(買前/9 紅旗/能不能買) + 達叔具名背書(E-E-A-T)。
-  //   數據依據：意圖/反詐型字 CTR 遠高於乾股名（高準精密詐騙 10.3% vs 個股頁 0.2%），故把意圖詞寫進 title。
-  //   desc 首句用「能不能買」疑問句勾搜尋意圖，但全句維持「不喊明牌、非投資建議」合規底線。
+  // SEO title/desc：股名+代號+市場別(命中「{股}興櫃」) + 「合理價」(用戶指定要打的字，領富招牌合理區間)
+  //   + 買前風險檢查 + 達叔具名(E-E-A-T)。desc 前置「合理股價區間是多少」勾『合理價』搜尋、
+  //   再用「想知道目標價？領富不喊分析師目標價、改用合理區間」誠實接住『目標價』搜尋(守不喊明牌品牌)。
+  //   ⚠ 目標價＝散戶高搜尋量但領富定位不報，故用『合理區間+為什麼別迷信目標價』捕捉不破品牌。
   const mkt = market || "股價";
-  const titleHook = name.length <= 3 ? "買前 9 紅旗風險檢查" : "買前風險檢查";
-  const title = `${name} ${code} ${mkt}｜${titleHook}・達叔 領富AI`;
+  const title = `${name} ${code} ${mkt} 合理價｜買前風險檢查・達叔 領富AI`;
   const askQ = market === "興櫃"
-    ? `${name}（${code}）興櫃能不能買、會不會轉上櫃？`
-    : `${name}（${code}）現在能不能買、風險高不高？`;
-  const desc = `${askQ}領富 AI 主編達叔帶你買前檢查 9 大紅旗：防錯雷達 ${score != null ? score + "/100 " : ""}風險分（等級${level || "整理中"}）、是否注意股／處置股${(fvLow != null && fvHigh != null) ? "、合理股價區間約 " + fvLow + "–" + fvHigh + " 元" : ""}${cat ? "、" + cat + "類股籌碼" : ""}。每日更新、免費，不喊明牌、非投資建議。`;
+    ? `${name}（${code}）合理股價區間是多少、能不能買、會不會轉上櫃？`
+    : `${name}（${code}）合理股價區間是多少、現在能不能買？`;
+  const desc = `${askQ}想知道 ${name} 目標價？領富 AI 不喊分析師目標價，改用系統化「合理股價區間${(fvLow != null && fvHigh != null) ? " " + fvLow + "–" + fvHigh + " 元" : ""}」＋防錯雷達 ${score != null ? score + "/100 " : ""}風險分，幫你判斷該不該買${cat ? "（" + cat + "類股）" : ""}。每日更新、免費，不喊明牌、非投資建議。`;
   const canon = `https://leadfuai.com/stock/${encodeURIComponent(code)}`;
 
   const jsonld = JSON.stringify({
@@ -2630,7 +2630,7 @@ async function renderStockPage(url, env) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="keywords" content="${esc(name)} AI,${esc(name)}AI分析,${esc(name)} ai,${esc(code)} ${esc(name)},${esc(name)}股價,${esc(name)}合理股價,${esc(name)}風險,${esc(code)}注意股${cat ? "," + esc(cat) + "ai" : ""}">
+<meta name="keywords" content="${esc(name)}合理價,${esc(name)}目標價,${esc(name)}合理股價,${esc(code)}合理價,${esc(code)}目標價,${esc(name)} AI,${esc(code)} ${esc(name)},${esc(name)}股價,${esc(name)}風險${cat ? "," + esc(cat) + "ai" : ""}">
 <link rel="canonical" href="${canon}">
 <meta property="og:title" content="${esc(title)}">
 <meta name="twitter:card" content="summary_large_image">
