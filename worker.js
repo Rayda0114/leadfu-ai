@@ -29,11 +29,15 @@
 //   ✘ meta/llama-3.1-8b-instruct               → 編造資料
 //   不可用 404/410：qwen/qwen2.5-72b, qwen3-5-122b, moonshotai/kimi-k2, z-ai/glm4.7&5.1,
 //                  bytedance/seed-oss, google/gemma-*, microsoft/phi-*, ibm/granite, 01-ai/yi-large
-const DEFAULT_MODEL = "qwen/qwen3-next-80b-a3b-instruct";
+// ⚠ 2026-08-14 修：qwen 全家 2026-07-27 遭 Nvidia NIM 下架(410)、AI 對話全掛。
+//   換成實測可用、速度最佳的 openai/gpt-oss-120b（記憶 reference_nvidia_nim_models：1.1s 最佳）。
+//   若要換回台式繁中更自然的模型，改這行或設 Cloudflare 環境變數 NVIDIA_MODEL 即可。
+const DEFAULT_MODEL = "openai/gpt-oss-120b";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // Gemini fallback：當 Nvidia 撞 429/5xx 時自動切換，每天免費 1500 req
-const GEMINI_MODEL = "gemini-2.0-flash";
+// ⚠ 2026-08-14 修：gemini-2.0-flash 已停用(404)，改用 gemini-3.6-flash（Google API 錯誤訊息親口指定的現行版）。
+const GEMINI_MODEL = "gemini-3.6-flash";
 const GEMINI_ENDPOINT_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
 // 系統 prompt：正面說明角色、清楚列舉可做/不可做
