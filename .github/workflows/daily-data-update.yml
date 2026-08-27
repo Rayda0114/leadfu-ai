@@ -50,7 +50,12 @@ jobs:
         run: |
           git config user.name "leadfu-ai-bot"
           git config user.email "bot@leadfu.ai"
-          git add data/
+          # run_all.py 也會重生根目錄 sitemap*.xml 與 pages/industries/，
+          # 只 add data/ 會讓它們變成「未暫存變更」→ 下面 push 失敗後的 rebase
+          # 直接 exit 128、整輪作廢（2026-06-17 起天天失敗、資料凍結 71 天的主因）。
+          git add data/ 2>/dev/null || true
+          git add sitemap.xml sitemap-pages.xml sitemap-stocks.xml sitemap-content.xml 2>/dev/null || true
+          git add pages/industries/ 2>/dev/null || true
           # 只有真的有 diff 才 commit，避免空 commit
           if ! git diff --staged --quiet; then
             DATE=$(date -u +"%Y-%m-%d")
@@ -60,7 +65,7 @@ jobs:
             for i in 1 2 3; do
               git push && break
               echo "push 被拒（第 $i 次），rebase 後重試…"
-              git pull --rebase -X theirs origin main
+              git pull --rebase --autostash -X theirs origin main
             done
             echo "✅ 已 commit 並 push"
             # ⚠ GITHUB_TOKEN 推的 commit 不會自動觸發 deploy-worker（GitHub 防遞迴）。

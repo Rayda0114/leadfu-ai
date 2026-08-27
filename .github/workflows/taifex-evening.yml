@@ -38,7 +38,7 @@ jobs:
             for i in 1 2 3; do
               git push && break
               echo "push 被拒，rebase 重試…"
-              git pull --rebase -X theirs origin main
+              git pull --rebase --autostash -X theirs origin main
             done
             gh workflow run deploy-worker.yml && echo "🚀 已觸發 worker 部署" || echo "⚠ 部署觸發失敗"
           else
