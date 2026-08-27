@@ -30,6 +30,9 @@ jobs:
         run: python scripts/fetch_news.py
         env:
           PYTHONIOENCODING: utf-8
+          # 抓不到新聞時（Google News 擋雲端 IP）通知站長；腳本會保留既有新聞不覆寫
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          OWNER_LINE_USER_ID: ${{ secrets.OWNER_LINE_USER_ID }}
 
       # 2) AI 標註利多/利空（可失敗，失敗就少了標註）
       - name: AI tag news

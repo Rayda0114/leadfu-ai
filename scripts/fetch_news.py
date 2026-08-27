@@ -11,7 +11,9 @@
 
 import json
 import sys
+import os
 import re
+import time
 import html
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +25,9 @@ import xml.etree.ElementTree as ET
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
+
+# 低於這個則數就視為抓取失敗，不覆寫既有新聞（見 main() 的 fail-closed 區塊）
+MIN_NEWS = 5
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
@@ -62,12 +67,49 @@ def parse_pub_date(s):
         return "", ""
 
 
-def fetch_query(keyword):
-    """從 Google News RSS 抓某個關鍵字的新聞"""
+def notify_owner(text):
+    """抓取失敗時通知站長 LINE（沿用站上既有 Messaging API 設定；沒設就安靜略過）"""
+    token = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN", "")
+    uid = os.environ.get("OWNER_LINE_USER_ID", "")
+    if not token or not uid:
+        print("[notify] 缺 LINE_CHANNEL_ACCESS_TOKEN / OWNER_LINE_USER_ID，略過通知")
+        return
+    try:
+        body = json.dumps({"to": uid, "messages": [{"type": "text", "text": text[:900]}]}).encode("utf-8")
+        req = Request("https://api.line.me/v2/bot/message/push", data=body,
+                      headers={"Content-Type": "application/json",
+                               "Authorization": f"Bearer {token}"})
+        with urlopen(req, timeout=15) as r:
+            print(f"[notify] 已通知站長 LINE（{r.status}）")
+    except Exception as e:
+        print(f"[notify] LINE 通知失敗：{e}")
+
+
+def fetch_query(keyword, retries=3):
+    """從 Google News RSS 抓某個關鍵字的新聞。
+
+    ⚠ Google News 會「間歇性」對雲端機房 IP 回 503/429（GitHub Actions runner 常中，
+    同一時間住宅 IP 打同一網址卻 200）。故對這類暫時性錯誤做退避重試，
+    全部重試都失敗才拋出，交由 main() 的 fail-closed 判斷。
+    """
     url = f"https://news.google.com/rss/search?q={quote(keyword)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
-    req = Request(url, headers={"User-Agent": UA, "Accept": "application/rss+xml"})
-    with urlopen(req, timeout=20) as resp:
-        return resp.read().decode("utf-8", errors="replace")
+    last = None
+    for attempt in range(retries):
+        try:
+            req = Request(url, headers={"User-Agent": UA, "Accept": "application/rss+xml"})
+            with urlopen(req, timeout=20) as resp:
+                return resp.read().decode("utf-8", errors="replace")
+        except (URLError, HTTPError) as e:
+            last = e
+            code = getattr(e, "code", None)
+            transient = code in (429, 500, 502, 503, 504) or code is None
+            if attempt < retries - 1 and transient:
+                wait = 8 * (attempt + 1)          # 8s → 16s
+                print(f"(第{attempt + 1}次 {code or e}，{wait}s 後重試)", end=" ", flush=True)
+                time.sleep(wait)
+                continue
+            raise
+    raise last
 
 
 def parse_rss(xml_text, tag, max_items=8):
@@ -153,6 +195,27 @@ def main():
         src = f" [{n['source']}]" if n['source'] else ""
         print(f"  [{n['tag']}] {n['date']} {n['time']}{src} {n['title'][:50]}")
 
+    out = DATA_DIR / "news_live.json"
+
+    # ══ fail-closed：抓不到（或遠低於正常量）就「不要覆寫」既有新聞 ══
+    # 背景：Google News RSS 間歇性擋雲端 IP（503）。舊版無條件寫檔，
+    # 於是 0 則會把前一天好好的 29 則洗成空白、網站「頭條快報」整區消失
+    # （2026-08-24、08-27 各發生一次）。寧可顯示昨天的新聞，也不要顯示空白。
+    if len(all_news) < MIN_NEWS:
+        prev = 0
+        try:
+            with open(out, encoding="utf-8") as f:
+                prev = len(json.load(f).get("news", []))
+        except Exception:
+            pass
+        msg = (f"只抓到 {len(all_news)} 則（門檻 {MIN_NEWS}），已保留既有 {prev} 則、"
+               f"不覆寫。常見原因：Google News RSS 擋雲端 IP（503）。")
+        print(f"\n⚠ {msg}")
+        notify_owner(f"【領富 AI】盤前新聞抓取失敗\n{msg}\n網站仍顯示前一版新聞，不會空白。")
+        # 非 0 退出：workflow 該步標記失敗（continue-on-error 不擋後續步驟），
+        # 且因為沒寫檔，git diff 無變化 → 不會 commit 空新聞。
+        sys.exit(1)
+
     payload = {
         "updatedAt": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "source": "Google News RSS（聚合台灣財經媒體）",
@@ -160,10 +223,9 @@ def main():
         "news": all_news
     }
 
-    out = DATA_DIR / "news_live.json"
     with open(out, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
-    print(f"\n✅ 已輸出: {out.relative_to(ROOT)}")
+    print(f"\n✅ 已輸出: {out.relative_to(ROOT)}（{len(all_news)} 則）")
 
 
 if __name__ == "__main__":
