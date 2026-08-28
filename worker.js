@@ -2480,7 +2480,7 @@ async function runInsightAutopilot(env) {
   let rows = [];
   try {
     const r = await fetch(
-      `${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.draft&article_md=is.null&select=*&order=created_at.asc&limit=5`,
+      `${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.draft&article_md=is.null&select=*&order=created_at.desc&limit=5`,
       { headers: ecpayAdmin(env) });
     if (!r.ok) return { step: "autopilot", error: "supabase " + r.status };
     rows = await r.json();
@@ -2491,6 +2491,20 @@ async function runInsightAutopilot(env) {
     const g = (b.quality_flags && b.quality_flags.gate) || {};
     if (g.rejected_at) { report.skipped.push({ id: b.id, why: "已退稿" }); continue; }
     if (Number(g.attempts || 0) >= 2) { report.skipped.push({ id: b.id, why: `已試 ${g.attempts} 次` }); continue; }
+    // 過期防呆：市場題材放太久就不新鮮了，別把兩個月前的草稿當今天的新文章發
+    const ageDays = (Date.now() - Date.parse(b.created_at || 0)) / 86400000;
+    const maxAge = Number(env.INSIGHT_MAX_AGE_DAYS || 3);
+    if (ageDays > maxAge) { report.skipped.push({ id: b.id, why: `草稿已 ${ageDays.toFixed(1)} 天（上限 ${maxAge}）` }); continue; }
+    // 重複防呆：已有同標題的已發佈文章就不要再發一篇（重複內容會被搜尋引擎扣分）
+    try {
+      const dupUrl = `${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.published`
+        + `&title_hint=eq.${encodeURIComponent(b.title_hint || "")}&select=id&limit=1`;
+      const dr = await fetch(dupUrl, { headers: ecpayAdmin(env) });
+      if (dr.ok) {
+        const dup = await dr.json();
+        if (dup && dup.length) { report.skipped.push({ id: b.id, why: `已有同標題的已發佈文章 ${dup[0].id}` }); continue; }
+      }
+    } catch (e) {}
     const res = await insightGateOne(env, b, holdHours);
     report.processed = { id: b.id, title: (b.title_hint || "").slice(0, 40), ...res };
     break;
