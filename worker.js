@@ -3598,9 +3598,14 @@ export default {
     // */5 1-5 = 盤中（09:00–13:55 台北）到價提醒檢查（每 5 分鐘）
     if (cron.startsWith("*/5 ")) { ctx.waitUntil(runPriceAlertCheck(env)); return; }
     // */10 = X 快訊雷達重大快訊推播（每 10 分鐘）
-    if (cron.startsWith("*/10")) { ctx.waitUntil(runXAlertPush(env)); return; }
-    // 0 * * * * = 每小時整點：市場洞察自動成稿＋三層把關；冷卻期已到者自動發佈
-    if (cron === "0 * * * *") { ctx.waitUntil(runInsightCycle(env)); return; }
+    // */10 = X 快訊雷達重大快訊推播；順帶每小時第一輪跑「市場洞察自動成稿＋把關＋發佈」。
+    //   ⚠ 不另開 cron：Cloudflare 免費方案「每帳號」上限 5 個 cron trigger，已用滿。
+    //   用分鐘判斷讓 insight 每小時只跑一次（不是每 10 分鐘），控成本。
+    if (cron.startsWith("*/10")) {
+      ctx.waitUntil(runXAlertPush(env));
+      if (new Date().getUTCMinutes() < 10) ctx.waitUntil(runInsightCycle(env));
+      return;
+    }
     // 00:30 UTC = 08:30 台北（盤前，開盤前）；07:50 UTC = 15:50 台北（盤後）。
     ctx.waitUntil(runNewsPush(env, cron.startsWith("30 0 ") ? "pre" : "post"));
   }
