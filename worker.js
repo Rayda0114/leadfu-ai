@@ -2411,7 +2411,7 @@ async function insightGateOne(env, b, holdHours) {
       passed_at: null, publish_after: null
     }, extra || {});
     await _insightPatch(env, b.id, { quality_flags: flags });
-    return false;
+    return { ok: false, stage, reasons };
   };
 
   // L1（大綱本身）
@@ -2450,7 +2450,7 @@ async function insightGateOne(env, b, holdHours) {
     gate_model: (l3 && l3.model) || GEMINI_MODEL
   };
   const ok = await _insightPatch(env, b.id, { article_md: article, quality_flags: flags });
-  if (!ok) return false;
+  if (!ok) return { ok: false, stage: "patch", reasons: ["寫入 article_md 失敗"] };
 
   // 通知站長（附退稿連結＝人類煞車）
   const tok = await insightToken(env, b.id);
@@ -2468,29 +2468,34 @@ async function insightGateOne(env, b, holdHours) {
     "",
     "（AI 寫稿＋AI 把關，仍請抽查；發佈後可在後台改）"
   ].join("\n");
-  for (const uid of await _ownerLineIds(env)) await _linePush(env, uid, msg);
-  return true;
+  const lineIds = await _ownerLineIds(env);
+  for (const uid of lineIds) await _linePush(env, uid, msg);
+  return { ok: true, stage: "passed", publish_after: publishAfter.toISOString(), line_sent: lineIds.length };
 }
 
-// cron：自動成稿＋把關（一次一篇，控成本）
+// cron：自動成稿＋把關（一次一篇，控成本）。回傳診斷報告供手動觸發時檢視。
 async function runInsightAutopilot(env) {
-  if (!env.SUPABASE_SERVICE_ROLE_KEY) return;
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return { step: "autopilot", error: "no service key" };
   const holdHours = Number(env.INSIGHT_HOLD_HOURS || 3);
   let rows = [];
   try {
     const r = await fetch(
       `${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.draft&article_md=is.null&select=*&order=created_at.asc&limit=5`,
       { headers: ecpayAdmin(env) });
-    if (!r.ok) return;
+    if (!r.ok) return { step: "autopilot", error: "supabase " + r.status };
     rows = await r.json();
-  } catch (e) { return; }
+  } catch (e) { return { step: "autopilot", error: String(e) }; }
+
+  const report = { step: "autopilot", candidates: (rows || []).length, skipped: [], processed: null };
   for (const b of (rows || [])) {
     const g = (b.quality_flags && b.quality_flags.gate) || {};
-    if (g.rejected_at) continue;                 // 已被退稿
-    if (Number(g.attempts || 0) >= 2) continue;  // 兩次沒過就不再燒 token
-    await insightGateOne(env, b, holdHours);
-    break;                                        // 一輪只處理一篇
+    if (g.rejected_at) { report.skipped.push({ id: b.id, why: "已退稿" }); continue; }
+    if (Number(g.attempts || 0) >= 2) { report.skipped.push({ id: b.id, why: `已試 ${g.attempts} 次` }); continue; }
+    const res = await insightGateOne(env, b, holdHours);
+    report.processed = { id: b.id, title: (b.title_hint || "").slice(0, 40), ...res };
+    break;
   }
+  return report;
 }
 
 // cron：冷卻期到且未退稿 → 正式發佈
@@ -2524,8 +2529,20 @@ async function runInsightPublish(env) {
 
 // 每小時一輪：先成稿把關，再處理冷卻期已到的發佈（cron 入口）
 async function runInsightCycle(env) {
-  try { await runInsightAutopilot(env); } catch (e) {}
-  try { await runInsightPublish(env); } catch (e) {}
+  const out = { at: new Date().toISOString() };
+  try { out.autopilot = await runInsightAutopilot(env); } catch (e) { out.autopilot = { error: String(e) }; }
+  try { out.publish = await runInsightPublish(env); } catch (e) { out.publish = { error: String(e) }; }
+  return out;
+}
+
+// 手動觸發（owner only，用 INGEST_SECRET 驗）：立刻跑一輪並回傳診斷。
+//   用法：curl -H "X-Ingest-Key: <key>" https://leadfuai.com/api/cron-insight
+async function handleInsightCron(request, env) {
+  const url = new URL(request.url);
+  const key = (request.headers.get("X-Ingest-Key") || url.searchParams.get("key") || "").trim();
+  const j = (o, st) => new Response(JSON.stringify(o, null, 2), { status: st || 200, headers: { "Content-Type": "application/json; charset=utf-8" } });
+  if (!env.INGEST_SECRET || !key || key !== env.INGEST_SECRET) return j({ error: "owner only" }, 403);
+  try { return j(await runInsightCycle(env)); } catch (e) { return j({ error: String(e) }, 500); }
 }
 
 // 退稿端點（LINE 點連結即可，用 HMAC 簽章驗證，不需登入）
@@ -3631,6 +3648,7 @@ export default {
     if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
     if (url.pathname === "/api/cron-news")      return handleManualNewsPush(request, env);
     if (url.pathname === "/api/login-token")    return handleLoginToken(request, env);
+    if (url.pathname === "/api/cron-insight") return handleInsightCron(request, env);
     if (url.pathname === "/api/insight-reject" && request.method === "GET") return handleInsightReject(request, env);
     if (url.pathname === "/api/mirofish-ingest") return handleMirofishIngest(request, env);
 
@@ -3648,7 +3666,7 @@ export default {
     //   用分鐘判斷讓 insight 每小時只跑一次（不是每 10 分鐘），控成本。
     if (cron.startsWith("*/10")) {
       ctx.waitUntil(runXAlertPush(env));
-      if (new Date().getUTCMinutes() < 10) ctx.waitUntil(runInsightCycle(env));
+      ctx.waitUntil(runInsightCycle(env));   // 每 10 分檢查一次；靠 break(一輪一篇)+attempts<2 控成本
       return;
     }
     // 00:30 UTC = 08:30 台北（盤前，開盤前）；07:50 UTC = 15:50 台北（盤後）。
