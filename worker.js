@@ -2163,6 +2163,357 @@ function scrubStockCalls(s) {
     .replace(/(保證獲利|穩賺不賠|穩賺|包賺|報酬保證|保證賺錢|保證賺|必賺)/g, "（報酬承諾已移除）");
 }
 
+
+/* ============================================================
+ * 市場洞察・自動成稿 + 三層把關 + 延遲發佈（YMYL 安全設計）
+ * ------------------------------------------------------------
+ * 流程（每小時 cron）：
+ *   Claude Code 排程 → brief(draft，無 article_md，ingest 端點仍拒收正式稿)
+ *     ↓ runInsightAutopilot
+ *   L1 規則  → 確定性禁用詞（目標價/報酬承諾/買賣建議/推介語…）
+ *   L2 事實  → verify_report 的代號↔名稱比對（mismatch / not_found 一律否決）
+ *   寫稿     → NVIDIA（aiAnswerSync）
+ *   L1 再檢  → 對生成的正文再跑一次禁用詞
+ *   L3 AI    → Gemini 獨立審查（刻意用「不同廠商模型」，避免自己審自己）
+ *     ↓ 全過
+ *   寫入 article_md + quality_flags.gate，LINE 通知站長（附退稿連結）
+ *     ↓ 冷卻期（預設 3 小時，env INSIGHT_HOLD_HOURS 可調）內未退稿
+ *   runInsightPublish → status=published
+ *
+ * 🔒 鐵則：
+ *   1. Fail-closed：AI 掛掉／逾時／回傳解析不了 → 一律留 draft，永不放行。
+ *   2. AI 只有否決權，沒有放行權：要「L1 且 L2 且 L3 都沒反對」才進冷卻期。
+ *   3. 全程可稽核：每次判定寫進 quality_flags.gate，事後查得到為什麼放行。
+ *   4. 人類永遠有煞車：冷卻期內一鍵退稿。
+ * ============================================================ */
+
+// L1：確定性禁用詞。命中即否決（比 scrubStockCalls 的「消音」更嚴）。
+const INSIGHT_L1_PATTERNS = [
+  [/目標價/, "目標價"],
+  [/(保證獲利|穩賺不賠|穩賺|包賺|報酬保證|保證賺錢|保證賺|必賺)/, "報酬承諾"],
+  [/(建議買進|建議賣出|建議加碼|建議減碼|買進訊號|賣出訊號|可以買進|可以賣出)/, "買賣建議"],
+  [/(逢低布局|逢低承接|進場時機|出場時機|大膽買|勇敢買|閉著眼睛買|All ?in)/i, "進出場指示"],
+  [/(值得買|值得留意|值得關注|不妨留意|可留意|建議關注)/, "變相推介"],
+  [/(飆股|噴出|起漲點|主力吃貨|內線|明牌|報明牌)/, "炒作用語"],
+  [/(一定會漲|一定會跌|必漲|必跌|穩漲|鐵定)/, "絕對化預測"],
+];
+
+function insightL1Check(text) {
+  const s = String(text == null ? "" : text);
+  const hits = [];
+  for (const [re, label] of INSIGHT_L1_PATTERNS) {
+    const m = s.match(re);
+    if (m) hits.push(`${label}（「${m[0]}」）`);
+  }
+  return hits;
+}
+
+// L2：事實查核。讀 scripts/verify_brief.py 產生的 verify_report。
+// 沒有報告 = 未經查核 → 否決（fail-closed，不假設沒問題）。
+function insightL2Check(vr) {
+  if (!vr || typeof vr !== "object" || Array.isArray(vr)) return ["缺少 verify_report（未經事實查核）"];
+  const sum = vr.ticker_summary || {};
+  const bad = [];
+  if (Number(sum.mismatch || 0) > 0) {
+    const names = (vr.items || []).filter(x => x && x.verdict === "mismatch")
+      .map(x => `${x.code || ""}${x.claimed_name ? "→" + x.claimed_name : ""}`).slice(0, 3).join("、");
+    bad.push(`名稱與代號不符 ${sum.mismatch} 處${names ? "：" + names : ""}`);
+  }
+  if (Number(sum.not_found || 0) > 0) {
+    const codes = (vr.items || []).filter(x => x && x.verdict === "not_found")
+      .map(x => x.code || "").slice(0, 3).join("、");
+    bad.push(`查無此代號 ${sum.not_found} 處${codes ? "：" + codes : ""}`);
+  }
+  return bad;
+}
+
+// 寫稿：用 NVIDIA。嚴格限定只能根據 brief 展開，不得自行加入新事實。
+async function insightWriteArticle(env, b) {
+  const points = (() => {
+    try { return JSON.stringify(b.points || {}, null, 0).slice(0, 1500); } catch (e) { return ""; }
+  })();
+  const risks = Array.isArray(b.risk_notes) ? b.risk_notes.join("；") : String(b.risk_notes || "");
+  const sys = [
+    "你是台灣財經媒體「領富 AI」的內容編輯，寫給 45-75 歲的一般散戶看。",
+    "任務：把一份『選題大綱』擴寫成一篇 600-900 字的繁體中文短文。",
+    "",
+    "【絕對禁止】以下詞語一個都不能出現（出現即整篇作廢）：",
+    "目標價、保證獲利、穩賺、包賺、必賺、建議買進、建議賣出、建議加碼、建議減碼、",
+    "買進訊號、賣出訊號、逢低布局、逢低承接、進場時機、出場時機、值得買、值得留意、",
+    "值得關注、可留意、飆股、噴出、起漲點、內線、明牌、必漲、必跌、穩漲。",
+    "",
+    "【內容規則】",
+    "1. 只能根據下方大綱的論點與要點展開，嚴禁自行加入大綱沒有的公司、數字、事件或結論。",
+    "2. 不預測股價、不建議買賣、不點名要買哪一檔。可以說明產業趨勢與風險。",
+    "3. 提到風險時要具體，不要只寫「投資有風險」。",
+    "4. 用 Markdown：開頭一段導言，中間 2-3 個 ## 小標，結尾一段「這對散戶的意義」。",
+    "5. 最後一行固定加：> 本文由 AI 依公開資料整理、經自動查核與人工監督發佈，僅供研究參考，不構成投資建議。",
+    "6. 全文繁體中文，語氣平實，不用驚嘆號。"
+  ].join("\n");
+  const usr = [
+    `【標題方向】${b.title_hint || ""}`,
+    `【核心論點】${b.thesis || ""}`,
+    points ? `【要點】${points}` : "",
+    risks ? `【風險】${risks}` : "",
+    "",
+    "請直接輸出文章 Markdown，不要任何前言或說明。"
+  ].filter(Boolean).join("\n");
+  const out = await aiAnswerSync(env, [
+    { role: "system", content: sys },
+    { role: "user", content: usr }
+  ], 1800);
+  return (out && out.trim()) ? out.trim() : null;
+}
+
+// L3：獨立 AI 把關。刻意用 Gemini（與寫稿的 NVIDIA 不同廠商），避免自己審自己。
+// 強制結構化輸出；解析不出來 → 視為否決（fail-closed）。
+async function insightL3Gate(env, b, article) {
+  const sys = [
+    "你是台灣金融內容的合規審查員，任務是【找出問題】，不是誇獎。",
+    "審查一篇要發佈到財經網站的文章，判斷是否可以發佈。",
+    "",
+    "【必須否決的情況】",
+    "A. 出現投資建議或推介語氣（包含委婉的：值得留意、可留意、逢低、進場…）。",
+    "B. 出現目標價、報酬承諾、保證獲利。",
+    "C. 文章出現『大綱裡沒有』的公司、具體數字或結論（＝憑空捏造）。",
+    "D. 誇大或煽動（飆股、噴出、必漲…）。",
+    "E. 把不確定的事寫成確定（例如把預估寫成已發生）。",
+    "",
+    "【只回傳 JSON，不要任何其他文字】",
+    '{"verdict":"pass"或"reject","violations":["具體引用原文片段並說明"],"confidence":0到1的數字}',
+    "有任何一項疑慮就 reject。寧可誤殺，不可放行。"
+  ].join("\n");
+  const usr = [
+    "===== 原始大綱（文章只能根據這個寫）=====",
+    `標題方向：${b.title_hint || ""}`,
+    `核心論點：${b.thesis || ""}`,
+    (() => { try { return "要點：" + JSON.stringify(b.points || {}); } catch (e) { return ""; } })(),
+    "",
+    "===== 待審文章 =====",
+    String(article || "").slice(0, 6000)
+  ].join("\n");
+
+  const r = await callGemini(env, [
+    { role: "system", content: sys },
+    { role: "user", content: usr }
+  ], 900);
+  if (!r || !r.ok || !r.answer) {
+    return { verdict: "reject", violations: ["L3 把關器無回應（fail-closed，不放行）"], confidence: 0, error: (r && r.error) || "no answer" };
+  }
+  // 容忍模型包了 ```json 圍欄
+  const m = String(r.answer).match(/\{[\s\S]*\}/);
+  if (!m) return { verdict: "reject", violations: ["L3 回傳無法解析為 JSON（fail-closed）"], confidence: 0, raw: String(r.answer).slice(0, 300) };
+  let j;
+  try { j = JSON.parse(m[0]); } catch (e) {
+    return { verdict: "reject", violations: ["L3 JSON 解析失敗（fail-closed）"], confidence: 0, raw: m[0].slice(0, 300) };
+  }
+  const verdict = String(j.verdict || "").toLowerCase() === "pass" ? "pass" : "reject";
+  return {
+    verdict,
+    violations: Array.isArray(j.violations) ? j.violations.slice(0, 8).map(String) : [],
+    confidence: typeof j.confidence === "number" ? j.confidence : null,
+    model: r.model || GEMINI_MODEL
+  };
+}
+
+// ── Supabase 小工具 ──
+async function _insightPatch(env, id, patch) {
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?id=eq.${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      headers: { ...ecpayAdmin(env), "Prefer": "return=minimal" },
+      body: JSON.stringify(patch)
+    });
+    return r.ok;
+  } catch (e) { return false; }
+}
+async function _insightGetOne(env, id) {
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?id=eq.${encodeURIComponent(id)}&select=*&limit=1`,
+      { headers: ecpayAdmin(env) });
+    if (!r.ok) return null;
+    const rows = await r.json();
+    return (rows && rows[0]) || null;
+  } catch (e) { return null; }
+}
+// 站長 LINE（沿用 profiles.line_user_id ∩ OWNER_UIDS）
+async function _ownerLineIds(env) {
+  try {
+    const r = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/profiles?id=in.(${OWNER_UIDS.join(",")})&line_user_id=not.is.null&select=line_user_id`,
+      { headers: ecpayAdmin(env) });
+    if (!r.ok) return [];
+    return ((await r.json()) || []).map(x => x && x.line_user_id).filter(Boolean);
+  } catch (e) { return []; }
+}
+// 退稿連結簽章（HMAC-SHA256，金鑰用 INGEST_SECRET）→ 沒有金鑰就偽造不了
+async function insightToken(env, id) {
+  const secret = env.INGEST_SECRET || env.SUPABASE_SERVICE_ROLE_KEY || "";
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode("insight-reject:" + id));
+  return [...new Uint8Array(mac)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 32);
+}
+
+// 三層把關單篇處理
+async function insightGateOne(env, b, holdHours) {
+  const now = new Date();
+  const gate0 = (b.quality_flags && b.quality_flags.gate) || {};
+  const attempts = Number(gate0.attempts || 0) + 1;
+  const flags = Object.assign({}, b.quality_flags || {});
+  const fail = async (stage, reasons, extra) => {
+    flags.gate = Object.assign({}, gate0, {
+      attempts, stage_failed: stage, reasons, checked_at: now.toISOString(),
+      passed_at: null, publish_after: null
+    }, extra || {});
+    await _insightPatch(env, b.id, { quality_flags: flags });
+    return false;
+  };
+
+  // L1（大綱本身）
+  const briefText = [b.title_hint, b.thesis, (b.risk_notes || []).join(" ")].join("\n");
+  const l1a = insightL1Check(briefText);
+  if (l1a.length) return await fail("L1-brief", l1a);
+
+  // L2（事實查核報告）
+  const l2 = insightL2Check(b.verify_report);
+  if (l2.length) return await fail("L2-facts", l2);
+
+  // 寫稿（NVIDIA）
+  const article = await insightWriteArticle(env, b);
+  if (!article) return await fail("write", ["寫稿失敗或回傳空白（fail-closed）"]);
+
+  // L1（生成的正文）
+  const l1b = insightL1Check(article);
+  if (l1b.length) return await fail("L1-article", l1b);
+
+  // L3（Gemini 獨立把關）
+  const l3 = await insightL3Gate(env, b, article);
+  if (!l3 || l3.verdict !== "pass") {
+    return await fail("L3-ai", (l3 && l3.violations && l3.violations.length) ? l3.violations : ["L3 否決"], { l3 });
+  }
+
+  // 全數通過 → 寫入正文 + 進冷卻期（此時仍是 draft，時間到才發佈）
+  const publishAfter = new Date(now.getTime() + holdHours * 3600 * 1000);
+  flags.gate = {
+    attempts, stage_failed: null, reasons: [],
+    l1: "pass", l2: "pass", l3: "pass", l3_report: l3,
+    checked_at: now.toISOString(),
+    passed_at: now.toISOString(),
+    publish_after: publishAfter.toISOString(),
+    rejected_at: null,
+    writer_model: env.NVIDIA_MODEL || DEFAULT_MODEL,
+    gate_model: (l3 && l3.model) || GEMINI_MODEL
+  };
+  const ok = await _insightPatch(env, b.id, { article_md: article, quality_flags: flags });
+  if (!ok) return false;
+
+  // 通知站長（附退稿連結＝人類煞車）
+  const tok = await insightToken(env, b.id);
+  const rejectUrl = `https://leadfuai.com/api/insight-reject?id=${encodeURIComponent(b.id)}&t=${tok}`;
+  const hhmm = `${String(publishAfter.getUTCHours() + 8).padStart(2, "0")}:${String(publishAfter.getUTCMinutes()).padStart(2, "0")}`;
+  const msg = [
+    "📝 市場洞察・自動成稿已通過三層把關",
+    "",
+    `標題：${b.title_hint || "(無)"}`,
+    `論點：${String(b.thesis || "").slice(0, 90)}`,
+    "",
+    `⏰ ${holdHours} 小時後（約 ${hhmm} 台北）自動發佈。`,
+    "不想發就點這個退稿：",
+    rejectUrl,
+    "",
+    "（AI 寫稿＋AI 把關，仍請抽查；發佈後可在後台改）"
+  ].join("\n");
+  for (const uid of await _ownerLineIds(env)) await _linePush(env, uid, msg);
+  return true;
+}
+
+// cron：自動成稿＋把關（一次一篇，控成本）
+async function runInsightAutopilot(env) {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return;
+  const holdHours = Number(env.INSIGHT_HOLD_HOURS || 3);
+  let rows = [];
+  try {
+    const r = await fetch(
+      `${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.draft&article_md=is.null&select=*&order=created_at.asc&limit=5`,
+      { headers: ecpayAdmin(env) });
+    if (!r.ok) return;
+    rows = await r.json();
+  } catch (e) { return; }
+  for (const b of (rows || [])) {
+    const g = (b.quality_flags && b.quality_flags.gate) || {};
+    if (g.rejected_at) continue;                 // 已被退稿
+    if (Number(g.attempts || 0) >= 2) continue;  // 兩次沒過就不再燒 token
+    await insightGateOne(env, b, holdHours);
+    break;                                        // 一輪只處理一篇
+  }
+}
+
+// cron：冷卻期到且未退稿 → 正式發佈
+async function runInsightPublish(env) {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return;
+  let rows = [];
+  try {
+    const r = await fetch(
+      `${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.draft&article_md=not.is.null&select=id,title_hint,quality_flags&limit=10`,
+      { headers: ecpayAdmin(env) });
+    if (!r.ok) return;
+    rows = await r.json();
+  } catch (e) { return; }
+  const now = Date.now();
+  for (const b of (rows || [])) {
+    const g = (b.quality_flags && b.quality_flags.gate) || {};
+    if (!g.publish_after || g.rejected_at) continue;
+    if (Date.parse(g.publish_after) > now) continue;   // 冷卻期還沒到
+    const flags = Object.assign({}, b.quality_flags || {});
+    flags.gate = Object.assign({}, g, { published_by: "autopilot", auto_published_at: new Date().toISOString() });
+    const ok = await _insightPatch(env, b.id, {
+      status: "published", published_at: new Date().toISOString(), quality_flags: flags
+    });
+    if (ok) {
+      const url = `https://leadfuai.com/insights/${encodeURIComponent(b.id)}`;
+      for (const uid of await _ownerLineIds(env))
+        await _linePush(env, uid, `✅ 市場洞察已自動發佈\n\n${b.title_hint || ""}\n${url}`);
+    }
+  }
+}
+
+// 每小時一輪：先成稿把關，再處理冷卻期已到的發佈（cron 入口）
+async function runInsightCycle(env) {
+  try { await runInsightAutopilot(env); } catch (e) {}
+  try { await runInsightPublish(env); } catch (e) {}
+}
+
+// 退稿端點（LINE 點連結即可，用 HMAC 簽章驗證，不需登入）
+async function handleInsightReject(request, env) {
+  const url = new URL(request.url);
+  const id = (url.searchParams.get("id") || "").trim();
+  const t = (url.searchParams.get("t") || "").trim();
+  const page = (title, body) => new Response(
+    `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8">` +
+    `<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">` +
+    `<title>${title} - 領富 AI</title></head><body style="font-family:-apple-system,system-ui,sans-serif;max-width:520px;margin:14vh auto;padding:0 24px;text-align:center;color:#1B4332;">` +
+    `<h2 style="margin-bottom:10px;">${title}</h2><p style="color:#555;line-height:1.8;">${body}</p>` +
+    `<p style="margin-top:26px;"><a href="/insights" style="color:#1B4332;font-weight:600;">← 回市場洞察</a></p></body></html>`,
+    { headers: { "Content-Type": "text/html; charset=utf-8" } });
+
+  if (!id || !t) return page("連結不完整", "缺少必要參數。");
+  let expect = "";
+  try { expect = await insightToken(env, id); } catch (e) { return page("驗證失敗", "請稍後再試。"); }
+  if (t !== expect) return page("連結無效", "簽章不符，可能是連結被截斷或已失效。");
+
+  const row = await _insightGetOne(env, id);
+  if (!row) return page("找不到這篇", "可能已被刪除。");
+  if (row.status === "published") return page("已經發佈了", "這篇已上線；要下架請到後台改狀態。");
+
+  const flags = Object.assign({}, row.quality_flags || {});
+  flags.gate = Object.assign({}, flags.gate || {}, {
+    rejected_at: new Date().toISOString(), rejected_via: "line-link", publish_after: null
+  });
+  const ok = await _insightPatch(env, id, { quality_flags: flags });
+  return ok
+    ? page("✅ 已退稿", `「${(row.title_hint || "").slice(0, 40)}」不會自動發佈，仍保留在後台草稿。`)
+    : page("退稿失敗", "資料庫寫入失敗，請到後台手動處理。");
+}
 async function handleMirofishIngest(request, env) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders() });
   const jerr = (m, s) => new Response(JSON.stringify({ error: m }), { status: s || 400, headers: { "Content-Type": "application/json", ...corsHeaders() } });
@@ -3235,6 +3586,7 @@ export default {
     if (url.pathname === "/api/line-webhook")   return handleLineWebhook(request, env, ctx);
     if (url.pathname === "/api/cron-news")      return handleManualNewsPush(request, env);
     if (url.pathname === "/api/login-token")    return handleLoginToken(request, env);
+    if (url.pathname === "/api/insight-reject" && request.method === "GET") return handleInsightReject(request, env);
     if (url.pathname === "/api/mirofish-ingest") return handleMirofishIngest(request, env);
 
     // 其他 path → 交給 ASSETS binding 處理（保留所有原本的靜態行為）
@@ -3247,6 +3599,8 @@ export default {
     if (cron.startsWith("*/5 ")) { ctx.waitUntil(runPriceAlertCheck(env)); return; }
     // */10 = X 快訊雷達重大快訊推播（每 10 分鐘）
     if (cron.startsWith("*/10")) { ctx.waitUntil(runXAlertPush(env)); return; }
+    // 0 * * * * = 每小時整點：市場洞察自動成稿＋三層把關；冷卻期已到者自動發佈
+    if (cron === "0 * * * *") { ctx.waitUntil(runInsightCycle(env)); return; }
     // 00:30 UTC = 08:30 台北（盤前，開盤前）；07:50 UTC = 15:50 台北（盤後）。
     ctx.waitUntil(runNewsPush(env, cron.startsWith("30 0 ") ? "pre" : "post"));
   }
