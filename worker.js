@@ -2210,19 +2210,64 @@ function insightL1Check(text) {
 
 // L2：事實查核。讀 scripts/verify_brief.py 產生的 verify_report。
 // 沒有報告 = 未經查核 → 否決（fail-closed，不假設沒問題）。
-function insightL2Check(vr) {
-  if (!vr || typeof vr !== "object" || Array.isArray(vr)) return ["缺少 verify_report（未經事實查核）"];
-  const sum = vr.ticker_summary || {};
-  const bad = [];
-  if (Number(sum.mismatch || 0) > 0) {
-    const names = (vr.items || []).filter(x => x && x.verdict === "mismatch")
-      .map(x => `${x.code || ""}${x.claimed_name ? "→" + x.claimed_name : ""}`).slice(0, 3).join("、");
-    bad.push(`名稱與代號不符 ${sum.mismatch} 處${names ? "：" + names : ""}`);
+// L2：事實查核。兩條路——
+//   (a) 上游有送 verify_report（scripts/verify_brief.py 產）→ 直接讀它的結論；
+//   (b) 沒送（例如排程用 curl 直接 POST）→ worker 自己拿站上 companies_live.json
+//       做「代號↔名稱」比對。不依賴上游是否守規矩，才是真的把關。
+async function insightL2Check(env, b) {
+  const vr = b && b.verify_report;
+  if (vr && typeof vr === "object" && !Array.isArray(vr) && vr.ticker_summary) {
+    const sum = vr.ticker_summary || {};
+    const bad = [];
+    if (Number(sum.mismatch || 0) > 0) {
+      const names = (vr.items || []).filter(x => x && x.verdict === "mismatch")
+        .map(x => `${x.code || ""}${x.claimed_name ? "→" + x.claimed_name : ""}`).slice(0, 3).join("、");
+      bad.push(`名稱與代號不符 ${sum.mismatch} 處${names ? "：" + names : ""}`);
+    }
+    if (Number(sum.not_found || 0) > 0) {
+      const codes = (vr.items || []).filter(x => x && x.verdict === "not_found")
+        .map(x => x.code || "").slice(0, 3).join("、");
+      bad.push(`查無此代號 ${sum.not_found} 處${codes ? "：" + codes : ""}`);
+    }
+    return bad;
   }
-  if (Number(sum.not_found || 0) > 0) {
-    const codes = (vr.items || []).filter(x => x && x.verdict === "not_found")
-      .map(x => x.code || "").slice(0, 3).join("、");
-    bad.push(`查無此代號 ${sum.not_found} 處${codes ? "：" + codes : ""}`);
+
+  // ── (b) worker 自查 ──
+  const cj = await _assetJson(env, "companies_live.json");
+  const comp = (cj && cj.companies) || null;
+  if (!comp) return ["無法載入 companies_live.json（查核資料不可用，fail-closed）"];
+
+  const bad = [];
+  // 1) brief 自己宣告的個股代號必須存在
+  const declared = [];
+  for (const s of (b.sectors || [])) {
+    for (const t of ((s && s.sample_tickers) || [])) {
+      const c = String(t).trim();
+      if (/^\d{4}$/.test(c)) declared.push(c);
+    }
+  }
+  const missing = [...new Set(declared)].filter(c => !comp[c]);
+  if (missing.length) bad.push(`查無此代號：${missing.slice(0, 4).join("、")}`);
+
+  // 2) 全文的「中文名＋4碼代號」配對必須對得上（抓「代號安錯公司」）
+  const text = [b.title_hint, b.thesis, (b.risk_notes || []).join(" "),
+                (() => { try { return JSON.stringify(b.points || {}); } catch (e) { return ""; } })()
+               ].join("\n");
+  const seen = new Set();
+  const re = /([一-鿿]{2,6})\s*([0-9]{4})(?![0-9])/g;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const name = m[1], code = m[2];
+    if (seen.has(code)) continue;
+    const c = comp[code];
+    if (!c) continue;                       // 不是台股代號（可能是年份/價格）→ 不報
+    seen.add(code);
+    const full = String(c.name || ""), abbr = String(c.abbrev || "");
+    // 名稱對得上就算通過（簡稱包含、或全名包含）
+    if (abbr && (abbr.includes(name) || name.includes(abbr))) continue;
+    if (full && full.includes(name)) continue;
+    // 對不上，且該代號是 brief 自己宣告的個股 → 判定安錯公司
+    if (declared.includes(code)) bad.push(`名稱與代號不符：${code} 被寫成「${name}」，官方為「${abbr || full}」`);
   }
   return bad;
 }
@@ -2375,7 +2420,7 @@ async function insightGateOne(env, b, holdHours) {
   if (l1a.length) return await fail("L1-brief", l1a);
 
   // L2（事實查核報告）
-  const l2 = insightL2Check(b.verify_report);
+  const l2 = await insightL2Check(env, b);
   if (l2.length) return await fail("L2-facts", l2);
 
   // 寫稿（NVIDIA）
