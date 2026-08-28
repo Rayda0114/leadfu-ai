@@ -2391,11 +2391,11 @@ async function _ownerLineIds(env) {
   } catch (e) { return []; }
 }
 // 退稿連結簽章（HMAC-SHA256，金鑰用 INGEST_SECRET）→ 沒有金鑰就偽造不了
-async function insightToken(env, id) {
+async function insightToken(env, id, purpose) {
   const secret = env.INGEST_SECRET || env.SUPABASE_SERVICE_ROLE_KEY || "";
   const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret),
     { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode("insight-reject:" + id));
+  const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(`insight-${purpose || "reject"}:` + id));
   return [...new Uint8Array(mac)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 32);
 }
 
@@ -2453,8 +2453,10 @@ async function insightGateOne(env, b, holdHours) {
   if (!ok) return { ok: false, stage: "patch", reasons: ["寫入 article_md 失敗"] };
 
   // 通知站長（附退稿連結＝人類煞車）
-  const tok = await insightToken(env, b.id);
+  const tok = await insightToken(env, b.id, "reject");
+  const tokA = await insightToken(env, b.id, "approve");
   const rejectUrl = `https://leadfuai.com/api/insight-reject?id=${encodeURIComponent(b.id)}&t=${tok}`;
+  const approveUrl = `https://leadfuai.com/api/insight-approve?id=${encodeURIComponent(b.id)}&t=${tokA}`;
   const hhmm = `${String(publishAfter.getUTCHours() + 8).padStart(2, "0")}:${String(publishAfter.getUTCMinutes()).padStart(2, "0")}`;
   const msg = [
     "📝 市場洞察・自動成稿已通過三層把關",
@@ -2462,8 +2464,12 @@ async function insightGateOne(env, b, holdHours) {
     `標題：${b.title_hint || "(無)"}`,
     `論點：${String(b.thesis || "").slice(0, 90)}`,
     "",
-    `⏰ ${holdHours} 小時後（約 ${hhmm} 台北）自動發佈。`,
-    "不想發就點這個退稿：",
+    `⏰ 不動作的話，${holdHours} 小時後（約 ${hhmm} 台北）自動發佈。`,
+    "",
+    "👍 想現在就發：",
+    approveUrl,
+    "",
+    "🚫 不想發（退稿）：",
     rejectUrl,
     "",
     "（AI 寫稿＋AI 把關，仍請抽查；發佈後可在後台改）"
@@ -2579,6 +2585,38 @@ async function handleInsightCron(request, env) {
   const j = (o, st) => new Response(JSON.stringify(o, null, 2), { status: st || 200, headers: { "Content-Type": "application/json; charset=utf-8" } });
   if (!env.INGEST_SECRET || !key || key !== env.INGEST_SECRET) return j({ error: "owner only" }, 403);
   try { return j(await runInsightCycle(env)); } catch (e) { return j({ error: String(e) }, 500); }
+}
+
+// 核准端點：清掉退稿標記並把冷卻期設為現在 → 下一輪（10 分內）就會發佈。
+//   也用來救回「誤點退稿」的稿子。簽章前綴與退稿不同，兩個連結不能互換。
+async function handleInsightApprove(request, env) {
+  const url = new URL(request.url);
+  const id = (url.searchParams.get("id") || "").trim();
+  const t = (url.searchParams.get("t") || "").trim();
+  const page = (title, body) => new Response(
+    `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8">` +
+    `<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">` +
+    `<title>${title} - 領富 AI</title></head><body style="font-family:-apple-system,system-ui,sans-serif;max-width:520px;margin:14vh auto;padding:0 24px;text-align:center;color:#1B4332;">` +
+    `<h2 style="margin-bottom:10px;">${title}</h2><p style="color:#555;line-height:1.8;">${body}</p>` +
+    `<p style="margin-top:26px;"><a href="/insights" style="color:#1B4332;font-weight:600;">← 回市場洞察</a></p></body></html>`,
+    { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  if (!id || !t) return page("連結不完整", "缺少必要參數。");
+  let expect = "";
+  try { expect = await insightToken(env, id, "approve"); } catch (e) { return page("驗證失敗", "請稍後再試。"); }
+  if (t !== expect) return page("連結無效", "簽章不符。");
+  const row = await _insightGetOne(env, id);
+  if (!row) return page("找不到這篇", "可能已被刪除。");
+  if (row.status === "published") return page("已經發佈了", "這篇已經在線上。");
+  if (!(row.article_md || "").trim()) return page("還沒有正文", "這篇尚未通過把關成稿，無法發佈。");
+  const flags = Object.assign({}, row.quality_flags || {});
+  flags.gate = Object.assign({}, flags.gate || {}, {
+    rejected_at: null, rejected_via: null, approved_at: new Date().toISOString(),
+    publish_after: new Date(Date.now() - 1000).toISOString()   // 立刻到期 → 下一輪發佈
+  });
+  const ok = await _insightPatch(env, id, { quality_flags: flags });
+  return ok
+    ? page("✅ 已核准發佈", `「${(row.title_hint || "").slice(0, 40)}」<br>將在 10 分鐘內自動上線。`)
+    : page("核准失敗", "資料庫寫入失敗，請到後台手動處理。");
 }
 
 // 退稿端點（LINE 點連結即可，用 HMAC 簽章驗證，不需登入）
@@ -3685,6 +3723,7 @@ export default {
     if (url.pathname === "/api/cron-news")      return handleManualNewsPush(request, env);
     if (url.pathname === "/api/login-token")    return handleLoginToken(request, env);
     if (url.pathname === "/api/cron-insight") return handleInsightCron(request, env);
+    if (url.pathname === "/api/insight-approve" && request.method === "GET") return handleInsightApprove(request, env);
     if (url.pathname === "/api/insight-reject" && request.method === "GET") return handleInsightReject(request, env);
     if (url.pathname === "/api/mirofish-ingest") return handleMirofishIngest(request, env);
 
