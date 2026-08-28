@@ -2528,6 +2528,23 @@ async function runInsightPublish(env) {
     const g = (b.quality_flags && b.quality_flags.gate) || {};
     if (!g.publish_after || g.rejected_at) continue;
     if (Date.parse(g.publish_after) > now) continue;   // 冷卻期還沒到
+    // 發佈前最後一道：已有同標題的已發佈文章 → 不發，直接標記退稿（重複內容會被搜尋引擎扣分）
+    try {
+      const dr = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.published`
+        + `&title_hint=eq.${encodeURIComponent(b.title_hint || "")}&select=id&limit=1`,
+        { headers: ecpayAdmin(env) });
+      if (dr.ok) {
+        const dup = await dr.json();
+        if (dup && dup.length) {
+          const f2 = Object.assign({}, b.quality_flags || {});
+          f2.gate = Object.assign({}, g, { rejected_at: new Date().toISOString(), rejected_via: "duplicate-title", publish_after: null });
+          await _insightPatch(env, b.id, { quality_flags: f2 });
+          for (const uid of await _ownerLineIds(env))
+            await _linePush(env, uid, `⛔ 已自動攔下重複文章\n\n「${(b.title_hint || "").slice(0, 40)}」\n站上已有同標題的已發佈文章，為避免重複內容，這篇不會發佈（仍保留草稿）。`);
+          continue;
+        }
+      }
+    } catch (e) {}
     const flags = Object.assign({}, b.quality_flags || {});
     flags.gate = Object.assign({}, g, { published_by: "autopilot", auto_published_at: new Date().toISOString() });
     const ok = await _insightPatch(env, b.id, {
