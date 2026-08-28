@@ -2527,7 +2527,7 @@ async function runInsightPublish(env) {
   const now = Date.now();
   for (const b of (rows || [])) {
     const g = (b.quality_flags && b.quality_flags.gate) || {};
-    if (g.rejected_at) { rep.actions.push({ id: b.id, act: "已退稿" }); continue; }
+    if (g.rejected_at) { rep.actions.push({ id: b.id, act: "已退稿", via: g.rejected_via || "?", at: g.rejected_at, title: (b.title_hint||"").slice(0,30) }); continue; }
     if (!g.publish_after) { rep.actions.push({ id: b.id, act: "尚未過閘" }); continue; }
     if (Date.parse(g.publish_after) > now) { rep.actions.push({ id: b.id, act: "冷卻中", until: g.publish_after }); continue; }
     // 發佈前最後一道：已有同標題的已發佈文章 → 不發，直接標記退稿（重複內容會被搜尋引擎扣分）
