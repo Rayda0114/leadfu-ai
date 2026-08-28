@@ -2514,20 +2514,22 @@ async function runInsightAutopilot(env) {
 
 // cron：冷卻期到且未退稿 → 正式發佈
 async function runInsightPublish(env) {
-  if (!env.SUPABASE_SERVICE_ROLE_KEY) return;
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return { step: "publish", error: "no service key" };
   let rows = [];
   try {
     const r = await fetch(
       `${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.draft&article_md=not.is.null&select=id,title_hint,quality_flags&limit=10`,
       { headers: ecpayAdmin(env) });
-    if (!r.ok) return;
+    if (!r.ok) return { step: "publish", error: "supabase " + r.status };
     rows = await r.json();
-  } catch (e) { return; }
+  } catch (e) { return { step: "publish", error: String(e) }; }
+  const rep = { step: "publish", waiting: (rows || []).length, actions: [] };
   const now = Date.now();
   for (const b of (rows || [])) {
     const g = (b.quality_flags && b.quality_flags.gate) || {};
-    if (!g.publish_after || g.rejected_at) continue;
-    if (Date.parse(g.publish_after) > now) continue;   // 冷卻期還沒到
+    if (g.rejected_at) { rep.actions.push({ id: b.id, act: "已退稿" }); continue; }
+    if (!g.publish_after) { rep.actions.push({ id: b.id, act: "尚未過閘" }); continue; }
+    if (Date.parse(g.publish_after) > now) { rep.actions.push({ id: b.id, act: "冷卻中", until: g.publish_after }); continue; }
     // 發佈前最後一道：已有同標題的已發佈文章 → 不發，直接標記退稿（重複內容會被搜尋引擎扣分）
     try {
       const dr = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.published`
@@ -2541,6 +2543,7 @@ async function runInsightPublish(env) {
           await _insightPatch(env, b.id, { quality_flags: f2 });
           for (const uid of await _ownerLineIds(env))
             await _linePush(env, uid, `⛔ 已自動攔下重複文章\n\n「${(b.title_hint || "").slice(0, 40)}」\n站上已有同標題的已發佈文章，為避免重複內容，這篇不會發佈（仍保留草稿）。`);
+          rep.actions.push({ id: b.id, act: "重複標題→自動退稿" });
           continue;
         }
       }
@@ -2554,8 +2557,10 @@ async function runInsightPublish(env) {
       const url = `https://leadfuai.com/insights/${encodeURIComponent(b.id)}`;
       for (const uid of await _ownerLineIds(env))
         await _linePush(env, uid, `✅ 市場洞察已自動發佈\n\n${b.title_hint || ""}\n${url}`);
-    }
+      rep.actions.push({ id: b.id, act: "已發佈", url });
+    } else { rep.actions.push({ id: b.id, act: "發佈寫入失敗" }); }
   }
+  return rep;
 }
 
 // 每小時一輪：先成稿把關，再處理冷卻期已到的發佈（cron 入口）
