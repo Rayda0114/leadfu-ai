@@ -38,10 +38,11 @@
     setMeta("metaDesc", `領富 AI 整理 ${code} 完整公開資料：即時報價、合理區間、月營收、本益比、ROE、三大法人、籌碼分析。資料來源 TWSE/TPEx/MOPS。`);
     setMeta("ogTitle", `${code} - 領富 AI 個股完整資訊`);
     setMeta("ogDesc", `${code} 完整公開資料整理：即時報價、合理區間、月營收、籌碼。`);
-    setMeta("ogUrl", `https://leadfuai.com/pages/stock-detail?code=${code}`);
+    setMeta("ogUrl", `https://leadfuai.com/stock/${code}`);
     setMeta("twTitle", `${code} - 領富 AI`);
     setMeta("twDesc", `${code} 即時報價 + 合理區間 + AI 分析`);
-    setMeta("canonicalLink", `https://leadfuai.com/pages/stock-detail?code=${code}`);
+    // canonical 一律指向 SEO 版 /stock/{code}：本頁是同內容的互動版，訊號要集中在一個網址
+    setMeta("canonicalLink", `https://leadfuai.com/stock/${code}`);
 
     // 同步把 code 填到可見 DOM（會在 body 載入後執行）
     document.addEventListener("DOMContentLoaded", () => {
@@ -535,7 +536,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.31.0"></script>
+<script src="../js/main.js?v=3.32.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;

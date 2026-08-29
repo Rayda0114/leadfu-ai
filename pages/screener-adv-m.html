@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>進階選股 - 自訂條件・策略掃描 - 領富 AI</title>
 <meta name="robots" content="noindex">
-<link rel="canonical" href="https://leadfuai.com/pages/screener">
+<!-- 本頁 noindex：不放指向 /pages/screener 的 canonical。noindex + 跨頁 canonical 是混合訊號，
+     Google 可能把 noindex 一併傳給目標頁，而 /pages/screener 是我們要索引的頁（在 sitemap 內）。 -->
 <meta name="theme-color" content="#0b3328">
 <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
 <link rel="stylesheet" href="/css/style.css?v=3.23.9">
@@ -235,7 +236,7 @@
   <a href="/pages/member-m" id="tbUser"></a>
 </nav>
 
-<script src="/js/main.js?v=3.31.0"></script>
+<script src="/js/main.js?v=3.32.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;

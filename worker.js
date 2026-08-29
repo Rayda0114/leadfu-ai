@@ -3669,6 +3669,13 @@ export default {
       return Response.redirect(url.toString(), 301);
     }
 
+    // ── 目錄索引網址收斂：/pages 底下沒有 index，這三種寫法都會 404。
+    //    原本 /pages/index.html 會被下面的 .html 規則導到 /pages/index（也是 404），形成「301 → 404」死鏈。──
+    if (/^\/pages\/?(index\.html)?$/.test(url.pathname)) {
+      url.pathname = "/";
+      return Response.redirect(url.toString(), 301);
+    }
+
     // ── .html → 無 .html（統一網址，消除 .html/無.html 重複稀釋；ASSETS 對無.html 路徑自動解析實體檔）──
     if (url.pathname.endsWith(".html")) {
       url.pathname = url.pathname === "/index.html" ? "/" : url.pathname.slice(0, -5);
@@ -3703,6 +3710,26 @@ export default {
         out.headers.set("Vary", "User-Agent");
         out.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
         return out;
+      }
+    }
+
+    // ── 互動版個股頁 /pages/stock-detail?code=X：伺服器端把 canonical / og:url 改寫成 /stock/X。
+    //    頁內的 JS 也會設，但 Google 第一波索引只讀原始 HTML、算繪執行可能晚好幾天，
+    //    原始 HTML 又寫死成不含 code 的 /pages/stock-detail（等於 2,652 頁都宣稱是同一頁），
+    //    這正是 GSC「Google 選擇的標準網頁和使用者的選擇不同」671 頁的來源。這裡讓爬蟲第一眼就看到正確值。──
+    if (url.pathname === "/pages/stock-detail" && request.method === "GET") {
+      const sdCode = (url.searchParams.get("code") || "").trim();
+      if (/^\d{4,6}[A-Za-z]?$/.test(sdCode)) {
+        const canon = "https://leadfuai.com/stock/" + encodeURIComponent(sdCode);
+        const res = await env.ASSETS.fetch(request);
+        const ct = res.headers.get("content-type") || "";
+        if (res.ok && ct.includes("text/html")) {
+          return new HTMLRewriter()
+            .on('link#canonicalLink', { element(el) { el.setAttribute("href", canon); } })
+            .on('meta#ogUrl',         { element(el) { el.setAttribute("content", canon); } })
+            .transform(res);
+        }
+        return res;
       }
     }
 

@@ -2298,14 +2298,24 @@ function _showInAppModal(inApp) {
 /* ============================================================
  * 個股詳情頁動態 JSON-LD（GEO 用，讓 AI 助手能精準抽取個股資料）
  * ============================================================ */
+/* 公司官網欄位有 985 家只存 "www.xxx.com.tw"（沒有 protocol）。
+   直接放進 JSON-LD 的 url，Google 會當成相對網址解析成 /pages/www.xxx.com.tw → 404。
+   這裡統一補上 https://，補不了就回 undefined（寧可不輸出也不要輸出壞網址）。 */
+function _absSite(raw) {
+  const v = String(raw == null ? "" : raw).trim();
+  if (!v) return undefined;
+  if (/^https?:\/\//i.test(v)) return v;
+  if (/^[\w.-]+\.[a-z]{2,}(\/|$)/i.test(v)) return "https://" + v;
+  return undefined;
+}
+
 function injectStockJsonLd() {
   // 只在 stock-detail.html 跑
   if (!location.pathname.includes("stock-detail")) return;
   const code = new URLSearchParams(location.search).get("code");
   if (!code) return;
-  // 互動版個股頁 canonical 指向 SEO 版 /stock/{code}（整合重複網址，集中索引信號）
-  const _cl = document.getElementById("canonicalLink");
-  if (_cl) _cl.href = "https://leadfuai.com/stock/" + code;
+  // canonical 由 stock-detail.html 的 head 內嵌腳本直接寫死正確值（早於本檔載入）。
+  // 這裡曾經重複賦值，兩處寫法不一致造成 Google 不採信我方 canonical，已移除。
   const s = findStock(code);
   if (!s) return;
 
@@ -2464,7 +2474,7 @@ function injectStockJsonLd() {
         "tickerSymbol": s.code,
         "address": co.address,
         "telephone": co.phone,
-        "url": co.website || undefined,
+        "url": _absSite(co.website),
         "foundingDate": co.founded || undefined,
         "leiCode": co.taxId || undefined,
         "areaServed": "TW"
