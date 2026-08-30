@@ -3100,12 +3100,19 @@ async function renderStockPage(url, env) {
   //   + 買前風險檢查 + 達叔具名(E-E-A-T)。desc 前置「合理股價區間是多少」勾『合理價』搜尋、
   //   再用「想知道目標價？領富不喊分析師目標價、改用合理區間」誠實接住『目標價』搜尋(守不喊明牌品牌)。
   //   ⚠ 目標價＝散戶高搜尋量但領富定位不報，故用『合理區間+為什麼別迷信目標價』捕捉不破品牌。
-  const mkt = market || "股價";
-  const title = `${name} ${code} ${mkt} 合理價｜買前風險檢查・達叔 領富AI`;
+  // 標題要同時接住兩個查詢叢集。GSC 90 天實測：「{股名}目標價」268 個查詢／759 曝光、
+  // 「{股名}合理價」137 個／549 曝光，合計 1,308 曝光。原標題只有「合理價」，
+  // 較大的目標價那半完全沒被命中（統懋目標價 123 曝光排第 9 名卻只有 2 次點擊）。
+  // 拿掉「上市／上櫃」（沒有搜尋量）與「達叔」（E-E-A-T 靠 schema 與內文，不必佔標題），
+  // 空間讓給真正被搜的字。興櫃保留，因為「XX 興櫃」本身有搜尋意圖。
+  const mktTag = market === "興櫃" ? "興櫃 " : "";
+  const title = `${name} ${code} ${mktTag}合理價與目標價｜買前風險檢查 - 領富 AI`;
   const askQ = market === "興櫃"
     ? `${name}（${code}）合理股價區間是多少、能不能買、會不會轉上櫃？`
     : `${name}（${code}）合理股價區間是多少、現在能不能買？`;
-  const desc = `${askQ}想知道 ${name} 目標價？領富 AI 不喊分析師目標價，改用系統化「合理股價區間${(fvLow != null && fvHigh != null) ? " " + fvLow + "–" + fvHigh + " 元" : ""}」＋防錯雷達 ${score != null ? score + "/100 " : ""}風險分，幫你判斷該不該買${cat ? "（" + cat + "類股）" : ""}。每日更新、免費，不喊明牌、非投資建議。`;
+  // 描述前置實際數字：中文摘要在 SERP 大約只顯示 80 個全形字，原本把區間放在中段會被截掉。
+  const fvTxt = (fvLow != null && fvHigh != null) ? `合理股價區間 ${fvLow}–${fvHigh} 元` : "合理股價區間";
+  const desc = `${name}（${code}）${fvTxt}${score != null ? "、防錯雷達風險 " + score + "/100" : ""}。想找 ${name} 目標價？領富 AI 不喊分析師目標價，改用公開財報算出的合理區間，幫你判斷現在該不該買。${cat ? cat + "類股，" : ""}每日更新、免費，非投資建議。`;
   const canon = `https://leadfuai.com/stock/${encodeURIComponent(code)}`;
 
   const jsonld = JSON.stringify({
@@ -3187,7 +3194,7 @@ async function renderStockPage(url, env) {
 
 <main class="sd-wrap">
   <div class="sd-bc"><a href="/">首頁</a> ▸ <a href="/pages/stocks">股價總覽</a>${cat ? ` ▸ <a href="${indLink}">${esc(cat)}</a>` : ""} ▸ <span>${esc(code)} ${esc(name)}</span></div>
-  <h1 class="sd-h1">${esc(name)}　AI 分析｜${esc(code)}</h1>
+  <h1 class="sd-h1">${esc(name)} ${esc(code)}　合理價與目標價分析</h1>
   <p class="sd-sub">${market ? esc(market) : ""}${cat ? "・" + esc(cat) : ""} 類股${price != null ? "・參考價 " + esc(price) + " 元" : ""}</p>
   <div class="sd-src"><svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" style="vertical-align:-2.5px;margin-right:4px;"><path d="M216,48V88H40V48a8,8,0,0,1,8-8H208A8,8,0,0,1,216,48Z" fill="#c9a24b" opacity=".9"/><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-68-76a12,12,0,1,1-12-12A12,12,0,0,1,140,132Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,132ZM96,172a12,12,0,1,1-12-12A12,12,0,0,1,96,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,140,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,172Z"/></svg>更新日期：${esc(today)}　·　資料來源：TWSE 證交所、TPEx 櫃買中心、MOPS 公開資訊觀測站</div>
 
@@ -3328,8 +3335,10 @@ async function renderUsStockPage(url, env) {
     : `<p class="sd-muted">資料整理中。</p>`;
 
   const aiQ = encodeURIComponent(`${t} ${nameZh} 現在適合買嗎？合理價與主要風險？`);
-  const desc = `${nameZh}（${t}）美股分析：領富 AI 合理區間估值${low != null && high != null ? " $" + low.toFixed(0) + "–$" + high.toFixed(0) : ""}、本益比${pe != null ? " " + pe.toFixed(1) : ""}、殖利率${yld != null ? " " + yld.toFixed(2) + "%" : ""}${posTxt ? "、52週位置 " + posTxt : ""}。${summary || ""} 每日更新，非投資建議。`;
-  const title = `${t} ${nameZh} 合理價・該不該買？PE 殖利率分析 - 領富 AI`;
+  const desc = `${nameZh}（${t}）合理價區間${low != null && high != null ? " $" + low.toFixed(0) + "–$" + high.toFixed(0) : ""}、本益比${pe != null ? " " + pe.toFixed(1) : ""}、殖利率${yld != null ? " " + yld.toFixed(2) + "%" : ""}${posTxt ? "、52週位置 " + posTxt : ""}。想找 ${nameZh} 目標價？領富 AI 不喊分析師目標價，改用公開數據算出的合理區間。${summary || ""} 每日更新，非投資建議。`;
+  // 同台股：美股同樣吃到「{中文名}合理價」查詢（微軟 19 曝光、阿里巴巴 13、google 10、輝達 5），
+  // 補上「目標價」接住另一半查詢。
+  const title = `${t} ${nameZh} 合理價與目標價｜該不該買・PE 殖利率 - 領富 AI`;
   const canon = `https://leadfuai.com/us/${encodeURIComponent(t)}`;
 
   // 🌎 同產業美股 peer（內鏈：US leaf 之間互鏈，傳遞同類權重 + 留住讀者）
