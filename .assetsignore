@@ -25,6 +25,14 @@ README.md
 data/_*.json
 data/raw_*.json
 
+# 開發／備份用的暫存頁（留在 repo 供參考，但不對外服務）
+#   這些檔案沒有被任何頁面連結、也不在 sitemap 裡，卻可公開存取，
+#   等於孤兒重複頁，只會佔用 Google 的爬取預算。
+#   ⚠ index-mobile.html 不在此列：worker.js 手機版首頁會抓它，必須保留。
+index-legacy-*.html
+_preview_*.html
+_ref_*.html
+
 # 系統檔
 .DS_Store
 Thumbs.db
