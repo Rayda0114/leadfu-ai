@@ -2333,15 +2333,27 @@ function injectStockJsonLd() {
   const dirText = s.change > 0 ? "上漲" : s.change < 0 ? "下跌" : "持平";
   const pctText = (s.change >= 0 ? "+" : "") + pct.toFixed(2) + "%";
 
-  // 1) <title>：「2330 台積電 股價 2,265 上漲 5.30% | 即時報價、月營收、本益比 - 領富 AI」
-  const seoTitle = `${s.code} ${s.name} 股價 ${fmtPrice(s.price)} ${dirText} ${pctText} | ${marketLabel} ${s.category} - 領富 AI`;
+  // 1) <title>：與 SEO 版 /stock/{code} 完全一致。
+  //    這頁的 canonical 指向 /stock/{code}，Google 會逐步收攏；但 GSC 90 天顯示
+  //    舊參數網址仍佔全站 52% 的曝光（12,038 次），在收攏完成前它們就是使用者
+  //    實際看到的搜尋結果，標題必須一樣好。
+  //    原標題「{代號} {名} 股價 {價格} 上漲 +x%｜...」有兩個問題：
+  //      ① 不含「合理價」「目標價」——那是 1,308 曝光的兩個查詢叢集
+  //      ② 內嵌股價，Google 快取後就過期，SERP 顯示的數字對不上當天行情
+  const mktTag = marketLabel === "興櫃" ? "興櫃 " : "";
+  const seoTitle = `${s.name} ${s.code} ${mktTag}合理價與目標價｜買前風險檢查 - 領富 AI`;
   document.title = seoTitle;
   const pageTitleEl = document.getElementById("pageTitle");
   if (pageTitleEl) pageTitleEl.textContent = seoTitle;
 
-  // 2) <meta description>：含關鍵資料點，<160 字
-  let descParts = [`${s.code} ${s.name}（${marketLabel}・${s.category}）即時報價 ${fmtPrice(s.price)} 元`];
-  descParts.push(`今日${dirText} ${pctText}、成交量 ${s.volume.toLocaleString()} 張`);
+  // 2) <meta description>：前置合理區間與「不喊目標價」的立場，與 SEO 版一致。
+  //    中文摘要在 SERP 約只顯示 80 個全形字，重要的要放前面。
+  const _fv = (STOCK_DATA.fairValue && STOCK_DATA.fairValue[s.code]) || null;
+  const _fvTxt = (_fv && _fv.low != null && _fv.high != null)
+    ? `合理股價區間 ${_fv.low}–${_fv.high} 元` : "合理股價區間";
+  let descParts = [`${s.name}（${s.code}）${_fvTxt}`];
+  descParts.push(`想找 ${s.name} 目標價？領富 AI 不喊分析師目標價，改用公開財報算出的合理區間`);
+  descParts.push(`${marketLabel}・${s.category}類股，參考價 ${fmtPrice(s.price)} 元`);
   if (val) {
     if (val.pe_ratio) descParts.push(`本益比 ${val.pe_ratio.toFixed(2)}`);
     if (val.yield_pct) descParts.push(`殖利率 ${val.yield_pct.toFixed(2)}%`);
@@ -2364,7 +2376,7 @@ function injectStockJsonLd() {
 
   setMeta('meta[name="description"]', "name", "description", seoDesc);
   setMeta('meta[name="keywords"]', "name", "keywords",
-    `${s.code},${s.name},${s.name}股價,${s.name}本益比,${s.name}月營收,${marketLabel},${s.category},台股,${s.code}即時報價`);
+    `${s.name}合理價,${s.name}目標價,${s.code}合理價,${s.code}目標價,${s.code},${s.name},${s.name}股價,${s.name}本益比,${marketLabel},${s.category},台股`);
 
   // 3) Open Graph：分享到 LINE/FB 時的卡片
   setMeta('meta[property="og:title"]', "property", "og:title",
