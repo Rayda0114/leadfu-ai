@@ -30,7 +30,13 @@
     if (!code || !/^\d{4,6}[A-Z]?$/.test(code)) return;
 
     // 立即更新 title / meta（不等資料）— Google 至少看到「2330」而非「個股詳情」
-    document.title = `${code} - 領富 AI 個股完整資訊`;
+    // 本頁曾有四個地方各自寫 title，彼此覆蓋、格式全不一樣（跟先前 canonical
+    // 打架是同一種 bug）。統一成這個函式，格式與 SEO 版 /stock/{code} 一致。
+    window.__lfTitle = function (name, code, mkt, isETF) {
+      if (isETF) return `${name} ${code} ETF 淨值與折溢價｜成分股・配息 - 領富 AI`;
+      return `${name} ${code} ${mkt === "興櫃" ? "興櫃 " : ""}合理價與目標價｜買前風險檢查 - 領富 AI`;
+    };
+    document.title = `${code} 合理價與目標價｜買前風險檢查 - 領富 AI`;
     const setMeta = (id, content) => {
       const el = document.getElementById(id);
       if (el) el.setAttribute(el.tagName === "META" ? "content" : "href", content);
@@ -64,10 +70,10 @@
         const mkt = s.status || "";
         const isETF = s.category === "ETF";
         if (isETF) {
-          document.title = `${code} ${s.name} ETF 股價・成分股・折溢價 - 領富 AI`;
+          document.title = window.__lfTitle(s.name, code, mkt, true);
           setMeta("metaDesc", `${code} ${s.name} ETF｜即時淨值、折溢價、規模、前十大成分股、殖利率與配息一次看。領富 AI 整理 TWSE 官方資料，不推薦、不代操。`);
         } else {
-          document.title = `${code} ${s.name} 風險評分・合理價區間・買前檢查｜${s.name}股價分析 - 領富 AI`;
+          document.title = window.__lfTitle(s.name, code, mkt, false);
           setMeta("metaDesc", `${code} ${s.name}${mkt ? "（" + mkt + "）" : ""}即時股價 NT$${s.price}，今日 ${s.change > 0 ? "+" : ""}${s.change}。產業：${s.category || ""}。領富 AI 整理月營收、本益比、三大法人、合理區間與防錯雷達。資料源 TWSE+TPEx+MOPS。`);
         }
         setMeta("ogTitle", `${code} ${s.name}${isETF ? " ETF" : ""} 股價${mkt ? " " + mkt : ""} - 領富 AI`);
@@ -536,7 +542,7 @@
   <div class="copyright"><div class="container">© 2026 領富 AI. All rights reserved.</div></div>
 </footer>
 
-<script src="../js/main.js?v=3.34.0"></script>
+<script src="../js/main.js?v=3.35.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -554,7 +560,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const cls = changeClass(s.change);
 
   // Title & breadcrumb
-  document.getElementById("pageTitle").textContent = `${s.code} ${s.name} 股價・風險評分・買前先檢查 - 領富 AI`;
+  // ⚠ <title> 的 id 就是 pageTitle，寫這裡等於覆蓋標題。改用共用函式，
+  //   否則會蓋掉前面設好的 SEO 標題（這正是原本 title 對不上的原因）。
+  document.getElementById("pageTitle").textContent =
+    window.__lfTitle(s.name, s.code, s.status || "", s.category === "ETF");
   document.getElementById("bcCode").textContent = `${s.code} ${s.name}`;
 
   // Hero

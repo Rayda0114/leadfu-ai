@@ -2351,9 +2351,12 @@ function injectStockJsonLd() {
   const _fv = (STOCK_DATA.fairValue && STOCK_DATA.fairValue[s.code]) || null;
   const _fvTxt = (_fv && _fv.low != null && _fv.high != null)
     ? `合理股價區間 ${_fv.low}–${_fv.high} 元` : "合理股價區間";
+  // ⚠ descParts 最後是用「、」串起來的，所以每一段都必須是能被頓號接住的短語，
+  //   不能放完整句子（否則會出現「…合理區間、想找 統懋 目標價？…」這種讀不通的接法）。
+  //   完整句子放在 seoDesc 組裝時另外接。
   let descParts = [`${s.name}（${s.code}）${_fvTxt}`];
-  descParts.push(`想找 ${s.name} 目標價？領富 AI 不喊分析師目標價，改用公開財報算出的合理區間`);
-  descParts.push(`${marketLabel}・${s.category}類股，參考價 ${fmtPrice(s.price)} 元`);
+  descParts.push(`${marketLabel}・${s.category}類股`);
+  descParts.push(`參考價 ${fmtPrice(s.price)} 元`);
   if (val) {
     if (val.pe_ratio) descParts.push(`本益比 ${val.pe_ratio.toFixed(2)}`);
     if (val.yield_pct) descParts.push(`殖利率 ${val.yield_pct.toFixed(2)}%`);
@@ -2362,7 +2365,8 @@ function injectStockJsonLd() {
   if (rev && typeof rev.yoy === "number") descParts.push(`月營收年增 ${rev.yoy.toFixed(1)}%`);
   if (co && co.chairman) descParts.push(`董事長 ${co.chairman}`);
   descParts.push("資料來源 TWSE/TPEx 公開 API，每日更新");
-  const seoDesc = descParts.join("、").slice(0, 158);
+  const seoDesc = (`${descParts.join("、")}。想找 ${s.name} 目標價？領富 AI 不喊分析師目標價，`
+    + `改用公開財報算出的合理區間，幫你判斷現在該不該買。每日更新、免費，非投資建議。`).slice(0, 158);
 
   function setMeta(selector, attrName, attrVal, contentVal) {
     let el = document.head.querySelector(selector);

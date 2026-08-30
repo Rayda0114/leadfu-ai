@@ -21,7 +21,7 @@ DATA = ROOT / "data"
 OUT = ROOT / "pages" / "industries"
 BASE = "https://leadfuai.com"
 CSS_V = "3.23.9"
-JS_V = "3.34.0"
+JS_V = "3.35.0"
 TODAY = datetime.now().strftime("%Y-%m-%d")
 
 # 產業（category）→（英文 slug, 一句產業概況）。
