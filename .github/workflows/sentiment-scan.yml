@@ -34,6 +34,9 @@ jobs:
         if: steps.guard.outputs.skip == 'false'
         run: python scripts/fetch_sentiment.py
         env:
+          # 守門擋下覆寫時通知站長，見 scripts/_guard.py
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          OWNER_LINE_USER_ID: ${{ secrets.OWNER_LINE_USER_ID }}
           PYTHONIOENCODING: utf-8
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
