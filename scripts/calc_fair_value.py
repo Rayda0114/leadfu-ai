@@ -17,6 +17,9 @@
 """
 
 import json
+import sys
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
+from _guard import guard_count, guard_sources  # 見 scripts/_guard.py：抓不到資料就不覆寫
 import statistics
 import sys
 from datetime import datetime
@@ -370,6 +373,11 @@ def main():
         "count": len(out_data),
         "data": out_data,
     }
+
+    # 合理區間是全站個股頁 title／description／FAQ 的核心資料，
+    # 一旦被寫成空的，2,500+ 個 SEO 頁面會同時失去合理區間且不會有任何告警。
+    guard_count("fair_value_live.json", len(out_data), floor=1500,
+                what="合理區間（LeadFu Fair Value Range）")
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)

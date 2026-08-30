@@ -12,6 +12,9 @@
 """
 
 import json
+import sys
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
+from _guard import guard_count, guard_sources  # 見 scripts/_guard.py：抓不到資料就不覆寫
 import ssl
 import sys
 from datetime import datetime
@@ -166,6 +169,8 @@ def main():
         },
         "revenue": revenue
     }
+
+    guard_count("revenue_live.json", len(revenue), floor=1500, what="月營收")
 
     out = DATA_DIR / "revenue_live.json"
     with open(out, "w", encoding="utf-8") as f:

@@ -12,6 +12,9 @@
 炒作警示規則：本週貼文數 ≥8 且為前三週平均的 ≥3 倍 → heat_spike（常見於炒作前期）
 """
 import json, re, sys, time, urllib.request, urllib.parse
+import sys
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
+from _guard import guard_count, guard_sources  # 見 scripts/_guard.py：抓不到資料就不覆寫
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -250,6 +253,10 @@ def main():
     out = {"updatedAt": NOW.strftime("%Y-%m-%d %H:%M"), "ptt_ok": ptt_ok,
            "source": "PTT Stock 板 + Google News + YouTube + X 快訊雷達（四源熱度統計）；僅輿情整理、非投資建議",
            "window_days": 30, "count": len(result), "data": result}
+    # 掃描名單來自成交量前段＋會員自選（上限 90 檔），正常會有數十檔；
+    # 掉到個位數代表來源清單或抓取整個失敗，不是「今天大家都沒討論」。
+    guard_count("sentiment_live.json", len(result), floor=20, what="輿情熱度")
+
     (DATA / "sentiment_live.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"\n✅ sentiment_live.json：{len(result)} 檔")
 

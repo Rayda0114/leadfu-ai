@@ -19,6 +19,9 @@ fetch_attention.py — 領富 AI · 注意股 / 處置股 名單
 注意：處置(較嚴重) 覆蓋 注意；含權證/ETF 代碼亦保留，與股票清單交集後自然只留個股。
 """
 import json
+import sys
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
+from _guard import guard_count, guard_sources  # 見 scripts/_guard.py：抓不到資料就不覆寫
 import ssl
 import sys
 import urllib.request
@@ -81,12 +84,14 @@ def main():
         (f"{BASE_TPEX}/tpex_esb_warning_information",  "TPEx 注意",   "注意", "otc",    "證券代號", "注意交易資訊", "公告日期"),
         (f"{BASE_TPEX}/tpex_esb_disposal_information", "TPEx 處置",   "處置", "otc",    "證券代號", "處置原因",   "公布日期"),
     ]
+    ok_sources = 0   # 成功抓到的來源數 —— 守門要看這個，不是看筆數，原因見下方 guard_sources
     for url, label, typ, market, code_k, reason_k, date_k in sources:
         try:
             raw = fetch_url(url)
             before = len(data)
             for r in (raw or []):
                 add(data, r.get(code_k), typ, r.get(reason_k), roc_to_iso(r.get(date_k)) if date_k else "", market)
+            ok_sources += 1
             print(f"  {label}: 原始 {len(raw)} → 累計 +{len(data) - before}")
         except (URLError, HTTPError, ValueError, ssl.SSLError) as e:
             print(f"  {label}: ❌ {e}")
@@ -99,6 +104,11 @@ def main():
         "count": len(data),
         "data": data,
     }
+    # ⚠ 這裡刻意不用筆數守門：注意股／處置股「今天真的一檔都沒有」是合法結果，
+    #   空的就是正確答案。能區分「抓成功但零筆」與「全部來源掛掉」的，只有成功來源數。
+    guard_sources("attention_live.json", ok=ok_sources, total=len(sources),
+                  what="注意股／處置股")
+
     out = DATA_DIR / "attention_live.json"
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"\n✅ 注意 {att}、處置 {dis}、合計 {len(data)} → {out.name}")
