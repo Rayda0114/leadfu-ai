@@ -2531,7 +2531,7 @@ async function runInsightPublish(env) {
   let rows = [];
   try {
     const r = await fetch(
-      `${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.draft&article_md=not.is.null&select=id,title_hint,quality_flags&limit=10`,
+      `${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.draft&article_md=not.is.null&select=id,slug,title_hint,quality_flags&limit=10`,
       { headers: ecpayAdmin(env) });
     if (!r.ok) return { step: "publish", error: "supabase " + r.status };
     rows = await r.json();
@@ -2563,11 +2563,14 @@ async function runInsightPublish(env) {
     } catch (e) {}
     const flags = Object.assign({}, b.quality_flags || {});
     flags.gate = Object.assign({}, g, { published_by: "autopilot", auto_published_at: new Date().toISOString() });
-    const ok = await _insightPatch(env, b.id, {
+    // 發佈時一併寫入 slug（若尚未有）。同標題重複已在上面擋掉，所以 slug 不會撞。
+    const patch = {
       status: "published", published_at: new Date().toISOString(), quality_flags: flags
-    });
+    };
+    if (!b.slug) patch.slug = insightMakeSlug(b.title_hint, b.id);
+    const ok = await _insightPatch(env, b.id, patch);
     if (ok) {
-      const url = `https://leadfuai.com/insights/${encodeURIComponent(b.id)}`;
+      const url = `https://leadfuai.com/insights/${encodeURIComponent(patch.slug || b.slug || b.id)}`;
       for (const uid of await _ownerLineIds(env))
         await _linePush(env, uid, `✅ 市場洞察已自動發佈\n\n${b.title_hint || ""}\n${url}`);
       rep.actions.push({ id: b.id, act: "已發佈", url });
@@ -2577,8 +2580,32 @@ async function runInsightPublish(env) {
 }
 
 // 每小時一輪：先成稿把關，再處理冷卻期已到的發佈（cron 入口）
+/* 已發佈但還沒有 slug 的舊文章補上 slug。
+   發佈流程從 2026-08-30 起會直接寫入 slug，但在那之前發佈的文章網址還是 UUID。
+   放進每輪 cycle：冪等、補完就不再有事做，不必另外寫一次性腳本或開後門端點。 */
+async function runInsightSlugBackfill(env) {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) return { step: "slug", error: "no service key" };
+  try {
+    const r = await fetch(
+      `${SUPABASE_PROJECT_URL}/rest/v1/mirofish_briefs?status=eq.published&slug=is.null&select=id,title_hint&limit=20`,
+      { headers: ecpayAdmin(env) });
+    if (!r.ok) return { step: "slug", error: "supabase " + r.status };
+    const rows = await r.json();
+    if (!rows.length) return { step: "slug", filled: 0 };
+    const done = [];
+    for (const b of rows) {
+      const slug = insightMakeSlug(b.title_hint, b.id);
+      if (!slug || slug === b.id) { done.push({ id: b.id, act: "標題產不出 slug，維持 UUID" }); continue; }
+      if (await _insightPatch(env, b.id, { slug })) done.push({ id: b.id, slug });
+      else done.push({ id: b.id, act: "寫入失敗" });
+    }
+    return { step: "slug", filled: done.filter(x => x.slug).length, done };
+  } catch (e) { return { step: "slug", error: String(e) }; }
+}
+
 async function runInsightCycle(env) {
   const out = { at: new Date().toISOString() };
+  try { out.slug = await runInsightSlugBackfill(env); } catch (e) { out.slug = { error: String(e) }; }
   try { out.autopilot = await runInsightAutopilot(env); } catch (e) { out.autopilot = { error: String(e) }; }
   try { out.publish = await runInsightPublish(env); } catch (e) { out.publish = { error: String(e) }; }
   return out;
@@ -3505,6 +3532,25 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const INSIGHT_SELECT = "id,slug,title_hint,thesis,article_md,seo_keywords,meta_description,published_at,updated_at";
 const insightSlug = (row) => row.slug || row.id;
 
+/* 從中文標題產生網址用 slug。
+   原本文章網址是 UUID（/insights/647c12ff-d65b-…），對讀者與搜尋引擎都沒有意義。
+   路由早就同時支援 slug 與 UUID（見 renderInsightArticle 的 filter），只是欄位沒填。
+   ⚠ 保留中文：Google 對 UTF-8 網址支援良好，且會在搜尋結果把 percent-encoding 顯示成
+     可讀中文；對繁中站而言比硬轉拼音更有辨識度。標點一律換成連字號、長度截到 40 字，
+     避免 percent-encode 後過長。 */
+function insightMakeSlug(title, id) {
+  const base = String(title || "")
+    .replace(/[｜|]/g, "-")
+    .replace(/[^\u4e00-\u9fffA-Za-z0-9]+/g, "-")   // 只留中日韓漢字、英數
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 40)
+    .replace(/-$/, "");
+  // 產不出可用 slug（例如標題全是符號）就退回 UUID，不要生出空字串
+  if (!base || base.length < 4) return String(id || "");
+  return base;
+}
+
 // 極簡 markdown → HTML（Worker 端，先 escape 再套語法，無外部依賴）。article_md 由站長主編撰寫。
 function mdToHtml(md) {
   const lines = String(md || "").replace(/\r\n/g, "\n").split("\n");
@@ -3546,6 +3592,9 @@ async function renderInsightArticle(url, env) {
 
   const slug = insightSlug(a);
   const canon = `https://leadfuai.com/insights/${encodeURIComponent(slug)}`;
+  // 舊的 UUID 網址已被 Google 索引（曾列在 sitemap-insights 裡）。有 slug 之後
+  // 直接 301 過去，把索引訊號收攏到一個網址，而不是留兩個並存讓 canonical 去喬。
+  if (p !== slug && UUID_RE.test(p)) return Response.redirect(canon, 301);
   const title = `${a.title_hint}｜領富 AI 市場洞察`;
   // 描述清掉 markdown 符號（連結→純文字、去 *_`#> 等），避免 Google 搜尋結果出現生硬標記
   const desc = String(a.meta_description || a.thesis || a.title_hint)
@@ -3562,9 +3611,14 @@ async function renderInsightArticle(url, env) {
     "@graph": [
       { "@type": "NewsArticle", "@id": canon + "#article", "headline": String(a.title_hint).slice(0, 110), "description": desc, "url": canon, "mainEntityOfPage": canon,
         "datePublished": pub, "dateModified": mod, "inLanguage": "zh-TW",
-        "author": { "@type": "Organization", "name": "領富編輯台", "url": "https://leadfuai.com/insights" },
-        "publisher": { "@type": "Organization", "name": "領富 AI", "logo": { "@type": "ImageObject", "url": "https://leadfuai.com/icons/icon-512.png" } },
-        "image": ["https://leadfuai.com/icons/icon-512.png"] },
+        // 誠實標示：文章是機器撰稿、達叔逐篇審閱後才發佈（LINE 上按核准）。
+        // 因此 author 掛編輯台（Organization），真正負責的人放 editor（Person 達叔），
+        // 與 learn 文章用的是同一個 @id，讓 Google 認得是同一位可究責的人。
+        // 不把 author 直接寫成達叔——他沒有逐字撰寫，那樣標示不實。
+        "author": { "@type": "Organization", "@id": "https://leadfuai.com/#organization", "name": "領富 AI 編輯台" },
+        "editor": { "@type": "Person", "@id": "https://leadfuai.com/pages/team#dashu", "name": "達叔", "url": "https://leadfuai.com/pages/team" },
+        "publisher": { "@id": "https://leadfuai.com/#organization" },
+        "image": ["https://leadfuai.com/og/insights-1200x630.png"] },
       { "@type": "BreadcrumbList", "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
         { "@type": "ListItem", "position": 2, "name": "市場洞察", "item": "https://leadfuai.com/insights" },
@@ -3596,7 +3650,10 @@ ${kws ? `<meta name="keywords" content="${esc(kws)}">` : ""}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${canon}">
-<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta property="og:image" content="https://leadfuai.com/og/insights-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="領富 AI 市場洞察">
 <meta property="article:published_time" content="${esc(pub || "")}">
 <meta property="article:modified_time" content="${esc(mod || "")}">
 <meta name="twitter:card" content="summary_large_image">
@@ -3636,12 +3693,12 @@ ${kws ? `<meta name="keywords" content="${esc(kws)}">` : ""}
   <nav class="in-bc"><a href="/">首頁</a> › <a href="/insights">市場洞察</a> › ${esc(a.title_hint)}</nav>
   <article>
     <h1 class="in-h1">${esc(a.title_hint)}</h1>
-    <p class="in-meta">領富編輯台${dateLabel ? "・" + esc(dateLabel) + " 發佈" : ""}・經 AI 輔助選題、編輯查證</p>
+    <p class="in-meta">AI 撰稿${dateLabel ? "・" + esc(dateLabel) + " 發佈" : ""}・由 <a href="/pages/team" style="color:inherit;">達叔</a> 審閱後刊出</p>
     ${a.thesis ? `<p class="in-lead">${esc(a.thesis)}</p>` : ""}
     <div class="in-body">${bodyHtml}</div>
   </article>
   ${moreHtml}
-  <div class="in-disc">⚠️ 本文由領富編輯台整理，內容經 AI 輔助選題並由編輯查證，僅供研究與資訊參考，<b>不構成任何投資建議或買賣依據</b>。投資有風險，請依公開資訊觀測站、公司財報與法說會等官方來源自行查證，並為自身決策負責。</div>
+  <div class="in-disc">⚠️ <b>本文初稿由 AI 依公開資料撰寫</b>，經自動事實查核（比對股票代號、公司名稱等可驗證事實）後，由主編達叔逐篇審閱決定是否刊出。內容僅供研究與資訊參考，<b>不構成任何投資建議或買賣依據</b>，也未經逐字人工改寫。投資有風險，請依公開資訊觀測站、公司財報與法說會等官方來源自行查證，並為自身決策負責。</div>
   <a class="in-back" href="/insights">← 看更多市場洞察</a>
 </div>
 </body>
