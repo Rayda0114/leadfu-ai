@@ -13,6 +13,7 @@ calc_risk_score.py — 領富 AI · 個股風險分數（防錯雷達升級）
       fair_value / indicators / margin(+tpex) / sbl / klines
 輸出：
   data/risk_score_live.json      { code: {score,level,reasons[],trend,prevScore} }（score≥門檻者）
+  data/risk_score_all.json       { code: {score,level} }（所有已評分個股，含低分；供個股頁顯示用）
   data/risk_score_history.json   { code: [{d,s},...] } 每日分數（給 7 天趨勢；最多保留 8 筆）
 
 等級：<25 低 / 25-49 中 / 50-74 高 / ≥75 極高
@@ -187,11 +188,13 @@ def main():
         history = {}
 
     out = {}
+    every = {}   # 所有算過分數的個股（含低於 INCLUDE_MIN 的），給個股頁用，見檔尾說明
     for s in stocks:
         code = s.get("code")
         if not code or s.get("category") == "ETF":
             continue   # ETF 跳過：個股風險邏輯(財報/月營收/法人)不適用
         score, reasons = score_stock(s, D)
+        every[code] = {"score": score, "level": level_of(score)}
         # 更新歷史（只記有一定風險的，控制檔案大小）
         if score >= 10:
             hist = [h for h in history.get(code, []) if isinstance(h, dict)]
@@ -237,6 +240,21 @@ def main():
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     (DATA_DIR / "risk_score_history.json").write_text(
         json.dumps(history, ensure_ascii=False), encoding="utf-8")
+
+    # risk_score_all.json：所有算過分數的個股，含分數低於 INCLUDE_MIN 的。
+    #   為什麼要多一個檔而不是直接放寬 INCLUDE_MIN——
+    #   risk_score_live.json 的語意是「有值得注意的風險的個股」，全站約 30 處在讀它，
+    #   其中 pages/risk-radar.html 是 Object.entries(risk) 列出「全部」再依分數排序。
+    #   放寬門檻會讓防錯雷達被 1,100+ 檔低風險股灌爆，也會影響 LINE 推播與產業頁。
+    #   所以另出一個精簡檔（只有 score 與 level，不含 reasons/trend），只給個股頁當
+    #   fallback 用：讓低風險個股顯示「低風險・分數 x/100」而不是「評分整理中」。
+    #   ⚠ ETF 不在此檔內（個股風險邏輯不適用），個股頁對 ETF 仍走原本的敘述性 fallback。
+    (DATA_DIR / "risk_score_all.json").write_text(json.dumps({
+        "updatedAt": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "note": "所有已評分個股的分數與等級（含低分）；有風險細節的請看 risk_score_live.json",
+        "count": len(every),
+        "data": every,
+    }, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
     # 警示歷史：每天存一筆當日高風險事件（score≥50），保留近 60 天 → 給「警示歷史」用
     names = {s.get("code"): s.get("name", "") for s in stocks if s.get("code")}

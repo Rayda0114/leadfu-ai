@@ -3023,9 +3023,12 @@ async function loadStockData(env, origin) {
     try { const r = await env.ASSETS.fetch(new Request(origin + p)); return r.ok ? await r.json() : null; }
     catch (e) { return null; }
   };
-  const [stk, risk, atten, fv] = await Promise.all([
+  const [stk, risk, atten, fv, riskAll] = await Promise.all([
     j("/data/stocks_live.json"), j("/data/risk_score_live.json"),
     j("/data/attention_live.json"), j("/data/fair_value_live.json"),
+    // 只有分數與等級的完整檔（含低於警示門檻的個股）。risk_score_live 只收「有風險的」，
+    // 導致 1,100+ 檔低風險個股頁顯示「評分整理中」——但那些其實都算過、就是低風險。
+    j("/data/risk_score_all.json"),
   ]);
   const map = {};
   for (const s of (stk && stk.stocks) || []) map[String(s.code)] = s;
@@ -3034,7 +3037,8 @@ async function loadStockData(env, origin) {
   if (Array.isArray(ad)) { for (const x of ad) att[String(x && x.code != null ? x.code : x)] = x || true; }
   else if (ad && typeof ad === "object") { for (const k in ad) att[String(k)] = ad[k]; }
   _STOCK_DATA = {
-    map, risk: (risk && risk.data) || {}, att, fv: (fv && fv.data) || fv || {},
+    map, risk: (risk && risk.data) || {}, riskAll: (riskAll && riskAll.data) || {},
+    att, fv: (fv && fv.data) || fv || {},
     updated: (stk && stk.updatedAt) || (risk && risk.updatedAt) || "",
   };
   _STOCK_DATA_T = Date.now();
@@ -3061,7 +3065,10 @@ async function renderStockPage(url, env) {
   const market = s.status || "";
   const cat = s.category || "";
   const slug = STOCK_IND_SLUG[cat];
-  const r = D.risk[code] || {};
+  // risk_score_live 只收「分數 ≥ 警示門檻」的個股；查不到時退到完整檔，
+  // 這樣低風險個股會顯示「低・分數 x/100」而不是「評分整理中」。
+  // 兩個都查不到才是真的沒有評分（ETF：個股風險邏輯不適用）。
+  const r = D.risk[code] || D.riskAll[code] || {};
   const level = r.level || "";
   const score = (r.score != null) ? r.score : null;
   const reasons = (r.reasons || []).slice(0, 5);
@@ -3087,7 +3094,9 @@ async function renderStockPage(url, env) {
   const reasonsHtml = reasons.length
     ? `<ul class="sd-reasons">${reasons.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
     : (level
-        ? `<p class="sd-muted">領富 AI 風險評分顯示 ${esc(name)} 目前無明顯風險警示項目（風險等級「${esc(level)}」${score != null ? "、分數 " + esc(score) + "/100" : ""}）。</p>`
+        // 有分數但沒有警示項目：把每檔各不相同的敘述（市場別／產業／參考價／合理區間／
+        // 注意股狀態）一起帶上，否則這句話會在 900 多頁上一字不差，等於製造近重複內容。
+        ? `<p class="sd-muted">領富 AI 風險評分顯示 ${esc(name)} 目前<b>無明顯風險警示項目</b>（風險等級「${esc(level)}」${score != null ? "、分數 " + esc(score) + "/100" : ""}）。${esc(_fbBits.join("，"))}。以上為公開資料的系統化整理，非投資建議。</p>`
         : `<p class="sd-att">${esc(_fbBits.join("，"))}。${esc(name)} 的 0–100 風險評分待資料累積足夠後提供；建議搭配買前檢查與同產業比較一起看。以上為公開資料整理、非投資建議。</p>`);
 
   const fvCard = (fvLow != null && fvHigh != null)
