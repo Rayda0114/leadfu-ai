@@ -80,6 +80,13 @@ STATIC_PAGES = [
     ("/pages/learn/warning-stocks.html",            "monthly", 0.85),
     ("/pages/learn/spacex-stock.html",              "weekly",  0.9),
     ("/pages/learn/spacex-concept-stocks.html",     "weekly",  0.9),
+    # 投資防詐系列（2026-08-30）：站方定位核心，優先度高
+    ("/pages/learn/stock-group-scam.html",          "monthly", 0.9),
+    ("/pages/learn/guaranteed-profit-scam.html",    "monthly", 0.9),
+    ("/pages/learn/fake-advisor-check.html",        "monthly", 0.9),
+    ("/pages/learn/investment-scam-report.html",    "monthly", 0.9),
+    ("/pages/learn/impersonation-scam.html",        "monthly", 0.9),
+    ("/pages/learn/unlisted-stock-scam.html",       "monthly", 0.9),
 ]
 
 
