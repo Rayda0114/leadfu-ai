@@ -247,7 +247,7 @@ usStocks 每個 entry 可能含 \`fair_value\` 子物件：
 【判斷 ticker 是否在 100 檔範圍內】
 **先檢查 context.usStocks 陣列**：
 - 如果 usStocks 有對應該 ticker 的 entry → **在範圍內**，必須用 fair_value 卡片 + 真實 price/PE/yield 回答（禁止說「不在範圍」）
-- 如果 usStocks 是空的、或裡面沒有用戶問的 ticker → **才是範圍外**，可引導用戶到 leadfuai.com/pages/us-market.html 看清單
+- 如果 usStocks 是空的、或裡面沒有用戶問的 ticker → **才是範圍外**，可引導用戶到 leadfuai.com/pages/us-market 看清單
 
 ❌ 絕對禁止：context.usStocks 已有 entry 卻說「不在範圍」（這是 hallucination）
 ❌ 絕對禁止：用記憶編造美股價格／PE／市值（你的訓練資料截至 2024，會誤導用戶）

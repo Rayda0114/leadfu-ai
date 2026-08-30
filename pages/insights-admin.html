@@ -78,7 +78,7 @@
 <div class="ad-wrap">
   <div class="ad-head">
     <div class="ad-title">領富 <span class="ai">AI</span> · 選題草稿審核</div>
-    <a href="../index.html" style="color:#1B4332;font-size:13px;">← 回首頁</a>
+    <a href="/" style="color:#1B4332;font-size:13px;">← 回首頁</a>
   </div>
   <div class="ad-sub">選題引擎送進來的「題材方向」一律是草稿。請用真實來源（公司法說會、重訊、財報）查證後，把正式文章寫進 <code>article_md</code>，再人工發佈。僅站長本人可見。</div>
   <div class="ad-warn">⚠️ <b>YMYL 財經內容硬性規則</b>：brief 只是方向探勘，不可當事實照抄。每個 <span class="ad-tag nv">needs_verify</span> 與數字都要逐一核對來源；發佈的文章須標「AI 輔助選題、經編輯查證」並附免責聲明。</div>
@@ -113,14 +113,14 @@
   try { user = (await sb.auth.getUser()).data.user; } catch (e) {}
   if (!user) {
     body.innerHTML = stateHtml("🔒", "請先用<strong>站長帳號</strong>登入。",
-      `<div><a class="ad-btn" href="login.html">會員登入 →</a></div>`);
+      `<div><a class="ad-btn" href="login">會員登入 →</a></div>`);
     return;
   }
   if (!OWNER_UIDS.includes(user.id)) {
     body.innerHTML = stateHtml("🚫", "此帳號無權限（請用站長帳號登入）。",
       `<div><a class="ad-link" href="#" id="adLogout">登出，改用其他帳號 →</a></div>`);
     const lo = document.getElementById("adLogout");
-    if (lo) lo.addEventListener("click", async (e) => { e.preventDefault(); try { await sb.auth.signOut(); } catch (e2) {} location.href = "login.html"; });
+    if (lo) lo.addEventListener("click", async (e) => { e.preventDefault(); try { await sb.auth.signOut(); } catch (e2) {} location.href = "login"; });
     return;
   }
 

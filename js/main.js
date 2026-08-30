@@ -642,13 +642,13 @@ function renderStockTableToggle(totalN, shownN, isMobile) {
   if (homeTableExpanded) {
     toggle.innerHTML = `
       <button type="button" data-action="collapse">收合</button>
-      <a class="home-table-jumplink" href="${pageHref('stocks.html')}">看完整 ${(STOCK_DATA.stocks?.length || 2300).toLocaleString()} 檔 →</a>
+      <a class="home-table-jumplink" href="${pageHref('stocks')}">看完整 ${(STOCK_DATA.stocks?.length || 2300).toLocaleString()} 檔 →</a>
     `;
   } else {
     const moreN = totalN - shownN;
     toggle.innerHTML = `
       <button type="button" data-action="expand">查看更多（再 ${moreN} 檔）</button>
-      <a class="home-table-jumplink" href="${pageHref('stocks.html')}">看完整 ${(STOCK_DATA.stocks?.length || 2300).toLocaleString()} 檔 →</a>
+      <a class="home-table-jumplink" href="${pageHref('stocks')}">看完整 ${(STOCK_DATA.stocks?.length || 2300).toLocaleString()} 檔 →</a>
     `;
   }
   // 綁定事件（每次重綁避免重複）
@@ -843,7 +843,7 @@ function renderFairValueLow() {
 
       // 💎 VIP 分級開關 ON：TOP 5 是「最被低估的精華」→ 數據照顯示、名字鎖住、導向 VIP
       if (FAIR_VALUE_GATE) {
-        return `<a class="fv-low-card fv-low-card-locked" href="${pageHref('vip.html')}">
+        return `<a class="fv-low-card fv-low-card-locked" href="${pageHref('vip')}">
           <div class="fv-low-card-head fv-low-locked-head">
             <span class="fv-low-lock-icon">🔒</span>
             <span class="fv-low-lock-text">解鎖看是哪檔</span>
@@ -1051,23 +1051,23 @@ function parseAiQuery(text) {
 
   // ---- 1. 導覽意圖（跳頁）----
   if (/詐|騙|被坑|被害|警示/.test(q))
-    return { kind: "nav", url: pageHref("fraud-alert.html"), label: "投資人防詐須知" };
+    return { kind: "nav", url: pageHref("fraud-alert"), label: "投資人防詐須知" };
   if (/註冊|加入會員|新會員/.test(q))
-    return { kind: "nav", url: pageHref("register.html"), label: "會員註冊" };
+    return { kind: "nav", url: pageHref("register"), label: "會員註冊" };
   if (/登入|login/i.test(q))
-    return { kind: "nav", url: pageHref("login.html"), label: "會員登入" };
+    return { kind: "nav", url: pageHref("login"), label: "會員登入" };
   if (/(自選|追蹤|關注).*(股|清單)|我的(自選|追蹤|關注)/.test(q))
-    return { kind: "nav", url: pageHref("watchlist.html"), label: "我的自選股" };
+    return { kind: "nav", url: pageHref("watchlist"), label: "我的自選股" };
   if (/稅|報稅|證所稅/.test(q))
-    return { kind: "nav", url: pageHref("tax.html"), label: "稅務說明" };
+    return { kind: "nav", url: pageHref("tax"), label: "稅務說明" };
   if (/教學|怎麼下單|怎麼買|新手|入門|看不懂|教我/.test(q))
-    return { kind: "nav", url: pageHref("tutorial.html"), label: "新手教學" };
+    return { kind: "nav", url: pageHref("tutorial"), label: "新手教學" };
   if (/IPO|新股|抽籤/i.test(q))
-    return { kind: "nav", url: pageHref("ipo.html"), label: "新股抽籤" };
+    return { kind: "nav", url: pageHref("ipo"), label: "新股抽籤" };
   if (/公告|重大訊息/.test(q))
-    return { kind: "nav", url: pageHref("announcements.html"), label: "公告中心" };
+    return { kind: "nav", url: pageHref("announcements"), label: "公告中心" };
   if (/新聞|快訊/.test(q) && !/公司新聞/.test(q))
-    return { kind: "nav", url: pageHref("news.html"), label: "財經新聞" };
+    return { kind: "nav", url: pageHref("news"), label: "財經新聞" };
 
   // ---- 2. 個股直接命中（4 碼代號 或 完整公司名包含）----
   const codeMatch = q.match(/\b\d{4}\b/);
@@ -1121,7 +1121,7 @@ function parseAiQuery(text) {
 
 /* 把意圖物件變成可分享的 URL（給 ai.html 結果頁用） */
 function aiQueryUrl(query) {
-  return pageHref("ai.html?q=" + encodeURIComponent(query));
+  return pageHref("ai?q=" + encodeURIComponent(query));
 }
 
 /* 判斷查詢「看起來」是不是自然語言（vs 純股票代號 / 公司名）*/
@@ -1232,7 +1232,7 @@ function bindSearch() {
     if (includes.length === 1) { location.href = _seoHref(includes[0].code); return; }
 
     // 5. 多結果或全無 → 進搜尋頁
-    location.href = pageHref('search.html?q=' + encodeURIComponent(q));
+    location.href = pageHref('search?q=' + encodeURIComponent(q));
   }
   btn.addEventListener("click", doSearch);
   input.addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
@@ -1774,15 +1774,15 @@ function setupSupportWidget() {
           '<span class="cs-item-ic cs-ic-line">' + lineSVG + '</span>' +
           '<span class="cs-item-tx"><b>LINE 客服</b><small>加官方 LINE，真人＋AI 回覆</small></span>' +
           '<span class="cs-item-go">›</span></a>' +
-        '<a class="cs-item" href="' + P + 'ai.html">' +
+        '<a class="cs-item" href="' + P + 'ai">' +
           '<span class="cs-item-ic cs-ic-ai">🤖</span>' +
           '<span class="cs-item-tx"><b>AI 問股</b><small>用 AI 查個股、問問題</small></span>' +
           '<span class="cs-item-go">›</span></a>' +
-        '<a class="cs-item" href="' + P + 'fraud-alert.html">' +
+        '<a class="cs-item" href="' + P + 'fraud-alert">' +
           '<span class="cs-item-ic cs-ic-shield">🛡️</span>' +
           '<span class="cs-item-tx"><b>投資防詐</b><small>辨識冒名詐騙，保護自己</small></span>' +
           '<span class="cs-item-go">›</span></a>' +
-        '<a class="cs-item" href="' + P + 'about.html">' +
+        '<a class="cs-item" href="' + P + 'about">' +
           '<span class="cs-item-ic cs-ic-q">❓</span>' +
           '<span class="cs-item-tx"><b>常見問題</b><small>關於領富 AI 的常見疑問</small></span>' +
           '<span class="cs-item-go">›</span></a>' +
@@ -1875,7 +1875,7 @@ function injectFooterFraudReminder() {
       唯一官方網址 <code style="background:rgba(197,165,114,0.15);padding:1px 5px;border-radius:3px;color:#C5A572;">leadfuai.com</code>
       ／唯一客服 LINE <a href="https://line.me/R/ti/p/@130tqckv" target="_blank" rel="noopener">@130tqckv</a>。
       看到任何冒用本品牌之投資邀約，請撥 <a href="https://165.npa.gov.tw/" target="_blank" rel="noopener">165</a> 反詐騙專線。
-      <a href="${pageHref('fraud-alert.html')}">了解更多防詐須知 →</a>
+      <a href="${pageHref('fraud-alert')}">了解更多防詐須知 →</a>
     </div>
   `;
   footer.appendChild(reminder);
@@ -2483,7 +2483,7 @@ function injectStockJsonLd() {
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://leadfuai.com/" },
-          { "@type": "ListItem", "position": 2, "name": "股價總覽", "item": "https://leadfuai.com/pages/stocks.html" },
+          { "@type": "ListItem", "position": 2, "name": "股價總覽", "item": "https://leadfuai.com/pages/stocks" },
           { "@type": "ListItem", "position": 3, "name": s.code + " " + s.name, "item": url }
         ]
       }
@@ -2618,7 +2618,7 @@ function setupDisclaimer() {
   const footer = document.querySelector(".site-footer");
   if (!footer) return;
 
-  const fraudHref = pageHref("fraud-alert.html");
+  const fraudHref = pageHref("fraud-alert");
   const bar = document.createElement("div");
   bar.className = "site-disclaimer";
   bar.innerHTML = `
@@ -2654,7 +2654,7 @@ function setupPWA() {
     const at = parseInt(localStorage.getItem("leadfu_handoff_at") || "0", 10);
     const fresh = t && (Date.now() - at < 9 * 60 * 1000);
     const onAuthPage = /login|member|line-callback|register/.test(location.pathname);
-    if (standalone && fresh && !onAuthPage) { location.replace("/pages/login.html"); return; }
+    if (standalone && fresh && !onAuthPage) { location.replace("/pages/login"); return; }
   } catch (e) {}
 
   // 已在 PWA standalone 模式 → 已安裝，不顯示
@@ -2978,7 +2978,7 @@ function setupAiAlert() {
         </div>
       </a>`;
     } else {
-      policyItem = `<a class="ai-alert-item" href="${pageHref('news.html')}">
+      policyItem = `<a class="ai-alert-item" href="${pageHref('news')}">
         <div class="ai-alert-rank">03</div>
         <div class="ai-alert-content">
           <div class="ai-alert-row">
@@ -4167,7 +4167,7 @@ function injectPriceFreshnessNote() {
     const note = document.createElement("div");
     note.id = "priceFreshNote";
     note.style.cssText = "margin-top:9px;font-size:12.5px;line-height:1.6;color:#6f7b84;background:#eef3f0;border:1px solid #dde7e1;border-radius:8px;padding:7px 12px;";
-    note.innerHTML = `📅 本頁股價為<b>盤後收盤</b>資料（更新 ${when}）、非盤中即時；<a href="check.html" style="color:#1B4332;font-weight:700;">買前檢查</a>與<a href="watchlist.html" style="color:#1B4332;font-weight:700;">自選股</a>為<b>即時報價</b>。`;
+    note.innerHTML = `📅 本頁股價為<b>盤後收盤</b>資料（更新 ${when}）、非盤中即時；<a href="check" style="color:#1B4332;font-weight:700;">買前檢查</a>與<a href="watchlist" style="color:#1B4332;font-weight:700;">自選股</a>為<b>即時報價</b>。`;
     head.appendChild(note);
   } catch (e) {}
 }

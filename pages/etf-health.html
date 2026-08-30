@@ -209,10 +209,10 @@
   </div>
   <div id="list">載入中…</div>
   <p class="src">資料：TWSE 官方 ETF 淨值／配息累積（站內每日更新）、近 6 月報酬為價格報酬＋半年配息估算。本頁為公開資料整理與風險提示，<b>非投資建議</b>；配息組成請以各投信收益分配通知為準。</p>
-  <a class="back" href="/pages/etf.html">← ETF 專區</a> ・ <a class="back" href="/pages/dividend-tax">股利稅試算 →</a> ・ <a class="back" href="/pages/dividends.html">高殖利率排行 →</a>
+  <a class="back" href="/pages/etf">← ETF 專區</a> ・ <a class="back" href="/pages/dividend-tax">股利稅試算 →</a> ・ <a class="back" href="/pages/dividends">高殖利率排行 →</a>
 </div>
 
-<script src="/js/main.js?v=3.32.0"></script>
+<script src="/js/main.js?v=3.33.0"></script>
 <script>
 fetch("/data/etf_health_live.json").then(r => r.json()).then(d => {
   const rows = Object.entries(d.data || {}).map(([code, v]) => ({ code, ...v }));

@@ -50,7 +50,7 @@
   "areaServed": { "@type": "Country", "name": "Taiwan" },
   "sameAs": ["https://line.me/R/ti/p/@130tqckv"],
   "contactPoint": { "@type": "ContactPoint", "contactType": "Customer Service", "url": "https://line.me/R/ti/p/@130tqckv", "availableLanguage": ["zh-TW", "zh-Hant", "Chinese"] },
-  "potentialAction": { "@type": "SearchAction", "target": "https://leadfuai.com/pages/stocks.html?q={search_term_string}", "query-input": "required name=search_term_string" }
+  "potentialAction": { "@type": "SearchAction", "target": "https://leadfuai.com/pages/stocks?q={search_term_string}", "query-input": "required name=search_term_string" }
 }
 </script>
 
@@ -235,7 +235,7 @@
 <section class="hero">
   <div class="top">
     <div class="brand"><img class="mark-ic" src="/icons/leadfu-mark.png" alt="領富 AI"><div><b>領富 <i>AI</i></b><span>台股風險守門員</span></div></div>
-    <a class="ghost lb-login" href="pages/login.html">登入</a>
+    <a class="ghost lb-login" href="pages/login">登入</a>
   </div>
   <div class="hero-body">
     <div class="signal">Pre-trade check</div>
@@ -248,11 +248,11 @@
         <div class="lf-ta-box" id="heroSuggM" style="display:none;"></div>
       </div>
       <div class="quick">
-        <a href="pages/check.html?code=2330"><small>快速檢查</small><b>2330 台積電</b></a>
-        <a href="pages/portfolio-health.html"><small>持股守門員</small><b>建立清單</b></a>
+        <a href="pages/check?code=2330"><small>快速檢查</small><b>2330 台積電</b></a>
+        <a href="pages/portfolio-health"><small>持股守門員</small><b>建立清單</b></a>
       </div>
     </form>
-    <a href="pages/start.html" style="display:flex;align-items:center;gap:9px;margin-top:13px;padding:12px 15px;border-radius:14px;background:rgba(214,179,111,.13);border:1.5px solid rgba(214,179,111,.5);color:#f8f5ec;font-size:13.5px;font-weight:800;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.18);">
+    <a href="pages/start" style="display:flex;align-items:center;gap:9px;margin-top:13px;padding:12px 15px;border-radius:14px;background:rgba(214,179,111,.13);border:1.5px solid rgba(214,179,111,.5);color:#f8f5ec;font-size:13.5px;font-weight:800;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.18);">
         <span style="font-size:18px;">🧭</span>
         <span><b style="color:#ecd9ab;">新朋友？</b>1 分鐘看懂領富能為你做什麼</span>
         <b style="margin-left:auto;color:#ecd9ab;">→</b>
@@ -290,7 +290,7 @@
     <div><b>講清原因</b><span>外資、借券、估值、注意股。</span></div>
     <div><b>LINE 提醒</b><span>風險升高才通知你。</span></div>
   </div>
-  <div class="sec-cta"><a class="btn" href="pages/portfolio-health.html">加入持股，每天幫我複查</a><a class="link" href="pages/risk-radar.html">防錯雷達 →</a></div>
+  <div class="sec-cta"><a class="btn" href="pages/portfolio-health">加入持股，每天幫我複查</a><a class="link" href="pages/risk-radar">防錯雷達 →</a></div>
 </section>
 
 <!-- 今日值得關注 -->
@@ -299,10 +299,10 @@
   <h2 style="font-size:24px;">今日值得關注，點一下問 AI</h2>
 </section>
 <div class="scroller" id="todayScroller">
-  <a class="qc" href="pages/ai.html?q=2330"><small>AI 題材</small><b>台積電</b><div class="tk">2330</div><div class="pxx up">— <em></em></div></a>
-  <a class="qc" href="pages/ai.html?q=0056"><small>高股息</small><b>元大高股息</b><div class="tk">0056</div><div class="pxx up">— <em></em></div></a>
-  <a class="qc" href="pages/ai.html?q=2603"><small>航運</small><b>長榮</b><div class="tk">2603</div><div class="pxx up">— <em></em></div></a>
-  <a class="qc" href="pages/ai.html?q=2882"><small>金融</small><b>國泰金</b><div class="tk">2882</div><div class="pxx up">— <em></em></div></a>
+  <a class="qc" href="pages/ai?q=2330"><small>AI 題材</small><b>台積電</b><div class="tk">2330</div><div class="pxx up">— <em></em></div></a>
+  <a class="qc" href="pages/ai?q=0056"><small>高股息</small><b>元大高股息</b><div class="tk">0056</div><div class="pxx up">— <em></em></div></a>
+  <a class="qc" href="pages/ai?q=2603"><small>航運</small><b>長榮</b><div class="tk">2603</div><div class="pxx up">— <em></em></div></a>
+  <a class="qc" href="pages/ai?q=2882"><small>金融</small><b>國泰金</b><div class="tk">2882</div><div class="pxx up">— <em></em></div></a>
 </div>
 
 <!-- ⚡ X 快訊雷達（VIP 賣點 + LIVE 試閱） -->
@@ -318,7 +318,7 @@
     <div><b>LINE 推播</b><span>重大動向主動提醒。</span></div>
   </div>
   <p class="sub" style="margin-top:14px;">📡 搭配<b>個股輿情雷達</b>（PTT × 新聞 × YouTube 熱度異常警示）—— 已內建於買前檢查與防錯雷達。</p>
-  <div class="sec-cta"><a class="btn" href="pages/vip.html#x-radar">看 VIP 方案</a><a class="link" href="pages/member.html#x-radar">先試用 →</a></div>
+  <div class="sec-cta"><a class="btn" href="pages/vip#x-radar">看 VIP 方案</a><a class="link" href="pages/member#x-radar">先試用 →</a></div>
 </section>
 
 <!-- 方案 -->
@@ -327,7 +327,7 @@
   <h2 style="font-size:27px;">免費讓你查一次，<br>VIP 幫你每天盯</h2>
   <p class="sub">付費價值不是更多頁面，而是每天幫你把持股變化整理好。</p>
   <div class="plan">
-    <div class="plan-head"><div><small>RECOMMENDED</small><b>VIP 守門員</b></div><a class="trial" href="pages/member.html">先試用</a></div>
+    <div class="plan-head"><div><small>RECOMMENDED</small><b>VIP 守門員</b></div><a class="trial" href="pages/member">先試用</a></div>
     <div class="prow"><b>免費會員</b><span>單次買前檢查、範例報告、基本風險分數。</span></div>
     <div class="prow"><b>VIP 進階</b><span>自選股每日健診、風險上升主動 LINE 提醒、警示歷史。</span></div>
     <div class="prow"><b>完整方案</b><span>策略掃描、報告匯出、持股組合風險整理。</span></div>
@@ -340,14 +340,14 @@
   <div class="acc">
     <button class="acc-btn" type="button" onclick="this.parentNode.classList.toggle('open')">更多免費工具<span class="ar">⌄</span></button>
     <div class="acc-body"><div class="ll">
-      <a href="pages/ai.html">AI 對話（即時報價・引用來源）</a>
-      <a href="pages/value-stocks.html">合理區間偏低 TOP 5</a>
+      <a href="pages/ai">AI 對話（即時報價・引用來源）</a>
+      <a href="pages/value-stocks">合理區間偏低 TOP 5</a>
       <a href="pages/etf-health">高股息 ETF 健檢（平準金拆解）</a>
       <a href="pages/dividend-tax">股利所得稅試算</a>
       <a href="pages/us-market">美股精選 100（合理區間）</a>
       <a href="pages/dividend-calendar">除權息行事曆</a>
-      <a href="pages/stocks.html">股價總覽・熱門排行</a>
-      <a href="pages/news.html">財經新聞</a>
+      <a href="pages/stocks">股價總覽・熱門排行</a>
+      <a href="pages/news">財經新聞</a>
     </div></div>
   </div>
   <div class="acc faq">
@@ -364,7 +364,7 @@
   台股全市場財經資訊網 · 本站資訊僅供參考，不構成投資建議<br>客服 LINE：<a href="https://line.me/R/ti/p/@130tqckv">@130tqckv</a> · 唯一官方網址 leadfuai.com
 </footer>
 
-<script src="js/main.js?v=3.32.0"></script>
+<script src="js/main.js?v=3.33.0"></script>
 <script>
 /* 首頁第一屏：檢查框 → 買前檢查（沿用原邏輯）*/
 (async () => {
@@ -376,7 +376,7 @@
     const goStock = (code) => {
       if (!code) return false;
       if (L.isUsTicker && L.isUsTicker(code)) location.href = "/us/" + String(code).toUpperCase();
-      else location.href = "pages/check.html?code=" + code;
+      else location.href = "pages/check?code=" + code;
       return true;
     };
     const resolve = (v) => {
@@ -421,7 +421,7 @@
         if (pick.length) box.innerHTML = pick.map(s => {
           const p = pct(s), up = p >= 0;
           const cat = (s.category || "熱門").slice(0, 5);
-          return '<a class="qc" href="pages/ai.html?q=' + s.code + '"><small>' + cat + '</small><b>' + (s.name || "") + '</b><div class="tk">' + s.code + '</div><div class="pxx ' + (up ? "up" : "dn") + '">' + Number(s.price).toFixed(2) + ' <em>' + (up ? "▲" : "▼") + Math.abs(p).toFixed(1) + '%</em></div></a>';
+          return '<a class="qc" href="pages/ai?q=' + s.code + '"><small>' + cat + '</small><b>' + (s.name || "") + '</b><div class="tk">' + s.code + '</div><div class="pxx ' + (up ? "up" : "dn") + '">' + Number(s.price).toFixed(2) + ' <em>' + (up ? "▲" : "▼") + Math.abs(p).toFixed(1) + '%</em></div></a>';
         }).join("");
       }
     } catch (e2) {}

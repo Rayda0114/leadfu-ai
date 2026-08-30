@@ -1002,7 +1002,7 @@ footer.site .wrap{padding:54px 28px 40px;}
       "publisher": { "@id": "https://leadfuai.com/#organization" },
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://leadfuai.com/pages/search.html?q={search_term_string}",
+        "target": "https://leadfuai.com/pages/search?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     },
@@ -1063,7 +1063,7 @@ footer.site .wrap{padding:54px 28px 40px;}
   ]
 }
 </script>
-<script src="/js/main.js?v=3.32.0"></script>
+<script src="/js/main.js?v=3.33.0"></script>
 <script>
 /* Hero 搜尋框：打字即下拉(台積→2330) + 送出時 name→code 解析(修中文名送到空白檢查頁的 bug) */
 (async function () {
@@ -1102,7 +1102,7 @@ footer.site .wrap{padding:54px 28px 40px;}
       e.preventDefault();
       var code = resolve(input.value);
       if (code) goStock(code);
-      else if (input.value.trim()) location.href = "/pages/search.html?q=" + encodeURIComponent(input.value.trim());
+      else if (input.value.trim()) location.href = "/pages/search?q=" + encodeURIComponent(input.value.trim());
     };
   }
 })();

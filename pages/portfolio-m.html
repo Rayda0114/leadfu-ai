@@ -146,7 +146,7 @@
 <div class="m-alert" id="mAlert" style="display:none;"></div>
 
 <section class="m-sec" id="mDiagSec" style="display:none;">
-  <div class="m-sec-head"><h2>今日持股警示</h2><a href="/pages/risk-radar.html">防錯雷達 ›</a></div>
+  <div class="m-sec-head"><h2>今日持股警示</h2><a href="/pages/risk-radar">防錯雷達 ›</a></div>
   <div class="m-diag" id="mDiag"></div>
 </section>
 
@@ -198,7 +198,7 @@
   <a href="/pages/member-m" class="on" id="tbUser"></a>
 </nav>
 
-<script src="/js/main.js?v=3.32.0"></script>
+<script src="/js/main.js?v=3.33.0"></script>
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
   await window.LeadFu.ready;
@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     el.innerHTML = `<b>${hi ? "⚠ 系統性風險上升" : "大盤波動風險偏中"}</b>
       <p>明日大盤波動風險偏【${esc(rk.level)}】，持股（尤其高波動個股、槓桿/反向 ETF）可能隨大盤擺盪加大。</p>
       <ul>${(rk.reasons || []).slice(0, 3).map(r => `<li>${esc(r)}</li>`).join("")}</ul>
-      <a href="/pages/market-risk.html">看大盤風險溫度計 →</a>`;
+      <a href="/pages/market-risk">看大盤風險溫度計 →</a>`;
   }
 
   // ── 持股計算 ──

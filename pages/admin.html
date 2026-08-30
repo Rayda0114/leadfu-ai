@@ -41,7 +41,7 @@
 <div class="ad-wrap">
   <div class="ad-head">
     <div class="ad-title">領富 <span class="ai">AI</span> · 站長後台</div>
-    <a href="../index.html" style="color:#1B4332;font-size:13px;">← 回首頁</a>
+    <a href="/" style="color:#1B4332;font-size:13px;">← 回首頁</a>
   </div>
   <div class="ad-sub">意見回饋（含 VIP 訂閱意願）· 僅站長本人可見</div>
 
@@ -68,7 +68,7 @@
   try { session = (await sb.auth.getSession()).data.session; } catch (e) {}
   if (!session) {
     body.innerHTML = stateHtml("🔒", "請先用<strong>站長帳號</strong>登入才能查看回饋。",
-      `<div><a class="ad-btn" href="login.html">會員登入 →</a></div>`);
+      `<div><a class="ad-btn" href="login">會員登入 →</a></div>`);
     return;
   }
 
@@ -91,7 +91,7 @@
       body.innerHTML = stateHtml("🚫", "此帳號無權限查看（請用站長帳號登入）。",
         `<div><a class="ad-link" href="#" id="adLogout">登出，改用其他帳號 →</a></div>`);
       const lo = document.getElementById("adLogout");
-      if (lo) lo.addEventListener("click", async (e) => { e.preventDefault(); try { await sb.auth.signOut(); } catch (e2) {} location.href = "login.html"; });
+      if (lo) lo.addEventListener("click", async (e) => { e.preventDefault(); try { await sb.auth.signOut(); } catch (e2) {} location.href = "login"; });
     } else {
       body.innerHTML = stateHtml("😕", "讀取失敗：" + esc(errMsg),
         `<div><a class="ad-link" href="#" onclick="location.reload();return false;">重新整理</a></div>`);
