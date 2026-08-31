@@ -1,395 +1,401 @@
 {
   "weekYear": 2026,
-  "weekNum": 34,
-  "weekStart": "2026-08-17",
-  "weekEnd": "2026-08-21",
-  "generatedAt": "2026-08-24 01:04",
+  "weekNum": 35,
+  "weekStart": "2026-08-24",
+  "weekEnd": "2026-08-28",
+  "generatedAt": "2026-08-31 03:52",
   "market": {
-    "totalStocks": 2534,
-    "summary": "本週 2026-08-17 ~ 2026-08-21 全市場 2534 檔。"
+    "totalStocks": 2551,
+    "summary": "本週 2026-08-24 ~ 2026-08-28 全市場 2551 檔。"
   },
   "industries": [
     {
       "name": "半導體",
-      "stockCount": 237,
-      "avgWeekReturn": 0.38,
-      "foreignNetTotal": -112569,
+      "stockCount": 240,
+      "avgWeekReturn": -0.95,
+      "foreignNetTotal": 95782,
       "narrative": "",
       "highlights": [
         {
-          "code": "5468",
-          "name": "凱鈺",
+          "code": "3374",
+          "name": "精材",
           "kind": "週漲幅 #1",
-          "value": "+52.1%"
+          "value": "+71.9%"
         },
         {
-          "code": "6485",
-          "name": "點序",
+          "code": "5246",
+          "name": "勵威",
           "kind": "週跌幅 #1",
-          "value": "-28.1%"
-        },
-        {
-          "code": "2408",
-          "name": "南亞科",
-          "kind": "法人加碼",
-          "value": "+7,033 張"
+          "value": "-58.4%"
         },
         {
           "code": "2303",
           "name": "聯電",
-          "kind": "外資借券放空",
-          "value": "+4.6M 股"
+          "kind": "法人加碼",
+          "value": "+95,648 張"
         },
         {
-          "code": "7913",
-          "name": "通寶半導體",
+          "code": "2344",
+          "name": "華邦電",
+          "kind": "外資借券放空",
+          "value": "+11.3M 股"
+        },
+        {
+          "code": "2408",
+          "name": "南亞科",
           "kind": "月營收年增",
-          "value": "+2216.9%"
+          "value": "+719.6%"
         }
       ]
     },
     {
       "name": "電子零組件",
-      "stockCount": 227,
-      "avgWeekReturn": 2.2,
-      "foreignNetTotal": 17086,
+      "stockCount": 230,
+      "avgWeekReturn": -2.16,
+      "foreignNetTotal": 3365,
       "narrative": "",
       "highlights": [
         {
-          "code": "5227",
-          "name": "立凱-KY",
+          "code": "6538",
+          "name": "倉和",
           "kind": "週漲幅 #1",
-          "value": "+55.9%"
+          "value": "+100.6%"
         },
         {
-          "code": "8291",
-          "name": "尚茂",
+          "code": "3207",
+          "name": "耀勝",
           "kind": "週跌幅 #1",
-          "value": "-45.3%"
+          "value": "-40.0%"
         },
         {
-          "code": "2313",
-          "name": "華通",
+          "code": "3037",
+          "name": "欣興",
           "kind": "法人加碼",
-          "value": "+19,265 張"
+          "value": "+3,141 張"
         },
         {
-          "code": "8093",
-          "name": "保銳",
+          "code": "4958",
+          "name": "臻鼎-KY",
+          "kind": "外資借券放空",
+          "value": "+1.8M 股"
+        },
+        {
+          "code": "3310",
+          "name": "佳穎",
           "kind": "月營收年增",
-          "value": "+378.1%"
-        },
-        {
-          "code": "3679",
-          "name": "新至陞",
-          "kind": "高殖利率",
-          "value": "8.04%"
+          "value": "+538.6%"
         }
       ]
     },
     {
       "name": "光電",
       "stockCount": 136,
-      "avgWeekReturn": 0.11,
-      "foreignNetTotal": 72680,
+      "avgWeekReturn": -1.04,
+      "foreignNetTotal": 42326,
       "narrative": "",
       "highlights": [
         {
           "code": "3441",
           "name": "聯一光",
           "kind": "週漲幅 #1",
-          "value": "+62.6%"
+          "value": "+100.0%"
         },
         {
-          "code": "3523",
-          "name": "迎輝",
+          "code": "6682",
+          "name": "華旭先進",
           "kind": "週跌幅 #1",
-          "value": "-31.6%"
+          "value": "-47.5%"
         },
         {
-          "code": "2409",
-          "name": "友達",
+          "code": "3481",
+          "name": "群創",
           "kind": "法人加碼",
-          "value": "+86,851 張"
-        },
-        {
-          "code": "2426",
-          "name": "鼎元",
-          "kind": "外資借券放空",
-          "value": "+1.5M 股"
+          "value": "+28,357 張"
         },
         {
           "code": "3535",
           "name": "晶彩科",
           "kind": "月營收年增",
-          "value": "+2229.0%"
+          "value": "+1057.6%"
+        },
+        {
+          "code": "3168",
+          "name": "眾福科",
+          "kind": "高殖利率",
+          "value": "7.13%"
         }
       ]
     },
     {
       "name": "電腦及周邊",
-      "stockCount": 122,
-      "avgWeekReturn": -2.08,
-      "foreignNetTotal": -5472,
+      "stockCount": 124,
+      "avgWeekReturn": -3.99,
+      "foreignNetTotal": -12670,
       "narrative": "",
       "highlights": [
         {
-          "code": "5426",
-          "name": "振發",
+          "code": "2305",
+          "name": "全友",
           "kind": "週漲幅 #1",
-          "value": "+36.9%"
+          "value": "+33.0%"
         },
         {
-          "code": "6638",
-          "name": "沅聖",
+          "code": "5386",
+          "name": "青雲",
           "kind": "週跌幅 #1",
-          "value": "-19.1%"
+          "value": "-47.8%"
         },
         {
-          "code": "2495",
-          "name": "普安",
+          "code": "2301",
+          "name": "光寶科",
           "kind": "法人加碼",
-          "value": "+3,187 張"
+          "value": "+5,182 張"
         },
         {
-          "code": "4938",
-          "name": "和碩",
+          "code": "3231",
+          "name": "緯創",
           "kind": "外資借券放空",
           "value": "+2.3M 股"
         },
         {
-          "code": "5289",
-          "name": "宜鼎",
-          "kind": "月營收年增",
-          "value": "+640.8%"
+          "code": "2387",
+          "name": "精元",
+          "kind": "高殖利率",
+          "value": "10.87%"
         }
       ]
     },
     {
       "name": "通信網路",
-      "stockCount": 99,
-      "avgWeekReturn": -2.49,
-      "foreignNetTotal": 15564,
+      "stockCount": 103,
+      "avgWeekReturn": -3.19,
+      "foreignNetTotal": -11129,
       "narrative": "",
       "highlights": [
         {
-          "code": "6241",
-          "name": "鑫永洋",
+          "code": "3234",
+          "name": "光環",
           "kind": "週漲幅 #1",
-          "value": "+32.0%"
+          "value": "+60.6%"
         },
         {
-          "code": "3491",
-          "name": "昇達科",
+          "code": "7717",
+          "name": "萊德光電-KY",
           "kind": "週跌幅 #1",
-          "value": "-20.5%"
+          "value": "-32.7%"
         },
         {
-          "code": "2455",
-          "name": "全新",
+          "code": "3045",
+          "name": "台灣大",
           "kind": "法人加碼",
-          "value": "+3,105 張"
+          "value": "+1,118 張"
         },
         {
-          "code": "6285",
-          "name": "啟碁",
+          "code": "2332",
+          "name": "友訊",
           "kind": "外資借券放空",
-          "value": "+1.9M 股"
+          "value": "+2.3M 股"
         },
         {
-          "code": "3466",
-          "name": "德晉",
+          "code": "7917",
+          "name": "源傑科技",
           "kind": "月營收年增",
-          "value": "+1974.0%"
+          "value": "+1749.1%"
         }
       ]
     },
     {
       "name": "金融保險",
-      "stockCount": 46,
-      "avgWeekReturn": 0.4,
-      "foreignNetTotal": 57085,
+      "stockCount": 45,
+      "avgWeekReturn": 2.82,
+      "foreignNetTotal": 104592,
       "narrative": "",
       "highlights": [
         {
-          "code": "2887",
-          "name": "台新新光金",
+          "code": "6878",
+          "name": "歐付寶",
           "kind": "週漲幅 #1",
-          "value": "+10.3%"
+          "value": "+104.4%"
         },
         {
-          "code": "6015",
-          "name": "宏遠證",
+          "code": "6016",
+          "name": "康和證",
           "kind": "週跌幅 #1",
-          "value": "-19.1%"
+          "value": "-21.9%"
         },
         {
           "code": "2892",
           "name": "第一金",
           "kind": "法人加碼",
-          "value": "+32,032 張"
+          "value": "+42,448 張"
         },
         {
-          "code": "2880",
-          "name": "華南金",
+          "code": "2834",
+          "name": "臺企銀",
           "kind": "外資借券放空",
-          "value": "+2.2M 股"
+          "value": "+7.3M 股"
         },
         {
-          "code": "6020",
-          "name": "大展證",
+          "code": "6023",
+          "name": "元大期",
           "kind": "月營收年增",
-          "value": "+1285.0%"
+          "value": "+95.8%"
         }
       ]
     },
     {
       "name": "生技醫療",
-      "stockCount": 250,
-      "avgWeekReturn": -1.07,
-      "foreignNetTotal": 2258,
+      "stockCount": 247,
+      "avgWeekReturn": -0.93,
+      "foreignNetTotal": -6408,
       "narrative": "",
       "highlights": [
         {
-          "code": "6949",
-          "name": "沛爾生醫-創",
+          "code": "7427",
+          "name": "華上生醫",
           "kind": "週漲幅 #1",
-          "value": "+27.1%"
+          "value": "+92.1%"
         },
         {
-          "code": "6945",
-          "name": "圓祥生技",
+          "code": "4150",
+          "name": "優你康",
           "kind": "週跌幅 #1",
-          "value": "-24.8%"
+          "value": "-74.2%"
         },
         {
-          "code": "6446",
-          "name": "藥華藥",
+          "code": "4142",
+          "name": "國光生",
           "kind": "法人加碼",
-          "value": "+817 張"
+          "value": "+152 張"
         },
         {
-          "code": "6580",
-          "name": "台睿",
+          "code": "6917",
+          "name": "竟天",
           "kind": "月營收年增",
-          "value": "+30094.1%"
+          "value": "+4131.8%"
         },
         {
           "code": "4137",
           "name": "麗豐-KY",
           "kind": "高殖利率",
-          "value": "9.13%"
+          "value": "11.64%"
         }
       ]
     },
     {
       "name": "鋼鐵",
       "stockCount": 50,
-      "avgWeekReturn": -0.45,
-      "foreignNetTotal": 9855,
+      "avgWeekReturn": 0.52,
+      "foreignNetTotal": -14990,
       "narrative": "",
       "highlights": [
         {
           "code": "2071",
           "name": "震南鐵",
           "kind": "週漲幅 #1",
-          "value": "+7.9%"
+          "value": "+70.6%"
         },
         {
-          "code": "2025",
-          "name": "千興",
+          "code": "2064",
+          "name": "晉椿",
           "kind": "週跌幅 #1",
-          "value": "-7.5%"
+          "value": "-17.5%"
+        },
+        {
+          "code": "2030",
+          "name": "彰源",
+          "kind": "法人加碼",
+          "value": "+626 張"
         },
         {
           "code": "2002",
           "name": "中鋼",
-          "kind": "法人加碼",
-          "value": "+7,459 張"
+          "kind": "外資借券放空",
+          "value": "+1.4M 股"
         },
         {
-          "code": "2020",
-          "name": "美亞",
-          "kind": "高殖利率",
-          "value": "8.26%"
+          "code": "2025",
+          "name": "千興",
+          "kind": "月營收年增",
+          "value": "+200.8%"
         }
       ]
     },
     {
       "name": "化學",
-      "stockCount": 51,
-      "avgWeekReturn": -0.22,
-      "foreignNetTotal": 4745,
+      "stockCount": 50,
+      "avgWeekReturn": -0.64,
+      "foreignNetTotal": 15012,
       "narrative": "",
       "highlights": [
         {
-          "code": "1714",
-          "name": "和桐",
+          "code": "4707",
+          "name": "磐亞",
           "kind": "週漲幅 #1",
-          "value": "+38.5%"
+          "value": "+71.3%"
         },
         {
-          "code": "4768",
-          "name": "晶呈科技",
+          "code": "4741",
+          "name": "泓瀚",
           "kind": "週跌幅 #1",
-          "value": "-16.5%"
+          "value": "-47.6%"
         },
         {
-          "code": "1727",
-          "name": "中華化",
+          "code": "1709",
+          "name": "和益",
           "kind": "法人加碼",
-          "value": "+3,156 張"
+          "value": "+5,929 張"
         },
         {
-          "code": "1717",
-          "name": "長興",
-          "kind": "外資借券放空",
-          "value": "+1.3M 股"
-        },
-        {
-          "code": "7742",
-          "name": "天弘化",
+          "code": "6618",
+          "name": "永虹先進",
           "kind": "月營收年增",
-          "value": "+474.7%"
+          "value": "+20975.0%"
+        },
+        {
+          "code": "1713",
+          "name": "國化",
+          "kind": "高殖利率",
+          "value": "7.01%"
         }
       ]
     },
     {
       "name": "建材營造",
       "stockCount": 89,
-      "avgWeekReturn": 3.99,
-      "foreignNetTotal": 19583,
+      "avgWeekReturn": 2.81,
+      "foreignNetTotal": -22341,
       "narrative": "",
       "highlights": [
         {
-          "code": "9946",
-          "name": "三發地產",
-          "kind": "週漲幅 #1",
-          "value": "+20.9%"
-        },
-        {
           "code": "4416",
           "name": "三圓",
+          "kind": "週漲幅 #1",
+          "value": "+32.5%"
+        },
+        {
+          "code": "6186",
+          "name": "新潤",
           "kind": "週跌幅 #1",
-          "value": "-19.6%"
+          "value": "-22.6%"
         },
         {
-          "code": "2501",
-          "name": "國建",
+          "code": "2542",
+          "name": "興富發",
           "kind": "法人加碼",
-          "value": "+4,193 張"
+          "value": "+181 張"
         },
         {
-          "code": "1808",
-          "name": "潤隆",
+          "code": "4113",
+          "name": "聯上",
           "kind": "月營收年增",
-          "value": "+87447.7%"
+          "value": "+1096390.6%"
         },
         {
-          "code": "2442",
-          "name": "新美齊",
+          "code": "2528",
+          "name": "皇普",
           "kind": "高殖利率",
-          "value": "13.53%"
+          "value": "14.71%"
         }
       ]
     }
