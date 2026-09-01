@@ -576,7 +576,9 @@ async function handleAsk(request, env) {
   // 支援兩種模式：
   //   1. 單輪：{ question, context } - 舊版相容
   //   2. 多輪聊天：{ messages: [{role, content}, ...], context, stream?: true }
-  const question = (body.question || "").toString().slice(0, 1500);
+  const question = (body.question || "").toString().slice(0, 4000);
+  // "article" = 後端內容生成模式（見下方 ARTICLE_PROMPT）；其餘一律走聊天人設。
+  const mode = body.mode === "article" ? "article" : "chat";
   const context = body.context || {};
   const incomingMessages = Array.isArray(body.messages) ? body.messages : null;
   const wantStream = body.stream === true;
@@ -754,7 +756,28 @@ async function handleAsk(request, env) {
   }
 
   // 組裝最終 messages 陣列
-  const finalMessages = [{ role: "system", content: SYSTEM_PROMPT }];
+  // mode:"article" —— 給後端內容生成用（scripts/gen_stock_insight.py），不是聊天。
+  //   為什麼要這個：SYSTEM_PROMPT 是聊天人設，會強制輸出「💎 領富 AI 合理區間 /
+  //   訊號強度 ⭐⭐⭐」這種卡片排版給聊天視窗用。拿它寫文章，那些卡片會直接
+  //   混進正文裡（實測 1101 就是這樣）。
+  //   ⚠ 只換掉「輸出格式」，合規護欄一字不減——這個端點是公開的，不能有
+  //     一個模式比另一個鬆。
+  const ARTICLE_PROMPT = `detailed thinking off
+你是台灣財經資料整理員，把本站的公開資料整理成散文段落，供網站文章使用。
+
+【合規護欄（與站上聊天一致，不得放寬）】
+- 不做投資建議、不推介個股、不預測股價、不喊目標價、不承諾報酬。
+- 只能用系統在 context 提供的本站資料。沒有的欄位就不要寫，**絕不自行編造
+  數字、公司名或事件**——冒用本站名義編造自家指標是最嚴重的錯誤。
+- 不替讀者下價值判斷（不說「相對低估」「具吸引力」「適合存股族」）。
+  解釋數字代表什麼意思即可，好壞由讀者自己判斷。
+
+【輸出格式】
+- 純散文，**不要**表格、卡片、emoji、星等、粗體標籤那類聊天排版。
+- 不要開場白、不要結語、不要免責聲明（頁面本身已有）。
+- 完全依照使用者訊息裡指定的段落結構與標題輸出。`;
+
+  const finalMessages = [{ role: "system", content: mode === "article" ? ARTICLE_PROMPT : SYSTEM_PROMPT }];
   if (incomingMessages && incomingMessages.length) {
     // 多輪模式：保留歷史（除最後一條），最後一條用 augmented 版本
     // 限制歷史到最近 10 條訊息控制 token 用量
