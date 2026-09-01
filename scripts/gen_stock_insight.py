@@ -257,8 +257,15 @@ def main():
             1 if S["companies"].get(code) else 0,
         ])
 
+    # ⚠ 挑選順序照「市場別」優先，不是照代號。
+    #   GSC 90 天實測的「排得上去」比率：興櫃 24%（86/364）、上市 11%（148/1315）、
+    #   上櫃 8%（71/859）——興櫃是上櫃的 2.9 倍，因為 Yahoo／鉅亨對興櫃覆蓋很差。
+    #   原本按代號排序等於從 1101 開始做完所有上市大型股（前 100 檔有 88 檔是上市），
+    #   把力氣灑在競爭最激烈、最排不上的那一區，興櫃要等好幾年才輪到。
+    MARKET_ORDER = {"興櫃": 0, "上櫃": 1, "上市": 2}
     pool = [c for c in S["stocks"] if c not in done and S["fv"].get(c)]
-    pool.sort(key=lambda c: (-richness(c), c))
+    pool.sort(key=lambda c: (MARKET_ORDER.get((S["stocks"][c] or {}).get("status"), 3),
+                             -richness(c), c))
     if not pool:
         print("  沒有待處理的個股（可能全部做完了）")
         return
