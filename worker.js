@@ -2412,12 +2412,41 @@ async function insightGateOne(env, b, holdHours) {
   const gate0 = (b.quality_flags && b.quality_flags.gate) || {};
   const attempts = Number(gate0.attempts || 0) + 1;
   const flags = Object.assign({}, b.quality_flags || {});
+  // 關卡名稱 → 給人看的說明。LINE 訊息裡直接寫 "L1-brief" 沒人看得懂。
+  const STAGE_LABEL = {
+    "L1-brief":   "L1 大綱禁用詞",
+    "L2-facts":   "L2 事實查核（代號↔名稱）",
+    "write":      "AI 寫稿",
+    "L1-article": "L1 正文禁用詞",
+    "L3-ai":      "L3 Gemini 獨立審查",
+  };
   const fail = async (stage, reasons, extra) => {
     flags.gate = Object.assign({}, gate0, {
       attempts, stage_failed: stage, reasons, checked_at: now.toISOString(),
       passed_at: null, publish_after: null
     }, extra || {});
     await _insightPatch(env, b.id, { quality_flags: flags });
+    // ⚠ 退稿一定要通知。原本這條路是完全安靜的：稿子被擋下、attempts 累加到 2 之後
+    //   永久跳過，而站長從頭到尾不會收到任何訊息，只會覺得「怎麼都沒發文」。
+    //   把關 fail-closed 是對的，但 silent 是錯的——這跟資料腳本那次是同一個病。
+    const willRetry = attempts < 2;
+    try {
+      const msg = [
+        "⚠️ 市場洞察草稿沒過把關，未發佈",
+        "",
+        `標題：${String(b.title_hint || "").slice(0, 60)}`,
+        `卡在：${STAGE_LABEL[stage] || stage}`,
+        `原因：${(reasons || []).join("；").slice(0, 240) || "（未提供）"}`,
+        "",
+        willRetry
+          ? `這是第 ${attempts} 次，下一輪還會再試一次。`
+          : `這是第 ${attempts} 次，已停止重試——不會再自動處理這篇。`,
+        "",
+        "看完整內容／手動改稿：",
+        "https://leadfuai.com/pages/insights-admin",
+      ].join("\n");
+      for (const uid of await _ownerLineIds(env)) await _linePush(env, uid, msg);
+    } catch (e) { /* 通知失敗不影響把關結果 */ }
     return { ok: false, stage, reasons };
   };
 

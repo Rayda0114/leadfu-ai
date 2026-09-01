@@ -34,6 +34,15 @@
   .ad-tag.risk{background:#fbeaea;color:#a23;}
   .ad-tag.nv{background:#fff4e0;color:#9a6b1b;}
   .ad-flags{font-size:11px;color:#888;background:#fafafa;border:1px dashed #ddd;border-radius:6px;padding:6px 10px;margin:8px 0;}
+  /* 把關狀態：原本只丟 JSON.stringify(quality_flags)，出事時看不出卡在哪 */
+  .ad-gate{border-radius:8px;padding:10px 13px;margin:8px 0;font-size:13px;line-height:1.7;border:1px solid;}
+  .ad-gate.fail{background:#fbeae8;border-color:#eccac4;color:#8c2f24;}
+  .ad-gate.wait{background:#fdf2dd;border-color:#eeddb4;color:#7a5a18;}
+  .ad-gate.pass{background:#e4efe8;border-color:#c6ddcf;color:#1a5c3a;}
+  .ad-gate.rej {background:#eee;border-color:#ddd;color:#666;}
+  .ad-gate b{font-weight:800;}
+  .ad-gate .g-why{display:block;margin-top:3px;}
+  .ad-gate .g-sub{display:block;margin-top:5px;font-size:11.5px;opacity:.8;}
   details.ad-vr{margin:10px 0;border:1px solid #d9e3dc;border-radius:8px;background:#fbfcfb;}
   details.ad-vr>summary{cursor:pointer;padding:9px 12px;font-size:13px;color:#1B4332;font-weight:700;}
   details.ad-vr>summary b.bad{color:#b23b3b;}
@@ -157,6 +166,54 @@
     rows.forEach(wireCard);
   }
 
+  // 自動把關（worker 的 runInsightAutopilot）的結果。原本這段只被 JSON.stringify 印出來，
+  // 稿子沒發時得自己讀 JSON 才知道卡在哪——這是「為什麼都沒自動發文」最常見的答案來源。
+  const GATE_STAGE = {
+    "L1-brief":   "L1 大綱禁用詞",
+    "L2-facts":   "L2 事實查核（代號↔名稱）",
+    "write":      "AI 寫稿",
+    "L1-article": "L1 正文禁用詞",
+    "L3-ai":      "L3 Gemini 獨立審查",
+  };
+  const fmtWhen = (d) => {
+    const p2 = (n) => String(n).padStart(2, "0");
+    return `${d.getMonth() + 1}/${d.getDate()} ${p2(d.getHours())}:${p2(d.getMinutes())}`;
+  };
+  function gateHtml(r) {
+    const g = (r.quality_flags && r.quality_flags.gate) || null;
+    if (!g) return r.status === "draft"
+      ? `<div class="ad-gate wait">⏳ <b>尚未進入自動把關</b><span class="g-sub">每 10 分鐘一輪；剛送進來的草稿要等下一輪。</span></div>`
+      : "";
+    if (g.rejected_at) return `<div class="ad-gate rej">🚫 <b>已退稿</b>（${esc(String(g.rejected_via || "未註明來源"))}）<span class="g-sub">${esc(String(g.rejected_at).slice(0, 16).replace("T", " "))}</span></div>`;
+    if (g.stage_failed) {
+      const retry = Number(g.attempts || 0) < 2;
+      return `<div class="ad-gate fail">❌ <b>沒過把關，所以沒有自動發佈</b>
+        <span class="g-why">卡在：<b>${esc(GATE_STAGE[g.stage_failed] || g.stage_failed)}</b></span>
+        <span class="g-why">原因：${esc((g.reasons || []).join("；") || "（未提供）")}</span>
+        <span class="g-sub">已試 ${esc(String(g.attempts || 1))} 次${retry ? "，下一輪還會再試" : "，已停止重試（上限 2 次）"}
+        ${g.checked_at ? "・" + esc(String(g.checked_at).slice(0, 16).replace("T", " ")) : ""}
+        ${retry ? "" : "。要救回來：在下面手動改掉觸發的字，再按發佈。"}</span></div>`;
+    }
+    if (g.publish_after) {
+      const due = new Date(g.publish_after);
+      const left = Math.round((due - Date.now()) / 60000);
+      return `<div class="ad-gate ${left > 0 ? "wait" : "pass"}">${left > 0 ? "⏳" : "✅"} <b>已通過三層把關</b>
+        <span class="g-sub">${left > 0
+          // ⚠ 不要用 toLocaleString(...).slice(0,16)——會切在秒的中間，變成「16:00:1」。
+          ? `冷卻中，約 ${left} 分鐘後（${esc(fmtWhen(due))}）自動發佈；不想發就按下面的退稿。`
+          : "冷卻期已過，下一輪 cron 會自動發佈。"}</span></div>`;
+    }
+    return "";
+  }
+  // gate 以外的旗標（上游 brief 自帶的）仍保留原始 JSON，除錯時有用。
+  function otherFlagsHtml(r) {
+    const qf = r.quality_flags;
+    if (!qf || typeof qf !== "object") return "";
+    const rest = Object.assign({}, qf); delete rest.gate;
+    return Object.keys(rest).length
+      ? `<div class="ad-flags">其他品質旗標：${esc(JSON.stringify(rest))}</div>` : "";
+  }
+
   function verifyReportHtml(vr) {
     if (!vr || typeof vr !== "object") return "";
     if (vr.error) return `<details class="ad-vr"><summary class="ad-vrhead">🔍 AI 查證清單</summary><div class="ad-vrbody"><div class="ad-vrbasis">查證未產生：${esc(vr.error)}</div></div></details>`;
@@ -219,7 +276,7 @@
       risks.map(x => `<span class="ad-tag risk">${esc(x)}</span>`).join("") + `</div>` : "";
     const kwHtml = kws.length ? `<div class="ad-sec"><b>SEO</b>：` +
       kws.map(k => `<span class="ad-tag">${esc(k)}</span>`).join("") + `</div>` : "";
-    const flags = r.quality_flags ? `<div class="ad-flags">品質旗標：${esc(JSON.stringify(r.quality_flags))}</div>` : "";
+    const flags = gateHtml(r) + otherFlagsHtml(r);
     const verifyHtml = verifyReportHtml(r.verify_report);
     const briefMd = sm.brief_md ? `<details class="ad-brief"><summary>📄 展開原始 brief（選題引擎輸出，僅供方向參考）</summary><div class="ad-briefbody">${md2html(sm.brief_md)}</div></details>` : "";
 
