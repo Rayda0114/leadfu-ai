@@ -73,6 +73,7 @@
   .ad-b.pub{background:#1B4332;color:#fff;}
   .ad-b.rej{background:#fff;color:#b23b3b;border:1px solid #e3b3b3;}
   .ad-b.prev{background:#fff;color:#1B4332;border:1px solid #cfd6cf;}
+  .ad-b.retry{background:#fff;color:#8a6d1f;border:1px solid #e3d3a6;}
   .ad-b:disabled{opacity:.5;cursor:not-allowed;}
   .ad-msg2{font-size:12px;color:#1e7e34;margin-left:6px;}
   .ad-msg2.err{color:#b23b3b;}
@@ -178,6 +179,11 @@
   const fmtWhen = (d) => {
     const p2 = (n) => String(n).padStart(2, "0");
     return `${d.getMonth() + 1}/${d.getDate()} ${p2(d.getHours())}:${p2(d.getMinutes())}`;
+  };
+  // 只有「被自動把關擋下」才給重送按鈕；人工退稿的不給（那是站長自己的決定）。
+  const gateFailed = (r) => {
+    const g = (r.quality_flags && r.quality_flags.gate) || null;
+    return !!(g && g.stage_failed && !g.rejected_at);
   };
   function gateHtml(r) {
     const g = (r.quality_flags && r.quality_flags.gate) || null;
@@ -300,6 +306,7 @@
           <button class="ad-b save" data-act="save">存草稿（→待覆核）</button>
           <button class="ad-b pub" data-act="publish">發佈（人工最後一步）</button>
           <button class="ad-b rej" data-act="reject">退回</button>
+          ${gateFailed(r) ? `<button class="ad-b retry" data-act="retry">重送自動把關</button>` : ""}
           <span class="ad-msg2" data-role="msg"></span>
         </div>
         <div class="ad-prevbox" data-role="prev"></div>
@@ -351,6 +358,24 @@
       if (error) return setMsg(/duplicate|unique/i.test(error.message) ? "發佈失敗：這個 slug 已被其他文章用了，請換一個" : "發佈失敗：" + error.message, true);
       setMsg("已發佈 ✓");
       setTimeout(load, 700);
+    });
+
+    // 重送自動把關：清掉 quality_flags.gate（attempts / stage_failed 一起歸零），
+    // 下一輪 cron 的 runInsightAutopilot 就會重新撿起這篇。
+    // ⚠ 只清 gate，不動上游 brief 自帶的其他旗標；也不碰 status（維持 draft）。
+    const retryBtn = card.querySelector('[data-act="retry"]');
+    if (retryBtn) retryBtn.addEventListener("click", async () => {
+      if (!confirm("清掉把關紀錄，讓系統下一輪重新審一次？\n（適用於：規則調整過、或你已經改掉觸發的字）")) return;
+      busy(true); setMsg("處理中…");
+      const qf = Object.assign({}, r.quality_flags || {});
+      delete qf.gate;
+      const { error } = await sb.from("mirofish_briefs")
+        .update({ quality_flags: Object.keys(qf).length ? qf : null })
+        .eq("id", r.id);
+      busy(false);
+      if (error) return setMsg("失敗：" + error.message, true);
+      setMsg("已重送 ✓ 下一輪（最多 10 分鐘）會重新審");
+      setTimeout(load, 900);
     });
 
     card.querySelector('[data-act="reject"]').addEventListener("click", async () => {
