@@ -3094,12 +3094,14 @@ async function loadStockData(env, origin) {
     try { const r = await env.ASSETS.fetch(new Request(origin + p)); return r.ok ? await r.json() : null; }
     catch (e) { return null; }
   };
-  const [stk, risk, atten, fv, riskAll] = await Promise.all([
+  const [stk, risk, atten, fv, riskAll, insight] = await Promise.all([
     j("/data/stocks_live.json"), j("/data/risk_score_live.json"),
     j("/data/attention_live.json"), j("/data/fair_value_live.json"),
     // 只有分數與等級的完整檔（含低於警示門檻的個股）。risk_score_live 只收「有風險的」，
     // 導致 1,100+ 檔低風險個股頁顯示「評分整理中」——但那些其實都算過、就是低風險。
     j("/data/risk_score_all.json"),
+    // 每日由 scripts/gen_stock_insight.py 產生的常青深度內容（每天累積 3 檔）
+    j("/data/stock_insight.json"),
   ]);
   const map = {};
   for (const s of (stk && stk.stocks) || []) map[String(s.code)] = s;
@@ -3109,6 +3111,7 @@ async function loadStockData(env, origin) {
   else if (ad && typeof ad === "object") { for (const k in ad) att[String(k)] = ad[k]; }
   _STOCK_DATA = {
     map, risk: (risk && risk.data) || {}, riskAll: (riskAll && riskAll.data) || {},
+    insight: (insight && insight.data) || {},
     att, fv: (fv && fv.data) || fv || {},
     updated: (stk && stk.updatedAt) || (risk && risk.updatedAt) || "",
   };
@@ -3201,6 +3204,14 @@ async function renderStockPage(url, env) {
         ? `${name}（${code}）屬於「${cat}」類股，可在同產業頁面比較同類個股的估值與籌碼。`
         : `${name}（${code}）的產業分類整理中。` },
   ];
+  // 常青深度內容（每日 3 檔累積）。沒做過的個股整段不出現——不放「整理中」
+  // 空殼，那正是先前 1,179 頁薄內容的成因。
+  const _ins = D.insight[code];
+  const insightHtml = (_ins && Array.isArray(_ins.sections) && _ins.sections.length)
+    ? `<div class="sd-sec sd-insight">${_ins.sections.map(x =>
+        `<h2>${esc(x.h)}</h2><p>${esc(x.body).split("\n").join("</p><p>")}</p>`).join("")}`
+      + `<p class="sd-muted" style="margin-top:14px;">以上依 ${esc(_ins.generated_at || "")} 之公開資料整理，非投資建議。</p></div>`
+    : "";
   const faqHtml = `<div class="sd-sec"><h2>❓ ${esc(name)}（${esc(code)}）常見問題</h2>${faqs.map(f => `<div class="sd-faq"><p class="sd-faq-q">${esc(f.q)}</p><p class="sd-faq-a">${esc(f.a)}</p></div>`).join("")}</div>`;
 
   // SEO title/desc：股名+代號+市場別(命中「{股}興櫃」) + 「合理價」(用戶指定要打的字，領富招牌合理區間)
@@ -3278,7 +3289,8 @@ async function renderStockPage(url, env) {
   .sd-tools a{background:#1B4332;color:#fff;padding:11px 18px;border-radius:999px;text-decoration:none;font-size:14px;font-weight:700;}
   .sd-tools a.ghost{background:#eef7f1;color:#1B4332;}
   .sd-disc{background:#fdf6ec;border:1px solid #f0e2c8;border-radius:12px;padding:14px 16px;font-size:13px;color:#7a6a4a;line-height:1.7;margin-top:20px;}
-  .sd-related{display:flex;flex-wrap:wrap;gap:8px 18px;}
+  .sd-insight h2{font-size:17px;color:#1B4332;margin:18px 0 7px;}.sd-insight h2:first-child{margin-top:0;}.sd-insight p{font-size:14.5px;color:#3a453e;line-height:1.95;margin:0 0 10px;}
+.sd-related{display:flex;flex-wrap:wrap;gap:8px 18px;}
   .sd-related a{font-size:14px;color:#1B4332;text-decoration:none;}
   .sd-related a:hover{color:#C9A24B;}
   .sd-related a b{font-weight:800;}
@@ -3332,6 +3344,7 @@ async function renderStockPage(url, env) {
     <a class="ghost" href="${indLink}">🏭 ${cat ? esc(cat) : "產業"}類股</a>
   </div>
 
+  ${insightHtml}
   ${faqHtml}
   ${relatedHtml}
 

@@ -70,63 +70,6 @@ SCRIPTS = [
     "fetch_ipo.py",             # 新股 IPO 行事曆（TWSE 上市申請）
     "generate_industry_pages.py",  # 🏭 產業頁 pages/industries/*.html + 更新 industries.html 連結（需 stocks + risk）
     "generate_sitemap.py",
+    # 每日常青內容：拿上面抓好的資料生成個股深度說明（放最後，要等素材齊）
+    "gen_stock_insight.py",
 ]
-
-
-def main():
-    print("=" * 60)
-    print(f"領富 AI 全資料抓取 ・ {datetime.now():%Y-%m-%d %H:%M:%S}")
-    print("=" * 60)
-
-    failed = []
-    for s in SCRIPTS:
-        script = ROOT / s
-        print(f"\n{'━' * 50}")
-        print(f"▶ 執行 {s}")
-        print(f"{'━' * 50}")
-
-        success = False
-        for attempt in range(1, MAX_ATTEMPTS + 1):
-            try:
-                code = subprocess.call(
-                    [sys.executable, str(script)],
-                    env={**__import__("os").environ, "PYTHONIOENCODING": "utf-8"}
-                )
-                if code == 0:
-                    success = True
-                    break
-                if attempt < MAX_ATTEMPTS:
-                    wait = RETRY_BACKOFF * attempt
-                    print(f"⚠ {s} 第 {attempt} 次失敗 (exit {code})，等 {wait} 秒後重試...")
-                    time.sleep(wait)
-                else:
-                    print(f"❌ {s} 三次嘗試都失敗，放棄")
-            except Exception as e:
-                if attempt < MAX_ATTEMPTS:
-                    print(f"⚠ {s} 第 {attempt} 次例外: {e}，等 {RETRY_BACKOFF * attempt} 秒後重試...")
-                    time.sleep(RETRY_BACKOFF * attempt)
-                else:
-                    print(f"❌ {s} 三次嘗試都例外: {e}")
-
-        if not success:
-            failed.append(s)
-
-    # 核心價格鏈：失敗才中止部署（不上架壞掉/過舊的股價）。
-    # 其餘（insider/news/etf/法人…）多為外部來源，偶發 404/timeout 不該拖垮整天更新 —— 警告但照常部署，該資料維持前一日值。
-    CRITICAL = {"fetch_listed_twse.py", "fetch_listed_tpex.py", "merge_stocks.py"}
-    critical_failed = [s for s in failed if s in CRITICAL]
-
-    print(f"\n{'=' * 60}")
-    if failed:
-        print(f"⚠ 有 {len(failed)} 個腳本失敗：{failed}")
-    if critical_failed:
-        print(f"❌ 核心價格腳本失敗，中止部署：{critical_failed}")
-        sys.exit(1)
-    if failed:
-        print(f"✅ 核心股價 OK → 照常 commit 部署；非核心失敗（{failed}）維持前一日值，明天自動補。")
-    else:
-        print(f"✅ 全部完成 ・ {datetime.now():%H:%M:%S}")
-
-
-if __name__ == "__main__":
-    main()

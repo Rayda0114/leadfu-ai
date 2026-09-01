@@ -87,7 +87,7 @@ def load(name, key=None):
     return d.get("data", d) or {}
 
 
-def ask(prompt, max_tokens=1400, retries=3):
+def ask(prompt, max_tokens=2000, retries=3):
     # mode:"article" → worker 換成不含聊天排版的系統提示詞（合規護欄不變）。
     # 沒有這個的話，聊天人設會把「💎 領富 AI 合理區間 / 訊號強度 ⭐⭐⭐」卡片
     # 直接塞進正文（實測 1101 就是這樣）。
@@ -215,6 +215,12 @@ def parse_sections(text):
         body = re.sub(r"\s*(資料時間|更新時間)[：:][^\n]*", "", body)
         body = re.sub(r"\s*[※*]\s*(以上|本文|本頁)[^\n]*", "", body)
         body = re.sub(r"\s*（?本(文|頁|內容)[^）\n]{0,40}(投資建議|參考)[^\n]*", "", body).strip()
+        # 生成被 max_tokens 截斷時，最後一段會斷在句子中間（實測 1101 收在
+        # 「區間僅基於歷」）。與其整檔重試，不如切回最後一個完整句子——
+        # 前面的內容本來就是好的，沒必要丟掉重花一次 API。
+        if body and body[-1] not in "。！？」）":
+            cut = max(body.rfind(c) for c in "。！？")
+            body = body[:cut + 1] if cut > 40 else ""
         if len(body) >= 60:
             out.append({"h": h, "body": body})
     return out
