@@ -3932,10 +3932,16 @@ export default {
         if (res0.ok && ct0.includes("text/html")) {
           const html = await deepLinksBlock(env, url.origin);
           if (html) {
-            return new HTMLRewriter()
+            const r = new HTMLRewriter()
               .on("footer", { element(el) { el.before(html, { html: true }); } })
               .transform(res0);
+            const out = new Response(r.body, r);
+            out.headers.set("X-LF-Deep", String((html.match(/href="\/stock\//g) || []).length));
+            return out;
           }
+          const r2 = new Response(res0.body, res0);
+          r2.headers.set("X-LF-Deep", "empty");
+          return r2;
         }
         return res0;
       } catch (e) { /* 出錯就走原本的靜態資產，不要讓首頁掛掉 */ }
