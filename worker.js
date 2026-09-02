@@ -3119,6 +3119,32 @@ async function loadStockData(env, origin) {
   return _STOCK_DATA;
 }
 
+/* 首頁／股價總覽用的「個股深度分析」連結區塊（伺服器端渲染）。
+   只連 data/stock_insight.json 裡有內容的個股——把權重集中在正在變厚的頁面。 */
+async function deepLinksBlock(env, origin) {
+  try {
+    const D0 = await loadStockData(env, origin);
+    const ins = D0.insight || {};
+    const codes = Object.keys(ins)
+      .sort((a, b) => String(ins[b].generated_at || "").localeCompare(String(ins[a].generated_at || "")))
+      .slice(0, 36);
+    if (!codes.length) return "";
+    const items = codes.map(c => {
+      const st = D0.map[c] || {};
+      return `<a href="/stock/${encodeURIComponent(c)}"><b>${esc(c)}</b> ${esc(st.name || "")}</a>`;
+    }).join("");
+    return `<section class="lf-deep"><h2>個股深度分析</h2>`
+      + `<p>依公開財報與官方公告整理的個股說明，每個交易日新增。</p>`
+      + `<div class="lf-deep-list">${items}</div></section>`
+      + `<style>.lf-deep{max-width:1200px;margin:26px auto;padding:18px 20px;background:#fff;border:1px solid #e6ebe7;border-radius:10px;}`
+      + `.lf-deep h2{font-size:17px;color:#1B4332;margin:0 0 4px;}`
+      + `.lf-deep>p{font-size:13px;color:#6f7b74;margin:0 0 12px;}`
+      + `.lf-deep-list{display:flex;flex-wrap:wrap;gap:8px 18px;}`
+      + `.lf-deep-list a{font-size:14px;color:#1B4332;text-decoration:none;}`
+      + `.lf-deep-list a:hover{color:#C9A24B;}.lf-deep-list a b{font-weight:800;}</style>`;
+  } catch (e) { return ""; }
+}
+
 function esc(v) {
   return String(v == null ? "" : v).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 }
@@ -3877,7 +3903,13 @@ export default {
       const ua = (request.headers.get("user-agent") || "").toLowerCase();
       if (/iphone|ipod|android.*mobile|windows phone|blackberry|bb10|iemobile|opera mini/.test(ua)) {
         const mres = await env.ASSETS.fetch(new Request(new URL("/index-mobile", url).toString(), request));
-        const out = new Response(mres.body, mres);
+        // ⚠ 手機版也要注入深度分析連結。Google 用行動優先索引，只做桌機等於白做
+        //   （第一版就漏了：桌機 3 個連結、手機 0 個）。
+        const deep = await deepLinksBlock(env, url.origin);
+        const base = deep
+          ? new HTMLRewriter().on("footer", { element(el) { el.before(deep, { html: true }); } }).transform(mres)
+          : mres;
+        const out = new Response(base.body, base);
         out.headers.set("Vary", "User-Agent");
         out.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
         return out;
@@ -3898,25 +3930,8 @@ export default {
         const res0 = await env.ASSETS.fetch(request);
         const ct0 = res0.headers.get("content-type") || "";
         if (res0.ok && ct0.includes("text/html")) {
-          const D0 = await loadStockData(env, url.origin);
-          const ins = D0.insight || {};
-          const codes = Object.keys(ins)
-            .sort((a, b) => String(ins[b].generated_at || "").localeCompare(String(ins[a].generated_at || "")))
-            .slice(0, 36);
-          if (codes.length) {
-            const items = codes.map(c => {
-              const st = D0.map[c] || {};
-              return `<a href="/stock/${encodeURIComponent(c)}"><b>${esc(c)}</b> ${esc(st.name || "")}</a>`;
-            }).join("");
-            const html = `<section class="lf-deep"><h2>個股深度分析</h2>`
-              + `<p>依公開財報與官方公告整理的個股說明，每個交易日新增。</p>`
-              + `<div class="lf-deep-list">${items}</div></section>`
-              + `<style>.lf-deep{max-width:1200px;margin:26px auto;padding:18px 20px;background:#fff;border:1px solid #e6ebe7;border-radius:10px;}`
-              + `.lf-deep h2{font-size:17px;color:#1B4332;margin:0 0 4px;}`
-              + `.lf-deep>p{font-size:13px;color:#6f7b74;margin:0 0 12px;}`
-              + `.lf-deep-list{display:flex;flex-wrap:wrap;gap:8px 18px;}`
-              + `.lf-deep-list a{font-size:14px;color:#1B4332;text-decoration:none;}`
-              + `.lf-deep-list a:hover{color:#C9A24B;}.lf-deep-list a b{font-weight:800;}</style>`;
+          const html = await deepLinksBlock(env, url.origin);
+          if (html) {
             return new HTMLRewriter()
               .on("footer", { element(el) { el.before(html, { html: true }); } })
               .transform(res0);
