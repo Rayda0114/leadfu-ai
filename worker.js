@@ -3884,6 +3884,48 @@ export default {
       }
     }
 
+    // ── 首頁與股價總覽：伺服器端注入個股連結 ───────────────────────────
+    //    問題：首頁、/pages/stocks、/pages/value-stocks 的個股清單全是前端 JS 產生，
+    //    原始 HTML 裡 0 個 /stock/ 連結。伺服器端能走到個股頁的路徑只剩
+    //    產業頁（36 頁、各連 480 檔）與 sitemap。
+    //    ⚠ 誠實界定這件事能做什麼：產業頁其實已 100% 覆蓋 2,538 檔，GSC 也顯示
+    //      7,130 頁已建立索引——所以這不是「爬不到」，是「排不上」。注入連結是
+    //      在做「內部權重集中」，不是修爬取問題，效益會比修一個斷掉的路徑溫和。
+    //    做法：只連我們正在投入深度內容的那批個股（data/stock_insight.json，
+    //    每交易日 +3）。把首頁權重集中在少數正在變厚的頁面，比灑給 2,538 檔有意義。
+    if ((url.pathname === "/" || url.pathname === "/pages/stocks") && request.method === "GET") {
+      try {
+        const res0 = await env.ASSETS.fetch(request);
+        const ct0 = res0.headers.get("content-type") || "";
+        if (res0.ok && ct0.includes("text/html")) {
+          const D0 = await loadStockData(env, url.origin);
+          const ins = D0.insight || {};
+          const codes = Object.keys(ins)
+            .sort((a, b) => String(ins[b].generated_at || "").localeCompare(String(ins[a].generated_at || "")))
+            .slice(0, 36);
+          if (codes.length) {
+            const items = codes.map(c => {
+              const st = D0.map[c] || {};
+              return `<a href="/stock/${encodeURIComponent(c)}"><b>${esc(c)}</b> ${esc(st.name || "")}</a>`;
+            }).join("");
+            const html = `<section class="lf-deep"><h2>個股深度分析</h2>`
+              + `<p>依公開財報與官方公告整理的個股說明，每個交易日新增。</p>`
+              + `<div class="lf-deep-list">${items}</div></section>`
+              + `<style>.lf-deep{max-width:1200px;margin:26px auto;padding:18px 20px;background:#fff;border:1px solid #e6ebe7;border-radius:10px;}`
+              + `.lf-deep h2{font-size:17px;color:#1B4332;margin:0 0 4px;}`
+              + `.lf-deep>p{font-size:13px;color:#6f7b74;margin:0 0 12px;}`
+              + `.lf-deep-list{display:flex;flex-wrap:wrap;gap:8px 18px;}`
+              + `.lf-deep-list a{font-size:14px;color:#1B4332;text-decoration:none;}`
+              + `.lf-deep-list a:hover{color:#C9A24B;}.lf-deep-list a b{font-weight:800;}</style>`;
+            return new HTMLRewriter()
+              .on("footer", { element(el) { el.before(html, { html: true }); } })
+              .transform(res0);
+          }
+        }
+        return res0;
+      } catch (e) { /* 出錯就走原本的靜態資產，不要讓首頁掛掉 */ }
+    }
+
     // ── 互動版個股頁 /pages/stock-detail?code=X：伺服器端把 canonical / og:url 改寫成 /stock/X。
     //    頁內的 JS 也會設，但 Google 第一波索引只讀原始 HTML、算繪執行可能晚好幾天，
     //    原始 HTML 又寫死成不含 code 的 /pages/stock-detail（等於 2,652 頁都宣稱是同一頁），
