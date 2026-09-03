@@ -318,10 +318,10 @@
       "source": "",
       "summary": "中國機器人龍頭宇樹科技IPO申購啟動 中籤率萬分之2 money.udn.com",
       "id": 21,
-      "ai_sentiment": "利多",
+      "ai_sentiment": "中性",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "宇樹科技啟動IPO，投資人可申購。"
+      "ai_note": "宇樹科技啟動IPO申購，中籤率萬分之2。"
     },
     {
       "title": "【08/10處置股公告】台燿(6274) 08/10到08/14列入處置股，採2分盤交易 - CMoney",
@@ -337,7 +337,7 @@
       "ai_related": [
         "6274"
       ],
-      "ai_note": "台燿列入處置股，短期可能受壓。"
+      "ai_note": "台燿遭列處置股，改採2分盤交易。"
     },
     {
       "title": "SpaceX拚史上最大IPO 開放申購國家包含台灣| 國際 - 中央社 CNA",
@@ -349,9 +349,9 @@
       "summary": "SpaceX拚史上最大IPO 開放申購國家包含台灣| 國際 中央社 CNA",
       "id": 23,
       "ai_sentiment": "中性",
-      "ai_horizon": "不明",
+      "ai_horizon": "長期",
       "ai_related": [],
-      "ai_note": "SpaceX計畫大規模IPO，國際關注。"
+      "ai_note": "SpaceX推IPO開放申購，包含台灣市場。"
     },
     {
       "title": "快訊》台股抓去關新名單曝！這15檔個股遭列處置股，明起處置至6月10日 - Storm.mg",
@@ -365,7 +365,7 @@
       "ai_sentiment": "利空",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "多檔台股被列處置，市場情緒偏弱。"
+      "ai_note": "台股15檔個股遭列處置股。"
     },
     {
       "title": "興櫃嗨翻 七檔單周翻倍漲 - Yahoo股市",
@@ -379,7 +379,7 @@
       "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "興櫃七檔股單週翻倍，短期表現強勁。"
+      "ai_note": "興櫃市場買氣熱絡，七檔單周股價翻倍。"
     },
     {
       "title": "AMAX-KY遭列注意股 公告2月自結獲利2100萬元EPS 0.49元 - news.cnyes.com",
@@ -390,10 +390,12 @@
       "source": "",
       "summary": "AMAX-KY遭列注意股 公告2月自結獲利2100萬元EPS 0.49元 news.cnyes.com",
       "id": 26,
-      "ai_sentiment": "利空",
+      "ai_sentiment": "中性",
       "ai_horizon": "短期",
-      "ai_related": [],
-      "ai_note": "AMAX-KY被列注意股，投資人需留意。"
+      "ai_related": [
+        "6933"
+      ],
+      "ai_note": "AMAX-KY列注意股，公布2月EPS 0.49元。"
     },
     {
       "title": "基金-FundDJ基智網 - MoneyDJ",
@@ -407,7 +409,7 @@
       "ai_sentiment": "中性",
       "ai_horizon": "不明",
       "ai_related": [],
-      "ai_note": "基金資訊更新，屬資訊性新聞。"
+      "ai_note": "基金市場相關資訊彙整。"
     },
     {
       "title": "2025年度生技股財報出爐！誰是獲利英雄？淨值排行又如何？(更新興櫃數據) - news.gbimonthly.com",
@@ -419,9 +421,9 @@
       "summary": "2025年度生技股財報出爐！誰是獲利英雄？淨值排行又如何？(更新興櫃數據) news.gbimonthly.com",
       "id": 28,
       "ai_sentiment": "中性",
-      "ai_horizon": "短期",
+      "ai_horizon": "長期",
       "ai_related": [],
-      "ai_note": "生技股2025財報公布，提供參考。"
+      "ai_note": "2025年生技股財報及淨值排行出爐。"
     },
     {
       "title": "昔日新藥股王、今投資人爆逃命潮 國鼎股價腰斬剩6.5元 - 民報",
@@ -435,7 +437,7 @@
       "ai_sentiment": "利空",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "國鼎股價大跌至6.5元，顯示利空。"
+      "ai_note": "國鼎股價急挫腰斬，爆發賣壓逃命潮。"
     },
     {
       "title": "生技新兵！新藥股安立璽榮1月13日登興櫃 - Yahoo股市",
@@ -449,7 +451,7 @@
       "ai_sentiment": "利多",
       "ai_horizon": "短期",
       "ai_related": [],
-      "ai_note": "安立璽榮登興櫃，為新藥股新秀。"
+      "ai_note": "新藥股安立璽榮預計1月13日登興櫃。"
     }
   ]
 }
