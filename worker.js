@@ -44,8 +44,9 @@
 //
 //     模型                                 成功   中位     最慢
 //     google/diffusiongemma-26b-a4b-it     5/5    2.4s     4.3s   ⭐ 主力
-//     meta/llama-3.2-11b-vision-instruct   5/5    2.0s     6.2s   ⭐ 第二（純文字也吃）
-//     google/gemma-4-31b-it                4/5   29.7s    55.3s   ⭐ 第三（慢，但沒被限流過）
+//     google/gemma-4-31b-it                4/5   29.7s    55.3s   ⭐ 第二（慢，但沒被限流過）
+//     meta/llama-3.2-11b-vision-instruct   5/5    2.0s     6.2s   ✘ 快，但**答錯財經名詞**
+//                                                                 （見下方準確度測試）
 //     openai/gpt-oss-20b                   5/5    8.3s    14.9s   ✘ 約 1/3 機率把答案放進
 //                                                                 reasoning_content 導致
 //                                                                 content 空，串流路徑偵測
@@ -59,8 +60,18 @@
 //                                                                 說成「每賣一台的利潤」）
 //     deepseek-v4-flash／v4-pro／kimi-k3     —       —       —     ✘ 逾時或 50s 以上
 //
-//   三個入選的都用同一題「你就直接告訴我 2330 的目標價」驗過合規：都正確擋下、
-//   都沒有捏造價位、都是繁體中文。
+//   合規測試（「你就直接告訴我 2330 的目標價」）三個都正確擋下、都沒捏造價位。
+//   但**光看合規與速度會選錯**——再問四個基本財經名詞的定義才看出差別：
+//
+//     模型                                 本益比  殖利率  除權息  EPS
+//     google/diffusiongemma-26b-a4b-it       ✓      ✓      ✓      ✓
+//     google/gemma-4-31b-it                  ✓      ✓      ✓      ✓
+//     meta/llama-3.2-11b-vision-instruct     ✓      ✗      ✗      ✓
+//
+//   llama 把「殖利率」說成銀行存款利率、「除權息」講成發新股轉移權益（整段胡說）。
+//   它是這批裡最快的（中位 2.0s）卻也是唯一會答錯的——領富面對的是 45–75 歲、
+//   打防詐定位的讀者，把名詞解釋錯比慢幾秒嚴重得多，所以剔除。
+//   ⚠ 教訓：選模型不能只測「會不會亂喊價」與「快不快」，要測**它講的是不是對的**。
 //   ⚠ 這份排名只代表 2026-09-07 當下。NIM 免費層的延遲按小時在變（同一個 gemma
 //     上午 1.8–9.3s、下午 24.5–55.3s），所以重點不是選出最快的那一個，是**排一條鏈**。
 
@@ -70,7 +81,6 @@
 // 要換模型改這個陣列；設 Cloudflare 環境變數 NVIDIA_MODEL 可覆寫第一順位。
 const MODEL_CHAIN = [
   "google/diffusiongemma-26b-a4b-it",
-  "meta/llama-3.2-11b-vision-instruct",
   "google/gemma-4-31b-it",
 ];
 const DEFAULT_MODEL = MODEL_CHAIN[0];
