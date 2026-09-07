@@ -79,20 +79,27 @@
 // 為什麼要一條鏈而不是挑一個最好的：NIM 的 429 是**按模型**限流的（重打同一個
 // 沒用），而延遲又按小時在變，所以任何單一模型都會有整段時間不能用。
 // 要換模型改這個陣列；設 Cloudflare 環境變數 NVIDIA_MODEL 可覆寫第一順位。
+// base = 這個模型自己的逾時基準（毫秒），依它實測的延遲分佈給，不是照順序遞減。
+// ⚠ 這裡踩過一個雷：原本逾時是照鏈上位置遞減（1.0 / 0.7），但這條鏈的第二順位
+//   正好是**比較慢**的那個，結果它拿到最短的時間，幾乎每次都被自己的逾時砍掉
+//   （金絲雀實測「逾時 15680ms（google/gemma-4-31b-it）」，而它的中位是 29.7s）。
+//   逾時要看模型有多慢，不是看它排第幾。
 const MODEL_CHAIN = [
-  "google/diffusiongemma-26b-a4b-it",
-  "google/gemma-4-31b-it",
+  { model: "google/diffusiongemma-26b-a4b-it", base: 12000 },  // 中位 2.4s、最慢 4.3s
+  { model: "google/gemma-4-31b-it", base: 40000 },             // 中位 29.7s、最慢 55.3s
 ];
-const DEFAULT_MODEL = MODEL_CHAIN[0];
+const DEFAULT_MODEL = MODEL_CHAIN[0].model;
+const MODEL_BASE = Object.fromEntries(MODEL_CHAIN.map(x => [x.model, x.base]));
+const MODEL_NAMES = MODEL_CHAIN.map(x => x.model);
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
-// 單次呼叫的硬性逾時。沒有它的話慢模型會把請求拖到 Cloudflare 的 524
-// （2026-09-07 實測 127 秒才回，使用者只看到錯誤，連 Gemini 備援都來不及試）。
-// 但也不能訂太緊：先前訂 15s 基準，把「慢但會回」的請求一起砍掉，線上成功率
-// 反而掉到 1/6，錯誤全是「逾時 16200ms」。鏈上前兩個中位只要 2 秒多，第三個
-// 有 55 秒的尾巴（它排最後、逾時已縮到 49%），所以基準 20 秒、上限 60 秒：
-// 聊天 800 tokens 給 26 秒，長文 4096 tokens 給 53 秒。
-const nvidiaTimeoutFor = (maxTokens) => Math.min(60000, 20000 + maxTokens * 8);
+// 單次呼叫的硬性逾時 = 該模型的 base + 輸出長度的加成，上限 75 秒。
+// 沒有逾時的話慢模型會把請求拖到 Cloudflare 的 524（實測 127 秒才回，使用者
+// 只看到錯誤，連 Gemini 備援都來不及試）；訂太緊又會把「慢但會回」的請求
+// 一起砍掉（先前訂 15s 基準，線上成功率反而掉到 1/6）。
+// 未知模型（呼叫端自己指定 body.model）給 25 秒的中間值。
+const nvidiaTimeoutFor = (model, maxTokens) =>
+  Math.min(75000, (MODEL_BASE[model] || 25000) + maxTokens * 8);
 
 // Gemini fallback：當 Nvidia 撞 429/5xx 時自動切換，每天免費 1500 req
 // ⚠ 2026-08-14 修：gemini-2.0-flash 已停用(404)，改用 gemini-3.6-flash（Google API 錯誤訊息親口指定的現行版）。
@@ -867,8 +874,6 @@ async function handleAsk(request, env) {
     ? body.max_tokens
     : 800;
 
-  const nvidiaTimeoutMs = nvidiaTimeoutFor(maxTokens);
-
   const bodyFor = (m) => JSON.stringify({
     model: m,
     messages: finalMessages,
@@ -895,13 +900,13 @@ async function handleAsk(request, env) {
   //   2. 逾時 —— 額度吃緊時 NIM 不回 429，而是把請求掛住（實測 8 次有 6 次
   //      卡滿逾時）。早期版本把逾時寫在迴圈外，一逾時就放棄整個 Nvidia，
   //      後面的模型根本沒機會上場。
-  //   逾時長度逐級遞減（1.0 / 0.7 / 0.49），越後面的越沒時間慢慢來。
-  const chain = callerModel ? [model] : [model, ...MODEL_CHAIN.filter(m => m !== model)];
+  //   每個模型用自己的逾時基準（見 MODEL_CHAIN），不是照順序遞減——
+  //   這條鏈的第二順位反而比較慢，照順序遞減會把它砍死。
+  const chain = callerModel ? [model] : [model, ...MODEL_NAMES.filter(m => m !== model)];
   let aiResp = null;
   let nvidiaError = null;
-  for (let i = 0; i < chain.length; i++) {
-    const m = chain[i];
-    const ms = Math.round(nvidiaTimeoutMs * Math.pow(0.7, i));
+  for (const m of chain) {
+    const ms = nvidiaTimeoutFor(m, maxTokens);
     try {
       const r = await callNvidia(m, ms);
       if (r.ok) { aiResp = r; break; }
@@ -2930,11 +2935,9 @@ async function lineReply(env, replyToken, text) {
 async function aiAnswerSync(env, messages, maxTokens = 700) {
   if (env.NVIDIA_API_KEY) {
     const primary = env.NVIDIA_MODEL || DEFAULT_MODEL;
-    const timeout = nvidiaTimeoutFor(maxTokens);
-    const chain = [primary, ...MODEL_CHAIN.filter(m => m !== primary)];
-    for (let i = 0; i < chain.length; i++) {
-      const model = chain[i];
-      const ms = Math.round(timeout * Math.pow(0.7, i));
+    const chain = [primary, ...MODEL_NAMES.filter(m => m !== primary)];
+    for (const model of chain) {
+      const ms = nvidiaTimeoutFor(model, maxTokens);
       try {
         const r = await fetch(NVIDIA_ENDPOINT, {
           method: "POST",
