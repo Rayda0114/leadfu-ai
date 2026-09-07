@@ -24,7 +24,10 @@ jobs:
           python-version: "3.12"
 
       - name: Run all fetchers
-        run: python scripts/run_all.py
+        # 存一份執行紀錄給下一步自檢用（pipefail：run_all 的離開碼不能被 tee 吃掉）
+        run: |
+          set -o pipefail
+          python scripts/run_all.py 2>&1 | tee /tmp/run_all.log
         env:
           PYTHONIOENCODING: utf-8
           # 資料腳本的 fail-closed 守門（scripts/_guard.py）在上游拿不到資料時
@@ -80,3 +83,14 @@ jobs:
           else
             echo "ℹ️ 無變動，跳過 commit"
           fi
+
+      # 「腳本失敗」會叫，「根本沒跑」不會——後者才是 2026-06 凍結 71 天、
+      # 2026-09 凍結 6 天的真正死因。這一步專門檢查「有沒有跑」。
+      # if: always()：run_all 自己失敗時更要通知，不能因為前一步紅燈就跳過。
+      - name: 管線自檢（有沒有真的跑）
+        if: always()
+        run: python scripts/check_pipeline_ran.py /tmp/run_all.log
+        env:
+          PYTHONIOENCODING: utf-8
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          OWNER_LINE_USER_ID: ${{ secrets.OWNER_LINE_USER_ID }}
