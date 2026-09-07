@@ -57,9 +57,18 @@ const DEFAULT_MODEL = "google/gemma-4-31b-it";
 const SECOND_MODEL = "minimaxai/minimax-m3";
 // 單次呼叫的硬性逾時。沒有它的話慢模型會把請求拖到 Cloudflare 的 524
 // （2026-09-07 實測 127 秒才回，使用者只看到錯誤，連 Gemini 備援都來不及試）。
-// 隨 max_tokens 縮放：聊天預設 800 tokens 給 21 秒，長文 4096 tokens 給 48 秒。
-// 固定值不行——訂太短會砍掉正常的長文生成，訂太長會讓聊天等半分鐘才看到錯誤。
-const nvidiaTimeoutFor = (maxTokens) => Math.min(60000, 15000 + maxTokens * 8);
+//
+// ⚠ 2026-09-07 第二次調整：15s 基準訂得太緊，把「慢但會回」的請求也砍掉了。
+//   同一天內同一個模型、同一把金鑰的實測延遲：
+//     google/gemma-4-31b-it   上午 1.8–9.3s（4/4）→ 下午 24.5–40.8s
+//     minimaxai/minimax-m3    上午 0/5 全 429    → 下午 14.2s 正常
+//   NIM 免費層的延遲是**按小時在變**的，不是哪個模型天生快或慢。
+//   訂 15s 基準的結果是線上成功率掉到 1/6，錯誤訊息全是「逾時 16200ms」——
+//   模型其實答得出來，只是慢，被我們自己砍掉。
+//   慢 30 秒的答案，比 502 有用得多（何況聊天是串流的，使用者早就看到字了），
+//   所以基準拉到 30 秒、上限 75 秒。上限留這麼寬也是因為 AbortSignal 會連
+//   串流中的回應一起中止，訂太緊會把長答案攔腰砍斷。
+const nvidiaTimeoutFor = (maxTokens) => Math.min(75000, 30000 + maxTokens * 10);
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // Gemini fallback：當 Nvidia 撞 429/5xx 時自動切換，每天免費 1500 req
