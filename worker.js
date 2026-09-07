@@ -3281,6 +3281,14 @@ async function renderStockPage(url, env) {
         { "@type": "ListItem", "position": 3, "name": `${code} ${name}` },
       ] },
       { "@type": "FAQPage", "mainEntity": faqs.map(f => ({ "@type": "Question", "name": f.q, "acceptedAnswer": { "@type": "Answer", "text": f.a } })) },
+      // 股票實體標記。⚠ 誠實預期：Google 對個股沒有 Rich Result，這不會讓搜尋
+      //   結果變好看；作用是讓「這一頁在講哪一家公司」對搜尋引擎明確（實體理解、
+      //   知識圖譜關聯），對「{股名}{詞}」這種以公司為主體的查詢有幫助。
+      //   tickerSymbol 是 schema.org Corporation 的正式屬性。
+      { "@type": "Corporation", "@id": canon + "#company", "name": name,
+        "tickerSymbol": code, "url": canon, "mainEntityOfPage": canon,
+        ...(cat ? { "industry": cat } : {}),
+        ...(market ? { "description": `${name}（${code}），台灣${market}公司${cat ? "，" + cat + "類股" : ""}。` } : {}) },
     ],
   });
 
@@ -3301,7 +3309,10 @@ async function renderStockPage(url, env) {
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canon}">
-<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta property="og:image" content="https://leadfuai.com/og/stock-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
 <script type="application/ld+json">${jsonld}</script>
@@ -3545,7 +3556,10 @@ async function renderUsStockPage(url, env) {
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canon}">
-<meta property="og:image" content="https://leadfuai.com/icons/icon-512.png">
+<meta property="og:image" content="https://leadfuai.com/og/stock-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1B4332">
 <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
 <script type="application/ld+json">${jsonld}</script>
@@ -3871,6 +3885,18 @@ export default {
     if (/^\/pages\/?(index\.html)?$/.test(url.pathname)) {
       url.pathname = "/";
       return Response.redirect(url.toString(), 301);
+    }
+
+    // ── 舊個股網址一次到位：/pages/stock-detail.html?code=X → /stock/X
+    //    原本會先被下面的通用 .html 規則導到 /pages/stock-detail?code=X，
+    //    再靠 canonical 指向 /stock/X——等於「301 + canonical」兩段。
+    //    GSC 顯示 .html?code= 版本仍有實際曝光（6786 那檔 925 次），
+    //    直接一跳到最終網址，爬蟲少走一趟、訊號也更明確。──
+    if (url.pathname === "/pages/stock-detail.html" && request.method === "GET") {
+      const c = (url.searchParams.get("code") || "").trim();
+      if (/^\d{4,6}[A-Za-z]?$/.test(c)) {
+        return Response.redirect(`https://leadfuai.com/stock/${encodeURIComponent(c)}`, 301);
+      }
     }
 
     // ── .html → 無 .html（統一網址，消除 .html/無.html 重複稀釋；ASSETS 對無.html 路徑自動解析實體檔）──
