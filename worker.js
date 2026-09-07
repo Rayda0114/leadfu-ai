@@ -2901,21 +2901,32 @@ async function lineReply(env, replyToken, text) {
   } catch (e) {}
 }
 
-// 非串流 AI（NVIDIA → Gemini 備援）
+// 非串流 AI（NVIDIA 主力 → 第二順位 → Gemini 備援）。
+// LINE 客服（handleLineWebhook）與洞察寫稿都走這裡。
+// ⚠ 這裡原本只打一個模型、而且沒有逾時——/api/ask 那條路徑上的兩個教訓
+//   （429 按模型限流要換模型、額度吃緊時 NIM 會把請求掛住）在這裡同樣成立，
+//   所以共用同一組設定，不要讓兩條路徑的韌性不一樣。
 async function aiAnswerSync(env, messages, maxTokens = 700) {
   if (env.NVIDIA_API_KEY) {
-    try {
-      const r = await fetch(NVIDIA_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${env.NVIDIA_API_KEY}` },
-        body: JSON.stringify({ model: env.NVIDIA_MODEL || DEFAULT_MODEL, messages, temperature: 0.4, max_tokens: maxTokens, stream: false })
-      });
-      if (r.ok) {
-        const j = await r.json();
-        const a = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
-        if (a && a.trim()) return a.trim();
-      }
-    } catch (e) {}
+    const primary = env.NVIDIA_MODEL || DEFAULT_MODEL;
+    const timeout = nvidiaTimeoutFor(maxTokens);
+    for (const [model, ms] of [[primary, timeout], [SECOND_MODEL, Math.round(timeout * 0.7)]]) {
+      try {
+        const r = await fetch(NVIDIA_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${env.NVIDIA_API_KEY}` },
+          body: JSON.stringify({ model, messages, temperature: 0.4, max_tokens: maxTokens, stream: false }),
+          signal: AbortSignal.timeout(ms)
+        });
+        if (r.ok) {
+          const j = await r.json();
+          const a = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+          if (a && a.trim()) return a.trim();
+        }
+        // 非限流／非伺服器錯誤（400/401）換模型也沒用，直接進 Gemini
+        if (!(r.status === 429 || (r.status >= 500 && r.status < 600))) break;
+      } catch (e) { /* 逾時或連線錯誤 → 換下一個模型 */ }
+    }
   }
   const gem = await callGemini(env, messages, maxTokens);
   return (gem.ok && gem.answer) ? gem.answer.trim() : null;
