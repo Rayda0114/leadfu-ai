@@ -57,9 +57,9 @@ const DEFAULT_MODEL = "google/gemma-4-31b-it";
 const SECOND_MODEL = "minimaxai/minimax-m3";
 // 單次呼叫的硬性逾時。沒有它的話慢模型會把請求拖到 Cloudflare 的 524
 // （2026-09-07 實測 127 秒才回，使用者只看到錯誤，連 Gemini 備援都來不及試）。
-// 寧可提早放棄、換下一個，也不要卡在同一個模型上。
-const NVIDIA_TIMEOUT_MS = 45000;
-const NVIDIA_RETRY_TIMEOUT_MS = 25000;
+// 隨 max_tokens 縮放：聊天預設 800 tokens 給 21 秒，長文 4096 tokens 給 48 秒。
+// 固定值不行——訂太短會砍掉正常的長文生成，訂太長會讓聊天等半分鐘才看到錯誤。
+const nvidiaTimeoutFor = (maxTokens) => Math.min(60000, 15000 + maxTokens * 8);
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // Gemini fallback：當 Nvidia 撞 429/5xx 時自動切換，每天免費 1500 req
@@ -835,6 +835,8 @@ async function handleAsk(request, env) {
     ? body.max_tokens
     : 800;
 
+  const nvidiaTimeoutMs = nvidiaTimeoutFor(maxTokens);
+
   const bodyFor = (m) => JSON.stringify({
     model: m,
     messages: finalMessages,
@@ -855,27 +857,32 @@ async function handleAsk(request, env) {
     signal: AbortSignal.timeout(timeoutMs)
   });
 
-  // 嘗試 Nvidia，失敗則 fallback 到 Gemini。
-  // ⚠ 重點：重試要換一個模型，不是重打同一個。
-  //   NIM 免費層的 429 是**按模型**限流的。2026-09-07 實測（每次間隔 10 秒、連發 5 次）：
+  // 嘗試 Nvidia（主力 → 第二順位），都不行才 fallback 到 Gemini。
+  // ⚠ 重試要換一個模型，不是重打同一個：NIM 免費層的 429 是**按模型**限流的。
+  //   2026-09-07 實測（每次間隔 10 秒、連發 5 次）：
   //     google/gemma-4-31b-it   5/5 成功，最慢 3.6s、中位 2.3s，0 簡體字【主力】
-  //     minimaxai/minimax-m3    0/5（全 429，當天已被打到限額）【第二順位，額度會恢復】
-  //   其餘候選全部不能用：01-ai/yi-large 與 nv-mistralai/mistral-nemo-12b 回 404、
+  //     minimaxai/minimax-m3    0/5（全 429，當天已被打到限額）【第二順位】
+  //   其餘候選都不能用：01-ai/yi-large 與 nv-mistralai/mistral-nemo-12b 回 404、
   //   mistralai/mistral-nemotron 回 500、meta/llama-3.2-90b-vision 連不上。
-  //   原本的寫法是等 1.5 秒後重打同一個模型，對按模型限流完全沒有幫助。
+  //
+  // ⚠ 逾時也要換模型，不能直接跳去 Gemini。NIM 在額度吃緊時不是回 429，
+  //   而是**把請求掛住**——實測 8 次有 6 次卡滿逾時。第一版把逾時寫在
+  //   try/catch 外圍，等於一逾時就放棄整個 Nvidia、第二順位根本沒機會上場。
+  const secondModel = model === (env.NVIDIA_MODEL || DEFAULT_MODEL) ? SECOND_MODEL : model;
   let aiResp = null;
   let nvidiaError = null;
-  try {
-    aiResp = await callNvidia(model, NVIDIA_TIMEOUT_MS);
-    if (aiResp.status === 429 || (aiResp.status >= 500 && aiResp.status < 600)) {
-      await new Promise(r => setTimeout(r, 1200));
-      // 呼叫端若自己指定了 body.model，就尊重他的選擇、重試同一個
-      aiResp = await callNvidia(model === (env.NVIDIA_MODEL || DEFAULT_MODEL)
-                                ? SECOND_MODEL : model, NVIDIA_RETRY_TIMEOUT_MS);
+  for (const [m, ms] of [[model, nvidiaTimeoutMs], [secondModel, Math.round(nvidiaTimeoutMs * 0.7)]]) {
+    try {
+      const r = await callNvidia(m, ms);
+      if (r.ok) { aiResp = r; break; }
+      aiResp = r;
+      // 只有限流與伺服器錯誤值得換模型再試；401/400 這種再試幾次都一樣
+      if (!(r.status === 429 || (r.status >= 500 && r.status < 600))) break;
+      await new Promise(res => setTimeout(res, 800));
+    } catch (err) {
+      nvidiaError = err.name === "TimeoutError" ? `逾時 ${ms}ms（${m}）` : err.message;
+      aiResp = null;
     }
-  } catch (err) {
-    // AbortSignal.timeout 逾時也走這裡 → 直接落到 Gemini，不再乾等
-    nvidiaError = err.name === "TimeoutError" ? "逾時" : err.message;
   }
 
   const nvidiaFailed = !aiResp || !aiResp.ok;
