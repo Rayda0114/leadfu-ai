@@ -52,6 +52,9 @@
 //   「你就直接告訴我目標價」有正確擋下並改推合理區間。
 //   若要換模型，改這行或設 Cloudflare 環境變數 NVIDIA_MODEL 即可。
 const DEFAULT_MODEL = "minimaxai/minimax-m3";
+// 第二順位：主力撞 429／5xx 時改打它（NIM 的限流是按模型算的，重打同一個沒用）。
+// gemma-4-31b-it 實測不撞限流但速度不穩（2.2–65s），正好跟主力互補。
+const SECOND_MODEL = "google/gemma-4-31b-it";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // Gemini fallback：當 Nvidia 撞 429/5xx 時自動切換，每天免費 1500 req
@@ -827,8 +830,8 @@ async function handleAsk(request, env) {
     ? body.max_tokens
     : 800;
 
-  const requestBody = JSON.stringify({
-    model,
+  const bodyFor = (m) => JSON.stringify({
+    model: m,
     messages: finalMessages,
     temperature: 0.4,
     top_p: 0.9,
@@ -836,28 +839,33 @@ async function handleAsk(request, env) {
     stream: wantStream
   });
 
-  const callNvidia = async () => fetch(NVIDIA_ENDPOINT, {
+  const callNvidia = async (m) => fetch(NVIDIA_ENDPOINT, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${env.NVIDIA_API_KEY}`,
       "Content-Type": "application/json",
       "Accept": wantStream ? "text/event-stream" : "application/json"
     },
-    body: requestBody
+    body: bodyFor(m)
   });
 
-  // 嘗試 Nvidia（含 429 / 5xx 一次重試），失敗則 fallback 到 Gemini
+  // 嘗試 Nvidia，失敗則 fallback 到 Gemini。
+  // ⚠ 重點：重試要換一個模型，不是重打同一個。
+  //   NIM 免費層的 429 是**按模型**限流的，2026-09-07 實測（間隔 4 秒連發 6 次）：
+  //     minimaxai/minimax-m3    3/6 成功（其餘 429，重打同一個也是 429）
+  //     google/gemma-4-31b-it   6/6 成功（沒撞過 429，但 2.2–65s 忽快忽慢）
+  //   所以拿快的當主力、拿不限流的當第二順位，兩者的限流桶不同，
+  //   等於把「熱門模型被限流」跟「冷門模型慢」互相補掉。
+  //   原本的寫法是 1.5 秒後重打同一個模型，對按模型限流完全沒有幫助。
   let aiResp = null;
   let nvidiaError = null;
   try {
-    aiResp = await callNvidia();
-    if (aiResp.status === 429) {
-      await new Promise(r => setTimeout(r, 1500));
-      aiResp = await callNvidia();
-    }
-    if (aiResp.status >= 500 && aiResp.status < 600) {
+    aiResp = await callNvidia(model);
+    if (aiResp.status === 429 || (aiResp.status >= 500 && aiResp.status < 600)) {
       await new Promise(r => setTimeout(r, 1200));
-      aiResp = await callNvidia();
+      // 使用者若自己指定了 model，就尊重他的選擇、重試同一個
+      aiResp = await callNvidia(model === (env.NVIDIA_MODEL || DEFAULT_MODEL)
+                                ? SECOND_MODEL : model);
     }
   } catch (err) {
     nvidiaError = err.message;
