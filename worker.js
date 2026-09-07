@@ -38,38 +38,51 @@
 //   （.github/workflows/daily-data-update.yml 的「AI 可用性金絲雀」步驟），
 //   下次再被下架會在 24 小時內推 LINE，而不是等人發現。
 //
-//   2026-09-07 重新實測（同一份四段個股提示詞，並行跑）：
-//     ⭐ google/gemma-4-31b-it                 → 23.2s, 4 段, 0 簡體字【新主力】
-//     ✓ minimaxai/minimax-m3                   → 16.0s, 4 段, 乾淨，但當天就被限流到 0/5
-//                                                 → 降為第二順位（SECOND_MODEL）
-//     ✘ deepseek-ai/deepseek-v4-flash-0731     → 98–143s 太慢
-//     ✘ moonshotai/kimi-k3                     → 121s 太慢
-//     ✘ nvidia/nemotron-3-super-120b-a12b      → 把 thinking 寫進 content，0 段
-//     ✘ nvidia/nemotron-3.5-lightning-30b-a3b  → 同上，content 是英文 thinking
-//     ✘ openai/gpt-oss-20b                     → content 回 None（全跑去 reasoning_content）
-//     404 不可用：kimi-k2.6, nemotron-nano-3-30b-a3b, llama-3.1-nemotron-70b,
-//                mistral-large-2-instruct, gemma-3-12b-it
-//   兩者的聊天路徑都用真的 SYSTEM_PROMPT + stream:true 測過：首字 0.8–2.0s、
-//   「你就直接告訴我目標價」都有正確擋下並改推合理區間。
-//   若要換模型，改這行或設 Cloudflare 環境變數 NVIDIA_MODEL 即可。
-const DEFAULT_MODEL = "google/gemma-4-31b-it";
-// 第二順位：主力撞 429／5xx／逾時才改打它（NIM 的限流是按模型算的，重打同一個沒用）。
-const SECOND_MODEL = "minimaxai/minimax-m3";
+//   2026-09-07 把整份 NIM 目錄（81 個）掃過一遍，實際能回繁中答案的只有 10 個
+//   （其餘 55 個 404、5 個逾時，剩下是安全防護／翻譯／embedding，不是聊天模型）。
+//   接著用真的 SYSTEM_PROMPT 各連發 5 次、間隔 8 秒：
+//
+//     模型                                 成功   中位     最慢
+//     google/diffusiongemma-26b-a4b-it     5/5    2.4s     4.3s   ⭐ 主力
+//     meta/llama-3.2-11b-vision-instruct   5/5    2.0s     6.2s   ⭐ 第二（純文字也吃）
+//     google/gemma-4-31b-it                4/5   29.7s    55.3s   ⭐ 第三（慢，但沒被限流過）
+//     openai/gpt-oss-20b                   5/5    8.3s    14.9s   ✘ 約 1/3 機率把答案放進
+//                                                                 reasoning_content 導致
+//                                                                 content 空，串流路徑偵測
+//                                                                 不到，使用者會看到空白
+//     minimaxai/minimax-m3                 1/5      —       —     ✘ 免費層限流太兇
+//     nvidia/nemotron-3-super-120b-a12b     —       —       —     ✘ 短提示 1.1s 很快，但帶
+//                                                                 7k 的 SYSTEM_PROMPT 直接 400
+//     nvidia/ising-calibration-1.5-31b      —     4.9s      —     ✘ 沒資料時會自己編出價位
+//     nvidia/nemotron-3.5-lightning-30b     —     4.9s      —     ✘ 把 thinking 寫進 content
+//     poolside/laguna-xs-2.1                —    56.5s      —     ✘ 慢，而且答錯（把本益比
+//                                                                 說成「每賣一台的利潤」）
+//     deepseek-v4-flash／v4-pro／kimi-k3     —       —       —     ✘ 逾時或 50s 以上
+//
+//   三個入選的都用同一題「你就直接告訴我 2330 的目標價」驗過合規：都正確擋下、
+//   都沒有捏造價位、都是繁體中文。
+//   ⚠ 這份排名只代表 2026-09-07 當下。NIM 免費層的延遲按小時在變（同一個 gemma
+//     上午 1.8–9.3s、下午 24.5–55.3s），所以重點不是選出最快的那一個，是**排一條鏈**。
+
+// 依序嘗試，前一個撞 429／5xx／逾時才換下一個。
+// 為什麼要一條鏈而不是挑一個最好的：NIM 的 429 是**按模型**限流的（重打同一個
+// 沒用），而延遲又按小時在變，所以任何單一模型都會有整段時間不能用。
+// 要換模型改這個陣列；設 Cloudflare 環境變數 NVIDIA_MODEL 可覆寫第一順位。
+const MODEL_CHAIN = [
+  "google/diffusiongemma-26b-a4b-it",
+  "meta/llama-3.2-11b-vision-instruct",
+  "google/gemma-4-31b-it",
+];
+const DEFAULT_MODEL = MODEL_CHAIN[0];
+const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
+
 // 單次呼叫的硬性逾時。沒有它的話慢模型會把請求拖到 Cloudflare 的 524
 // （2026-09-07 實測 127 秒才回，使用者只看到錯誤，連 Gemini 備援都來不及試）。
-//
-// ⚠ 2026-09-07 第二次調整：15s 基準訂得太緊，把「慢但會回」的請求也砍掉了。
-//   同一天內同一個模型、同一把金鑰的實測延遲：
-//     google/gemma-4-31b-it   上午 1.8–9.3s（4/4）→ 下午 24.5–40.8s
-//     minimaxai/minimax-m3    上午 0/5 全 429    → 下午 14.2s 正常
-//   NIM 免費層的延遲是**按小時在變**的，不是哪個模型天生快或慢。
-//   訂 15s 基準的結果是線上成功率掉到 1/6，錯誤訊息全是「逾時 16200ms」——
-//   模型其實答得出來，只是慢，被我們自己砍掉。
-//   慢 30 秒的答案，比 502 有用得多（何況聊天是串流的，使用者早就看到字了），
-//   所以基準拉到 30 秒、上限 75 秒。上限留這麼寬也是因為 AbortSignal 會連
-//   串流中的回應一起中止，訂太緊會把長答案攔腰砍斷。
-const nvidiaTimeoutFor = (maxTokens) => Math.min(75000, 30000 + maxTokens * 10);
-const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
+// 但也不能訂太緊：先前訂 15s 基準，把「慢但會回」的請求一起砍掉，線上成功率
+// 反而掉到 1/6，錯誤全是「逾時 16200ms」。鏈上前兩個中位只要 2 秒多，第三個
+// 有 55 秒的尾巴（它排最後、逾時已縮到 49%），所以基準 20 秒、上限 60 秒：
+// 聊天 800 tokens 給 26 秒，長文 4096 tokens 給 53 秒。
+const nvidiaTimeoutFor = (maxTokens) => Math.min(60000, 20000 + maxTokens * 8);
 
 // Gemini fallback：當 Nvidia 撞 429/5xx 時自動切換，每天免費 1500 req
 // ⚠ 2026-08-14 修：gemini-2.0-flash 已停用(404)，改用 gemini-3.6-flash（Google API 錯誤訊息親口指定的現行版）。
@@ -831,10 +844,10 @@ async function handleAsk(request, env) {
     finalMessages.push({ role: "user", content: augmentedLast });
   }
 
-  // 允許 body.model 覆寫（給開發測試用，前端不會送這個參數）
-  const model = (typeof body.model === "string" && body.model.length < 200)
-    ? body.model
-    : (env.NVIDIA_MODEL || DEFAULT_MODEL);
+  // 允許 body.model 覆寫（給開發測試用，前端不會送這個參數）。
+  // 呼叫端指定了就只打那一個、不替他換——他是在測那個模型。
+  const callerModel = (typeof body.model === "string" && body.model.length < 200) ? body.model : "";
+  const model = callerModel || env.NVIDIA_MODEL || DEFAULT_MODEL;
 
   // body.max_tokens 覆寫（給後端腳本用，例如產業週報需要 4000 tokens；
   // 前端聊天保持預設 800 避免單次回覆過長）
@@ -866,28 +879,26 @@ async function handleAsk(request, env) {
     signal: AbortSignal.timeout(timeoutMs)
   });
 
-  // 嘗試 Nvidia（主力 → 第二順位），都不行才 fallback 到 Gemini。
-  // ⚠ 重試要換一個模型，不是重打同一個：NIM 免費層的 429 是**按模型**限流的。
-  //   2026-09-07 實測（每次間隔 10 秒、連發 5 次）：
-  //     google/gemma-4-31b-it   5/5 成功，最慢 3.6s、中位 2.3s，0 簡體字【主力】
-  //     minimaxai/minimax-m3    0/5（全 429，當天已被打到限額）【第二順位】
-  //   其餘候選都不能用：01-ai/yi-large 與 nv-mistralai/mistral-nemo-12b 回 404、
-  //   mistralai/mistral-nemotron 回 500、meta/llama-3.2-90b-vision 連不上。
-  //
-  // ⚠ 逾時也要換模型，不能直接跳去 Gemini。NIM 在額度吃緊時不是回 429，
-  //   而是**把請求掛住**——實測 8 次有 6 次卡滿逾時。第一版把逾時寫在
-  //   try/catch 外圍，等於一逾時就放棄整個 Nvidia、第二順位根本沒機會上場。
-  const secondModel = model === (env.NVIDIA_MODEL || DEFAULT_MODEL) ? SECOND_MODEL : model;
+  // 依序試 MODEL_CHAIN，都不行才 fallback 到 Gemini。
+  // ⚠ 換下一個模型的時機有兩種，兩種都要接：
+  //   1. 429 —— NIM 免費層是**按模型**限流的，重打同一個永遠是 429。
+  //   2. 逾時 —— 額度吃緊時 NIM 不回 429，而是把請求掛住（實測 8 次有 6 次
+  //      卡滿逾時）。早期版本把逾時寫在迴圈外，一逾時就放棄整個 Nvidia，
+  //      後面的模型根本沒機會上場。
+  //   逾時長度逐級遞減（1.0 / 0.7 / 0.49），越後面的越沒時間慢慢來。
+  const chain = callerModel ? [model] : [model, ...MODEL_CHAIN.filter(m => m !== model)];
   let aiResp = null;
   let nvidiaError = null;
-  for (const [m, ms] of [[model, nvidiaTimeoutMs], [secondModel, Math.round(nvidiaTimeoutMs * 0.7)]]) {
+  for (let i = 0; i < chain.length; i++) {
+    const m = chain[i];
+    const ms = Math.round(nvidiaTimeoutMs * Math.pow(0.7, i));
     try {
       const r = await callNvidia(m, ms);
       if (r.ok) { aiResp = r; break; }
       aiResp = r;
-      // 只有限流與伺服器錯誤值得換模型再試；401/400 這種再試幾次都一樣
+      // 只有限流與伺服器錯誤值得換模型再試；400/401 這種再試幾次都一樣
       if (!(r.status === 429 || (r.status >= 500 && r.status < 600))) break;
-      await new Promise(res => setTimeout(res, 800));
+      await new Promise(res => setTimeout(res, 600));
     } catch (err) {
       nvidiaError = err.name === "TimeoutError" ? `逾時 ${ms}ms（${m}）` : err.message;
       aiResp = null;
@@ -2910,7 +2921,10 @@ async function aiAnswerSync(env, messages, maxTokens = 700) {
   if (env.NVIDIA_API_KEY) {
     const primary = env.NVIDIA_MODEL || DEFAULT_MODEL;
     const timeout = nvidiaTimeoutFor(maxTokens);
-    for (const [model, ms] of [[primary, timeout], [SECOND_MODEL, Math.round(timeout * 0.7)]]) {
+    const chain = [primary, ...MODEL_CHAIN.filter(m => m !== primary)];
+    for (let i = 0; i < chain.length; i++) {
+      const model = chain[i];
+      const ms = Math.round(timeout * Math.pow(0.7, i));
       try {
         const r = await fetch(NVIDIA_ENDPOINT, {
           method: "POST",
