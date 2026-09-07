@@ -94,3 +94,17 @@ jobs:
           PYTHONIOENCODING: utf-8
           LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
           OWNER_LINE_USER_ID: ${{ secrets.OWNER_LINE_USER_ID }}
+
+      # /api/ask 是全站唯一的 AI 出口（網站聊天／LINE 客服／新聞標註／個股內容）。
+      # 它掛掉的原因一年內重複兩次，都是 Nvidia NIM 無預警下架模型（410）——
+      # 程式碼不會壞、workflow 不會紅，所以要主動去問一句話確認它還答得出來。
+      # continue-on-error：AI 掛掉不該讓資料更新這個 job 看起來像失敗，
+      # 通知走 LINE（步驟本身仍會標記失敗，在 Actions 頁面看得到）。
+      - name: AI 可用性金絲雀
+        if: always()
+        continue-on-error: true
+        run: python scripts/check_ai_alive.py
+        env:
+          PYTHONIOENCODING: utf-8
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          OWNER_LINE_USER_ID: ${{ secrets.OWNER_LINE_USER_ID }}

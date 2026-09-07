@@ -30,9 +30,28 @@
 //   不可用 404/410：qwen/qwen2.5-72b, qwen3-5-122b, moonshotai/kimi-k2, z-ai/glm4.7&5.1,
 //                  bytedance/seed-oss, google/gemma-*, microsoft/phi-*, ibm/granite, 01-ai/yi-large
 // ⚠ 2026-08-14 修：qwen 全家 2026-07-27 遭 Nvidia NIM 下架(410)、AI 對話全掛。
-//   換成實測可用、速度最佳的 openai/gpt-oss-120b（記憶 reference_nvidia_nim_models：1.1s 最佳）。
-//   若要換回台式繁中更自然的模型，改這行或設 Cloudflare 環境變數 NVIDIA_MODEL 即可。
-const DEFAULT_MODEL = "openai/gpt-oss-120b";
+//   換成 openai/gpt-oss-120b。
+// ⚠ 2026-09-07 再修：openai/gpt-oss-120b 也被下架了（NIM 清單只剩 20b），Nvidia 回 410、
+//   Gemini 備援同時撞免費額度 429 → /api/ask 對每個請求都回 502，網站 AI 對話、
+//   LINE 客服、新聞 AI 標註、每日個股內容生成全部停擺（9/4 還是好的，之間掛掉）。
+//   這已經是一年內第二次被 NIM 下架打死，所以這次同時加了每日金絲雀檢查
+//   （.github/workflows/daily-data-update.yml 的「AI 可用性金絲雀」步驟），
+//   下次再被下架會在 24 小時內推 LINE，而不是等人發現。
+//
+//   2026-09-07 重新實測（同一份四段個股提示詞，並行跑）：
+//     ⭐ minimaxai/minimax-m3                  → 16.0s, 4 段, 0 簡體字, 無 reasoning 外洩【新主力】
+//     ✓ google/gemma-4-31b-it                  → 23.2s, 4 段, 乾淨（備選）
+//     ✘ deepseek-ai/deepseek-v4-flash-0731     → 98–143s 太慢
+//     ✘ moonshotai/kimi-k3                     → 121s 太慢
+//     ✘ nvidia/nemotron-3-super-120b-a12b      → 把 thinking 寫進 content，0 段
+//     ✘ nvidia/nemotron-3.5-lightning-30b-a3b  → 同上，content 是英文 thinking
+//     ✘ openai/gpt-oss-20b                     → content 回 None（全跑去 reasoning_content）
+//     404 不可用：kimi-k2.6, nemotron-nano-3-30b-a3b, llama-3.1-nemotron-70b,
+//                mistral-large-2-instruct, gemma-3-12b-it
+//   聊天路徑另測過（真 SYSTEM_PROMPT + stream:true）：首字 0.6s、卡片排版正確、
+//   「你就直接告訴我目標價」有正確擋下並改推合理區間。
+//   若要換模型，改這行或設 Cloudflare 環境變數 NVIDIA_MODEL 即可。
+const DEFAULT_MODEL = "minimaxai/minimax-m3";
 const NVIDIA_ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 // Gemini fallback：當 Nvidia 撞 429/5xx 時自動切換，每天免費 1500 req
