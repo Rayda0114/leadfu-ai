@@ -49,7 +49,17 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 OUT = DATA / "stock_insight.json"
 ASK_URL = os.environ.get("ASK_URL", "https://leadfuai.com/api/ask")
-PER_RUN = int(os.environ.get("INSIGHT_PER_RUN", "3"))   # 每次跑幾檔
+# 每次跑幾檔。2026-09-07 從 3 調到 6：
+#   換模型前（NIM 主力被下架、掉到備援）：9 檔嘗試成功 3 檔（33%），
+#     失敗全是「格式不符」——模型寫不出固定的四段結構。
+#   換成 google/diffusiongemma-26b-a4b-it 後：9 檔嘗試成功 6 檔（67%），
+#     **格式不符 0 次**，剩下的失敗全是 /api/ask 回 502（端點不穩，不是品質問題）。
+#     字數 518–711，四段結構穩定。
+# 實測 6 檔耗時約 20 分鐘（其中大半是 502 的重試等待），加在每日管線後面
+# 仍遠低於 GitHub Actions 的上限。
+# 為什麼是 6 不是更多：6 是實測驗證過的數字，再往上是外推。要調就改這個
+# 環境變數，不必動程式。
+PER_RUN = int(os.environ.get("INSIGHT_PER_RUN", "6"))
 _CTX = ssl.create_default_context()
 
 # 與 worker.js 的 INSIGHT_L1_PATTERNS 對齊：擋「行為」不擋「詞彙」。
