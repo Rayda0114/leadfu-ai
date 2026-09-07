@@ -4061,6 +4061,10 @@ export default {
     //    這正是 GSC「Google 選擇的標準網頁和使用者的選擇不同」671 頁的來源。這裡讓爬蟲第一眼就看到正確值。──
     if (url.pathname === "/pages/stock-detail" && request.method === "GET") {
       const sdCode = (url.searchParams.get("code") || "").trim();
+      // 沒帶 code 的裸網址是一個沒有內容的空殼，canonical 又寫死指向自己
+      // （= 一頁宣稱自己是標準網頁卻什麼都沒有）。站內每個連結都會帶 ?code=，
+      // 所以這個網址只有爬蟲會走到 —— 直接 301 回股價總覽，不留薄頁。
+      if (!sdCode) return Response.redirect("https://leadfuai.com/pages/stocks", 301);
       if (/^\d{4,6}[A-Za-z]?$/.test(sdCode)) {
         const canon = "https://leadfuai.com/stock/" + encodeURIComponent(sdCode);
         const res = await env.ASSETS.fetch(request);

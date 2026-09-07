@@ -87,7 +87,58 @@ STATIC_PAGES = [
     ("/pages/learn/investment-scam-report.html",    "monthly", 0.9),
     ("/pages/learn/impersonation-scam.html",        "monthly", 0.9),
     ("/pages/learn/unlisted-stock-scam.html",       "monthly", 0.9),
+    # 2026-09-07 補：這三篇文章早就寫好、線上也開得起來，但從來沒進過 sitemap
+    # （STATIC_PAGES 是手寫清單，新增檔案時漏加就會這樣，而且不會有任何錯誤）。
+    # 都是大搜尋量的題目：存股、除權息、未上市股票。
+    ("/pages/learn/dividend-stock.html",            "monthly", 0.9),
+    ("/pages/learn/ex-dividend.html",               "monthly", 0.9),
+    ("/pages/learn/unlisted-stocks.html",           "monthly", 0.85),
+    # 同上：投資邀約查證器是站方防詐定位的核心工具頁，也沒進過 sitemap
+    ("/pages/fraud-check.html",                     "monthly", 0.9),
+    # 市場洞察總覽（個別文章由 worker 的動態 sitemap-insights.xml 負責）
+    ("/pages/insights.html",                        "weekly",  0.8),
 ]
+
+# 允許不進 sitemap 的例外：這些頁面本來就不該被索引，但也沒有／不需要 noindex。
+SITEMAP_EXEMPT = {
+    "/pages/stock-detail",   # 互動版個股頁，canonical 已指向 /stock/{code}
+    "/pages/news-detail",    # 新聞詳情殼，內容由 JS 帶入
+    "/pages/thread-detail",  # 討論功能已下線
+}
+
+
+def audit_coverage():
+    """把「檔案存在但沒進 sitemap」這件事講出來。
+
+    STATIC_PAGES 是手寫清單。手寫清單會漂：新增頁面時忘了加一行，
+    程式不會壞、workflow 不會紅、sitemap 照樣產出，只是那頁永遠不會被
+    提交給 Google。2026-09-07 一次查出四支這樣的頁面，其中三篇是
+    「存股」「除權息」「未上市股票」這種大詞文章，寫好了卻沒人看得到。
+
+    有 noindex 的頁面本來就不該進 sitemap，不算漏；其餘列進 SITEMAP_EXEMPT。
+    這裡只印警告不中斷 —— 漏一頁不該擋掉整份 sitemap 的產出。
+    """
+    listed = {x[0].replace(".html", "") for x in STATIC_PAGES}
+    missing = []
+    for f in sorted((ROOT / "pages").rglob("*.html")):
+        rel = "/pages/" + str(f.relative_to(ROOT / "pages")).replace(".html", "")
+        if rel.endswith("-m") or "/industries/" in rel:
+            continue                      # 手機版由 UA 決定；產業頁另有邏輯
+        if rel in listed or rel in SITEMAP_EXEMPT:
+            continue
+        try:
+            if "noindex" in f.read_text(encoding="utf-8", errors="replace").lower():
+                continue                  # 明確不想被索引，正確地不在 sitemap 裡
+        except Exception:
+            pass
+        missing.append(rel)
+    if missing:
+        print(f"\n⚠ 有 {len(missing)} 支頁面存在、沒有 noindex，卻不在 sitemap 清單裡：")
+        for m in missing:
+            print(f"    {m}")
+        print("  → 要嘛加進 STATIC_PAGES，要嘛加 noindex，要嘛列進 SITEMAP_EXEMPT。")
+    else:
+        print("✅ sitemap 涵蓋檢查通過：沒有頁面被漏掉")
 
 
 def load_json(path):
@@ -187,6 +238,7 @@ def main():
         f"✅ sitemap 索引 + 3 靜態子檔已更新（另 +1 動態 sitemap-insights.xml 由 worker 服務）："
         f"首頁/工具 {len(page_urls)}、個股 {len(stock_urls)}、內容 {len(content_urls)}"
     )
+    audit_coverage()
 
 
 if __name__ == "__main__":
