@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07 06:07",
+  "updatedAt": "2026-09-07 13:27",
   "source": "TPEx 櫃買中心 OpenAPI",
   "sourceDate": "2026-09-07",
   "stockCount": 363,
@@ -7,9 +7,9 @@
     {
       "code": "6696",
       "name": "仁新*",
-      "price": 175.0,
-      "change": 43.0,
-      "volume": 39899,
+      "price": 174.5,
+      "change": 42.5,
+      "volume": 40922,
       "category": "金融保險",
       "status": "興櫃",
       "market": "emerging"
@@ -19,7 +19,7 @@
       "name": "倍利創投",
       "price": 29.0,
       "change": 5.1,
-      "volume": 3755,
+      "volume": 4066,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -27,9 +27,9 @@
     {
       "code": "3184",
       "name": "微邦",
-      "price": 24.1,
-      "change": 7.21,
-      "volume": 3596,
+      "price": 24.0,
+      "change": 7.11,
+      "volume": 4056,
       "category": "電子",
       "status": "興櫃",
       "market": "emerging"
@@ -37,9 +37,9 @@
     {
       "code": "7871",
       "name": "安立璽榮-KY",
-      "price": 147.0,
-      "change": 10.15,
-      "volume": 3576,
+      "price": 145.5,
+      "change": 8.65,
+      "volume": 3860,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -47,9 +47,9 @@
     {
       "code": "6467",
       "name": "泰合",
-      "price": 225.0,
-      "change": 35.44,
-      "volume": 3368,
+      "price": 228.5,
+      "change": 38.94,
+      "volume": 3648,
       "category": "金融",
       "status": "興櫃",
       "market": "emerging"
@@ -57,9 +57,9 @@
     {
       "code": "6610",
       "name": "安成生技",
-      "price": 40.35,
-      "change": 2.77,
-      "volume": 2515,
+      "price": 40.55,
+      "change": 2.97,
+      "volume": 2619,
       "category": "金融保險",
       "status": "興櫃",
       "market": "emerging"
@@ -67,9 +67,19 @@
     {
       "code": "6976",
       "name": "育世博-KY",
-      "price": 13.2,
-      "change": 1.27,
-      "volume": 2252,
+      "price": 13.3,
+      "change": 1.37,
+      "volume": 2332,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7920",
+      "name": "瀚陽*",
+      "price": 8.27,
+      "change": 0.24,
+      "volume": 2193,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -77,9 +87,9 @@
     {
       "code": "6819",
       "name": "眾智",
-      "price": 60.5,
-      "change": 9.68,
-      "volume": 1950,
+      "price": 61.9,
+      "change": 11.08,
+      "volume": 2109,
       "category": "證券",
       "status": "興櫃",
       "market": "emerging"
@@ -87,9 +97,9 @@
     {
       "code": "7754",
       "name": "安基生技",
-      "price": 63.6,
-      "change": 6.76,
-      "volume": 1627,
+      "price": 63.3,
+      "change": 6.46,
+      "volume": 1660,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -97,49 +107,9 @@
     {
       "code": "5246",
       "name": "勵威",
-      "price": 141.0,
-      "change": 21.46,
-      "volume": 1554,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "4573",
-      "name": "高明鐵",
-      "price": 646.0,
-      "change": 40.41,
-      "volume": 1441,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6618",
-      "name": "永虹先進",
-      "price": 17.2,
-      "change": -0.13,
-      "volume": 1439,
-      "category": "金融保險",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6775",
-      "name": "穎台科技",
-      "price": 45.0,
-      "change": 5.48,
-      "volume": 1390,
-      "category": "證券",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7920",
-      "name": "瀚陽*",
-      "price": 8.8,
-      "change": 0.77,
-      "volume": 1386,
+      "price": 143.0,
+      "change": 23.46,
+      "volume": 1629,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -147,19 +117,49 @@
     {
       "code": "6940",
       "name": "格斯科技*",
-      "price": 19.45,
-      "change": -0.36,
-      "volume": 1359,
+      "price": 19.4,
+      "change": -0.41,
+      "volume": 1543,
       "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "4573",
+      "name": "高明鐵",
+      "price": 645.0,
+      "change": 39.41,
+      "volume": 1482,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6618",
+      "name": "永虹先進",
+      "price": 17.35,
+      "change": 0.02,
+      "volume": 1479,
+      "category": "金融保險",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6775",
+      "name": "穎台科技",
+      "price": 44.55,
+      "change": 5.03,
+      "volume": 1404,
+      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "3585",
       "name": "聯致",
-      "price": 49.0,
-      "change": -3.46,
-      "volume": 1213,
+      "price": 48.95,
+      "change": -3.51,
+      "volume": 1303,
       "category": "通訊網路",
       "status": "興櫃",
       "market": "emerging"
@@ -167,9 +167,9 @@
     {
       "code": "7686",
       "name": "捷立康",
-      "price": 995.0,
-      "change": 308.67,
-      "volume": 1166,
+      "price": 983.0,
+      "change": 296.67,
+      "volume": 1175,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -179,7 +179,7 @@
       "name": "東佑達",
       "price": 555.0,
       "change": 112.73,
-      "volume": 1074,
+      "volume": 1102,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -187,9 +187,9 @@
     {
       "code": "6990",
       "name": "華鉬",
-      "price": 150.5,
-      "change": -4.99,
-      "volume": 1036,
+      "price": 152.0,
+      "change": -3.49,
+      "volume": 1092,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -199,7 +199,7 @@
       "name": "智新生技*",
       "price": 14.15,
       "change": 0.87,
-      "volume": 1023,
+      "volume": 1040,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -207,9 +207,9 @@
     {
       "code": "7781",
       "name": "昕力資*",
-      "price": 27.35,
-      "change": -0.25,
-      "volume": 766,
+      "price": 27.1,
+      "change": -0.5,
+      "volume": 1015,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -217,20 +217,10 @@
     {
       "code": "6748",
       "name": "亞果生醫",
-      "price": 179.0,
-      "change": 4.01,
-      "volume": 752,
+      "price": 184.0,
+      "change": 9.01,
+      "volume": 797,
       "category": "證券",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7731",
-      "name": "火星生技*",
-      "price": 4.28,
-      "change": -0.01,
-      "volume": 728,
-      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -239,7 +229,17 @@
       "name": "恆勁科技",
       "price": 93.2,
       "change": 3.04,
-      "volume": 689,
+      "volume": 769,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7731",
+      "name": "火星生技*",
+      "price": 4.23,
+      "change": -0.06,
+      "volume": 748,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -247,9 +247,9 @@
     {
       "code": "7930",
       "name": "威世波",
-      "price": 285.0,
-      "change": 10.34,
-      "volume": 642,
+      "price": 286.0,
+      "change": 11.34,
+      "volume": 695,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -259,17 +259,7 @@
       "name": "昱鐳應材",
       "price": 411.5,
       "change": 20.87,
-      "volume": 611,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "5271",
-      "name": "紘通",
-      "price": 9.71,
-      "change": 0.23,
-      "volume": 599,
+      "volume": 627,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -277,9 +267,19 @@
     {
       "code": "5297",
       "name": "廣化",
-      "price": 80.6,
-      "change": 1.48,
-      "volume": 570,
+      "price": 81.4,
+      "change": 2.28,
+      "volume": 603,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "5271",
+      "name": "紘通",
+      "price": 9.86,
+      "change": 0.38,
+      "volume": 602,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -289,7 +289,7 @@
       "name": "善德生技",
       "price": 8.25,
       "change": 1.01,
-      "volume": 565,
+      "volume": 587,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -297,9 +297,9 @@
     {
       "code": "3117",
       "name": "年程",
-      "price": 30.5,
-      "change": 0.85,
-      "volume": 546,
+      "price": 31.3,
+      "change": 1.65,
+      "volume": 570,
       "category": "電子",
       "status": "興櫃",
       "market": "emerging"
@@ -307,9 +307,9 @@
     {
       "code": "6864",
       "name": "元樟生技",
-      "price": 62.5,
-      "change": 15.22,
-      "volume": 543,
+      "price": 63.9,
+      "change": 16.62,
+      "volume": 570,
       "category": "證券",
       "status": "興櫃",
       "market": "emerging"
@@ -317,9 +317,9 @@
     {
       "code": "6676",
       "name": "祥翊",
-      "price": 11.6,
-      "change": -0.24,
-      "volume": 542,
+      "price": 11.65,
+      "change": -0.19,
+      "volume": 560,
       "category": "金融保險",
       "status": "興櫃",
       "market": "emerging"
@@ -327,29 +327,29 @@
     {
       "code": "6407",
       "name": "相互",
-      "price": 25.15,
-      "change": -0.82,
-      "volume": 494,
+      "price": 25.35,
+      "change": -0.62,
+      "volume": 518,
       "category": "金融",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7865",
-      "name": "金聯成",
-      "price": 44.45,
-      "change": -5.34,
-      "volume": 438,
-      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "7742",
       "name": "天弘化",
-      "price": 107.0,
-      "change": -6.73,
-      "volume": 435,
+      "price": 108.0,
+      "change": -5.73,
+      "volume": 458,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7865",
+      "name": "金聯成",
+      "price": 44.4,
+      "change": -5.39,
+      "volume": 442,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -357,10 +357,20 @@
     {
       "code": "3595",
       "name": "山太士",
-      "price": 1635.0,
-      "change": -87.07,
-      "volume": 406,
+      "price": 1650.0,
+      "change": -72.07,
+      "volume": 420,
       "category": "通訊網路",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7729",
+      "name": "仲恩生醫",
+      "price": 76.8,
+      "change": 0.31,
+      "volume": 404,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -369,17 +379,27 @@
       "name": "水星生醫*",
       "price": 5.35,
       "change": 0.13,
-      "volume": 392,
+      "volume": 394,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7729",
-      "name": "仲恩生醫",
-      "price": 77.1,
-      "change": 0.61,
-      "volume": 383,
+      "code": "6682",
+      "name": "華旭先進",
+      "price": 35.0,
+      "change": 1.24,
+      "volume": 381,
+      "category": "金融保險",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7853",
+      "name": "政美應用",
+      "price": 321.5,
+      "change": 13.34,
+      "volume": 379,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -387,29 +407,9 @@
     {
       "code": "6483",
       "name": "原創生醫",
-      "price": 13.0,
-      "change": -0.5,
-      "volume": 370,
-      "category": "金融",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7853",
-      "name": "政美應用",
-      "price": 322.5,
-      "change": 14.34,
-      "volume": 367,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6586",
-      "name": "醣基",
-      "price": 101.5,
-      "change": 1.25,
-      "volume": 346,
+      "price": 13.2,
+      "change": -0.3,
+      "volume": 375,
       "category": "金融",
       "status": "興櫃",
       "market": "emerging"
@@ -417,90 +417,60 @@
     {
       "code": "6563",
       "name": "映智",
-      "price": 20.65,
-      "change": 1.66,
-      "volume": 342,
+      "price": 20.6,
+      "change": 1.61,
+      "volume": 370,
       "category": "金融",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7427",
-      "name": "華上生醫",
-      "price": 73.5,
-      "change": 0.64,
-      "volume": 322,
-      "category": "其他",
+      "code": "6586",
+      "name": "醣基",
+      "price": 102.0,
+      "change": 1.75,
+      "volume": 360,
+      "category": "金融",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "6950",
       "name": "科科科技-KY",
-      "price": 26.9,
-      "change": 2.77,
-      "volume": 314,
+      "price": 27.1,
+      "change": 2.97,
+      "volume": 336,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "6786",
-      "name": "芯測",
-      "price": 48.05,
-      "change": -4.35,
-      "volume": 305,
-      "category": "證券",
+      "code": "7427",
+      "name": "華上生醫",
+      "price": 73.4,
+      "change": 0.54,
+      "volume": 331,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "6434",
       "name": "達輝光電",
-      "price": 14.55,
-      "change": -0.14,
-      "volume": 303,
+      "price": 15.1,
+      "change": 0.41,
+      "volume": 323,
       "category": "金融",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7856",
-      "name": "漢測",
-      "price": 4800.0,
-      "change": 66.53,
-      "volume": 299,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6659",
-      "name": "天明製藥",
-      "price": 20.0,
-      "change": 0.52,
-      "volume": 287,
-      "category": "金融保險",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6682",
-      "name": "華旭先進",
-      "price": 34.2,
-      "change": 0.44,
-      "volume": 279,
-      "category": "金融保險",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7719",
-      "name": "碳基",
-      "price": 50.2,
-      "change": -0.13,
-      "volume": 277,
-      "category": "其他",
+      "code": "6786",
+      "name": "芯測",
+      "price": 50.4,
+      "change": -2.0,
+      "volume": 321,
+      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -509,8 +479,88 @@
       "name": "瑞峰",
       "price": 155.5,
       "change": 0.95,
-      "volume": 276,
+      "volume": 303,
       "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7856",
+      "name": "漢測",
+      "price": 4700.0,
+      "change": -33.47,
+      "volume": 301,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6659",
+      "name": "天明製藥",
+      "price": 20.25,
+      "change": 0.77,
+      "volume": 293,
+      "category": "金融保險",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7719",
+      "name": "碳基",
+      "price": 50.1,
+      "change": -0.23,
+      "volume": 293,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6876",
+      "name": "朗齊生醫*",
+      "price": 15.4,
+      "change": 3.42,
+      "volume": 281,
+      "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7825",
+      "name": "和亞智慧",
+      "price": 92.0,
+      "change": -1.1,
+      "volume": 281,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6849",
+      "name": "奇鼎科技",
+      "price": 152.5,
+      "change": 4.37,
+      "volume": 276,
+      "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6704",
+      "name": "國璽幹細胞",
+      "price": 20.2,
+      "change": 1.23,
+      "volume": 275,
+      "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "3659",
+      "name": "百辰",
+      "price": 7.9,
+      "change": -0.23,
+      "volume": 271,
+      "category": "電子零組件",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -519,67 +569,17 @@
       "name": "宇川精材",
       "price": 157.5,
       "change": 4.23,
-      "volume": 264,
+      "volume": 271,
       "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6704",
-      "name": "國璽幹細胞",
-      "price": 19.95,
-      "change": 0.98,
-      "volume": 259,
-      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "7561",
       "name": "光晟生技",
-      "price": 24.5,
-      "change": 8.22,
-      "volume": 259,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6849",
-      "name": "奇鼎科技",
-      "price": 154.0,
-      "change": 5.87,
-      "volume": 258,
-      "category": "證券",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "3659",
-      "name": "百辰",
-      "price": 8.03,
-      "change": -0.1,
-      "volume": 253,
-      "category": "電子零組件",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7936",
-      "name": "寰聖",
-      "price": 16.0,
-      "change": -0.57,
-      "volume": 252,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7825",
-      "name": "和亞智慧",
-      "price": 92.5,
-      "change": -0.6,
-      "volume": 242,
+      "price": 24.6,
+      "change": 8.32,
+      "volume": 268,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -587,10 +587,20 @@
     {
       "code": "6738",
       "name": "鼎恒",
-      "price": 79.0,
-      "change": -0.57,
-      "volume": 236,
+      "price": 79.8,
+      "change": 0.23,
+      "volume": 262,
       "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7936",
+      "name": "寰聖",
+      "price": 16.2,
+      "change": -0.37,
+      "volume": 256,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -599,8 +609,18 @@
       "name": "晶瑞光",
       "price": 29.9,
       "change": 0.69,
-      "volume": 226,
+      "volume": 246,
       "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7924",
+      "name": "TLC-KY",
+      "price": 261.0,
+      "change": -2.53,
+      "volume": 225,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -617,9 +637,9 @@
     {
       "code": "7899",
       "name": "景美",
-      "price": 369.0,
-      "change": -17.05,
-      "volume": 206,
+      "price": 371.5,
+      "change": -14.55,
+      "volume": 220,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -627,9 +647,9 @@
     {
       "code": "6987",
       "name": "寶晶能源*",
-      "price": 19.85,
-      "change": 0.31,
-      "volume": 204,
+      "price": 19.9,
+      "change": 0.36,
+      "volume": 214,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -637,9 +657,9 @@
     {
       "code": "4194",
       "name": "禾生技",
-      "price": 7.78,
-      "change": 0.23,
-      "volume": 195,
+      "price": 7.82,
+      "change": 0.27,
+      "volume": 208,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -647,9 +667,9 @@
     {
       "code": "7419",
       "name": "達勝",
-      "price": 50.5,
-      "change": -1.53,
-      "volume": 190,
+      "price": 50.7,
+      "change": -1.33,
+      "volume": 199,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -665,40 +685,40 @@
       "market": "emerging"
     },
     {
-      "code": "6876",
-      "name": "朗齊生醫*",
-      "price": 13.4,
-      "change": 1.42,
-      "volume": 184,
-      "category": "證券",
+      "code": "6959",
+      "name": "兆捷科技",
+      "price": 113.5,
+      "change": 4.94,
+      "volume": 187,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "7669",
       "name": "碩正科技",
-      "price": 717.0,
-      "change": 15.86,
-      "volume": 180,
+      "price": 708.0,
+      "change": 6.86,
+      "volume": 181,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "6959",
-      "name": "兆捷科技",
-      "price": 114.5,
-      "change": 5.94,
-      "volume": 179,
-      "category": "其他",
+      "code": "6892",
+      "name": "台寶生醫",
+      "price": 26.1,
+      "change": 1.41,
+      "volume": 178,
+      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7924",
-      "name": "TLC-KY",
-      "price": 263.0,
-      "change": -0.53,
+      "code": "7530",
+      "name": "鋒魁科技",
+      "price": 38.5,
+      "change": -0.47,
       "volume": 178,
       "category": "其他",
       "status": "興櫃",
@@ -715,51 +735,61 @@
       "market": "emerging"
     },
     {
-      "code": "6917",
-      "name": "竟天",
-      "price": 31.9,
-      "change": 0.04,
-      "volume": 169,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7530",
-      "name": "鋒魁科技",
-      "price": 38.45,
-      "change": -0.52,
-      "volume": 167,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6892",
-      "name": "台寶生醫",
-      "price": 25.95,
-      "change": 1.26,
-      "volume": 166,
-      "category": "證券",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "6891",
       "name": "樂迦再生",
-      "price": 39.1,
-      "change": -0.88,
-      "volume": 165,
+      "price": 39.4,
+      "change": -0.58,
+      "volume": 170,
       "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6917",
+      "name": "竟天",
+      "price": 31.85,
+      "change": -0.01,
+      "volume": 170,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "4172",
+      "name": "因華",
+      "price": 11.25,
+      "change": 0.17,
+      "volume": 164,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7892",
+      "name": "元鈦科",
+      "price": 539.0,
+      "change": 25.65,
+      "volume": 163,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7878",
+      "name": "藥祇",
+      "price": 137.0,
+      "change": -1.48,
+      "volume": 162,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "2252",
       "name": "為昇科",
-      "price": 23.1,
-      "change": -0.09,
-      "volume": 153,
+      "price": 22.85,
+      "change": -0.34,
+      "volume": 160,
       "category": "汽車",
       "status": "興櫃",
       "market": "emerging"
@@ -769,7 +799,7 @@
       "name": "凱銳光電",
       "price": 13.9,
       "change": 0.45,
-      "volume": 149,
+      "volume": 154,
       "category": "汽車",
       "status": "興櫃",
       "market": "emerging"
@@ -777,9 +807,9 @@
     {
       "code": "2256",
       "name": "歐特明",
-      "price": 82.6,
-      "change": -1.5,
-      "volume": 146,
+      "price": 82.9,
+      "change": -1.2,
+      "volume": 151,
       "category": "汽車",
       "status": "興櫃",
       "market": "emerging"
@@ -789,7 +819,7 @@
       "name": "旭東",
       "price": 156.0,
       "change": -1.55,
-      "volume": 144,
+      "volume": 147,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -797,49 +827,39 @@
     {
       "code": "6848",
       "name": "拉法醫",
-      "price": 21.25,
-      "change": -0.48,
+      "price": 21.65,
+      "change": -0.08,
       "volume": 144,
       "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7878",
-      "name": "藥祇",
-      "price": 134.5,
-      "change": -3.98,
-      "volume": 144,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7892",
-      "name": "元鈦科",
-      "price": 530.0,
-      "change": 16.65,
-      "volume": 144,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "7909",
       "name": "鈺祥",
-      "price": 611.0,
-      "change": -8.39,
-      "volume": 140,
+      "price": 609.0,
+      "change": -10.39,
+      "volume": 144,
       "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6820",
+      "name": "連訊",
+      "price": 338.0,
+      "change": 4.74,
+      "volume": 142,
+      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "8058",
       "name": "耐特",
-      "price": 98.7,
-      "change": 0.47,
-      "volume": 140,
+      "price": 99.1,
+      "change": 0.87,
+      "volume": 141,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -849,38 +869,38 @@
       "name": "聯純",
       "price": 200.0,
       "change": 15.95,
-      "volume": 136,
+      "volume": 139,
       "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6820",
-      "name": "連訊",
-      "price": 331.0,
-      "change": -2.26,
-      "volume": 135,
-      "category": "證券",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6827",
-      "name": "巨生醫",
-      "price": 11.5,
-      "change": 1.35,
-      "volume": 121,
-      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "6673",
       "name": "和詮",
-      "price": 15.55,
-      "change": 0.16,
-      "volume": 119,
+      "price": 15.75,
+      "change": 0.36,
+      "volume": 138,
       "category": "金融保險",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6827",
+      "name": "巨生醫",
+      "price": 11.45,
+      "change": 1.3,
+      "volume": 129,
+      "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7861",
+      "name": "貝爾威勒",
+      "price": 1195.0,
+      "change": -3.16,
+      "volume": 119,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -889,8 +909,18 @@
       "name": "富基電通",
       "price": 34.55,
       "change": 0.65,
-      "volume": 117,
+      "volume": 118,
       "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7815",
+      "name": "新特",
+      "price": 338.5,
+      "change": 26.05,
+      "volume": 116,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -900,6 +930,16 @@
       "price": 14.9,
       "change": 0.01,
       "volume": 116,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "5248",
+      "name": "景傳",
+      "price": 39.5,
+      "change": 0.32,
+      "volume": 115,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -915,61 +955,11 @@
       "market": "emerging"
     },
     {
-      "code": "4172",
-      "name": "因華",
-      "price": 11.25,
-      "change": 0.17,
-      "volume": 113,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7815",
-      "name": "新特",
-      "price": 333.5,
-      "change": 21.05,
-      "volume": 113,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7861",
-      "name": "貝爾威勒",
-      "price": 1200.0,
-      "change": 1.84,
-      "volume": 113,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "5248",
-      "name": "景傳",
-      "price": 39.6,
-      "change": 0.42,
-      "volume": 110,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7911",
-      "name": "阿波羅電力",
-      "price": 89.7,
-      "change": -1.79,
-      "volume": 106,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "7415",
       "name": "元澄半導體",
-      "price": 394.5,
-      "change": 11.76,
-      "volume": 103,
+      "price": 390.5,
+      "change": 7.76,
+      "volume": 114,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -977,9 +967,19 @@
     {
       "code": "7866",
       "name": "丹立",
-      "price": 168.5,
-      "change": 2.65,
-      "volume": 102,
+      "price": 171.0,
+      "change": 5.15,
+      "volume": 114,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7911",
+      "name": "阿波羅電力",
+      "price": 92.5,
+      "change": 1.01,
+      "volume": 113,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -989,8 +989,18 @@
       "name": "德信",
       "price": 14.0,
       "change": 0.04,
-      "volume": 101,
+      "volume": 104,
       "category": "金融",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7926",
+      "name": "中華立鼎",
+      "price": 642.0,
+      "change": 25.18,
+      "volume": 101,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -999,7 +1009,7 @@
       "name": "晨暉生技",
       "price": 58.6,
       "change": -1.15,
-      "volume": 98,
+      "volume": 99,
       "category": "食品",
       "status": "興櫃",
       "market": "emerging"
@@ -1015,30 +1025,40 @@
       "market": "emerging"
     },
     {
-      "code": "7926",
-      "name": "中華立鼎",
-      "price": 636.0,
-      "change": 19.18,
-      "volume": 95,
-      "category": "其他",
+      "code": "6825",
+      "name": "和暢科技",
+      "price": 33.1,
+      "change": -3.26,
+      "volume": 93,
+      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "6825",
-      "name": "和暢科技",
-      "price": 33.05,
-      "change": -3.31,
-      "volume": 92,
+      "code": "6750",
+      "name": "泰創工程",
+      "price": 60.0,
+      "change": 0.65,
+      "volume": 90,
       "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7872",
+      "name": "登豐",
+      "price": 48.1,
+      "change": 0.08,
+      "volume": 87,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "6868",
       "name": "采威國際",
-      "price": 27.4,
-      "change": -2.12,
+      "price": 27.5,
+      "change": -2.02,
       "volume": 86,
       "category": "證券",
       "status": "興櫃",
@@ -1055,16 +1075,6 @@
       "market": "emerging"
     },
     {
-      "code": "6750",
-      "name": "泰創工程",
-      "price": 59.9,
-      "change": 0.55,
-      "volume": 85,
-      "category": "證券",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "7551",
       "name": "知識科技",
       "price": 13.0,
@@ -1075,11 +1085,11 @@
       "market": "emerging"
     },
     {
-      "code": "7872",
-      "name": "登豐",
-      "price": 48.0,
-      "change": -0.02,
-      "volume": 85,
+      "code": "5267",
+      "name": "龍翩",
+      "price": 54.9,
+      "change": -2.21,
+      "volume": 84,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1087,9 +1097,9 @@
     {
       "code": "5859",
       "name": "遠壽",
-      "price": 13.95,
-      "change": 0.13,
-      "volume": 83,
+      "price": 13.9,
+      "change": 0.08,
+      "volume": 84,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1097,30 +1107,60 @@
     {
       "code": "5863",
       "name": "瑞興銀",
-      "price": 10.95,
-      "change": 0.22,
+      "price": 11.0,
+      "change": 0.27,
       "volume": 83,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "5267",
-      "name": "龍翩",
-      "price": 55.0,
-      "change": -2.11,
-      "volume": 80,
-      "category": "其他",
+      "code": "6604",
+      "name": "儒億",
+      "price": 31.45,
+      "change": 0.23,
+      "volume": 83,
+      "category": "金融保險",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "7913",
       "name": "通寶半導體",
-      "price": 299.5,
-      "change": 10.67,
+      "price": 304.5,
+      "change": 15.67,
+      "volume": 83,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "3678",
+      "name": "聯享",
+      "price": 50.4,
+      "change": -1.65,
+      "volume": 79,
+      "category": "電子零組件",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "4186",
+      "name": "尖端醫",
+      "price": 7.17,
+      "change": -0.25,
       "volume": 78,
       "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6580",
+      "name": "台睿",
+      "price": 12.6,
+      "change": 0.1,
+      "volume": 77,
+      "category": "金融",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1130,6 +1170,16 @@
       "price": 5.73,
       "change": 0.08,
       "volume": 77,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "5262",
+      "name": "立達",
+      "price": 42.8,
+      "change": -0.64,
+      "volume": 76,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1145,32 +1195,22 @@
       "market": "emerging"
     },
     {
-      "code": "5262",
-      "name": "立達",
-      "price": 42.8,
-      "change": -0.64,
-      "volume": 75,
+      "code": "7928",
+      "name": "合聖科技*",
+      "price": 398.0,
+      "change": -6.52,
+      "volume": 73,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "3678",
-      "name": "聯享",
-      "price": 49.8,
-      "change": -2.25,
-      "volume": 74,
-      "category": "電子零組件",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6604",
-      "name": "儒億",
-      "price": 31.45,
-      "change": 0.23,
-      "volume": 70,
-      "category": "金融保險",
+      "code": "7876",
+      "name": "鼎晉生技",
+      "price": 37.7,
+      "change": 0.6,
+      "volume": 71,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1185,12 +1225,12 @@
       "market": "emerging"
     },
     {
-      "code": "4186",
-      "name": "尖端醫",
-      "price": 7.2,
-      "change": -0.22,
-      "volume": 68,
-      "category": "其他",
+      "code": "6572",
+      "name": "博錸",
+      "price": 7.6,
+      "change": 0.12,
+      "volume": 69,
+      "category": "金融",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1205,21 +1245,11 @@
       "market": "emerging"
     },
     {
-      "code": "7876",
-      "name": "鼎晉生技",
-      "price": 37.65,
-      "change": 0.55,
-      "volume": 66,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7928",
-      "name": "合聖科技*",
-      "price": 400.5,
-      "change": -4.02,
-      "volume": 65,
+      "code": "7763",
+      "name": "崇舜",
+      "price": 150.0,
+      "change": -3.06,
+      "volume": 68,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1227,20 +1257,50 @@
     {
       "code": "7929",
       "name": "碩通",
-      "price": 402.5,
-      "change": -3.27,
-      "volume": 64,
+      "price": 403.0,
+      "change": -2.77,
+      "volume": 67,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7763",
-      "name": "崇舜",
-      "price": 148.0,
-      "change": -5.06,
-      "volume": 63,
+      "code": "6826",
+      "name": "和淞",
+      "price": 447.0,
+      "change": 1.72,
+      "volume": 66,
+      "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7883",
+      "name": "饗賓",
+      "price": 290.5,
+      "change": 8.83,
+      "volume": 66,
       "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7907",
+      "name": "錸恩帕斯",
+      "price": 227.0,
+      "change": -5.16,
+      "volume": 66,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6729",
+      "name": "機光科技",
+      "price": 51.5,
+      "change": 4.4,
+      "volume": 63,
+      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1249,7 +1309,7 @@
       "name": "稜研科技*",
       "price": 77.7,
       "change": 0.91,
-      "volume": 62,
+      "volume": 63,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1267,20 +1327,10 @@
     {
       "code": "3644",
       "name": "凌嘉科",
-      "price": 261.5,
-      "change": 0.17,
+      "price": 262.0,
+      "change": 0.67,
       "volume": 60,
       "category": "電子零組件",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6729",
-      "name": "機光科技",
-      "price": 51.5,
-      "change": 4.4,
-      "volume": 60,
-      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1289,8 +1339,18 @@
       "name": "宏偉",
       "price": 143.0,
       "change": -4.23,
-      "volume": 59,
+      "volume": 60,
       "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6622",
+      "name": "百聿數碼",
+      "price": 7.1,
+      "change": -0.18,
+      "volume": 60,
+      "category": "金融保險",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1305,21 +1365,21 @@
       "market": "emerging"
     },
     {
-      "code": "6826",
-      "name": "和淞",
-      "price": 448.5,
-      "change": 3.22,
-      "volume": 58,
-      "category": "證券",
+      "code": "7902",
+      "name": "宇越生醫*",
+      "price": 35.9,
+      "change": 0.52,
+      "volume": 56,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7907",
-      "name": "錸恩帕斯",
-      "price": 221.0,
-      "change": -11.16,
-      "volume": 57,
+      "code": "4738",
+      "name": "大同精化",
+      "price": 6.26,
+      "change": 0.23,
+      "volume": 55,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1335,10 +1395,30 @@
       "market": "emerging"
     },
     {
+      "code": "7880",
+      "name": "聖凰",
+      "price": 129.5,
+      "change": -3.72,
+      "volume": 54,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
       "code": "7762",
       "name": "吉晟生",
-      "price": 57.3,
-      "change": -0.82,
+      "price": 57.6,
+      "change": -0.52,
+      "volume": 51,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7858",
+      "name": "芝普",
+      "price": 164.0,
+      "change": 4.62,
       "volume": 51,
       "category": "其他",
       "status": "興櫃",
@@ -1355,32 +1435,52 @@
       "market": "emerging"
     },
     {
-      "code": "6580",
-      "name": "台睿",
-      "price": 12.4,
-      "change": -0.1,
+      "code": "4431",
+      "name": "敏成健康",
+      "price": 20.5,
+      "change": 0.2,
+      "volume": 50,
+      "category": "生技醫療",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6555",
+      "name": "榮炭",
+      "price": 14.75,
+      "change": 0.63,
       "volume": 50,
       "category": "金融",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "2644",
-      "name": "中信造船",
-      "price": 76.8,
-      "change": 0.82,
-      "volume": 49,
-      "category": "建材營造",
+      "code": "6634",
+      "name": "欣耀",
+      "price": 51.7,
+      "change": 0.52,
+      "volume": 50,
+      "category": "金融保險",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "4738",
-      "name": "大同精化",
-      "price": 6.26,
-      "change": 0.23,
+      "code": "6793",
+      "name": "天力離岸",
+      "price": 5.45,
+      "change": 0.15,
+      "volume": 50,
+      "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "2644",
+      "name": "中信造船",
+      "price": 76.9,
+      "change": 0.92,
       "volume": 49,
-      "category": "其他",
+      "category": "建材營造",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1395,22 +1495,12 @@
       "market": "emerging"
     },
     {
-      "code": "6634",
-      "name": "欣耀",
-      "price": 51.7,
+      "code": "4170",
+      "name": "鑫品生醫",
+      "price": 12.6,
       "change": 0.52,
-      "volume": 49,
-      "category": "金融保險",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6572",
-      "name": "博錸",
-      "price": 7.5,
-      "change": 0.02,
       "volume": 48,
-      "category": "金融",
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1425,10 +1515,20 @@
       "market": "emerging"
     },
     {
+      "code": "7796",
+      "name": "擷發科",
+      "price": 61.0,
+      "change": 1.09,
+      "volume": 48,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
       "code": "4117",
       "name": "普生",
-      "price": 9.55,
-      "change": 0.39,
+      "price": 9.25,
+      "change": 0.09,
       "volume": 47,
       "category": "其他",
       "status": "興櫃",
@@ -1445,52 +1545,42 @@
       "market": "emerging"
     },
     {
-      "code": "7858",
-      "name": "芝普",
-      "price": 162.0,
-      "change": 2.62,
+      "code": "7761",
+      "name": "三大未來",
+      "price": 39.45,
+      "change": 0.84,
       "volume": 47,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7796",
-      "name": "擷發科",
-      "price": 60.4,
-      "change": 0.49,
+      "code": "6737",
+      "name": "秀育",
+      "price": 25.2,
+      "change": 1.41,
       "volume": 46,
-      "category": "其他",
+      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
     {
       "code": "8359",
       "name": "錢櫃",
-      "price": 55.9,
-      "change": -0.23,
+      "price": 55.8,
+      "change": -0.33,
       "volume": 46,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "6622",
-      "name": "百聿數碼",
-      "price": 6.95,
-      "change": -0.33,
+      "code": "7945",
+      "name": "廣盛科技",
+      "price": 206.0,
+      "change": -9.29,
       "volume": 45,
-      "category": "金融保險",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "4431",
-      "name": "敏成健康",
-      "price": 20.5,
-      "change": 0.2,
-      "volume": 44,
-      "category": "生技醫療",
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1505,16 +1595,6 @@
       "market": "emerging"
     },
     {
-      "code": "6737",
-      "name": "秀育",
-      "price": 24.6,
-      "change": 0.81,
-      "volume": 44,
-      "category": "證券",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "6995",
       "name": "野獸國",
       "price": 57.8,
@@ -1525,31 +1605,11 @@
       "market": "emerging"
     },
     {
-      "code": "6793",
-      "name": "天力離岸",
-      "price": 5.4,
-      "change": 0.1,
-      "volume": 43,
-      "category": "證券",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7919",
-      "name": "禾蒼",
-      "price": 37.1,
-      "change": -0.04,
-      "volume": 43,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "7710",
       "name": "東擎科技",
-      "price": 233.0,
-      "change": 8.82,
-      "volume": 42,
+      "price": 240.5,
+      "change": 16.32,
+      "volume": 44,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1557,19 +1617,19 @@
     {
       "code": "7939",
       "name": "技宸",
-      "price": 234.0,
-      "change": 24.51,
-      "volume": 42,
+      "price": 233.0,
+      "change": 23.51,
+      "volume": 44,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7945",
-      "name": "廣盛科技",
-      "price": 206.0,
-      "change": -9.29,
-      "volume": 42,
+      "code": "7919",
+      "name": "禾蒼",
+      "price": 37.05,
+      "change": -0.09,
+      "volume": 43,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1577,10 +1637,40 @@
     {
       "code": "6638",
       "name": "沅聖",
-      "price": 46.5,
-      "change": 2.02,
-      "volume": 41,
+      "price": 46.65,
+      "change": 2.17,
+      "volume": 42,
       "category": "金融保險",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7773",
+      "name": "富禾生醫",
+      "price": 33.4,
+      "change": -0.09,
+      "volume": 42,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "8098",
+      "name": "慶康科技",
+      "price": 407.5,
+      "change": -7.6,
+      "volume": 42,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6817",
+      "name": "溫士頓",
+      "price": 44.1,
+      "change": -0.57,
+      "volume": 41,
+      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1595,20 +1685,10 @@
       "market": "emerging"
     },
     {
-      "code": "7880",
-      "name": "聖凰",
-      "price": 128.0,
-      "change": -5.22,
-      "volume": 41,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7902",
-      "name": "宇越生醫*",
-      "price": 35.9,
-      "change": 0.52,
+      "code": "7707",
+      "name": "益芯科",
+      "price": 114.0,
+      "change": 0.19,
       "volume": 41,
       "category": "其他",
       "status": "興櫃",
@@ -1617,38 +1697,18 @@
     {
       "code": "7935",
       "name": "安富",
-      "price": 40.35,
-      "change": 0.26,
+      "price": 40.3,
+      "change": 0.21,
       "volume": 41,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "6817",
-      "name": "溫士頓",
-      "price": 42.1,
-      "change": -2.57,
-      "volume": 40,
-      "category": "證券",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "6915",
       "name": "美強光",
-      "price": 41.8,
-      "change": -2.92,
-      "volume": 40,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "8098",
-      "name": "慶康科技",
-      "price": 409.0,
-      "change": -6.1,
+      "price": 41.85,
+      "change": -2.87,
       "volume": 40,
       "category": "其他",
       "status": "興櫃",
@@ -1665,31 +1725,11 @@
       "market": "emerging"
     },
     {
-      "code": "6555",
-      "name": "榮炭",
-      "price": 14.8,
-      "change": 0.68,
-      "volume": 38,
-      "category": "金融",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7707",
-      "name": "益芯科",
-      "price": 114.0,
-      "change": 0.19,
-      "volume": 37,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7773",
-      "name": "富禾生醫",
-      "price": 33.25,
-      "change": -0.24,
-      "volume": 37,
+      "code": "7507",
+      "name": "環拓科技",
+      "price": 19.1,
+      "change": -0.08,
+      "volume": 39,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1697,20 +1737,60 @@
     {
       "code": "4197",
       "name": "暐世",
-      "price": 8.92,
-      "change": 0.35,
-      "volume": 36,
+      "price": 9.2,
+      "change": 0.63,
+      "volume": 37,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7761",
-      "name": "三大未來",
-      "price": 39.45,
-      "change": 0.84,
-      "volume": 36,
+      "code": "6734",
+      "name": "安盛生",
+      "price": 5.5,
+      "change": -0.03,
+      "volume": 37,
+      "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6878",
+      "name": "歐付寶",
+      "price": 20.75,
+      "change": -0.09,
+      "volume": 37,
+      "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7566",
+      "name": "亞果遊艇",
+      "price": 11.45,
+      "change": -0.05,
+      "volume": 37,
       "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6564",
+      "name": "安特羅",
+      "price": 15.6,
+      "change": -0.22,
+      "volume": 36,
+      "category": "金融",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "2938",
+      "name": "床的世界",
+      "price": 22.2,
+      "change": -0.63,
+      "volume": 35,
+      "category": "百貨貿易",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1737,50 +1817,50 @@
     {
       "code": "7879",
       "name": "益材科技",
-      "price": 66.8,
-      "change": 0.41,
+      "price": 66.9,
+      "change": 0.51,
       "volume": 35,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7883",
-      "name": "饗賓",
-      "price": 286.0,
-      "change": 4.33,
-      "volume": 35,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7507",
-      "name": "環拓科技",
-      "price": 18.95,
-      "change": -0.23,
+      "code": "4587",
+      "name": "寶元數控",
+      "price": 42.4,
+      "change": 0.1,
       "volume": 34,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "6734",
-      "name": "安盛生",
-      "price": 5.5,
-      "change": -0.03,
+      "code": "6911",
+      "name": "群運",
+      "price": 29.4,
+      "change": 0.94,
       "volume": 33,
-      "category": "證券",
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "6911",
-      "name": "群運",
-      "price": 28.2,
-      "change": -0.26,
+      "code": "7578",
+      "name": "利百景",
+      "price": 24.0,
+      "change": -0.29,
       "volume": 33,
       "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6493",
+      "name": "雷虎生",
+      "price": 38.2,
+      "change": 0.08,
+      "volume": 32,
+      "category": "金融",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1795,20 +1875,20 @@
       "market": "emerging"
     },
     {
-      "code": "6878",
-      "name": "歐付寶",
-      "price": 20.4,
-      "change": -0.44,
+      "code": "6867",
+      "name": "坦德科技",
+      "price": 27.65,
+      "change": -0.28,
       "volume": 32,
       "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7578",
-      "name": "利百景",
-      "price": 23.9,
-      "change": -0.39,
+      "code": "7752",
+      "name": "世紀樺欣",
+      "price": 28.5,
+      "change": -0.84,
       "volume": 32,
       "category": "其他",
       "status": "興櫃",
@@ -1835,12 +1915,12 @@
       "market": "emerging"
     },
     {
-      "code": "6493",
-      "name": "雷虎生",
-      "price": 38.2,
-      "change": 0.08,
+      "code": "4732",
+      "name": "彥臣",
+      "price": 17.8,
+      "change": -0.6,
       "volume": 31,
-      "category": "金融",
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -1855,31 +1935,21 @@
       "market": "emerging"
     },
     {
-      "code": "7752",
-      "name": "世紀樺欣",
-      "price": 29.0,
-      "change": -0.34,
+      "code": "7801",
+      "name": "華芸科技",
+      "price": 104.0,
+      "change": -1.84,
       "volume": 31,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "7801",
-      "name": "華芸科技",
-      "price": 100.5,
-      "change": -5.34,
-      "volume": 30,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7566",
-      "name": "亞果遊艇",
-      "price": 11.5,
-      "change": 0.0,
-      "volume": 29,
+      "code": "7843",
+      "name": "英柏得",
+      "price": 111.5,
+      "change": 0.37,
+      "volume": 31,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1897,18 +1967,38 @@
     {
       "code": "6559",
       "name": "研晶",
-      "price": 17.45,
-      "change": 0.36,
+      "price": 17.55,
+      "change": 0.46,
       "volume": 28,
       "category": "金融",
       "status": "興櫃",
       "market": "emerging"
     },
     {
+      "code": "6980",
+      "name": "鐳洋科技",
+      "price": 120.0,
+      "change": -4.7,
+      "volume": 28,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7829",
+      "name": "思捷優達-KY",
+      "price": 46.4,
+      "change": 1.36,
+      "volume": 28,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
       "code": "7943",
       "name": "鴻璟科技",
-      "price": 50.1,
-      "change": -1.77,
+      "price": 51.5,
+      "change": -0.37,
       "volume": 28,
       "category": "其他",
       "status": "興櫃",
@@ -1917,8 +2007,18 @@
     {
       "code": "7759",
       "name": "視航生醫",
-      "price": 29.15,
-      "change": -1.28,
+      "price": 30.35,
+      "change": -0.08,
+      "volume": 27,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7898",
+      "name": "乾瞻",
+      "price": 370.0,
+      "change": -1.5,
       "volume": 27,
       "category": "其他",
       "status": "興櫃",
@@ -1930,16 +2030,6 @@
       "price": 10.75,
       "change": 0.21,
       "volume": 27,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "4587",
-      "name": "寶元數控",
-      "price": 42.25,
-      "change": -0.05,
-      "volume": 26,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -1957,8 +2047,18 @@
     {
       "code": "6723",
       "name": "傑智環境",
-      "price": 34.9,
-      "change": 0.18,
+      "price": 36.25,
+      "change": 1.53,
+      "volume": 26,
+      "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6832",
+      "name": "金鼎科",
+      "price": 66.0,
+      "change": -0.67,
       "volume": 26,
       "category": "證券",
       "status": "興櫃",
@@ -1975,22 +2075,22 @@
       "market": "emerging"
     },
     {
+      "code": "6639",
+      "name": "源大環能",
+      "price": 4.2,
+      "change": -0.08,
+      "volume": 25,
+      "category": "金融保險",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
       "code": "7888",
       "name": "麗寶新藥",
       "price": 29.2,
       "change": -0.69,
       "volume": 25,
       "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6639",
-      "name": "源大環能",
-      "price": 4.2,
-      "change": -0.08,
-      "volume": 24,
-      "category": "金融保險",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2015,6 +2115,16 @@
       "market": "emerging"
     },
     {
+      "code": "6536",
+      "name": "碩豐",
+      "price": 16.3,
+      "change": -0.4,
+      "volume": 23,
+      "category": "金融",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
       "code": "7735",
       "name": "台智雲",
       "price": 212.0,
@@ -2025,20 +2135,10 @@
       "market": "emerging"
     },
     {
-      "code": "7898",
-      "name": "乾瞻",
-      "price": 373.0,
-      "change": 1.5,
-      "volume": 23,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "7944",
       "name": "睿禾金碳",
-      "price": 35.3,
-      "change": 0.16,
+      "price": 36.55,
+      "change": 1.41,
       "volume": 23,
       "category": "其他",
       "status": "興櫃",
@@ -2055,36 +2155,6 @@
       "market": "emerging"
     },
     {
-      "code": "6536",
-      "name": "碩豐",
-      "price": 16.75,
-      "change": 0.05,
-      "volume": 22,
-      "category": "金融",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6564",
-      "name": "安特羅",
-      "price": 15.5,
-      "change": -0.32,
-      "volume": 22,
-      "category": "金融",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7843",
-      "name": "英柏得",
-      "price": 112.0,
-      "change": 0.87,
-      "volume": 22,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "6979",
       "name": "勝釩",
       "price": 120.5,
@@ -2095,12 +2165,12 @@
       "market": "emerging"
     },
     {
-      "code": "6832",
-      "name": "金鼎科",
-      "price": 66.3,
-      "change": -0.37,
-      "volume": 20,
-      "category": "證券",
+      "code": "7857",
+      "name": "合水先進",
+      "price": 25.9,
+      "change": -0.39,
+      "volume": 21,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2109,16 +2179,6 @@
       "name": "博來科技",
       "price": 69.0,
       "change": -0.14,
-      "volume": 20,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7857",
-      "name": "合水先進",
-      "price": 25.9,
-      "change": -0.39,
       "volume": 20,
       "category": "其他",
       "status": "興櫃",
@@ -2137,30 +2197,10 @@
     {
       "code": "7798",
       "name": "將捷",
-      "price": 15.1,
-      "change": -0.09,
+      "price": 15.3,
+      "change": 0.11,
       "volume": 19,
       "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7829",
-      "name": "思捷優達-KY",
-      "price": 46.4,
-      "change": 1.36,
-      "volume": 19,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "2938",
-      "name": "床的世界",
-      "price": 22.2,
-      "change": -0.63,
-      "volume": 18,
-      "category": "百貨貿易",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2195,6 +2235,16 @@
       "market": "emerging"
     },
     {
+      "code": "6839",
+      "name": "開陽能源",
+      "price": 11.55,
+      "change": 0.17,
+      "volume": 18,
+      "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
       "code": "7877",
       "name": "海利普",
       "price": 37.1,
@@ -2205,12 +2255,22 @@
       "market": "emerging"
     },
     {
-      "code": "6839",
-      "name": "開陽能源",
-      "price": 11.25,
-      "change": -0.13,
+      "code": "7894",
+      "name": "瀚軒",
+      "price": 170.0,
+      "change": 4.16,
+      "volume": 18,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "3633",
+      "name": "云光",
+      "price": 147.5,
+      "change": 2.42,
       "volume": 17,
-      "category": "證券",
+      "category": "電子零組件",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2229,6 +2289,16 @@
       "name": "智生活",
       "price": 44.0,
       "change": 0.81,
+      "volume": 17,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7851",
+      "name": "慧康生技*-KY",
+      "price": 23.4,
+      "change": 0.3,
       "volume": 17,
       "category": "其他",
       "status": "興櫃",
@@ -2255,36 +2325,6 @@
       "market": "emerging"
     },
     {
-      "code": "3633",
-      "name": "云光",
-      "price": 147.5,
-      "change": 2.42,
-      "volume": 16,
-      "category": "電子零組件",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "4732",
-      "name": "彥臣",
-      "price": 17.95,
-      "change": -0.45,
-      "volume": 16,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6980",
-      "name": "鐳洋科技",
-      "price": 120.5,
-      "change": -4.2,
-      "volume": 16,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "7846",
       "name": "德揚",
       "price": 83.5,
@@ -2295,22 +2335,12 @@
       "market": "emerging"
     },
     {
-      "code": "7851",
-      "name": "慧康生技*-KY",
+      "code": "6815",
+      "name": "晶鑽生醫",
       "price": 23.3,
-      "change": 0.2,
-      "volume": 16,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7894",
-      "name": "瀚軒",
-      "price": 168.0,
-      "change": 2.16,
-      "volume": 16,
-      "category": "其他",
+      "change": 0.06,
+      "volume": 15,
+      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2325,22 +2355,22 @@
       "market": "emerging"
     },
     {
+      "code": "8345",
+      "name": "超秦",
+      "price": 51.9,
+      "change": 0.85,
+      "volume": 15,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
       "code": "6543",
       "name": "普惠醫工",
       "price": 18.15,
       "change": -0.15,
       "volume": 14,
       "category": "金融",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6867",
-      "name": "坦德科技",
-      "price": 27.9,
-      "change": -0.03,
-      "volume": 14,
-      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2365,11 +2395,21 @@
       "market": "emerging"
     },
     {
-      "code": "8345",
-      "name": "超秦",
-      "price": 51.0,
-      "change": -0.05,
-      "volume": 14,
+      "code": "4559",
+      "name": "久裕興",
+      "price": 8.46,
+      "change": -0.39,
+      "volume": 13,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "4575",
+      "name": "銓寶",
+      "price": 22.5,
+      "change": -0.57,
+      "volume": 13,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -2381,16 +2421,6 @@
       "change": -0.3,
       "volume": 13,
       "category": "金融保險",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "6815",
-      "name": "晶鑽生醫",
-      "price": 23.3,
-      "change": 0.06,
-      "volume": 13,
-      "category": "證券",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2427,8 +2457,8 @@
     {
       "code": "1269",
       "name": "乾杯",
-      "price": 57.1,
-      "change": 0.39,
+      "price": 57.4,
+      "change": 0.69,
       "volume": 12,
       "category": "食品",
       "status": "興櫃",
@@ -2441,6 +2471,16 @@
       "change": 0.16,
       "volume": 12,
       "category": "證券",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7833",
+      "name": "綠岩能源",
+      "price": 23.9,
+      "change": 0.83,
+      "volume": 12,
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2475,22 +2515,22 @@
       "market": "emerging"
     },
     {
-      "code": "4575",
-      "name": "銓寶",
-      "price": 22.7,
-      "change": -0.37,
+      "code": "6473",
+      "name": "美賣*",
+      "price": 6.34,
+      "change": -0.01,
       "volume": 11,
-      "category": "其他",
+      "category": "金融",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "6473",
-      "name": "美賣*",
-      "price": 6.19,
-      "change": -0.16,
+      "code": "7595",
+      "name": "世基生醫",
+      "price": 7.33,
+      "change": 0.3,
       "volume": 11,
-      "category": "金融",
+      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2499,16 +2539,6 @@
       "name": "諾亞克",
       "price": 14.4,
       "change": -0.08,
-      "volume": 11,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7833",
-      "name": "綠岩能源",
-      "price": 23.9,
-      "change": 0.83,
       "volume": 11,
       "category": "其他",
       "status": "興櫃",
@@ -2545,52 +2575,32 @@
       "market": "emerging"
     },
     {
+      "code": "7808",
+      "name": "訊聯智藥",
+      "price": 34.5,
+      "change": 1.3,
+      "volume": 10,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
       "code": "2071",
       "name": "震南鐵",
-      "price": 34.5,
-      "change": 0.46,
+      "price": 34.65,
+      "change": 0.61,
       "volume": 9,
       "category": "鋼鐵",
       "status": "興櫃",
       "market": "emerging"
     },
     {
-      "code": "4170",
-      "name": "鑫品生醫",
-      "price": 11.95,
-      "change": -0.13,
-      "volume": 9,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "4559",
-      "name": "久裕興",
-      "price": 8.6,
-      "change": -0.25,
-      "volume": 9,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "6677",
       "name": "瑩碩生技",
-      "price": 16.9,
-      "change": 0.08,
+      "price": 17.3,
+      "change": 0.48,
       "volume": 9,
       "category": "金融保險",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7595",
-      "name": "世基生醫",
-      "price": 7.33,
-      "change": 0.3,
-      "volume": 9,
-      "category": "其他",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2615,10 +2625,30 @@
       "market": "emerging"
     },
     {
+      "code": "7921",
+      "name": "台普威",
+      "price": 79.8,
+      "change": -0.34,
+      "volume": 9,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "2249",
+      "name": "湧盛",
+      "price": 93.6,
+      "change": -0.77,
+      "volume": 8,
+      "category": "汽車",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
       "code": "4980",
       "name": "佐臻",
-      "price": 39.0,
-      "change": -0.4,
+      "price": 40.0,
+      "change": 0.6,
       "volume": 8,
       "category": "電腦周邊",
       "status": "興櫃",
@@ -2627,30 +2657,10 @@
     {
       "code": "7854",
       "name": "佐茂",
-      "price": 68.5,
-      "change": 1.48,
+      "price": 68.9,
+      "change": 1.88,
       "volume": 8,
       "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7921",
-      "name": "台普威",
-      "price": 79.8,
-      "change": -0.34,
-      "volume": 8,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "2249",
-      "name": "湧盛",
-      "price": 94.4,
-      "change": 0.03,
-      "volume": 7,
-      "category": "汽車",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2685,10 +2695,10 @@
       "market": "emerging"
     },
     {
-      "code": "7808",
-      "name": "訊聯智藥",
-      "price": 34.0,
-      "change": 0.8,
+      "code": "7889",
+      "name": "騰勢",
+      "price": 75.0,
+      "change": 0.0,
       "volume": 7,
       "category": "其他",
       "status": "興櫃",
@@ -2707,10 +2717,20 @@
     {
       "code": "7896",
       "name": "喬越",
-      "price": 207.0,
-      "change": 0.59,
+      "price": 214.0,
+      "change": 7.59,
       "volume": 7,
       "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "6665",
+      "name": "康聯生醫",
+      "price": 17.85,
+      "change": 0.43,
+      "volume": 6,
+      "category": "金融保險",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2735,12 +2755,12 @@
       "market": "emerging"
     },
     {
-      "code": "6665",
-      "name": "康聯生醫",
-      "price": 17.8,
-      "change": 0.38,
+      "code": "3194",
+      "name": "圓方科技",
+      "price": 31.2,
+      "change": 0.42,
       "volume": 5,
-      "category": "金融保險",
+      "category": "電子",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2765,10 +2785,20 @@
       "market": "emerging"
     },
     {
+      "code": "7868",
+      "name": "聖育",
+      "price": 61.5,
+      "change": 0.35,
+      "volume": 5,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
       "code": "7893",
       "name": "睿信",
-      "price": 150.0,
-      "change": 0.43,
+      "price": 153.0,
+      "change": 3.43,
       "volume": 5,
       "category": "其他",
       "status": "興櫃",
@@ -2781,16 +2811,6 @@
       "change": 0.78,
       "volume": 4,
       "category": "塑膠",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "3194",
-      "name": "圓方科技",
-      "price": 31.5,
-      "change": 0.72,
-      "volume": 4,
-      "category": "電子",
       "status": "興櫃",
       "market": "emerging"
     },
@@ -2817,8 +2837,8 @@
     {
       "code": "7422",
       "name": "鴻林堂",
-      "price": 31.7,
-      "change": 0.07,
+      "price": 32.95,
+      "change": 1.32,
       "volume": 4,
       "category": "其他",
       "status": "興櫃",
@@ -2827,18 +2847,8 @@
     {
       "code": "7847",
       "name": "豊漁",
-      "price": 20.0,
-      "change": -0.05,
-      "volume": 4,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7868",
-      "name": "聖育",
-      "price": 62.4,
-      "change": 1.25,
+      "price": 20.05,
+      "change": 0.0,
       "volume": 4,
       "category": "其他",
       "status": "興櫃",
@@ -2867,8 +2877,18 @@
     {
       "code": "7915",
       "name": "廌家",
-      "price": 390.5,
-      "change": -6.38,
+      "price": 410.0,
+      "change": 13.12,
+      "volume": 4,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "7933",
+      "name": "威旭",
+      "price": 30.6,
+      "change": -0.2,
       "volume": 4,
       "category": "其他",
       "status": "興櫃",
@@ -2877,8 +2897,8 @@
     {
       "code": "2942",
       "name": "京站",
-      "price": 37.7,
-      "change": 0.14,
+      "price": 38.65,
+      "change": 1.09,
       "volume": 3,
       "category": "百貨貿易",
       "status": "興櫃",
@@ -2907,8 +2927,8 @@
     {
       "code": "7706",
       "name": "宏碁創達",
-      "price": 30.5,
-      "change": -0.83,
+      "price": 31.5,
+      "change": 0.17,
       "volume": 3,
       "category": "其他",
       "status": "興櫃",
@@ -2955,11 +2975,31 @@
       "market": "emerging"
     },
     {
-      "code": "7889",
-      "name": "騰勢",
-      "price": 75.3,
-      "change": 0.3,
+      "code": "7886",
+      "name": "科建",
+      "price": 84.5,
+      "change": 2.22,
       "volume": 3,
+      "category": "其他",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "2760",
+      "name": "巨宇翔",
+      "price": 8.8,
+      "change": 0.0,
+      "volume": 2,
+      "category": "航運",
+      "status": "興櫃",
+      "market": "emerging"
+    },
+    {
+      "code": "4544",
+      "name": "春日",
+      "price": 13.55,
+      "change": 0.07,
+      "volume": 2,
       "category": "其他",
       "status": "興櫃",
       "market": "emerging"
@@ -2967,8 +3007,8 @@
     {
       "code": "4570",
       "name": "傑生",
-      "price": 69.0,
-      "change": -0.71,
+      "price": 70.3,
+      "change": 0.59,
       "volume": 2,
       "category": "其他",
       "status": "興櫃",
@@ -2979,26 +3019,6 @@
       "name": "品元",
       "price": 24.8,
       "change": 0.85,
-      "volume": 2,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7886",
-      "name": "科建",
-      "price": 84.0,
-      "change": 1.72,
-      "volume": 2,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "7933",
-      "name": "威旭",
-      "price": 29.2,
-      "change": -1.6,
       "volume": 2,
       "category": "其他",
       "status": "興櫃",
@@ -3025,20 +3045,10 @@
       "market": "emerging"
     },
     {
-      "code": "4544",
-      "name": "春日",
-      "price": 13.55,
-      "change": 0.07,
-      "volume": 1,
-      "category": "其他",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
       "code": "6818",
       "name": "連騰",
-      "price": 43.85,
-      "change": 0.73,
+      "price": 43.75,
+      "change": 0.63,
       "volume": 1,
       "category": "證券",
       "status": "興櫃",
@@ -3117,8 +3127,8 @@
     {
       "code": "8458",
       "name": "影一",
-      "price": 13.85,
-      "change": -0.18,
+      "price": 14.5,
+      "change": 0.47,
       "volume": 1,
       "category": "其他",
       "status": "興櫃",
@@ -3179,16 +3189,6 @@
       "name": "路易莎咖啡",
       "price": 68.8,
       "change": 1.96,
-      "volume": 0,
-      "category": "航運",
-      "status": "興櫃",
-      "market": "emerging"
-    },
-    {
-      "code": "2760",
-      "name": "巨宇翔",
-      "price": 8.8,
-      "change": 0.0,
       "volume": 0,
       "category": "航運",
       "status": "興櫃",
@@ -3317,8 +3317,8 @@
     {
       "code": "6814",
       "name": "路迦生醫",
-      "price": 18.3,
-      "change": 0.32,
+      "price": 17.6,
+      "change": -0.38,
       "volume": 0,
       "category": "證券",
       "status": "興櫃",
@@ -3407,8 +3407,8 @@
     {
       "code": "7558",
       "name": "群利科技",
-      "price": 17.6,
-      "change": 0.19,
+      "price": 17.0,
+      "change": -0.41,
       "volume": 0,
       "category": "其他",
       "status": "興櫃",
@@ -3607,8 +3607,8 @@
     {
       "code": "7925",
       "name": "健生",
-      "price": 76.0,
-      "change": 0.0,
+      "price": 78.0,
+      "change": 2.0,
       "volume": 0,
       "category": "其他",
       "status": "興櫃",
