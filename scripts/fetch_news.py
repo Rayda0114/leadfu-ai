@@ -15,7 +15,7 @@ import os
 import re
 import time
 import html
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.parse import quote
@@ -44,6 +44,37 @@ QUERIES = [
 ]
 
 UA = "Mozilla/5.0 (compatible; LeadFu-AI/1.0; +https://leadfuai.com)"
+
+# 保留的新聞超過幾小時才通知站長（見 main() 的 fail-closed 區塊）。
+# 平日早晚各抓一輪，正常相隔最多約 15 小時；超過 24 小時代表連續兩輪都失敗了。
+STALE_HOURS = 24
+
+
+def _run_label():
+    """通知標題用：這是哪一輪。原本標題寫死「盤前」，但晚上的每日資料更新也跑
+    這支，於是晚上 8 點收到「盤前新聞抓取失敗」，看了會以為是早上出事。"""
+    if os.environ.get("NEWS_RUN_LABEL"):
+        return os.environ["NEWS_RUN_LABEL"]
+    return "每日" if os.environ.get("RUN_ALL_ATTEMPT") else "手動"
+
+
+def _is_last_attempt():
+    """run_all 會把失敗的腳本重試 3 次，並用環境變數告訴子腳本現在是第幾次。
+    沒有這兩個變數＝不是被 run_all 呼叫（盤前 workflow 或手動），只跑一次，就是最後一次。"""
+    try:
+        return int(os.environ["RUN_ALL_ATTEMPT"]) >= int(os.environ["RUN_ALL_MAX_ATTEMPTS"])
+    except (KeyError, ValueError):
+        return True
+
+
+def _age_hours(updated_at):
+    """既有新聞是幾小時前抓的。updatedAt 是寫檔當下的 datetime.now()，而兩條管線
+    都跑在 GitHub runner（時區 UTC），所以當 UTC 解讀。讀不出來回 None（視同過期）。"""
+    try:
+        t = datetime.strptime(str(updated_at), "%Y-%m-%d %H:%M").replace(tzinfo=timezone.utc)
+    except (TypeError, ValueError):
+        return None
+    return (datetime.now(timezone.utc) - t).total_seconds() / 3600
 
 
 def strip_html(s):
@@ -202,16 +233,34 @@ def main():
     # 於是 0 則會把前一天好好的 29 則洗成空白、網站「頭條快報」整區消失
     # （2026-08-24、08-27 各發生一次）。寧可顯示昨天的新聞，也不要顯示空白。
     if len(all_news) < MIN_NEWS:
-        prev = 0
+        prev, prev_at = 0, None
         try:
             with open(out, encoding="utf-8") as f:
-                prev = len(json.load(f).get("news", []))
+                old = json.load(f)
+            prev, prev_at = len(old.get("news", [])), old.get("updatedAt")
         except Exception:
             pass
-        msg = (f"只抓到 {len(all_news)} 則（門檻 {MIN_NEWS}），已保留既有 {prev} 則、"
-               f"不覆寫。常見原因：Google News RSS 擋雲端 IP（503）。")
+        age = _age_hours(prev_at)
+        age_txt = f"{age:.0f} 小時前抓的" if age is not None else "抓取時間不明"
+        msg = (f"{_run_label()}這輪只抓到 {len(all_news)} 則（門檻 {MIN_NEWS}），"
+               f"已保留既有 {prev} 則（{age_txt}）、不覆寫。"
+               f"常見原因：Google News RSS 擋雲端 IP（503）。")
         print(f"\n⚠ {msg}")
-        notify_owner(f"【領富 AI】盤前新聞抓取失敗\n{msg}\n網站仍顯示前一版新聞，不會空白。")
+        # ⚠ 什麼時候才吵站長（2026-09-11 起）：
+        #   原本每失敗一次就推一則 LINE。但 Google 擋雲端 IP 是間歇性的，站長收到也
+        #   無從處理，網站又因為不覆寫而照常顯示；加上 run_all 重試 3 次，一次事故
+        #   變成 3 則一模一樣的通知。沒有行動可採取的警報就是噪音，看久了會對
+        #   真正的警報麻痺。
+        #   改成看「後果」：保留的新聞超過 STALE_HOURS 才通知（代表早晚兩輪都失敗），
+        #   而且只在最後一次重試也失敗時發一則。不覆寫的防護完全不變。
+        if not _is_last_attempt():
+            print("  （還會重試，這次不通知）")
+        elif age is not None and age <= STALE_HOURS:
+            print(f"  （保留的新聞才 {age:.0f} 小時，未超過 {STALE_HOURS} 小時，不通知）")
+        else:
+            head = (f"新聞已 {age:.0f} 小時沒更新" if age is not None
+                    else "新聞抓取失敗（讀不到既有新聞的時間）")
+            notify_owner(f"【領富 AI】{head}\n{msg}\n網站仍顯示這批舊新聞，不會空白；下一輪會自動重試。")
         # 非 0 退出：workflow 該步標記失敗（continue-on-error 不擋後續步驟），
         # 且因為沒寫檔，git diff 無變化 → 不會 commit 空新聞。
         sys.exit(1)

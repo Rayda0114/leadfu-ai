@@ -92,7 +92,11 @@ def main():
             try:
                 code = subprocess.call(
                     [sys.executable, str(script)],
-                    env={**__import__("os").environ, "PYTHONIOENCODING": "utf-8"}
+                    # RUN_ALL_ATTEMPT：讓子腳本知道自己是第幾次嘗試。會發通知的腳本可以
+                    # 只在最後一次失敗時才發，否則一次事故會被重試放大成 3 則
+                    # （2026-09-11 新聞抓取就是這樣：20:19、20:24 各一則一模一樣的 LINE）。
+                    env={**__import__("os").environ, "PYTHONIOENCODING": "utf-8",
+                         "RUN_ALL_ATTEMPT": str(attempt), "RUN_ALL_MAX_ATTEMPTS": str(MAX_ATTEMPTS)}
                 )
                 if code == 0:
                     success = True

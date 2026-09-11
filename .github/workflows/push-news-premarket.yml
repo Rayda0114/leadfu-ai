@@ -30,6 +30,9 @@ jobs:
         run: python scripts/fetch_news.py
         env:
           PYTHONIOENCODING: utf-8
+          # 通知標題用：這支是盤前那輪。晚上的每日資料更新也跑 fetch_news，
+          # 那邊由 run_all 標成「每日」，兩輪才分得出來。
+          NEWS_RUN_LABEL: 盤前
           # 抓不到新聞時（Google News 擋雲端 IP）通知站長；腳本會保留既有新聞不覆寫
           LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
           OWNER_LINE_USER_ID: ${{ secrets.OWNER_LINE_USER_ID }}
